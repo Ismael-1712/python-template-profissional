@@ -1,0 +1,5 @@
+[run]
+# Omite os arquivos de teste do relatório de cobertura
+omit =
+    tests/*
+    */.venv/*

@@ -1,0 +1,2 @@
+# Força o Git a usar quebras de linha LF (Linux) em vez de CRLF (Windows)
+* text=auto eol=lf
