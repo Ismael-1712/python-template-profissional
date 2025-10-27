@@ -1,0 +1,40 @@
+{
+    // ----- Configurações Gerais do Python -----
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.typeCheckingMode": "basic",
+
+    // ----- Ferramentas de Qualidade (Ruff) -----
+    // Define o Ruff como o linter principal e formatador
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        },
+    },
+    "ruff.lint.args": [
+        "--select=ALL"
+    ],
+    "ruff.enable": true,
+    "ruff.lint.enable": true,
+    "ruff.format.enable": true,
+    "ruff.importStrategy": "fromEnvironment",
+
+    // ----- Configurações Gerais do Editor -----
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+        88,
+        120
+    ],
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/.pytest_cache": true,
+        "**/__pycache__": true,
+        "**/.venv": true
+    }
+}

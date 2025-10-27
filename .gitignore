@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+#
+# .gitignore
+#
+# Ignora arquivos que não devem ir para o controle de versão.
+# Baseado nos padrões da comunidade Python e GitHub.
+
+### Ambientes Virtuais ###
+# Ignora o ambiente virtual padrão
+.venv/
+# Outros nomes comuns de ambientes
+venv/
+env/
+ENV/
+virtualenv/
+
+### Python Cache ###
+# Bytecode compilado
+__pycache__/
+*.py[cod]
+
+# Arquivos de distribuição/build
+build/
+dist/
+*.egg-info/
+*.egg
+
+### Testes ###
+# Relatórios de cobertura
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+
+### Configuração de IDEs ###
+# VSCode (exceto as configurações que *queremos* compartilhar)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+
+# PyCharm
+.idea/
+
+# Outros
+.DS_Store
+Thumbs.db
+
+### Arquivos Sensíveis ###
+# Arquivos de ambiente - NUNCA comite segredos!
+.env
+.env.*
+!.env.example
+
+### Logs e Bases de Dados ###
+*.log
+*.db
+*.sqlite3
