@@ -33,14 +33,14 @@ Add to your CI/CD pipeline (e.g., `.github/workflows/audit.yml`):
 ```yaml
 steps:
   - name: Run Code Audit
-    run: python scripts/code_audit.py --output json --config scripts/audit_config.yaml
-    
+    run: python3 scripts/code_audit.py --output json --config scripts/audit_config.yaml
+
   - name: Update Dashboard Metrics
-    run: python scripts/audit_dashboard.py
-    
+    run: python3 scripts/audit_dashboard.py
+
   - name: Export Dashboard
-    run: python scripts/audit_dashboard.py --export-html
-    
+    run: python3 scripts/audit_dashboard.py --export-html
+
   - name: Upload Dashboard Artifact
     uses: actions/upload-artifact@v3
     with:
@@ -58,7 +58,7 @@ repos:
     hooks:
       - id: audit-dashboard-update
         name: Update Audit Dashboard
-        entry: python scripts/audit_dashboard.py
+        entry: python3 scripts/audit_dashboard.py
         language: system
         pass_filenames: false
         stages: [post-commit]
@@ -69,25 +69,25 @@ repos:
 ### Console Dashboard
 
 ```bash
-python scripts/audit_dashboard.py
+python3 scripts/audit_dashboard.py
 ```
 
 ### HTML Export
 
 ```bash
-python scripts/audit_dashboard.py --export-html
+python3 scripts/audit_dashboard.py --export-html
 ```
 
 ### JSON Export for Monitoring
 
 ```bash
-python scripts/audit_dashboard.py --export-json monitoring_metrics.json
+python3 scripts/audit_dashboard.py --export-json monitoring_metrics.json
 ```
 
 ### Reset Statistics
 
 ```bash
-python scripts/audit_dashboard.py --reset-stats
+python3 scripts/audit_dashboard.py --reset-stats
 ```
 
 ## Monitoring Integration
@@ -100,7 +100,7 @@ Export metrics to Prometheus format:
 def export_prometheus_metrics(dashboard: AuditDashboard) -> str:
     """Export metrics in Prometheus format."""
     metrics = dashboard.get_metrics_summary()
-    
+
     prometheus_metrics = f"""
 # HELP audit_total_performed Total number of audits performed
 # TYPE audit_total_performed counter
@@ -127,16 +127,16 @@ audit_success_rate {metrics['success_rate']}
 def send_to_datadog(dashboard: AuditDashboard):
     """Send metrics to Datadog."""
     import datadog
-    
+
     metrics = dashboard.get_metrics_summary()
-    
+
     datadog.api.Metric.send([
         {
             'metric': 'devops.audit.performed',
             'points': metrics['audits_performed']
         },
         {
-            'metric': 'devops.audit.failures_prevented', 
+            'metric': 'devops.audit.failures_prevented',
             'points': metrics['failures_prevented']
         }
     ])
@@ -189,7 +189,7 @@ tail -f audit_dashboard.log
 This dashboard is designed for the **main** branch of `python-template-profissional` and will work across:
 
 - `python-template-cli`: CLI applications
-- `python-template-api`: REST API services  
+- `python-template-api`: REST API services
 - `python-template-lib`: Library packages
 
 The dashboard provides universal DevOps metrics that are valuable regardless of project type.
