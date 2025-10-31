@@ -58,3 +58,4 @@ Thumbs.db
 *.sqlite3
 nota-obsidian-quarentena/
 audit_report_*.json
+audit_dashboard.html
