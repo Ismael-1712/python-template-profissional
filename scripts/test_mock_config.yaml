@@ -1,0 +1,199 @@
+# Test Mock Generator Configuration
+# Configuração extensível para padrões de mock
+
+# Versão da configuração
+version: "1.0"
+
+# Padrões de mock detectáveis
+mock_patterns:
+  # Requisições HTTP
+  http_patterns:
+    - pattern: "httpx.get("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "HTTP GET request - needs mocking for CI stability"
+      mock_template: |
+        @patch("httpx.get")
+        def {func_name}(self, mock_get, *args, **kwargs):
+            """Test with mocked HTTP GET request."""
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"status": "success", "data": "mocked"}
+            mock_get.return_value = mock_response
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+    - pattern: "httpx.post("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "HTTP POST request - needs mocking for CI stability"
+      mock_template: |
+        @patch("httpx.post")
+        def {func_name}(self, mock_post, *args, **kwargs):
+            """Test with mocked HTTP POST request."""
+            mock_response = Mock()
+            mock_response.status_code = 201
+            mock_response.json.return_value = {"id": "mock_id", "status": "created"}
+            mock_post.return_value = mock_response
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+    - pattern: "requests.get("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "Requests GET - needs mocking for CI stability"
+      mock_template: |
+        @patch("requests.get")
+        def {func_name}(self, mock_get, *args, **kwargs):
+            """Test with mocked requests GET."""
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"result": "mocked"}
+            mock_get.return_value = mock_response
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+    - pattern: "requests.post("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "Requests POST - needs mocking for CI stability"
+      mock_template: |
+        @patch("requests.post")
+        def {func_name}(self, mock_post, *args, **kwargs):
+            """Test with mocked requests POST."""
+            mock_response = Mock()
+            mock_response.status_code = 201
+            mock_response.json.return_value = {"id": "created"}
+            mock_post.return_value = mock_response
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+  # Execução de processos
+  subprocess_patterns:
+    - pattern: "subprocess.run("
+      type: "SUBPROCESS"
+      severity: "HIGH"
+      description: "Subprocess execution - needs mocking for CI portability"
+      mock_template: |
+        @patch("subprocess.run")
+        def {func_name}(self, mock_subprocess_run, *args, **kwargs):
+            """Test with mocked subprocess execution."""
+            mock_result = Mock()
+            mock_result.returncode = 0
+            mock_result.stdout = "mocked output"
+            mock_result.stderr = ""
+            mock_subprocess_run.return_value = mock_result
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+    - pattern: "subprocess.Popen("
+      type: "SUBPROCESS"
+      severity: "HIGH"
+      description: "Subprocess Popen - needs mocking for CI portability"
+      mock_template: |
+        @patch("subprocess.Popen")
+        def {func_name}(self, mock_popen, *args, **kwargs):
+            """Test with mocked subprocess Popen."""
+            mock_process = Mock()
+            mock_process.communicate.return_value = ("output", "")
+            mock_process.returncode = 0
+            mock_popen.return_value = mock_process
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+  # Sistema de arquivos
+  filesystem_patterns:
+    - pattern: "open("
+      type: "FILE_SYSTEM"
+      severity: "MEDIUM"
+      description: "File operation - consider mocking for test isolation"
+      mock_template: |
+        @patch("builtins.open", new_callable=mock_open, read_data="mocked file content")
+        def {func_name}(self, mock_file, *args, **kwargs):
+            """Test with mocked file operations."""
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch, mock_open"
+
+    - pattern: "pathlib.Path("
+      type: "FILE_SYSTEM"
+      severity: "LOW"
+      description: "Path operation - consider mocking for test isolation"
+      mock_template: |
+        @patch("pathlib.Path")
+        def {func_name}(self, mock_path, *args, **kwargs):
+            """Test with mocked path operations."""
+            mock_path.return_value.exists.return_value = True
+            mock_path.return_value.is_file.return_value = True
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+  # Database patterns
+  database_patterns:
+    - pattern: "sqlite3.connect("
+      type: "DATABASE"
+      severity: "HIGH"
+      description: "SQLite connection - needs mocking for test isolation"
+      mock_template: |
+        @patch("sqlite3.connect")
+        def {func_name}(self, mock_connect, *args, **kwargs):
+            """Test with mocked SQLite connection."""
+            mock_conn = Mock()
+            mock_cursor = Mock()
+            mock_conn.cursor.return_value = mock_cursor
+            mock_cursor.fetchall.return_value = []
+            mock_connect.return_value = mock_conn
+            
+            # Your test logic here
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+# Configurações de execução
+execution:
+  # Arquivos de teste a serem escaneados
+  test_file_patterns:
+    - "tests/**/*.py"
+    - "test_*.py"
+    - "*_test.py"
+
+  # Arquivos a serem ignorados
+  exclude_patterns:
+    - "**/__init__.py"
+    - "**/conftest.py"
+    - "**/.venv/**"
+    - "**/venv/**"
+    - "**/.pytest_cache/**"
+
+  # Apenas aplicar correções com essa severidade ou maior
+  min_severity_for_auto_apply: "HIGH"
+
+  # Criar backup antes de modificar arquivos
+  create_backups: true
+
+  # Diretório para backups
+  backup_directory: ".test_mock_backups"
+
+# Configurações de logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+  
+# Configurações de relatório
+reporting:
+  include_low_priority: false
+  max_suggestions_display: 10
+  output_format: "json"
