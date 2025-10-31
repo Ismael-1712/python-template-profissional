@@ -1,0 +1,82 @@
+# Code Audit Configuration
+# DevOps-grade security and quality auditing configuration
+
+# Paths to scan for security issues
+scan_paths:
+  - "src/"
+  - "tests/"
+
+# File patterns to include in scan
+file_patterns:
+  - "*.py"
+
+# Paths to exclude from scanning
+exclude_paths:
+  - ".git/"
+  - "__pycache__/"
+  - ".venv/"
+  - "venv/"
+  - ".pytest_cache/"
+  - "node_modules/"
+  - "dist/"
+  - "build/"
+
+# CI simulation timeout in seconds
+ci_timeout: 300
+simulate_ci: false
+
+# Maximum findings per file to avoid noise
+max_findings_per_file: 50
+
+# Severity levels (in order of importance)
+severity_levels:
+  - "LOW"
+  - "MEDIUM"
+  - "HIGH"
+  - "CRITICAL"
+
+# Custom security patterns (advanced users)
+custom_patterns:
+  - pattern: "eval("
+    severity: "CRITICAL"
+    description: "eval() usage detected - potential code injection vulnerability"
+    category: "injection"
+
+  - pattern: "exec("
+    severity: "CRITICAL"
+    description: "exec() usage detected - potential code injection vulnerability"
+    category: "injection"
+
+  - pattern: "pickle.loads("
+    severity: "HIGH"
+    description: "pickle.loads() can execute arbitrary code - use json instead"
+    category: "deserialization"
+
+# Mock patterns to look for in tests
+mock_indicators:
+  - "@patch"
+  - "Mock()"
+  - "mocker.patch"
+  - "mock_"
+  - "pytest-httpx"
+  - "httpx_mock"
+  - "responses.add"
+  - "unittest.mock"
+
+# External service indicators that should be mocked
+external_service_indicators:
+  - "requests."
+  - "httpx."
+  - "urllib.request"
+  - "subprocess."
+  - "socket."
+  - "os.system"
+  - "smtplib."
+  - "ftplib."
+
+# Report settings
+report:
+  include_suggestions: true
+  max_code_snippet_length: 80
+  group_by_severity: true
+  show_file_stats: true

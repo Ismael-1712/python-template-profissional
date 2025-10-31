@@ -56,3 +56,5 @@ Thumbs.db
 *.log
 *.db
 *.sqlite3
+nota-obsidian-quarentena/
+audit_report_*.json
