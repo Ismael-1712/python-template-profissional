@@ -5,6 +5,7 @@ Sistema robusto de geração automática de mocks para testes Python, seguindo p
 ## 🎯 Propósito
 
 Este sistema automatiza a geração e aplicação de mocks em arquivos de teste Python, garantindo que:
+
 - **Testes sejam estáveis no CI/CD** (sem dependências externas)
 - **Código seja portável** entre diferentes ambientes
 - **Padrões de qualidade** sejam mantidos automaticamente
@@ -23,40 +24,47 @@ scripts/
 ## 🚀 Uso Rápido
 
 ### 1. Escanear Arquivos de Teste
+
 ```bash
-python scripts/test_mock_generator.py --scan
+python3 scripts/test_mock_generator.py --scan
 ```
 
 ### 2. Preview das Correções
+
 ```bash
-python scripts/test_mock_generator.py --apply --dry-run
+python3 scripts/test_mock_generator.py --apply --dry-run
 ```
 
 ### 3. Aplicar Correções
+
 ```bash
-python scripts/test_mock_generator.py --apply
+python3 scripts/test_mock_generator.py --apply
 ```
 
 ### 4. Validar Sistema
+
 ```bash
-python scripts/validate_test_mocks.py --fix-found-issues
+python3 scripts/validate_test_mocks.py --fix-found-issues
 ```
 
 ## 📋 Funcionalidades
 
 ### ✅ Detecção Automática
+
 - **Requisições HTTP** (`httpx.get`, `requests.post`, etc.)
 - **Execução de subprocessos** (`subprocess.run`, `Popen`)
 - **Operações de arquivo** (`open()`, `pathlib.Path`)
 - **Conexões de banco** (`sqlite3.connect`)
 
 ### 🛡️ Segurança & Robustez
+
 - **Backup automático** antes de modificar arquivos
 - **Idempotência** - pode ser executado múltiplas vezes
 - **Logging estruturado** para auditoria
 - **Validação de sintaxe** antes e depois
 
 ### 🔧 Configurabilidade
+
 - **Padrões extensíveis** via YAML
 - **Templates personalizáveis** de mock
 - **Severidade configurável** (HIGH, MEDIUM, LOW)
@@ -65,19 +73,21 @@ python scripts/validate_test_mocks.py --fix-found-issues
 ## 🏭 Integração CI/CD
 
 ### GitHub Actions
+
 ```yaml
 - name: Check Test Mocks
-  run: python scripts/ci_test_mock_integration.py --check --fail-on-issues
+  run: python3 scripts/ci_test_mock_integration.py --check --fail-on-issues
 
 - name: Auto-fix Test Issues
-  run: python scripts/ci_test_mock_integration.py --auto-fix --commit
+  run: python3 scripts/ci_test_mock_integration.py --auto-fix --commit
 ```
 
 ### GitLab CI
+
 ```yaml
 test_mock_check:
   script:
-    - python scripts/ci_test_mock_integration.py --check --fail-on-issues
+    - python3 scripts/ci_test_mock_integration.py --check --fail-on-issues
   allow_failure: false
 ```
 
@@ -133,22 +143,26 @@ execution:
 ## 🏆 Padrões de Qualidade
 
 ### Compatibilidade
+
 - **Python 3.10+**
 - **POSIX-compliant** (Linux, macOS, WSL)
 - **Portabilidade** entre ambientes CI/CD
 
 ### Segurança
+
 - ✅ Sem uso de `shell=True`
 - ✅ Validação de caminhos de arquivo
 - ✅ Tratamento seguro de exceptions
 - ✅ Logging de auditoria
 
 ### Performance
+
 - ✅ Processamento em lote
 - ✅ Cache de análise AST
 - ✅ Operações idempotentes
 
 ### Manutenibilidade
+
 - ✅ Type hints completos
 - ✅ Documentação inline
 - ✅ Testes automatizados
@@ -159,6 +173,7 @@ execution:
 ### Adicionando Novos Padrões
 
 1. **Edite `test_mock_config.yaml`:**
+
 ```yaml
 custom_patterns:
   - pattern: "my_library.connect("
@@ -176,9 +191,13 @@ custom_patterns:
 
 ```python
 from test_mock_generator import TestMockGenerator
+from pathlib import Path
 
 # Uso programático
-generator = TestMockGenerator(Path.cwd())
+workspace = Path.cwd()
+config_path = Path(__file__).parent / "test_mock_config.yaml"
+generator = TestMockGenerator(workspace, config_path) # <-- CORRIGIDO
+
 report = generator.scan_test_files()
 generator.apply_suggestions(dry_run=False)
 ```
@@ -186,11 +205,13 @@ generator.apply_suggestions(dry_run=False)
 ## 📈 Métricas e Monitoramento
 
 ### Códigos de Saída
+
 - `0` - Sucesso completo
 - `1` - Warning (problemas menores)
 - `2` - Failure (problemas críticos)
 
 ### Logs Estruturados
+
 ```
 2025-10-31 18:00:00 [INFO] test_mock_generator: Escaneamento concluído: 15 sugestões geradas
 2025-10-31 18:00:05 [INFO] test_mock_generator: Mock aplicado: test_api.py:test_get_user
@@ -199,18 +220,21 @@ generator.apply_suggestions(dry_run=False)
 ## 🛠️ Resolução de Problemas
 
 ### Problema: "Nenhuma sugestão encontrada"
+
 ```bash
 # Criar arquivos de teste de exemplo
-python scripts/validate_test_mocks.py --fix-found-issues
+python3 scripts/validate_test_mocks.py --fix-found-issues
 ```
 
 ### Problema: "Erro de sintaxe após aplicação"
+
 ```bash
-# Restaurar backup
-cp .test_mock_backups/test_file.py.20251031_180000.backup tests/test_file.py
+# Recomenda-se executar os testes para validar as correções:
+python3 -m pytest tests/
 ```
 
 ### Problema: "Git commit falhou"
+
 ```bash
 # Verificar status
 git status
@@ -224,15 +248,18 @@ git commit -m "fix(tests): Apply test mocks"
 ## 🎯 Casos de Uso
 
 ### 1. Projeto CLI
+
 - Foco em mocks de `subprocess` e `sys.argv`
 - Validação de entrada/saída
 
 ### 2. Projeto API
+
 - Mocks de requisições HTTP
 - Mocks de banco de dados
 - Validação de endpoints
 
 ### 3. Projeto Library
+
 - Mocks minimais
 - Foco na lógica de negócio
 - Testes de integração opcional
@@ -247,15 +274,16 @@ git commit -m "fix(tests): Apply test mocks"
 ## 🤝 Contribuição
 
 Este sistema faz parte do **Python Template Profissional** e segue os padrões:
+
 - **Idempotência** obrigatória
-- **Logging estruturado** 
+- **Logging estruturado**
 - **Configuração declarativa**
 - **Testes automatizados**
 - **Documentação completa**
 
 ---
 
-**Autor:** DevOps Template Generator  
-**Versão:** 1.0.0  
-**Licença:** MIT  
+**Autor:** DevOps Template Generator
+**Versão:** 1.0.0
+**Licença:** MIT
 **Compatibilidade:** Python 3.10+, POSIX

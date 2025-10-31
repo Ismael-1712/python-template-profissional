@@ -20,7 +20,7 @@ mock_patterns:
             mock_response.status_code = 200
             mock_response.json.return_value = {"status": "success", "data": "mocked"}
             mock_get.return_value = mock_response
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -37,7 +37,7 @@ mock_patterns:
             mock_response.status_code = 201
             mock_response.json.return_value = {"id": "mock_id", "status": "created"}
             mock_post.return_value = mock_response
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -54,7 +54,7 @@ mock_patterns:
             mock_response.status_code = 200
             mock_response.json.return_value = {"result": "mocked"}
             mock_get.return_value = mock_response
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -71,7 +71,7 @@ mock_patterns:
             mock_response.status_code = 201
             mock_response.json.return_value = {"id": "created"}
             mock_post.return_value = mock_response
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -91,7 +91,7 @@ mock_patterns:
             mock_result.stdout = "mocked output"
             mock_result.stderr = ""
             mock_subprocess_run.return_value = mock_result
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -108,7 +108,7 @@ mock_patterns:
             mock_process.communicate.return_value = ("output", "")
             mock_process.returncode = 0
             mock_popen.return_value = mock_process
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -137,7 +137,7 @@ mock_patterns:
             """Test with mocked path operations."""
             mock_path.return_value.exists.return_value = True
             mock_path.return_value.is_file.return_value = True
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -157,7 +157,7 @@ mock_patterns:
             mock_conn.cursor.return_value = mock_cursor
             mock_cursor.fetchall.return_value = []
             mock_connect.return_value = mock_conn
-            
+
             # Your test logic here
       required_imports:
         - "from unittest.mock import Mock, patch"
@@ -191,7 +191,7 @@ execution:
 logging:
   level: "INFO"
   format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-  
+
 # Configurações de relatório
 reporting:
   include_low_priority: false
