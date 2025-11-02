@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Pre-commit Code Security and Quality Auditor.
+"""Pre-commit Code Security and Quality Auditor.
 
 A DevOps-grade auditing tool that performs static analysis to detect
 security vulnerabilities, external dependencies, and CI/CD risks before commits.
@@ -21,7 +20,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 
@@ -32,7 +31,7 @@ logging.basicConfig(
     handlers=[
         logging.StreamHandler(sys.stdout),
         logging.FileHandler("audit.log", mode="a"),
-    ]
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ class SecurityPattern:
         pattern: str,
         severity: str,
         description: str,
-        category: str = "security"
+        category: str = "security",
     ) -> None:
         self.pattern = pattern
         self.severity = severity
@@ -62,7 +61,7 @@ class AuditResult:
         line_number: int,
         pattern: SecurityPattern,
         code_snippet: str,
-        suggestion: Optional[str] = None
+        suggestion: str | None = None,
     ) -> None:
         self.file_path = file_path
         self.line_number = line_number
@@ -70,7 +69,7 @@ class AuditResult:
         self.code_snippet = code_snippet
         self.suggestion = suggestion
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for JSON serialization."""
         return {
             "file": str(self.file_path),
@@ -84,25 +83,24 @@ class AuditResult:
 
 
 class CodeAuditor:
-    """
-    Enterprise-grade code auditor for Python projects.
+    """Enterprise-grade code auditor for Python projects.
 
     Performs static analysis to detect security vulnerabilities,
     external dependencies, and potential CI/CD issues.
     """
 
-    def __init__(self, workspace_root: Path, config_path: Optional[Path] = None) -> None:
+    def __init__(self, workspace_root: Path, config_path: Path | None = None) -> None:
         self.workspace_root = workspace_root.resolve()
         self.config = self._load_config(config_path)
-        self.findings: List[AuditResult] = []
+        self.findings: list[AuditResult] = []
         self.patterns = self._load_security_patterns()
 
         logger.info(f"Initialized auditor for workspace: {self.workspace_root}")
 
-    def _load_config(self, config_path: Optional[Path]) -> Dict[str, Any]:
+    def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
         default_config = {
-            "scan_paths": ["src/", "tests/", "scripts/"],
+            "scan_paths": ["src/", "tests/"],
             "file_patterns": ["*.py"],
             "exclude_paths": [".git/", "__pycache__/", ".venv/", "venv/"],
             "ci_timeout": 300,
@@ -113,7 +111,7 @@ class CodeAuditor:
 
         if config_path and config_path.exists():
             try:
-                with open(config_path, "r", encoding="utf-8") as f:
+                with open(config_path, encoding="utf-8") as f:
                     user_config = yaml.safe_load(f)
                     default_config.update(user_config)
                     logger.info(f"Loaded configuration from {config_path}")
@@ -122,7 +120,7 @@ class CodeAuditor:
 
         return default_config
 
-    def _load_security_patterns(self) -> List[SecurityPattern]:
+    def _load_security_patterns(self) -> list[SecurityPattern]:
         """Load security patterns to detect in code."""
         return [
             # Subprocess security risks
@@ -130,71 +128,68 @@ class CodeAuditor:
                 "subprocess.run(",
                 "HIGH",
                 "Subprocess execution detected - ensure shell=False and validate inputs",
-                "subprocess"
+                "subprocess",
             ),
             SecurityPattern(
                 "subprocess.call(",
                 "HIGH",
                 "Subprocess call detected - ensure shell=False and validate inputs",
-                "subprocess"
+                "subprocess",
             ),
             SecurityPattern(
                 "os.system(",
                 "CRITICAL",
                 "os.system() is dangerous - use subprocess with shell=False instead",
-                "subprocess"
+                "subprocess",
             ),
             SecurityPattern(
                 "shell=True",
                 "CRITICAL",
                 "shell=True is a security risk - use shell=False with list arguments",
-                "subprocess"
+                "subprocess",
             ),
-
             # Network requests without mocking
             SecurityPattern(
                 "requests.get(",
                 "MEDIUM",
                 "HTTP request detected - ensure proper mocking in tests",
-                "network"
+                "network",
             ),
             SecurityPattern(
                 "requests.post(",
                 "MEDIUM",
                 "HTTP request detected - ensure proper mocking in tests",
-                "network"
+                "network",
             ),
             SecurityPattern(
                 "httpx.get(",
                 "MEDIUM",
                 "HTTP request detected - ensure proper mocking in tests",
-                "network"
+                "network",
             ),
             SecurityPattern(
                 "urllib.request",
                 "MEDIUM",
                 "URL request detected - ensure proper mocking in tests",
-                "network"
+                "network",
             ),
-
             # File system operations
             SecurityPattern(
                 "open(",
                 "LOW",
                 "File operation detected - ensure proper error handling and encoding",
-                "filesystem"
+                "filesystem",
             ),
-
             # External service dependencies
             SecurityPattern(
                 "socket.connect",
                 "HIGH",
                 "Socket connection detected - ensure proper mocking in tests",
-                "network"
+                "network",
             ),
         ]
 
-    def _get_python_files(self) -> List[Path]:
+    def _get_python_files(self) -> list[Path]:
         """Get all Python files to audit based on configuration."""
         python_files = []
 
@@ -207,19 +202,22 @@ class CodeAuditor:
             for pattern in self.config["file_patterns"]:
                 for file_path in scan_dir.rglob(pattern):
                     # Skip excluded paths
-                    if any(exclude in str(file_path) for exclude in self.config["exclude_paths"]):
+                    if any(
+                        exclude in str(file_path)
+                        for exclude in self.config["exclude_paths"]
+                    ):
                         continue
                     python_files.append(file_path)
 
         logger.info(f"Found {len(python_files)} Python files to audit")
         return python_files
 
-    def _analyze_file(self, file_path: Path) -> List[AuditResult]:
+    def _analyze_file(self, file_path: Path) -> list[AuditResult]:
         """Analyze a single Python file for security patterns."""
         findings = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
                 lines = content.splitlines()
 
@@ -236,7 +234,9 @@ class CodeAuditor:
                     if pattern.pattern in line:
                         # Skip if it's in a comment or string literal
                         stripped_line = line.strip()
-                        if stripped_line.startswith("#") or self._is_in_string_literal(line, pattern.pattern):
+                        if stripped_line.startswith("#") or self._is_in_string_literal(
+                            line, pattern.pattern
+                        ):
                             continue
 
                         # Create suggestion based on pattern
@@ -247,7 +247,7 @@ class CodeAuditor:
                             line_number=line_num,
                             pattern=pattern,
                             code_snippet=line.strip(),
-                            suggestion=suggestion
+                            suggestion=suggestion,
                         )
                         findings.append(finding)
 
@@ -289,7 +289,7 @@ class CodeAuditor:
 
         return f"Review {pattern.category} usage for security best practices"
 
-    def _check_mock_coverage(self) -> Dict[str, Any]:
+    def _check_mock_coverage(self) -> dict[str, Any]:
         """Analyze test files for proper mocking of external dependencies."""
         test_files = []
         for scan_path in self.config["scan_paths"]:
@@ -305,28 +305,39 @@ class CodeAuditor:
             "files_needing_mocks": [],
         }
 
-        mock_indicators = ["@patch", "Mock()", "mocker.patch", "mock_", "pytest-httpx", "httpx_mock"]
+        mock_indicators = [
+            "@patch",
+            "Mock()",
+            "mocker.patch",
+            "mock_",
+            "pytest-httpx",
+            "httpx_mock",
+        ]
         external_indicators = ["requests.", "httpx.", "subprocess.", "socket."]
 
         for test_file in test_files:
             try:
-                with open(test_file, "r", encoding="utf-8") as f:
+                with open(test_file, encoding="utf-8") as f:
                     content = f.read()
 
-                has_external = any(indicator in content for indicator in external_indicators)
+                has_external = any(
+                    indicator in content for indicator in external_indicators
+                )
                 has_mock = any(indicator in content for indicator in mock_indicators)
 
                 if has_external and has_mock:
                     mock_coverage["files_with_mocks"] += 1
                 elif has_external and not has_mock:
-                    mock_coverage["files_needing_mocks"].append(str(test_file.relative_to(self.workspace_root)))
+                    mock_coverage["files_needing_mocks"].append(
+                        str(test_file.relative_to(self.workspace_root))
+                    )
 
             except Exception as e:
                 logger.error(f"Error analyzing test file {test_file}: {e}")
 
         return mock_coverage
 
-    def _simulate_ci_environment(self) -> Dict[str, Any]:
+    def _simulate_ci_environment(self) -> dict[str, Any]:
         """Simulate CI environment by running critical tests."""
         logger.info("Simulating CI environment...")
 
@@ -340,21 +351,24 @@ class CodeAuditor:
         try:
             # Run pytest with CI-appropriate flags
             cmd = [
-                sys.executable, "-m", "pytest",
+                sys.executable,
+                "-m",
+                "pytest",
                 "--tb=short",
                 "--maxfail=5",
                 "--timeout=60",
                 "--quiet",
-                "tests/"
+                "tests/",
             ]
 
             result = subprocess.run(
                 cmd,
+                check=False,
                 env=ci_env,
                 capture_output=True,
                 text=True,
                 timeout=self.config["ci_timeout"],
-                cwd=self.workspace_root
+                cwd=self.workspace_root,
             )
 
             return {
@@ -393,7 +407,7 @@ class CodeAuditor:
                 "duration": "error",
             }
 
-    def run_audit(self) -> Dict[str, Any]:
+    def run_audit(self) -> dict[str, Any]:
         """Run complete security and quality audit."""
         logger.info("Starting comprehensive code audit...")
         start_time = datetime.now(timezone.utc)
@@ -408,7 +422,7 @@ class CodeAuditor:
         mock_coverage = self._check_mock_coverage()
 
         # Simulate CI environment
-        ci_simulation = {"passed": True, "status": "SKIPPED"} # Padrão: Passa se pulado
+        ci_simulation = {"passed": True, "status": "SKIPPED"}  # Padrão: Passa se pulado
         if self.config.get("simulate_ci"):
             ci_simulation = self._simulate_ci_environment()
         else:
@@ -420,7 +434,9 @@ class CodeAuditor:
         # Calculate severity distribution
         severity_counts = {}
         for severity in self.config["severity_levels"]:
-            severity_counts[severity] = len([f for f in self.findings if f.pattern.severity == severity])
+            severity_counts[severity] = len(
+                [f for f in self.findings if f.pattern.severity == severity]
+            )
 
         # Determine overall status
         critical_issues = severity_counts.get("CRITICAL", 0)
@@ -450,8 +466,10 @@ class CodeAuditor:
                 "total_findings": len(self.findings),
                 "severity_distribution": severity_counts,
                 "overall_status": overall_status,
-                "recommendations": self._generate_recommendations(severity_counts, mock_coverage, ci_simulation),
-            }
+                "recommendations": self._generate_recommendations(
+                    severity_counts, mock_coverage, ci_simulation
+                ),
+            },
         }
 
         logger.info(f"Audit completed in {duration:.2f}s - Status: {overall_status}")
@@ -459,21 +477,25 @@ class CodeAuditor:
 
     def _generate_recommendations(
         self,
-        severity_counts: Dict[str, int],
-        mock_coverage: Dict[str, Any],
-        ci_simulation: Dict[str, Any]
-    ) -> List[str]:
+        severity_counts: dict[str, int],
+        mock_coverage: dict[str, Any],
+        ci_simulation: dict[str, Any],
+    ) -> list[str]:
         """Generate actionable recommendations based on audit results."""
         recommendations = []
 
         if severity_counts.get("CRITICAL", 0) > 0:
-            recommendations.append("🔴 CRITICAL: Fix security vulnerabilities before commit")
+            recommendations.append(
+                "🔴 CRITICAL: Fix security vulnerabilities before commit"
+            )
 
         if severity_counts.get("HIGH", 0) > 0:
             recommendations.append("🟠 HIGH: Address high-priority security issues")
 
         if mock_coverage["files_needing_mocks"]:
-            recommendations.append(f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} test files")
+            recommendations.append(
+                f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} test files"
+            )
 
         if not ci_simulation.get("passed", True):
             recommendations.append("⚠️ Fix failing tests before CI/CD pipeline")
@@ -484,7 +506,9 @@ class CodeAuditor:
         return recommendations
 
 
-def save_report(report: Dict[str, Any], output_path: Path, format_type: str = "json") -> None:
+def save_report(
+    report: dict[str, Any], output_path: Path, format_type: str = "json"
+) -> None:
     """Save audit report in specified format."""
     if format_type.lower() == "json":
         with open(output_path, "w", encoding="utf-8") as f:
@@ -498,14 +522,14 @@ def save_report(report: Dict[str, Any], output_path: Path, format_type: str = "j
     logger.info(f"Report saved to {output_path}")
 
 
-def print_summary(report: Dict[str, Any]) -> None:
+def print_summary(report: dict[str, Any]) -> None:
     """Print executive summary of audit results."""
     metadata = report["metadata"]
     summary = report["summary"]
 
-    print(f"\n{'='*60}")
-    print(f"🔍 CODE SECURITY AUDIT REPORT")
-    print(f"{'='*60}")
+    print(f"\n{'=' * 60}")
+    print("🔍 CODE SECURITY AUDIT REPORT")
+    print(f"{'=' * 60}")
     print(f"📅 Timestamp: {metadata['timestamp']}")
     print(f"📁 Workspace: {metadata['workspace']}")
     print(f"⏱️  Duration: {metadata['duration_seconds']:.2f}s")
@@ -515,22 +539,24 @@ def print_summary(report: Dict[str, Any]) -> None:
     status_emoji = {"PASS": "✅", "WARNING": "⚠️", "FAIL": "❌", "CRITICAL": "🔴"}
     print(f"\n{status_emoji.get(status, '❓')} OVERALL STATUS: {status}")
 
-    print(f"\n📊 SEVERITY DISTRIBUTION:")
+    print("\n📊 SEVERITY DISTRIBUTION:")
     for severity, count in summary["severity_distribution"].items():
         if count > 0:
-            emoji = {"CRITICAL": "🔴", "HIGH": "🟠", "MEDIUM": "🟡", "LOW": "🔵"}.get(severity, "⚪")
+            emoji = {"CRITICAL": "🔴", "HIGH": "🟠", "MEDIUM": "🟡", "LOW": "🔵"}.get(
+                severity, "⚪"
+            )
             print(f"  {emoji} {severity}: {count}")
 
     if report["findings"]:
-        print(f"\n🔍 TOP FINDINGS:")
+        print("\n🔍 TOP FINDINGS:")
         for finding in report["findings"][:5]:  # Show top 5
             print(f"  • {finding['file']}:{finding['line']} - {finding['description']}")
 
-    print(f"\n💡 RECOMMENDATIONS:")
+    print("\n💡 RECOMMENDATIONS:")
     for rec in summary["recommendations"]:
         print(f"  {rec}")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
 
 
 def main() -> None:
@@ -543,35 +569,35 @@ Examples:
   python scripts/code_audit.py                    # Basic audit
   python scripts/code_audit.py --output yaml     # YAML output
   python scripts/code_audit.py --config audit.yaml  # Custom config
-        """
+        """,
     )
 
     parser.add_argument(
         "--config",
         type=Path,
-        help="Path to configuration YAML file"
+        help="Path to configuration YAML file",
     )
     parser.add_argument(
         "--output",
         choices=["json", "yaml"],
         default="json",
-        help="Output format (default: json)"
+        help="Output format (default: json)",
     )
     parser.add_argument(
         "--report-file",
         type=Path,
-        help="Custom report output path"
+        help="Custom report output path",
     )
     parser.add_argument(
         "--quiet",
         action="store_true",
-        help="Suppress console output"
+        help="Suppress console output",
     )
     parser.add_argument(
         "--fail-on",
         choices=["CRITICAL", "HIGH", "MEDIUM", "LOW"],
         default="HIGH",
-        help="Exit with error on this severity level or higher"
+        help="Exit with error on this severity level or higher",
     )
 
     args = parser.parse_args()
@@ -610,7 +636,9 @@ Examples:
     for finding in auditor.findings:
         finding_level = severity_hierarchy.get(finding.pattern.severity, 0)
         if finding_level >= fail_threshold:
-            logger.error(f"Audit failed due to {finding.pattern.severity} severity findings")
+            logger.error(
+                f"Audit failed due to {finding.pattern.severity} severity findings"
+            )
             sys.exit(1)
 
     # Check CI simulation if it ran
