@@ -117,7 +117,9 @@ jobs:
           python-version: '3.10'
 
       - name: Install Dependencies
-        run: pip install pyyaml
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install .[dev]
 
       - name: Run Smart Git Sync (Dry Run)
         run: python3 scripts/smart_git_sync.py --dry-run --verbose
