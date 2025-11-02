@@ -1,0 +1,62 @@
+# Smart Git Sync Configuration
+# Configuration file for the Smart Git Synchronization system
+
+# Audit Settings
+audit_enabled: true
+audit_timeout: 300  # seconds
+audit_fail_threshold: "HIGH"  # CRITICAL, HIGH, MEDIUM, LOW
+strict_audit: true  # Fail sync if audit fails
+
+# Automated Fix Settings
+auto_fix_enabled: true
+lint_timeout: 180  # seconds
+
+# Git Settings
+git_timeout: 120  # seconds
+cleanup_enabled: true
+
+# Security Settings
+allowed_file_extensions:
+  - ".py"
+  - ".yaml"
+  - ".yml"
+  - ".json"
+  - ".md"
+  - ".txt"
+  - ".toml"
+
+excluded_paths:
+  - ".git/"
+  - "__pycache__/"
+  - ".venv/"
+  - "venv/"
+  - ".env"
+  - "*.log"
+  - "*.tmp"
+
+# CI/CD Simulation
+simulate_ci: true
+ci_timeout: 300
+
+# Logging
+log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+log_to_file: true
+log_file: "smart_git_sync.log"
+
+# Commit Message Settings
+commit_categories:
+  - "feat"     # New features
+  - "fix"      # Bug fixes
+  - "docs"     # Documentation
+  - "test"     # Tests
+  - "chore"    # Maintenance
+  - "style"    # Code style
+  - "refactor" # Code refactoring
+
+# Rollback Settings
+enable_rollback: true
+rollback_on_push_failure: true
+
+# Performance Settings
+max_files_per_commit: 100
+max_commit_message_length: 72
