@@ -30,6 +30,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "PyYAML",
+    "tomli; python_version < '3.11'"
 ]
 
 # --- Configuração das Ferramentas ---
@@ -61,5 +62,5 @@ select = ["E", "F", "W", "I", "N", "UP", "B"]
 [tool.ruff.format]
 # Usa aspas duplas " " em vez de simples ' '
 quote-style = "double"
-# Adiciona vírgula no final de listas/dicionários multi-linha
-trailing-comma = "all"
+# Não adiciona vírgula no final (skip-magic-trailing-comma controla isso)
+skip-magic-trailing-comma = false
