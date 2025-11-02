@@ -17,10 +17,10 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (vazio por enquanto)
+# Dependências do projeto (CLI)
 dependencies = [
-    # Ex: "fastapi==0.100.0",
-    # Ex: "pydantic>=2.0",
+    # O framework moderno para criar CLIs
+    "typer[all]",
 ]
 
 # Dependências de desenvolvimento
@@ -32,6 +32,14 @@ dev = [
     "PyYAML",
     "tomli; python_version < '3.11'"
 ]
+
+# Define os "pontos de entrada" ou scripts executáveis
+# Isso cria um comando no .venv/bin/
+[project.scripts]
+# O nome do comando = "pacote.modulo:funcao"
+# "meu_projeto_placeholder" será o nome do comando no terminal
+meu_projeto_placeholder = "src.main:app"
+
 
 # --- Configuração das Ferramentas ---
 
