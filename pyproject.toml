@@ -17,15 +17,11 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (API)
+# Dependências do projeto (O 'main' deve ser neutro)
 dependencies = [
-    # O framework web moderno e rápido
-    "fastapi",
-
-    # O servidor ASGI (necessário para rodar o FastAPI)
-    # Usamos [standard] para incluir otimizações (httptools)
-    # e auto-reload (watchfiles)
-    "uvicorn[standard]",
+    # Dependências específicas (como 'fastapi' ou 'typer')
+    # devem ser adicionadas nos branches 'api' ou 'cli',
+    # não no 'main'.
 ]
 
 # Dependências de desenvolvimento
