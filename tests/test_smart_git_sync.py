@@ -10,12 +10,17 @@ Usage:
     python3 scripts/test_smart_git_sync.py --unit-tests-only
 """
 
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import yaml
+
+# Adiciona o diretório 'scripts' (pai do pai deste arquivo) ao path
+scripts_dir = Path(__file__).parent.parent / "scripts"
+sys.path.insert(0, str(scripts_dir))
 
 # Import the module under test (assumes smart_git_sync.py exists)
 try:
