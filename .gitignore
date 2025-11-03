@@ -59,3 +59,9 @@ Thumbs.db
 audit_report_*.json
 audit_dashboard.html
 sync_report_*.json
+
+
+# --- Lixo de Ferramental e Cache ---
+.ruff_cache/
+.vscode/tasks.json
+project_structure.txt
