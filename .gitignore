@@ -60,12 +60,8 @@ audit_report_*.json
 audit_dashboard.html
 sync_report_*.json
 
-# --- Lixo de Execução e Logs (Pós-Auditoria v2.0) ---
-*.log
-*.html
-*.json
 
-# --- Lixo de Build do Python ---
-build/
-dist/
-*.egg-info/
+# --- Lixo de Ferramental e Cache ---
+.ruff_cache/
+.vscode/tasks.json
+project_structure.txt
