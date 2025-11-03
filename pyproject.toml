@@ -14,23 +14,23 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Seu Nome", email = "seu-email@dominio.com" }
+    { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
 # Dependências do projeto (CLI)
 dependencies = [
-    # O framework moderno para criar CLIs
-    "typer[all]",
+    # O framework moderno para criar CLIs
+    "typer"
 ]
 
 # Dependências de desenvolvimento
 [project.optional-dependencies]
 dev = [
-    "ruff",
-    "pytest",
-    "pytest-cov",
-    "PyYAML",
-    "tomli; python_version < '3.11'"
+    "ruff",
+    "pytest",
+    "pytest-cov",
+    "PyYAML",
+    "tomli; python_version < '3.11'"
 ]
 
 # Define os "pontos de entrada" ou scripts executáveis
