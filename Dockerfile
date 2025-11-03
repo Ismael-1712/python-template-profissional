@@ -2,6 +2,9 @@
 # Usamos uma imagem completa para construir as dependências
 FROM python:3.11-slim-bookworm as builder
 
+# Expõe a porta padrão do FastAPI/Uvicorn
+EXPOSE 8000
+
 # Define o diretório de trabalho
 WORKDIR /app
 
@@ -34,8 +37,9 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copia o código-fonte da aplicação
-COPY . .
+COPY src/ ./src/
 
-# O CMD (Comando) dependerá do seu projeto.
-# Isto é um placeholder que apenas mostra a versão do Python.
-CMD ["python", "--version"]
+# Comando final para iniciar o servidor Uvicorn
+# Ouve em todas as interfaces (0.0.0.0) na porta 8000
+# Aponta para o 'app' dentro do 'src/main.py' (que criaremos a seguir)
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
