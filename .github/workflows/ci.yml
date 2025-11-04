@@ -55,10 +55,6 @@ jobs:
           # Ativamos o .venv apenas para garantir que o pip instale lá
           python3 -m venv .venv
           source .venv/bin/activate
-          # --- INÍCIO DA CORREÇÃO (Estabilização do Ambiente) ---
-          # Atualiza as ferramentas de build antes de tentar instalar
-          python -m pip install --upgrade pip setuptools wheel
-          # --- FIM DA CORREÇÃO ---
           # Usamos nosso script centralizado para instalar
           python3 scripts/dev_commands.py install-dev
 
