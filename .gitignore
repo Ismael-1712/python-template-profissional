@@ -65,3 +65,10 @@ sync_report_*.json
 .ruff_cache/
 .vscode/tasks.json
 project_structure.txt
+
+# Artefatos de build e cache do Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
