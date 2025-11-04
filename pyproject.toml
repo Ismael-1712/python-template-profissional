@@ -17,11 +17,12 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (O 'main' deve ser neutro)
+# Dependências do projeto (API)
 dependencies = [
-    # Dependências específicas (como 'fastapi' ou 'typer')
-    # devem ser adicionadas nos branches 'api' ou 'cli',
-    # não no 'main'.
+    # O framework web moderno e rápido
+    "fastapi",
+    # O servidor ASGI (necessário para rodar o FastAPI)
+    "uvicorn[standard]",
 ]
 
 # Dependências de desenvolvimento
@@ -41,23 +42,13 @@ dev = [
 # Define o comprimento máximo da linha (padrão 'black')
 line-length = 88
 
-# Define a versão mínima do Python para compatibilidade de regras
+# Define o versão mínima do Python para compatibilidade de regras
 target-version = "py310"
 
 # Configuração do Linter do Ruff
 [tool.ruff.lint]
 # Seleciona um conjunto robusto de regras para fiscalizar
-# E = Pycodestyle Erros
-# F = Pyflakes (erros de lógica)
-# W = Pycodestyle Warnings
-# I = isort (ordenação de imports)
-# N = Pep8-naming (nomes de variáveis/funções)
-# UP = pyupgrade (sugestões de modernização)
-# B = flake8-bugbear (possíveis bugs)
 select = ["E", "F", "W", "I", "N", "UP", "B"]
-
-# Ignora regras específicas (exemplo)
-# ignore = ["E501"] # (Não precisamos, pois 'line-length = 88' já cuida disso)
 
 # Configuração do Formatador do Ruff (substituto do 'black')
 [tool.ruff.format]
