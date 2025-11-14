@@ -580,7 +580,18 @@ class SmartGitSync:
             # Phase 1: Repository Status Check
             logger.info("📋 PHASE 1: Repository Status Analysis")
             git_status = self._check_git_status()
-
+            # INÍCIO DO PATCH DE PROTEÇÃO (v2.1)
+            current_branch = git_status.get("current_branch")
+            if current_branch == "main":
+                logger.error("🛑 OPERAÇÃO PROIBIDA NA 'main'")
+                logger.error("A branch 'main' está protegida por regras ('Cofre').")
+                logger.error("Este script não pode fazer 'push' direto na 'main'.")
+                logger.warning(
+                    "Use o 'Fluxo de Trabalho (Chave Mestra)': Crie um branch, "
+                    "abra um PR e solicite um 'Bypass' do administrador.",
+                )
+                raise SyncError("Tentativa de 'push' direto na 'main' protegida.")
+            # FIM DO PATCH DE PROTEÇÃO (v2.1)
             if git_status["is_clean"]:
                 logger.info("Repository is clean, no changes to sync")
                 self._save_sync_report()
