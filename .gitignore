@@ -72,3 +72,13 @@ __pycache__/
 *.egg-info/
 .venv/
 .pytest_cache/
+
+# Ignorar logs de runtime
+*.log
+
+# Ignorar relatórios de auditoria e outros JSONs gerados
+*.json
+
+# Ignorar metadados do projeto
+project_structure.txt
+
