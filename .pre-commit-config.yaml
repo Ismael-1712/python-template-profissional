@@ -1,7 +1,31 @@
+# .pre-commit-config.yaml
+# Define os "porteiros" que rodam antes de cada commit
+
 repos:
--   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.1 # Use a versão mais recente do ruff
+  # 1. Ganchos Padrão (Verifica arquivos que não são Python)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
     hooks:
-    -   id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
-    -   id: ruff-format
+      - id: check-added-large-files # Impede commit de arquivos > 5MB
+      - id: check-toml              # Valida pyproject.toml
+      - id: check-yaml              # Valida .yml (como o ci.yml)
+      - id: end-of-file-fixer     # Garante uma linha em branco no final
+      - id: trailing-whitespace     # Remove espaços em branco
+
+  # 2. Ruff (O Linter e Formatador)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff-format # Roda o formatador (substituto do Black)
+      - id: ruff        # Roda o linter (substituto do Flake8)
+
+  # 3. Nosso Auditor Customizado (O "Sistema de Auditoria")
+  - repo: local
+    hooks:
+      - id: code-audit-security
+        name: "Auditoria de Segurança Customizada (code_audit.py)"
+        entry: python3 scripts/pre_commit_audit.py
+        language: system
+        stages: [pre-commit]
+        pass_filenames: false
+        verbose: true
