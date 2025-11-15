@@ -5,7 +5,6 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 # Metadados do Projeto (PEP 621)
-# Estes são "placeholders" que seu script newproject v1.4 irá substituir.
 [project]
 name = "meu_projeto_placeholder"
 version = "0.1.0"
@@ -17,25 +16,29 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (O 'main' deve ser neutro)
+# Dependências do projeto (Específicas do branch 'cli')
 dependencies = [
     "typer[all]",
-    # Dependências específicas (como 'fastapi' ou 'typer')
-    # devem ser adicionadas nos branches 'api' ou 'cli',
-    # não no 'main'.
 ]
 
-# Dependências de desenvolvimento
+# Dependências de desenvolvimento (Combinadas do 'main' e 'cli')
 [project.optional-dependencies]
 dev = [
     "ruff",
     "pytest",
     "pytest-cov",
     "PyYAML",
+    "pre-commit",
+    "python-semantic-release",
     "tomli; python_version < '3.11'"
 ]
 
-# --- Configuração das Ferramentas ---
+# Configuração de Ponto de Entrada (Entry Point) - (Específico do 'cli')
+[project.scripts]
+meu-projeto = "src.main:app"
+
+
+# --- Configuração das Ferramtas ---
 
 # Configuração do Ruff (Linter e Formatador)
 [tool.ruff]
@@ -48,17 +51,7 @@ target-version = "py310"
 # Configuração do Linter do Ruff
 [tool.ruff.lint]
 # Seleciona um conjunto robusto de regras para fiscalizar
-# E = Pycodestyle Erros
-# F = Pyflakes (erros de lógica)
-# W = Pycodestyle Warnings
-# I = isort (ordenação de imports)
-# N = Pep8-naming (nomes de variáveis/funções)
-# UP = pyupgrade (sugestões de modernização)
-# B = flake8-bugbear (possíveis bugs)
 select = ["E", "F", "W", "I", "N", "UP", "B"]
-
-# Ignora regras específicas (exemplo)
-# ignore = ["E501"] # (Não precisamos, pois 'line-length = 88' já cuida disso)
 
 # Configuração do Formatador do Ruff (substituto do 'black')
 [tool.ruff.format]
@@ -67,7 +60,23 @@ quote-style = "double"
 # Não adiciona vírgula no final (skip-magic-trailing-comma controla isso)
 skip-magic-trailing-comma = false
 
-# Configuração de Ponto de Entrada (Entry Point)
-[project.scripts]
-meu-projeto = "src.main:app"
+# Configuração do Semantic Release (Herdado do 'main')
+[tool.semantic_release]
+# Define onde a variável de versão está
+version_variable = "pyproject.toml:project.version"
 
+# Não faça o upload para o PyPI automaticamente.
+# O pipeline de CD (Prioridade 3) fará isso.
+upload_to_pypi = false
+
+# O arquivo de "RELEASES" que você pediu
+changelog_file = "CHANGELOG.md"
+
+# Quais tipos de commit causam um 'bump' de versão
+build_command = "python3 -m build"
+minor_on_default_scope = true
+major_on_breaking_change = true
+
+[tool.semantic_release.changelog]
+# Seções do changelog
+categories = ["feat", "fix", "docs", "refactor", "perf"]

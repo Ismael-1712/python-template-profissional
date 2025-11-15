@@ -7,7 +7,7 @@
 # Este arquivo NÃO contém lógica de lint/teste.
 # Ele delega TODAS as tarefas ao script centralizado:
 #
-#   `scripts/dev_commands.py`
+#   `scripts/dev_commands.py`
 #
 # Isso nos dá uma "Fonte Única da Verdade" para os comandos.
 # ======================================================================
@@ -21,6 +21,10 @@ on:
     branches: [main]
   # Permite a execução manual
   workflow_dispatch:
+
+# Permissões para o semantic-release poder fazer push
+permissions:
+  contents: write # Permite que o semantic-release faça o push de commits/tags
 
 jobs:
   # --------------------------------------------------------------------
