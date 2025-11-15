@@ -32,6 +32,7 @@ dev = [
     "pytest-cov",
     "PyYAML",
     "pre-commit",
+    "python-semantic-release",
     "tomli; python_version < '3.11'"
 ]
 
@@ -66,3 +67,24 @@ select = ["E", "F", "W", "I", "N", "UP", "B"]
 quote-style = "double"
 # Não adiciona vírgula no final (skip-magic-trailing-comma controla isso)
 skip-magic-trailing-comma = false
+
+# Configuração do Semantic Release
+[tool.semantic_release]
+# Define onde a variável de versão está
+version_variable = "pyproject.toml:project.version"
+
+# Não faça o upload para o PyPI automaticamente.
+# O pipeline de CD (Prioridade 3) fará isso.
+upload_to_pypi = false
+
+# O arquivo de "RELEASES" que você pediu
+changelog_file = "CHANGELOG.md"
+
+# Quais tipos de commit causam um 'bump' de versão
+build_command = "python3 -m build"
+minor_on_default_scope = true
+major_on_breaking_change = true
+
+[tool.semantic_release.changelog]
+# Seções do changelog
+categories = ["feat", "fix", "docs", "refactor", "perf"]
