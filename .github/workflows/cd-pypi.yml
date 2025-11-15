@@ -1,0 +1,34 @@
+name: "📦 CD: Publicar Pacote no PyPI"
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # Dispara APENAS em tags de versão
+
+jobs:
+  publish-pypi:
+    name: "Publicar no PyPI"
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Permissão para o PyPI (OIDC)
+
+    steps:
+      - name: "Checkout do Código"
+        uses: actions/checkout@v4
+
+      - name: "Configurar Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: "Instalar Dependências de Build"
+        run: python3 -m pip install build
+
+      - name: "Construir o Pacote"
+        run: python3 -m build
+
+      - name: "Publicar no PyPI"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # Nota: Isso requer que o PyPI esteja configurado para "Trusted Publishing"
+        # com o OIDC do GitHub.
