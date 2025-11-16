@@ -20,6 +20,7 @@ exclude_paths:
   - "node_modules/"
   - "dist/"
   - "build/"
+  - "scripts/" # <--- CORREÇÃO SRE: Ignora a "caixa de ferramentas" da auditoria.
 
 # CI simulation timeout in seconds
 ci_timeout: 300
