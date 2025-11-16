@@ -6,6 +6,7 @@ security vulnerabilities, external dependencies, and CI/CD risks before commits.
 
 Usage:
     python scripts/code_audit.py [--config CONFIG_FILE] [--output FORMAT] [--fix]
+    python scripts/code_audit.py [FILE1_PATH] [FILE2_PATH] ...
 
 Author: DevOps Engineering Team
 License: MIT
@@ -127,13 +128,16 @@ class CodeAuditor:
             SecurityPattern(
                 "subprocess.run(",
                 "HIGH",
-                "Subprocess execution detected - ensure shell=False and validate inputs",
+                (
+                    "Subprocess execution detected - ensure shell=False "
+                    "and validate inputs"
+                ),
                 "subprocess",
             ),
             SecurityPattern(
                 "subprocess.call(",
                 "HIGH",
-                "Subprocess call detected - ensure shell=False and validate inputs",
+                ("Subprocess call detected - ensure shell=False and validate inputs"),
                 "subprocess",
             ),
             SecurityPattern(
@@ -209,7 +213,7 @@ class CodeAuditor:
                         continue
                     python_files.append(file_path)
 
-        logger.info(f"Found {len(python_files)} Python files to audit")
+        logger.info(f"Found {len(python_files)} Python files to audit (Full Scan)")
         return python_files
 
     def _analyze_file(self, file_path: Path) -> list[AuditResult]:
@@ -223,7 +227,8 @@ class CodeAuditor:
 
             # Parse AST for more accurate analysis
             try:
-                tree = ast.parse(content)
+                # Corrigido: Removida a atribuição 'tree =' (F841)
+                ast.parse(content)
             except SyntaxError as e:
                 logger.warning(f"Syntax error in {file_path}: {e}")
                 return findings
@@ -235,15 +240,28 @@ class CodeAuditor:
                         # Skip if it's in a comment or string literal
                         stripped_line = line.strip()
                         if stripped_line.startswith("#") or self._is_in_string_literal(
-                            line, pattern.pattern
+                            line,
+                            pattern.pattern,
                         ):
                             continue
 
                         # Create suggestion based on pattern
                         suggestion = self._generate_suggestion(pattern, line)
 
+                        # Garante que o file_path seja relativo ao root
+                        relative_path = file_path
+                        if file_path.is_absolute():
+                            try:
+                                relative_path = file_path.relative_to(
+                                    self.workspace_root,
+                                )
+                            except ValueError:
+                                # O path pode ser de fora do workspace (ex: /tmp),
+                                # mantenha-o absoluto se não for relativo.
+                                pass
+
                         finding = AuditResult(
-                            file_path=file_path.relative_to(self.workspace_root),
+                            file_path=relative_path,
                             line_number=line_num,
                             pattern=pattern,
                             code_snippet=line.strip(),
@@ -277,9 +295,14 @@ class CodeAuditor:
     def _generate_suggestion(self, pattern: SecurityPattern, line: str) -> str:
         """Generate improvement suggestion based on pattern."""
         suggestions = {
-            "shell=True": "Use shell=False with list arguments: subprocess.run(['command', 'arg1', 'arg2'])",
+            "shell=True": (
+                "Use shell=False with list arguments: "
+                "subprocess.run(['command', 'arg1', 'arg2'])"
+            ),
             "os.system(": "Replace with subprocess.run() using shell=False",
-            "requests.get(": "Consider mocking this request in tests using @patch or pytest-httpx",
+            "requests.get(": (
+                "Consider mocking this request in tests using @patch or pytest-httpx"
+            ),
             "subprocess.run(": "Ensure shell=False and validate all inputs",
         }
 
@@ -329,7 +352,7 @@ class CodeAuditor:
                     mock_coverage["files_with_mocks"] += 1
                 elif has_external and not has_mock:
                     mock_coverage["files_needing_mocks"].append(
-                        str(test_file.relative_to(self.workspace_root))
+                        str(test_file.relative_to(self.workspace_root)),
                     )
 
             except Exception as e:
@@ -407,13 +430,23 @@ class CodeAuditor:
                 "duration": "error",
             }
 
-    def run_audit(self) -> dict[str, Any]:
+    def run_audit(self, files_to_audit: list[Path] | None = None) -> dict[str, Any]:
         """Run complete security and quality audit."""
         logger.info("Starting comprehensive code audit...")
         start_time = datetime.now(timezone.utc)
 
-        # Scan all Python files
-        python_files = self._get_python_files()
+        # SE uma lista de arquivos for passada (pelo pre-commit),
+        # use-a. SENÃO, faça o scan completo (comportamento antigo).
+        if files_to_audit:
+            logger.info(
+                f"Auditing specific file list (Delta Audit): {len(files_to_audit)} files",
+            )
+            python_files = files_to_audit
+        else:
+            logger.info("No specific files provided, scanning paths from config...")
+            # Scan all Python files (Comportamento antigo)
+            python_files = self._get_python_files()
+
         for file_path in python_files:
             file_findings = self._analyze_file(file_path)
             self.findings.extend(file_findings)
@@ -435,7 +468,7 @@ class CodeAuditor:
         severity_counts = {}
         for severity in self.config["severity_levels"]:
             severity_counts[severity] = len(
-                [f for f in self.findings if f.pattern.severity == severity]
+                [f for f in self.findings if f.pattern.severity == severity],
             )
 
         # Determine overall status
@@ -457,7 +490,7 @@ class CodeAuditor:
                 "workspace": str(self.workspace_root),
                 "duration_seconds": duration,
                 "files_scanned": len(python_files),
-                "auditor_version": "2.0.0",
+                "auditor_version": "2.1.2-delta",  # Versão atualizada
             },
             "findings": [finding.to_dict() for finding in self.findings],
             "mock_coverage": mock_coverage,
@@ -467,7 +500,9 @@ class CodeAuditor:
                 "severity_distribution": severity_counts,
                 "overall_status": overall_status,
                 "recommendations": self._generate_recommendations(
-                    severity_counts, mock_coverage, ci_simulation
+                    severity_counts,
+                    mock_coverage,
+                    ci_simulation,
                 ),
             },
         }
@@ -486,7 +521,7 @@ class CodeAuditor:
 
         if severity_counts.get("CRITICAL", 0) > 0:
             recommendations.append(
-                "🔴 CRITICAL: Fix security vulnerabilities before commit"
+                "🔴 CRITICAL: Fix security vulnerabilities before commit",
             )
 
         if severity_counts.get("HIGH", 0) > 0:
@@ -494,7 +529,8 @@ class CodeAuditor:
 
         if mock_coverage["files_needing_mocks"]:
             recommendations.append(
-                f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} test files"
+                f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} "
+                "test files",
             )
 
         if not ci_simulation.get("passed", True):
@@ -507,7 +543,9 @@ class CodeAuditor:
 
 
 def save_report(
-    report: dict[str, Any], output_path: Path, format_type: str = "json"
+    report: dict[str, Any],
+    output_path: Path,
+    format_type: str = "json",
 ) -> None:
     """Save audit report in specified format."""
     if format_type.lower() == "json":
@@ -543,7 +581,8 @@ def print_summary(report: dict[str, Any]) -> None:
     for severity, count in summary["severity_distribution"].items():
         if count > 0:
             emoji = {"CRITICAL": "🔴", "HIGH": "🟠", "MEDIUM": "🟡", "LOW": "🔵"}.get(
-                severity, "⚪"
+                severity,
+                "⚪",
             )
             print(f"  {emoji} {severity}: {count}")
 
@@ -566,9 +605,10 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python scripts/code_audit.py                    # Basic audit
-  python scripts/code_audit.py --output yaml     # YAML output
-  python scripts/code_audit.py --config audit.yaml  # Custom config
+  python scripts/code_audit.py                     # Basic audit
+  python scripts/code_audit.py --output yaml       # YAML output
+  python scripts/code_audit.py --config audit_yaml   # Custom config
+  python scripts/code_audit.py file1.py file2.py   # Delta audit (pre-commit)
         """,
     )
 
@@ -600,6 +640,13 @@ Examples:
         help="Exit with error on this severity level or higher",
     )
 
+    parser.add_argument(
+        "files",
+        nargs="*",  # "Zero ou mais" - se nenhum for passado, a lista será vazia.
+        type=Path,
+        help="Optional list of files to audit (overrides config scan_paths)",
+    )
+
     args = parser.parse_args()
 
     # Configure logging based on quiet flag
@@ -613,7 +660,7 @@ Examples:
     auditor = CodeAuditor(workspace_root, args.config)
 
     # Run audit
-    report = auditor.run_audit()
+    report = auditor.run_audit(files_to_audit=args.files)
 
     # Determine output file
     if args.report_file:
@@ -637,7 +684,7 @@ Examples:
         finding_level = severity_hierarchy.get(finding.pattern.severity, 0)
         if finding_level >= fail_threshold:
             logger.error(
-                f"Audit failed due to {finding.pattern.severity} severity findings"
+                f"Audit failed due to {finding.pattern.severity} severity findings",
             )
             sys.exit(1)
 
