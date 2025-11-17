@@ -17,6 +17,7 @@ import ast
 import json
 import logging
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -237,6 +238,20 @@ class CodeAuditor:
             for line_num, line in enumerate(lines, 1):
                 for pattern in self.patterns:
                     if pattern.pattern in line:
+                        # --- Início da Lógica de Supressão (P8.1.3) ---
+                        noqa_match = re.search(r"#\s*noqa:\s*([\w,-]+)", line)
+                        if noqa_match:
+                            try:
+                                suppressed_categories = [
+                                    cat.strip().lower()
+                                    for cat in noqa_match.group(1).split(",")
+                                ]
+                                if pattern.category.lower() in suppressed_categories:
+                                    continue  # Risco suprimido. Pular este 'finding'.
+                            except Exception:
+                                pass  # Ignora 'noqa' mal formatado
+                        # --- Fim da Lógica de Supressão ---
+
                         # Skip if it's in a comment or string literal
                         stripped_line = line.strip()
                         if stripped_line.startswith("#") or self._is_in_string_literal(
@@ -384,7 +399,7 @@ class CodeAuditor:
                 "tests/",
             ]
 
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 cmd,
                 check=False,
                 env=ci_env,
@@ -439,7 +454,8 @@ class CodeAuditor:
         # use-a. SENÃO, faça o scan completo (comportamento antigo).
         if files_to_audit:
             logger.info(
-                f"Auditing specific file list (Delta Audit): {len(files_to_audit)} files",
+                f"Auditing specific file list (Delta Audit): "
+                f"{len(files_to_audit)} files",
             )
             python_files = files_to_audit
         else:
