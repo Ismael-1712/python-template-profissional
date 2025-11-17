@@ -12,18 +12,16 @@ Environment Variables:
     CI_RECOVERY_LOG_LEVEL: Log level (DEBUG, INFO, WARNING, ERROR)
 """
 
-import json
 import logging
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.ci_recovery import analyzer, executor, runner
+from scripts.ci_recovery import analyzer, executor, reporter, runner
 from scripts.ci_recovery.models import (
     RecoveryReport,
     RecoveryStatus,
     RecoveryStep,
-    RiskLevel,
 )
 
 # Configure structured logging
@@ -160,119 +158,6 @@ class CIFailureRecoverySystem:
         else:
             logger.warning(log_message)
 
-    def generate_recovery_suggestions(self) -> list[str]:
-        """Generate actionable recovery suggestions based on analysis.
-
-        Returns:
-            List of recovery suggestions
-
-        """
-        suggestions = []
-
-        if not self.report.file_analysis:
-            return ["Run file analysis first"]
-
-        risk = self.report.file_analysis.overall_risk
-
-        if risk == RiskLevel.CRITICAL:
-            suggestions.extend(
-                [
-                    "Review critical infrastructure changes carefully",
-                    "Test in isolated environment before deployment",
-                    "Consider rolling back changes if CI continues to fail",
-                ],
-            )
-
-        if risk in [RiskLevel.HIGH, RiskLevel.CRITICAL]:
-            suggestions.extend(
-                [
-                    "Run full test suite locally before pushing",
-                    "Check for missing dependencies or configuration",
-                    "Verify environment variables are set correctly",
-                ],
-            )
-
-        # Add specific suggestions based on file types
-        if self.report.file_analysis.high_risk:
-            test_files = [
-                f for f in self.report.file_analysis.high_risk if "test" in f.lower()
-            ]
-            if test_files:
-                suggestions.append(
-                    "Review test changes - ensure mocks and fixtures are correct",
-                )
-
-        if not suggestions:
-            suggestions.append(
-                "No specific issues detected - CI failure may be transient",
-            )
-
-        return suggestions
-
-    def save_report(self) -> Path:
-        """Save the recovery report to a JSON file.
-
-        Returns:
-            Path to the saved report file
-
-        """
-        report_file = (
-            self.repository_path / f"ci_recovery_report_{self.commit_hash}_"
-            f"{int(datetime.now().timestamp())}.json"
-        )
-
-        try:
-            # Convert dataclass to dict for JSON serialization
-            report_dict = {
-                "timestamp": self.report.timestamp.isoformat(),
-                "commit_hash": self.report.commit_hash,
-                "repository_path": str(self.report.repository_path),
-                "steps": [
-                    {
-                        "name": step.name,
-                        "status": step.status.value,
-                        "timestamp": step.timestamp.isoformat(),
-                        "details": step.details,
-                        "error_message": step.error_message,
-                        "duration_seconds": step.duration_seconds,
-                    }
-                    for step in self.report.steps
-                ],
-                "file_analysis": {
-                    "low_risk": self.report.file_analysis.low_risk
-                    if self.report.file_analysis
-                    else [],
-                    "medium_risk": self.report.file_analysis.medium_risk
-                    if self.report.file_analysis
-                    else [],
-                    "high_risk": self.report.file_analysis.high_risk
-                    if self.report.file_analysis
-                    else [],
-                    "critical_risk": self.report.file_analysis.critical_risk
-                    if self.report.file_analysis
-                    else [],
-                    "overall_risk": self.report.file_analysis.overall_risk.value
-                    if self.report.file_analysis
-                    else "low",
-                }
-                if self.report.file_analysis
-                else None,
-                "fixes_applied": self.report.fixes_applied,
-                "final_status": self.report.final_status.value,
-                "total_duration_seconds": self.report.total_duration_seconds,
-                "metadata": self.report.metadata,
-            }
-
-            with open(report_file, "w", encoding="utf-8") as f:
-                json.dump(report_dict, f, indent=2, ensure_ascii=False)
-
-            logger.info(f"Recovery report saved to: {report_file}")
-            return report_file
-
-        except Exception as e:
-            logger.error(f"Failed to save recovery report: {e}")
-            raise
-
     def execute_recovery(self) -> bool:
         """Execute the complete CI failure recovery process.
 
@@ -314,7 +199,7 @@ class CIFailureRecoverySystem:
 
             # Phase 4: Generate Suggestions
             logger.info("💡 Phase 4: Recovery Suggestions")
-            suggestions = self.generate_recovery_suggestions()
+            suggestions = reporter.generate_recovery_suggestions(report=self.report)
 
             for suggestion in suggestions:
                 logger.info(f"   • {suggestion}")
@@ -338,7 +223,11 @@ class CIFailureRecoverySystem:
             self.report.total_duration_seconds = (end_time - start_time).total_seconds()
 
             # Save report
-            self.save_report()
+            reporter.save_report(
+                report=self.report,
+                repository_path=self.repository_path,
+                commit_hash=self.commit_hash,
+            )
 
             logger.info("=" * 70)
             logger.info(
@@ -358,7 +247,11 @@ class CIFailureRecoverySystem:
             )
 
             try:
-                self.save_report()
+                reporter.save_report(
+                    report=self.report,
+                    repository_path=self.repository_path,
+                    commit_hash=self.commit_hash,
+                )
             except Exception:
                 logger.error("Failed to save error report")
 
