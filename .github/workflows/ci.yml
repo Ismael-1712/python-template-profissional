@@ -16,9 +16,9 @@ name: "🚀 CI: Teste, Lint e Qualidade"
 
 on:
   push:
-    branches: [main]
+    branches: [main, api, cli]
   pull_request:
-    branches: [main]
+    branches: [main, api, cli]
   # Permite a execução manual
   workflow_dispatch:
 
