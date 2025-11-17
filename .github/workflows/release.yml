@@ -1,0 +1,47 @@
+name: 🚀 Release Automático (Semantic-Release)
+
+on:
+  push:
+    branches: [main] # Gatilho: Apenas em push para a 'main'
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  release:
+    name: 📦 Publicar Release
+    runs-on: ubuntu-latest
+
+    # Permissão CRÍTICA (Escopo Específico):
+    # Necessária para o bot fazer o push de tags, commits e CHANGELOG.md.
+    # Alinhado com P1 (Menor Privilégio), pois está no job, não global.
+    permissions:
+      contents: write
+      issues: write     # Para criar comentários de release
+      pull-requests: write # Para links de PRs no changelog
+
+    steps:
+      - name: 1. Checkout (Histórico Completo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # OBRIGATÓRIO para o semantic-release ler o histórico
+
+      - name: 2. Setup Python (Versão Estável)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 3. Instalar Dependências de Release
+        run: |
+          python -m pip install --upgrade pip
+          # Instala o grupo [dev] que contém 'python-semantic-release'
+          pip install .[dev]
+
+      - name: 4. Configurar Git (Identidade do Bot)
+        run: |
+          git config --global user.name "semantic-release [bot]"
+          git config --global user.email "semantic-release[bot]@users.noreply.github.com"
+
+      - name: 5. Executar Publicação do Release
+        env:
+          # O GITHUB_TOKEN é essencial para autenticação no repositório
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: semantic-release publish
