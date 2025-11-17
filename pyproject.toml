@@ -67,8 +67,6 @@ select = ["E", "F", "W", "I", "N", "UP", "B"]
 quote-style = "double"
 # Não adiciona vírgula no final (skip-magic-trailing-comma controla isso)
 skip-magic-trailing-comma = false
-# Define o mesmo comprimento máximo da linha do linter (harmonização)
-line-length = 88
 
 # Configuração do Semantic Release
 [tool.semantic_release]
