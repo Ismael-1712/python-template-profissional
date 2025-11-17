@@ -19,9 +19,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.ci_recovery import executor
+from scripts.ci_recovery import analyzer, executor
 from scripts.ci_recovery.models import (
-    FileRiskAnalysis,
     RecoveryReport,
     RecoveryStatus,
     RecoveryStep,
@@ -161,137 +160,6 @@ class CIFailureRecoverySystem:
             logger.info(log_message)
         else:
             logger.warning(log_message)
-
-    def analyze_changed_files(self) -> FileRiskAnalysis:
-        """Analyze files changed in the current commit for CI failure risk.
-
-        Returns:
-            FileRiskAnalysis with categorized files
-
-        """
-        self._log_step("File Risk Analysis", RecoveryStatus.IN_PROGRESS)
-
-        try:
-            # Get changed files for the commit
-            result = executor.run_command(
-                command=[
-                    "git",
-                    "show",
-                    "--name-only",
-                    "--format=",
-                    self.commit_hash,
-                ],
-                repository_path=self.repository_path,
-                dry_run=self.dry_run,
-            )
-
-            if result.returncode != 0:
-                self._log_step(
-                    "File Risk Analysis",
-                    RecoveryStatus.FAILED,
-                    error_message="Failed to get changed files",
-                )
-                return FileRiskAnalysis()
-
-            changed_files = [f.strip() for f in result.stdout.split("\n") if f.strip()]
-            analysis = FileRiskAnalysis()
-
-            for file_path in changed_files:
-                risk = self._assess_file_risk(file_path)
-
-                if risk == RiskLevel.CRITICAL:
-                    analysis.critical_risk.append(file_path)
-                elif risk == RiskLevel.HIGH:
-                    analysis.high_risk.append(file_path)
-                elif risk == RiskLevel.MEDIUM:
-                    analysis.medium_risk.append(file_path)
-                else:
-                    analysis.low_risk.append(file_path)
-
-            # Determine overall risk
-            if analysis.critical_risk:
-                analysis.overall_risk = RiskLevel.CRITICAL
-            elif analysis.high_risk:
-                analysis.overall_risk = RiskLevel.HIGH
-            elif analysis.medium_risk:
-                analysis.overall_risk = RiskLevel.MEDIUM
-            else:
-                analysis.overall_risk = RiskLevel.LOW
-
-            self.report.file_analysis = analysis
-
-            self._log_step(
-                "File Risk Analysis",
-                RecoveryStatus.SUCCESS,
-                f"Analyzed {len(changed_files)} files - "
-                f"Overall risk: {analysis.overall_risk.value}",
-            )
-
-            return analysis
-
-        except Exception as e:
-            self._log_step(
-                "File Risk Analysis",
-                RecoveryStatus.FAILED,
-                error_message=str(e),
-            )
-            return FileRiskAnalysis()
-
-    def _assess_file_risk(self, file_path: str) -> RiskLevel:
-        """Assess the CI failure risk of a single file.
-
-        Args:
-            file_path: Path to the file
-
-        Returns:
-            Risk level for the file
-
-        """
-        file_path_lower = file_path.lower()
-
-        # Critical risk files
-        critical_patterns = [
-            "dockerfile",
-            "docker-compose",
-            ".github/workflows",
-            "pyproject.toml",
-            "setup.py",
-            "requirements.txt",
-            "makefile",
-            ".gitignore",
-        ]
-
-        if any(pattern in file_path_lower for pattern in critical_patterns):
-            return RiskLevel.CRITICAL
-
-        # High risk files
-        high_risk_patterns = [
-            "test_",
-            "_test.py",
-            "/tests/",
-            "conftest.py",
-            "tox.ini",
-            ".pre-commit",
-            "pytest.ini",
-        ]
-
-        if any(pattern in file_path_lower for pattern in high_risk_patterns):
-            return RiskLevel.HIGH
-
-        # Medium risk files
-        medium_risk_patterns = [
-            "src/",
-            "lib/",
-            "__init__.py",
-            "config",
-            "settings",
-        ]
-
-        if any(pattern in file_path_lower for pattern in medium_risk_patterns):
-            return RiskLevel.MEDIUM
-
-        # Everything else is low risk
-        return RiskLevel.LOW
 
     def run_code_quality_checks(self) -> bool:
         """Run code quality checks (linting, type checking, etc.).
@@ -520,7 +388,13 @@ class CIFailureRecoverySystem:
         try:
             # Phase 1: File Analysis
             logger.info("🔍 Phase 1: File Risk Analysis")
-            self.analyze_changed_files()
+            analyzer.analyze_changed_files(
+                report=self.report,
+                log_step_callback=self._log_step,
+                commit_hash=self.commit_hash,
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
+            )
 
             # Phase 2: Code Quality Checks
             logger.info("🔧 Phase 2: Code Quality Checks")
