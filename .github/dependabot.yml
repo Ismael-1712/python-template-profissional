@@ -1,0 +1,19 @@
+# Versão 2 do schema do Dependabot
+version: 2
+
+updates:
+  # 1. Manutenção das GitHub Actions (Segurança SRE)
+  - package-ecosystem: "github-actions"
+    directory: "/" # Verifica a raiz por .github/workflows
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore(deps):" # Alinhado com Conventional Commits
+
+  # 2. Manutenção das dependências Python (Pip)
+  - package-ecosystem: "pip"
+    directory: "/" # Verifica a raiz por pyproject.toml
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore(deps):" # Alinhado com Conventional Commits
