@@ -14,12 +14,11 @@ Environment Variables:
 
 import json
 import logging
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.ci_recovery import analyzer, executor
+from scripts.ci_recovery import analyzer, executor, runner
 from scripts.ci_recovery.models import (
     RecoveryReport,
     RecoveryStatus,
@@ -161,105 +160,6 @@ class CIFailureRecoverySystem:
         else:
             logger.warning(log_message)
 
-    def run_code_quality_checks(self) -> bool:
-        """Run code quality checks (linting, type checking, etc.).
-
-        Returns:
-            True if all checks pass, False otherwise
-
-        """
-        self._log_step("Code Quality Checks", RecoveryStatus.IN_PROGRESS)
-
-        checks = [
-            ([sys.executable, "-m", "flake8", "src/"], "Flake8 linting"),
-            ([sys.executable, "-m", "black", "--check", "src/"], "Black formatting"),
-            ([sys.executable, "-m", "isort", "--check-only", "src/"], "Import sorting"),
-            ([sys.executable, "-m", "mypy", "src/"], "Type checking"),
-        ]
-
-        all_passed = True
-
-        for command, check_name in checks:
-            try:
-                result = executor.run_command(
-                    command=command,
-                    repository_path=self.repository_path,
-                    dry_run=self.dry_run,
-                    timeout=120,
-                )
-
-                if result.returncode == 0:
-                    logger.info(f"✅ {check_name} passed")
-                else:
-                    logger.warning(f"⚠️ {check_name} failed")
-                    all_passed = False
-
-            except subprocess.TimeoutExpired:
-                logger.error(f"❌ {check_name} timed out")
-                all_passed = False
-            except Exception as e:
-                logger.error(f"❌ {check_name} error: {e}")
-                all_passed = False
-
-        status = (
-            RecoveryStatus.SUCCESS if all_passed else RecoveryStatus.PARTIAL_SUCCESS
-        )
-        self._log_step("Code Quality Checks", status)
-
-        return all_passed
-
-    def run_tests(self) -> bool:
-        """Run the test suite.
-
-        Returns:
-            True if tests pass, False otherwise
-
-        """
-        self._log_step("Test Execution", RecoveryStatus.IN_PROGRESS)
-
-        try:
-            # Run tests with coverage
-            result = executor.run_command(
-                command=[
-                    sys.executable,
-                    "-m",
-                    "pytest",
-                    "tests/",
-                    "-v",
-                    "--tb=short",
-                    "--maxfail=5",
-                    "--timeout=300",
-                ],
-                repository_path=self.repository_path,
-                dry_run=self.dry_run,
-                timeout=600,
-            )
-
-            if result.returncode == 0:
-                self._log_step(
-                    "Test Execution",
-                    RecoveryStatus.SUCCESS,
-                    "All tests passed",
-                )
-                return True
-            self._log_step(
-                "Test Execution",
-                RecoveryStatus.FAILED,
-                f"Tests failed with exit code {result.returncode}",
-            )
-            return False
-
-        except subprocess.TimeoutExpired:
-            self._log_step("Test Execution", RecoveryStatus.FAILED, "Tests timed out")
-            return False
-        except Exception as e:
-            self._log_step(
-                "Test Execution",
-                RecoveryStatus.FAILED,
-                error_message=str(e),
-            )
-            return False
-
     def generate_recovery_suggestions(self) -> list[str]:
         """Generate actionable recovery suggestions based on analysis.
 
@@ -398,11 +298,19 @@ class CIFailureRecoverySystem:
 
             # Phase 2: Code Quality Checks
             logger.info("🔧 Phase 2: Code Quality Checks")
-            quality_passed = self.run_code_quality_checks()
+            quality_passed = runner.run_code_quality_checks(
+                log_step_callback=self._log_step,
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
+            )
 
             # Phase 3: Test Execution
             logger.info("🧪 Phase 3: Test Execution")
-            tests_passed = self.run_tests()
+            tests_passed = runner.run_tests(
+                log_step_callback=self._log_step,
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
+            )
 
             # Phase 4: Generate Suggestions
             logger.info("💡 Phase 4: Recovery Suggestions")
