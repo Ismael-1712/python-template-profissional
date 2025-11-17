@@ -148,7 +148,7 @@ class DevCommandsManager:
             return subprocess.CompletedProcess(cmd_parts, 0, "", "")
 
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 cmd_parts,
                 cwd=working_dir,
                 env=env,

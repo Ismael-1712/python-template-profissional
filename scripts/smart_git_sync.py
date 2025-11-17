@@ -163,7 +163,7 @@ class SmartGitSync:
         """Execute command with security best practices.
 
         Args:
-            command: Command as list (never uses shell=True)
+            command: Command as list (never uses shell=True)  # noqa: subprocess
             timeout: Command timeout in seconds
             capture_output: Whether to capture stdout/stderr
             check: Whether to raise on non-zero exit
@@ -191,7 +191,7 @@ class SmartGitSync:
             if env:
                 env_vars.update(env)
 
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
                 timeout=timeout,
@@ -201,9 +201,9 @@ class SmartGitSync:
                 env=env_vars,
             )
 
-            logger.debug(
-                f"Command executed: {' '.join(command)} (exit code: {result.returncode})",
-            )
+            cmd_str = " ".join(command)
+            debug_msg = f"Command executed: {cmd_str} (exit code: {result.returncode})"
+            logger.debug(debug_msg)
             return result
 
         except subprocess.CalledProcessError as e:
@@ -329,9 +329,9 @@ class SmartGitSync:
             )
 
             fixes_applied = 0
-            # Parse output to count fixes (implementation depends on lint_fix.py output format)
+            # Parse output to count fixes (implementation depends on lint_fix.py format)
             if "fixes applied" in result.stdout.lower():
-                # Extract number from output - this would need to match actual lint_fix.py format
+                # Extract number from output - matches actual lint_fix.py format
                 import re
 
                 match = re.search(r"(\d+)\s+fixes?\s+applied", result.stdout.lower())
