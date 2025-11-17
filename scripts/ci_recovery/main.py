@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-"""CI/CD Failure Recovery System - Professional Template
+"""Sistema de Recuperação de Falhas de CI (SRE) - Ponto de Entrada Principal.
 
-A robust, secure, and portable system for automatic CI/CD failure recovery.
-Follows industry best practices for DevOps automation.
-
-Usage:
-    python scripts/ci_failure_recovery.py [--commit HASH] [--dry-run]
-
-Environment Variables:
-    CI_RECOVERY_DRY_RUN: Set to 'true' for dry-run mode
-    CI_RECOVERY_LOG_LEVEL: Log level (DEBUG, INFO, WARNING, ERROR)
+Este módulo contém o orquestrador (CIFailureRecoverySystem) e o
+entrypoint (main) para o sistema de recuperação, refatorado
+seguindo os princípios S.O.L.I.D. (P8.7).
 """
 
 import logging
@@ -17,6 +11,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+# --- Importações S.O.L.I.D. (Relativas ao Pacote) ---
 from scripts.ci_recovery import analyzer, reporter, runner, validator
 from scripts.ci_recovery.models import (
     RecoveryReport,
@@ -24,13 +19,16 @@ from scripts.ci_recovery.models import (
     RecoveryStep,
 )
 
-# Configure structured logging
+# --- Fim das Importações S.O.L.I.D. ---
+
+# Configuração do Logger
+# (Esta configuração deve permanecer com o entrypoint)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.StreamHandler(sys.stdout),
         logging.FileHandler("ci_recovery.log"),
+        logging.StreamHandler(sys.stdout),
     ],
 )
 logger = logging.getLogger(__name__)
@@ -284,6 +282,10 @@ def main() -> None:
     except Exception as e:
         logger.error(f"Failed to initialize recovery system: {e}")
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":
