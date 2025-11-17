@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-CI/CD Failure Recovery System - Professional Template
+"""CI/CD Failure Recovery System - Professional Template
 
 A robust, secure, and portable system for automatic CI/CD failure recovery.
 Follows industry best practices for DevOps automation.
@@ -18,79 +17,31 @@ import logging
 import shlex
 import subprocess
 import sys
-from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+
+from scripts.ci_recovery.models import (
+    FileRiskAnalysis,
+    RecoveryReport,
+    RecoveryStatus,
+    RecoveryStep,
+    RiskLevel,
+)
 
 # Configure structured logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('ci_recovery.log')
-    ]
+        logging.FileHandler("ci_recovery.log"),
+    ],
 )
 logger = logging.getLogger(__name__)
 
 
-class RecoveryStatus(Enum):
-    """Recovery operation status enumeration."""
-    PENDING = "pending"
-    IN_PROGRESS = "in_progress"
-    SUCCESS = "success"
-    PARTIAL_SUCCESS = "partial_success"
-    FAILED = "failed"
-
-
-class RiskLevel(Enum):
-    """File change risk level enumeration."""
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-    CRITICAL = "critical"
-
-
-@dataclass
-class RecoveryStep:
-    """Represents a single recovery step."""
-    name: str
-    status: RecoveryStatus
-    timestamp: datetime
-    details: str = ""
-    error_message: str = ""
-    duration_seconds: float = 0.0
-
-
-@dataclass
-class FileRiskAnalysis:
-    """Analysis of file changes and associated risks."""
-    low_risk: List[str] = field(default_factory=list)
-    medium_risk: List[str] = field(default_factory=list)
-    high_risk: List[str] = field(default_factory=list)
-    critical_risk: List[str] = field(default_factory=list)
-    overall_risk: RiskLevel = RiskLevel.LOW
-
-
-@dataclass
-class RecoveryReport:
-    """Complete recovery operation report."""
-    timestamp: datetime
-    commit_hash: str
-    repository_path: Path
-    steps: List[RecoveryStep] = field(default_factory=list)
-    file_analysis: Optional[FileRiskAnalysis] = None
-    fixes_applied: List[str] = field(default_factory=list)
-    final_status: RecoveryStatus = RecoveryStatus.PENDING
-    total_duration_seconds: float = 0.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
 class CIFailureRecoverySystem:
-    """
-    Professional CI/CD failure recovery system.
+    """Professional CI/CD failure recovery system.
 
     Implements industry best practices:
     - Idempotent operations
@@ -102,17 +53,17 @@ class CIFailureRecoverySystem:
 
     def __init__(
         self,
-        repository_path: Optional[Path] = None,
-        commit_hash: Optional[str] = None,
-        dry_run: bool = False
-    ):
-        """
-        Initialize the recovery system.
+        repository_path: Path | None = None,
+        commit_hash: str | None = None,
+        dry_run: bool = False,
+    ) -> None:
+        """Initialize the recovery system.
 
         Args:
             repository_path: Path to git repository (defaults to current directory)
             commit_hash: Specific commit to analyze (defaults to HEAD)
             dry_run: If True, only simulate operations without making changes
+
         """
         self.repository_path = repository_path or Path.cwd()
         self.commit_hash = commit_hash
@@ -120,7 +71,7 @@ class CIFailureRecoverySystem:
         self.report = RecoveryReport(
             timestamp=datetime.now(timezone.utc),
             commit_hash="",
-            repository_path=self.repository_path
+            repository_path=self.repository_path,
         )
 
         # Validate repository
@@ -133,7 +84,7 @@ class CIFailureRecoverySystem:
 
         logger.info(
             f"Initialized CI Recovery System - Repository: {self.repository_path}, "
-            f"Commit: {self.commit_hash}, Dry Run: {self.dry_run}"
+            f"Commit: {self.commit_hash}, Dry Run: {self.dry_run}",
         )
 
     def _is_git_repository(self) -> bool:
@@ -142,7 +93,7 @@ class CIFailureRecoverySystem:
             result = self._run_command(
                 ["git", "rev-parse", "--git-dir"],
                 cwd=self.repository_path,
-                capture_output=True
+                capture_output=True,
             )
             return result.returncode == 0
         except Exception:
@@ -154,7 +105,7 @@ class CIFailureRecoverySystem:
             result = self._run_command(
                 ["git", "rev-parse", "HEAD"],
                 cwd=self.repository_path,
-                capture_output=True
+                capture_output=True,
             )
             if result.returncode == 0:
                 return result.stdout.strip()[:8]
@@ -165,21 +116,18 @@ class CIFailureRecoverySystem:
 
     def _run_command(
         self,
-        command: List[str],
-        cwd: Optional[Path] = None,
+        command: list[str],
+        cwd: Path | None = None,
         capture_output: bool = True,
         timeout: int = 300,
-        **kwargs
     ) -> subprocess.CompletedProcess:
-        """
-        Securely run a command using subprocess.
+        """Securely run a command using subprocess.
 
         Args:
-            command: Command as list of strings (never use shell=True)
+            command: Command as list of strings for secure execution
             cwd: Working directory
             capture_output: Whether to capture stdout/stderr
             timeout: Command timeout in seconds
-            **kwargs: Additional subprocess arguments
 
         Returns:
             CompletedProcess instance
@@ -187,13 +135,21 @@ class CIFailureRecoverySystem:
         Raises:
             subprocess.TimeoutExpired: If command times out
             subprocess.SubprocessError: On subprocess errors
+            ValueError: If command is invalid or unsafe
+
         """
-        # Validate command
+        # Validate command security
         if not command or not isinstance(command, list):
             raise ValueError("Command must be a non-empty list")
 
+        # Additional security validation - prevent path traversal and dangerous commands
+        if any("/../" in str(arg) or str(arg).startswith("/") for arg in command):
+            raise ValueError("Command contains potentially unsafe paths")
+
         # Sanitize command arguments
-        sanitized_command = [shlex.quote(str(arg)) if ' ' in str(arg) else str(arg) for arg in command]
+        sanitized_command = [
+            shlex.quote(str(arg)) if " " in str(arg) else str(arg) for arg in command
+        ]
 
         logger.debug(f"Executing command: {' '.join(sanitized_command)}")
 
@@ -203,32 +159,34 @@ class CIFailureRecoverySystem:
                 args=command,
                 returncode=0,
                 stdout="",
-                stderr=""
+                stderr="",
             )
 
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 command,  # Use original command, not sanitized
                 cwd=cwd or self.repository_path,
                 capture_output=capture_output,
                 text=True,
                 timeout=timeout,
                 check=False,  # Don't raise on non-zero exit
-                **kwargs
+                shell=False,  # Explicit security measure
             )
 
             if result.returncode != 0:
                 logger.warning(
                     f"Command failed with exit code {result.returncode}: "
-                    f"{' '.join(sanitized_command)}"
+                    f"{' '.join(sanitized_command)}",
                 )
                 if result.stderr:
                     logger.warning(f"STDERR: {result.stderr}")
 
             return result
 
-        except subprocess.TimeoutExpired as e:
-            logger.error(f"Command timed out after {timeout}s: {' '.join(sanitized_command)}")
+        except subprocess.TimeoutExpired:
+            logger.error(
+                f"Command timed out after {timeout}s: {' '.join(sanitized_command)}",
+            )
             raise
         except Exception as e:
             logger.error(f"Command execution failed: {e}")
@@ -240,7 +198,7 @@ class CIFailureRecoverySystem:
         status: RecoveryStatus,
         details: str = "",
         error_message: str = "",
-        duration: float = 0.0
+        duration: float = 0.0,
     ) -> None:
         """Log a recovery step and add to report."""
         step = RecoveryStep(
@@ -249,7 +207,7 @@ class CIFailureRecoverySystem:
             timestamp=datetime.now(timezone.utc),
             details=details,
             error_message=error_message,
-            duration_seconds=duration
+            duration_seconds=duration,
         )
 
         self.report.steps.append(step)
@@ -260,7 +218,7 @@ class CIFailureRecoverySystem:
             RecoveryStatus.FAILED: "❌",
             RecoveryStatus.IN_PROGRESS: "🔄",
             RecoveryStatus.PARTIAL_SUCCESS: "⚠️",
-            RecoveryStatus.PENDING: "⏳"
+            RecoveryStatus.PENDING: "⏳",
         }
 
         emoji = emoji_map.get(status, "📋")
@@ -279,29 +237,35 @@ class CIFailureRecoverySystem:
             logger.warning(log_message)
 
     def analyze_changed_files(self) -> FileRiskAnalysis:
-        """
-        Analyze files changed in the current commit for CI failure risk.
+        """Analyze files changed in the current commit for CI failure risk.
 
         Returns:
             FileRiskAnalysis with categorized files
+
         """
         self._log_step("File Risk Analysis", RecoveryStatus.IN_PROGRESS)
 
         try:
             # Get changed files for the commit
-            result = self._run_command([
-                "git", "show", "--name-only", "--format=", self.commit_hash
-            ])
+            result = self._run_command(
+                [
+                    "git",
+                    "show",
+                    "--name-only",
+                    "--format=",
+                    self.commit_hash,
+                ],
+            )
 
             if result.returncode != 0:
                 self._log_step(
                     "File Risk Analysis",
                     RecoveryStatus.FAILED,
-                    error_message="Failed to get changed files"
+                    error_message="Failed to get changed files",
                 )
                 return FileRiskAnalysis()
 
-            changed_files = [f.strip() for f in result.stdout.split('\n') if f.strip()]
+            changed_files = [f.strip() for f in result.stdout.split("\n") if f.strip()]
             analysis = FileRiskAnalysis()
 
             for file_path in changed_files:
@@ -331,7 +295,8 @@ class CIFailureRecoverySystem:
             self._log_step(
                 "File Risk Analysis",
                 RecoveryStatus.SUCCESS,
-                f"Analyzed {len(changed_files)} files - Overall risk: {analysis.overall_risk.value}"
+                f"Analyzed {len(changed_files)} files - "
+                f"Overall risk: {analysis.overall_risk.value}",
             )
 
             return analysis
@@ -340,27 +305,32 @@ class CIFailureRecoverySystem:
             self._log_step(
                 "File Risk Analysis",
                 RecoveryStatus.FAILED,
-                error_message=str(e)
+                error_message=str(e),
             )
             return FileRiskAnalysis()
 
     def _assess_file_risk(self, file_path: str) -> RiskLevel:
-        """
-        Assess the CI failure risk of a single file.
+        """Assess the CI failure risk of a single file.
 
         Args:
             file_path: Path to the file
 
         Returns:
             Risk level for the file
+
         """
         file_path_lower = file_path.lower()
 
         # Critical risk files
         critical_patterns = [
-            'dockerfile', 'docker-compose', '.github/workflows',
-            'pyproject.toml', 'setup.py', 'requirements.txt',
-            'makefile', '.gitignore'
+            "dockerfile",
+            "docker-compose",
+            ".github/workflows",
+            "pyproject.toml",
+            "setup.py",
+            "requirements.txt",
+            "makefile",
+            ".gitignore",
         ]
 
         if any(pattern in file_path_lower for pattern in critical_patterns):
@@ -368,8 +338,13 @@ class CIFailureRecoverySystem:
 
         # High risk files
         high_risk_patterns = [
-            'test_', '_test.py', '/tests/', 'conftest.py',
-            'tox.ini', '.pre-commit', 'pytest.ini'
+            "test_",
+            "_test.py",
+            "/tests/",
+            "conftest.py",
+            "tox.ini",
+            ".pre-commit",
+            "pytest.ini",
         ]
 
         if any(pattern in file_path_lower for pattern in high_risk_patterns):
@@ -377,7 +352,11 @@ class CIFailureRecoverySystem:
 
         # Medium risk files
         medium_risk_patterns = [
-            'src/', 'lib/', '__init__.py', 'config', 'settings'
+            "src/",
+            "lib/",
+            "__init__.py",
+            "config",
+            "settings",
         ]
 
         if any(pattern in file_path_lower for pattern in medium_risk_patterns):
@@ -387,11 +366,11 @@ class CIFailureRecoverySystem:
         return RiskLevel.LOW
 
     def run_code_quality_checks(self) -> bool:
-        """
-        Run code quality checks (linting, type checking, etc.).
+        """Run code quality checks (linting, type checking, etc.).
 
         Returns:
             True if all checks pass, False otherwise
+
         """
         self._log_step("Code Quality Checks", RecoveryStatus.IN_PROGRESS)
 
@@ -399,7 +378,7 @@ class CIFailureRecoverySystem:
             ([sys.executable, "-m", "flake8", "src/"], "Flake8 linting"),
             ([sys.executable, "-m", "black", "--check", "src/"], "Black formatting"),
             ([sys.executable, "-m", "isort", "--check-only", "src/"], "Import sorting"),
-            ([sys.executable, "-m", "mypy", "src/"], "Type checking")
+            ([sys.executable, "-m", "mypy", "src/"], "Type checking"),
         ]
 
         all_passed = True
@@ -421,55 +400,69 @@ class CIFailureRecoverySystem:
                 logger.error(f"❌ {check_name} error: {e}")
                 all_passed = False
 
-        status = RecoveryStatus.SUCCESS if all_passed else RecoveryStatus.PARTIAL_SUCCESS
+        status = (
+            RecoveryStatus.SUCCESS if all_passed else RecoveryStatus.PARTIAL_SUCCESS
+        )
         self._log_step("Code Quality Checks", status)
 
         return all_passed
 
     def run_tests(self) -> bool:
-        """
-        Run the test suite.
+        """Run the test suite.
 
         Returns:
             True if tests pass, False otherwise
+
         """
         self._log_step("Test Execution", RecoveryStatus.IN_PROGRESS)
 
         try:
             # Run tests with coverage
-            result = self._run_command([
-                sys.executable, "-m", "pytest",
-                "tests/",
-                "-v",
-                "--tb=short",
-                "--maxfail=5",
-                "--timeout=300"
-            ], timeout=600)
+            result = self._run_command(
+                [
+                    sys.executable,
+                    "-m",
+                    "pytest",
+                    "tests/",
+                    "-v",
+                    "--tb=short",
+                    "--maxfail=5",
+                    "--timeout=300",
+                ],
+                timeout=600,
+            )
 
             if result.returncode == 0:
-                self._log_step("Test Execution", RecoveryStatus.SUCCESS, "All tests passed")
-                return True
-            else:
                 self._log_step(
                     "Test Execution",
-                    RecoveryStatus.FAILED,
-                    f"Tests failed with exit code {result.returncode}"
+                    RecoveryStatus.SUCCESS,
+                    "All tests passed",
                 )
-                return False
+                return True
+            self._log_step(
+                "Test Execution",
+                RecoveryStatus.FAILED,
+                f"Tests failed with exit code {result.returncode}",
+            )
+            return False
 
         except subprocess.TimeoutExpired:
             self._log_step("Test Execution", RecoveryStatus.FAILED, "Tests timed out")
             return False
         except Exception as e:
-            self._log_step("Test Execution", RecoveryStatus.FAILED, error_message=str(e))
+            self._log_step(
+                "Test Execution",
+                RecoveryStatus.FAILED,
+                error_message=str(e),
+            )
             return False
 
-    def generate_recovery_suggestions(self) -> List[str]:
-        """
-        Generate actionable recovery suggestions based on analysis.
+    def generate_recovery_suggestions(self) -> list[str]:
+        """Generate actionable recovery suggestions based on analysis.
 
         Returns:
             List of recovery suggestions
+
         """
         suggestions = []
 
@@ -479,70 +472,95 @@ class CIFailureRecoverySystem:
         risk = self.report.file_analysis.overall_risk
 
         if risk == RiskLevel.CRITICAL:
-            suggestions.extend([
-                "Review critical infrastructure changes carefully",
-                "Test in isolated environment before deployment",
-                "Consider rolling back changes if CI continues to fail"
-            ])
+            suggestions.extend(
+                [
+                    "Review critical infrastructure changes carefully",
+                    "Test in isolated environment before deployment",
+                    "Consider rolling back changes if CI continues to fail",
+                ],
+            )
 
         if risk in [RiskLevel.HIGH, RiskLevel.CRITICAL]:
-            suggestions.extend([
-                "Run full test suite locally before pushing",
-                "Check for missing dependencies or configuration",
-                "Verify environment variables are set correctly"
-            ])
+            suggestions.extend(
+                [
+                    "Run full test suite locally before pushing",
+                    "Check for missing dependencies or configuration",
+                    "Verify environment variables are set correctly",
+                ],
+            )
 
         # Add specific suggestions based on file types
         if self.report.file_analysis.high_risk:
-            test_files = [f for f in self.report.file_analysis.high_risk if 'test' in f.lower()]
+            test_files = [
+                f for f in self.report.file_analysis.high_risk if "test" in f.lower()
+            ]
             if test_files:
-                suggestions.append("Review test changes - ensure mocks and fixtures are correct")
+                suggestions.append(
+                    "Review test changes - ensure mocks and fixtures are correct",
+                )
 
         if not suggestions:
-            suggestions.append("No specific issues detected - CI failure may be transient")
+            suggestions.append(
+                "No specific issues detected - CI failure may be transient",
+            )
 
         return suggestions
 
     def save_report(self) -> Path:
-        """
-        Save the recovery report to a JSON file.
+        """Save the recovery report to a JSON file.
 
         Returns:
             Path to the saved report file
+
         """
-        report_file = self.repository_path / f"ci_recovery_report_{self.commit_hash}_{int(datetime.now().timestamp())}.json"
+        report_file = (
+            self.repository_path / f"ci_recovery_report_{self.commit_hash}_"
+            f"{int(datetime.now().timestamp())}.json"
+        )
 
         try:
             # Convert dataclass to dict for JSON serialization
             report_dict = {
-                'timestamp': self.report.timestamp.isoformat(),
-                'commit_hash': self.report.commit_hash,
-                'repository_path': str(self.report.repository_path),
-                'steps': [
+                "timestamp": self.report.timestamp.isoformat(),
+                "commit_hash": self.report.commit_hash,
+                "repository_path": str(self.report.repository_path),
+                "steps": [
                     {
-                        'name': step.name,
-                        'status': step.status.value,
-                        'timestamp': step.timestamp.isoformat(),
-                        'details': step.details,
-                        'error_message': step.error_message,
-                        'duration_seconds': step.duration_seconds
+                        "name": step.name,
+                        "status": step.status.value,
+                        "timestamp": step.timestamp.isoformat(),
+                        "details": step.details,
+                        "error_message": step.error_message,
+                        "duration_seconds": step.duration_seconds,
                     }
                     for step in self.report.steps
                 ],
-                'file_analysis': {
-                    'low_risk': self.report.file_analysis.low_risk if self.report.file_analysis else [],
-                    'medium_risk': self.report.file_analysis.medium_risk if self.report.file_analysis else [],
-                    'high_risk': self.report.file_analysis.high_risk if self.report.file_analysis else [],
-                    'critical_risk': self.report.file_analysis.critical_risk if self.report.file_analysis else [],
-                    'overall_risk': self.report.file_analysis.overall_risk.value if self.report.file_analysis else 'low'
-                } if self.report.file_analysis else None,
-                'fixes_applied': self.report.fixes_applied,
-                'final_status': self.report.final_status.value,
-                'total_duration_seconds': self.report.total_duration_seconds,
-                'metadata': self.report.metadata
+                "file_analysis": {
+                    "low_risk": self.report.file_analysis.low_risk
+                    if self.report.file_analysis
+                    else [],
+                    "medium_risk": self.report.file_analysis.medium_risk
+                    if self.report.file_analysis
+                    else [],
+                    "high_risk": self.report.file_analysis.high_risk
+                    if self.report.file_analysis
+                    else [],
+                    "critical_risk": self.report.file_analysis.critical_risk
+                    if self.report.file_analysis
+                    else [],
+                    "overall_risk": self.report.file_analysis.overall_risk.value
+                    if self.report.file_analysis
+                    else "low",
+                }
+                if self.report.file_analysis
+                else None,
+                "fixes_applied": self.report.fixes_applied,
+                "final_status": self.report.final_status.value,
+                "total_duration_seconds": self.report.total_duration_seconds,
+                "metadata": self.report.metadata,
             }
 
-            with open(report_file, 'w', encoding='utf-8') as f:
+            with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(report_dict, f, indent=2, ensure_ascii=False)
 
             logger.info(f"Recovery report saved to: {report_file}")
@@ -553,11 +571,11 @@ class CIFailureRecoverySystem:
             raise
 
     def execute_recovery(self) -> bool:
-        """
-        Execute the complete CI failure recovery process.
+        """Execute the complete CI failure recovery process.
 
         Returns:
             True if recovery was successful, False otherwise
+
         """
         start_time = datetime.now()
 
@@ -606,14 +624,21 @@ class CIFailureRecoverySystem:
             self.save_report()
 
             logger.info("=" * 70)
-            logger.info(f"🎯 CI Recovery completed in {self.report.total_duration_seconds:.2f}s")
+            logger.info(
+                f"🎯 CI Recovery completed in "
+                f"{self.report.total_duration_seconds:.2f}s",
+            )
 
             return success
 
         except Exception as e:
             logger.error(f"Recovery process failed with exception: {e}")
             self.report.final_status = RecoveryStatus.FAILED
-            self._log_step("Recovery Process", RecoveryStatus.FAILED, error_message=str(e))
+            self._log_step(
+                "Recovery Process",
+                RecoveryStatus.FAILED,
+                error_message=str(e),
+            )
 
             try:
                 self.save_report()
@@ -629,27 +654,27 @@ def main() -> None:
     import os
 
     parser = argparse.ArgumentParser(
-        description="Professional CI/CD Failure Recovery System"
+        description="Professional CI/CD Failure Recovery System",
     )
     parser.add_argument(
         "--commit",
-        help="Specific commit hash to analyze (defaults to HEAD)"
+        help="Specific commit hash to analyze (defaults to HEAD)",
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Simulate operations without making changes"
+        help="Simulate operations without making changes",
     )
     parser.add_argument(
         "--repository",
         type=Path,
-        help="Path to git repository (defaults to current directory)"
+        help="Path to git repository (defaults to current directory)",
     )
     parser.add_argument(
         "--log-level",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         default="INFO",
-        help="Set logging level"
+        help="Set logging level",
     )
 
     args = parser.parse_args()
@@ -665,7 +690,7 @@ def main() -> None:
         recovery_system = CIFailureRecoverySystem(
             repository_path=args.repository,
             commit_hash=args.commit,
-            dry_run=dry_run
+            dry_run=dry_run,
         )
 
         success = recovery_system.execute_recovery()
