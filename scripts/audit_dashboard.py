@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-DevOps Audit Metrics Dashboard.
+"""DevOps Audit Metrics Dashboard.
 
 Enterprise-grade dashboard for tracking CI/CD audit metrics, prevented failures,
 and productivity improvements across development workflows.
@@ -22,6 +21,8 @@ Author: DevOps Engineering Team
 License: MIT
 """
 
+import argparse
+import html
 import json
 import logging
 import os
@@ -29,9 +30,7 @@ import sys
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-import argparse
-import html
+from typing import Any
 
 # Configure structured logging
 logging.basicConfig(
@@ -40,19 +39,17 @@ logging.basicConfig(
     handlers=[
         logging.StreamHandler(sys.stdout),
         logging.FileHandler("audit_dashboard.log", mode="a"),
-    ]
+    ],
 )
 logger = logging.getLogger(__name__)
 
 
 class AuditMetricsError(Exception):
     """Custom exception for audit metrics operations."""
-    pass
 
 
 class AuditDashboard:
-    """
-    Thread-safe dashboard for DevOps audit metrics tracking.
+    """Thread-safe dashboard for DevOps audit metrics tracking.
 
     Provides comprehensive metrics collection, persistence, and reporting
     for CI/CD audit operations with enterprise-grade reliability.
@@ -65,20 +62,20 @@ class AuditDashboard:
 
     def __init__(
         self,
-        workspace_root: Optional[Path] = None,
-        metrics_filename: str = "audit_metrics.json"
+        workspace_root: Path | None = None,
+        metrics_filename: str = "audit_metrics.json",
     ) -> None:
-        """
-        Initialize audit dashboard with thread-safe operations.
+        """Initialize audit dashboard with thread-safe operations.
 
         Args:
             workspace_root: Root directory for metrics storage
             metrics_filename: Name of the metrics file
+
         """
         self.workspace_root = workspace_root or Path.cwd()
         self.metrics_file = self.workspace_root / metrics_filename
         self._lock = threading.RLock()
-        self._metrics: Dict[str, Any] = {}
+        self._metrics: dict[str, Any] = {}
 
         # Ensure workspace directory exists
         self.workspace_root.mkdir(parents=True, exist_ok=True)
@@ -90,7 +87,7 @@ class AuditDashboard:
         with self._lock:
             try:
                 if self.metrics_file.exists():
-                    with open(self.metrics_file, 'r', encoding='utf-8') as f:
+                    with open(self.metrics_file, encoding="utf-8") as f:
                         self._metrics = json.load(f)
                     logger.info(f"Loaded metrics from {self.metrics_file}")
                 else:
@@ -100,12 +97,12 @@ class AuditDashboard:
                 # Validate and migrate metrics structure
                 self._validate_metrics_structure()
 
-            except (json.JSONDecodeError, IOError) as e:
+            except (OSError, json.JSONDecodeError) as e:
                 logger.error(f"Failed to load metrics: {e}")
                 logger.info("Initializing with default metrics")
                 self._metrics = self._get_default_metrics()
 
-    def _get_default_metrics(self) -> Dict[str, Any]:
+    def _get_default_metrics(self) -> dict[str, Any]:
         """Return default metrics structure."""
         return {
             "version": "1.0",
@@ -120,21 +117,30 @@ class AuditDashboard:
             "success_rate": 100.0,
             "configuration": {
                 "time_per_failure_minutes": self.DEFAULT_TIME_PER_FAILURE_MINUTES,
-                "max_history_records": self.MAX_HISTORY_RECORDS
-            }
+                "max_history_records": self.MAX_HISTORY_RECORDS,
+            },
         }
 
     def _validate_metrics_structure(self) -> None:
         """Validate and migrate metrics structure if needed."""
         required_keys = [
-            "audits_performed", "failures_prevented", "time_saved_minutes",
-            "audit_history", "pattern_statistics", "monthly_stats", "success_rate"
+            "audits_performed",
+            "failures_prevented",
+            "time_saved_minutes",
+            "audit_history",
+            "pattern_statistics",
+            "monthly_stats",
+            "success_rate",
         ]
 
         for key in required_keys:
             if key not in self._metrics:
                 logger.warning(f"Missing metric key '{key}', initializing with default")
-                if key in ["audits_performed", "failures_prevented", "time_saved_minutes"]:
+                if key in [
+                    "audits_performed",
+                    "failures_prevented",
+                    "time_saved_minutes",
+                ]:
                     self._metrics[key] = 0
                 elif key == "success_rate":
                     self._metrics[key] = 100.0
@@ -145,16 +151,16 @@ class AuditDashboard:
         if "configuration" not in self._metrics:
             self._metrics["configuration"] = {
                 "time_per_failure_minutes": self.DEFAULT_TIME_PER_FAILURE_MINUTES,
-                "max_history_records": self.MAX_HISTORY_RECORDS
+                "max_history_records": self.MAX_HISTORY_RECORDS,
             }
 
     def _save_metrics(self) -> None:
         """Save metrics to persistent storage with atomic write."""
         try:
             # Atomic write using temporary file
-            temp_file = self.metrics_file.with_suffix('.tmp')
+            temp_file = self.metrics_file.with_suffix(".tmp")
 
-            with open(temp_file, 'w', encoding='utf-8') as f:
+            with open(temp_file, "w", encoding="utf-8") as f:
                 json.dump(self._metrics, f, indent=2, ensure_ascii=False)
 
             # Atomic move
@@ -165,21 +171,23 @@ class AuditDashboard:
 
             logger.debug(f"Metrics saved to {self.metrics_file}")
 
-        except IOError as e:
+        except OSError as e:
             logger.error(f"Failed to save metrics: {e}")
             raise AuditMetricsError(f"Cannot save metrics: {e}") from e
 
-    def record_audit(self, audit_result: Dict[str, Any]) -> None:
-        """
-        Record audit results with comprehensive validation.
+    def record_audit(self, audit_result: dict[str, Any]) -> None:
+        """Record audit results with comprehensive validation.
 
         Args:
             audit_result: Dictionary containing audit results with structure:
                 {
-                    "external_dependencies": [{"severity": str, "pattern": str, "file": str}, ...],
+                    "external_dependencies": [
+                        {"severity": str, "pattern": str, "file": str}, ...
+                    ],
                     "ci_simulation": {"tests_passed": bool},
                     ...
                 }
+
         """
         if not isinstance(audit_result, dict):
             raise ValueError("audit_result must be a dictionary")
@@ -194,19 +202,24 @@ class AuditDashboard:
                 # Process external dependencies
                 dependencies = audit_result.get("external_dependencies", [])
                 if not isinstance(dependencies, list):
-                    logger.warning("external_dependencies is not a list, treating as empty")
+                    logger.warning(
+                        "external_dependencies is not a list, treating as empty",
+                    )
                     dependencies = []
 
                 failures_prevented = len(dependencies)
                 high_severity_count = sum(
-                    1 for dep in dependencies
+                    1
+                    for dep in dependencies
                     if isinstance(dep, dict) and dep.get("severity") == "HIGH"
                 )
 
                 self._metrics["failures_prevented"] += failures_prevented
 
                 # Calculate time saved with configurable rate
-                time_per_failure = self._metrics["configuration"]["time_per_failure_minutes"]
+                time_per_failure = self._metrics["configuration"][
+                    "time_per_failure_minutes"
+                ]
                 time_saved = failures_prevented * time_per_failure
                 self._metrics["time_saved_minutes"] += time_saved
 
@@ -218,8 +231,11 @@ class AuditDashboard:
 
                 # Record audit history
                 self._record_audit_history(
-                    now, failures_prevented, high_severity_count,
-                    time_saved, audit_result
+                    now,
+                    failures_prevented,
+                    high_severity_count,
+                    time_saved,
+                    audit_result,
                 )
 
                 # Update success rate
@@ -230,14 +246,14 @@ class AuditDashboard:
 
                 logger.info(
                     f"Audit recorded: {failures_prevented} failures prevented, "
-                    f"{time_saved} minutes saved"
+                    f"{time_saved} minutes saved",
                 )
 
             except Exception as e:
                 logger.error(f"Failed to record audit: {e}")
                 raise AuditMetricsError(f"Cannot record audit: {e}") from e
 
-    def _update_pattern_statistics(self, dependencies: List[Dict[str, Any]]) -> None:
+    def _update_pattern_statistics(self, dependencies: list[dict[str, Any]]) -> None:
         """Update pattern detection statistics."""
         for dep in dependencies:
             if not isinstance(dep, dict):
@@ -251,7 +267,7 @@ class AuditDashboard:
                 self._metrics["pattern_statistics"][pattern] = {
                     "count": 0,
                     "files_affected": [],
-                    "severity_distribution": {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
+                    "severity_distribution": {"HIGH": 0, "MEDIUM": 0, "LOW": 0},
                 }
 
             pattern_stats = self._metrics["pattern_statistics"][pattern]
@@ -263,7 +279,11 @@ class AuditDashboard:
             if severity in pattern_stats["severity_distribution"]:
                 pattern_stats["severity_distribution"][severity] += 1
 
-    def _update_monthly_statistics(self, failures_prevented: int, time_saved: int) -> None:
+    def _update_monthly_statistics(
+        self,
+        failures_prevented: int,
+        time_saved: int,
+    ) -> None:
         """Update monthly aggregated statistics."""
         month_key = datetime.now().strftime("%Y-%m")
 
@@ -271,7 +291,7 @@ class AuditDashboard:
             self._metrics["monthly_stats"][month_key] = {
                 "audits": 0,
                 "failures_prevented": 0,
-                "time_saved": 0
+                "time_saved": 0,
             }
 
         monthly = self._metrics["monthly_stats"][month_key]
@@ -285,7 +305,7 @@ class AuditDashboard:
         failures_prevented: int,
         high_severity_count: int,
         time_saved: int,
-        audit_result: Dict[str, Any]
+        audit_result: dict[str, Any],
     ) -> None:
         """Record individual audit in history with size management."""
         audit_record = {
@@ -295,7 +315,7 @@ class AuditDashboard:
             "time_saved": time_saved,
             "ci_simulation_passed": (
                 audit_result.get("ci_simulation", {}).get("tests_passed", True)
-            )
+            ),
         }
 
         self._metrics["audit_history"].append(audit_record)
@@ -303,7 +323,9 @@ class AuditDashboard:
         # Maintain history size limit
         max_records = self._metrics["configuration"]["max_history_records"]
         if len(self._metrics["audit_history"]) > max_records:
-            self._metrics["audit_history"] = self._metrics["audit_history"][-max_records:]
+            self._metrics["audit_history"] = self._metrics["audit_history"][
+                -max_records:
+            ]
 
     def _update_success_rate(self) -> None:
         """Calculate and update success rate based on CI simulation results."""
@@ -312,7 +334,8 @@ class AuditDashboard:
             return
 
         successful_audits = sum(
-            1 for audit in self._metrics["audit_history"]
+            1
+            for audit in self._metrics["audit_history"]
             if audit.get("ci_simulation_passed", True)
         )
 
@@ -320,57 +343,70 @@ class AuditDashboard:
         self._metrics["success_rate"] = (successful_audits / total_audits) * 100
 
     def generate_html_dashboard(self) -> str:
-        """
-        Generate secure HTML dashboard with sanitized content.
+        """Generate secure HTML dashboard with sanitized content.
 
         Returns:
             HTML string with complete dashboard
+
         """
         with self._lock:
             template_data = self._prepare_template_data()
             return self._render_html_template(template_data)
 
-    def _prepare_template_data(self) -> Dict[str, Any]:
+    def _prepare_template_data(self) -> dict[str, Any]:
         """Prepare sanitized data for HTML template."""
         # Sanitize all string data for HTML output
         sanitized_patterns = []
         for pattern, data in sorted(
             self._metrics["pattern_statistics"].items(),
             key=lambda x: x[1]["count"],
-            reverse=True
+            reverse=True,
         )[:10]:
             severity_class = (
-                "severity-high" if data["severity_distribution"]["HIGH"] > 0
+                "severity-high"
+                if data["severity_distribution"]["HIGH"] > 0
                 else "severity-medium"
             )
-            sanitized_patterns.append({
-                "pattern": html.escape(str(pattern)),
-                "count": data["count"],
-                "files_count": len(data["files_affected"]),
-                "severity_class": severity_class
-            })
+            sanitized_patterns.append(
+                {
+                    "pattern": html.escape(str(pattern)),
+                    "count": data["count"],
+                    "files_count": len(data["files_affected"]),
+                    "severity_class": severity_class,
+                },
+            )
 
         sanitized_monthly = []
-        for month, data in sorted(self._metrics["monthly_stats"].items(), reverse=True)[:6]:
-            sanitized_monthly.append({
-                "month": html.escape(str(month)),
-                "audits": data["audits"],
-                "failures_prevented": data["failures_prevented"]
-            })
+        for month, data in sorted(self._metrics["monthly_stats"].items(), reverse=True)[
+            :6
+        ]:
+            sanitized_monthly.append(
+                {
+                    "month": html.escape(str(month)),
+                    "audits": data["audits"],
+                    "failures_prevented": data["failures_prevented"],
+                },
+            )
 
         sanitized_history = []
         for audit in self._metrics["audit_history"][-10:]:
             try:
-                timestamp = datetime.fromisoformat(audit["timestamp"]).strftime("%d/%m %H:%M")
+                timestamp = datetime.fromisoformat(audit["timestamp"]).strftime(
+                    "%d/%m %H:%M",
+                )
             except (ValueError, TypeError):
                 timestamp = "N/A"
 
-            sanitized_history.append({
-                "timestamp": html.escape(timestamp),
-                "status_emoji": "✅" if audit.get("ci_simulation_passed", True) else "❌",
-                "failures_prevented": audit["failures_prevented"],
-                "time_saved": audit["time_saved"]
-            })
+            sanitized_history.append(
+                {
+                    "timestamp": html.escape(timestamp),
+                    "status_emoji": "✅"
+                    if audit.get("ci_simulation_passed", True)
+                    else "❌",
+                    "failures_prevented": audit["failures_prevented"],
+                    "time_saved": audit["time_saved"],
+                },
+            )
 
         return {
             "last_update": datetime.now().strftime("%d/%m/%Y %H:%M"),
@@ -381,39 +417,56 @@ class AuditDashboard:
             "patterns": sanitized_patterns,
             "monthly": sanitized_monthly,
             "history": sanitized_history,
-            "generation_time": datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            "generation_time": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         }
 
-    def _render_html_template(self, data: Dict[str, Any]) -> str:
+    def _render_html_template(self, data: dict[str, Any]) -> str:
         """Render HTML template with provided data."""
-        pattern_stats_html = "".join([
-            f'''
+        pattern_stats_html = "".join(
+            [
+                f"""
                 <li class="pattern-item">
-                    <span class="{pattern['severity_class']}">🔍 {pattern['pattern']}</span>
-                    <span>{pattern['count']} ocorrências em {pattern['files_count']} arquivos</span>
+                    <span class="{pattern["severity_class"]}">
+                        🔍 {pattern["pattern"][:15]}
+                    </span>
+                    <span>
+                        {pattern["count"]} em {pattern["files_count"]} arquivos
+                    </span>
                 </li>
-            ''' for pattern in data["patterns"]
-        ])
+            """
+                for pattern in data["patterns"]
+            ],
+        )
 
-        monthly_stats_html = "".join([
-            f'''
+        monthly_stats_html = "".join(
+            [
+                f"""
                 <li class="pattern-item">
-                    <span>📅 {month['month']}</span>
-                    <span>{month['audits']} auditorias, {month['failures_prevented']} falhas evitadas</span>
+                    <span>📅 {month["month"]}</span>
+                    <span>
+                        {month["audits"]} auditorias, {month["failures_prevented"]} err
+                    </span>
                 </li>
-            ''' for month in data["monthly"]
-        ])
+            """
+                for month in data["monthly"]
+            ],
+        )
 
-        audit_history_html = "".join([
-            f'''
+        audit_history_html = "".join(
+            [
+                f"""
                 <li class="pattern-item">
-                    <span>{audit['status_emoji']} {audit['timestamp']}</span>
-                    <span>{audit['failures_prevented']} falhas evitadas, {audit['time_saved']}min economizados</span>
+                    <span>{audit["status_emoji"]} {audit["timestamp"]}</span>
+                    <span>
+                        {audit["failures_prevented"]} falhas, {audit["time_saved"]}min
+                    </span>
                 </li>
-            ''' for audit in data["history"]
-        ])
+            """
+                for audit in data["history"]
+            ],
+        )
 
-        return f'''<!DOCTYPE html>
+        return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -517,7 +570,7 @@ class AuditDashboard:
         </div>
     </div>
 </body>
-</html>'''
+</html>"""
 
     def print_console_dashboard(self) -> None:
         """Print formatted dashboard to console."""
@@ -528,7 +581,8 @@ class AuditDashboard:
             print("\n🎯 MÉTRICAS PRINCIPAIS:")
             print(f"   • Auditorias realizadas: {self._metrics['audits_performed']}")
             print(f"   • Falhas evitadas: {self._metrics['failures_prevented']}")
-            print(f"   • Tempo economizado: {self._metrics['time_saved_minutes'] / 60:.1f} horas")
+            time_hours = self._metrics["time_saved_minutes"] / 60
+            print(f"   • Tempo economizado: {time_hours:.1f} horas")
             print(f"   • Taxa de sucesso: {self._metrics['success_rate']:.1f}%")
 
             if self._metrics["pattern_statistics"]:
@@ -536,52 +590,57 @@ class AuditDashboard:
                 for pattern, data in sorted(
                     self._metrics["pattern_statistics"].items(),
                     key=lambda x: x[1]["count"],
-                    reverse=True
+                    reverse=True,
                 )[:5]:
-                    severity = "🔴" if data["severity_distribution"]["HIGH"] > 0 else "🟡"
+                    severity = (
+                        "🔴" if data["severity_distribution"]["HIGH"] > 0 else "🟡"
+                    )
                     print(f"   {severity} {pattern}: {data['count']} ocorrências")
 
             if self._metrics["audit_history"]:
                 print("\n📈 ÚLTIMAS AUDITORIAS:")
                 for audit in self._metrics["audit_history"][-5:]:
                     try:
-                        timestamp = datetime.fromisoformat(audit["timestamp"]).strftime("%d/%m %H:%M")
+                        timestamp = datetime.fromisoformat(audit["timestamp"]).strftime(
+                            "%d/%m %H:%M",
+                        )
                     except (ValueError, TypeError):
                         timestamp = "N/A"
 
                     status = "✅" if audit.get("ci_simulation_passed", True) else "❌"
-                    print(f"   {status} {timestamp}: {audit['failures_prevented']} falhas evitadas")
+                    failures = audit["failures_prevented"]
+                    print(f"   {status} {timestamp}: {failures} falhas evitadas")
 
     def export_html_dashboard(self) -> Path:
-        """
-        Export dashboard as HTML file.
+        """Export dashboard as HTML file.
 
         Returns:
             Path to generated HTML file
+
         """
         try:
             html_content = self.generate_html_dashboard()
             html_file = self.workspace_root / "audit_dashboard.html"
 
-            with open(html_file, 'w', encoding='utf-8') as f:
+            with open(html_file, "w", encoding="utf-8") as f:
                 f.write(html_content)
 
             os.chmod(html_file, self.METRICS_FILE_PERMISSIONS)
             logger.info(f"HTML dashboard exported to {html_file}")
             return html_file
 
-        except IOError as e:
+        except OSError as e:
             raise AuditMetricsError(f"Cannot export HTML dashboard: {e}") from e
 
-    def export_json_metrics(self, output_file: Optional[Path] = None) -> Path:
-        """
-        Export metrics as JSON for external monitoring systems.
+    def export_json_metrics(self, output_file: Path | None = None) -> Path:
+        """Export metrics as JSON for external monitoring systems.
 
         Args:
             output_file: Optional custom output file path
 
         Returns:
             Path to exported JSON file
+
         """
         with self._lock:
             try:
@@ -590,17 +649,17 @@ class AuditDashboard:
 
                 export_data = {
                     "exported_at": datetime.now(timezone.utc).isoformat(),
-                    "metrics": self._metrics.copy()
+                    "metrics": self._metrics.copy(),
                 }
 
-                with open(output_file, 'w', encoding='utf-8') as f:
+                with open(output_file, "w", encoding="utf-8") as f:
                     json.dump(export_data, f, indent=2, ensure_ascii=False)
 
                 os.chmod(output_file, self.METRICS_FILE_PERMISSIONS)
                 logger.info(f"Metrics exported to {output_file}")
                 return output_file
 
-            except IOError as e:
+            except OSError as e:
                 raise AuditMetricsError(f"Cannot export JSON metrics: {e}") from e
 
     def reset_metrics(self) -> None:
@@ -609,7 +668,7 @@ class AuditDashboard:
             try:
                 # Backup current metrics
                 if self.metrics_file.exists():
-                    backup_file = self.metrics_file.with_suffix('.backup')
+                    backup_file = self.metrics_file.with_suffix(".backup")
                     self.metrics_file.rename(backup_file)
                     logger.info(f"Metrics backed up to {backup_file}")
 
@@ -617,15 +676,15 @@ class AuditDashboard:
                 self._save_metrics()
                 logger.info("Metrics reset to default state")
 
-            except IOError as e:
+            except OSError as e:
                 raise AuditMetricsError(f"Cannot reset metrics: {e}") from e
 
-    def get_metrics_summary(self) -> Dict[str, Any]:
-        """
-        Get current metrics summary for programmatic access.
+    def get_metrics_summary(self) -> dict[str, Any]:
+        """Get current metrics summary for programmatic access.
 
         Returns:
             Dictionary with current metrics
+
         """
         with self._lock:
             return {
@@ -635,7 +694,7 @@ class AuditDashboard:
                 "success_rate": self._metrics["success_rate"],
                 "last_audit": self._metrics.get("last_audit"),
                 "pattern_count": len(self._metrics["pattern_statistics"]),
-                "history_count": len(self._metrics["audit_history"])
+                "history_count": len(self._metrics["audit_history"]),
             }
 
 
@@ -650,45 +709,46 @@ Examples:
   %(prog)s --export-html            Export HTML dashboard
   %(prog)s --export-json metrics.json  Export metrics as JSON
   %(prog)s --reset-stats            Reset all statistics
-        """
+        """,
     )
 
     parser.add_argument(
         "--export-html",
         action="store_true",
-        help="Export dashboard as HTML file"
+        help="Export dashboard as HTML file",
     )
 
     parser.add_argument(
         "--export-json",
         type=str,
         metavar="FILE",
-        help="Export metrics as JSON to specified file"
+        help="Export metrics as JSON to specified file",
     )
 
     parser.add_argument(
         "--reset-stats",
         action="store_true",
-        help="Reset all statistics (creates backup)"
+        help="Reset all statistics (creates backup)",
     )
 
     parser.add_argument(
         "--workspace",
         type=Path,
-        help="Workspace root directory (default: current directory)"
+        help="Workspace root directory (default: current directory)",
     )
 
     parser.add_argument(
         "--metrics-file",
         type=str,
         default="audit_metrics.json",
-        help="Metrics file name (default: audit_metrics.json)"
+        help="Metrics file name (default: audit_metrics.json)",
     )
 
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
-        help="Enable verbose logging"
+        help="Enable verbose logging",
     )
 
     return parser

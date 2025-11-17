@@ -71,9 +71,11 @@ class LintFixConfig:
                     logger.error(
                         "Nem 'tomllib' (Python 3.11+) nem 'tomli' foram encontrados.",
                     )
-                    logger.error(
-                        "Por favor, adicione 'tomli' às dependências de dev no pyproject.toml.",
+                    error_msg = (
+                        "Por favor, adicione 'tomli' às dependências "
+                        "de dev no pyproject.toml."
                     )
+                    logger.error(error_msg)
                     # Retorna o padrão se não puder ler o config
                     return 88
 
@@ -243,7 +245,9 @@ class LintFixer:
                     if op in line:
                         parts = line.split(op, 1)
                         if len(parts) == 2:
-                            return f"{parts[0].rstrip()}{op.strip()} \\\n{indent_str}    {parts[1].lstrip()}"
+                            left = parts[0].rstrip()
+                            right = parts[1].lstrip()
+                            return f"{left}{op.strip()} \\\n{indent_str}    {right}"
 
         return line
 
@@ -279,7 +283,7 @@ class LintFixer:
             cmd = [sys.executable, "-m", "ruff", "format"]
             cmd.extend(str(p) for p in paths)
 
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 cmd,
                 check=False,
                 capture_output=True,
@@ -313,7 +317,7 @@ class LintFixer:
             cmd = [sys.executable, "-m", "ruff", "check", "--output-format=concise"]
             cmd.extend(str(p) for p in paths)
 
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 cmd,
                 check=False,
                 capture_output=True,
@@ -389,7 +393,7 @@ def create_commit_if_needed(
 
     try:
         # Verificar se há mudanças staged
-        status_result = subprocess.run(
+        status_result = subprocess.run(  # noqa: subprocess
             ["git", "status", "--porcelain"],
             check=False,
             capture_output=True,
@@ -402,7 +406,7 @@ def create_commit_if_needed(
             return False
 
         # Add files
-        subprocess.run(
+        subprocess.run(  # noqa: subprocess
             ["git", "add", "."],
             cwd=config.project_root,
             check=True,
@@ -423,7 +427,7 @@ def create_commit_if_needed(
 🎯 Gerado por: scripts/lint_fix.py"""
 
         # Commit
-        subprocess.run(
+        subprocess.run(  # noqa: subprocess
             ["git", "commit", "-m", commit_msg],
             cwd=config.project_root,
             check=True,

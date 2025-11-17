@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Test Mock Validator - Validador para o Sistema de Mock Generator
+"""Test Mock Validator - Validador para o Sistema de Mock Generator
 ===============================================================
 
 Valida e testa o funcionamento do Test Mock Generator de forma automatizada.
@@ -19,7 +18,6 @@ import ast
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, List
 
 from test_mock_generator import TestMockGenerator
 
@@ -32,19 +30,18 @@ logger = logging.getLogger("test_mock_validator")
 
 
 class TestMockValidator:
-    """
-    Validador para o sistema de geração automática de mocks.
+    """Validador para o sistema de geração automática de mocks.
 
     Implementa verificações de integridade e testes automatizados
     para garantir que o sistema funcione corretamente.
     """
 
     def __init__(self, workspace_root: Path):
-        """
-        Inicializa o validador.
+        """Inicializa o validador.
 
         Args:
             workspace_root: Caminho raiz do workspace
+
         """
         self.workspace_root = workspace_root.resolve()
 
@@ -61,20 +58,20 @@ class TestMockValidator:
         self.generator = TestMockGenerator(workspace_root, config_file)
         # --- FIM DA CORREÇÃO ---
 
-        self.validation_errors: List[Dict[str, str]] = []
+        self.validation_errors: list[dict[str, str]] = []
 
     def validate_workspace_structure(self) -> bool:
-        """
-        Valida se a estrutura do workspace está adequada.
+        """Valida se a estrutura do workspace está adequada.
 
         Returns:
             True se estrutura válida
+
         """
         logger.info("Validando estrutura do workspace...")
 
         required_paths = [
             "tests",  # Diretório de testes
-            "src",    # Código fonte (opcional)
+            "src",  # Código fonte (opcional)
         ]
 
         optional_paths = [
@@ -95,31 +92,42 @@ class TestMockValidator:
                     logger.info(f"Diretório de testes criado: {path}")
                 except Exception as e:
                     logger.error(f"Erro ao criar diretório {path}: {e}")
-                    self.validation_errors.append({
-                        "type": "MISSING_DIRECTORY",
-                        "path": str(path),
-                        "message": f"Diretório obrigatório não encontrado: {path}"
-                    })
+                    self.validation_errors.append(
+                        {
+                            "type": "MISSING_DIRECTORY",
+                            "path": str(path),
+                            "message": f"Diretório obrigatório não encontrado: {path}",
+                        },
+                    )
                     is_valid = False
 
         # Verifica se há pelo menos um arquivo de configuração Python
-        has_config = any((self.workspace_root / path).exists() for path in optional_paths)
+        has_config = any(
+            (self.workspace_root / path).exists() for path in optional_paths
+        )
         if not has_config:
-            self.validation_errors.append({
-                "type": "MISSING_CONFIG",
-                "path": str(self.workspace_root),
-                "message": "Nenhum arquivo de configuração Python encontrado (pyproject.toml, etc.)"
-            })
+            self.validation_errors.append(
+                {
+                    "type": "MISSING_CONFIG",
+                    "path": str(self.workspace_root),
+                    "message": (
+                        "Nenhum arquivo de configuração Python encontrado "
+                        "(pyproject.toml, etc.)"
+                    ),
+                },
+            )
 
-        logger.info(f"Validação da estrutura: {'✅ Válida' if is_valid else '❌ Inválida'}")
+        logger.info(
+            f"Validação da estrutura: {'✅ Válida' if is_valid else '❌ Inválida'}",
+        )
         return is_valid
 
     def validate_test_files_syntax(self) -> bool:
-        """
-        Valida sintaxe de todos os arquivos de teste.
+        """Valida sintaxe de todos os arquivos de teste.
 
         Returns:
             True se todos os arquivos têm sintaxe válida
+
         """
         logger.info("Validando sintaxe dos arquivos de teste...")
 
@@ -140,35 +148,43 @@ class TestMockValidator:
 
             except SyntaxError as e:
                 logger.error(f"Erro de sintaxe em {test_file}: {e}")
-                self.validation_errors.append({
-                    "type": "SYNTAX_ERROR",
-                    "path": str(test_file),
-                    "message": f"Erro de sintaxe: {e}"
-                })
+                self.validation_errors.append(
+                    {
+                        "type": "SYNTAX_ERROR",
+                        "path": str(test_file),
+                        "message": f"Erro de sintaxe: {e}",
+                    },
+                )
             except Exception as e:
                 logger.error(f"Erro ao validar {test_file}: {e}")
-                self.validation_errors.append({
-                    "type": "VALIDATION_ERROR",
-                    "path": str(test_file),
-                    "message": f"Erro de validação: {e}"
-                })
+                self.validation_errors.append(
+                    {
+                        "type": "VALIDATION_ERROR",
+                        "path": str(test_file),
+                        "message": f"Erro de validação: {e}",
+                    },
+                )
 
         success_rate = valid_files / len(test_files) if test_files else 1.0
-        logger.info(f"Validação de sintaxe: {valid_files}/{len(test_files)} arquivos válidos ({success_rate:.1%})")
+        msg = (
+            f"Validação de sintaxe: {valid_files}/{len(test_files)} "
+            f"arquivos válidos ({success_rate:.1%})"
+        )
+        logger.info(msg)
 
         return success_rate >= 0.9  # 90% dos arquivos devem ser válidos
 
-    def create_sample_test_files(self) -> List[Path]:
-        """
-        Cria arquivos de teste de exemplo para validação.
+    def create_sample_test_files(self) -> list[Path]:
+        """Cria arquivos de teste de exemplo para validação.
 
         Returns:
             Lista de caminhos dos arquivos criados
+
         """
         logger.info("Criando arquivos de teste de exemplo...")
 
         sample_tests = {
-            "test_http_requests.py": '''"""Test file with HTTP patterns for mock validation."""
+            "test_http_requests.py": '''"""Test file with HTTP patterns."""
 
 import httpx
 import requests
@@ -186,7 +202,6 @@ def test_requests_post():
     response = requests.post("https://api.example.com/submit", json=data)
     assert response.status_code == 201
 ''',
-
             "test_subprocess_calls.py": '''"""Test file with subprocess patterns."""
 
 import subprocess
@@ -195,7 +210,7 @@ import sys
 
 def test_subprocess_run():
     """Test that should trigger subprocess.run mock suggestion."""
-    result = subprocess.run([sys.executable, "--version"],
+    result = subprocess.run([sys.executable, "--version"],  # noqa: subprocess
                           capture_output=True, text=True)
     assert result.returncode == 0
 
@@ -207,7 +222,6 @@ def test_subprocess_popen():
     output, _ = process.communicate()
     assert process.returncode == 0
 ''',
-
             "test_file_operations.py": '''"""Test file with file system operations."""
 
 from pathlib import Path
@@ -249,11 +263,11 @@ def test_path_operations():
         return created_files
 
     def test_mock_generation(self) -> bool:
-        """
-        Testa se o gerador de mocks funciona corretamente.
+        """Testa se o gerador de mocks funciona corretamente.
 
         Returns:
             True se geração funcionou
+
         """
         logger.info("Testando geração de mocks...")
 
@@ -262,7 +276,9 @@ def test_path_operations():
             report = self.generator.scan_test_files()
 
             if not report["suggestions"]:
-                logger.warning("Nenhuma sugestão gerada - criando arquivos de teste de exemplo")
+                logger.warning(
+                    "Nenhuma sugestão gerada - criando arquivos de teste de exemplo",
+                )
                 self.create_sample_test_files()
                 # Tenta novamente
                 report = self.generator.scan_test_files()
@@ -270,37 +286,45 @@ def test_path_operations():
             suggestions_count = len(report["suggestions"])
             high_priority_count = report["summary"]["high_priority"]
 
-            logger.info(f"Geração de mocks: {suggestions_count} sugestões, {high_priority_count} alta prioridade")
+            msg = (
+                f"Geração de mocks: {suggestions_count} sugestões, "
+                f"{high_priority_count} alta prioridade"
+            )
+            logger.info(msg)
 
             # Valida estrutura das sugestões
             for suggestion in report["suggestions"]:
                 required_fields = ["file", "function", "line", "pattern", "severity"]
                 for field in required_fields:
                     if field not in suggestion:
-                        self.validation_errors.append({
-                            "type": "MISSING_FIELD",
-                            "path": suggestion.get("file", "unknown"),
-                            "message": f"Campo obrigatório ausente: {field}"
-                        })
+                        self.validation_errors.append(
+                            {
+                                "type": "MISSING_FIELD",
+                                "path": suggestion.get("file", "unknown"),
+                                "message": f"Campo obrigatório ausente: {field}",
+                            },
+                        )
                         return False
 
             return suggestions_count > 0
 
         except Exception as e:
             logger.error(f"Erro na geração de mocks: {e}")
-            self.validation_errors.append({
-                "type": "GENERATION_ERROR",
-                "path": str(self.workspace_root),
-                "message": f"Erro na geração: {e}"
-            })
+            self.validation_errors.append(
+                {
+                    "type": "GENERATION_ERROR",
+                    "path": str(self.workspace_root),
+                    "message": f"Erro na geração: {e}",
+                },
+            )
             return False
 
     def test_dry_run_application(self) -> bool:
-        """
-        Testa aplicação em modo dry-run.
+        """Testa aplicação em modo dry-run.
 
         Returns:
             True se dry-run funcionou
+
         """
         logger.info("Testando aplicação em modo dry-run...")
 
@@ -325,19 +349,21 @@ def test_path_operations():
 
         except Exception as e:
             logger.error(f"Erro no dry-run: {e}")
-            self.validation_errors.append({
-                "type": "DRY_RUN_ERROR",
-                "path": str(self.workspace_root),
-                "message": f"Erro no dry-run: {e}"
-            })
+            self.validation_errors.append(
+                {
+                    "type": "DRY_RUN_ERROR",
+                    "path": str(self.workspace_root),
+                    "message": f"Erro no dry-run: {e}",
+                },
+            )
             return False
 
-    def run_full_validation(self) -> Dict[str, bool]:
-        """
-        Executa validação completa do sistema.
+    def run_full_validation(self) -> dict[str, bool]:
+        """Executa validação completa do sistema.
 
         Returns:
             Dicionário com resultados de cada validação
+
         """
         logger.info("Iniciando validação completa do Test Mock Generator...")
 
@@ -351,7 +377,9 @@ def test_path_operations():
         success_count = sum(validations.values())
         total_count = len(validations)
 
-        logger.info(f"Validação completa: {success_count}/{total_count} verificações passaram")
+        logger.info(
+            f"Validação completa: {success_count}/{total_count} verificações passaram",
+        )
 
         # Log de erros encontrados
         if self.validation_errors:
@@ -362,11 +390,11 @@ def test_path_operations():
         return validations
 
     def fix_common_issues(self) -> int:
-        """
-        Tenta corrigir problemas comuns automaticamente.
+        """Tenta corrigir problemas comuns automaticamente.
 
         Returns:
             Número de problemas corrigidos
+
         """
         logger.info("Tentando corrigir problemas comuns...")
 
@@ -396,35 +424,36 @@ def test_path_operations():
 
 
 def main() -> int:
-    """
-    Função principal CLI.
+    """Função principal CLI.
 
     Returns:
         Código de saída (0 = sucesso, 1 = erro)
+
     """
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Test Mock Validator - Validador do Sistema de Mock Generator"
+        description="Test Mock Validator - Validador do Sistema de Mock Generator",
     )
 
     parser.add_argument(
         "--fix-found-issues",
         action="store_true",
-        help="Tentar corrigir problemas encontrados automaticamente"
+        help="Tentar corrigir problemas encontrados automaticamente",
     )
 
     parser.add_argument(
         "--workspace",
         type=Path,
         default=Path.cwd(),
-        help="Caminho do workspace (padrão: diretório atual)"
+        help="Caminho do workspace (padrão: diretório atual)",
     )
 
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
-        help="Ativar logging verboso"
+        help="Ativar logging verboso",
     )
 
     args = parser.parse_args()
@@ -465,7 +494,11 @@ def main() -> int:
         total_count = len(results)
         success_rate = success_count / total_count
 
-        print(f"\n📊 SUMÁRIO: {success_count}/{total_count} validações passaram ({success_rate:.1%})")
+        msg = (
+            f"\n📊 SUMÁRIO: {success_count}/{total_count} validações passaram "
+            f"({success_rate:.1%})"
+        )
+        print(msg)
 
         if validator.validation_errors:
             print(f"\n⚠️  {len(validator.validation_errors)} problemas encontrados")

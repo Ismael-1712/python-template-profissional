@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""
-Integration example showing how to connect audit_dashboard.py with code_audit.py.
+"""Integration example showing how to connect audit_dashboard.py with code_audit.py.
 
 This example demonstrates enterprise-grade integration patterns for
 tracking audit metrics in DevOps pipelines.
 """
 
+import logging
 import sys
 from pathlib import Path
 
@@ -13,16 +13,15 @@ from pathlib import Path
 scripts_dir = Path(__file__).parent
 sys.path.insert(0, str(scripts_dir))
 
-from code_audit import CodeAuditor, save_report, print_summary
-from audit_dashboard import AuditDashboard, AuditMetricsError
-import logging
+# Now we can safely import the local modules after modifying sys.path
+from audit_dashboard import AuditDashboard, AuditMetricsError  # noqa: E402
+from code_audit import CodeAuditor, print_summary, save_report  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
 
 def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
-    """
-    Run code audit with dashboard metrics integration.
+    """Run code audit with dashboard metrics integration.
 
     Args:
         workspace_root: Root directory of the project
@@ -30,6 +29,7 @@ def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
 
     Returns:
         Exit code (0 for success, >0 for failure)
+
     """
     try:
         # Initialize auditor
@@ -49,9 +49,9 @@ def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
             logger.info("✅ Audit metrics recorded in dashboard")
 
             # Print dashboard summary
-            print("\n" + "="*60)
+            print("\n" + "=" * 60)
             print("📊 DASHBOARD METRICS UPDATED")
-            print("="*60)
+            print("=" * 60)
             dashboard.print_console_dashboard()
 
         except AuditMetricsError as e:
@@ -60,6 +60,7 @@ def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
 
         # Save the audit report
         from datetime import datetime
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         report_file = workspace_root / f"audit_report_{timestamp}.json"
         save_report(audit_report, report_file, "json")
@@ -72,12 +73,11 @@ def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
         if overall_status in ["CRITICAL", "FAIL"]:
             logger.error(f"Audit failed with status: {overall_status}")
             return 1
-        elif overall_status == "WARNING":
+        if overall_status == "WARNING":
             logger.warning(f"Audit completed with warnings: {overall_status}")
             return 0  # Warnings don't fail the build
-        else:
-            logger.info(f"Audit passed with status: {overall_status}")
-            return 0
+        logger.info(f"Audit passed with status: {overall_status}")
+        return 0
 
     except Exception as e:
         logger.exception(f"Integrated audit failed: {e}")
@@ -85,14 +85,14 @@ def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
 
 
 def transform_audit_for_dashboard(audit_report: dict) -> dict:
-    """
-    Transform code_audit.py report format to audit_dashboard.py expected format.
+    """Transform code_audit.py report format to audit_dashboard.py expected format.
 
     Args:
         audit_report: Report from CodeAuditor.run_audit()
 
     Returns:
         Dictionary in format expected by AuditDashboard.record_audit()
+
     """
     # Extract external dependencies from findings
     external_dependencies = []
@@ -104,7 +104,7 @@ def transform_audit_for_dashboard(audit_report: dict) -> dict:
             "severity": finding.get("severity", "MEDIUM"),
             "file": finding.get("file", ""),
             "description": finding.get("description", ""),
-            "line": finding.get("line", 0)
+            "line": finding.get("line", 0),
         }
         external_dependencies.append(dependency)
 
@@ -114,7 +114,7 @@ def transform_audit_for_dashboard(audit_report: dict) -> dict:
         "tests_passed": ci_simulation.get("passed", True),
         "exit_code": ci_simulation.get("exit_code", 0),
         "duration": ci_simulation.get("duration", "unknown"),
-        "output": ci_simulation.get("stdout", "")
+        "output": ci_simulation.get("stdout", ""),
     }
 
     # Return dashboard-compatible format
@@ -123,7 +123,7 @@ def transform_audit_for_dashboard(audit_report: dict) -> dict:
         "ci_simulation": formatted_ci_simulation,
         "metadata": audit_report.get("metadata", {}),
         "mock_coverage": audit_report.get("mock_coverage", {}),
-        "summary": audit_report.get("summary", {})
+        "summary": audit_report.get("summary", {}),
     }
 
 
@@ -133,31 +133,32 @@ def main():
 
     parser = argparse.ArgumentParser(
         description="Integrated code audit with dashboard metrics",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
     parser.add_argument(
         "--config",
         type=Path,
-        help="Path to audit configuration YAML file"
+        help="Path to audit configuration YAML file",
     )
 
     parser.add_argument(
         "--workspace",
         type=Path,
-        help="Workspace root directory (default: parent of this script)"
+        help="Workspace root directory (default: parent of this script)",
     )
 
     parser.add_argument(
         "--export-dashboard",
         action="store_true",
-        help="Export HTML dashboard after audit"
+        help="Export HTML dashboard after audit",
     )
 
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
-        help="Enable verbose logging"
+        help="Enable verbose logging",
     )
 
     args = parser.parse_args()
@@ -166,7 +167,7 @@ def main():
     log_level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(
         level=log_level,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     # Determine workspace root
@@ -181,11 +182,16 @@ def main():
         config_file = script_dir / "audit_config.yaml"
 
     if not config_file.exists():
-        logger.error(f"Arquivo de configuração de auditoria não encontrado: {config_file}")
+        logger.error(
+            f"Arquivo de configuração de auditoria não encontrado: {config_file}",
+        )
         return 1
 
     # Run integrated audit
-    exit_code = run_integrated_audit(workspace_root, config_file) # Passa o config_file corrigido
+    exit_code = run_integrated_audit(
+        workspace_root,
+        config_file,
+    )  # Passa o config_file corrigido
     # --- FIM DA CORREÇÃO ---
 
     # Export dashboard if requested
