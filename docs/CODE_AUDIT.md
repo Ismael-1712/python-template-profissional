@@ -31,16 +31,6 @@ python scripts/code_audit.py --output yaml
 python scripts/code_audit.py --fail-on MEDIUM
 ```
 
-### Pre-commit Hook Integration
-
-```bash
-# Install as git pre-commit hook
-python scripts/pre_commit_audit.py install
-
-# Manual pre-commit check
-python scripts/pre_commit_audit.py
-```
-
 ## 📋 Security Patterns Detected
 
 ### Critical Severity

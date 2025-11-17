@@ -22,9 +22,8 @@ on:
   # Permite a execução manual
   workflow_dispatch:
 
-# Permissões para o semantic-release poder fazer push
 permissions:
-  contents: write # Permite que o semantic-release faça o push de commits/tags
+  contents: read
 
 jobs:
   # --------------------------------------------------------------------
