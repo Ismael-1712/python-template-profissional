@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-CI/CD Test Mock Integration - Integração com Pipelines CI/CD
+"""CI/CD Test Mock Integration - Integração com Pipelines CI/CD
 ============================================================
 
 Script para integrar o Test Mock Generator em pipelines de CI/CD,
@@ -27,7 +26,6 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
 
 from test_mock_generator import TestMockGenerator
 from validate_test_mocks import TestMockValidator
@@ -41,19 +39,18 @@ logger = logging.getLogger("ci_test_mock_integration")
 
 
 class CITestMockIntegration:
-    """
-    Integração do Test Mock Generator com pipelines CI/CD.
+    """Integração do Test Mock Generator com pipelines CI/CD.
 
     Implementa verificações automáticas e correções para garantir
     que todos os testes tenham mocks adequados em ambiente CI/CD.
     """
 
     def __init__(self, workspace_root: Path):
-        """
-        Inicializa a integração CI/CD.
+        """Inicializa a integração CI/CD.
 
         Args:
             workspace_root: Caminho raiz do workspace
+
         """
         self.workspace_root = workspace_root.resolve()
 
@@ -66,8 +63,10 @@ class CITestMockIntegration:
             logger.error(f"Config do gerador não encontrado: {config_file}")
             raise FileNotFoundError(f"Config do gerador não encontrado: {config_file}")
 
-        self.generator = TestMockGenerator(workspace_root, config_file) # <-- CORRIGIDO
-        self.validator = TestMockValidator(workspace_root) # <-- OK (Corrigido na Etapa 31)
+        self.generator = TestMockGenerator(workspace_root, config_file)  # <-- CORRIGIDO
+        self.validator = TestMockValidator(
+            workspace_root,
+        )  # <-- OK (Corrigido na Etapa 31)
         # --- FIM DA CORREÇÃO ---
 
         self.ci_environment = self._detect_ci_environment()
@@ -75,11 +74,11 @@ class CITestMockIntegration:
         logger.info(f"CI/CD Integration iniciada - Ambiente: {self.ci_environment}")
 
     def _detect_ci_environment(self) -> str:
-        """
-        Detecta o ambiente CI/CD atual.
+        """Detecta o ambiente CI/CD atual.
 
         Returns:
             Nome do ambiente CI/CD detectado
+
         """
         ci_environments = {
             "GITHUB_ACTIONS": "github-actions",
@@ -97,23 +96,23 @@ class CITestMockIntegration:
 
         return "local"
 
-    def _run_git_command(self, command: List[str]) -> Tuple[bool, str]:
-        """
-        Executa comando git de forma segura.
+    def _run_git_command(self, command: list[str]) -> tuple[bool, str]:
+        """Executa comando git de forma segura.
 
         Args:
             command: Lista com comando git
 
         Returns:
             Tupla (sucesso, output)
+
         """
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
                 capture_output=True,
                 text=True,
-                check=False
+                check=False,
             )
 
             return result.returncode == 0, result.stdout.strip()
@@ -122,12 +121,12 @@ class CITestMockIntegration:
             logger.error(f"Erro ao executar comando git: {e}")
             return False, str(e)
 
-    def check_git_status(self) -> Dict[str, any]:
-        """
-        Verifica status do repositório git.
+    def check_git_status(self) -> dict[str, any]:
+        """Verifica status do repositório git.
 
         Returns:
             Dicionário com informações do git
+
         """
         info = {
             "is_git_repo": False,
@@ -160,12 +159,12 @@ class CITestMockIntegration:
 
         return info
 
-    def run_comprehensive_check(self) -> Dict[str, any]:
-        """
-        Executa verificação abrangente para CI/CD.
+    def run_comprehensive_check(self) -> dict[str, any]:
+        """Executa verificação abrangente para CI/CD.
 
         Returns:
             Relatório completo das verificações
+
         """
         logger.info("Executando verificação abrangente para CI/CD...")
 
@@ -179,13 +178,11 @@ class CITestMockIntegration:
         report = self.generator.scan_test_files()
 
         # Análise de criticidade
-        critical_issues = [
-            s for s in report["suggestions"]
-            if s["severity"] == "HIGH"
-        ]
+        critical_issues = [s for s in report["suggestions"] if s["severity"] == "HIGH"]
 
         blocking_issues = [
-            s for s in critical_issues
+            s
+            for s in critical_issues
             if s["mock_type"] in ["HTTP_REQUEST", "SUBPROCESS"]
         ]
 
@@ -204,10 +201,14 @@ class CITestMockIntegration:
             },
             "summary": report["summary"],
             "recommendations": self._generate_recommendations(
-                validation_results, critical_issues, blocking_issues
+                validation_results,
+                critical_issues,
+                blocking_issues,
             ),
             "status": self._determine_overall_status(
-                validation_results, critical_issues, blocking_issues
+                validation_results,
+                critical_issues,
+                blocking_issues,
             ),
         }
 
@@ -217,15 +218,15 @@ class CITestMockIntegration:
 
     def _generate_recommendations(
         self,
-        validation_results: Dict[str, bool],
-        critical_issues: List[Dict],
-        blocking_issues: List[Dict]
-    ) -> List[str]:
-        """
-        Gera recomendações baseadas nos resultados.
+        validation_results: dict[str, bool],
+        critical_issues: list[dict],
+        blocking_issues: list[dict],
+    ) -> list[str]:
+        """Gera recomendações baseadas nos resultados.
 
         Returns:
             Lista de recomendações
+
         """
         recommendations = []
 
@@ -233,22 +234,22 @@ class CITestMockIntegration:
         failed_validations = [k for k, v in validation_results.items() if not v]
         if failed_validations:
             recommendations.append(
-                f"Corrigir validações falharam: {', '.join(failed_validations)}"
+                f"Corrigir validações falharam: {', '.join(failed_validations)}",
             )
 
         # Issues críticos
         if critical_issues:
-            recommendations.append(
-                f"Aplicar mocks para {len(critical_issues)} problemas de alta prioridade"
-            )
+            num_issues = len(critical_issues)
+            msg = f"Aplicar mocks para {num_issues} problemas de alta prioridade"
+            recommendations.append(msg)
 
         # Issues bloqueadores
         if blocking_issues:
             recommendations.append(
-                f"URGENTE: {len(blocking_issues)} problemas podem quebrar CI/CD"
+                f"URGENTE: {len(blocking_issues)} problemas podem quebrar CI/CD",
             )
             recommendations.append(
-                "Execute: python scripts/test_mock_generator.py --apply"
+                "Execute: python scripts/test_mock_generator.py --apply",
             )
 
         # Sem problemas
@@ -259,15 +260,15 @@ class CITestMockIntegration:
 
     def _determine_overall_status(
         self,
-        validation_results: Dict[str, bool],
-        critical_issues: List[Dict],
-        blocking_issues: List[Dict]
+        validation_results: dict[str, bool],
+        critical_issues: list[dict],
+        blocking_issues: list[dict],
     ) -> str:
-        """
-        Determina status geral da verificação.
+        """Determina status geral da verificação.
 
         Returns:
             Status: SUCCESS, WARNING, ou FAILURE
+
         """
         # Falha se validações básicas falharam
         if not all(validation_results.values()):
@@ -283,15 +284,15 @@ class CITestMockIntegration:
 
         return "SUCCESS"
 
-    def auto_fix_issues(self, commit: bool = False) -> Dict[str, any]:
-        """
-        Aplica correções automáticas para problemas encontrados.
+    def auto_fix_issues(self, commit: bool = False) -> dict[str, any]:
+        """Aplica correções automáticas para problemas encontrados.
 
         Args:
             commit: Se True, faz commit das correções
 
         Returns:
             Relatório das correções aplicadas
+
         """
         logger.info("Aplicando correções automáticas...")
 
@@ -325,15 +326,15 @@ class CITestMockIntegration:
 
         return fix_result
 
-    def _commit_fixes(self, fix_result: Dict[str, any]) -> bool:
-        """
-        Faz commit das correções aplicadas.
+    def _commit_fixes(self, fix_result: dict[str, any]) -> bool:
+        """Faz commit das correções aplicadas.
 
         Args:
             fix_result: Resultado das correções
 
         Returns:
             True se commit foi bem-sucedido
+
         """
         try:
             # Adiciona arquivos modificados
@@ -350,24 +351,24 @@ class CITestMockIntegration:
                 f"- Generated by: CI Test Mock Integration"
             )
 
-            success, _ = self._run_git_command([
-                "git", "commit", "-m", commit_message
-            ])
+            success, _ = self._run_git_command(["git", "commit", "-m", commit_message])
 
             if success:
                 logger.info("Commit de correções criado com sucesso")
                 return True
-            else:
-                logger.warning("Nenhuma mudança para commit")
-                return False
+            logger.warning("Nenhuma mudança para commit")
+            return False
 
         except Exception as e:
             logger.error(f"Erro ao fazer commit: {e}")
             return False
 
-    def generate_ci_report(self, report_data: Dict[str, any], output_file: Optional[Path] = None) -> Path:
-        """
-        Gera relatório formatado para CI/CD.
+    def generate_ci_report(
+        self,
+        report_data: dict[str, any],
+        output_file: Path | None = None,
+    ) -> Path:
+        """Gera relatório formatado para CI/CD.
 
         Args:
             report_data: Dados do relatório
@@ -375,6 +376,7 @@ class CITestMockIntegration:
 
         Returns:
             Caminho do arquivo de relatório
+
         """
         if output_file is None:
             timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -390,12 +392,12 @@ class CITestMockIntegration:
         logger.info(f"Relatório CI/CD gerado: {output_file}")
         return output_file
 
-    def _print_ci_summary(self, report_data: Dict[str, any]) -> None:
-        """
-        Imprime resumo formatado para logs do CI/CD.
+    def _print_ci_summary(self, report_data: dict[str, any]) -> None:
+        """Imprime resumo formatado para logs do CI/CD.
 
         Args:
             report_data: Dados do relatório
+
         """
         status = report_data["status"]
 
@@ -412,32 +414,34 @@ class CITestMockIntegration:
 
         # Estatísticas
         mock_stats = report_data["mock_suggestions"]
-        print(f"📊 Mock Suggestions: {mock_stats['total']} total, {mock_stats['high_priority']} high priority")
+        total = mock_stats["total"]
+        high_priority = mock_stats["high_priority"]
+        print(f"📊 Mock Suggestions: {total} total, {high_priority} high priority")
 
         if mock_stats["blocking"]:
             print(f"🚫 Blocking Issues: {mock_stats['blocking']} (may break CI/CD)")
 
         # Recomendações
         if report_data["recommendations"]:
-            print(f"\n💡 Recommendations:")
+            print("\n💡 Recommendations:")
             for rec in report_data["recommendations"]:
                 print(f"   • {rec}")
 
         # Set exit code baseado no status
         if status == "FAILURE":
-            print(f"\n❌ Pipeline should FAIL - critical issues found")
+            print("\n❌ Pipeline should FAIL - critical issues found")
         elif status == "WARNING":
-            print(f"\n⚠️  Pipeline can continue with warnings")
+            print("\n⚠️  Pipeline can continue with warnings")
         else:
-            print(f"\n✅ Pipeline can continue - no issues found")
+            print("\n✅ Pipeline can continue - no issues found")
 
 
 def main() -> int:
-    """
-    Função principal CLI para integração CI/CD.
+    """Função principal CLI para integração CI/CD.
 
     Returns:
         Código de saída (0 = sucesso, 1 = warning, 2 = failure)
+
     """
     parser = argparse.ArgumentParser(
         description="CI/CD Test Mock Integration",
@@ -447,44 +451,44 @@ Exemplos de uso em CI/CD:
   %(prog)s --check --fail-on-issues      # Verificar e falhar se problemas
   %(prog)s --auto-fix --commit           # Aplicar correções e commitar
   %(prog)s --check --report ci-report.json  # Gerar relatório JSON
-        """
+        """,
     )
 
     parser.add_argument(
         "--check",
         action="store_true",
-        help="Executar verificação abrangente"
+        help="Executar verificação abrangente",
     )
 
     parser.add_argument(
         "--auto-fix",
         action="store_true",
-        help="Aplicar correções automáticas"
+        help="Aplicar correções automáticas",
     )
 
     parser.add_argument(
         "--commit",
         action="store_true",
-        help="Fazer commit das correções (usar com --auto-fix)"
+        help="Fazer commit das correções (usar com --auto-fix)",
     )
 
     parser.add_argument(
         "--fail-on-issues",
         action="store_true",
-        help="Falhar pipeline se problemas críticos encontrados"
+        help="Falhar pipeline se problemas críticos encontrados",
     )
 
     parser.add_argument(
         "--report",
         type=Path,
-        help="Gerar relatório JSON no arquivo especificado"
+        help="Gerar relatório JSON no arquivo especificado",
     )
 
     parser.add_argument(
         "--workspace",
         type=Path,
         default=Path.cwd(),
-        help="Caminho do workspace (padrão: diretório atual)"
+        help="Caminho do workspace (padrão: diretório atual)",
     )
 
     args = parser.parse_args()
@@ -512,14 +516,15 @@ Exemplos de uso em CI/CD:
             if args.fail_on_issues:
                 if report["status"] == "FAILURE":
                     return 2
-                elif report["status"] == "WARNING":
+                if report["status"] == "WARNING":
                     return 1
 
         if args.auto_fix:
             fix_result = integration.auto_fix_issues(commit=args.commit)
 
             if fix_result["total_fixes"] > 0:
-                print(f"✅ {fix_result['total_fixes']} problemas corrigidos automaticamente")
+                fixes = fix_result["total_fixes"]
+                print(f"✅ {fixes} problemas corrigidos automaticamente")
             else:
                 print("ℹ️  Nenhuma correção necessária")
 

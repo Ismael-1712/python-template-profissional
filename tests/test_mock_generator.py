@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-
-import yaml
-
-"""
-Test Mock Generator - Sistema de Auto-Correção para Testes
+"""Test Mock Generator - Sistema de Auto-Correção para Testes
 =========================================================
 
 Analisa arquivos de teste Python e gera sugestões automáticas de mocks
@@ -37,7 +33,9 @@ import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
+
+import yaml
 
 # Configuração de logging estruturado
 logging.basicConfig(
@@ -56,9 +54,9 @@ class MockPattern:
         pattern: str,
         mock_type: str,
         mock_template: str,
-        required_imports: List[str],
+        required_imports: list[str],
         description: str,
-        severity: str = "MEDIUM"
+        severity: str = "MEDIUM",
     ):
         self.pattern = pattern
         self.mock_type = mock_type
@@ -69,8 +67,7 @@ class MockPattern:
 
 
 class TestMockGenerator:
-    """
-    Gerador de sugestões automáticas de mocks para testes Python.
+    """Gerador de sugestões automáticas de mocks para testes Python.
 
     Implementa padrões de DevOps:
     - Idempotência: pode ser executado múltiplas vezes
@@ -80,28 +77,30 @@ class TestMockGenerator:
     """
 
     def __init__(self, workspace_root: Path, config_path: Path):
-            """
-            Inicializa o gerador de mocks.
+        """Inicializa o gerador de mocks.
 
-            Args:
-                workspace_root: Caminho raiz do workspace
-                config_path: Caminho para o test_mock_config.yaml
-            """
-            self.workspace_root = workspace_root.resolve()
-            self.config_path = config_path
-            self.backup_dir = self.workspace_root / ".test_mock_backups"
-            self.suggestions: List[Dict[str, Any]] = []
+        Args:
+            workspace_root: Caminho raiz do workspace
+            config_path: Caminho para o test_mock_config.yaml
 
-            # Carrega a configuração
-            self.config = self._load_config()
-            self.MOCK_PATTERNS = self._parse_patterns_from_config()
+        """
+        self.workspace_root = workspace_root.resolve()
+        self.config_path = config_path
+        self.backup_dir = self.workspace_root / ".test_mock_backups"
+        self.suggestions: list[dict[str, Any]] = []
 
-            if not self.MOCK_PATTERNS:
-                 logger.error("Nenhum padrão de mock foi carregado. Verifique o config.")
+        # Carrega a configuração
+        self.config = self._load_config()
+        self.MOCK_PATTERNS = self._parse_patterns_from_config()
 
-            logger.info(f"Inicializando TestMockGenerator para workspace: {self.workspace_root}")
+        if not self.MOCK_PATTERNS:
+            logger.error("Nenhum padrão de mock foi carregado. Verifique o config.")
 
-    def _load_config(self) -> Dict[str, Any]:
+        logger.info(
+            f"Inicializando TestMockGenerator para workspace: {self.workspace_root}",
+        )
+
+    def _load_config(self) -> dict[str, Any]:
         """Carrega a configuração do arquivo YAML."""
         if not self.config_path.exists():
             logger.error(f"Arquivo de configuração não encontrado: {self.config_path}")
@@ -116,14 +115,14 @@ class TestMockGenerator:
             logger.error(f"Erro ao carregar configuração YAML: {e}")
             return {}
 
-    def _parse_patterns_from_config(self) -> Dict[str, MockPattern]:
+    def _parse_patterns_from_config(self) -> dict[str, MockPattern]:
         """Converte os padrões do config YAML em objetos MockPattern."""
         patterns_dict = {}
         if "mock_patterns" not in self.config:
             return patterns_dict
 
-        # Itera sobre todos os grupos de padrões (ex: http_patterns, subprocess_patterns)
-        for group_name, pattern_list in self.config["mock_patterns"].items():
+        # Itera sobre todos os grupos de padrões (ex: http_patterns, etc.)
+        for _group_name, pattern_list in self.config["mock_patterns"].items():
             if not isinstance(pattern_list, list):
                 continue
 
@@ -140,7 +139,7 @@ class TestMockGenerator:
                         mock_template=p.get("mock_template", "").strip(),
                         required_imports=p.get("required_imports", []),
                         description=p.get("description", ""),
-                        severity=p.get("severity", "MEDIUM")
+                        severity=p.get("severity", "MEDIUM"),
                     )
                 except Exception as e:
                     logger.warning(f"Erro ao carregar padrão {p.get('pattern')}: {e}")
@@ -149,14 +148,14 @@ class TestMockGenerator:
         return patterns_dict
 
     def _create_backup(self, file_path: Path) -> Path:
-        """
-        Cria backup de um arquivo antes de modificá-lo.
+        """Cria backup de um arquivo antes de modificá-lo.
 
         Args:
             file_path: Caminho do arquivo para backup
 
         Returns:
             Caminho do arquivo de backup criado
+
         """
         if not self.backup_dir.exists():
             self.backup_dir.mkdir(parents=True, exist_ok=True)
@@ -170,15 +169,15 @@ class TestMockGenerator:
 
         return backup_path
 
-    def _parse_python_file(self, file_path: Path) -> Optional[ast.AST]:
-        """
-        Parse seguro de arquivo Python usando AST.
+    def _parse_python_file(self, file_path: Path) -> ast.AST | None:
+        """Parse seguro de arquivo Python usando AST.
 
         Args:
             file_path: Caminho do arquivo Python
 
         Returns:
             AST do arquivo ou None se houver erro
+
         """
         try:
             with file_path.open("r", encoding="utf-8") as f:
@@ -197,10 +196,9 @@ class TestMockGenerator:
         self,
         func_node: ast.FunctionDef,
         file_path: Path,
-        file_content: str
-    ) -> List[Dict[str, Any]]:
-        """
-        Analisa uma função de teste em busca de padrões que precisam de mock.
+        file_content: str,
+    ) -> list[dict[str, Any]]:
+        """Analisa uma função de teste em busca de padrões que precisam de mock.
 
         Args:
             func_node: Nó AST da função
@@ -209,6 +207,7 @@ class TestMockGenerator:
 
         Returns:
             Lista de sugestões para a função
+
         """
         suggestions = []
 
@@ -219,7 +218,9 @@ class TestMockGenerator:
                 if mock_pattern.pattern in func_source:
                     # Verifica se já existe mock para esse padrão
                     if self._has_existing_mock(file_content, mock_pattern.pattern):
-                        logger.debug(f"Mock já existe para {pattern_key} em {func_node.name}")
+                        logger.debug(
+                            f"Mock já existe para {pattern_key} em {func_node.name}",
+                        )
                         continue
 
                     suggestion = {
@@ -230,7 +231,9 @@ class TestMockGenerator:
                         "mock_type": mock_pattern.mock_type,
                         "severity": mock_pattern.severity,
                         "description": mock_pattern.description,
-                        "mock_template": mock_pattern.mock_template.format(func_name=func_node.name),
+                        "mock_template": mock_pattern.mock_template.format(
+                            func_name=func_node.name,
+                        ),
                         "required_imports": mock_pattern.required_imports.copy(),
                         "timestamp": datetime.now(timezone.utc).isoformat(),
                     }
@@ -244,8 +247,7 @@ class TestMockGenerator:
         return suggestions
 
     def _has_existing_mock(self, file_content: str, pattern: str) -> bool:
-        """
-        Verifica se já existe mock para o padrão especificado.
+        """Verifica se já existe mock para o padrão especificado.
 
         Args:
             file_content: Conteúdo do arquivo
@@ -253,6 +255,7 @@ class TestMockGenerator:
 
         Returns:
             True se mock já existe
+
         """
         # Estratégias para detectar mocks existentes
         mock_indicators = [
@@ -265,12 +268,12 @@ class TestMockGenerator:
 
         return any(indicator in file_content for indicator in mock_indicators)
 
-    def scan_test_files(self) -> Dict[str, Any]:
-        """
-        Escaneia todos os arquivos de teste no workspace.
+    def scan_test_files(self) -> dict[str, Any]:
+        """Escaneia todos os arquivos de teste no workspace.
 
         Returns:
             Dicionário com todas as sugestões geradas
+
         """
         logger.info("Iniciando escaneamento de arquivos de teste...")
 
@@ -290,7 +293,7 @@ class TestMockGenerator:
         logger.info(f"Encontrados {len(test_files)} arquivos de teste")
 
         all_suggestions = []
-        required_imports: Set[str] = set()
+        required_imports: set[str] = set()
 
         for test_file in test_files:
             file_suggestions = self._analyze_test_file(test_file)
@@ -309,28 +312,35 @@ class TestMockGenerator:
             "required_imports": sorted(list(required_imports)),
             "summary": {
                 "total_suggestions": len(all_suggestions),
-                "high_priority": len([s for s in all_suggestions if s["severity"] == "HIGH"]),
-                "medium_priority": len([s for s in all_suggestions if s["severity"] == "MEDIUM"]),
-                "low_priority": len([s for s in all_suggestions if s["severity"] == "LOW"]),
+                "high_priority": len(
+                    [s for s in all_suggestions if s["severity"] == "HIGH"],
+                ),
+                "medium_priority": len(
+                    [s for s in all_suggestions if s["severity"] == "MEDIUM"],
+                ),
+                "low_priority": len(
+                    [s for s in all_suggestions if s["severity"] == "LOW"],
+                ),
                 "files_with_issues": len(set(s["file"] for s in all_suggestions)),
             },
         }
 
         self.suggestions = all_suggestions
 
-        logger.info(f"Escaneamento concluído: {report['summary']['total_suggestions']} sugestões geradas")
+        total_suggestions = report["summary"]["total_suggestions"]
+        logger.info(f"Escaneamento concluído: {total_suggestions} sugestões geradas")
 
         return report
 
-    def _analyze_test_file(self, test_file: Path) -> List[Dict[str, Any]]:
-        """
-        Analisa um arquivo de teste específico.
+    def _analyze_test_file(self, test_file: Path) -> list[dict[str, Any]]:
+        """Analisa um arquivo de teste específico.
 
         Args:
             test_file: Caminho do arquivo de teste
 
         Returns:
             Lista de sugestões para o arquivo
+
         """
         logger.debug(f"Analisando arquivo: {test_file}")
 
@@ -352,25 +362,31 @@ class TestMockGenerator:
         # Analisa funções de teste
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) and node.name.startswith("test_"):
-                func_suggestions = self._analyze_test_function(node, test_file, file_content)
+                func_suggestions = self._analyze_test_function(
+                    node,
+                    test_file,
+                    file_content,
+                )
                 suggestions.extend(func_suggestions)
 
         logger.debug(f"Arquivo {test_file.name}: {len(suggestions)} sugestões")
 
         return suggestions
 
-    def apply_suggestions(self, dry_run: bool = False) -> Dict[str, Any]:
-        """
-        Aplica as sugestões de mock nos arquivos.
+    def apply_suggestions(self, dry_run: bool = False) -> dict[str, Any]:
+        """Aplica as sugestões de mock nos arquivos.
 
         Args:
             dry_run: Se True, apenas simula as mudanças
 
         Returns:
             Relatório das aplicações
+
         """
         if not self.suggestions:
-            logger.warning("Nenhuma sugestão disponível. Execute scan_test_files() primeiro.")
+            logger.warning(
+                "Nenhuma sugestão disponível. Execute scan_test_files() primeiro.",
+            )
             return {"applied": 0, "failed": 0, "skipped": 0}
 
         logger.info(f"Aplicando sugestões {'(DRY RUN)' if dry_run else '(REAL)'}...")
@@ -410,19 +426,18 @@ class TestMockGenerator:
 
         logger.info(
             f"Aplicação {'simulada' if dry_run else 'real'} concluída: "
-            f"{applied} aplicadas, {failed} falharam, {skipped} ignoradas"
+            f"{applied} aplicadas, {failed} falharam, {skipped} ignoradas",
         )
 
         return result
 
     def _apply_single_suggestion(
         self,
-        suggestion: Dict[str, Any],
+        suggestion: dict[str, Any],
         file_path: Path,
-        dry_run: bool
+        dry_run: bool,
     ) -> bool:
-        """
-        Aplica uma sugestão específica em um arquivo.
+        """Aplica uma sugestão específica em um arquivo.
 
         Args:
             suggestion: Dicionário com dados da sugestão
@@ -431,6 +446,7 @@ class TestMockGenerator:
 
         Returns:
             True se aplicada com sucesso
+
         """
         try:
             # Lê arquivo atual
@@ -443,7 +459,9 @@ class TestMockGenerator:
                 return False
 
             if dry_run:
-                logger.info(f"[DRY RUN] Aplicaria mock em {file_path.name}:{suggestion['function']}")
+                func_name = suggestion["function"]
+                msg = f"[DRY RUN] Aplicaria mock em {file_path.name}:{func_name}"
+                logger.info(msg)
                 return True
 
             # Cria backup
@@ -463,9 +481,8 @@ class TestMockGenerator:
             logger.error(f"Erro ao aplicar mock em {file_path}: {e}")
             return False
 
-    def _inject_mock_code(self, content: str, suggestion: Dict[str, Any]) -> str:
-        """
-        Injeta código de mock no conteúdo do arquivo.
+    def _inject_mock_code(self, content: str, suggestion: dict[str, Any]) -> str:
+        """Injeta código de mock no conteúdo do arquivo.
 
         Args:
             content: Conteúdo original do arquivo
@@ -473,20 +490,27 @@ class TestMockGenerator:
 
         Returns:
             Conteúdo modificado com mock injetado
+
         """
         lines = content.splitlines()
 
         # Adiciona imports necessários
-        modified_lines = self._add_required_imports(lines, suggestion["required_imports"])
+        modified_lines = self._add_required_imports(
+            lines,
+            suggestion["required_imports"],
+        )
 
         # Encontra e modifica a função de teste
         modified_lines = self._add_mock_decorator(modified_lines, suggestion)
 
         return "\n".join(modified_lines)
 
-    def _add_required_imports(self, lines: List[str], required_imports: List[str]) -> List[str]:
-        """
-        Adiciona imports necessários se não existirem.
+    def _add_required_imports(
+        self,
+        lines: list[str],
+        required_imports: list[str],
+    ) -> list[str]:
+        """Adiciona imports necessários se não existirem.
 
         Args:
             lines: Linhas do arquivo
@@ -494,8 +518,13 @@ class TestMockGenerator:
 
         Returns:
             Linhas modificadas com imports
+
         """
-        existing_imports = [line.strip() for line in lines if line.strip().startswith(("import ", "from "))]
+        existing_imports = [
+            line.strip()
+            for line in lines
+            if line.strip().startswith(("import ", "from "))
+        ]
 
         # Encontra posição para inserir imports
         import_insert_pos = 0
@@ -506,15 +535,21 @@ class TestMockGenerator:
         # Adiciona imports que não existem
         new_lines = lines.copy()
         for import_stmt in required_imports:
-            if not any(import_stmt.split("import")[1].strip() in existing for existing in existing_imports):
+            if not any(
+                import_stmt.split("import")[1].strip() in existing
+                for existing in existing_imports
+            ):
                 new_lines.insert(import_insert_pos, import_stmt)
                 import_insert_pos += 1
 
         return new_lines
 
-    def _add_mock_decorator(self, lines: List[str], suggestion: Dict[str, Any]) -> List[str]:
-        """
-        Adiciona decorator de mock na função específica.
+    def _add_mock_decorator(
+        self,
+        lines: list[str],
+        suggestion: dict[str, Any],
+    ) -> list[str]:
+        """Adiciona decorator de mock na função específica.
 
         Args:
             lines: Linhas do arquivo
@@ -522,6 +557,7 @@ class TestMockGenerator:
 
         Returns:
             Linhas modificadas com decorator
+
         """
         func_name = suggestion["function"]
         mock_template = suggestion["mock_template"]
@@ -542,20 +578,20 @@ class TestMockGenerator:
                         mock_lines.append("")
 
                 # Substitui função
-                lines[i:i+1] = mock_lines
+                lines[i : i + 1] = mock_lines
                 break
 
         return lines
 
-    def generate_report(self, output_file: Optional[Path] = None) -> Path:
-        """
-        Gera relatório em JSON das sugestões.
+    def generate_report(self, output_file: Path | None = None) -> Path:
+        """Gera relatório em JSON das sugestões.
 
         Args:
             output_file: Caminho do arquivo de saída (opcional)
 
         Returns:
             Caminho do arquivo de relatório gerado
+
         """
         if output_file is None:
             timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -593,23 +629,23 @@ class TestMockGenerator:
 
         # Mostra sugestões de alta prioridade
         if high_priority:
-            print(f"\n🚨 SUGESTÕES DE ALTA PRIORIDADE:")
+            print("\n🚨 SUGESTÕES DE ALTA PRIORIDADE:")
             for i, suggestion in enumerate(high_priority[:5], 1):  # Limita a 5
                 print(f"\n{i}. {suggestion['file']}:{suggestion['line']}")
                 print(f"   Função: {suggestion['function']}")
                 print(f"   Problema: {suggestion['description']}")
                 print(f"   Padrão: {suggestion['pattern']}")
 
-        print(f"\n💡 Use --apply --dry-run para ver as modificações propostas")
-        print(f"💡 Use --apply para aplicar as correções de alta prioridade")
+        print("\n💡 Use --apply --dry-run para ver as modificações propostas")
+        print("💡 Use --apply para aplicar as correções de alta prioridade")
 
 
 def main() -> int:
-    """
-    Função principal CLI.
+    """Função principal CLI.
 
     Returns:
         Código de saída (0 = sucesso, 1 = erro)
+
     """
     parser = argparse.ArgumentParser(
         description="Test Mock Generator - Sistema de Auto-Correção para Testes",
@@ -620,44 +656,45 @@ Exemplos de uso:
   %(prog)s --apply --dry-run      # Preview das correções
   %(prog)s --apply                # Aplicar correções
   %(prog)s --scan --report report.json  # Gerar relatório JSON
-        """
+        """,
     )
 
     parser.add_argument(
         "--scan",
         action="store_true",
-        help="Escanear arquivos de teste em busca de padrões problemáticos"
+        help="Escanear arquivos de teste em busca de padrões problemáticos",
     )
 
     parser.add_argument(
         "--apply",
         action="store_true",
-        help="Aplicar correções de alta prioridade automaticamente"
+        help="Aplicar correções de alta prioridade automaticamente",
     )
 
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Simular aplicação sem modificar arquivos (usar com --apply)"
+        help="Simular aplicação sem modificar arquivos (usar com --apply)",
     )
 
     parser.add_argument(
         "--report",
         type=Path,
-        help="Gerar relatório JSON no arquivo especificado"
+        help="Gerar relatório JSON no arquivo especificado",
     )
 
     parser.add_argument(
-        "--verbose", "-v",
+        "--verbose",
+        "-v",
         action="store_true",
-        help="Ativar logging verboso"
+        help="Ativar logging verboso",
     )
 
     parser.add_argument(
         "--workspace",
         type=Path,
         default=Path.cwd(),
-        help="Caminho do workspace (padrão: diretório atual)"
+        help="Caminho do workspace (padrão: diretório atual)",
     )
 
     args = parser.parse_args()
@@ -687,7 +724,11 @@ Exemplos de uso:
 
         if not config_file.exists():
             logger.error(f"Arquivo de configuração não encontrado: {config_file}")
-            logger.error("Certifique-se que 'test_mock_config.yaml' está no mesmo diretório 'scripts/'.")
+            config_msg = (
+                "Certifique-se que 'test_mock_config.yaml' está "
+                "no diretório 'scripts/'."
+            )
+            logger.error(config_msg)
             return 1
 
         generator = TestMockGenerator(workspace, config_file)
@@ -695,7 +736,7 @@ Exemplos de uso:
 
         # Executa ações solicitadas
         if args.scan:
-            report = generator.scan_test_files()
+            _report = generator.scan_test_files()
             generator.print_summary()
 
             if args.report:
@@ -710,7 +751,9 @@ Exemplos de uso:
             if result["applied"] > 0 and not args.dry_run:
                 print(f"\n✅ {result['applied']} correções aplicadas com sucesso!")
                 print("💡 Recomenda-se executar os testes para validar as correções:")
-                print("   python3 -m pytest tests/") # <-- Sua correção anterior (Etapa 29) está mantida.
+                print(
+                    "   python3 -m pytest tests/",
+                )  # <-- Sua correção anterior (Etapa 29) está mantida.
 
         return 0
 
