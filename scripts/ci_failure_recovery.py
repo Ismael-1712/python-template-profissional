@@ -17,7 +17,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from scripts.ci_recovery import analyzer, executor, reporter, runner
+from scripts.ci_recovery import analyzer, reporter, runner, validator
 from scripts.ci_recovery.models import (
     RecoveryReport,
     RecoveryStatus,
@@ -71,48 +71,23 @@ class CIFailureRecoverySystem:
         )
 
         # Validate repository
-        if not self._is_git_repository():
+        if not validator.is_git_repository(
+            repository_path=self.repository_path,
+            dry_run=self.dry_run,
+        ):
             raise ValueError(f"Not a git repository: {self.repository_path}")
 
         # Get actual commit hash
-        self.commit_hash = self.commit_hash or self._get_current_commit_hash()
+        self.commit_hash = self.commit_hash or validator.get_current_commit_hash(
+            repository_path=self.repository_path,
+            dry_run=self.dry_run,
+        )
         self.report.commit_hash = self.commit_hash
 
         logger.info(
             f"Initialized CI Recovery System - Repository: {self.repository_path}, "
             f"Commit: {self.commit_hash}, Dry Run: {self.dry_run}",
         )
-
-    def _is_git_repository(self) -> bool:
-        """Check if the current directory is a git repository."""
-        try:
-            result = executor.run_command(
-                command=["git", "rev-parse", "--git-dir"],
-                repository_path=self.repository_path,
-                dry_run=self.dry_run,
-                cwd=self.repository_path,
-                capture_output=True,
-            )
-            return result.returncode == 0
-        except Exception:
-            return False
-
-    def _get_current_commit_hash(self) -> str:
-        """Get the current commit hash."""
-        try:
-            result = executor.run_command(
-                command=["git", "rev-parse", "HEAD"],
-                repository_path=self.repository_path,
-                dry_run=self.dry_run,
-                cwd=self.repository_path,
-                capture_output=True,
-            )
-            if result.returncode == 0:
-                return result.stdout.strip()[:8]
-            return "unknown"
-        except Exception as e:
-            logger.error(f"Failed to get commit hash: {e}")
-            return "unknown"
 
     def _log_step(
         self,
