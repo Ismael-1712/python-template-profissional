@@ -14,12 +14,12 @@ Environment Variables:
 
 import json
 import logging
-import shlex
 import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+from scripts.ci_recovery import executor
 from scripts.ci_recovery.models import (
     FileRiskAnalysis,
     RecoveryReport,
@@ -90,8 +90,10 @@ class CIFailureRecoverySystem:
     def _is_git_repository(self) -> bool:
         """Check if the current directory is a git repository."""
         try:
-            result = self._run_command(
-                ["git", "rev-parse", "--git-dir"],
+            result = executor.run_command(
+                command=["git", "rev-parse", "--git-dir"],
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
                 cwd=self.repository_path,
                 capture_output=True,
             )
@@ -102,8 +104,10 @@ class CIFailureRecoverySystem:
     def _get_current_commit_hash(self) -> str:
         """Get the current commit hash."""
         try:
-            result = self._run_command(
-                ["git", "rev-parse", "HEAD"],
+            result = executor.run_command(
+                command=["git", "rev-parse", "HEAD"],
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
                 cwd=self.repository_path,
                 capture_output=True,
             )
@@ -113,84 +117,6 @@ class CIFailureRecoverySystem:
         except Exception as e:
             logger.error(f"Failed to get commit hash: {e}")
             return "unknown"
-
-    def _run_command(
-        self,
-        command: list[str],
-        cwd: Path | None = None,
-        capture_output: bool = True,
-        timeout: int = 300,
-    ) -> subprocess.CompletedProcess:
-        """Securely run a command using subprocess.
-
-        Args:
-            command: Command as list of strings for secure execution
-            cwd: Working directory
-            capture_output: Whether to capture stdout/stderr
-            timeout: Command timeout in seconds
-
-        Returns:
-            CompletedProcess instance
-
-        Raises:
-            subprocess.TimeoutExpired: If command times out
-            subprocess.SubprocessError: On subprocess errors
-            ValueError: If command is invalid or unsafe
-
-        """
-        # Validate command security
-        if not command or not isinstance(command, list):
-            raise ValueError("Command must be a non-empty list")
-
-        # Additional security validation - prevent path traversal and dangerous commands
-        if any("/../" in str(arg) or str(arg).startswith("/") for arg in command):
-            raise ValueError("Command contains potentially unsafe paths")
-
-        # Sanitize command arguments
-        sanitized_command = [
-            shlex.quote(str(arg)) if " " in str(arg) else str(arg) for arg in command
-        ]
-
-        logger.debug(f"Executing command: {' '.join(sanitized_command)}")
-
-        if self.dry_run:
-            logger.info(f"DRY RUN: Would execute: {' '.join(sanitized_command)}")
-            return subprocess.CompletedProcess(
-                args=command,
-                returncode=0,
-                stdout="",
-                stderr="",
-            )
-
-        try:
-            result = subprocess.run(  # noqa: subprocess
-                command,  # Use original command, not sanitized
-                cwd=cwd or self.repository_path,
-                capture_output=capture_output,
-                text=True,
-                timeout=timeout,
-                check=False,  # Don't raise on non-zero exit
-                shell=False,  # Explicit security measure
-            )
-
-            if result.returncode != 0:
-                logger.warning(
-                    f"Command failed with exit code {result.returncode}: "
-                    f"{' '.join(sanitized_command)}",
-                )
-                if result.stderr:
-                    logger.warning(f"STDERR: {result.stderr}")
-
-            return result
-
-        except subprocess.TimeoutExpired:
-            logger.error(
-                f"Command timed out after {timeout}s: {' '.join(sanitized_command)}",
-            )
-            raise
-        except Exception as e:
-            logger.error(f"Command execution failed: {e}")
-            raise
 
     def _log_step(
         self,
@@ -247,14 +173,16 @@ class CIFailureRecoverySystem:
 
         try:
             # Get changed files for the commit
-            result = self._run_command(
-                [
+            result = executor.run_command(
+                command=[
                     "git",
                     "show",
                     "--name-only",
                     "--format=",
                     self.commit_hash,
                 ],
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
             )
 
             if result.returncode != 0:
@@ -385,7 +313,12 @@ class CIFailureRecoverySystem:
 
         for command, check_name in checks:
             try:
-                result = self._run_command(command, timeout=120)
+                result = executor.run_command(
+                    command=command,
+                    repository_path=self.repository_path,
+                    dry_run=self.dry_run,
+                    timeout=120,
+                )
 
                 if result.returncode == 0:
                     logger.info(f"✅ {check_name} passed")
@@ -418,8 +351,8 @@ class CIFailureRecoverySystem:
 
         try:
             # Run tests with coverage
-            result = self._run_command(
-                [
+            result = executor.run_command(
+                command=[
                     sys.executable,
                     "-m",
                     "pytest",
@@ -429,6 +362,8 @@ class CIFailureRecoverySystem:
                     "--maxfail=5",
                     "--timeout=300",
                 ],
+                repository_path=self.repository_path,
+                dry_run=self.dry_run,
                 timeout=600,
             )
 
