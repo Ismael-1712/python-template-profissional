@@ -6,13 +6,41 @@ on:
       - "v*.*.*" # Dispara APENAS em tags de versão (ex: v0.1.1)
 
 jobs:
+  smoke-test:
+    name: "Construir e Testar Imagem (Smoke Test)"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout do Código"
+        uses: actions/checkout@v4
+
+      - name: "Extrair Metadados (Nome e Tag da Imagem)"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}-smoketest
+
+      - name: "Construir Imagem para Teste"
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false # Não empurrar esta imagem
+          load: true # Carregar no Docker engine local
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - name: "Executar Smoke Test (Importar src.main)"
+        run: |
+          docker run --rm ${{ steps.meta.outputs.tags }} python -c "import src.main"
+          echo "✅ Smoke test (import) bem-sucedido."
+
   publish-docker:
     name: "Publicar no GitHub Container Registry"
     runs-on: ubuntu-latest
+    needs: smoke-test # <-- PORTÃO DE QUALIDADE (P5)
 
     permissions:
       contents: read
-      packages: write # Permissão para escrever no GHCR
+      packages: write
 
     steps:
       - name: "Checkout do Código"
@@ -31,10 +59,10 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
 
-      - name: "Construir e Enviar Imagem Docker"
+      - name: "Construir e Enviar Imagem Docker (Produção)"
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true
+          push: true # Agora publica
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
