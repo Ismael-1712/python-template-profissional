@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import shlex
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -97,15 +98,79 @@ class DevCommandsManager:
         self.register_command(
             DevCommand(
                 name="install-dev",
-                description="Instala projeto em modo desenvolvimento",
+                description="Compila dependências e instala projeto em desenvolvimento",
                 category=CommandCategory.BUILD,
-                command_template="{python_executable} -m pip install -e .[dev]",
+                command_template="CUSTOM_INSTALL_DEV",
             ),
         )
 
     def register_command(self, command: DevCommand) -> None:
         """Registra um comando de desenvolvimento."""
         self.commands[command.name] = command
+
+    def _install_dev_explicit(self, working_dir: Path) -> subprocess.CompletedProcess:
+        """Implementação explícita do comando install-dev.
+
+        Usa subprocess.run sequencial para garantir atomicidade.
+        """
+        logger.info("Passo 1/3: Instalando projeto e pip-tools...")
+        result1 = subprocess.run(  # noqa: subprocess
+            [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        logger.info("Passo 2/3: Compilando dependências com pip-compile...")
+        # Primeiro, vamos tentar encontrar pip-compile no PATH do ambiente virtual
+        pip_compile_path = shutil.which("pip-compile")
+        if not pip_compile_path:
+            # Fallback: usar python -c para executar pip-compile via piptools
+            result2 = subprocess.run(  # noqa: subprocess
+                [
+                    sys.executable,
+                    "-c",
+                    "import sys; from piptools.scripts import compile; "
+                    "sys.argv = ['pip-compile', '--output-file', 'requirements/dev.txt', "  # noqa: E501
+                    "'requirements/dev.in']; compile.cli()",
+                ],
+                cwd=working_dir,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        else:
+            result2 = subprocess.run(  # noqa: subprocess
+                [
+                    pip_compile_path,
+                    "--output-file",
+                    "requirements/dev.txt",
+                    "requirements/dev.in",
+                ],
+                cwd=working_dir,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+
+        logger.info("Passo 3/3: Instalando dependências pinned...")
+        result3 = subprocess.run(  # noqa: subprocess
+            [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
+            cwd=working_dir,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        # Retorna o último resultado, mas com stdout combinado para feedback
+        combined_output = f"{result1.stdout}\n{result2.stdout}\n{result3.stdout}"
+        return subprocess.CompletedProcess(
+            result3.args,
+            0,
+            combined_output,
+            "",
+        )
 
     def _resolve_template_vars(self, template: str, **kwargs: Any) -> list[str]:
         """Resolve variáveis do template de comando de forma segura."""
@@ -131,6 +196,26 @@ class DevCommandsManager:
             raise ValueError(f"Unknown command: {command_name}")
 
         command = self.commands[command_name]
+        working_dir = command.working_dir or self.workspace_root
+
+        logger.info("Executing command: %s", command_name)
+
+        # Tratamento especial para install-dev customizado
+        if command.command_template == "CUSTOM_INSTALL_DEV":
+            if dry_run:
+                logger.info("DRY RUN - Would execute install-dev sequence")
+                return subprocess.CompletedProcess(["install-dev"], 0, "", "")
+            try:
+                return self._install_dev_explicit(working_dir)
+            except subprocess.CalledProcessError as e:
+                logger.error(
+                    "install-dev failed at step with exit code %s",
+                    e.returncode,
+                )
+                logger.error("Error output: %s", e.stderr)
+                raise
+
+        # Execução padrão para outros comandos
         template_kwargs["args"] = " ".join(args or [])
         cmd_parts = self._resolve_template_vars(
             command.command_template,
@@ -139,9 +224,6 @@ class DevCommandsManager:
 
         env = dict(os.environ)
         env.update(command.env_vars)
-        working_dir = command.working_dir or self.workspace_root
-
-        logger.info("Executing command: %s", command_name)
 
         if dry_run:
             logger.info("DRY RUN - Would execute: %s", " ".join(cmd_parts))
