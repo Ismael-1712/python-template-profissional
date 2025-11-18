@@ -1,0 +1,12 @@
+# Arquivo de entrada para pip-compile gerar requirements/dev.txt
+# Use: pip-compile --output-file requirements/dev.txt requirements/dev.in
+#
+# Dependências de desenvolvimento migradas do pyproject.toml
+
+ruff
+pytest
+pytest-cov
+PyYAML
+pre-commit
+python-semantic-release
+tomli; python_version < '3.11'
