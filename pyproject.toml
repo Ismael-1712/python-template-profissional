@@ -28,13 +28,7 @@ dependencies = [
 # Dependências de desenvolvimento
 [project.optional-dependencies]
 dev = [
-    "ruff",
-    "pytest",
-    "pytest-cov",
-    "PyYAML",
-    "pre-commit",
-    "python-semantic-release",
-    "tomli; python_version < '3.11'"
+    "pip-tools~=7.4"
 ]
 
 # --- Configuração das Ferramentas ---
