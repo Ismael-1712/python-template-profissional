@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-"""Módulo Executor de Subprocesso (Utilitário SRE)
-(Extraído do monólito P8.2)
+"""Módulo Executor de Subprocesso (Utilitário SRE).
+
+(Extraído do monólito P8.2).
 """
 
 import logging

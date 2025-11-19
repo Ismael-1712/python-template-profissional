@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Test Mock Generator - Sistema de Auto-Correção para Testes
+"""Test Mock Generator - Sistema de Auto-Correção para Testes.
+
 =========================================================
 
 Analisa arquivos de teste Python e gera sugestões automáticas de mocks
@@ -58,6 +59,7 @@ class MockPattern:
         description: str,
         severity: str = "MEDIUM",
     ):
+        """Inicializa a instância."""
         self.pattern = pattern
         self.mock_type = mock_type
         self.mock_template = mock_template

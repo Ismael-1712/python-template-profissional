@@ -50,10 +50,18 @@ target-version = "py310"
 # N = Pep8-naming (nomes de variáveis/funções)
 # UP = pyupgrade (sugestões de modernização)
 # B = flake8-bugbear (possíveis bugs)
-select = ["E", "F", "W", "I", "N", "UP", "B"]
+# D = pydocstyle (validação de docstrings)
+select = ["E", "F", "W", "I", "N", "UP", "B", "D"]
 
-# Ignora regras específicas (exemplo)
-# ignore = ["E501"] # (Não precisamos, pois 'line-length = 88' já cuida disso)
+# Ignora regras específicas para evitar conflitos
+# D203: one-blank-line-before-class (conflita com D211)
+# D213: multi-line-summary-second-line (conflita com D212, preferimos estilo Google)
+ignore = ["D203", "D213"]
+
+# Configuração do pydocstyle (D-Rules)
+[tool.ruff.lint.pydocstyle]
+# Usa a convenção Google para docstrings
+convention = "google"
 
 # Configuração do Formatador do Ruff (substituto do 'black')
 [tool.ruff.format]
