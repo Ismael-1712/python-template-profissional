@@ -27,6 +27,7 @@ from typing import Any
 import yaml
 
 # Import models from the audit package (relative import)
+from audit.config import load_config
 from audit.models import AuditResult, SecurityPattern
 
 # Configure logging
@@ -59,26 +60,7 @@ class CodeAuditor:
 
     def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
-        default_config = {
-            "scan_paths": ["src/", "tests/", "scripts/", ".github/"],
-            "file_patterns": ["*.py"],
-            "exclude_paths": [".git/", "__pycache__/", ".venv/", "venv/"],
-            "ci_timeout": 300,
-            "simulate_ci": True,
-            "max_findings_per_file": 50,
-            "severity_levels": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
-        }
-
-        if config_path and config_path.exists():
-            try:
-                with open(config_path, encoding="utf-8") as f:
-                    user_config = yaml.safe_load(f)
-                    default_config.update(user_config)
-                    logger.info(f"Loaded configuration from {config_path}")
-            except Exception as e:
-                logger.warning(f"Failed to load config from {config_path}: {e}")
-
-        return default_config
+        return load_config(config_path)
 
     def _load_security_patterns(self) -> list[SecurityPattern]:
         """Load security patterns to detect in code."""
