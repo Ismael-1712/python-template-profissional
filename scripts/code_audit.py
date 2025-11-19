@@ -29,6 +29,7 @@ import yaml
 # Import models from the audit package (relative import)
 from audit.config import load_config
 from audit.models import AuditResult, SecurityPattern
+from audit.scanner import scan_workspace
 
 # Configure logging
 logging.basicConfig(
@@ -136,26 +137,12 @@ class CodeAuditor:
 
     def _get_python_files(self) -> list[Path]:
         """Get all Python files to audit based on configuration."""
-        python_files = []
-
-        for scan_path in self.config["scan_paths"]:
-            scan_dir = self.workspace_root / scan_path
-            if not scan_dir.exists():
-                logger.warning(f"Scan path does not exist: {scan_dir}")
-                continue
-
-            for pattern in self.config["file_patterns"]:
-                for file_path in scan_dir.rglob(pattern):
-                    # Skip excluded paths
-                    if any(
-                        exclude in str(file_path)
-                        for exclude in self.config["exclude_paths"]
-                    ):
-                        continue
-                    python_files.append(file_path)
-
-        logger.info(f"Found {len(python_files)} Python files to audit (Full Scan)")
-        return python_files
+        return scan_workspace(
+            workspace_root=self.workspace_root,
+            scan_paths=self.config["scan_paths"],
+            file_patterns=self.config["file_patterns"],
+            exclude_paths=self.config["exclude_paths"],
+        )
 
     def _analyze_file(self, file_path: Path) -> list[AuditResult]:
         """Analyze a single Python file for security patterns."""
