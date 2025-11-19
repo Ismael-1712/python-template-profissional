@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""CI/CD Test Mock Integration - Integração com Pipelines CI/CD
+"""CI/CD Test Mock Integration - Integração com Pipelines CI/CD.
+
 ============================================================
 
 Script para integrar o Test Mock Generator em pipelines de CI/CD,
@@ -26,9 +27,16 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
-from test_mock_generator import TestMockGenerator
-from validate_test_mocks import TestMockValidator
+# Adiciona o diretório raiz do projeto ao sys.path para permitir imports de 'tests'
+# Assume que este script está em <raiz>/scripts/
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT / "tests") not in sys.path:
+    sys.path.append(str(PROJECT_ROOT / "tests"))
+
+from test_mock_generator import TestMockGenerator  # noqa: E402
+from validate_test_mocks import TestMockValidator  # noqa: E402
 
 # Configuração de logging para CI/CD
 logging.basicConfig(
@@ -121,7 +129,7 @@ class CITestMockIntegration:
             logger.error(f"Erro ao executar comando git: {e}")
             return False, str(e)
 
-    def check_git_status(self) -> dict[str, any]:
+    def check_git_status(self) -> dict[str, Any]:
         """Verifica status do repositório git.
 
         Returns:
@@ -159,7 +167,7 @@ class CITestMockIntegration:
 
         return info
 
-    def run_comprehensive_check(self) -> dict[str, any]:
+    def run_comprehensive_check(self) -> dict[str, Any]:
         """Executa verificação abrangente para CI/CD.
 
         Returns:
@@ -284,7 +292,7 @@ class CITestMockIntegration:
 
         return "SUCCESS"
 
-    def auto_fix_issues(self, commit: bool = False) -> dict[str, any]:
+    def auto_fix_issues(self, commit: bool = False) -> dict[str, Any]:
         """Aplica correções automáticas para problemas encontrados.
 
         Args:
@@ -326,7 +334,7 @@ class CITestMockIntegration:
 
         return fix_result
 
-    def _commit_fixes(self, fix_result: dict[str, any]) -> bool:
+    def _commit_fixes(self, fix_result: dict[str, Any]) -> bool:
         """Faz commit das correções aplicadas.
 
         Args:
@@ -365,7 +373,7 @@ class CITestMockIntegration:
 
     def generate_ci_report(
         self,
-        report_data: dict[str, any],
+        report_data: dict[str, Any],
         output_file: Path | None = None,
     ) -> Path:
         """Gera relatório formatado para CI/CD.
@@ -392,7 +400,7 @@ class CITestMockIntegration:
         logger.info(f"Relatório CI/CD gerado: {output_file}")
         return output_file
 
-    def _print_ci_summary(self, report_data: dict[str, any]) -> None:
+    def _print_ci_summary(self, report_data: dict[str, Any]) -> None:
         """Imprime resumo formatado para logs do CI/CD.
 
         Args:

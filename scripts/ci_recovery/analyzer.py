@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-"""Módulo de Análise de Risco SRE
-(Extraído do monólito P8.3)
+"""Módulo de Análise de Risco SRE.
+
+(Extraído do monólito P8.3).
 """
 
 import logging

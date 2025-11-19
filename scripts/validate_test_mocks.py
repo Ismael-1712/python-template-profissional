@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Test Mock Validator - Validador para o Sistema de Mock Generator
+"""Test Mock Validator - Validador para o Sistema de Mock Generator.
+
 ===============================================================
 
 Valida e testa o funcionamento do Test Mock Generator de forma automatizada.

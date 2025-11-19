@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Sistema Genérico de Correção Automática de Linting
+"""Sistema Genérico de Correção Automática de Linting.
+
 ==================================================
 
 Script genérico e seguro para correção automática de problemas comuns de linting
@@ -40,6 +41,7 @@ class LintFixConfig:
     """Configuração para o sistema de correção de lint."""
 
     def __init__(self, project_root: Path):
+        """Inicializa a instância."""
         self.project_root = project_root
         self.backup_dir = project_root / ".lint_fix_backup"
         self.max_line_length = self._get_line_length_config()
@@ -121,6 +123,7 @@ class LintFixer:
     """Sistema principal de correção automática de linting."""
 
     def __init__(self, config: LintFixConfig, dry_run: bool = False):
+        """Inicializa a instância."""
         self.config = config
         self.dry_run = dry_run
         self.fixes_applied: list[str] = []

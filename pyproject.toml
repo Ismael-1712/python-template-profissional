@@ -44,7 +44,25 @@ target-version = "py310"
 # Configuração do Linter do Ruff
 [tool.ruff.lint]
 # Seleciona um conjunto robusto de regras para fiscalizar
-select = ["E", "F", "W", "I", "N", "UP", "B"]
+# E = Pycodestyle Erros
+# F = Pyflakes (erros de lógica)
+# W = Pycodestyle Warnings
+# I = isort (ordenação de imports)
+# N = Pep8-naming (nomes de variáveis/funções)
+# UP = pyupgrade (sugestões de modernização)
+# B = flake8-bugbear (possíveis bugs)
+# D = pydocstyle (validação de docstrings)
+select = ["E", "F", "W", "I", "N", "UP", "B", "D"]
+
+# Ignora regras específicas para evitar conflitos
+# D203: one-blank-line-before-class (conflita com D211)
+# D213: multi-line-summary-second-line (conflita com D212, preferimos estilo Google)
+ignore = ["D203", "D213"]
+
+# Configuração do pydocstyle (D-Rules)
+[tool.ruff.lint.pydocstyle]
+# Usa a convenção Google para docstrings
+convention = "google"
 
 # Configuração do Formatador do Ruff (substituto do 'black')
 [tool.ruff.format]
