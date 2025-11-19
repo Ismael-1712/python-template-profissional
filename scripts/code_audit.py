@@ -26,6 +26,9 @@ from typing import Any
 
 import yaml
 
+# Import models from the audit package (relative import)
+from audit.models import AuditResult, SecurityPattern
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -36,54 +39,6 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
-class SecurityPattern:
-    """Represents a security pattern to detect in code."""
-
-    def __init__(
-        self,
-        pattern: str,
-        severity: str,
-        description: str,
-        category: str = "security",
-    ) -> None:
-        """Inicializa a instância."""
-        self.pattern = pattern
-        self.severity = severity
-        self.description = description
-        self.category = category
-
-
-class AuditResult:
-    """Represents an audit finding."""
-
-    def __init__(
-        self,
-        file_path: Path,
-        line_number: int,
-        pattern: SecurityPattern,
-        code_snippet: str,
-        suggestion: str | None = None,
-    ) -> None:
-        """Inicializa a instância."""
-        self.file_path = file_path
-        self.line_number = line_number
-        self.pattern = pattern
-        self.code_snippet = code_snippet
-        self.suggestion = suggestion
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for JSON serialization."""
-        return {
-            "file": str(self.file_path),
-            "line": self.line_number,
-            "severity": self.pattern.severity,
-            "category": self.pattern.category,
-            "description": self.pattern.description,
-            "code": self.code_snippet,
-            "suggestion": self.suggestion,
-        }
 
 
 class CodeAuditor:
