@@ -56,10 +56,11 @@ Thumbs.db
 *.log
 *.db
 *.sqlite3
-audit_report_*.json
 audit_dashboard.html
-sync_report_*.json
 
+# Relatórios de Auditoria e Sync
+audit_report_*.json
+sync_report_*.json
 
 # --- Lixo de Ferramental e Cache ---
 .ruff_cache/
@@ -72,12 +73,6 @@ __pycache__/
 *.egg-info/
 .venv/
 .pytest_cache/
-
-# Ignorar logs de runtime
-*.log
-
-# Ignorar relatórios de auditoria e outros JSONs gerados
-*.json
 
 # Ignorar metadados do projeto
 project_structure.txt
