@@ -19,6 +19,13 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+print("\033[93m" + "=" * 60)
+print("⚠️  DEPRECATION WARNING: dev_commands.py será removido em breve.")
+print("👉  Por favor, use o 'Makefile' para tarefas de desenvolvimento.")
+print("    Exemplo: 'make install-dev', 'make test', 'make lint'")
+print("=" * 60 + "\033[0m", file=sys.stderr)
+
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
