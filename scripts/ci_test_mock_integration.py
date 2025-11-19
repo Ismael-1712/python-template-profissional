@@ -29,8 +29,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from test_mock_generator import TestMockGenerator
-from validate_test_mocks import TestMockValidator
+# Adiciona o diretório raiz do projeto ao sys.path para permitir imports de 'tests'
+# Assume que este script está em <raiz>/scripts/
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT / "tests") not in sys.path:
+    sys.path.append(str(PROJECT_ROOT / "tests"))
+
+from test_mock_generator import TestMockGenerator  # noqa: E402
+from validate_test_mocks import TestMockValidator  # noqa: E402
 
 # Configuração de logging para CI/CD
 logging.basicConfig(
