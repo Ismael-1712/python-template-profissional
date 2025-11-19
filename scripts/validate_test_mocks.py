@@ -193,14 +193,15 @@ import requests
 
 def test_httpx_get_request():
     """Test that should trigger httpx.get mock suggestion."""
-    response = httpx.get("https://api.example.com/data")
+    response = httpx.get("https://api.example.com/data")  # noqa: network
     assert response.status_code == 200
 
 
 def test_requests_post():
     """Test that should trigger requests.post mock suggestion."""
     data = {"key": "value"}
-    response = requests.post("https://api.example.com/submit", json=data)
+    url = "https://api.example.com/submit"
+    response = requests.post(url, json=data)  # noqa: network
     assert response.status_code == 201
 ''',
             "test_subprocess_calls.py": '''"""Test file with subprocess patterns."""

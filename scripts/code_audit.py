@@ -105,7 +105,7 @@ class CodeAuditor:
     def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
         default_config = {
-            "scan_paths": ["src/", "tests/"],
+            "scan_paths": ["src/", "tests/", "scripts/", ".github/"],
             "file_patterns": ["*.py"],
             "exclude_paths": [".git/", "__pycache__/", ".venv/", "venv/"],
             "ci_timeout": 300,
