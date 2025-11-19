@@ -13,11 +13,9 @@ License: MIT
 """
 
 import argparse
-import ast
 import json
 import logging
 import os
-import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -27,6 +25,7 @@ from typing import Any
 import yaml
 
 # Import models from the audit package (relative import)
+from audit.analyzer import CodeAnalyzer
 from audit.config import load_config
 from audit.models import AuditResult, SecurityPattern
 from audit.scanner import scan_workspace
@@ -57,7 +56,14 @@ class CodeAuditor:
         self.findings: list[AuditResult] = []
         self.patterns = self._load_security_patterns()
 
-        logger.info(f"Initialized auditor for workspace: {self.workspace_root}")
+        # Initialize analyzer with loaded patterns and config
+        self.analyzer = CodeAnalyzer(
+            patterns=self.patterns,
+            workspace_root=self.workspace_root,
+            max_findings_per_file=self.config["max_findings_per_file"],
+        )
+
+        logger.info("Initialized auditor for workspace: %s", self.workspace_root)
 
     def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
@@ -145,114 +151,11 @@ class CodeAuditor:
         )
 
     def _analyze_file(self, file_path: Path) -> list[AuditResult]:
-        """Analyze a single Python file for security patterns."""
-        findings = []
+        """Analyze a single Python file for security patterns.
 
-        try:
-            with open(file_path, encoding="utf-8") as f:
-                content = f.read()
-                lines = content.splitlines()
-
-            # Parse AST for more accurate analysis
-            try:
-                # Corrigido: Removida a atribuição 'tree =' (F841)
-                ast.parse(content)
-            except SyntaxError as e:
-                logger.warning(f"Syntax error in {file_path}: {e}")
-                return findings
-
-            # Check for patterns in each line
-            for line_num, line in enumerate(lines, 1):
-                for pattern in self.patterns:
-                    if pattern.pattern in line:
-                        # --- Início da Lógica de Supressão (P8.1.3) ---
-                        noqa_match = re.search(r"#\s*noqa:\s*([\w,-]+)", line)
-                        if noqa_match:
-                            try:
-                                suppressed_categories = [
-                                    cat.strip().lower()
-                                    for cat in noqa_match.group(1).split(",")
-                                ]
-                                if pattern.category.lower() in suppressed_categories:
-                                    continue  # Risco suprimido. Pular este 'finding'.
-                            except Exception:
-                                pass  # Ignora 'noqa' mal formatado
-                        # --- Fim da Lógica de Supressão ---
-
-                        # Skip if it's in a comment or string literal
-                        stripped_line = line.strip()
-                        if stripped_line.startswith("#") or self._is_in_string_literal(
-                            line,
-                            pattern.pattern,
-                        ):
-                            continue
-
-                        # Create suggestion based on pattern
-                        suggestion = self._generate_suggestion(pattern, line)
-
-                        # Garante que o file_path seja relativo ao root
-                        relative_path = file_path
-                        if file_path.is_absolute():
-                            try:
-                                relative_path = file_path.relative_to(
-                                    self.workspace_root,
-                                )
-                            except ValueError:
-                                # O path pode ser de fora do workspace (ex: /tmp),
-                                # mantenha-o absoluto se não for relativo.
-                                pass
-
-                        finding = AuditResult(
-                            file_path=relative_path,
-                            line_number=line_num,
-                            pattern=pattern,
-                            code_snippet=line.strip(),
-                            suggestion=suggestion,
-                        )
-                        findings.append(finding)
-
-                        # Limit findings per file to avoid noise
-                        if len(findings) >= self.config["max_findings_per_file"]:
-                            logger.warning(f"Max findings reached for {file_path}")
-                            break
-
-        except Exception as e:
-            logger.error(f"Error analyzing {file_path}: {e}")
-
-        return findings
-
-    def _is_in_string_literal(self, line: str, pattern: str) -> bool:
-        """Check if pattern is inside a string literal."""
-        # Simple heuristic - check if pattern is between quotes
-        pattern_index = line.find(pattern)
-        if pattern_index == -1:
-            return False
-
-        before = line[:pattern_index]
-        single_quotes = before.count("'") - before.count("\\'")
-        double_quotes = before.count('"') - before.count('\\"')
-
-        return (single_quotes % 2 == 1) or (double_quotes % 2 == 1)
-
-    def _generate_suggestion(self, pattern: SecurityPattern, line: str) -> str:
-        """Generate improvement suggestion based on pattern."""
-        suggestions = {
-            "shell=True": (
-                "Use shell=False with list arguments: "
-                "subprocess.run(['command', 'arg1', 'arg2'])"
-            ),
-            "os.system(": "Replace with subprocess.run() using shell=False",
-            "requests.get(": (
-                "Consider mocking this request in tests using @patch or pytest-httpx"
-            ),
-            "subprocess.run(": "Ensure shell=False and validate all inputs",
-        }
-
-        for key, suggestion in suggestions.items():
-            if key in line:
-                return suggestion
-
-        return f"Review {pattern.category} usage for security best practices"
+        This is a wrapper method that delegates to CodeAnalyzer.analyze_file().
+        """
+        return self.analyzer.analyze_file(file_path)
 
     def _check_mock_coverage(self) -> dict[str, Any]:
         """Analyze test files for proper mocking of external dependencies."""
