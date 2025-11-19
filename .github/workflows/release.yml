@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0 # OBRIGATÓRIO para o semantic-release ler o histórico
 
       - name: 2. Setup Python (Versão Estável)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
