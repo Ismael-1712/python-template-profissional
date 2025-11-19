@@ -48,6 +48,7 @@ class SecurityPattern:
         description: str,
         category: str = "security",
     ) -> None:
+        """Inicializa a instância."""
         self.pattern = pattern
         self.severity = severity
         self.description = description
@@ -65,6 +66,7 @@ class AuditResult:
         code_snippet: str,
         suggestion: str | None = None,
     ) -> None:
+        """Inicializa a instância."""
         self.file_path = file_path
         self.line_number = line_number
         self.pattern = pattern
@@ -92,6 +94,7 @@ class CodeAuditor:
     """
 
     def __init__(self, workspace_root: Path, config_path: Path | None = None) -> None:
+        """Inicializa a instância."""
         self.workspace_root = workspace_root.resolve()
         self.config = self._load_config(config_path)
         self.findings: list[AuditResult] = []

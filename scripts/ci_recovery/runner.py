@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-"""Módulo Runner (Executor de Testes e Qualidade) SRE
-(Extraído do monólito P8.4)
+"""Módulo Runner (Executor de Testes e Qualidade) SRE.
+
+(Extraído do monólito P8.4).
 """
 
 import logging
