@@ -13,21 +13,18 @@ License: MIT
 """
 
 import argparse
-import json
 import logging
-import os
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import yaml
-
-# Import models from the audit package (relative import)
+# Import from the audit package
 from audit.analyzer import CodeAnalyzer
 from audit.config import load_config
 from audit.models import AuditResult, SecurityPattern
+from audit.plugins import check_mock_coverage, simulate_ci
+from audit.reporter import AuditReporter
 from audit.scanner import scan_workspace
 
 # Configure logging
@@ -62,6 +59,9 @@ class CodeAuditor:
             workspace_root=self.workspace_root,
             max_findings_per_file=self.config["max_findings_per_file"],
         )
+
+        # Initialize reporter
+        self.reporter = AuditReporter(workspace_root=self.workspace_root)
 
         logger.info("Initialized auditor for workspace: %s", self.workspace_root)
 
@@ -158,122 +158,18 @@ class CodeAuditor:
         return self.analyzer.analyze_file(file_path)
 
     def _check_mock_coverage(self) -> dict[str, Any]:
-        """Analyze test files for proper mocking of external dependencies."""
-        test_files = []
-        for scan_path in self.config["scan_paths"]:
-            if "test" in scan_path.lower():
-                test_dir = self.workspace_root / scan_path
-                if test_dir.exists():
-                    test_files.extend(test_dir.rglob("test_*.py"))
-                    test_files.extend(test_dir.rglob("*_test.py"))
+        """Analyze test files for proper mocking of external dependencies.
 
-        mock_coverage = {
-            "total_test_files": len(test_files),
-            "files_with_mocks": 0,
-            "files_needing_mocks": [],
-        }
-
-        mock_indicators = [
-            "@patch",
-            "Mock()",
-            "mocker.patch",
-            "mock_",
-            "pytest-httpx",
-            "httpx_mock",
-        ]
-        external_indicators = ["requests.", "httpx.", "subprocess.", "socket."]
-
-        for test_file in test_files:
-            try:
-                with open(test_file, encoding="utf-8") as f:
-                    content = f.read()
-
-                has_external = any(
-                    indicator in content for indicator in external_indicators
-                )
-                has_mock = any(indicator in content for indicator in mock_indicators)
-
-                if has_external and has_mock:
-                    mock_coverage["files_with_mocks"] += 1
-                elif has_external and not has_mock:
-                    mock_coverage["files_needing_mocks"].append(
-                        str(test_file.relative_to(self.workspace_root)),
-                    )
-
-            except Exception as e:
-                logger.error(f"Error analyzing test file {test_file}: {e}")
-
-        return mock_coverage
+        This is a wrapper method that delegates to the plugins module.
+        """
+        return check_mock_coverage(self.workspace_root, self.config["scan_paths"])
 
     def _simulate_ci_environment(self) -> dict[str, Any]:
-        """Simulate CI environment by running critical tests."""
-        logger.info("Simulating CI environment...")
+        """Simulate CI environment by running critical tests.
 
-        # Set CI-like environment variables
-        ci_env = {
-            **dict(os.environ),
-            "CI": "true",
-            "PYTEST_TIMEOUT": str(self.config["ci_timeout"]),
-        }
-
-        try:
-            # Run pytest with CI-appropriate flags
-            cmd = [
-                sys.executable,
-                "-m",
-                "pytest",
-                "--tb=short",
-                "--maxfail=5",
-                "--timeout=60",
-                "--quiet",
-                "tests/",
-            ]
-
-            result = subprocess.run(  # noqa: subprocess
-                cmd,
-                check=False,
-                env=ci_env,
-                capture_output=True,
-                text=True,
-                timeout=self.config["ci_timeout"],
-                cwd=self.workspace_root,
-            )
-
-            return {
-                "exit_code": result.returncode,
-                "passed": result.returncode == 0,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-                "duration": "within_timeout",
-            }
-
-        except subprocess.TimeoutExpired:
-            logger.error(f"CI simulation timed out after {self.config['ci_timeout']}s")
-            return {
-                "exit_code": -1,
-                "passed": False,
-                "stdout": "",
-                "stderr": f"Tests exceeded {self.config['ci_timeout']}s timeout",
-                "duration": "timeout",
-            }
-        except FileNotFoundError:
-            logger.warning("pytest not found - skipping CI simulation")
-            return {
-                "exit_code": -2,
-                "passed": None,
-                "stdout": "",
-                "stderr": "pytest not available",
-                "duration": "skipped",
-            }
-        except Exception as e:
-            logger.error(f"CI simulation failed: {e}")
-            return {
-                "exit_code": -3,
-                "passed": False,
-                "stdout": "",
-                "stderr": str(e),
-                "duration": "error",
-            }
+        This is a wrapper method that delegates to the plugins module.
+        """
+        return simulate_ci(self.workspace_root, self.config["ci_timeout"])
 
     def run_audit(self, files_to_audit: list[Path] | None = None) -> dict[str, Any]:
         """Run complete security and quality audit."""
@@ -345,7 +241,7 @@ class CodeAuditor:
                 "total_findings": len(self.findings),
                 "severity_distribution": severity_counts,
                 "overall_status": overall_status,
-                "recommendations": self._generate_recommendations(
+                "recommendations": self.reporter.generate_recommendations(
                     severity_counts,
                     mock_coverage,
                     ci_simulation,
@@ -355,93 +251,6 @@ class CodeAuditor:
 
         logger.info(f"Audit completed in {duration:.2f}s - Status: {overall_status}")
         return report
-
-    def _generate_recommendations(
-        self,
-        severity_counts: dict[str, int],
-        mock_coverage: dict[str, Any],
-        ci_simulation: dict[str, Any],
-    ) -> list[str]:
-        """Generate actionable recommendations based on audit results."""
-        recommendations = []
-
-        if severity_counts.get("CRITICAL", 0) > 0:
-            recommendations.append(
-                "🔴 CRITICAL: Fix security vulnerabilities before commit",
-            )
-
-        if severity_counts.get("HIGH", 0) > 0:
-            recommendations.append("🟠 HIGH: Address high-priority security issues")
-
-        if mock_coverage["files_needing_mocks"]:
-            recommendations.append(
-                f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} "
-                "test files",
-            )
-
-        if not ci_simulation.get("passed", True):
-            recommendations.append("⚠️ Fix failing tests before CI/CD pipeline")
-
-        if not recommendations:
-            recommendations.append("✅ Code quality meets security standards!")
-
-        return recommendations
-
-
-def save_report(
-    report: dict[str, Any],
-    output_path: Path,
-    format_type: str = "json",
-) -> None:
-    """Save audit report in specified format."""
-    if format_type.lower() == "json":
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=2, ensure_ascii=False)
-    elif format_type.lower() == "yaml":
-        with open(output_path, "w", encoding="utf-8") as f:
-            yaml.dump(report, f, default_flow_style=False, allow_unicode=True)
-    else:
-        raise ValueError(f"Unsupported format: {format_type}")
-
-    logger.info(f"Report saved to {output_path}")
-
-
-def print_summary(report: dict[str, Any]) -> None:
-    """Print executive summary of audit results."""
-    metadata = report["metadata"]
-    summary = report["summary"]
-
-    print(f"\n{'=' * 60}")
-    print("🔍 CODE SECURITY AUDIT REPORT")
-    print(f"{'=' * 60}")
-    print(f"📅 Timestamp: {metadata['timestamp']}")
-    print(f"📁 Workspace: {metadata['workspace']}")
-    print(f"⏱️  Duration: {metadata['duration_seconds']:.2f}s")
-    print(f"📄 Files Scanned: {metadata['files_scanned']}")
-
-    status = summary["overall_status"]
-    status_emoji = {"PASS": "✅", "WARNING": "⚠️", "FAIL": "❌", "CRITICAL": "🔴"}
-    print(f"\n{status_emoji.get(status, '❓')} OVERALL STATUS: {status}")
-
-    print("\n📊 SEVERITY DISTRIBUTION:")
-    for severity, count in summary["severity_distribution"].items():
-        if count > 0:
-            emoji = {"CRITICAL": "🔴", "HIGH": "🟠", "MEDIUM": "🟡", "LOW": "🔵"}.get(
-                severity,
-                "⚪",
-            )
-            print(f"  {emoji} {severity}: {count}")
-
-    if report["findings"]:
-        print("\n🔍 TOP FINDINGS:")
-        for finding in report["findings"][:5]:  # Show top 5
-            print(f"  • {finding['file']}:{finding['line']} - {finding['description']}")
-
-    print("\n💡 RECOMMENDATIONS:")
-    for rec in summary["recommendations"]:
-        print(f"  {rec}")
-
-    print(f"\n{'=' * 60}")
 
 
 def main() -> None:
@@ -512,15 +321,15 @@ Examples:
     if args.report_file:
         output_file = args.report_file
     else:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         output_file = workspace_root / f"audit_report_{timestamp}.{args.output}"
 
     # Save report
-    save_report(report, output_file, args.output)
+    auditor.reporter.save_report(report, output_file, args.output)
 
     # Print summary unless quiet
     if not args.quiet:
-        print_summary(report)
+        auditor.reporter.print_summary(report)
 
     # Determine exit code based on severity threshold
     severity_hierarchy = {"LOW": 1, "MEDIUM": 2, "HIGH": 3, "CRITICAL": 4}
