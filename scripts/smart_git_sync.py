@@ -25,7 +25,6 @@ License: MIT
 import argparse
 import json
 import logging
-import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -33,8 +32,10 @@ from pathlib import Path
 from typing import Any
 
 # Import from git_sync package
+from git_sync.branch_protector import BranchProtector
 from git_sync.config import load_config
 from git_sync.exceptions import AuditError, GitOperationError, SyncError
+from git_sync.git_wrapper import GitWrapper
 from git_sync.models import SyncStep
 
 # Configure structured logging
@@ -70,45 +71,34 @@ class SmartGitSync:
         self.steps: list[SyncStep] = []
         self.sync_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
 
-        # Validate workspace is a Git repository
-        self._validate_git_repository()
+        # Initialize Git wrapper
+        self.git = GitWrapper(self.workspace_root, dry_run=self.dry_run)
 
-        logger.info(f"Initialized SmartGitSync (ID: {self.sync_id})")
-        logger.info(f"Workspace: {self.workspace_root}")
-        logger.info(f"Dry run mode: {self.dry_run}")
+        # Initialize branch protector
+        self.protector = BranchProtector.from_config(self.config)
 
-    def _validate_git_repository(self) -> None:
-        """Validate that workspace is a Git repository."""
-        git_dir = self.workspace_root / ".git"
-        if not git_dir.exists():
-            raise SyncError(f"Not a Git repository: {self.workspace_root}")
+        logger.info("Initialized SmartGitSync (ID: %s)", self.sync_id)
+        logger.info("Workspace: %s", self.workspace_root)
+        logger.info("Dry run mode: %s", self.dry_run)
 
-    def _run_command(
+    def _run_python_script(
         self,
         command: list[str],
         timeout: int = 300,
-        capture_output: bool = True,
-        check: bool = True,
-        env: dict[str, str] | None = None,
+        check: bool = False,
     ) -> subprocess.CompletedProcess[str]:
-        """Execute command with security best practices.
+        """Execute Python script (non-Git command).
 
         Args:
-            command: Command as list (never uses shell=True)  # noqa: subprocess
-            timeout: Command timeout in seconds
-            capture_output: Whether to capture stdout/stderr
+            command: Command to execute
+            timeout: Timeout in seconds
             check: Whether to raise on non-zero exit
-            env: Optional environment variables
 
         Returns:
             CompletedProcess instance
-
-        Raises:
-            GitOperationError: On command execution failure
-
         """
         if self.dry_run:
-            logger.info(f"[DRY RUN] Would execute: {' '.join(command)}")
+            logger.info("[DRY RUN] Would execute: %s", " ".join(command))
             return subprocess.CompletedProcess(
                 args=command,
                 returncode=0,
@@ -117,35 +107,19 @@ class SmartGitSync:
             )
 
         try:
-            # Ensure we never use shell=True for security
-            env_vars = {**os.environ}
-            if env:
-                env_vars.update(env)
-
-            result = subprocess.run(  # noqa: subprocess
+            return subprocess.run(  # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
                 timeout=timeout,
-                capture_output=capture_output,
+                capture_output=True,
                 text=True,
                 check=check,
-                env=env_vars,
             )
-
-            cmd_str = " ".join(command)
-            debug_msg = f"Command executed: {cmd_str} (exit code: {result.returncode})"
-            logger.debug(debug_msg)
-            return result
-
         except subprocess.CalledProcessError as e:
-            error_msg = (
-                f"Command failed: {' '.join(command)} (exit code: {e.returncode})"
-            )
-            if e.stderr:
-                error_msg += f" - {e.stderr.strip()}"
+            error_msg = f"Command failed: {' '.join(command)}"
             raise GitOperationError(error_msg) from e
         except subprocess.TimeoutExpired as e:
-            error_msg = f"Command timed out after {timeout}s: {' '.join(command)}"
+            error_msg = f"Command timed out after {timeout}s"
             raise GitOperationError(error_msg) from e
 
     def _check_git_status(self) -> dict[str, Any]:
@@ -155,20 +129,10 @@ class SmartGitSync:
         self.steps.append(step)
 
         try:
-            # Check for uncommitted changes
-            result = self._run_command(["git", "status", "--porcelain"])
-            changed_files = [
-                line.strip()
-                for line in result.stdout.strip().split("\n")
-                if line.strip()
-            ]
-
-            # Check current branch
-            branch_result = self._run_command(["git", "branch", "--show-current"])
-            current_branch = branch_result.stdout.strip()
-
-            # Check if repository is clean
-            is_clean = len(changed_files) == 0
+            # Get changed files and current branch using GitWrapper
+            changed_files = self.git.get_status()
+            current_branch = self.git.get_current_branch()
+            is_clean = self.git.is_clean()
 
             status_info = {
                 "is_clean": is_clean,
@@ -208,7 +172,7 @@ class SmartGitSync:
                 self.config.get("audit_fail_threshold", "HIGH"),
             ]
 
-            result = self._run_command(
+            result = self._run_python_script(
                 audit_command,
                 timeout=self.config.get("audit_timeout", 300),
                 check=False,  # Don't raise on non-zero exit, we'll handle it
@@ -253,7 +217,7 @@ class SmartGitSync:
             # Execute lint fixes
             lint_command = [sys.executable, str(lint_script), "--auto-fix"]
 
-            result = self._run_command(
+            result = self._run_python_script(
                 lint_command,
                 timeout=self.config.get("lint_timeout", 180),
                 check=False,
@@ -358,7 +322,7 @@ class SmartGitSync:
 
         try:
             # Use git add . but exclude sensitive files
-            self._run_command(["git", "add", "."])
+            self.git.add_all()
             add_step.complete({"files_added": len(git_status["changed_files"])})
 
         except GitOperationError as e:
@@ -372,11 +336,7 @@ class SmartGitSync:
 
         try:
             commit_message = self._generate_smart_commit_message(git_status)
-            self._run_command(["git", "commit", "-m", commit_message])
-
-            # Get commit hash
-            hash_result = self._run_command(["git", "rev-parse", "HEAD"])
-            commit_hash = hash_result.stdout.strip()
+            commit_hash = self.git.commit(commit_message)
 
             commit_details = {
                 "message": commit_message,
@@ -398,7 +358,7 @@ class SmartGitSync:
         try:
             # Get current branch for push
             current_branch = git_status["current_branch"]
-            self._run_command(["git", "push", "origin", current_branch])
+            self.git.push(current_branch)
 
             push_details = {
                 "branch": current_branch,
@@ -420,7 +380,7 @@ class SmartGitSync:
             # Rollback commit if push fails
             logger.warning("Push failed, attempting to rollback commit")
             try:
-                self._run_command(["git", "reset", "--soft", "HEAD~1"])
+                self.git.reset_soft()
                 logger.info("Successfully rolled back commit")
             except GitOperationError as rollback_error:
                 logger.error(f"Rollback failed: {rollback_error}")
@@ -434,28 +394,41 @@ class SmartGitSync:
         self.steps.append(cleanup_step)
 
         try:
-            cleanup_commands = [
-                ["git", "gc", "--auto"],
-                ["git", "remote", "prune", "origin"],
-            ]
-
             cleanup_results = []
-            for cmd in cleanup_commands:
-                try:
-                    result = self._run_command(cmd, timeout=60, check=False)
-                    cleanup_results.append(
-                        {
-                            "command": " ".join(cmd),
-                            "success": result.returncode == 0,
-                        },
-                    )
-                except GitOperationError:
-                    cleanup_results.append(
-                        {
-                            "command": " ".join(cmd),
-                            "success": False,
-                        },
-                    )
+
+            # Git garbage collection
+            try:
+                self.git.gc(auto=True)
+                cleanup_results.append(
+                    {
+                        "command": "git gc --auto",
+                        "success": True,
+                    },
+                )
+            except GitOperationError:
+                cleanup_results.append(
+                    {
+                        "command": "git gc --auto",
+                        "success": False,
+                    },
+                )
+
+            # Prune remote
+            try:
+                self.git.prune_remote()
+                cleanup_results.append(
+                    {
+                        "command": "git remote prune origin",
+                        "success": True,
+                    },
+                )
+            except GitOperationError:
+                cleanup_results.append(
+                    {
+                        "command": "git remote prune origin",
+                        "success": False,
+                    },
+                )
 
             cleanup_step.complete({"operations": cleanup_results})
 
@@ -511,18 +484,11 @@ class SmartGitSync:
             # Phase 1: Repository Status Check
             logger.info("📋 PHASE 1: Repository Status Analysis")
             git_status = self._check_git_status()
-            # INÍCIO DO PATCH DE PROTEÇÃO (v2.1)
+
+            # Validate branch protection before proceeding
             current_branch = git_status.get("current_branch")
-            if current_branch == "main":
-                logger.error("🛑 OPERAÇÃO PROIBIDA NA 'main'")
-                logger.error("A branch 'main' está protegida por regras ('Cofre').")
-                logger.error("Este script não pode fazer 'push' direto na 'main'.")
-                logger.warning(
-                    "Use o 'Fluxo de Trabalho (Chave Mestra)': Crie um branch, "
-                    "abra um PR e solicite um 'Bypass' do administrador.",
-                )
-                raise SyncError("Tentativa de 'push' direto na 'main' protegida.")
-            # FIM DO PATCH DE PROTEÇÃO (v2.1)
+            self.protector.validate_push(current_branch)
+
             if git_status["is_clean"]:
                 logger.info("Repository is clean, no changes to sync")
                 self._save_sync_report()

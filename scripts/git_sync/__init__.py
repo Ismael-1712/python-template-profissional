@@ -16,12 +16,16 @@ Modules:
 __version__ = "2.0.0"
 __author__ = "DevOps Engineering Team"
 
+from scripts.git_sync.branch_protector import BranchProtector
 from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
+from scripts.git_sync.git_wrapper import GitWrapper
 from scripts.git_sync.models import SyncStep
 
 __all__ = [
     "AuditError",
+    "BranchProtector",
     "GitOperationError",
+    "GitWrapper",
     "SyncError",
     "SyncStep",
 ]
