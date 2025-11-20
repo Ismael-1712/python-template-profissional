@@ -32,7 +32,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import yaml
+# Import from git_sync package
+from git_sync.config import load_config
+from git_sync.exceptions import AuditError, GitOperationError, SyncError
+from git_sync.models import SyncStep
 
 # Configure structured logging
 logging.basicConfig(
@@ -44,78 +47,6 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
-
-
-class SyncError(Exception):
-    """Custom exception for synchronization errors."""
-
-
-class GitOperationError(SyncError):
-    """Exception for Git operation failures."""
-
-
-class AuditError(SyncError):
-    """Exception for audit failures."""
-
-
-class SyncStep:
-    """Represents a single synchronization step with metadata."""
-
-    def __init__(self, name: str, description: str) -> None:
-        """Initialize a sync step with name and description."""
-        self.name = name
-        self.description = description
-        self.start_time: datetime | None = None
-        self.end_time: datetime | None = None
-        self.status: str = "pending"
-        self.error: str | None = None
-        self.details: dict[str, Any] = {}
-
-    def start(self) -> None:
-        """Mark step as started."""
-        self.start_time = datetime.now(timezone.utc)
-        self.status = "running"
-        logger.info("🔄 Starting: %s - %s", self.name, self.description)
-
-    def complete(self, details: dict[str, Any] | None = None) -> None:
-        """Mark step as completed successfully."""
-        self.end_time = datetime.now(timezone.utc)
-        self.status = "success"
-        if details:
-            self.details.update(details)
-
-        duration = self._get_duration()
-        logger.info("✅ Completed: %s (%.2fs)", self.name, duration)
-
-    def fail(self, error: str, details: dict[str, Any] | None = None) -> None:
-        """Mark step as failed."""
-        self.end_time = datetime.now(timezone.utc)
-        self.status = "failed"
-        self.error = error
-        if details:
-            self.details.update(details)
-
-        duration = self._get_duration()
-        logger.error("❌ Failed: %s (%.2fs) - %s", self.name, duration, error)
-
-    def _get_duration(self) -> float:
-        """Calculate step duration in seconds."""
-        if self.start_time and self.end_time:
-            return (self.end_time - self.start_time).total_seconds()
-        return 0.0
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert to dictionary for serialization."""
-        return {
-            "name": self.name,
-            "description": self.description,
-            "status": self.status,
-            "start_time": self.start_time.isoformat() if self.start_time else None,
-            "end_time": self.end_time.isoformat() if self.end_time else None,
-            "duration_seconds": self._get_duration(),
-            "error": self.error,
-            "details": self.details,
-        }
 
 
 class SmartGitSync:
@@ -646,31 +577,6 @@ class SmartGitSync:
             logger.error(f"Unexpected error during synchronization: {e}")
             self._save_sync_report()
             return False
-
-
-def load_config(config_path: Path | None = None) -> dict[str, Any]:
-    """Load configuration with sensible defaults."""
-    default_config = {
-        "audit_enabled": True,
-        "audit_timeout": 300,
-        "audit_fail_threshold": "HIGH",
-        "strict_audit": True,
-        "auto_fix_enabled": True,
-        "lint_timeout": 180,
-        "cleanup_enabled": True,
-        "git_timeout": 120,
-    }
-
-    if config_path and config_path.exists():
-        try:
-            with open(config_path, encoding="utf-8") as f:
-                user_config = yaml.safe_load(f)
-                default_config.update(user_config)
-                logger.info(f"Loaded configuration from {config_path}")
-        except Exception as e:
-            logger.warning(f"Failed to load config from {config_path}: {e}")
-
-    return default_config
 
 
 def main() -> None:
