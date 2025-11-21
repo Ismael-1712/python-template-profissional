@@ -10,6 +10,7 @@ Usage:
     python3 scripts/test_smart_git_sync.py --unit-tests-only
 """
 
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -17,11 +18,18 @@ from unittest.mock import MagicMock, patch
 
 import yaml
 
+# Adiciona a raiz do projeto ao sys.path
+PROJECT_ROOT = Path(__file__).parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 # Import the module under test from git_sync package
-from scripts.git_sync.config import load_config
-from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
-from scripts.git_sync.models import SyncStep
-from scripts.git_sync.sync_logic import SyncOrchestrator
+# isort: off
+from scripts.git_sync.config import load_config  # noqa: E402
+from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError  # noqa: E402
+from scripts.git_sync.models import SyncStep  # noqa: E402
+from scripts.git_sync.sync_logic import SyncOrchestrator  # noqa: E402
+# isort: on
 
 
 class TestSyncStep(unittest.TestCase):
