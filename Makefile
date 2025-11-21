@@ -51,7 +51,7 @@ build:
 
 ## lint: Executa verificação de código com ruff (check apenas)
 lint:
-	$(PYTHON) -m ruff check .
+	PYTHONPATH=. $(PYTHON) -m ruff check .
 
 ## format: Formata código automaticamente com ruff
 format:
@@ -59,19 +59,19 @@ format:
 
 ## audit: Executa auditoria completa do código (análise estática avançada)
 audit:
-	$(PYTHON) $(SCRIPTS_DIR)/code_audit.py
+	PYTHONPATH=. $(PYTHON) $(SCRIPTS_DIR)/code_audit.py
 
 ## test: Executa suite completa de testes com pytest
 test:
-	$(PYTHON) -m pytest $(TEST_DIR)
+	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
 
 ## test-verbose: Executa testes em modo verboso
 test-verbose:
-	$(PYTHON) -m pytest -v $(TEST_DIR)
+	PYTHONPATH=. $(PYTHON) -m pytest -v $(TEST_DIR)
 
 ## test-coverage: Executa testes com relatório de cobertura
 test-coverage:
-	$(PYTHON) -m pytest --cov=$(SRC_DIR) $(TEST_DIR)
+	PYTHONPATH=. $(PYTHON) -m pytest --cov=$(SRC_DIR) $(TEST_DIR)
 
 ## clean: Remove artefatos de build, cache e arquivos temporários
 clean:
