@@ -37,6 +37,7 @@ from git_sync.config import load_config
 from git_sync.exceptions import AuditError, GitOperationError, SyncError
 from git_sync.git_wrapper import GitWrapper
 from git_sync.models import SyncStep
+from git_sync.pr_manager import PRManager
 
 # Configure structured logging
 logging.basicConfig(
@@ -76,6 +77,12 @@ class SmartGitSync:
 
         # Initialize branch protector
         self.protector = BranchProtector.from_config(self.config)
+
+        # Initialize PR manager
+        self.pr_manager = PRManager(
+            workspace_root=self.workspace_root,
+            **self.config.get("pull_request", {}),
+        )
 
         logger.info("Initialized SmartGitSync (ID: %s)", self.sync_id)
         logger.info("Workspace: %s", self.workspace_root)
@@ -315,6 +322,20 @@ class SmartGitSync:
             logger.info("Repository is clean, nothing to commit")
             return {"status": "clean", "committed": False}
 
+        current_branch = git_status["current_branch"]
+
+        # Check if current branch is protected
+        if self.protector.is_protected(current_branch):
+            logger.warning(
+                "⚠️  Branch '%s' is protected - creating feature branch and PR",
+                current_branch,
+            )
+            return self._create_feature_branch_and_pr(
+                git_status,
+                target_branch=current_branch,
+            )
+
+        # Standard flow for non-protected branches
         # Add files to staging
         add_step = SyncStep("git_add", "Adding files to Git staging area")
         add_step.start()
@@ -386,6 +407,135 @@ class SmartGitSync:
                 logger.error(f"Rollback failed: {rollback_error}")
 
             raise
+
+    def _create_feature_branch_and_pr(
+        self,
+        git_status: dict[str, Any],
+        target_branch: str,
+    ) -> dict[str, Any]:
+        """Create feature branch and Pull Request for protected branch changes.
+
+        Args:
+            git_status: Git status information
+            target_branch: Target branch (protected) for the PR
+
+        Returns:
+            Dictionary with PR creation results
+        """
+        # Generate feature branch name
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        feature_branch = f"sync/auto-{timestamp}"
+
+        logger.info("🌿 Creating feature branch: %s", feature_branch)
+
+        # Create and checkout feature branch
+        try:
+            self.git.create_branch(feature_branch)
+            self.git.checkout(feature_branch)
+        except GitOperationError as e:
+            msg = f"Failed to create feature branch: {e}"
+            raise SyncError(msg) from e
+
+        # Add files to staging
+        add_step = SyncStep("git_add", "Adding files to Git staging area")
+        add_step.start()
+        self.steps.append(add_step)
+
+        try:
+            self.git.add_all()
+            add_step.complete({"files_added": len(git_status["changed_files"])})
+        except GitOperationError as e:
+            add_step.fail(str(e))
+            raise
+
+        # Commit changes
+        commit_step = SyncStep("git_commit", "Creating Git commit")
+        commit_step.start()
+        self.steps.append(commit_step)
+
+        try:
+            commit_message = self._generate_smart_commit_message(git_status)
+            commit_hash = self.git.commit(commit_message)
+
+            commit_details = {
+                "message": commit_message,
+                "hash": commit_hash,
+                "files_committed": len(git_status["changed_files"]),
+            }
+
+            commit_step.complete(commit_details)
+        except GitOperationError as e:
+            commit_step.fail(str(e))
+            raise
+
+        # Push feature branch
+        push_step = SyncStep("git_push", "Pushing feature branch to remote")
+        push_step.start()
+        self.steps.append(push_step)
+
+        try:
+            self.git.push(feature_branch)
+            push_step.complete({"branch": feature_branch})
+        except GitOperationError as e:
+            push_step.fail(str(e))
+            raise
+
+        # Create Pull Request
+        pr_step = SyncStep("pr_create", "Creating Pull Request")
+        pr_step.start()
+        self.steps.append(pr_step)
+
+        try:
+            pr_title = f"chore: automated sync from {feature_branch}"
+            pr_body = (
+                f"🤖 **Automated Synchronization**\n\n"
+                f"This PR was automatically created because changes were "
+                f"detected on protected branch `{target_branch}`.\n\n"
+                f"**Changes:**\n"
+                f"- {len(git_status['changed_files'])} file(s) modified\n"
+                f"- Commit: `{commit_hash[:8]}`\n\n"
+                f"**Commit Message:**\n```\n{commit_message}\n```\n\n"
+                f"Please review and merge this PR to apply the changes.\n"
+            )
+
+            pr_url = self.pr_manager.create_pr(
+                source_branch=feature_branch,
+                target_branch=target_branch,
+                title=pr_title,
+                body=pr_body,
+            )
+
+            pr_step.complete({"pr_url": pr_url})
+
+            logger.info("✅ Pull Request created successfully!")
+            logger.info("🔗 PR URL: %s", pr_url)
+
+            return {
+                "status": "pr_created",
+                "committed": True,
+                "feature_branch": feature_branch,
+                "target_branch": target_branch,
+                "commit": commit_details,
+                "pr_url": pr_url,
+            }
+
+        except SyncError as e:
+            pr_step.fail(str(e))
+            logger.error("Failed to create PR: %s", e)
+            logger.info(
+                "Changes are committed to branch '%s'. "
+                "You can create the PR manually.",
+                feature_branch,
+            )
+
+            return {
+                "status": "commit_only",
+                "committed": True,
+                "feature_branch": feature_branch,
+                "target_branch": target_branch,
+                "commit": commit_details,
+                "pr_error": str(e),
+            }
 
     def _cleanup_repository(self) -> None:
         """Perform repository cleanup operations."""

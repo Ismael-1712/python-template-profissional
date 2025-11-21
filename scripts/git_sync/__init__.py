@@ -20,12 +20,14 @@ from scripts.git_sync.branch_protector import BranchProtector
 from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
 from scripts.git_sync.git_wrapper import GitWrapper
 from scripts.git_sync.models import SyncStep
+from scripts.git_sync.pr_manager import PRManager
 
 __all__ = [
     "AuditError",
     "BranchProtector",
     "GitOperationError",
     "GitWrapper",
+    "PRManager",
     "SyncError",
     "SyncStep",
 ]
