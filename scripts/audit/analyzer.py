@@ -182,7 +182,7 @@ class CodeAnalyzer:
             ),
             "os.system(": "Replace with subprocess.run() using shell=False",
             "requests.get(": (
-                "Consider mocking this request in tests " "using @patch or pytest-httpx"
+                "Consider mocking this request in tests using @patch or pytest-httpx"
             ),
             "subprocess.run(": "Ensure shell=False and validate all inputs",
         }
