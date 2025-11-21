@@ -1,13 +1,13 @@
 # ======================================================================
-# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v2.0 - Pós-Auditoria)
+# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v3.0 - Makefile)
 # ======================================================================
 # Este workflow é o "Porteiro de CI" para o python-template-profissional.
 #
 # ARQUITETURA (Task Runner Pattern):
 # Este arquivo NÃO contém lógica de lint/teste.
-# Ele delega TODAS as tarefas ao script centralizado:
+# Ele delega TODAS as tarefas ao Makefile padronizado:
 #
-#   `scripts/dev_commands.py`
+#   `make <comando>`
 #
 # Isso nos dá uma "Fonte Única da Verdade" para os comandos.
 # ======================================================================
@@ -33,7 +33,7 @@ jobs:
     name: "🧪 Teste e Qualidade"
     runs-on: ubuntu-latest
 
-    # EstratégIA de matriz para testar em múltiplas versões do Python
+    # Estratégia de matriz para testar em múltiplas versões do Python
     # (Definido no Roadmap Mestre, Prioridade 1)
     strategy:
       fail-fast: false
@@ -53,28 +53,17 @@ jobs:
           cache: "pip"
 
       # --- 2. INSTALAÇÃO ---
-      - name: "Instalar Dependências (via dev_commands)"
-        run: |
-          # Ativamos o .venv apenas para garantir que o pip instale lá
-          python3 -m venv .venv
-          source .venv/bin/activate
-          # Usamos nosso script centralizado para instalar
-          python3 scripts/dev_commands.py install-dev
+      - name: "Instalar Dependências"
+        run: make install-dev
 
-      # --- 3. EXECUÇÃO (Delegação ao Task Runner) ---
-      - name: "Executar Verificação de Formatação (via dev_commands)"
+      # --- 3. EXECUÇÃO (Delegação ao Makefile) ---
+      - name: "Executar Verificação de Formatação"
         run: |
-          source .venv/bin/activate
-          # Delega ao script. O "--" passa argumentos (como --check)
-          python3 scripts/dev_commands.py format -- --check
+          make format
+          git diff --exit-code
 
-      - name: "Executar Linting (via dev_commands)"
-        run: |
-          source .venv/bin/activate
-          python3 scripts/dev_commands.py lint
+      - name: "Executar Linting"
+        run: make lint
 
-      - name: "Executar Testes (via dev_commands)"
-        run: |
-          source .venv/bin/activate
-          # O script já está configurado para `pytest`, incluindo `--cov`
-          python3 scripts/dev_commands.py test
+      - name: "Executar Testes"
+        run: make test
