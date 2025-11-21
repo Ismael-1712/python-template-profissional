@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: 1. Checkout (Histórico Completo)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # OBRIGATÓRIO para o semantic-release ler o histórico
 
