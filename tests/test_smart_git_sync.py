@@ -10,7 +10,6 @@ Usage:
     python3 scripts/test_smart_git_sync.py --unit-tests-only
 """
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -18,19 +17,11 @@ from unittest.mock import MagicMock, patch
 
 import yaml
 
-# Adiciona o diretório 'scripts' (pai do pai deste arquivo) ao path
-scripts_dir = Path(__file__).parent.parent / "scripts"
-sys.path.insert(0, str(scripts_dir))
-
 # Import the module under test from git_sync package
-try:
-    from git_sync.config import load_config
-    from git_sync.exceptions import AuditError, GitOperationError, SyncError
-    from git_sync.models import SyncStep
-    from git_sync.sync_logic import SyncOrchestrator
-except ImportError:
-    print("⚠️  Warning: git_sync package not found. Tests will be limited.")
-    SyncOrchestrator = None
+from scripts.git_sync.config import load_config
+from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
+from scripts.git_sync.models import SyncStep
+from scripts.git_sync.sync_logic import SyncOrchestrator
 
 
 class TestSyncStep(unittest.TestCase):
@@ -139,7 +130,6 @@ class TestConfigLoading(unittest.TestCase):
         self.assertTrue(config["audit_enabled"])
 
 
-@unittest.skipIf(SyncOrchestrator is None, "SyncOrchestrator not available")
 class TestSyncOrchestrator(unittest.TestCase):
     """Test cases for SyncOrchestrator class."""
 
@@ -196,7 +186,7 @@ class TestSyncOrchestrator(unittest.TestCase):
                 dry_run=True,
             )
 
-    @patch("git_sync.sync_logic.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_dry_run(self, mock_run: MagicMock) -> None:
         """Test command execution in dry run mode."""
         sync = SyncOrchestrator(
@@ -212,7 +202,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         self.assertEqual(result.stdout, "[DRY RUN]")
         self.assertEqual(result.returncode, 0)
 
-    @patch("git_sync.sync_logic.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_success(self, mock_run: MagicMock) -> None:
         """Test successful command execution."""
         # Mock successful subprocess execution
@@ -234,7 +224,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         self.assertEqual(result.stdout, "test output")
         self.assertEqual(result.returncode, 0)
 
-    @patch("git_sync.sync_logic.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_failure(self, mock_run: MagicMock) -> None:
         """Test command execution failure."""
         # Mock failed subprocess execution
