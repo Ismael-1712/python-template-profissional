@@ -10,7 +10,6 @@ Usage:
     python3 scripts/test_smart_git_sync.py --unit-tests-only
 """
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -18,23 +17,11 @@ from unittest.mock import MagicMock, patch
 
 import yaml
 
-# Adiciona o diretório 'scripts' (pai do pai deste arquivo) ao path
-scripts_dir = Path(__file__).parent.parent / "scripts"
-sys.path.insert(0, str(scripts_dir))
-
-# Import the module under test (assumes smart_git_sync.py exists)
-try:
-    from smart_git_sync import (
-        AuditError,
-        GitOperationError,
-        SmartGitSync,
-        SyncError,
-        SyncStep,
-        load_config,
-    )
-except ImportError:
-    print("⚠️  Warning: smart_git_sync.py not found. Tests will be limited.")
-    SmartGitSync = None
+# Import the module under test from git_sync package
+from scripts.git_sync.config import load_config
+from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
+from scripts.git_sync.models import SyncStep
+from scripts.git_sync.sync_logic import SyncOrchestrator
 
 
 class TestSyncStep(unittest.TestCase):
@@ -143,9 +130,8 @@ class TestConfigLoading(unittest.TestCase):
         self.assertTrue(config["audit_enabled"])
 
 
-@unittest.skipIf(SmartGitSync is None, "SmartGitSync not available")
-class TestSmartGitSync(unittest.TestCase):
-    """Test cases for SmartGitSync class."""
+class TestSyncOrchestrator(unittest.TestCase):
+    """Test cases for SyncOrchestrator class."""
 
     def setUp(self) -> None:
         """Set up test environment."""
@@ -166,9 +152,9 @@ class TestSmartGitSync(unittest.TestCase):
 
         shutil.rmtree(self.temp_dir)
 
-    def test_smart_git_sync_initialization(self) -> None:
-        """Test SmartGitSync initialization."""
-        sync = SmartGitSync(
+    def test_sync_orchestrator_initialization(self) -> None:
+        """Test SyncOrchestrator initialization."""
+        sync = SyncOrchestrator(
             workspace_root=self.temp_dir,
             config=self.config,
             dry_run=True,
@@ -182,7 +168,7 @@ class TestSmartGitSync(unittest.TestCase):
     def test_validate_git_repository_success(self) -> None:
         """Test Git repository validation success."""
         # Should not raise an exception
-        SmartGitSync(
+        SyncOrchestrator(
             workspace_root=self.temp_dir,
             config=self.config,
             dry_run=True,
@@ -194,16 +180,16 @@ class TestSmartGitSync(unittest.TestCase):
         self.git_dir.rmdir()
 
         with self.assertRaises(SyncError):
-            SmartGitSync(
+            SyncOrchestrator(
                 workspace_root=self.temp_dir,
                 config=self.config,
                 dry_run=True,
             )
 
-    @patch("smart_git_sync.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_dry_run(self, mock_run: MagicMock) -> None:
         """Test command execution in dry run mode."""
-        sync = SmartGitSync(
+        sync = SyncOrchestrator(
             workspace_root=self.temp_dir,
             config=self.config,
             dry_run=True,
@@ -216,7 +202,7 @@ class TestSmartGitSync(unittest.TestCase):
         self.assertEqual(result.stdout, "[DRY RUN]")
         self.assertEqual(result.returncode, 0)
 
-    @patch("smart_git_sync.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_success(self, mock_run: MagicMock) -> None:
         """Test successful command execution."""
         # Mock successful subprocess execution
@@ -226,7 +212,7 @@ class TestSmartGitSync(unittest.TestCase):
         mock_result.stderr = ""
         mock_run.return_value = mock_result
 
-        sync = SmartGitSync(
+        sync = SyncOrchestrator(
             workspace_root=self.temp_dir,
             config=self.config,
             dry_run=False,
@@ -238,7 +224,7 @@ class TestSmartGitSync(unittest.TestCase):
         self.assertEqual(result.stdout, "test output")
         self.assertEqual(result.returncode, 0)
 
-    @patch("smart_git_sync.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
     def test_run_command_failure(self, mock_run: MagicMock) -> None:
         """Test command execution failure."""
         # Mock failed subprocess execution
@@ -250,7 +236,7 @@ class TestSmartGitSync(unittest.TestCase):
             stderr="error message",
         )
 
-        sync = SmartGitSync(
+        sync = SyncOrchestrator(
             workspace_root=self.temp_dir,
             config=self.config,
             dry_run=False,
