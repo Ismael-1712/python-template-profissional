@@ -30,7 +30,7 @@ jobs:
           python-version: '3.11'
 
       - name: 3. Install dependencies (P01 Pinned)
-        run: python3 scripts/dev_commands.py install-dev
+        run: make install-dev
 
       - name: 4. Configurar Git (Identidade do Bot)
         run: |
