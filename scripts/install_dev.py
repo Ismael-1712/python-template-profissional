@@ -28,6 +28,33 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _display_success_panel() -> None:
+    """Exibe painel formatado de sucesso com próximos passos."""
+    panel = """
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║        ✅  AMBIENTE CONFIGURADO COM SUCESSO!                  ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+🔧 ATIVAR O AMBIENTE VIRTUAL:
+
+    source .venv/bin/activate
+
+📋 PRÓXIMOS PASSOS RECOMENDADOS:
+
+    1️⃣  Executar testes:              make test
+    2️⃣  Verificar segurança:          make audit
+    3️⃣  Validação rápida (CI local):  make check
+    4️⃣  Ver todos os comandos:        make help
+
+💡 DICA: Use 'make check' antes de fazer push para garantir qualidade!
+
+════════════════════════════════════════════════════════════════════
+"""
+    print(panel)
+
+
 def install_dev_environment(workspace_root: Path) -> int:
     """Executa sequência completa de instalação do ambiente de desenvolvimento.
 
@@ -104,8 +131,8 @@ def install_dev_environment(workspace_root: Path) -> int:
         )
         logger.debug("Saída pip install -r: %s", result3.stdout.strip())
 
-        # ========== SUCESSO ==========
-        logger.info("✅ Ambiente de desenvolvimento instalado com sucesso!")
+        # ========== SUCESSO: PAINEL FORMATADO ==========
+        _display_success_panel()
         return 0
 
     except subprocess.CalledProcessError as e:
