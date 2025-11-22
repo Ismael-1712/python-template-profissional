@@ -27,7 +27,7 @@ BUILD_ARTIFACTS := build dist *.egg-info
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
@@ -51,6 +51,10 @@ install-dev:
 ## build: Constrói pacote distribuível (wheel + sdist)
 build:
 	$(PYTHON) -m build
+
+## release: Publica release semântico (CI/CD apenas)
+release:
+	$(VENV)/bin/semantic-release publish
 
 ## lint: Executa verificação de código com ruff (check apenas)
 lint:

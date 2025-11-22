@@ -41,4 +41,4 @@ jobs:
         env:
           # O GITHUB_TOKEN é essencial para autenticação no repositório
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: semantic-release publish
+        run: make release
