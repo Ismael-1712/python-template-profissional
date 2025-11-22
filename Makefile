@@ -27,12 +27,15 @@ BUILD_ARTIFACTS := build dist *.egg-info
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
 	@echo "📋 Comandos Disponíveis:"
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /' | column -t -s ':'
+
+## setup: Alias para install-dev (configura ambiente completo)
+setup: install-dev
 
 ## install-dev: Instala ambiente de desenvolvimento (Cria .venv se necessário)
 install-dev:
@@ -82,7 +85,7 @@ clean:
 	rm -rf .pytest_cache
 	rm -rf .ruff_cache
 	rm -rf htmlcov .coverage 2>/dev/null || true
-	rm -f audit_report_*.json 2>/dev/null || true
+	rm -f audit_report_*.json sync_report_*.json 2>/dev/null || true
 
 ## clean-all: Limpeza profunda incluindo dependências compiladas
 clean-all: clean

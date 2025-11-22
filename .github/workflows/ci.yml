@@ -43,7 +43,7 @@ jobs:
     steps:
       # --- 1. CONFIGURAÇÃO (Checkout e Setup) ---
       - name: "Checkout do Repositório"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Configurar Python ${{ matrix.python-version }}"
         uses: actions/setup-python@v6
