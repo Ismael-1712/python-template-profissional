@@ -106,8 +106,7 @@ O projeto possui validação automática que executa:
 ├── tests/                  # Testes unitários e de integração
 ├── scripts/                # Scripts de automação e ferramentas
 │   ├── install_dev.py      # Instalador do ambiente de dev
-│   ├── code_audit.py       # Sistema de auditoria
-│   └── lint_fix.py         # Correção automática de lint
+│   └── code_audit.py       # Sistema de auditoria
 ├── requirements/           # Dependências pinned (pip-tools)
 ├── docs/                   # Documentação técnica
 ├── Makefile                # Automação de comandos
@@ -156,7 +155,6 @@ make setup
 ## 📚 Documentação Adicional
 
 - [🔍 Sistema de Auditoria](docs/CODE_AUDIT.md) - Análise estática avançada
-- [🐛 Correção Automática de Lint](docs/LINT_FIX_SYSTEM.md) - Sistema inteligente de fixes
 - [🧪 Sistema de Mocks](docs/README_test_mock_system.md) - Geração automática de mocks
 - [🔄 Smart Git Sync](docs/SMART_GIT_SYNC_GUIDE.md) - Sincronização inteligente
 
