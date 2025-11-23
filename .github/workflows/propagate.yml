@@ -1,0 +1,105 @@
+name: "🔄 Propagação Automática"
+
+# ======================================================================
+# AUTO-PROPAGAÇÃO: main → api, main → cli
+# ======================================================================
+# Este workflow implementa a propagação automática de código da branch
+# 'main' para as branches derivadas 'api' e 'cli'.
+#
+# ESTRATÉGIA:
+# - Usa merge recursivo para suportar branches divergentes (api/cli)
+# - Permite que variações de template mantenham diferenças específicas
+# - Executa sequencialmente para rastreabilidade clara
+#
+# SEGURANÇA:
+# - Usa GITHUB_TOKEN com escopo mínimo (contents: write)
+# - Bot identificado como github-actions[bot]
+# - Histórico completo preservado (fetch-depth: 0)
+# ======================================================================
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  propagate:
+    name: "📤 Propagar main → [api, cli]"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout (Histórico Completo)"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: "🤖 Configurar Git Bot"
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: "🔍 Validar Estado do Repositório"
+        run: |
+          echo "📊 Verificando branches remotas..."
+          git fetch origin
+
+          if ! git ls-remote --heads origin api | grep -q 'refs/heads/api'; then
+            echo "❌ ERRO: Branch 'api' não existe no remote"
+            exit 1
+          fi
+
+          if ! git ls-remote --heads origin cli | grep -q 'refs/heads/cli'; then
+            echo "❌ ERRO: Branch 'cli' não existe no remote"
+            exit 1
+          fi
+
+      - name: "🔀 Propagar main → api"
+        run: |
+          echo "🎯 Iniciando propagação para branch 'api'..."
+          git checkout api
+          git pull origin api
+
+          echo "📦 Tentando merge recursivo..."
+          # Merge recursivo permite branches divergentes
+          if git merge origin/main; then
+            echo "✅ Merge recursivo bem-sucedido"
+            git push origin api
+          else
+            echo "❌ FALHA: Merge apresentou conflitos"
+            echo "⚠️  Conflitos na branch 'api' requerem resolução manual"
+            exit 1
+          fi
+
+      - name: "🔀 Propagar main → cli"
+        run: |
+          echo "🎯 Iniciando propagação para branch 'cli'..."
+          git checkout cli
+          git pull origin cli
+
+          echo "📦 Tentando merge recursivo..."
+          # Merge recursivo permite branches divergentes
+          if git merge origin/main; then
+            echo "✅ Merge recursivo bem-sucedido"
+            git push origin cli
+          else
+            echo "❌ FALHA: Merge apresentou conflitos"
+            echo "⚠️  Conflitos na branch 'cli' requerem resolução manual"
+            exit 1
+          fi
+
+      - name: "📋 Relatório de Propagação"
+        if: success()
+        run: |
+          echo "✅ PROPAGAÇÃO CONCLUÍDA COM SUCESSO"
+
+      - name: "⚠️ Relatório de Falha"
+        if: failure()
+        run: |
+          echo "❌ PROPAGAÇÃO FALHOU"
+          echo "📋 AÇÕES NECESSÁRIAS:"
+          echo "  1. Revise o log para identificar qual branch falhou"
+          echo "  2. Crie um Pull Request manual de main → [branch]"
