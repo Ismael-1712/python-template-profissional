@@ -80,6 +80,14 @@ test-verbose:
 test-coverage:
 	PYTHONPATH=. $(PYTHON) -m pytest --cov=$(SRC_DIR) $(TEST_DIR)
 
+## docs-serve: Inicia servidor local de documentação (http://127.0.0.1:8000)
+docs-serve:
+	$(VENV)/bin/mkdocs serve
+
+## docs-build: Gera site estático de documentação (pasta site/)
+docs-build:
+	$(VENV)/bin/mkdocs build
+
 ## clean: Remove artefatos de build, cache e arquivos temporários
 clean:
 	rm -rf $(BUILD_ARTIFACTS)
@@ -90,6 +98,7 @@ clean:
 	rm -rf .ruff_cache
 	rm -rf htmlcov .coverage 2>/dev/null || true
 	rm -f audit_report_*.json sync_report_*.json 2>/dev/null || true
+	rm -rf site 2>/dev/null || true
 
 ## clean-all: Limpeza profunda incluindo dependências compiladas
 clean-all: clean
