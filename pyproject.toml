@@ -28,7 +28,9 @@ dependencies = [
 # Dependências de desenvolvimento
 [project.optional-dependencies]
 dev = [
-    "pip-tools~=7.4"
+    "pip-tools~=7.4",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25"
 ]
 
 # --- Configuração das Ferramentas ---
