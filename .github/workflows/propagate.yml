@@ -1,0 +1,171 @@
+name: "🔄 Propagação Automática"
+
+# ======================================================================
+# AUTO-PROPAGAÇÃO: main → api, main → cli
+# ======================================================================
+# Este workflow implementa a propagação automática de código da branch
+# 'main' para as branches derivadas 'api' e 'cli'.
+#
+# ESTRATÉGIA:
+# - Usa Fast-Forward Only (--ff-only) para garantir linearidade
+# - Falha explicitamente se houver conflitos (requer resolução manual)
+# - Executa sequencialmente para rastreabilidade clara
+#
+# SEGURANÇA:
+# - Usa GITHUB_TOKEN com escopo mínimo (contents: write)
+# - Bot identificado como github-actions[bot]
+# - Histórico completo preservado (fetch-depth: 0)
+# ======================================================================
+
+on:
+  push:
+    branches: [main]
+  # Permite execução manual para correções/testes
+  workflow_dispatch:
+
+# Permissão necessária para push nas branches
+permissions:
+  contents: write
+
+jobs:
+  # --------------------------------------------------------------------
+  # JOB: PROPAGAÇÃO SEQUENCIAL
+  # --------------------------------------------------------------------
+  propagate:
+    name: "📤 Propagar main → [api, cli]"
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. CHECKOUT COM HISTÓRICO COMPLETO ---
+      - name: "📥 Checkout (Histórico Completo)"
+        uses: actions/checkout@v6
+        with:
+          # CRÍTICO: Histórico completo necessário para merge
+          fetch-depth: 0
+          # Garante que todas as branches estão disponíveis
+          ref: main
+
+      # --- 2. CONFIGURAÇÃO DO BOT ---
+      - name: "🤖 Configurar Git Bot"
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # --- 3. VALIDAÇÃO PRÉ-PROPAGAÇÃO ---
+      - name: "🔍 Validar Estado do Repositório"
+        run: |
+          echo "📊 Verificando branches remotas..."
+          git fetch origin
+
+          echo "✅ Branch atual: $(git branch --show-current)"
+          echo "✅ Último commit em main: $(git log -1 --oneline)"
+
+          # Verifica se branches de destino existem
+          if ! git ls-remote --heads origin api | grep -q 'refs/heads/api'; then
+            echo "❌ ERRO: Branch 'api' não existe no remote"
+            exit 1
+          fi
+
+          if ! git ls-remote --heads origin cli | grep -q 'refs/heads/cli'; then
+            echo "❌ ERRO: Branch 'cli' não existe no remote"
+            exit 1
+          fi
+
+          echo "✅ Branches de destino validadas: api, cli"
+
+      # --- 4. PROPAGAÇÃO PARA 'api' ---
+      - name: "🔀 Propagar main → api"
+        run: |
+          echo "🎯 Iniciando propagação para branch 'api'..."
+
+          # Checkout da branch de destino
+          git checkout api
+          git pull origin api
+
+          echo "📦 Tentando merge fast-forward..."
+          # --ff-only garante linearidade (falha se houver divergência)
+          if git merge origin/main --ff-only; then
+            echo "✅ Merge fast-forward bem-sucedido"
+
+            # Push para o remote
+            git push origin api
+            echo "✅ Branch 'api' atualizada com sucesso"
+            echo "📊 Último commit em api: $(git log -1 --oneline)"
+          else
+            echo "❌ FALHA: Merge fast-forward não é possível"
+            echo "⚠️  A branch 'api' divergiu de 'main'"
+            echo "⚠️  Resolução manual necessária via Pull Request"
+            exit 1
+          fi
+
+      # --- 5. PROPAGAÇÃO PARA 'cli' ---
+      - name: "🔀 Propagar main → cli"
+        run: |
+          echo "🎯 Iniciando propagação para branch 'cli'..."
+
+          # Checkout da branch de destino
+          git checkout cli
+          git pull origin cli
+
+          echo "📦 Tentando merge fast-forward..."
+          # --ff-only garante linearidade (falha se houver divergência)
+          if git merge origin/main --ff-only; then
+            echo "✅ Merge fast-forward bem-sucedido"
+
+            # Push para o remote
+            git push origin cli
+            echo "✅ Branch 'cli' atualizada com sucesso"
+            echo "📊 Último commit em cli: $(git log -1 --oneline)"
+          else
+            echo "❌ FALHA: Merge fast-forward não é possível"
+            echo "⚠️  A branch 'cli' divergiu de 'main'"
+            echo "⚠️  Resolução manual necessária via Pull Request"
+            exit 1
+          fi
+
+      # --- 6. RELATÓRIO FINAL ---
+      - name: "📋 Relatório de Propagação"
+        if: success()
+        run: |
+          echo "════════════════════════════════════════════════════════"
+          echo "✅ PROPAGAÇÃO CONCLUÍDA COM SUCESSO"
+          echo "════════════════════════════════════════════════════════"
+          echo ""
+          echo "📊 RESUMO:"
+          echo "  • main → api: ✅ Atualizada"
+          echo "  • main → cli: ✅ Atualizada"
+          echo ""
+          echo "🔍 ESTADO ATUAL DAS BRANCHES:"
+
+          # Mostra os últimos commits de cada branch
+          git fetch origin
+          echo ""
+          echo "📦 main:"
+          git log origin/main -1 --oneline --decorate
+          echo ""
+          echo "📦 api:"
+          git log origin/api -1 --oneline --decorate
+          echo ""
+          echo "📦 cli:"
+          git log origin/cli -1 --oneline --decorate
+          echo ""
+          echo "════════════════════════════════════════════════════════"
+
+      # --- 7. NOTIFICAÇÃO DE FALHA ---
+      - name: "⚠️ Relatório de Falha"
+        if: failure()
+        run: |
+          echo "════════════════════════════════════════════════════════"
+          echo "❌ PROPAGAÇÃO FALHOU"
+          echo "════════════════════════════════════════════════════════"
+          echo ""
+          echo "⚠️  Uma ou mais branches não puderam ser atualizadas"
+          echo "⚠️  automaticamente devido a divergências."
+          echo ""
+          echo "📋 AÇÕES NECESSÁRIAS:"
+          echo "  1. Revise o log acima para identificar qual branch falhou"
+          echo "  2. Crie um Pull Request manual de main → [branch]"
+          echo "  3. Resolva os conflitos localmente"
+          echo "  4. Após merge do PR, a propagação automática será retomada"
+          echo ""
+          echo "════════════════════════════════════════════════════════"
