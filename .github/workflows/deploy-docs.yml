@@ -1,0 +1,76 @@
+name: "📚 Deploy Documentação"
+# ======================================================================
+# 📚 DEPLOY DE DOCUMENTAÇÃO - GitHub Pages
+# ======================================================================
+# Este workflow automatiza a publicação da documentação MkDocs Material
+# no GitHub Pages sempre que há push na branch main.
+#
+# ARQUITETURA:
+# - Build: Gera site estático com mkdocs build
+# - Deploy: Publica na branch gh-pages via mkdocs gh-deploy
+#
+# OTIMIZAÇÕES:
+# - Instala apenas dependências de documentação (não o ambiente completo)
+# - Cache do pip para builds mais rápidos
+# - Histórico completo (fetch-depth: 0) para plugins git-based
+# ======================================================================
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'scripts/**/*.py'  # Docstrings changes
+      - '.github/workflows/deploy-docs.yml'
+  # Permite execução manual
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Necessário para push na branch gh-pages
+
+jobs:
+  # --------------------------------------------------------------------
+  # JOB: BUILD E DEPLOY DA DOCUMENTAÇÃO
+  # --------------------------------------------------------------------
+  deploy:
+    name: "🚀 Build & Deploy to GitHub Pages"
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. CHECKOUT (Histórico Completo) ---
+      - name: "📥 Checkout do Repositório"
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # Histórico completo para plugins git-revision-date
+
+      # --- 2. SETUP PYTHON ---
+      - name: "🐍 Configurar Python"
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          cache: 'pip'  # Cache de dependências pip
+
+      # --- 3. INSTALAÇÃO (Apenas Dependências de Docs) ---
+      - name: "📦 Instalar Dependências de Documentação"
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs-material>=9.5 mkdocstrings[python]>=0.25
+
+      # --- 4. BUILD & DEPLOY ---
+      - name: "🚀 Deploy para GitHub Pages"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdocs gh-deploy --force --message "docs: deploy documentation from {sha}"
+
+      # --- 5. SUMMARY ---
+      - name: "✅ Deploy Summary"
+        if: success()
+        run: |
+          echo "## 📚 Documentação Publicada com Sucesso!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 **URL:** https://ismael-1712.github.io/python-template-profissional/" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ A documentação foi atualizada na branch \`gh-pages\`" >> $GITHUB_STEP_SUMMARY
+          echo "⏱️ GitHub Pages pode levar alguns minutos para atualizar" >> $GITHUB_STEP_SUMMARY

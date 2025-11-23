@@ -8,8 +8,9 @@ repos:
     hooks:
       - id: check-added-large-files # Impede commit de arquivos > 5MB
       - id: check-toml              # Valida pyproject.toml
-      - id: check-yaml              # Valida .yml (como o ci.yml)
-      - id: end-of-file-fixer     # Garante uma linha em branco no final
+      - id: check-yaml              # Valida .yml
+        args: [--unsafe]            # Permite tags customizadas do MkDocs (CRÍTICO)
+      - id: end-of-file-fixer       # Garante uma linha em branco no final
       - id: trailing-whitespace     # Remove espaços em branco
 
   # 2. Ruff (O Linter e Formatador)
@@ -26,5 +27,5 @@ repos:
         name: "Auditoria de Segurança Customizada (Delta)"
         entry: python3 scripts/code_audit.py --config scripts/audit_config.yaml --fail-on HIGH --quiet
         language: system
-        pass_filenames: true  # <-- CORRIGE O DÉBITO 3 (Fiação)
-        types: [python]       # <-- Otimização (Pilar 4)
+        pass_filenames: true
+        types: [python]
