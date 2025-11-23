@@ -490,6 +490,321 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         self.assertTrue(result["passed"])
         self.assertEqual(result["status"], "skipped")
 
+    @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    def test_commit_and_push_success(
+        self,
+        mock_run: MagicMock,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test _commit_and_push com sucesso completo (add, commit, push)."""
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: Resultados de comandos git
+        mock_add_result = MagicMock()
+        mock_add_result.returncode = 0
+        mock_add_result.stdout = ""
+
+        mock_commit_result = MagicMock()
+        mock_commit_result.returncode = 0
+        mock_commit_result.stdout = ""
+
+        mock_hash_result = MagicMock()
+        mock_hash_result.returncode = 0
+        mock_hash_result.stdout = "abc123def456\n"
+
+        mock_push_result = MagicMock()
+        mock_push_result.returncode = 0
+        mock_push_result.stdout = ""
+
+        mock_run.side_effect = [
+            mock_add_result,
+            mock_commit_result,
+            mock_hash_result,
+            mock_push_result,
+        ]
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={"audit_enabled": False},
+            dry_run=False,
+        )
+
+        # ✅ Simula status git com mudanças
+        git_status = {
+            "is_clean": False,
+            "changed_files": ["M  file1.py", "A  file2.py"],
+            "total_changes": 2,
+            "current_branch": "feature-branch",
+        }
+
+        result = sync._commit_and_push(git_status)
+
+        # ✅ Validações: comandos foram chamados na ordem correta
+        self.assertEqual(mock_run.call_count, 4)
+        self.assertTrue(result["committed"])
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["commit"]["hash"], "abc123def456")
+        self.assertEqual(result["push"]["branch"], "feature-branch")
+
+        # ✅ Verifica sequência de comandos
+        calls = mock_run.call_args_list
+        self.assertIn("git", calls[0][0][0])  # git add
+        self.assertIn("git", calls[1][0][0])  # git commit
+        self.assertIn("git", calls[2][0][0])  # git rev-parse
+        self.assertIn("git", calls[3][0][0])  # git push
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    def test_commit_and_push_failure_rollback(
+        self,
+        mock_run: MagicMock,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test _commit_and_push com falha no push e rollback."""
+        from subprocess import CalledProcessError
+
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: git add e commit funcionam, mas push falha
+        mock_add_result = MagicMock()
+        mock_add_result.returncode = 0
+
+        mock_commit_result = MagicMock()
+        mock_commit_result.returncode = 0
+
+        mock_hash_result = MagicMock()
+        mock_hash_result.returncode = 0
+        mock_hash_result.stdout = "abc123\n"
+
+        # ❌ Push falha
+        mock_push_error = CalledProcessError(
+            returncode=1,
+            cmd=["git", "push", "origin", "main"],
+            stderr="fatal: unable to access",
+        )
+
+        # ✅ Rollback funciona
+        mock_rollback_result = MagicMock()
+        mock_rollback_result.returncode = 0
+
+        mock_run.side_effect = [
+            mock_add_result,
+            mock_commit_result,
+            mock_hash_result,
+            mock_push_error,  # Push falha aqui
+            mock_rollback_result,  # Rollback chamado
+        ]
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={"audit_enabled": False},
+            dry_run=False,
+        )
+
+        git_status = {
+            "is_clean": False,
+            "changed_files": ["M  file.py"],
+            "total_changes": 1,
+            "current_branch": "main",
+        }
+
+        # ✅ Deve lançar exceção devido ao push falhar
+        with self.assertRaises(GitOperationError):
+            sync._commit_and_push(git_status)
+
+        # ✅ Validação: rollback foi chamado
+        self.assertEqual(mock_run.call_count, 5)  # add, commit, hash, push, rollback
+        rollback_call = mock_run.call_args_list[4]
+        self.assertIn("reset", str(rollback_call))
+        self.assertIn("--soft", str(rollback_call))
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    @patch.object(SyncOrchestrator, "_check_git_status")
+    @patch.object(SyncOrchestrator, "_run_code_audit")
+    @patch.object(SyncOrchestrator, "_commit_and_push")
+    @patch.object(SyncOrchestrator, "_save_sync_report")
+    def test_execute_sync_success(
+        self,
+        mock_save_report: MagicMock,
+        mock_commit_push: MagicMock,
+        mock_audit: MagicMock,
+        mock_git_status: MagicMock,
+        mock_run: MagicMock,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test execute_sync fluxo completo de sucesso."""
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: git status retorna mudanças
+        mock_git_status.return_value = {
+            "is_clean": False,
+            "changed_files": ["M  test.py"],
+            "total_changes": 1,
+            "current_branch": "dev",
+        }
+
+        # ✅ Mock: audit passa
+        mock_audit.return_value = {
+            "passed": True,
+            "exit_code": 0,
+        }
+
+        # ✅ Mock: commit e push funcionam
+        mock_commit_push.return_value = {
+            "status": "success",
+            "committed": True,
+            "commit": {"hash": "abc123"},
+        }
+
+        # ✅ Mock: save report retorna Path
+        mock_save_report.return_value = Path("/fake/report.json")
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={
+                "audit_enabled": True,
+                "strict_audit": True,
+                "auto_fix_enabled": False,
+                "cleanup_enabled": False,
+            },
+            dry_run=False,
+        )
+
+        result = sync.execute_sync()
+
+        # ✅ Validações: fluxo completo executado
+        self.assertTrue(result)
+        mock_git_status.assert_called_once()
+        mock_audit.assert_called_once()
+        mock_commit_push.assert_called_once()
+        mock_save_report.assert_called_once()
+
+        # ✅ Validação: ordem de chamadas correta
+        call_order = [
+            mock_git_status,
+            mock_audit,
+            mock_commit_push,
+            mock_save_report,
+        ]
+        for mock_obj in call_order:
+            self.assertTrue(mock_obj.called)
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    @patch.object(SyncOrchestrator, "_check_git_status")
+    @patch.object(SyncOrchestrator, "_run_code_audit")
+    @patch.object(SyncOrchestrator, "_commit_and_push")
+    @patch.object(SyncOrchestrator, "_save_sync_report")
+    def test_execute_sync_audit_fail(
+        self,
+        mock_save_report: MagicMock,
+        mock_commit_push: MagicMock,
+        mock_audit: MagicMock,
+        mock_git_status: MagicMock,
+        mock_run: MagicMock,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test execute_sync quando audit falha (não deve fazer commit)."""
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: git status retorna mudanças
+        mock_git_status.return_value = {
+            "is_clean": False,
+            "changed_files": ["M  bad_code.py"],
+            "total_changes": 1,
+            "current_branch": "feature",
+        }
+
+        # ❌ Mock: audit FALHA e lança exceção
+        mock_audit.side_effect = AuditError("Code audit failed with exit code 1")
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={
+                "audit_enabled": True,
+                "strict_audit": True,
+            },
+            dry_run=False,
+        )
+
+        result = sync.execute_sync()
+
+        # ✅ Validações: fluxo parou no audit
+        self.assertFalse(result)  # Falhou
+        mock_git_status.assert_called_once()
+        mock_audit.assert_called_once()
+
+        # ✅ CRÍTICO: _commit_and_push NÃO deve ter sido chamado
+        mock_commit_push.assert_not_called()
+
+        # ✅ Report deve ser salvo mesmo em caso de falha
+        mock_save_report.assert_called_once()
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    @patch.object(SyncOrchestrator, "_check_git_status")
+    @patch.object(SyncOrchestrator, "_save_sync_report")
+    def test_execute_sync_clean_repo(
+        self,
+        mock_save_report: MagicMock,
+        mock_git_status: MagicMock,
+        mock_run: MagicMock,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test execute_sync quando repositório está limpo (sem mudanças)."""
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: git status retorna repo limpo (branch dev, não main)
+        mock_git_status.return_value = {
+            "is_clean": True,
+            "changed_files": [],
+            "total_changes": 0,
+            "current_branch": "dev",  # ✅ Não é 'main', evita proteção
+        }
+
+        # ✅ Mock: save report
+        mock_save_report.return_value = Path("/fake/report.json")
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={"audit_enabled": True},
+            dry_run=False,
+        )
+
+        result = sync.execute_sync()
+
+        # ✅ Validações: retorna True mas não faz nada
+        self.assertTrue(result)
+        mock_git_status.assert_called_once()
+        mock_save_report.assert_called_once()
+
 
 # ============================================================================
 # EXECUTAR TESTES COM PYTEST (Remover main() legado)
