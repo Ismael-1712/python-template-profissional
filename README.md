@@ -1,9 +1,16 @@
+
+### 📄 Arquivo Corrigido: `README.md` (v2.1 - Final)
+
+**Copie e substitua todo o conteúdo do seu arquivo `README.md`:**
+
+````markdown
 # meu_projeto_placeholder
 
 > 🚀 Template Python Profissional com Pipeline de Qualidade Integrado
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![Code Quality](https://img.shields.io/badge/code%20quality-enforced-brightgreen.svg)]()
+````
 
 ---
 
@@ -11,7 +18,7 @@
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/usuario/meu_projeto_placeholder.git
+git clone [https://github.com/usuario/meu_projeto_placeholder.git](https://github.com/usuario/meu_projeto_placeholder.git)
 cd meu_projeto_placeholder
 
 # 2. Configure o ambiente (cria venv + instala dependências)
@@ -22,25 +29,26 @@ source .venv/bin/activate
 
 # 4. Valide a instalação
 make test
-```
+````
 
-**Pronto!** Você está preparado para desenvolver. 🎉
+**Pronto\!** Você está preparado para desenvolver. 🎉
 
----
+-----
 
 ## 🛠️ Comandos de Engenharia
 
 Todos os comandos do projeto são gerenciados via **Makefile** para consistência e automação:
 
 | Comando | Descrição |
-|---------|-----------|
+|:---|:---|
 | `make setup` | Configura ambiente completo (alias para `install-dev`) |
 | `make test` | Executa suite completa de testes com pytest |
 | `make test-coverage` | Testes com relatório de cobertura |
 | `make lint` | Verifica código com ruff (análise estática) |
 | `make format` | Formata código automaticamente com ruff |
 | `make audit` | Auditoria completa de segurança e qualidade |
-| `make check` | Validação rápida (lint + test) - **use antes do push!** |
+| `make check` | Validação rápida (lint + test) - **use antes do push\!** |
+| `make release` | **(CI Only)** Publica versão e gera changelog |
 | `make clean` | Remove artefatos de build e cache |
 | `make help` | Exibe todos os comandos disponíveis |
 
@@ -57,50 +65,49 @@ make audit         # Análise profunda de segurança
 make test-coverage # Verificar cobertura de testes
 ```
 
----
+-----
 
-## 🤝 Fluxo de Trabalho
+## 🤝 Fluxo de Trabalho & Branches
 
 ### Política de Qualidade
 
 **⚠️ Regra de Ouro:** Nenhum código é aceito sem passar pelo `make audit` com sucesso.
 
-### Pipeline Recomendado
+### 🔄 Estratégia de Branches (Automated Flow)
+
+Este projeto utiliza um sistema de **Auto-Propagação** para manter as variantes sincronizadas.
+
+1. **`main`**: A fonte da verdade (Branch Protegida).
+2. **`api` / `cli`**: Variantes geradas automaticamente.
+
+**🛑 NÃO faça merge manual para `api` ou `cli`\!**
+Sempre que um Pull Request é aceito na `main`, um robô (GitHub Actions) propaga as mudanças automaticamente para as branches filhas, respeitando as diferenças de cada template.
+
+### Pipeline de Desenvolvimento
 
 ```bash
-# 1. Desenvolva sua feature
-# ... código ...
+# 1. Crie uma branch para sua feature
+git checkout -b feat/minha-melhoria
 
-# 2. Formate o código
+# 2. Desenvolva e Formate
 make format
 
-# 3. Execute validação local (CI local)
+# 3. Execute validação local
 make check
 
-# 4. Auditoria de segurança (obrigatório)
-make audit
-
-# 5. Se tudo passar, faça o commit
+# 4. Commit e Push
 git add .
-git commit -m "feat: minha nova feature"
-git push
+git commit -m "feat: descrição seguindo conventional commits"
+git push origin feat/minha-melhoria
+
+# 5. Abra o PR para a 'main'. O resto é automático.
 ```
 
-### Integração Contínua
-
-O projeto possui validação automática que executa:
-
-- ✅ Testes unitários (`make test`)
-- ✅ Análise estática (`make lint`)
-- ✅ Auditoria de segurança (`make audit`)
-
-**Dica:** Execute `make check` localmente antes do push para evitar falhas no CI.
-
----
+-----
 
 ## 📦 Estrutura do Projeto
 
-```
+```text
 .
 ├── src/                    # Código-fonte principal
 ├── tests/                  # Testes unitários e de integração
@@ -109,28 +116,18 @@ O projeto possui validação automática que executa:
 │   └── code_audit.py       # Sistema de auditoria
 ├── requirements/           # Dependências pinned (pip-tools)
 ├── docs/                   # Documentação técnica
+├── .github/workflows/      # Pipelines CI/CD (Testes, Release, Propagação)
 ├── Makefile                # Automação de comandos
 └── pyproject.toml          # Configuração do projeto
 ```
 
----
+-----
 
 ## 🔧 Troubleshooting
 
 ### Problema: `make: command not found`
 
-**Solução:** Instale o `make`:
-
-```bash
-# Ubuntu/Debian
-sudo apt-get install build-essential
-
-# macOS
-xcode-select --install
-
-# Fedora
-sudo dnf install make
-```
+**Solução:** Instale o `make` (build-essential no Linux ou Xcode tools no Mac).
 
 ### Problema: Ambiente virtual não ativa
 
@@ -141,43 +138,26 @@ source .venv/bin/activate  # Linux/macOS
 .venv\Scripts\activate     # Windows
 ```
 
-### Problema: Dependências desatualizadas
+### Problema: Erro no `semantic-release` localmente
 
-**Solução:** Reinstale o ambiente:
+**Causa:** O comando `make release` é otimizado para rodar no GitHub Actions.
+**Solução:** Não execute release localmente. Deixe o CI cuidar disso após o merge.
 
-```bash
-make clean-all
-make setup
-```
-
----
+-----
 
 ## 📚 Documentação Adicional
 
-- [🔍 Sistema de Auditoria](docs/CODE_AUDIT.md) - Análise estática avançada
-- [🧪 Sistema de Mocks](docs/README_test_mock_system.md) - Geração automática de mocks
-- [🔄 Smart Git Sync](docs/SMART_GIT_SYNC_GUIDE.md) - Sincronização inteligente
+- [🔍 Sistema de Auditoria](https://www.google.com/search?q=docs/CODE_AUDIT.md) - Análise estática avançada
+- [🧪 Sistema de Mocks](https://www.google.com/search?q=docs/README_test_mock_system.md) - Geração automática de mocks
+- [🔄 Smart Git Sync](https://www.google.com/search?q=docs/SMART_GIT_SYNC_GUIDE.md) - Detalhes da sincronização
 
----
-
-## 🤝 Contribuindo
-
-1. Faça fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Execute `make audit` para validar
-5. Push para a branch (`git push origin feature/AmazingFeature`)
-6. Abra um Pull Request
-
-Veja [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
-
----
+-----
 
 ## 📄 Licença
 
-Este projeto está sob a licença especificada no arquivo [LICENSE](LICENSE).
+Este projeto está sob a licença especificada no arquivo [LICENSE](https://www.google.com/search?q=LICENSE).
 
----
+-----
 
 ## 🙏 Agradecimentos
 
@@ -189,3 +169,5 @@ Desenvolvido com ❤️ usando as melhores práticas de engenharia de software P
 - 🧪 **pytest** - Framework de testes moderno
 - 🛡️ **Sistema de Auditoria Customizado** - Análise profunda
 - 🔧 **pip-tools** - Gestão determinística de dependências
+
+<!-- end list -->
