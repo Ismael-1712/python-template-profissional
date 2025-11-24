@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-"""Módulo de Análise de Risco SRE.
+"""SRE Risk Analysis Module.
 
-(Extraído do monólito P8.3).
+(Extracted from P8.3 monolith).
 """
 
 import logging
@@ -17,20 +17,20 @@ from scripts.ci_recovery.models import (
     RiskLevel,
 )
 
-# Inicializa o logger para este módulo
+# Initialize logger for this module
 logger = logging.getLogger(__name__)
 
 
 def _assess_file_risk(file_path: str) -> RiskLevel:
-    """Avalia o risco de falha de CI de um único arquivo.
+    """Assess the CI failure risk of a single file.
 
-    (Função pura extraída do monólito)
+    (Pure function extracted from monolith)
 
     Args:
-        file_path: Caminho para o arquivo
+        file_path: Path to the file
 
     Returns:
-        Nível de risco para o arquivo
+        Risk level for the file
 
     """
     file_path_lower = file_path.lower()
@@ -76,7 +76,7 @@ def _assess_file_risk(file_path: str) -> RiskLevel:
     if any(pattern in file_path_lower for pattern in medium_risk_patterns):
         return RiskLevel.MEDIUM
 
-    # O resto é risco baixo
+    # The rest is low risk
     return RiskLevel.LOW
 
 
@@ -87,9 +87,9 @@ def analyze_changed_files(
     repository_path: Path,
     dry_run: bool,
 ) -> FileRiskAnalysis:
-    """Analisa arquivos alterados no commit para risco de falha de CI.
+    """Analyze changed files in commit for CI failure risk.
 
-    (Função refatorada S.O.L.I.D. - dependências 'self' injetadas)
+    (S.O.L.I.D. refactored function - 'self' dependencies injected)
     """
     log_step_callback("File Risk Analysis", RecoveryStatus.IN_PROGRESS)
 
@@ -119,7 +119,7 @@ def analyze_changed_files(
         analysis = FileRiskAnalysis()
 
         for file_path in changed_files:
-            risk = _assess_file_risk(file_path)  # Chama a função local
+            risk = _assess_file_risk(file_path)  # Calls local function
 
             if risk == RiskLevel.CRITICAL:
                 analysis.critical_risk.append(file_path)
@@ -140,7 +140,7 @@ def analyze_changed_files(
         else:
             analysis.overall_risk = RiskLevel.LOW
 
-        report.file_analysis = analysis  # Muta o objeto 'report'
+        report.file_analysis = analysis  # Mutates 'report' object
 
         log_step_callback(
             "File Risk Analysis",

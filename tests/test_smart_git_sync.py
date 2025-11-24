@@ -4,10 +4,10 @@
 Comprehensive test suite to validate the Smart Git Sync functionality
 in various scenarios and edge cases.
 
-REFATORADO (P20): Testes unitários puros com unittest.mock estrito.
-- Sem I/O real (disco, rede, processos)
-- Mocks para Path, subprocess, open()
-- Velocidade e isolamento garantidos
+REFACTORED (P20): Pure unit tests with strict unittest.mock.
+- No real I/O (disk, network, processes)
+- Mocks for Path, subprocess, open()
+- Speed and isolation guaranteed
 
 Usage:
     pytest tests/test_smart_git_sync.py -v
@@ -101,11 +101,11 @@ class TestConfigLoading(unittest.TestCase):
         mock_open_fn: MagicMock,
         mock_exists: MagicMock,
     ) -> None:
-        """Test loading configuration from YAML file (SEM I/O REAL)."""
-        # ✅ Mock: Arquivo existe
+        """Test loading configuration from YAML file (NO REAL I/O)."""
+        # ✅ Mock: File exists
         mock_exists.return_value = True
 
-        # ✅ Mock: Conteúdo YAML
+        # ✅ Mock: YAML content
         test_config = {
             "audit_enabled": False,
             "audit_timeout": 600,
@@ -113,7 +113,7 @@ class TestConfigLoading(unittest.TestCase):
         }
         mock_yaml_load.return_value = test_config
 
-        # ✅ Mock: open() retorna um file object simulado
+        # ✅ Mock: open() returns a simulated file object
         mock_file = MagicMock()
         mock_open_fn.return_value.__enter__.return_value = mock_file
 
@@ -128,13 +128,13 @@ class TestConfigLoading(unittest.TestCase):
         # Check that unspecified defaults are still present
         self.assertEqual(config["audit_fail_threshold"], "HIGH")
 
-        # ✅ Validação: open() foi chamado corretamente
+        # ✅ Validation: open() was called correctly
         mock_open_fn.assert_called_once()
 
     @patch("scripts.git_sync.config.Path.exists")
     def test_load_config_nonexistent_file(self, mock_exists: MagicMock) -> None:
-        """Test loading configuration with non-existent file (SEM I/O REAL)."""
-        # ✅ Mock: Arquivo NÃO existe
+        """Test loading configuration with non-existent file (NO REAL I/O)."""
+        # ✅ Mock: File does NOT exist
         mock_exists.return_value = False
 
         nonexistent_path = Path("/nonexistent/config.yaml")
@@ -145,21 +145,21 @@ class TestConfigLoading(unittest.TestCase):
 
 
 class TestSyncOrchestrator(unittest.TestCase):
-    """Test cases for SyncOrchestrator class (REFATORADO - SEM I/O REAL)."""
+    """Test cases for SyncOrchestrator class (REFACTORED - NO REAL I/O)."""
 
     def setUp(self) -> None:
-        """Set up test environment com MOCKS ESTRITOS."""
-        # ✅ Mock: Path para workspace (SEM mkdtemp real)
+        """Set up test environment with STRICT MOCKS."""
+        # ✅ Mock: Path for workspace (NO real mkdtemp)
         self.temp_dir = MagicMock(spec=Path)
         self.temp_dir.__str__ = MagicMock(return_value="/fake/workspace")
         self.temp_dir.__truediv__ = MagicMock(return_value=MagicMock(spec=Path))
         self.temp_dir.resolve.return_value = self.temp_dir
 
-        # ✅ Mock: .git directory (simula existência)
+        # ✅ Mock: .git directory (simulates existence)
         self.git_dir = MagicMock(spec=Path)
         self.git_dir.exists.return_value = True
 
-        # Configuração de teste
+        # Test configuration
         self.config = {
             "audit_enabled": True,
             "strict_audit": True,
@@ -168,13 +168,13 @@ class TestSyncOrchestrator(unittest.TestCase):
         }
 
     def tearDown(self) -> None:
-        """Clean up - NÃO FAZ NADA (sem I/O real)."""
-        # ✅ Nenhum shutil.rmtree() necessário
+        """Clean up - DOES NOTHING (no real I/O)."""
+        # ✅ No shutil.rmtree() needed
 
     @patch("scripts.git_sync.sync_logic.Path")
     def test_sync_orchestrator_initialization(self, mock_path_cls: MagicMock) -> None:
-        """Test SyncOrchestrator initialization (SEM I/O REAL)."""
-        # ✅ Mock: Path.__truediv__ para simular / ".git"
+        """Test SyncOrchestrator initialization (NO REAL I/O)."""
+        # ✅ Mock: Path.__truediv__ to simulate / ".git"
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
         mock_git_dir = MagicMock(spec=Path)
@@ -209,17 +209,17 @@ class TestSyncOrchestrator(unittest.TestCase):
             dry_run=True,
         )
 
-        # ✅ Validação: objeto criado com sucesso
+        # ✅ Validation: object created successfully
         self.assertIsNotNone(sync)
 
     @patch("scripts.git_sync.sync_logic.Path")
     def test_validate_git_repository_failure(self, mock_path_cls: MagicMock) -> None:
-        """Test Git repository validation failure (SEM I/O REAL)."""
-        # ✅ Mock: .git NÃO existe
+        """Test Git repository validation failure (NO REAL I/O)."""
+        # ✅ Mock: .git does NOT exist
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
         mock_git_dir = MagicMock(spec=Path)
-        mock_git_dir.exists.return_value = False  # ❌ Não existe
+        mock_git_dir.exists.return_value = False  # ❌ Does not exist
         mock_workspace.__truediv__.return_value = mock_git_dir
 
         with self.assertRaises(SyncError):
@@ -236,7 +236,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test command execution in dry run mode (SEM SUBPROCESS REAL)."""
+        """Test command execution in dry run mode (NO REAL SUBPROCESS)."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -264,7 +264,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test successful command execution (SEM SUBPROCESS REAL)."""
+        """Test successful command execution (NO REAL SUBPROCESS)."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -272,7 +272,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: subprocess.run retorna sucesso
+        # ✅ Mock: subprocess.run returns success
         mock_result = MagicMock()
         mock_result.returncode = 0
         mock_result.stdout = "test output"
@@ -287,7 +287,7 @@ class TestSyncOrchestrator(unittest.TestCase):
 
         result = sync._run_command(["git", "status"])
 
-        # ✅ Validação: subprocess.run foi chamado
+        # ✅ Validation: subprocess.run was called
         mock_run.assert_called_once()
         self.assertEqual(result.stdout, "test output")
         self.assertEqual(result.returncode, 0)
@@ -299,7 +299,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test command execution failure (SEM SUBPROCESS REAL)."""
+        """Test command execution failure (NO REAL SUBPROCESS)."""
         from subprocess import CalledProcessError
 
         # ✅ Setup: Mock workspace
@@ -309,7 +309,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: subprocess.run lança exceção
+        # ✅ Mock: subprocess.run raises exception
         mock_run.side_effect = CalledProcessError(
             returncode=1,
             cmd=["git", "status"],
@@ -348,12 +348,12 @@ class TestErrorHandling(unittest.TestCase):
 
 
 # ============================================================================
-# TESTES ADICIONAIS - COBERTURA DE MÉTODOS CRÍTICOS (P20 - Fase 02)
+# ADDITIONAL TESTS - COVERAGE OF CRITICAL METHODS (P20 - Phase 02)
 # ============================================================================
 
 
 class TestSyncOrchestratorAdvanced(unittest.TestCase):
-    """Testes avançados para métodos não cobertos anteriormente."""
+    """Advanced tests for methods not previously covered."""
 
     @patch("scripts.git_sync.sync_logic.Path")
     @patch("scripts.git_sync.sync_logic.subprocess.run")
@@ -362,7 +362,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test _check_git_status com repositório limpo."""
+        """Test _check_git_status with clean repository."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -370,13 +370,13 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: git status retorna vazio (repo limpo)
+        # ✅ Mock: git status returns empty (clean repo)
         mock_status_result = MagicMock()
         mock_status_result.returncode = 0
-        mock_status_result.stdout = ""  # Repo limpo
+        mock_status_result.stdout = ""  # Clean repo
         mock_status_result.stderr = ""
 
-        # ✅ Mock: git branch retorna main
+        # ✅ Mock: git branch returns main
         mock_branch_result = MagicMock()
         mock_branch_result.returncode = 0
         mock_branch_result.stdout = "main"
@@ -404,7 +404,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test _check_git_status com mudanças pendentes."""
+        """Test _check_git_status with pending changes."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -412,13 +412,13 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: git status retorna arquivos modificados
+        # ✅ Mock: git status returns modified files
         mock_status_result = MagicMock()
         mock_status_result.returncode = 0
         mock_status_result.stdout = "M  file1.py\nA  file2.py\n"
         mock_status_result.stderr = ""
 
-        # ✅ Mock: git branch retorna feature-branch
+        # ✅ Mock: git branch returns feature-branch
         mock_branch_result = MagicMock()
         mock_branch_result.returncode = 0
         mock_branch_result.stdout = "feature-branch"
@@ -434,7 +434,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync._check_git_status()
 
-        # ✅ Validações
+        # ✅ Validations
         self.assertFalse(result["is_clean"])
         self.assertEqual(result["total_changes"], 2)
         self.assertEqual(len(result["changed_files"]), 2)
@@ -449,26 +449,26 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test _run_code_audit quando script de audit não existe."""
+        """Test _run_code_audit when audit script does not exist."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
 
-        # ✅ Mock: .git existe para validação inicial
+        # ✅ Mock: .git exists for initial validation
         mock_git_dir = MagicMock(spec=Path)
         mock_git_dir.exists.return_value = True
 
-        # ✅ Mock: audit script NÃO existe
+        # ✅ Mock: audit script does NOT exist
         # workspace_root / "scripts" / "code_audit.py"
         mock_scripts_dir = MagicMock(spec=Path)
         mock_audit_script = MagicMock(spec=Path)
-        mock_audit_script.exists.return_value = False  # ❌ Script não existe
+        mock_audit_script.exists.return_value = False  # ❌ Script does not exist
 
-        # Simula: workspace_root / "scripts" retorna mock_scripts_dir
-        # depois: mock_scripts_dir / "code_audit.py" retorna mock_audit_script
+        # Simulates: workspace_root / "scripts" returns mock_scripts_dir
+        # then: mock_scripts_dir / "code_audit.py" returns mock_audit_script
         mock_scripts_dir.__truediv__.return_value = mock_audit_script
 
-        # Patch do __truediv__ para retornar o mock correto
+        # Patch __truediv__ to return the correct mock
         def mock_truediv(path_str: str) -> MagicMock:
             if path_str == ".git":
                 return mock_git_dir
@@ -486,7 +486,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync._run_code_audit()
 
-        # ✅ Validação: audit foi pulado porque script não existe
+        # ✅ Validation: audit was skipped because script does not exist
         self.assertTrue(result["passed"])
         self.assertEqual(result["status"], "skipped")
 
@@ -497,7 +497,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test _commit_and_push com sucesso completo (add, commit, push)."""
+        """Test _commit_and_push with complete success (add, commit, push)."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -505,7 +505,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: Resultados de comandos git
+        # ✅ Mock: Git command results
         mock_add_result = MagicMock()
         mock_add_result.returncode = 0
         mock_add_result.stdout = ""
@@ -535,7 +535,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
             dry_run=False,
         )
 
-        # ✅ Simula status git com mudanças
+        # ✅ Simulates git status with changes
         git_status = {
             "is_clean": False,
             "changed_files": ["M  file1.py", "A  file2.py"],
@@ -545,14 +545,14 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync._commit_and_push(git_status)
 
-        # ✅ Validações: comandos foram chamados na ordem correta
+        # ✅ Validations: commands were called in correct order
         self.assertEqual(mock_run.call_count, 4)
         self.assertTrue(result["committed"])
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["commit"]["hash"], "abc123def456")
         self.assertEqual(result["push"]["branch"], "feature-branch")
 
-        # ✅ Verifica sequência de comandos
+        # ✅ Verify command sequence
         calls = mock_run.call_args_list
         self.assertIn("git", calls[0][0][0])  # git add
         self.assertIn("git", calls[1][0][0])  # git commit
@@ -566,7 +566,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test _commit_and_push com falha no push e rollback."""
+        """Test _commit_and_push with push failure and rollback."""
         from subprocess import CalledProcessError
 
         # ✅ Setup: Mock workspace
@@ -576,7 +576,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: git add e commit funcionam, mas push falha
+        # ✅ Mock: git add and commit work, but push fails
         mock_add_result = MagicMock()
         mock_add_result.returncode = 0
 
@@ -587,14 +587,14 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_hash_result.returncode = 0
         mock_hash_result.stdout = "abc123\n"
 
-        # ❌ Push falha
+        # ❌ Push fails
         mock_push_error = CalledProcessError(
             returncode=1,
             cmd=["git", "push", "origin", "main"],
             stderr="fatal: unable to access",
         )
 
-        # ✅ Rollback funciona
+        # ✅ Rollback works
         mock_rollback_result = MagicMock()
         mock_rollback_result.returncode = 0
 
@@ -602,8 +602,8 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
             mock_add_result,
             mock_commit_result,
             mock_hash_result,
-            mock_push_error,  # Push falha aqui
-            mock_rollback_result,  # Rollback chamado
+            mock_push_error,  # Push fails here
+            mock_rollback_result,  # Rollback called
         ]
 
         sync = SyncOrchestrator(
@@ -619,11 +619,11 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
             "current_branch": "main",
         }
 
-        # ✅ Deve lançar exceção devido ao push falhar
+        # ✅ Should raise exception due to push failure
         with self.assertRaises(GitOperationError):
             sync._commit_and_push(git_status)
 
-        # ✅ Validação: rollback foi chamado
+        # ✅ Validation: rollback was called
         self.assertEqual(mock_run.call_count, 5)  # add, commit, hash, push, rollback
         rollback_call = mock_run.call_args_list[4]
         self.assertIn("reset", str(rollback_call))
@@ -644,7 +644,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test execute_sync fluxo completo de sucesso."""
+        """Test execute_sync complete success flow."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -660,20 +660,20 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
             "current_branch": "dev",
         }
 
-        # ✅ Mock: audit passa
+        # ✅ Mock: audit passes
         mock_audit.return_value = {
             "passed": True,
             "exit_code": 0,
         }
 
-        # ✅ Mock: commit e push funcionam
+        # ✅ Mock: commit and push work
         mock_commit_push.return_value = {
             "status": "success",
             "committed": True,
             "commit": {"hash": "abc123"},
         }
 
-        # ✅ Mock: save report retorna Path
+        # ✅ Mock: save report returns Path
         mock_save_report.return_value = Path("/fake/report.json")
 
         sync = SyncOrchestrator(
@@ -689,14 +689,14 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync.execute_sync()
 
-        # ✅ Validações: fluxo completo executado
+        # ✅ Validations: complete flow executed
         self.assertTrue(result)
         mock_git_status.assert_called_once()
         mock_audit.assert_called_once()
         mock_commit_push.assert_called_once()
         mock_save_report.assert_called_once()
 
-        # ✅ Validação: ordem de chamadas correta
+        # ✅ Validation: correct call order
         call_order = [
             mock_git_status,
             mock_audit,
@@ -721,7 +721,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test execute_sync quando audit falha (não deve fazer commit)."""
+        """Test execute_sync when audit fails (should not commit)."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -737,7 +737,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
             "current_branch": "feature",
         }
 
-        # ❌ Mock: audit FALHA e lança exceção
+        # ❌ Mock: audit FAILS and raises exception
         mock_audit.side_effect = AuditError("Code audit failed with exit code 1")
 
         sync = SyncOrchestrator(
@@ -751,15 +751,15 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync.execute_sync()
 
-        # ✅ Validações: fluxo parou no audit
-        self.assertFalse(result)  # Falhou
+        # ✅ Validations: flow stopped at audit
+        self.assertFalse(result)  # Failed
         mock_git_status.assert_called_once()
         mock_audit.assert_called_once()
 
-        # ✅ CRÍTICO: _commit_and_push NÃO deve ter sido chamado
+        # ✅ CRITICAL: _commit_and_push should NOT have been called
         mock_commit_push.assert_not_called()
 
-        # ✅ Report deve ser salvo mesmo em caso de falha
+        # ✅ Report should be saved even on failure
         mock_save_report.assert_called_once()
 
     @patch("scripts.git_sync.sync_logic.Path")
@@ -773,7 +773,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_run: MagicMock,
         mock_path_cls: MagicMock,
     ) -> None:
-        """Test execute_sync quando repositório está limpo (sem mudanças)."""
+        """Test execute_sync when repository is clean (no changes)."""
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
@@ -781,12 +781,12 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_dir.exists.return_value = True
         mock_workspace.__truediv__.return_value = mock_git_dir
 
-        # ✅ Mock: git status retorna repo limpo (branch dev, não main)
+        # ✅ Mock: git status returns clean repo (branch dev, not main)
         mock_git_status.return_value = {
             "is_clean": True,
             "changed_files": [],
             "total_changes": 0,
-            "current_branch": "dev",  # ✅ Não é 'main', evita proteção
+            "current_branch": "dev",  # ✅ Not 'main', avoids protection
         }
 
         # ✅ Mock: save report
@@ -800,30 +800,30 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
         result = sync.execute_sync()
 
-        # ✅ Validações: retorna True mas não faz nada
+        # ✅ Validations: returns True but does nothing
         self.assertTrue(result)
         mock_git_status.assert_called_once()
         mock_save_report.assert_called_once()
 
 
 # ============================================================================
-# EXECUTAR TESTES COM PYTEST (Remover main() legado)
+# RUN TESTS WITH PYTEST (Remove legacy main())
 # ============================================================================
 
 
 if __name__ == "__main__":
-    # ✅ Use pytest para rodar os testes
+    # ✅ Use pytest to run the tests
     # pytest tests/test_smart_git_sync.py -v
 
     print("=" * 70)
-    print("🧪 TESTES REFATORADOS (P20 - Fase 02)")
+    print("🧪 REFACTORED TESTS (P20 - Phase 02)")
     print("=" * 70)
-    print("✅ Sem I/O real (disco, rede, processos)")
-    print("✅ Mocks estritos para subprocess, Path, open()")
-    print("✅ Velocidade e isolamento garantidos")
+    print("✅ No real I/O (disk, network, processes)")
+    print("✅ Strict mocks for subprocess, Path, open()")
+    print("✅ Speed and isolation guaranteed")
     print("=" * 70)
-    print("\n💡 Execute com: pytest tests/test_smart_git_sync.py -v")
-    print("💡 Cobertura:    pytest tests/test_smart_git_sync.py --cov\n")
+    print("\n💡 Run with: pytest tests/test_smart_git_sync.py -v")
+    print("💡 Coverage: pytest tests/test_smart_git_sync.py --cov\n")
 
-    # Fallback para unittest se pytest não estiver disponível
+    # Fallback to unittest if pytest is not available
     unittest.main(argv=[""], exit=False, verbosity=2)
