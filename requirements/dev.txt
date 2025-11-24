@@ -93,7 +93,7 @@ requests-toolbelt==1.0.0
     # via python-gitlab
 rich==14.2.0
     # via python-semantic-release
-ruff==0.14.5
+ruff==0.14.6
     # via -r requirements/dev.in
 shellingham==1.5.4
     # via python-semantic-release
