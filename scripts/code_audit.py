@@ -47,7 +47,7 @@ class CodeAuditor:
     """
 
     def __init__(self, workspace_root: Path, config_path: Path | None = None) -> None:
-        """Inicializa a instância."""
+        """Initialize the instance."""
         self.workspace_root = workspace_root.resolve()
         self.config = self._load_config(config_path)
         self.findings: list[AuditResult] = []
@@ -176,8 +176,8 @@ class CodeAuditor:
         logger.info("Starting comprehensive code audit...")
         start_time = datetime.now(timezone.utc)
 
-        # SE uma lista de arquivos for passada (pelo pre-commit),
-        # use-a. SENÃO, faça o scan completo (comportamento antigo).
+        # IF a file list is passed (by pre-commit),
+        # use it. ELSE, do complete scan (old behavior).
         if files_to_audit:
             logger.info(
                 f"Auditing specific file list (Delta Audit): "
@@ -197,7 +197,10 @@ class CodeAuditor:
         mock_coverage = self._check_mock_coverage()
 
         # Simulate CI environment
-        ci_simulation = {"passed": True, "status": "SKIPPED"}  # Padrão: Passa se pulado
+        ci_simulation = {
+            "passed": True,
+            "status": "SKIPPED",
+        }  # Default: Passes if skipped
         if self.config.get("simulate_ci"):
             ci_simulation = self._simulate_ci_environment()
         else:
@@ -232,7 +235,7 @@ class CodeAuditor:
                 "workspace": str(self.workspace_root),
                 "duration_seconds": duration,
                 "files_scanned": len(python_files),
-                "auditor_version": "2.1.2-delta",  # Versão atualizada
+                "auditor_version": "2.1.2-delta",  # Updated version
             },
             "findings": [finding.to_dict() for finding in self.findings],
             "mock_coverage": mock_coverage,
@@ -297,7 +300,7 @@ Examples:
 
     parser.add_argument(
         "files",
-        nargs="*",  # "Zero ou mais" - se nenhum for passado, a lista será vazia.
+        nargs="*",  # "Zero or more" - if none is passed, the list will be empty.
         type=Path,
         help="Optional list of files to audit (overrides config scan_paths)",
     )

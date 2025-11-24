@@ -5,7 +5,7 @@ Permite `python -m scripts.ci_recovery`.
 """
 
 if __name__ == "__main__":
-    # Importa e executa a função main() do módulo main.py
+    # Import and execute main() function from main.py module
     from .main import main
 
     main()
