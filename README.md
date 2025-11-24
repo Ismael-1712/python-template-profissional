@@ -9,7 +9,7 @@
 > 🚀 Template Python Profissional com Pipeline de Qualidade Integrado
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Code Quality](https://img.shields.io/badge/code%20quality-enforced-brightgreen.svg)]()
+[![Code Quality](https://img.shields.io/badge/code%20quality-enforced-brightgreen.svg)](https://github.com/Ismael-1712/python-template-profissional/actions/workflows/ci.yml)
 ````
 
 ---
