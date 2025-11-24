@@ -1,69 +1,26 @@
-# MkDocs Configuration for Python Template Profissional
-# Documentation site powered by Material for MkDocs
-
 site_name: "Python Template Profissional"
-site_description: "Template Python Profissional com Pipeline de Qualidade Integrado"
-site_author: "DevOps Engineering Team"
-site_url: "https://ismael-1712.github.io/python-template-profissional/"
 
-# Repository information
-repo_name: "Ismael-1712/python-template-profissional"
-repo_url: "https://github.com/Ismael-1712/python-template-profissional"
-edit_uri: "edit/main/docs/"
-
-# Copyright
-copyright: "Copyright &copy; 2025 DevOps Engineering Team"
-
-# Theme configuration
 theme:
   name: material
-  language: pt-BR
-
-  # Color palette with light/dark mode toggle
   palette:
-    # Light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: blue
+    - scheme: default
       toggle:
         icon: material/brightness-7
-        name: Alternar para modo escuro
-
-    # Dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: blue
+        name: Switch to dark mode
+    - scheme: slate
       toggle:
         icon: material/brightness-4
-        name: Alternar para modo claro
-
-  # Material features
+        name: Switch to light mode
   features:
-    - navigation.instant      # Instant loading (SPA-like)
-    - navigation.tracking     # URL tracking
-    - navigation.tabs         # Top-level tabs
-    - navigation.sections     # Navigation sections
-    - navigation.expand       # Expand navigation by default
-    - navigation.top          # Back to top button
-    - search.suggest          # Search suggestions
-    - search.highlight        # Highlight search terms
-    - content.code.copy       # Copy button for code blocks
-    - content.code.annotate   # Code annotations
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.follow
 
-  # Custom icons
-  icon:
-    repo: fontawesome/brands/github
-    edit: material/pencil
-    view: material/eye
-
-# Plugins
 plugins:
-  - search:
-      lang:
-        - pt
-        - en
+  - search
   - mkdocstrings:
       handlers:
         python:
@@ -71,71 +28,24 @@ plugins:
             docstring_style: google
             show_source: true
             show_root_heading: true
-            show_category_heading: true
-            show_if_no_docstring: false
-            inherited_members: true
-            members_order: source
-            separate_signature: true
-            show_signature_annotations: true
-            signature_crossrefs: true
 
-# Extensions
 markdown_extensions:
-  # Python Markdown
-  - abbr
   - admonition
-  - attr_list
-  - def_list
-  - footnotes
-  - md_in_html
-  - toc:
-      permalink: true
-      toc_depth: 3
-
-  # Python Markdown Extensions
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret
   - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.keys
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tilde
 
-# Navigation
 nav:
   - Início: index.md
+  - Guias:
+      - Filosofia de Testes: guides/testing.md
   - Referência da API:
       - Git Sync: reference/git_sync.md
-
-# Extra configuration
-extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/Ismael-1712
-
-  version:
-    provider: mike
-
-# Extra CSS/JS (for future customizations)
-extra_css: []
-extra_javascript: []
