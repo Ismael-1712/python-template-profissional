@@ -10,3 +10,6 @@ PyYAML
 pre-commit
 python-semantic-release
 tomli; python_version < '3.11'
+
+# Internationalization (i18n)
+Babel>=2.16.0

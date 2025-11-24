@@ -23,11 +23,16 @@ SCRIPTS_DIR := scripts
 # Artefatos para limpeza
 BUILD_ARTIFACTS := build dist *.egg-info
 
+# i18n Configuration
+LOCALES_DIR := locales
+BABEL_CFG := babel.cfg
+POT_FILE := $(LOCALES_DIR)/messages.pot
+
 # =============================================================================
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release i18n-extract i18n-init i18n-update i18n-compile i18n-stats
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
@@ -120,3 +125,46 @@ info:
 	@echo "Environment:"
 	@echo "  PYTHON: $(PYTHON)"
 	@echo "  VENV:   $(VENV)"
+
+# =============================================================================
+# INTERNATIONALIZATION (i18n) TARGETS
+# =============================================================================
+
+## i18n-extract: Extract translatable strings to messages.pot template
+i18n-extract:
+	@echo "🌍 Extracting translatable strings..."
+	@$(VENV)/bin/pybabel extract -F $(BABEL_CFG) -o $(POT_FILE) .
+	@echo "✅ Extraction complete: $(POT_FILE)"
+
+## i18n-init: Initialize new language catalog (usage: make i18n-init LOCALE=en_US)
+i18n-init:
+	@if [ -z "$(LOCALE)" ]; then \
+		echo "❌ Error: LOCALE not specified. Usage: make i18n-init LOCALE=en_US"; \
+		exit 1; \
+	fi
+	@echo "🌍 Initializing catalog for locale: $(LOCALE)..."
+	@$(VENV)/bin/pybabel init -i $(POT_FILE) -d $(LOCALES_DIR) -l $(LOCALE)
+	@echo "✅ Catalog initialized: $(LOCALES_DIR)/$(LOCALE)/LC_MESSAGES/messages.po"
+
+## i18n-update: Update existing language catalogs with new strings
+i18n-update:
+	@echo "🌍 Updating existing catalogs..."
+	@$(VENV)/bin/pybabel update -i $(POT_FILE) -d $(LOCALES_DIR)
+	@echo "✅ Catalogs updated"
+
+## i18n-compile: Compile .po files to .mo binary format
+i18n-compile:
+	@echo "🌍 Compiling message catalogs..."
+	@$(VENV)/bin/pybabel compile -d $(LOCALES_DIR)
+	@echo "✅ Compilation complete"
+
+## i18n-stats: Show translation statistics
+i18n-stats:
+	@echo "🌍 Translation Statistics:"
+	@for po_file in $(LOCALES_DIR)/*/LC_MESSAGES/*.po; do \
+		if [ -f "$$po_file" ]; then \
+			echo ""; \
+			echo "📄 $$po_file:"; \
+			$(VENV)/bin/msgfmt --statistics $$po_file 2>&1 | head -1; \
+		fi \
+	done
