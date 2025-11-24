@@ -14,11 +14,23 @@ Usage:
     ./scripts/install_dev.py  # If it has execute permission
 """
 
+import gettext
 import logging
+import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+# i18n configuration
+localedir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "locales")
+translation = gettext.translation(
+    "messages",
+    localedir=localedir,
+    languages=[os.getenv("LANGUAGE", "pt_BR")],
+    fallback=True,
+)
+_ = translation.gettext
 
 # Logging configuration
 logging.basicConfig(
@@ -33,7 +45,7 @@ def _display_success_panel() -> None:
     panel = """
 ╔════════════════════════════════════════════════════════════════╗
 ║                                                                ║
-║        ✅  AMBIENTE CONFIGURADO COM SUCESSO!                  ║
+║        {success_msg}                  ║
 ║                                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -51,7 +63,9 @@ def _display_success_panel() -> None:
 💡 DICA: Use 'make check' antes de fazer push para garantir qualidade!
 
 ════════════════════════════════════════════════════════════════════
-"""
+""".format(
+        success_msg=_("✅  AMBIENTE CONFIGURADO COM SUCESSO!"),
+    )
     print(panel)
 
 
