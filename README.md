@@ -35,6 +35,23 @@ make test
 
 -----
 
+## 🌍 Internationalization (i18n)
+
+O projeto suporta nativamente **Português (pt_BR)** e **Inglês (en_US)**.
+O idioma é detectado automaticamente via variável de ambiente.
+
+**Como usar (Linux/WSL):**
+
+```bash
+# Para rodar em Inglês (Sessão única)
+LANGUAGE=en_US python3 scripts/smart_git_sync.py
+
+# Para configurar permanentemente
+export LANGUAGE=en_US
+```
+
+-----
+
 ## 🛠️ Comandos de Engenharia
 
 Todos os comandos do projeto são gerenciados via **Makefile** para consistência e automação:

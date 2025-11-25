@@ -591,6 +591,8 @@ class SmartGitSync:
 
         """
         logger.info(_("🚀 Starting Smart Git Synchronization"))
+        current_lang = os.getenv("LANGUAGE", "pt_BR")
+        logger.info(_("🌐 Current Locale: %s"), current_lang)
         logger.info("=" * 60)
 
         try:
@@ -708,11 +710,15 @@ def main() -> None:
         description="Smart Git Synchronization with Preventive Audit",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
+Environment Variables:
+  LANGUAGE   Set to 'en_US' for English output (default: 'pt_BR')
+
 Examples:
   python3 scripts/smart_git_sync.py           # Basic sync
   python3 scripts/smart_git_sync.py --dry-run       # Test without changes
   python3 scripts/smart_git_sync.py --config sync.yaml  # Custom config
   python3 scripts/smart_git_sync.py --no-audit
+  LANGUAGE=en_US python3 scripts/smart_git_sync.py  # Run in English
         """,
     )
 
