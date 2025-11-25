@@ -22,6 +22,7 @@ License: MIT
 """
 
 import argparse
+import gettext
 import html
 import json
 import logging
@@ -31,6 +32,22 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# i18n setup
+_locale_dir = Path(__file__).parent.parent / "locales"
+try:
+    _translation = gettext.translation(
+        "messages",
+        localedir=str(_locale_dir),
+        languages=[os.getenv("LANGUAGE", "pt_BR")],
+        fallback=True,
+    )
+    _ = _translation.gettext
+except Exception:
+    # Fallback se não encontrar traduções
+    def _(message: str) -> str:
+        return message
+
 
 # Configure structured logging
 logging.basicConfig(
@@ -422,171 +439,234 @@ class AuditDashboard:
 
     def _render_html_template(self, data: dict[str, Any]) -> str:
         """Render HTML template with provided data."""
+        # Construir listas HTML com strings traduzíveis
         pattern_stats_html = "".join(
             [
-                f"""
+                """
                 <li class="pattern-item">
-                    <span class="{pattern["severity_class"]}">
-                        🔍 {pattern["pattern"][:15]}
+                    <span class="{severity_class}">
+                        🔍 {pattern}
                     </span>
                     <span>
-                        {pattern["count"]} em {pattern["files_count"]} arquivos
+                        {count_text}
                     </span>
                 </li>
-            """
+            """.format(
+                    severity_class=pattern["severity_class"],
+                    pattern=pattern["pattern"][:15],
+                    count_text=_("{count} em {files} arquivos").format(
+                        count=pattern["count"],
+                        files=pattern["files_count"],
+                    ),
+                )
                 for pattern in data["patterns"]
             ],
         )
 
         monthly_stats_html = "".join(
             [
-                f"""
+                """
                 <li class="pattern-item">
-                    <span>📅 {month["month"]}</span>
+                    <span>📅 {month}</span>
                     <span>
-                        {month["audits"]} auditorias, {month["failures_prevented"]} err
+                        {stats_text}
                     </span>
                 </li>
-            """
+            """.format(
+                    month=month["month"],
+                    stats_text=_("{audits} auditorias, {failures} err").format(
+                        audits=month["audits"],
+                        failures=month["failures_prevented"],
+                    ),
+                )
                 for month in data["monthly"]
             ],
         )
 
         audit_history_html = "".join(
             [
-                f"""
+                """
                 <li class="pattern-item">
-                    <span>{audit["status_emoji"]} {audit["timestamp"]}</span>
+                    <span>{emoji} {timestamp}</span>
                     <span>
-                        {audit["failures_prevented"]} falhas, {audit["time_saved"]}min
+                        {history_text}
                     </span>
                 </li>
-            """
+            """.format(
+                    emoji=audit["status_emoji"],
+                    timestamp=audit["timestamp"],
+                    history_text=_("{failures} falhas, {time}min").format(
+                        failures=audit["failures_prevented"],
+                        time=audit["time_saved"],
+                    ),
+                )
                 for audit in data["history"]
             ],
         )
 
-        return f"""<!DOCTYPE html>
+        # Template HTML principal com strings traduzíveis
+        html_template = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="DevOps Audit Dashboard">
-    <title>📊 Dashboard - Auditoria DevOps</title>
+    <title>{page_title}</title>
     <style>
-        body {{
+        body {{{{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0; padding: 20px; background: #f5f5f5;
             line-height: 1.6;
-        }}
-        .container {{ max-width: 1200px; margin: 0 auto; }}
-        .header {{
+        }}}}
+        .container {{{{ max-width: 1200px; margin: 0 auto; }}}}
+        .header {{{{
             background: linear-gradient(135deg, #1976d2, #42a5f5);
             color: white; padding: 30px; border-radius: 10px; margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }}
-        .stats-grid {{
+        }}}}
+        .stats-grid {{{{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px; margin-bottom: 20px;
-        }}
-        .stat-card {{
+        }}}}
+        .stat-card {{{{
             background: white; padding: 20px; border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             transition: transform 0.2s ease;
-        }}
-        .stat-card:hover {{ transform: translateY(-2px); }}
-        .stat-number {{ font-size: 2.5em; font-weight: bold; color: #1976d2; }}
-        .stat-label {{ color: #666; font-size: 0.9em; margin-top: 5px; }}
-        .chart-container {{
+        }}}}
+        .stat-card:hover {{{{ transform: translateY(-2px); }}}}
+        .stat-number {{{{ font-size: 2.5em; font-weight: bold; color: #1976d2; }}}}
+        .stat-label {{{{ color: #666; font-size: 0.9em; margin-top: 5px; }}}}
+        .chart-container {{{{
             background: white; padding: 20px; border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px;
-        }}
-        .pattern-list {{ list-style: none; padding: 0; }}
-        .pattern-item {{
+        }}}}
+        .pattern-list {{{{ list-style: none; padding: 0; }}}}
+        .pattern-item {{{{
             display: flex; justify-content: space-between;
             padding: 10px; border-bottom: 1px solid #eee;
             transition: background-color 0.2s ease;
-        }}
-        .pattern-item:hover {{ background-color: #f9f9f9; }}
-        .severity-high {{ color: #f44336; font-weight: bold; }}
-        .severity-medium {{ color: #ff9800; }}
-        .severity-low {{ color: #4caf50; }}
-        .footer {{ text-align: center; color: #666; margin-top: 40px; }}
-        .footer small {{ font-size: 0.8em; }}
+        }}}}
+        .pattern-item:hover {{{{ background-color: #f9f9f9; }}}}
+        .severity-high {{{{ color: #f44336; font-weight: bold; }}}}
+        .severity-medium {{{{ color: #ff9800; }}}}
+        .severity-low {{{{ color: #4caf50; }}}}
+        .footer {{{{ text-align: center; color: #666; margin-top: 40px; }}}}
+        .footer small {{{{ font-size: 0.8em; }}}}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 Dashboard de Auditoria DevOps</h1>
-            <p>Monitoramento de falhas evitadas e métricas de produtividade CI/CD</p>
-            <p><small>Última atualização: {data["last_update"]}</small></p>
+            <h1>{header_title}</h1>
+            <p>{header_subtitle}</p>
+            <p><small>{last_update_label}: {last_update}</small></p>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">{data["audits_performed"]}</div>
-                <div class="stat-label">Auditorias Realizadas</div>
+                <div class="stat-number">{audits_performed}</div>
+                <div class="stat-label">{audits_label}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">{data["failures_prevented"]}</div>
-                <div class="stat-label">Falhas Evitadas</div>
+                <div class="stat-number">{failures_prevented}</div>
+                <div class="stat-label">{failures_label}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">{data["time_saved_hours"]:.1f}h</div>
-                <div class="stat-label">Tempo Economizado</div>
+                <div class="stat-number">{time_saved:.1f}h</div>
+                <div class="stat-label">{time_label}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">{data["success_rate"]:.1f}%</div>
-                <div class="stat-label">Taxa de Sucesso</div>
+                <div class="stat-number">{success_rate:.1f}%</div>
+                <div class="stat-label">{success_label}</div>
             </div>
         </div>
 
         <div class="chart-container">
-            <h3>🔍 Padrões Mais Detectados</h3>
+            <h3>{patterns_title}</h3>
             <ul class="pattern-list">
                 {pattern_stats_html}
             </ul>
         </div>
 
         <div class="chart-container">
-            <h3>📈 Estatísticas Mensais</h3>
+            <h3>{monthly_title}</h3>
             <ul class="pattern-list">
                 {monthly_stats_html}
             </ul>
         </div>
 
         <div class="chart-container">
-            <h3>📋 Histórico Recente (Últimas 10 Auditorias)</h3>
+            <h3>{history_title}</h3>
             <ul class="pattern-list">
                 {audit_history_html}
             </ul>
         </div>
 
         <div class="footer">
-            <p>🤖 Sistema de Auditoria Preventiva DevOps</p>
-            <p><small>Gerado automaticamente em {data["generation_time"]}</small></p>
+            <p>{footer_text}</p>
+            <p><small>{generated_label}: {generation_time}</small></p>
         </div>
     </div>
 </body>
 </html>"""
 
+        return html_template.format(
+            page_title=_("📊 Dashboard - Auditoria DevOps"),
+            header_title=_("📊 Dashboard de Auditoria DevOps"),
+            header_subtitle=_(
+                "Monitoramento de falhas evitadas e métricas de produtividade CI/CD",
+            ),
+            last_update_label=_("Última atualização"),
+            last_update=data["last_update"],
+            audits_performed=data["audits_performed"],
+            audits_label=_("Auditorias Realizadas"),
+            failures_prevented=data["failures_prevented"],
+            failures_label=_("Falhas Evitadas"),
+            time_saved=data["time_saved_hours"],
+            time_label=_("Tempo Economizado"),
+            success_rate=data["success_rate"],
+            success_label=_("Taxa de Sucesso"),
+            patterns_title=_("🔍 Padrões Mais Detectados"),
+            pattern_stats_html=pattern_stats_html,
+            monthly_title=_("📈 Estatísticas Mensais"),
+            monthly_stats_html=monthly_stats_html,
+            history_title=_("📋 Histórico Recente (Últimas 10 Auditorias)"),
+            audit_history_html=audit_history_html,
+            footer_text=_("🤖 Sistema de Auditoria Preventiva DevOps"),
+            generated_label=_("Gerado automaticamente em"),
+            generation_time=data["generation_time"],
+        )
+
     def print_console_dashboard(self) -> None:
         """Print formatted dashboard to console."""
         with self._lock:
-            print("📊 DASHBOARD DE AUDITORIA DEVOPS")
+            print(_("📊 DASHBOARD DE AUDITORIA DEVOPS"))
             print("=" * 50)
 
-            print("\n🎯 MÉTRICAS PRINCIPAIS:")
-            print(f"   • Auditorias realizadas: {self._metrics['audits_performed']}")
-            print(f"   • Falhas evitadas: {self._metrics['failures_prevented']}")
+            print(_("\n🎯 MÉTRICAS PRINCIPAIS:"))
+            print(
+                _("   • Auditorias realizadas: {count}").format(
+                    count=self._metrics["audits_performed"],
+                ),
+            )
+            print(
+                _("   • Falhas evitadas: {count}").format(
+                    count=self._metrics["failures_prevented"],
+                ),
+            )
             time_hours = self._metrics["time_saved_minutes"] / 60
-            print(f"   • Tempo economizado: {time_hours:.1f} horas")
-            print(f"   • Taxa de sucesso: {self._metrics['success_rate']:.1f}%")
+            print(
+                _("   • Tempo economizado: {hours:.1f} horas").format(hours=time_hours)
+            )
+            print(
+                _("   • Taxa de sucesso: {rate:.1f}%").format(
+                    rate=self._metrics["success_rate"],
+                ),
+            )
 
             if self._metrics["pattern_statistics"]:
-                print("\n🔍 PADRÕES MAIS DETECTADOS:")
+                print(_("\n🔍 PADRÕES MAIS DETECTADOS:"))
                 for pattern, data in sorted(
                     self._metrics["pattern_statistics"].items(),
                     key=lambda x: x[1]["count"],
@@ -595,10 +675,16 @@ class AuditDashboard:
                     severity = (
                         "🔴" if data["severity_distribution"]["HIGH"] > 0 else "🟡"
                     )
-                    print(f"   {severity} {pattern}: {data['count']} ocorrências")
+                    print(
+                        _("   {severity} {pattern}: {count} ocorrências").format(
+                            severity=severity,
+                            pattern=pattern,
+                            count=data["count"],
+                        ),
+                    )
 
             if self._metrics["audit_history"]:
-                print("\n📈 ÚLTIMAS AUDITORIAS:")
+                print(_("\n📈 ÚLTIMAS AUDITORIAS:"))
                 for audit in self._metrics["audit_history"][-5:]:
                     try:
                         timestamp = datetime.fromisoformat(audit["timestamp"]).strftime(
@@ -609,7 +695,13 @@ class AuditDashboard:
 
                     status = "✅" if audit.get("ci_simulation_passed", True) else "❌"
                     failures = audit["failures_prevented"]
-                    print(f"   {status} {timestamp}: {failures} falhas evitadas")
+                    print(
+                        _("   {status} {timestamp}: {failures} falhas evitadas").format(
+                            status=status,
+                            timestamp=timestamp,
+                            failures=failures,
+                        ),
+                    )
 
     def export_html_dashboard(self) -> Path:
         """Export dashboard as HTML file.
@@ -771,15 +863,15 @@ def main() -> int:
         # Execute requested action
         if args.export_html:
             html_file = dashboard.export_html_dashboard()
-            print(f"📄 Dashboard HTML exportado para: {html_file}")
+            print(_("📄 Dashboard HTML exportado para: {file}").format(file=html_file))
 
         elif args.export_json:
             json_file = dashboard.export_json_metrics(Path(args.export_json))
-            print(f"📊 Métricas exportadas para: {json_file}")
+            print(_("📊 Métricas exportadas para: {file}").format(file=json_file))
 
         elif args.reset_stats:
             dashboard.reset_metrics()
-            print("🔄 Estatísticas resetadas com backup criado")
+            print(_("🔄 Estatísticas resetadas com backup criado"))
 
         else:
             dashboard.print_console_dashboard()
@@ -788,17 +880,17 @@ def main() -> int:
 
     except AuditMetricsError as e:
         logger.error(f"Dashboard error: {e}")
-        print(f"❌ Erro: {e}", file=sys.stderr)
+        print(_("❌ Erro: {error}").format(error=e), file=sys.stderr)
         return 1
 
     except KeyboardInterrupt:
         logger.info("Operation cancelled by user")
-        print("\n⚠️  Operação cancelada pelo usuário")
+        print(_("\n⚠️  Operação cancelada pelo usuário"))
         return 130
 
     except Exception as e:
         logger.exception(f"Unexpected error: {e}")
-        print(f"💥 Erro inesperado: {e}", file=sys.stderr)
+        print(_("💥 Erro inesperado: {error}").format(error=e), file=sys.stderr)
         return 1
 
 

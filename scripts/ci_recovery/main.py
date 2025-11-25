@@ -6,7 +6,9 @@ entrypoint (main) para o sistema de recuperação, refatorado
 seguindo os princípios S.O.L.I.D. (P8.7).
 """
 
+import gettext
 import logging
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,6 +22,22 @@ from scripts.ci_recovery.models import (
 )
 
 # --- Fim das Importações S.O.L.I.D. ---
+
+# i18n setup
+_locale_dir = Path(__file__).parent.parent.parent / "locales"
+try:
+    _translation = gettext.translation(
+        "messages",
+        localedir=str(_locale_dir),
+        languages=[os.getenv("LANGUAGE", "pt_BR")],
+        fallback=True,
+    )
+    _ = _translation.gettext
+except Exception:
+    # Fallback se não encontrar traduções
+    def _(message: str) -> str:
+        return message
+
 
 # Configuração do Logger
 # (Esta configuração deve permanecer com o entrypoint)
@@ -140,12 +158,16 @@ class CIFailureRecoverySystem:
         """
         start_time = datetime.now()
 
-        logger.info(f"🚨 Starting CI/CD Failure Recovery for commit {self.commit_hash}")
+        logger.info(
+            _("🚨 Starting CI/CD Failure Recovery for commit {commit}").format(
+                commit=self.commit_hash
+            )
+        )
         logger.info("=" * 70)
 
         try:
             # Phase 1: File Analysis
-            logger.info("🔍 Phase 1: File Risk Analysis")
+            logger.info(_("🔍 Phase 1: File Risk Analysis"))
             analyzer.analyze_changed_files(
                 report=self.report,
                 log_step_callback=self._log_step,
@@ -155,7 +177,7 @@ class CIFailureRecoverySystem:
             )
 
             # Phase 2: Code Quality Checks
-            logger.info("🔧 Phase 2: Code Quality Checks")
+            logger.info(_("🔧 Phase 2: Code Quality Checks"))
             quality_passed = runner.run_code_quality_checks(
                 log_step_callback=self._log_step,
                 repository_path=self.repository_path,
@@ -163,7 +185,7 @@ class CIFailureRecoverySystem:
             )
 
             # Phase 3: Test Execution
-            logger.info("🧪 Phase 3: Test Execution")
+            logger.info(_("🧪 Phase 3: Test Execution"))
             tests_passed = runner.run_tests(
                 log_step_callback=self._log_step,
                 repository_path=self.repository_path,
@@ -171,7 +193,7 @@ class CIFailureRecoverySystem:
             )
 
             # Phase 4: Generate Suggestions
-            logger.info("💡 Phase 4: Recovery Suggestions")
+            logger.info(_("💡 Phase 4: Recovery Suggestions"))
             suggestions = reporter.generate_recovery_suggestions(report=self.report)
 
             for suggestion in suggestions:
@@ -180,15 +202,15 @@ class CIFailureRecoverySystem:
             # Determine final status
             if quality_passed and tests_passed:
                 self.report.final_status = RecoveryStatus.SUCCESS
-                logger.info("✅ Recovery completed successfully")
+                logger.info(_("✅ Recovery completed successfully"))
                 success = True
             elif quality_passed or tests_passed:
                 self.report.final_status = RecoveryStatus.PARTIAL_SUCCESS
-                logger.warning("⚠️ Recovery partially successful")
+                logger.warning(_("⚠️ Recovery partially successful"))
                 success = False
             else:
                 self.report.final_status = RecoveryStatus.FAILED
-                logger.error("❌ Recovery failed")
+                logger.error(_("❌ Recovery failed"))
                 success = False
 
             # Calculate total duration
@@ -204,8 +226,9 @@ class CIFailureRecoverySystem:
 
             logger.info("=" * 70)
             logger.info(
-                f"🎯 CI Recovery completed in "
-                f"{self.report.total_duration_seconds:.2f}s",
+                _("🎯 CI Recovery completed in {duration:.2fs}").format(
+                    duration=self.report.total_duration_seconds,
+                ),
             )
 
             return success
