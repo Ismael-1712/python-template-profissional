@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-24 20:36-0300\n"
+"POT-Creation-Date: 2025-11-24 21:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,350 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
+#: scripts/audit_dashboard.py:456
+#, python-brace-format
+msgid "{count} em {files} arquivos"
+msgstr ""
+
+#: scripts/audit_dashboard.py:476
+#, python-brace-format
+msgid "{audits} auditorias, {failures} err"
+msgstr ""
+
+#: scripts/audit_dashboard.py:497
+#, python-brace-format
+msgid "{failures} falhas, {time}min"
+msgstr ""
+
+#: scripts/audit_dashboard.py:614
+msgid "📊 Dashboard - Auditoria DevOps"
+msgstr ""
+
+#: scripts/audit_dashboard.py:615
+msgid "📊 Dashboard de Auditoria DevOps"
+msgstr ""
+
+#: scripts/audit_dashboard.py:617
+msgid "Monitoramento de falhas evitadas e métricas de produtividade CI/CD"
+msgstr ""
+
+#: scripts/audit_dashboard.py:619
+msgid "Última atualização"
+msgstr ""
+
+#: scripts/audit_dashboard.py:622
+msgid "Auditorias Realizadas"
+msgstr ""
+
+#: scripts/audit_dashboard.py:624
+msgid "Falhas Evitadas"
+msgstr ""
+
+#: scripts/audit_dashboard.py:626
+msgid "Tempo Economizado"
+msgstr ""
+
+#: scripts/audit_dashboard.py:628
+msgid "Taxa de Sucesso"
+msgstr ""
+
+#: scripts/audit_dashboard.py:629
+msgid "🔍 Padrões Mais Detectados"
+msgstr ""
+
+#: scripts/audit_dashboard.py:631
+msgid "📈 Estatísticas Mensais"
+msgstr ""
+
+#: scripts/audit_dashboard.py:633
+msgid "📋 Histórico Recente (Últimas 10 Auditorias)"
+msgstr ""
+
+#: scripts/audit_dashboard.py:635
+msgid "🤖 Sistema de Auditoria Preventiva DevOps"
+msgstr ""
+
+#: scripts/audit_dashboard.py:636
+msgid "Gerado automaticamente em"
+msgstr ""
+
+#: scripts/audit_dashboard.py:643
+msgid "📊 DASHBOARD DE AUDITORIA DEVOPS"
+msgstr ""
+
+#: scripts/audit_dashboard.py:646
+msgid ""
+"\n"
+"🎯 MÉTRICAS PRINCIPAIS:"
+msgstr ""
+
+#: scripts/audit_dashboard.py:648
+#, python-brace-format
+msgid "   • Auditorias realizadas: {count}"
+msgstr ""
+
+#: scripts/audit_dashboard.py:653
+#, python-brace-format
+msgid "   • Falhas evitadas: {count}"
+msgstr ""
+
+#: scripts/audit_dashboard.py:658
+#, python-brace-format
+msgid "   • Tempo economizado: {hours:.1f} horas"
+msgstr ""
+
+#: scripts/audit_dashboard.py:660
+#, python-brace-format
+msgid "   • Taxa de sucesso: {rate:.1f}%"
+msgstr ""
+
+#: scripts/audit_dashboard.py:666
+msgid ""
+"\n"
+"🔍 PADRÕES MAIS DETECTADOS:"
+msgstr ""
+
+#: scripts/audit_dashboard.py:676
+#, python-brace-format
+msgid "   {severity} {pattern}: {count} ocorrências"
+msgstr ""
+
+#: scripts/audit_dashboard.py:684
+msgid ""
+"\n"
+"📈 ÚLTIMAS AUDITORIAS:"
+msgstr ""
+
+#: scripts/audit_dashboard.py:696
+#, python-brace-format
+msgid "   {status} {timestamp}: {failures} falhas evitadas"
+msgstr ""
+
+#: scripts/audit_dashboard.py:863
+#, python-brace-format
+msgid "📄 Dashboard HTML exportado para: {file}"
+msgstr ""
+
+#: scripts/audit_dashboard.py:867
+#, python-brace-format
+msgid "📊 Métricas exportadas para: {file}"
+msgstr ""
+
+#: scripts/audit_dashboard.py:871
+msgid "🔄 Estatísticas resetadas com backup criado"
+msgstr ""
+
+#: scripts/audit_dashboard.py:880
+#, python-brace-format
+msgid "❌ Erro: {error}"
+msgstr ""
+
+#: scripts/audit_dashboard.py:885
+msgid ""
+"\n"
+"⚠️  Operação cancelada pelo usuário"
+msgstr ""
+
+#: scripts/audit_dashboard.py:890
+#, python-brace-format
+msgid "💥 Erro inesperado: {error}"
+msgstr ""
+
 #: scripts/install_dev.py:67
 msgid "✅  AMBIENTE CONFIGURADO COM SUCESSO!"
+msgstr ""
+
+#: scripts/smart_git_sync.py:94
+#, python-format
+msgid "🔄 Starting: %s - %s"
+msgstr ""
+
+#: scripts/smart_git_sync.py:104
+#, python-format
+msgid "✅ Completed: %s (%.2fs)"
+msgstr ""
+
+#: scripts/smart_git_sync.py:115
+#, python-format
+msgid "❌ Failed: %s (%.2fs) - %s"
+msgstr ""
+
+#: scripts/smart_git_sync.py:592
+msgid "🚀 Starting Smart Git Synchronization"
+msgstr ""
+
+#: scripts/smart_git_sync.py:597
+msgid "📋 PHASE 1: Repository Status Analysis"
+msgstr ""
+
+#: scripts/smart_git_sync.py:612
+msgid "Repository is clean, no changes to sync"
+msgstr ""
+
+#: scripts/smart_git_sync.py:617
+#, python-brace-format
+msgid "Found {count} changes to process"
+msgstr ""
+
+#: scripts/smart_git_sync.py:623
+msgid "🔍 PHASE 2: Preventive Code Audit"
+msgstr ""
+
+#: scripts/smart_git_sync.py:632
+msgid "🔧 PHASE 3: Automated Lint Fixes"
+msgstr ""
+
+#: scripts/smart_git_sync.py:635
+#, python-brace-format
+msgid "Applied {count} automated fixes"
+msgstr ""
+
+#: scripts/smart_git_sync.py:641
+msgid "📤 PHASE 4: Git Commit and Push"
+msgstr ""
+
+#: scripts/smart_git_sync.py:646
+msgid "🧹 PHASE 5: Repository Cleanup"
+msgstr ""
+
+#: scripts/smart_git_sync.py:653
+msgid "✅ Smart Git Synchronization completed successfully!"
+msgstr ""
+
+#: scripts/smart_git_sync.py:658
+#, python-brace-format
+msgid "📦 Commit: {hash}"
+msgstr ""
+
+#: scripts/smart_git_sync.py:661
+#, python-brace-format
+msgid "🌳 Branch: {branch}"
+msgstr ""
+
+#: scripts/smart_git_sync.py:669
+#, python-format
+msgid "Synchronization failed: %s"
+msgstr ""
+
+#: scripts/smart_git_sync.py:674
+#, python-format
+msgid "Unexpected error during synchronization: %s"
+msgstr ""
+
+#: scripts/audit/reporter.py:83
+msgid "🔍 CODE SECURITY AUDIT REPORT"
+msgstr ""
+
+#: scripts/audit/reporter.py:85
+#, python-brace-format
+msgid "📅 Timestamp: {timestamp}"
+msgstr ""
+
+#: scripts/audit/reporter.py:86
+#, python-brace-format
+msgid "📁 Workspace: {workspace}"
+msgstr ""
+
+#: scripts/audit/reporter.py:88
+#, python-brace-format
+msgid "⏱️  Duration: {duration:.2f}s"
+msgstr ""
+
+#: scripts/audit/reporter.py:93
+#, python-brace-format
+msgid "📄 Files Scanned: {count}"
+msgstr ""
+
+#: scripts/audit/reporter.py:106
+#, python-brace-format
+msgid ""
+"\n"
+"{emoji} OVERALL STATUS: {status}"
+msgstr ""
+
+#: scripts/audit/reporter.py:112
+msgid ""
+"\n"
+"📊 SEVERITY DISTRIBUTION:"
+msgstr ""
+
+#: scripts/audit/reporter.py:122
+#, python-brace-format
+msgid "  {emoji} {severity}: {count}"
+msgstr ""
+
+#: scripts/audit/reporter.py:130
+msgid ""
+"\n"
+"🔍 TOP FINDINGS:"
+msgstr ""
+
+#: scripts/audit/reporter.py:133
+#, python-brace-format
+msgid "  • {file}:{line} - {description}"
+msgstr ""
+
+#: scripts/audit/reporter.py:140
+msgid ""
+"\n"
+"💡 RECOMMENDATIONS:"
+msgstr ""
+
+#: scripts/audit/reporter.py:166
+msgid "🔴 CRITICAL: Fix security vulnerabilities before commit"
+msgstr ""
+
+#: scripts/audit/reporter.py:171
+msgid "🟠 HIGH: Address high-priority security issues"
+msgstr ""
+
+#: scripts/audit/reporter.py:176
+#, python-brace-format
+msgid "🧪 Add mocks to {count} test files"
+msgstr ""
+
+#: scripts/audit/reporter.py:183
+msgid "⚠️ Fix failing tests before CI/CD pipeline"
+msgstr ""
+
+#: scripts/audit/reporter.py:188
+msgid "✅ Code quality meets security standards!"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:160
+#, python-brace-format
+msgid "🚨 Starting CI/CD Failure Recovery for commit {commit}"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:165
+msgid "🔍 Phase 1: File Risk Analysis"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:175
+msgid "🔧 Phase 2: Code Quality Checks"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:183
+msgid "🧪 Phase 3: Test Execution"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:191
+msgid "💡 Phase 4: Recovery Suggestions"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:200
+msgid "✅ Recovery completed successfully"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:204
+msgid "⚠️ Recovery partially successful"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:208
+msgid "❌ Recovery failed"
+msgstr ""
+
+#: scripts/ci_recovery/main.py:224
+#, python-brace-format
+msgid "🎯 CI Recovery completed in {duration:.2fs}"
 msgstr ""
