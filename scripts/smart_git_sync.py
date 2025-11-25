@@ -23,6 +23,7 @@ License: MIT
 """
 
 import argparse
+import gettext
 import json
 import logging
 import os
@@ -33,6 +34,22 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+# i18n setup
+_locale_dir = Path(__file__).parent.parent / "locales"
+try:
+    _translation = gettext.translation(
+        "messages",
+        localedir=str(_locale_dir),
+        languages=[os.getenv("LANGUAGE", "pt_BR")],
+        fallback=True,
+    )
+    _ = _translation.gettext
+except Exception:
+    # Fallback se não encontrar traduções
+    def _(message: str) -> str:
+        return message
+
 
 # Configure structured logging
 logging.basicConfig(
@@ -75,7 +92,7 @@ class SyncStep:
         """Mark step as started."""
         self.start_time = datetime.now(timezone.utc)
         self.status = "running"
-        logger.info("🔄 Starting: %s - %s", self.name, self.description)
+        logger.info(_("🔄 Starting: %s - %s"), self.name, self.description)
 
     def complete(self, details: dict[str, Any] | None = None) -> None:
         """Mark step as completed successfully."""
@@ -85,7 +102,7 @@ class SyncStep:
             self.details.update(details)
 
         duration = self._get_duration()
-        logger.info("✅ Completed: %s (%.2fs)", self.name, duration)
+        logger.info(_("✅ Completed: %s (%.2fs)"), self.name, duration)
 
     def fail(self, error: str, details: dict[str, Any] | None = None) -> None:
         """Mark step as failed."""
@@ -96,7 +113,7 @@ class SyncStep:
             self.details.update(details)
 
         duration = self._get_duration()
-        logger.error("❌ Failed: %s (%.2fs) - %s", self.name, duration, error)
+        logger.error(_("❌ Failed: %s (%.2fs) - %s"), self.name, duration, error)
 
     def _get_duration(self) -> float:
         """Calculate step duration in seconds."""
@@ -573,12 +590,12 @@ class SmartGitSync:
             True if synchronization completed successfully, False otherwise.
 
         """
-        logger.info("🚀 Starting Smart Git Synchronization")
+        logger.info(_("🚀 Starting Smart Git Synchronization"))
         logger.info("=" * 60)
 
         try:
             # Phase 1: Repository Status Check
-            logger.info("📋 PHASE 1: Repository Status Analysis")
+            logger.info(_("📋 PHASE 1: Repository Status Analysis"))
             git_status = self._check_git_status()
             # INÍCIO DO PATCH DE PROTEÇÃO (v2.1)
             current_branch = git_status.get("current_branch")
@@ -593,14 +610,18 @@ class SmartGitSync:
                 raise SyncError("Tentativa de 'push' direto na 'main' protegida.")
             # FIM DO PATCH DE PROTEÇÃO (v2.1)
             if git_status["is_clean"]:
-                logger.info("Repository is clean, no changes to sync")
+                logger.info(_("Repository is clean, no changes to sync"))
                 self._save_sync_report()
                 return True
 
-            logger.info(f"Found {git_status['total_changes']} changes to process")
+            logger.info(
+                _("Found {count} changes to process").format(
+                    count=git_status["total_changes"],
+                ),
+            )
 
             # Phase 2: Code Quality and Security Audit
-            logger.info("🔍 PHASE 2: Preventive Code Audit")
+            logger.info(_("🔍 PHASE 2: Preventive Code Audit"))
             audit_result = self._run_code_audit()
             self._last_audit_result = audit_result  # Store for commit message
 
@@ -609,41 +630,49 @@ class SmartGitSync:
                 "auto_fix_enabled",
                 True,
             ):
-                logger.info("🔧 PHASE 3: Automated Lint Fixes")
+                logger.info(_("🔧 PHASE 3: Automated Lint Fixes"))
                 fix_result = self._apply_lint_fixes()
                 logger.info(
-                    f"Applied {fix_result.get('fixes_applied', 0)} automated fixes",
+                    _("Applied {count} automated fixes").format(
+                        count=fix_result.get("fixes_applied", 0),
+                    ),
                 )
 
             # Phase 4: Git Operations
-            logger.info("📤 PHASE 4: Git Commit and Push")
+            logger.info(_("📤 PHASE 4: Git Commit and Push"))
             git_result = self._commit_and_push(git_status)
 
             # Phase 5: Cleanup
             if self.config.get("cleanup_enabled", True):
-                logger.info("🧹 PHASE 5: Repository Cleanup")
+                logger.info(_("🧹 PHASE 5: Repository Cleanup"))
                 self._cleanup_repository()
 
             # Save report and finalize
             self._save_sync_report()
 
             logger.info("=" * 60)
-            logger.info("✅ Smart Git Synchronization completed successfully!")
+            logger.info(_("✅ Smart Git Synchronization completed successfully!"))
 
             if git_result.get("committed"):
                 commit_hash = git_result.get("commit", {}).get("hash", "unknown")
-                logger.info(f"📦 Commit: {commit_hash[:8]}")
-                logger.info(f"🌳 Branch: {git_status['current_branch']}")
+                logger.info(
+                    _("📦 Commit: {hash}").format(hash=commit_hash[:8]),
+                )
+                logger.info(
+                    _("🌳 Branch: {branch}").format(
+                        branch=git_status["current_branch"],
+                    ),
+                )
 
             return True
 
         except (SyncError, GitOperationError, AuditError) as e:
-            logger.error(f"Synchronization failed: {e}")
+            logger.error(_("Synchronization failed: %s"), e)
             self._save_sync_report()
             return False
 
         except Exception as e:
-            logger.error(f"Unexpected error during synchronization: {e}")
+            logger.error(_("Unexpected error during synchronization: %s"), e)
             self._save_sync_report()
             return False
 

@@ -4,12 +4,30 @@ This module provides functionality for generating audit reports
 in multiple formats (JSON, YAML, console).
 """
 
+import gettext
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+# i18n setup
+_locale_dir = Path(__file__).parent.parent.parent / "locales"
+try:
+    _translation = gettext.translation(
+        "messages",
+        localedir=str(_locale_dir),
+        languages=[os.getenv("LANGUAGE", "pt_BR")],
+        fallback=True,
+    )
+    _ = _translation.gettext
+except Exception:
+    # Fallback se não encontrar traduções
+    def _(message: str) -> str:
+        return message
+
 
 logger = logging.getLogger(__name__)
 
@@ -63,12 +81,20 @@ class AuditReporter:
         summary = report["summary"]
 
         print(f"\n{'=' * 60}")
-        print("🔍 CODE SECURITY AUDIT REPORT")
+        print(_("🔍 CODE SECURITY AUDIT REPORT"))
         print(f"{'=' * 60}")
-        print(f"📅 Timestamp: {metadata['timestamp']}")
-        print(f"📁 Workspace: {metadata['workspace']}")
-        print(f"⏱️  Duration: {metadata['duration_seconds']:.2f}s")
-        print(f"📄 Files Scanned: {metadata['files_scanned']}")
+        print(_("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"]))
+        print(_("📁 Workspace: {workspace}").format(workspace=metadata["workspace"]))
+        print(
+            _("⏱️  Duration: {duration:.2f}s").format(
+                duration=metadata["duration_seconds"],
+            ),
+        )
+        print(
+            _("📄 Files Scanned: {count}").format(
+                count=metadata["files_scanned"],
+            ),
+        )
 
         status = summary["overall_status"]
         status_emoji = {
@@ -77,9 +103,14 @@ class AuditReporter:
             "FAIL": "❌",
             "CRITICAL": "🔴",
         }
-        print(f"\n{status_emoji.get(status, '❓')} OVERALL STATUS: {status}")
+        print(
+            _("\n{emoji} OVERALL STATUS: {status}").format(
+                emoji=status_emoji.get(status, "❓"),
+                status=status,
+            ),
+        )
 
-        print("\n📊 SEVERITY DISTRIBUTION:")
+        print(_("\n📊 SEVERITY DISTRIBUTION:"))
         for severity, count in summary["severity_distribution"].items():
             if count > 0:
                 emoji = {
@@ -88,17 +119,26 @@ class AuditReporter:
                     "MEDIUM": "🟡",
                     "LOW": "🔵",
                 }.get(severity, "⚪")
-                print(f"  {emoji} {severity}: {count}")
-
-        if report["findings"]:
-            print("\n🔍 TOP FINDINGS:")
-            for finding in report["findings"][:5]:  # Show top 5
                 print(
-                    f"  • {finding['file']}:{finding['line']} - "
-                    f"{finding['description']}",
+                    _("  {emoji} {severity}: {count}").format(
+                        emoji=emoji,
+                        severity=severity,
+                        count=count,
+                    ),
                 )
 
-        print("\n💡 RECOMMENDATIONS:")
+        if report["findings"]:
+            print(_("\n🔍 TOP FINDINGS:"))
+            for finding in report["findings"][:5]:  # Show top 5
+                print(
+                    _("  • {file}:{line} - {description}").format(
+                        file=finding["file"],
+                        line=finding["line"],
+                        description=finding["description"],
+                    ),
+                )
+
+        print(_("\n💡 RECOMMENDATIONS:"))
         for rec in summary["recommendations"]:
             print(f"  {rec}")
 
@@ -124,22 +164,29 @@ class AuditReporter:
 
         if severity_counts.get("CRITICAL", 0) > 0:
             recommendations.append(
-                "🔴 CRITICAL: Fix security vulnerabilities before commit",
+                _("🔴 CRITICAL: Fix security vulnerabilities before commit"),
             )
 
         if severity_counts.get("HIGH", 0) > 0:
-            recommendations.append("🟠 HIGH: Address high-priority security issues")
+            recommendations.append(
+                _("🟠 HIGH: Address high-priority security issues"),
+            )
 
         if mock_coverage["files_needing_mocks"]:
             recommendations.append(
-                f"🧪 Add mocks to {len(mock_coverage['files_needing_mocks'])} "
-                "test files",
+                _("🧪 Add mocks to {count} test files").format(
+                    count=len(mock_coverage["files_needing_mocks"]),
+                ),
             )
 
         if not ci_simulation.get("passed", True):
-            recommendations.append("⚠️ Fix failing tests before CI/CD pipeline")
+            recommendations.append(
+                _("⚠️ Fix failing tests before CI/CD pipeline"),
+            )
 
         if not recommendations:
-            recommendations.append("✅ Code quality meets security standards!")
+            recommendations.append(
+                _("✅ Code quality meets security standards!"),
+            )
 
         return recommendations
