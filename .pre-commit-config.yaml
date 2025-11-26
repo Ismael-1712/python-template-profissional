@@ -15,7 +15,7 @@ repos:
 
   # 2. Ruff (O Linter e Formatador)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.4
+    rev: v0.14.6  # ⚠️ MANTER SINCRONIZADO COM requirements/dev.txt
     hooks:
       - id: ruff-format # Roda o formatador (substituto do Black)
       - id: ruff        # Roda o linter (substituto do Flake8)

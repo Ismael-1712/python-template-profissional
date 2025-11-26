@@ -3,7 +3,7 @@
 #
 # Dependências de desenvolvimento migradas do pyproject.toml
 
-ruff
+ruff==0.14.6
 pytest
 pytest-cov
 PyYAML
