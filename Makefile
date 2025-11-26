@@ -69,6 +69,11 @@ lint:
 format:
 	$(PYTHON) -m ruff format .
 
+## save: Formata código, adiciona todas as alterações e faz commit. Uso: make save m="Mensagem do commit"
+save: format
+	@git add .
+	@git commit -m "$(m)"
+
 ## audit: Executa auditoria completa do código (análise estática avançada)
 audit:
 	PYTHONPATH=. $(PYTHON) $(SCRIPTS_DIR)/code_audit.py
