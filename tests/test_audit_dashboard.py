@@ -289,12 +289,12 @@ class TestMetricsProcessing:
         assert dashboard._metrics["audits_performed"] == 1, "Should have 1 audit"
         assert dashboard._metrics["failures_prevented"] == 0, "Should have 0 failures"
         assert dashboard._metrics["time_saved_minutes"] == 0, "Should have 0 time saved"
-        assert (
-            dashboard._metrics["last_audit"] is not None
-        ), "Should have last_audit timestamp"
-        assert (
-            len(dashboard._metrics["audit_history"]) == 1
-        ), "Should have 1 history entry"
+        assert dashboard._metrics["last_audit"] is not None, (
+            "Should have last_audit timestamp"
+        )
+        assert len(dashboard._metrics["audit_history"]) == 1, (
+            "Should have 1 history entry"
+        )
 
     def test_record_audit_with_failures(self, dashboard):
         """Test recording an audit with multiple failures detected.
@@ -337,24 +337,24 @@ class TestMetricsProcessing:
 
         # Assert: Metrics updated correctly
         assert dashboard._metrics["audits_performed"] == 1, "Should have 1 audit"
-        assert (
-            dashboard._metrics["failures_prevented"] == 5
-        ), "Should have 5 failures prevented"
+        assert dashboard._metrics["failures_prevented"] == 5, (
+            "Should have 5 failures prevented"
+        )
 
         # Time saved: 5 failures x 7 minutes = 35 minutes
         expected_time_saved = 5 * 7
-        assert (
-            dashboard._metrics["time_saved_minutes"] == expected_time_saved
-        ), f"Should have {expected_time_saved} minutes saved"
+        assert dashboard._metrics["time_saved_minutes"] == expected_time_saved, (
+            f"Should have {expected_time_saved} minutes saved"
+        )
 
         # Check history entry
         history = dashboard._metrics["audit_history"]
         assert len(history) == 1, "Should have 1 history entry"
         assert history[0]["failures_prevented"] == 5, "History should record 5 failures"
         assert history[0]["high_severity"] == 2, "History should record 2 HIGH severity"
-        assert (
-            history[0]["time_saved"] == expected_time_saved
-        ), "History should record time saved"
+        assert history[0]["time_saved"] == expected_time_saved, (
+            "History should record time saved"
+        )
 
     def test_pattern_statistics(self, dashboard):
         """Test that pattern statistics are tracked correctly.
@@ -398,9 +398,9 @@ class TestMetricsProcessing:
         pattern_stats = patterns["import_outside_try"]
         assert pattern_stats["count"] == 3, "Pattern count should be 3"
         assert len(pattern_stats["files_affected"]) == 3, "Should track 3 files"
-        assert (
-            "module1.py" in pattern_stats["files_affected"]
-        ), "Should include module1.py"
+        assert "module1.py" in pattern_stats["files_affected"], (
+            "Should include module1.py"
+        )
 
         # Check severity distribution
         severity_dist = pattern_stats["severity_distribution"]
@@ -440,17 +440,17 @@ class TestMetricsProcessing:
 
         # Assert: History is capped at max_records
         history = dashboard._metrics["audit_history"]
-        assert (
-            len(history) == max_records
-        ), f"History should be capped at {max_records} records"
+        assert len(history) == max_records, (
+            f"History should be capped at {max_records} records"
+        )
 
         # Verify metrics are cumulative (not capped)
-        assert (
-            dashboard._metrics["audits_performed"] == 60
-        ), "Total audits should be 60 (not capped)"
-        assert (
-            dashboard._metrics["failures_prevented"] == 60
-        ), "Total failures should be 60 (not capped)"
+        assert dashboard._metrics["audits_performed"] == 60, (
+            "Total audits should be 60 (not capped)"
+        )
+        assert dashboard._metrics["failures_prevented"] == 60, (
+            "Total failures should be 60 (not capped)"
+        )
 
     def test_multiple_audits_cumulative(self, dashboard):
         """Test that multiple audits accumulate metrics correctly.
@@ -490,28 +490,28 @@ class TestMetricsProcessing:
 
         # Assert: Cumulative metrics
         assert dashboard._metrics["audits_performed"] == 3, "Should have 3 audits"
-        assert (
-            dashboard._metrics["failures_prevented"] == 6
-        ), "Should have 6 total failures (2 + 1 + 3)"
+        assert dashboard._metrics["failures_prevented"] == 6, (
+            "Should have 6 total failures (2 + 1 + 3)"
+        )
 
         # Time saved: 6 failures x 7 minutes = 42 minutes
-        assert (
-            dashboard._metrics["time_saved_minutes"] == 42
-        ), "Should have 42 minutes saved"
+        assert dashboard._metrics["time_saved_minutes"] == 42, (
+            "Should have 42 minutes saved"
+        )
 
         # History entries
-        assert (
-            len(dashboard._metrics["audit_history"]) == 3
-        ), "Should have 3 separate history entries"
+        assert len(dashboard._metrics["audit_history"]) == 3, (
+            "Should have 3 separate history entries"
+        )
 
         # Check individual history entries
         history = dashboard._metrics["audit_history"]
         assert history[0]["failures_prevented"] == 2, "First audit: 2 failures"
         assert history[1]["failures_prevented"] == 1, "Second audit: 1 failure"
         assert history[2]["failures_prevented"] == 3, "Third audit: 3 failures"
-        assert (
-            history[2]["ci_simulation_passed"] is False
-        ), "Third audit: CI simulation failed"
+        assert history[2]["ci_simulation_passed"] is False, (
+            "Third audit: CI simulation failed"
+        )
 
     def test_success_rate_calculation(self, dashboard):
         """Test that success rate is calculated correctly based on CI results.
@@ -522,9 +522,9 @@ class TestMetricsProcessing:
         - Calculation uses audit history, not total audits
         """
         # Act & Assert: Start with 100% success rate
-        assert (
-            dashboard._metrics["success_rate"] == 100.0
-        ), "Should start with 100% success rate"
+        assert dashboard._metrics["success_rate"] == 100.0, (
+            "Should start with 100% success rate"
+        )
 
         # Record 2 successful audits
         for _ in range(2):
@@ -535,9 +535,9 @@ class TestMetricsProcessing:
                 }
             )
 
-        assert (
-            dashboard._metrics["success_rate"] == 100.0
-        ), "Should maintain 100% with all passing"
+        assert dashboard._metrics["success_rate"] == 100.0, (
+            "Should maintain 100% with all passing"
+        )
 
         # Record 2 failed audits
         for _ in range(2):
@@ -549,9 +549,9 @@ class TestMetricsProcessing:
             )
 
         # Success rate: 2 passed / 4 total = 50%
-        assert (
-            dashboard._metrics["success_rate"] == 50.0
-        ), "Should be 50% with 2/4 passing"
+        assert dashboard._metrics["success_rate"] == 50.0, (
+            "Should be 50% with 2/4 passing"
+        )
 
         # Record 2 more successful audits
         for _ in range(2):
@@ -564,9 +564,9 @@ class TestMetricsProcessing:
 
         # Success rate: 4 passed / 6 total = 66.67%
         expected_rate = (4 / 6) * 100
-        assert (
-            abs(dashboard._metrics["success_rate"] - expected_rate) < 0.01
-        ), f"Should be {expected_rate:.2f}% with 4/6 passing"
+        assert abs(dashboard._metrics["success_rate"] - expected_rate) < 0.01, (
+            f"Should be {expected_rate:.2f}% with 4/6 passing"
+        )
 
     def test_monthly_statistics(self, dashboard):
         """Test that monthly statistics are aggregated correctly.
@@ -641,9 +641,9 @@ class TestMetricsProcessing:
         dashboard.record_audit(audit_result)
 
         # Assert: Treated as 0 failures
-        assert (
-            dashboard._metrics["failures_prevented"] == 0
-        ), "Malformed dependencies should be treated as 0 failures"
+        assert dashboard._metrics["failures_prevented"] == 0, (
+            "Malformed dependencies should be treated as 0 failures"
+        )
 
         # Test with list containing non-dict items
         audit_result_2 = {
@@ -730,9 +730,9 @@ class TestHTMLGeneration:
         assert "99" in html_output, "Should contain failures prevented count"
 
         # Check for time saved (99 failures x 7 minutes = 693 minutes = 11.6h rounded)
-        assert (
-            "11.6h" in html_output
-        ), "Should contain time saved in hours (11.6h rounded)"
+        assert "11.6h" in html_output, (
+            "Should contain time saved in hours (11.6h rounded)"
+        )
 
     def test_html_sanitization(self, dashboard):
         """Test that HTML special characters are properly escaped.
@@ -760,12 +760,12 @@ class TestHTMLGeneration:
         html_output = dashboard.generate_html_dashboard()
 
         # Assert: Script tags are escaped
-        assert (
-            "<script>alert('xss')</script>" not in html_output
-        ), "Raw script tags should not appear"
-        assert (
-            "&lt;script&gt;" in html_output or "alert" not in html_output
-        ), "Script should be escaped or truncated"
+        assert "<script>alert('xss')</script>" not in html_output, (
+            "Raw script tags should not appear"
+        )
+        assert "&lt;script&gt;" in html_output or "alert" not in html_output, (
+            "Script should be escaped or truncated"
+        )
 
     def test_html_contains_metrics(self, dashboard):
         """Test that all major metric sections are present in HTML.
@@ -793,9 +793,9 @@ class TestHTMLGeneration:
         # Assert: All sections present (check for section markers)
         # The actual text may be translated, but structure should be there
         assert "stat-card" in html_output, "Should have stat cards"
-        assert (
-            "pattern-list" in html_output or "chart-container" in html_output
-        ), "Should have data visualization sections"
+        assert "pattern-list" in html_output or "chart-container" in html_output, (
+            "Should have data visualization sections"
+        )
 
     def test_empty_dashboard_html(self, dashboard):
         """Test HTML generation with no audit data.
@@ -811,9 +811,9 @@ class TestHTMLGeneration:
         # Assert: Valid HTML with zeros
         assert html_output, "Should generate HTML even with no data"
         assert "0" in html_output, "Should show zero for empty metrics"
-        assert (
-            "100" in html_output or "100.0" in html_output
-        ), "Should show 100% success rate for empty history"
+        assert "100" in html_output or "100.0" in html_output, (
+            "Should show 100% success rate for empty history"
+        )
 
 
 # ==============================================================================
@@ -954,9 +954,9 @@ class TestExportFunctions:
         mock_handle = mock_file()
         written_content = mock_handle.write.call_args[0][0]
         assert "5" in written_content, "Should include audit count"
-        assert (
-            "pattern_" in written_content or "🔍" in written_content
-        ), "Should include pattern information"
+        assert "pattern_" in written_content or "🔍" in written_content, (
+            "Should include pattern information"
+        )
 
     def test_get_metrics_summary(self, dashboard):
         """Test programmatic metrics summary access.
@@ -992,9 +992,9 @@ class TestExportFunctions:
         # Assert: Values are correct
         assert summary["audits_performed"] == 10, "Should have 10 audits"
         assert summary["failures_prevented"] == 10, "Should have 10 failures"
-        assert (
-            summary["time_saved_hours"] == 70 / 60
-        ), "Should calculate hours correctly"
+        assert summary["time_saved_hours"] == 70 / 60, (
+            "Should calculate hours correctly"
+        )
         assert summary["success_rate"] == 100.0, "Should be 100% success"
         assert summary["pattern_count"] == 1, "Should have 1 unique pattern"
         assert summary["history_count"] == 10, "Should have 10 history entries"
@@ -1012,3 +1012,4 @@ if __name__ == "__main__":
     Run with: python tests/test_audit_dashboard.py
     """
     pytest.main([__file__, "-v", "--tb=short"])
+# CI fix trigger
