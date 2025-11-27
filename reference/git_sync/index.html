@@ -2252,9 +2252,9 @@ and structured logging for production-grade automation.</p>
 <a id="__codelineno-0-541" name="__codelineno-0-541"></a>            <span class="k">return</span> <span class="kc">False</span>
 <a id="__codelineno-0-542" name="__codelineno-0-542"></a>
 <a id="__codelineno-0-543" name="__codelineno-0-543"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-544" name="__codelineno-0-544"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unexpected error during synchronization: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-0-544" name="__codelineno-0-544"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <a id="__codelineno-0-545" name="__codelineno-0-545"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-546" name="__codelineno-0-546"></a>            <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-546" name="__codelineno-0-546"></a>            <span class="k">raise</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2531,9 +2531,9 @@ and structured logging for production-grade automation.</p>
 <a id="__codelineno-0-541" name="__codelineno-0-541"></a>        <span class="k">return</span> <span class="kc">False</span>
 <a id="__codelineno-0-542" name="__codelineno-0-542"></a>
 <a id="__codelineno-0-543" name="__codelineno-0-543"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unexpected error during synchronization: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-0-544" name="__codelineno-0-544"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <a id="__codelineno-0-545" name="__codelineno-0-545"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-546" name="__codelineno-0-546"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-546" name="__codelineno-0-546"></a>        <span class="k">raise</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
