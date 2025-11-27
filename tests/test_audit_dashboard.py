@@ -15,7 +15,7 @@ Usage:
     pytest tests/test_audit_dashboard.py --cov=scripts.audit_dashboard
 """
 
-# ruff: noqa: S101, PLR2004, SLF001, ANN001, ANN201, ARG001, ARG002, E501, DTZ001
+# ruff: noqa: S101, PLR2004, SLF001, ANN001, ANN201, ARG001, ARG002, DTZ001
 # S101: Use of assert (required for pytest)
 # PLR2004: Magic value in comparison (test constants are acceptable)
 # SLF001: Private member access (necessary for unit testing internals)
@@ -72,6 +72,9 @@ def mock_fs() -> Generator[dict[str, MagicMock], None, None]:
         # Default: file doesn't exist (triggers default metrics)
         mock_exists.return_value = False
 
+        # Configure mock to support fileno() for fsync operations
+        mock_file.return_value.fileno.return_value = 10
+
         yield {
             "exists": mock_exists,
             "open": mock_file,
@@ -124,6 +127,28 @@ def mock_path_replace() -> Generator[MagicMock, None, None]:
 
 
 @pytest.fixture
+def mock_os_fsync() -> Generator[MagicMock, None, None]:
+    """Mock os.fsync to prevent real disk synchronization.
+
+    Yields:
+        MagicMock: Mocked os.fsync function
+    """
+    with patch("os.fsync") as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_os_getpid() -> Generator[MagicMock, None, None]:
+    """Mock os.getpid to return deterministic PID for testing.
+
+    Yields:
+        MagicMock: Mocked os.getpid function returning 12345
+    """
+    with patch("os.getpid", return_value=12345) as mock:
+        yield mock
+
+
+@pytest.fixture
 def dashboard(
     mock_translation: MagicMock,
     mock_fs: dict[str, MagicMock],
@@ -131,6 +156,8 @@ def dashboard(
     mock_json_dump: MagicMock,
     mock_os_chmod: MagicMock,
     mock_path_replace: MagicMock,
+    mock_os_fsync: MagicMock,
+    mock_os_getpid: MagicMock,
     tmp_path: Path,
 ) -> AuditDashboard:
     """Create a clean AuditDashboard instance with all I/O mocked.
@@ -145,6 +172,8 @@ def dashboard(
         mock_json_dump: Mocked JSON dumping
         mock_os_chmod: Mocked file permission changes
         mock_path_replace: Mocked atomic file replacement
+        mock_os_fsync: Mocked os.fsync for disk synchronization
+        mock_os_getpid: Mocked os.getpid for deterministic PIDs
         tmp_path: pytest's temporary directory
 
     Returns:
@@ -532,7 +561,7 @@ class TestMetricsProcessing:
                 {
                     "external_dependencies": [],
                     "ci_simulation": {"tests_passed": True},
-                }
+                },
             )
 
         assert dashboard._metrics["success_rate"] == 100.0, (
@@ -545,7 +574,7 @@ class TestMetricsProcessing:
                 {
                     "external_dependencies": [],
                     "ci_simulation": {"tests_passed": False},
-                }
+                },
             )
 
         # Success rate: 2 passed / 4 total = 50%
@@ -559,7 +588,7 @@ class TestMetricsProcessing:
                 {
                     "external_dependencies": [],
                     "ci_simulation": {"tests_passed": True},
-                }
+                },
             )
 
         # Success rate: 4 passed / 6 total = 66.67%
@@ -594,7 +623,7 @@ class TestMetricsProcessing:
                             },
                         ],
                         "ci_simulation": {"tests_passed": True},
-                    }
+                    },
                 )
 
             # Assert: Monthly stats exist
@@ -688,7 +717,7 @@ class TestHTMLGeneration:
                     {"severity": "HIGH", "pattern": "test_pattern", "file": "test.py"},
                 ],
                 "ci_simulation": {"tests_passed": True},
-            }
+            },
         )
 
         # Act: Generate HTML
@@ -719,7 +748,7 @@ class TestHTMLGeneration:
                         {"severity": "MEDIUM", "pattern": "test", "file": "file.py"},
                     ],
                     "ci_simulation": {"tests_passed": True},
-                }
+                },
             )
 
         # Act: Generate HTML
@@ -753,7 +782,7 @@ class TestHTMLGeneration:
                     },
                 ],
                 "ci_simulation": {"tests_passed": True},
-            }
+            },
         )
 
         # Act: Generate HTML
@@ -784,7 +813,7 @@ class TestHTMLGeneration:
                     {"severity": "LOW", "pattern": "pattern2", "file": "file2.py"},
                 ],
                 "ci_simulation": {"tests_passed": True},
-            }
+            },
         )
 
         # Act: Generate HTML
@@ -840,7 +869,7 @@ class TestExportFunctions:
                     {"severity": "HIGH", "pattern": "test", "file": "test.py"},
                 ],
                 "ci_simulation": {"tests_passed": True},
-            }
+            },
         )
 
         # Act: Export metrics
@@ -899,7 +928,7 @@ class TestExportFunctions:
                     {"severity": "MEDIUM", "pattern": "test", "file": "test.py"},
                 ],
                 "ci_simulation": {"tests_passed": True},
-            }
+            },
         )
 
         # Act: Export HTML
@@ -943,7 +972,7 @@ class TestExportFunctions:
                         },
                     ],
                     "ci_simulation": {"tests_passed": True},
-                }
+                },
             )
 
         # Act: Export HTML
@@ -974,7 +1003,7 @@ class TestExportFunctions:
                         {"severity": "HIGH", "pattern": "test", "file": "test.py"},
                     ],
                     "ci_simulation": {"tests_passed": True},
-                }
+                },
             )
 
         # Act: Get summary
