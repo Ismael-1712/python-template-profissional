@@ -1964,7 +1964,7 @@ and structured logging for production-grade automation.</p>
 <a id="__codelineno-0-253" name="__codelineno-0-253"></a>        <span class="n">changed_files</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;changed_files&quot;</span><span class="p">,</span> <span class="p">[])</span>
 <a id="__codelineno-0-254" name="__codelineno-0-254"></a>
 <a id="__codelineno-0-255" name="__codelineno-0-255"></a>        <span class="c1"># Analyze file types and changes</span>
-<a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="n">categories</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="n">categories</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
 <a id="__codelineno-0-257" name="__codelineno-0-257"></a>            <span class="s2">&quot;feat&quot;</span><span class="p">:</span> <span class="p">[],</span>
 <a id="__codelineno-0-258" name="__codelineno-0-258"></a>            <span class="s2">&quot;fix&quot;</span><span class="p">:</span> <span class="p">[],</span>
 <a id="__codelineno-0-259" name="__codelineno-0-259"></a>            <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="p">[],</span>
