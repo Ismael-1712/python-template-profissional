@@ -541,9 +541,9 @@ class SyncOrchestrator:
             return False
 
         except Exception as e:
-            logger.error("Unexpected error during synchronization: %s", e)
+            logger.critical("UNEXPECTED BUG: %s", e, exc_info=True)
             self._save_sync_report()
-            return False
+            raise
 
 
 # Backward compatibility alias

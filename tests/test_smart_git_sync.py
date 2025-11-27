@@ -805,6 +805,50 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         mock_git_status.assert_called_once()
         mock_save_report.assert_called_once()
 
+    @patch("scripts.git_sync.sync_logic.subprocess.run")
+    @patch("scripts.git_sync.sync_logic.Path")
+    def test_execute_sync_blocks_main_branch(
+        self,
+        mock_path_cls: MagicMock,
+        mock_run: MagicMock,
+    ) -> None:
+        """Test that execute_sync blocks direct push to main branch."""
+        # ✅ Setup: Mock workspace
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        # ✅ Mock: git status returns changes on main branch
+        mock_status_result = MagicMock()
+        mock_status_result.returncode = 0
+        mock_status_result.stdout = "M  file1.py\n"
+        mock_status_result.stderr = ""
+
+        # ✅ Mock: git branch returns 'main' (protected branch)
+        mock_branch_result = MagicMock()
+        mock_branch_result.returncode = 0
+        mock_branch_result.stdout = "main"
+        mock_branch_result.stderr = ""
+
+        mock_run.side_effect = [mock_status_result, mock_branch_result]
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config={"audit_enabled": False},
+            dry_run=False,
+        )
+
+        # ✅ Execute sync - should return False (failure)
+        result = sync.execute_sync()
+
+        # ✅ Validate that sync failed
+        self.assertFalse(result)
+
+        # ✅ Validate that git commands were called correctly
+        self.assertEqual(mock_run.call_count, 2)  # status + branch
+
 
 # ============================================================================
 # RUN TESTS WITH PYTEST (Remove legacy main())
