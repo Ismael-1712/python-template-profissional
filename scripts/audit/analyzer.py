@@ -59,7 +59,7 @@ class CodeAnalyzer:
             >>> findings = analyzer.analyze_file(Path('script.py'))
             >>> print(f"Found {len(findings)} issues")
         """
-        findings = []
+        findings: list[AuditResult] = []
 
         try:
             with file_path.open(encoding="utf-8") as f:

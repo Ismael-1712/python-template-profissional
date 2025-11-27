@@ -136,7 +136,7 @@ class CITestMockIntegration:
             Dicionário com informações do git
 
         """
-        info = {
+        info: dict[str, Any] = {
             "is_git_repo": False,
             "has_changes": False,
             "current_branch": None,

@@ -20,7 +20,7 @@ from code_audit import CodeAuditor, print_summary, save_report  # noqa: E402
 logger = logging.getLogger(__name__)
 
 
-def run_integrated_audit(workspace_root: Path, config_path: Path = None) -> int:
+def run_integrated_audit(workspace_root: Path, config_path: Path | None = None) -> int:
     """Run code audit with dashboard metrics integration.
 
     Args:
@@ -127,7 +127,7 @@ def transform_audit_for_dashboard(audit_report: dict) -> dict:
     }
 
 
-def main():
+def main() -> None:
     """Main entry point for integrated audit."""
     import argparse
 
@@ -185,7 +185,7 @@ def main():
         logger.error(
             f"Arquivo de configuração de auditoria não encontrado: {config_file}",
         )
-        return 1
+        sys.exit(1)
 
     # Run integrated audit
     exit_code = run_integrated_audit(
@@ -203,7 +203,8 @@ def main():
         except Exception as e:
             logger.warning(f"Failed to export dashboard: {e}")
 
-    sys.exit(exit_code)
+    if exit_code != 0:
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":

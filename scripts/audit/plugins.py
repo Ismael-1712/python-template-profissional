@@ -27,7 +27,7 @@ def check_mock_coverage(
     Returns:
         Dictionary containing mock coverage statistics
     """
-    test_files = []
+    test_files: list[Path] = []
     for scan_path in scan_paths:
         if "test" in scan_path.lower():
             test_dir = workspace_root / scan_path
@@ -35,7 +35,7 @@ def check_mock_coverage(
                 test_files.extend(test_dir.rglob("test_*.py"))
                 test_files.extend(test_dir.rglob("*_test.py"))
 
-    mock_coverage = {
+    mock_coverage: dict[str, Any] = {
         "total_test_files": len(test_files),
         "files_with_mocks": 0,
         "files_needing_mocks": [],
