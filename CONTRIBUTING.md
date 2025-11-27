@@ -363,3 +363,24 @@ fi
 ---
 
 ## Obrigado por contribuir! 🎉
+
+---
+
+## 🛡️ Padrões de Engenharia (As 3 Travas de Segurança)
+
+Para evitar regressões e "alucinações" de código, todo desenvolvimento deve respeitar estritamente estas 3 leis:
+
+### 🔒 Trava 1: Verificação Forense (Anti-Alucinação)
+**Regra:** Nunca assuma que um arquivo ou classe existe. Verifique antes de importar.
+- **Antes de criar um `__init__.py` ou `import`:** Execute `grep` ou `ls` para confirmar o nome exato da classe/função.
+- **Exemplo:** Não importe `SecurityScanner` se a classe se chama `FileScanner`. A divergência entre o "Mapa Mental" e o "Território Real" é a maior causa de quebras em CI.
+
+### 🔒 Trava 2: Tipagem Estática Absoluta
+**Regra:** O `mypy` em modo estrito é a autoridade final.
+- **Não ignore erros de tipo:** Se o Mypy reclamar, corrija o código, não use `Any` ou `# type: ignore` a menos que estritamente necessário.
+- **Tipos > Testes:** Testes unitários podem passar com dados errados (falso positivo), mas a checagem estática não deixa passar contratos inválidos.
+
+### 🔒 Trava 3: Princípio da Realidade dos Dados
+**Regra:** Testes devem usar dados que espelham a produção, não invenções convenientes.
+- **Ao criar Fixtures:** Olhe como o código de produção chama a função (ex: via `grep` no código consumidor).
+- **Evite Estruturas Aninhadas Falsas:** Se a função espera `{'key': 'val'}`, não passe `{'wrapper': {'key': 'val'}}` no teste.
