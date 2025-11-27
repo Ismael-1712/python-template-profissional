@@ -347,7 +347,7 @@ def test_path_operations():
             # Valida que nenhum arquivo foi modificado realmente
             # (isso seria verificado comparando timestamps, mas simplificamos)
 
-            return result["failed"] == 0
+            return bool(result["failed"] == 0)
 
         except Exception as e:
             logger.error(f"Erro no dry-run: {e}")

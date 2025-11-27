@@ -52,5 +52,5 @@ def get_current_commit_hash(repository_path: Path, *, dry_run: bool) -> str:
         return "unknown"
     else:
         if result.returncode == 0:
-            return result.stdout.strip()[:8]
+            return str(result.stdout.strip()[:8])  # Cast to ensure str type
         return "unknown"

@@ -78,7 +78,6 @@ class CIFailureRecoverySystem:
 
         """
         self.repository_path = repository_path or Path.cwd()
-        self.commit_hash = commit_hash
         self.dry_run = dry_run
         self.report = RecoveryReport(
             timestamp=datetime.now(timezone.utc),
@@ -93,8 +92,8 @@ class CIFailureRecoverySystem:
         ):
             raise ValueError(f"Not a git repository: {self.repository_path}")
 
-        # Get actual commit hash
-        self.commit_hash = self.commit_hash or validator.get_current_commit_hash(
+        # Get actual commit hash (garantido ser str após esta linha)
+        self.commit_hash: str = commit_hash or validator.get_current_commit_hash(
             repository_path=self.repository_path,
             dry_run=self.dry_run,
         )
@@ -160,8 +159,8 @@ class CIFailureRecoverySystem:
 
         logger.info(
             _("🚨 Starting CI/CD Failure Recovery for commit {commit}").format(
-                commit=self.commit_hash
-            )
+                commit=self.commit_hash,
+            ),
         )
         logger.info("=" * 70)
 
