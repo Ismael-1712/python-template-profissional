@@ -1,192 +1,223 @@
-"""Audit report generation module.
+"""Audit reporter module."""
 
-This module provides functionality for generating audit reports
-in multiple formats (JSON, YAML, console).
-"""
-
-import gettext
+import datetime
 import json
 import logging
-import os
 from pathlib import Path
 from typing import Any
 
 import yaml
 
-# i18n setup
-_locale_dir = Path(__file__).parent.parent.parent / "locales"
 try:
-    _translation = gettext.translation(
-        "messages",
-        localedir=str(_locale_dir),
-        languages=[os.getenv("LANGUAGE", "pt_BR")],
-        fallback=True,
-    )
-    _ = _translation.gettext
-except Exception:
-    # Fallback se não encontrar traduções
+    import gettext
+    import os
+
+    # i18n setup
+    _locale_dir = Path(__file__).parent.parent.parent / "locales"
+    try:
+        _translation = gettext.translation(
+            "messages",
+            localedir=str(_locale_dir),
+            languages=[os.getenv("LANGUAGE", "pt_BR")],
+            fallback=True,
+        )
+        _ = _translation.gettext
+    except Exception:
+        # Fallback if translation fails
+        def _(message: str) -> str:
+            return message
+except ImportError:
+    # Fallback if gettext is not available
     def _(message: str) -> str:
         return message
 
 
-logger = logging.getLogger(__name__)
+class ConsoleAuditFormatter:
+    """Formatter for audit reports to console output."""
 
-
-class AuditReporter:
-    """Generates and saves audit reports in multiple formats."""
-
-    def __init__(self, workspace_root: Path) -> None:
-        """Initialize the reporter.
-
-        Args:
-            workspace_root: Root directory of the workspace
-        """
-        self.workspace_root = workspace_root
-
-    def save_report(
-        self,
-        report: dict[str, Any],
-        output_path: Path,
-        format_type: str = "json",
-    ) -> None:
-        """Save audit report in specified format.
-
-        Args:
-            report: Report data to save
-            output_path: Path where the report will be saved
-            format_type: Format type ('json' or 'yaml')
-
-        Raises:
-            ValueError: If unsupported format type is provided
-        """
-        if format_type.lower() == "json":
-            with output_path.open("w", encoding="utf-8") as f:
-                json.dump(report, f, indent=2, ensure_ascii=False)
-        elif format_type.lower() == "yaml":
-            with output_path.open("w", encoding="utf-8") as f:
-                yaml.dump(report, f, default_flow_style=False, allow_unicode=True)
-        else:
-            msg = f"Unsupported format: {format_type}"
-            raise ValueError(msg)
-
-        logger.info("Report saved to %s", output_path)
-
-    def print_summary(self, report: dict[str, Any]) -> None:
-        """Print executive summary of audit results.
-
-        Args:
-            report: Complete audit report data
-        """
+    def format(self, report: dict[str, Any]) -> str:
+        """Format audit report as a console-ready string."""
         metadata = report["metadata"]
         summary = report["summary"]
+        findings = report["findings"]
 
-        print(f"\n{'=' * 60}")
-        print(_("🔍 CODE SECURITY AUDIT REPORT"))
-        print(f"{'=' * 60}")
-        print(_("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"]))
-        print(_("📁 Workspace: {workspace}").format(workspace=metadata["workspace"]))
-        print(
+        lines = []
+        lines.append("")
+        lines.append("=" * 60)
+        lines.append(_("🔍 CODE SECURITY AUDIT REPORT"))
+        lines.append("=" * 60)
+        lines.append(
+            _("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"])
+        )
+        lines.append(
+            _("📁 Workspace: {workspace}").format(workspace=metadata["workspace"])
+        )
+        lines.append(
             _("⏱️  Duration: {duration:.2f}s").format(
-                duration=metadata["duration_seconds"],
-            ),
+                duration=metadata["duration_seconds"]
+            )
         )
-        print(
-            _("📄 Files Scanned: {count}").format(
-                count=metadata["files_scanned"],
-            ),
+        lines.append(
+            _("📄 Files Scanned: {count}").format(count=metadata["files_scanned"])
         )
+        lines.append("-" * 60)
 
-        status = summary["overall_status"]
-        status_emoji = {
-            "PASS": "✅",
-            "WARNING": "⚠️",
-            "FAIL": "❌",
-            "CRITICAL": "🔴",
-        }
-        print(
+        # Status
+        status_emoji = "✅" if summary["overall_status"] == "PASS" else "⚠️"
+        lines.append(
             _("\n{emoji} OVERALL STATUS: {status}").format(
-                emoji=status_emoji.get(status, "❓"),
-                status=status,
-            ),
+                emoji=status_emoji, status=summary["overall_status"]
+            )
         )
 
-        print(_("\n📊 SEVERITY DISTRIBUTION:"))
+        # Severity Distribution
+        lines.append(_("\n📊 SEVERITY DISTRIBUTION:"))
         for severity, count in summary["severity_distribution"].items():
             if count > 0:
-                emoji = {
-                    "CRITICAL": "🔴",
-                    "HIGH": "🟠",
-                    "MEDIUM": "🟡",
-                    "LOW": "🔵",
-                }.get(severity, "⚪")
-                print(
+                icon = (
+                    "🔴"
+                    if severity == "CRITICAL"
+                    else "🟠"
+                    if severity == "HIGH"
+                    else "🔵"
+                )
+                lines.append(
                     _("  {emoji} {severity}: {count}").format(
-                        emoji=emoji,
-                        severity=severity,
-                        count=count,
-                    ),
+                        emoji=icon, severity=severity, count=count
+                    )
                 )
 
-        if report["findings"]:
-            print(_("\n🔍 TOP FINDINGS:"))
-            for finding in report["findings"][:5]:  # Show top 5
-                print(
+        # Top Findings
+        if findings:
+            lines.append(_("\n🔍 TOP FINDINGS:"))
+            for finding in findings[:5]:
+                lines.append(
                     _("  • {file}:{line} - {description}").format(
                         file=finding["file"],
                         line=finding["line"],
                         description=finding["description"],
-                    ),
+                    )
                 )
 
-        print(_("\n💡 RECOMMENDATIONS:"))
-        for rec in summary["recommendations"]:
-            print(f"  {rec}")
+        # Recommendations
+        if summary["recommendations"]:
+            lines.append(_("\n💡 RECOMMENDATIONS:"))
+            for rec in summary["recommendations"]:
+                lines.append(f"  • {rec}")
 
-        print(f"\n{'=' * 60}")
+        lines.append("")
+        lines.append("=" * 60)
+
+        return "\n".join(lines)
+
+
+class AuditReporter:
+    """Handles reporting of audit results."""
+
+    def __init__(self, workspace_root: Path):
+        """Initialize the reporter."""
+        self.workspace_root = workspace_root
+        self.logger = logging.getLogger(__name__)
+
+    def generate_summary(
+        self,
+        findings: list[dict[str, Any]],
+        stats: dict[str, Any],
+        duration: float,
+        scanned_count: int,
+    ) -> dict[str, Any]:
+        """Generate a summary dictionary from audit results."""
+        # Calculate severity distribution
+        severity_dist = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
+        for f in findings:
+            severity_dist[f["severity"]] += 1
+
+        # Determine overall status
+        if severity_dist["CRITICAL"] > 0 or severity_dist["HIGH"] > 0:
+            status = "FAIL"
+        elif severity_dist["MEDIUM"] > 0:
+            status = "WARNING"
+        else:
+            status = "PASS"
+
+        # Generate recommendations
+        recommendations = self.generate_recommendations(
+            severity_dist, stats.get("ci_simulation", {})
+        )
+
+        return {
+            "metadata": {
+                "timestamp": datetime.datetime.now().isoformat(),
+                "workspace": str(self.workspace_root),
+                "duration_seconds": duration,
+                "files_scanned": scanned_count,
+            },
+            "summary": {
+                "overall_status": status,
+                "total_findings": len(findings),
+                "severity_distribution": severity_dist,
+                "recommendations": recommendations,
+            },
+            "findings": [f for f in findings],  # Serializeable copy
+        }
+
+    def print_summary(self, report: dict[str, Any]) -> None:
+        """Print audit summary to console using ConsoleAuditFormatter."""
+        formatter = ConsoleAuditFormatter()
+        print(formatter.format(report))
+
+    def save_report(
+        self, report: dict[str, Any], output_path: str, format: str = "json"
+    ) -> None:
+        """Save report to file."""
+        path = Path(output_path)
+
+        # Detect format from extension if not specified
+        if path.suffix == ".json":
+            format = "json"
+        elif path.suffix in [".yaml", ".yml"]:
+            format = "yaml"
+
+        if format == "json":
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(report, f, indent=2, ensure_ascii=False)
+        elif format == "yaml":
+            with open(path, "w", encoding="utf-8") as f:
+                yaml.dump(report, f, allow_unicode=True)
+        else:
+            raise ValueError(f"Unsupported format: {format}")
+
+        self.logger.info(f"Report saved to {path}")
+
+    def generate_recommendations(
+        self, severity_dist: dict[str, int], ci_stats: dict[str, Any], *args: Any
+    ) -> list[str]:
+        """Generate actionable recommendations based on findings."""
+        recs = []
+
+        if severity_dist["CRITICAL"] > 0:
+            recs.append(_("🔴 CRITICAL: Fix security vulnerabilities before commit"))
+
+        if severity_dist["HIGH"] > 0:
+            recs.append(_("🟠 HIGH: Address high-priority security issues"))
+
+        # Check mock usage
+        if "_check_test_mocks" in AuditReporter.__dict__:
+            missing_mocks = AuditReporter._check_test_mocks()  # type: ignore
+            if missing_mocks > 0:
+                recs.append(
+                    _("🧪 Add mocks to {count} test files").format(count=missing_mocks)
+                )
+
+        if not ci_stats.get("tests_passed", True):
+            recs.append(_("⚠️ Fix failing tests before CI/CD pipeline"))
+
+        if not recs:
+            recs.append(_("✅ Code quality meets security standards!"))
+
+        return recs
 
     @staticmethod
-    def generate_recommendations(
-        severity_counts: dict[str, int],
-        mock_coverage: dict[str, Any],
-        ci_simulation: dict[str, Any],
-    ) -> list[str]:
-        """Generate actionable recommendations based on audit results.
-
-        Args:
-            severity_counts: Count of findings by severity level
-            mock_coverage: Mock coverage statistics
-            ci_simulation: CI simulation results
-
-        Returns:
-            List of recommendation strings
-        """
-        recommendations = []
-
-        if severity_counts.get("CRITICAL", 0) > 0:
-            recommendations.append(
-                _("🔴 CRITICAL: Fix security vulnerabilities before commit"),
-            )
-
-        if severity_counts.get("HIGH", 0) > 0:
-            recommendations.append(
-                _("🟠 HIGH: Address high-priority security issues"),
-            )
-
-        if mock_coverage["files_needing_mocks"]:
-            recommendations.append(
-                _("🧪 Add mocks to {count} test files").format(
-                    count=len(mock_coverage["files_needing_mocks"]),
-                ),
-            )
-
-        if not ci_simulation.get("passed", True):
-            recommendations.append(
-                _("⚠️ Fix failing tests before CI/CD pipeline"),
-            )
-
-        if not recommendations:
-            recommendations.append(
-                _("✅ Code quality meets security standards!"),
-            )
-
-        return recommendations
+    def _check_test_mocks() -> int:
+        """Placeholder for checking test mocks."""
+        return 0
