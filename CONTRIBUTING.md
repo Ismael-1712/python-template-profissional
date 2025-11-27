@@ -329,4 +329,37 @@ Se tiver dúvidas sobre o fluxo de contribuição:
 
 ---
 
+## 🆘 Troubleshooting & Exit Codes
+
+O `smart_git_sync.py` utiliza códigos de saída padronizados para facilitar a integração em pipelines CI/CD e debugging.
+
+### Códigos de Saída (Exit Codes)
+
+| Código | Significado | Descrição |
+|--------|-------------|-----------|
+| `0` | **Sucesso** | Operação concluída sem erros |
+| `1` | **Erro de Operação** | Erro de lógica de negócio (Git error, Linter error, etc.) |
+| `2` | **Bug Interno** | Crash/Exceção inesperada - **Requer atenção da Engenharia** |
+| `130` | **Interrupção do Usuário** | Processo cancelado pelo usuário (Ctrl+C) |
+
+### 📋 Logs e Debugging
+
+**Importante:** Erros com **Exit Code 2** geram logs com traceback completo para debugging.
+
+Esses logs são cruciais para identificar problemas internos e bugs no sistema. Se você encontrar um Exit Code 2, verifique os logs para detalhes técnicos completos.
+
+**Exemplo de verificação em scripts:**
+
+```bash
+python scripts/smart_git_sync.py
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -eq 2 ]; then
+    echo "⚠️  Bug interno detectado! Verifique os logs."
+    exit 1
+fi
+```
+
+---
+
 ## Obrigado por contribuir! 🎉
