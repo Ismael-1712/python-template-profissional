@@ -11,5 +11,9 @@ pre-commit
 python-semantic-release
 tomli; python_version < '3.11'
 
+# Type Checking
+mypy>=1.14.0
+types-PyYAML
+
 # Internationalization (i18n)
 Babel>=2.16.0

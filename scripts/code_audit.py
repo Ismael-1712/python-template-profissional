@@ -67,7 +67,8 @@ class CodeAuditor:
 
     def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
-        return load_config(config_path)
+        config = load_config(config_path)
+        return dict(config)  # Cast to ensure dict[str, Any] type
 
     def _load_security_patterns(self) -> list[SecurityPattern]:
         """Load security patterns to detect in code."""
@@ -143,33 +144,37 @@ class CodeAuditor:
 
     def _get_python_files(self) -> list[Path]:
         """Get all Python files to audit based on configuration."""
-        return scan_workspace(
+        files = scan_workspace(
             workspace_root=self.workspace_root,
             scan_paths=self.config["scan_paths"],
             file_patterns=self.config["file_patterns"],
             exclude_paths=self.config["exclude_paths"],
         )
+        return list(files)  # Cast to ensure list[Path] type
 
     def _analyze_file(self, file_path: Path) -> list[AuditResult]:
         """Analyze a single Python file for security patterns.
 
         This is a wrapper method that delegates to CodeAnalyzer.analyze_file().
         """
-        return self.analyzer.analyze_file(file_path)
+        results = self.analyzer.analyze_file(file_path)
+        return list(results)  # Cast to ensure list[AuditResult] type
 
     def _check_mock_coverage(self) -> dict[str, Any]:
         """Analyze test files for proper mocking of external dependencies.
 
         This is a wrapper method that delegates to the plugins module.
         """
-        return check_mock_coverage(self.workspace_root, self.config["scan_paths"])
+        coverage = check_mock_coverage(self.workspace_root, self.config["scan_paths"])
+        return dict(coverage)  # Cast to ensure dict[str, Any] type
 
     def _simulate_ci_environment(self) -> dict[str, Any]:
         """Simulate CI environment by running critical tests.
 
         This is a wrapper method that delegates to the plugins module.
         """
-        return simulate_ci(self.workspace_root, self.config["ci_timeout"])
+        results = simulate_ci(self.workspace_root, self.config["ci_timeout"])
+        return dict(results)  # Cast to ensure dict[str, Any] type
 
     def run_audit(self, files_to_audit: list[Path] | None = None) -> dict[str, Any]:
         """Run complete security and quality audit."""

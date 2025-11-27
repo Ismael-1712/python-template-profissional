@@ -253,7 +253,7 @@ class SyncOrchestrator:
         changed_files = git_status.get("changed_files", [])
 
         # Analyze file types and changes
-        categories = {
+        categories: dict[str, list[str]] = {
             "feat": [],
             "fix": [],
             "test": [],
