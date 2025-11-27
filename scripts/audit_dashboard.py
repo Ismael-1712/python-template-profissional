@@ -172,25 +172,34 @@ class AuditDashboard:
             }
 
     def _save_metrics(self) -> None:
-        """Save metrics to persistent storage with atomic write."""
-        try:
-            # Atomic write using temporary file
-            temp_file = self.metrics_file.with_suffix(".tmp")
+        """Save metrics with atomic write guarantees (POSIX)."""
+        # Create unique temp file to avoid race conditions between processes
+        temp_file = self.metrics_file.with_suffix(f".tmp.{os.getpid()}")
 
+        try:
             with open(temp_file, "w", encoding="utf-8") as f:
                 json.dump(self._metrics, f, indent=2, ensure_ascii=False)
+                f.flush()
+                os.fsync(f.fileno())  # Force write to disk physical media
 
-            # Atomic move
+            # Atomic replace (POSIX guarantee)
+            # If target exists, it is replaced atomically
             temp_file.replace(self.metrics_file)
 
-            # Set proper permissions
-            os.chmod(self.metrics_file, self.METRICS_FILE_PERMISSIONS)
+            # Restore permissions
+            try:
+                os.chmod(self.metrics_file, self.METRICS_FILE_PERMISSIONS)
+            except OSError:
+                pass  # Ignore permission errors on non-owned files
 
-            logger.debug(f"Metrics saved to {self.metrics_file}")
-
-        except OSError as e:
-            logger.error(f"Failed to save metrics: {e}")
-            raise AuditMetricsError(f"Cannot save metrics: {e}") from e
+        except Exception:
+            # Cleanup temp file on failure
+            if temp_file.exists():
+                try:
+                    temp_file.unlink()
+                except OSError:
+                    pass
+            raise  # Re-raise to alert caller
 
     def record_audit(self, audit_result: dict[str, Any]) -> None:
         """Record audit results with comprehensive validation.
@@ -657,7 +666,7 @@ class AuditDashboard:
             )
             time_hours = self._metrics["time_saved_minutes"] / 60
             print(
-                _("   • Tempo economizado: {hours:.1f} horas").format(hours=time_hours)
+                _("   • Tempo economizado: {hours:.1f} horas").format(hours=time_hours),
             )
             print(
                 _("   • Taxa de sucesso: {rate:.1f}%").format(
