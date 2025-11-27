@@ -189,16 +189,24 @@ class AuditDashboard:
             # Restore permissions
             try:
                 os.chmod(self.metrics_file, self.METRICS_FILE_PERMISSIONS)
-            except OSError:
-                pass  # Ignore permission errors on non-owned files
+            except OSError as e:
+                logger.debug(
+                    "Could not set permissions on %s: %s",
+                    self.metrics_file,
+                    e,
+                )
 
         except Exception:
             # Cleanup temp file on failure
             if temp_file.exists():
                 try:
                     temp_file.unlink()
-                except OSError:
-                    pass
+                except OSError as e:
+                    logger.debug(
+                        "Failed to cleanup temp file %s: %s",
+                        temp_file,
+                        e,
+                    )
             raise  # Re-raise to alert caller
 
     def record_audit(self, audit_result: dict[str, Any]) -> None:
@@ -420,7 +428,12 @@ class AuditDashboard:
                 timestamp = datetime.fromisoformat(audit["timestamp"]).strftime(
                     "%d/%m %H:%M",
                 )
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
+                logger.debug(
+                    "Invalid timestamp format for %s: %s",
+                    audit.get("timestamp"),
+                    e,
+                )
                 timestamp = "N/A"
 
             sanitized_history.append(
@@ -699,7 +712,12 @@ class AuditDashboard:
                         timestamp = datetime.fromisoformat(audit["timestamp"]).strftime(
                             "%d/%m %H:%M",
                         )
-                    except (ValueError, TypeError):
+                    except (ValueError, TypeError) as e:
+                        logger.debug(
+                            "Invalid timestamp format for %s: %s",
+                            audit.get("timestamp"),
+                            e,
+                        )
                         timestamp = "N/A"
 
                     status = "✅" if audit.get("ci_simulation_passed", True) else "❌"
