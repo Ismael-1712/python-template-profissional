@@ -3,6 +3,9 @@
 import datetime
 import json
 import logging
+import os
+import shutil
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -47,18 +50,18 @@ class ConsoleAuditFormatter:
         lines.append(_("🔍 CODE SECURITY AUDIT REPORT"))
         lines.append("=" * 60)
         lines.append(
-            _("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"])
+            _("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"]),
         )
         lines.append(
-            _("📁 Workspace: {workspace}").format(workspace=metadata["workspace"])
+            _("📁 Workspace: {workspace}").format(workspace=metadata["workspace"]),
         )
         lines.append(
             _("⏱️  Duration: {duration:.2f}s").format(
-                duration=metadata["duration_seconds"]
-            )
+                duration=metadata["duration_seconds"],
+            ),
         )
         lines.append(
-            _("📄 Files Scanned: {count}").format(count=metadata["files_scanned"])
+            _("📄 Files Scanned: {count}").format(count=metadata["files_scanned"]),
         )
         lines.append("-" * 60)
 
@@ -66,8 +69,9 @@ class ConsoleAuditFormatter:
         status_emoji = "✅" if summary["overall_status"] == "PASS" else "⚠️"
         lines.append(
             _("\n{emoji} OVERALL STATUS: {status}").format(
-                emoji=status_emoji, status=summary["overall_status"]
-            )
+                emoji=status_emoji,
+                status=summary["overall_status"],
+            ),
         )
 
         # Severity Distribution
@@ -83,8 +87,10 @@ class ConsoleAuditFormatter:
                 )
                 lines.append(
                     _("  {emoji} {severity}: {count}").format(
-                        emoji=icon, severity=severity, count=count
-                    )
+                        emoji=icon,
+                        severity=severity,
+                        count=count,
+                    ),
                 )
 
         # Top Findings
@@ -96,7 +102,7 @@ class ConsoleAuditFormatter:
                         file=finding["file"],
                         line=finding["line"],
                         description=finding["description"],
-                    )
+                    ),
                 )
 
         # Recommendations
@@ -142,7 +148,8 @@ class AuditReporter:
 
         # Generate recommendations
         recommendations = self.generate_recommendations(
-            severity_dist, stats.get("ci_simulation", {})
+            severity_dist,
+            stats.get("ci_simulation", {}),
         )
 
         return {
@@ -167,9 +174,16 @@ class AuditReporter:
         print(formatter.format(report))
 
     def save_report(
-        self, report: dict[str, Any], output_path: str, format: str = "json"
+        self,
+        report: dict[str, Any],
+        output_path: str,
+        format: str = "json",
     ) -> None:
-        """Save report to file."""
+        """Save report to file with atomic write guarantees.
+
+        Uses temporary file + atomic move to prevent data corruption
+        during write failures (power loss, disk full, etc.).
+        """
         path = Path(output_path)
 
         # Detect format from extension if not specified
@@ -178,19 +192,50 @@ class AuditReporter:
         elif path.suffix in [".yaml", ".yml"]:
             format = "yaml"
 
-        if format == "json":
-            with open(path, "w", encoding="utf-8") as f:
-                json.dump(report, f, indent=2, ensure_ascii=False)
-        elif format == "yaml":
-            with open(path, "w", encoding="utf-8") as f:
-                yaml.dump(report, f, allow_unicode=True)
-        else:
-            raise ValueError(f"Unsupported format: {format}")
+        # Ensure parent directory exists
+        path.parent.mkdir(parents=True, exist_ok=True)
 
-        self.logger.info(f"Report saved to {path}")
+        # Create temporary file in same directory as target (required for atomic move)
+        temp_fd, temp_path_str = tempfile.mkstemp(
+            dir=path.parent,
+            prefix=".tmp_report_",
+            suffix=path.suffix,
+        )
+        temp_path = Path(temp_path_str)
+
+        try:
+            # Write to temporary file
+            with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+                if format == "json":
+                    json.dump(report, f, indent=2, ensure_ascii=False)
+                elif format == "yaml":
+                    yaml.dump(report, f, allow_unicode=True)
+                else:
+                    raise ValueError(f"Unsupported format: {format}")
+
+                # Force write to physical disk
+                f.flush()
+                os.fsync(f.fileno())
+
+            # Atomic move (POSIX guarantee - replaces target atomically)
+            shutil.move(str(temp_path), str(path))
+
+            self.logger.info(f"Report saved to {path}")
+
+        except Exception:
+            # Cleanup temporary file on failure
+            if temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except OSError:
+                    pass
+            raise
 
     def generate_recommendations(
-        self, severity_dist: dict[str, int], ci_stats: dict[str, Any], *args: Any
+        self,
+        severity_dist: dict[str, int],
+        ci_stats: dict[str, Any],
+        *args: Any,
     ) -> list[str]:
         """Generate actionable recommendations based on findings."""
         recs = []
@@ -206,7 +251,7 @@ class AuditReporter:
             missing_mocks = AuditReporter._check_test_mocks()  # type: ignore
             if missing_mocks > 0:
                 recs.append(
-                    _("🧪 Add mocks to {count} test files").format(count=missing_mocks)
+                    _("🧪 Add mocks to {count} test files").format(count=missing_mocks),
                 )
 
         if not ci_stats.get("tests_passed", True):
