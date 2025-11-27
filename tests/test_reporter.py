@@ -154,9 +154,7 @@ class TestConsoleAuditFormatter:
             output = formatter.format(sample_report)
             assert output is not None
 
-            # Verify _ was called with expected translation keys
-            # The code adds newline characters inside the _() call in some places
-            # We check for the main headers which are cleaner
+            # Check for the main headers which are cleaner
             mock_gettext.assert_any_call("🔍 CODE SECURITY AUDIT REPORT")
             # For severity, the code uses _("\n📊 SEVERITY DISTRIBUTION:")
             mock_gettext.assert_any_call("\n📊 SEVERITY DISTRIBUTION:")
@@ -228,12 +226,13 @@ class TestAuditReporter:
         """Test that invalid format raises ValueError."""
         reporter = AuditReporter(tmp_path)
         output_file = tmp_path / "report.txt"
+        # FIX: Explicitly pass format='txt' (or 'invalid') to force error
+        # Otherwise it defaults to 'json' in some logic branches if not detected
         with pytest.raises(ValueError, match="Unsupported format"):
-            reporter.save_report(sample_report, str(output_file))
+            reporter.save_report(sample_report, str(output_file), format="invalid")
 
     def test_generate_recommendations_critical(self):
         """Test recommendations for CRITICAL findings."""
-        # Use instance instead of static call
         reporter = AuditReporter(Path("/tmp"))
         recs = reporter.generate_recommendations(
             {"CRITICAL": 1, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
@@ -269,6 +268,8 @@ class TestAuditReporter:
             {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
             {"ci_simulation": {"tests_passed": False}},
         )
+        # FIX: Check for substring "failing tests" which matches code
+        # "⚠️ Fix failing tests before CI/CD pipeline"
         assert any("failing tests" in r for r in recs)
 
     def test_generate_recommendations_all_good(self):
