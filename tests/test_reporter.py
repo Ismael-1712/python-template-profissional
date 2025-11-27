@@ -241,7 +241,7 @@ class TestAuditReporter:
         reporter = AuditReporter(Path("/tmp"))
         recs = reporter.generate_recommendations(
             {"CRITICAL": 1, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
-            {"ci_simulation": {"tests_passed": True}},
+            {"tests_passed": True},
         )
         assert any("CRITICAL" in r for r in recs)
 
@@ -250,7 +250,7 @@ class TestAuditReporter:
         reporter = AuditReporter(Path("/tmp"))
         recs = reporter.generate_recommendations(
             {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 0, "LOW": 0},
-            {"ci_simulation": {"tests_passed": True}},
+            {"tests_passed": True},
         )
         assert any("HIGH" in r for r in recs)
 
@@ -262,7 +262,7 @@ class TestAuditReporter:
         ):
             recs = reporter.generate_recommendations(
                 {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
-                {"ci_simulation": {"tests_passed": True}},
+                {"tests_passed": True},
             )
             assert len(recs) > 0
 
@@ -271,7 +271,7 @@ class TestAuditReporter:
         reporter = AuditReporter(Path("/tmp"))
         recs = reporter.generate_recommendations(
             {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
-            {"ci_simulation": {"tests_passed": False}},
+            {"tests_passed": False},
         )
         assert any("failing tests" in r for r in recs)
 
@@ -280,7 +280,7 @@ class TestAuditReporter:
         reporter = AuditReporter(Path("/tmp"))
         recs = reporter.generate_recommendations(
             {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
-            {"ci_simulation": {"tests_passed": True}},
+            {"tests_passed": True},
         )
         assert any("meets security standards" in r for r in recs)
 
