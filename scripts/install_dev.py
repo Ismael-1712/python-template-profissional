@@ -80,6 +80,10 @@ def install_dev_environment(workspace_root: Path) -> int:
 
     Raises:
         subprocess.CalledProcessError: If any installation step fails
+
+    Note:
+        # TODO(P02): Review for atomic writes - Currently no direct file writes
+        # This function only calls subprocess operations, no critical file I/O
     """
     try:
         # ========== STEP 1: Install project + pip-tools ==========
