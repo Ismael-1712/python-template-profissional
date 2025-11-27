@@ -545,8 +545,9 @@ class SmartGitSync:
 
             cleanup_step.complete({"operations": cleanup_results})
 
-        except Exception as e:
+        except (GitOperationError, OSError, subprocess.SubprocessError) as e:
             cleanup_step.fail(str(e))
+            logger.debug(f"Cleanup operation failed (non-critical): {e}")
             # Don't raise - cleanup failures are not critical
 
     def _save_sync_report(self) -> Path:
@@ -673,10 +674,15 @@ class SmartGitSync:
             self._save_sync_report()
             return False
 
-        except Exception as e:
-            logger.error(_("Unexpected error during synchronization: %s"), e)
+        except (OSError, subprocess.SubprocessError) as e:
+            logger.error(_("System error during synchronization: %s"), e)
             self._save_sync_report()
             return False
+
+        except Exception as e:
+            logger.critical(_("UNEXPECTED BUG: %s"), e, exc_info=True)
+            self._save_sync_report()
+            raise
 
 
 def load_config(config_path: Path | None = None) -> dict[str, Any]:
@@ -774,9 +780,12 @@ Examples:
     except KeyboardInterrupt:
         logger.warning("Synchronization interrupted by user")
         sys.exit(130)  # Standard SIGINT exit code
-    except Exception as e:
-        logger.error(f"Fatal error: {e}")
+    except SyncError as e:
+        logger.error(f"Synchronization error: {e}")
         sys.exit(1)
+    except Exception as e:
+        logger.critical(f"UNEXPECTED ERROR (possible bug): {e}", exc_info=True)
+        sys.exit(2)
 
 
 if __name__ == "__main__":
