@@ -180,6 +180,13 @@ class TestConsoleAuditFormatter:
 class TestAuditReporter:
     """Test the high-level AuditReporter class."""
 
+    # Mock i18n to ensure tests run against English keys regardless of system locale
+    @pytest.fixture(autouse=True)
+    def mock_translation(self):
+        """Mock translation function."""
+        with patch("scripts.audit.reporter._", side_effect=lambda x: x):
+            yield
+
     def test_reporter_initialization(self, tmp_path):
         """Test that reporter initializes correctly."""
         reporter = AuditReporter(workspace_root=tmp_path)
@@ -226,8 +233,6 @@ class TestAuditReporter:
         """Test that invalid format raises ValueError."""
         reporter = AuditReporter(tmp_path)
         output_file = tmp_path / "report.txt"
-        # FIX: Explicitly pass format='txt' (or 'invalid') to force error
-        # Otherwise it defaults to 'json' in some logic branches if not detected
         with pytest.raises(ValueError, match="Unsupported format"):
             reporter.save_report(sample_report, str(output_file), format="invalid")
 
@@ -268,8 +273,6 @@ class TestAuditReporter:
             {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
             {"ci_simulation": {"tests_passed": False}},
         )
-        # FIX: Check for substring "failing tests" which matches code
-        # "⚠️ Fix failing tests before CI/CD pipeline"
         assert any("failing tests" in r for r in recs)
 
     def test_generate_recommendations_all_good(self):
