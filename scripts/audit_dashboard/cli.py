@@ -136,6 +136,13 @@ def main() -> int:
 
         else:
             dashboard.print_console_dashboard()
+            # Mostrar dica sobre exportação HTML (exceto em modo verbose)
+            if not args.verbose:
+                tip_msg = (
+                    "\n💡 Dica: Gere um relatório HTML interativo com: "
+                    "python scripts/audit_dashboard.py --export-html"
+                )
+                print(tip_msg)  # noqa: T201
 
         return 0
 
