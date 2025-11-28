@@ -35,6 +35,35 @@ make test
 
 -----
 
+## 📊 Dashboard Interativo
+
+O projeto inclui um **Dashboard de Auditoria** que permite visualizar métricas de qualidade de código em formato HTML interativo.
+
+### Como Usar
+
+```bash
+# Exibir métricas no console
+python3 scripts/audit_dashboard.py
+
+# Gerar relatório HTML standalone (recomendado)
+python3 scripts/audit_dashboard.py --export-html
+```
+
+O arquivo HTML gerado (`audit_dashboard_YYYYMMDD_HHMMSS.html`) pode ser:
+
+- ✅ Aberto em qualquer navegador (sem necessidade de servidor)
+- ✅ Compartilhado com a equipe via e-mail ou repositório
+- ✅ Integrado em pipelines CI/CD para tracking de métricas
+
+**Métricas Disponíveis:**
+
+- 📊 Auditorias realizadas
+- 🛡️ Falhas evitadas
+- ⏱️ Tempo economizado
+- 📈 Taxa de sucesso
+
+-----
+
 ## 🌍 Internationalization (i18n)
 
 O projeto suporta nativamente **Português (pt_BR)** e **Inglês (en_US)**.
