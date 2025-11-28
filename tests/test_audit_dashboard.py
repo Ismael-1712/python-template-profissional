@@ -913,7 +913,10 @@ class TestExportFunctions:
         custom_path = tmp_path / "custom_export.json"
 
         # Act: Export with custom path
-        with patch("pathlib.Path.open", mock_open()) as mock_file, patch("os.chmod"):
+        with (
+            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.chmod"),
+        ):
             export_path = dashboard.export_json_metrics(output_file=custom_path)
 
         # Assert: Custom path was used
@@ -986,7 +989,10 @@ class TestExportFunctions:
             )
 
         # Act: Export HTML
-        with patch("pathlib.Path.open", mock_open()) as mock_file, patch("os.chmod"):
+        with (
+            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.chmod"),
+        ):
             dashboard.export_html_dashboard()
 
         # Assert: Write was called (content validation would require reading template)
