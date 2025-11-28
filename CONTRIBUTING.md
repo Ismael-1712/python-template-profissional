@@ -178,13 +178,73 @@ O comando gera um relatório JSON (`audit_report_*.json`) e pode abrir um dashbo
 
 ### Dashboard Interativo
 
-Para visualizar métricas:
+Para visualizar métricas no console:
 
 ```bash
-python scripts/audit_dashboard.py
+python3 scripts/audit_dashboard.py
 ```
 
-Abre um servidor local com gráficos e tabelas detalhadas.
+Para gerar um relatório HTML standalone:
+
+```bash
+python3 scripts/audit_dashboard.py --export-html
+```
+
+O arquivo HTML gerado contém gráficos e tabelas detalhadas que podem ser abertos em qualquer navegador.
+
+---
+
+## 🛠️ Setup de Ambiente (Padrão Ouro)
+
+### Gerenciamento de Versões Python (Pyenv)
+
+O projeto utiliza **Pyenv** para garantir compatibilidade entre diferentes ambientes de desenvolvimento.
+
+**Arquivo de Configuração:** `.python-version`
+
+Este arquivo define a versão Python recomendada para o projeto. O Pyenv ativa automaticamente a versão correta ao entrar no diretório.
+
+**Instalação do Pyenv (se necessário):**
+
+```bash
+# Linux/macOS
+curl https://pyenv.run | bash
+
+# Adicione ao ~/.bashrc ou ~/.zshrc:
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+```
+
+**Instalar a versão Python do projeto:**
+
+```bash
+# Leia a versão do arquivo .python-version
+pyenv install $(cat .python-version)
+```
+
+### Testes Multi-Versão (Tox)
+
+O projeto suporta **múltiplas versões do Python** (3.11, 3.12, 3.13). Antes de abrir um PR, valide a compatibilidade:
+
+```bash
+make test-matrix
+```
+
+**O que este comando faz:**
+
+- ✅ Executa toda a suite de testes em Python 3.11, 3.12 e 3.13
+- ✅ Valida que o código é compatível com todas as versões suportadas
+- ✅ Detecta problemas de compatibilidade antes do merge
+- ✅ Usa Tox para gerenciar ambientes virtuais isolados
+
+**Pré-requisito:** As versões Python devem estar instaladas via Pyenv.
+
+**Quando usar:**
+
+- 🔴 **Obrigatório** antes de abrir PR que altera lógica de negócio
+- 🟡 **Recomendado** para qualquer mudança em dependências ou código core
+- 🟢 **Opcional** para mudanças apenas em documentação
 
 ---
 
@@ -371,16 +431,22 @@ fi
 Para evitar regressões e "alucinações" de código, todo desenvolvimento deve respeitar estritamente estas 3 leis:
 
 ### 🔒 Trava 1: Verificação Forense (Anti-Alucinação)
+
 **Regra:** Nunca assuma que um arquivo ou classe existe. Verifique antes de importar.
+
 - **Antes de criar um `__init__.py` ou `import`:** Execute `grep` ou `ls` para confirmar o nome exato da classe/função.
 - **Exemplo:** Não importe `SecurityScanner` se a classe se chama `FileScanner`. A divergência entre o "Mapa Mental" e o "Território Real" é a maior causa de quebras em CI.
 
 ### 🔒 Trava 2: Tipagem Estática Absoluta
+
 **Regra:** O `mypy` em modo estrito é a autoridade final.
+
 - **Não ignore erros de tipo:** Se o Mypy reclamar, corrija o código, não use `Any` ou `# type: ignore` a menos que estritamente necessário.
 - **Tipos > Testes:** Testes unitários podem passar com dados errados (falso positivo), mas a checagem estática não deixa passar contratos inválidos.
 
 ### 🔒 Trava 3: Princípio da Realidade dos Dados
+
 **Regra:** Testes devem usar dados que espelham a produção, não invenções convenientes.
+
 - **Ao criar Fixtures:** Olhe como o código de produção chama a função (ex: via `grep` no código consumidor).
 - **Evite Estruturas Aninhadas Falsas:** Se a função espera `{'key': 'val'}`, não passe `{'wrapper': {'key': 'val'}}` no teste.
