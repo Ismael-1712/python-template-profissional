@@ -172,8 +172,12 @@ i18n-stats:
 	@echo "🌍 Translation Statistics:"
 	@for po_file in $(LOCALES_DIR)/*/LC_MESSAGES/*.po; do \
 		if [ -f "$$po_file" ]; then \
-			echo ""; \
-			echo "📄 $$po_file:"; \
-			$(VENV)/bin/msgfmt --statistics $$po_file 2>&1 | head -1; \
-		fi \
-	done
+		echo ""; \
+		echo "📄 $$po_file:"; \
+		$(VENV)/bin/msgfmt --statistics $$po_file 2>&1 | head -1; \
+	fi \
+done
+
+## test-matrix: Run tests across multiple Python versions (requires tox)
+test-matrix:
+	$(PYTHON) -m tox
