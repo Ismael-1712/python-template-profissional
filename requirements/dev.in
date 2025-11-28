@@ -17,3 +17,4 @@ types-PyYAML==6.0.12.20250915
 
 # Internationalization (i18n)
 Babel==2.17.0
+tox
