@@ -884,7 +884,10 @@ class TestExportFunctions:
         )
 
         # Act: Export metrics
-        with patch("pathlib.Path.open", mock_open()) as mock_file:
+        with (
+            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.chmod"),
+        ):
             export_path = dashboard.export_json_metrics()
 
         # Assert: Export operations occurred
@@ -937,7 +940,10 @@ class TestExportFunctions:
         )
 
         # Act: Export HTML
-        with patch("pathlib.Path.open", mock_open()) as mock_file:
+        with (
+            patch("pathlib.Path.open", mock_open()) as mock_file,
+            patch("pathlib.Path.chmod"),
+        ):
             export_path = dashboard.export_html_dashboard()
 
         # Assert: File was opened (template + output = 2 calls)
