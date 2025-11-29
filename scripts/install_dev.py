@@ -40,6 +40,37 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _setup_direnv(workspace_root: Path) -> None:
+    """Setup direnv configuration by copying template if .envrc doesn't exist.
+
+    Args:
+        workspace_root: Project root directory
+
+    Note:
+        Creates .envrc from .envrc.template if it doesn't exist.
+        Provides instructions for activating direnv.
+    """
+    envrc_path = workspace_root / ".envrc"
+    template_path = workspace_root / ".envrc.template"
+
+    if envrc_path.exists():
+        logger.info("ℹ️  .envrc já existe, mantendo configuração atual.")
+        return
+
+    if not template_path.exists():
+        logger.warning(
+            "⚠️  .envrc.template não encontrado. Pulando configuração do direnv.",
+        )
+        return
+
+    try:
+        # Copy template to .envrc
+        shutil.copy2(template_path, envrc_path)
+        logger.info("✅ Direnv configurado! Execute 'direnv allow' para ativar.")
+    except Exception as e:
+        logger.warning("⚠️  Não foi possível copiar .envrc.template: %s", e)
+
+
 def _display_success_panel() -> None:
     """Display formatted success panel with next steps."""
     panel = """
@@ -52,6 +83,9 @@ def _display_success_panel() -> None:
 🔧 ATIVAR O AMBIENTE VIRTUAL:
 
     source .venv/bin/activate
+
+    👉 OU ative automaticamente com direnv:
+       direnv allow
 
 📋 PRÓXIMOS PASSOS RECOMENDADOS:
 
@@ -148,6 +182,10 @@ def install_dev_environment(workspace_root: Path) -> int:
             check=True,
         )
         logger.debug("Output pip install -r: %s", result3.stdout.strip())
+
+        # ========== STEP 4: Setup direnv configuration ==========
+        logger.info("Step 4/4: Setting up direnv configuration...")
+        _setup_direnv(workspace_root)
 
         # ========== SUCCESS: FORMATTED PANEL ==========
         _display_success_panel()
