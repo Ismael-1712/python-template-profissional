@@ -13,6 +13,7 @@ Exit Codes:
 
 import importlib.util
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -47,7 +48,7 @@ class DevDoctor:
         self.results: list[DiagnosticResult] = []
 
     def check_python_version(self) -> DiagnosticResult:
-        """Verifica se a versão do Python é compatível com .python-version."""
+        """Verifica compatibilidade da versão Python e detecta Drift."""
         python_version_file = self.project_root / ".python-version"
 
         if not python_version_file.exists():
@@ -60,41 +61,43 @@ class DevDoctor:
 
         try:
             content = python_version_file.read_text().strip()
-            allowed_versions = [v.strip() for v in content.split() if v.strip()]
+            # Pega primeira versão (principal) do arquivo
+            expected_version = content.split()[0].strip()
 
             current_major = sys.version_info.major
             current_minor = sys.version_info.minor
-            current_full = f"{current_major}.{current_minor}.{sys.version_info.micro}"
-            current_mm = f"{current_major}.{current_minor}"
+            current_micro = sys.version_info.micro
+            current_full = f"{current_major}.{current_minor}.{current_micro}"
 
-            match = False
-            for allowed in allowed_versions:
-                parts = allowed.split(".")
-                if len(parts) >= 2:
-                    allowed_mm = f"{parts[0]}.{parts[1]}"
-                    if allowed_mm == current_mm:
-                        match = True
-                        break
+            # Drift Check: A versão exata deve bater com a esperada
+            # (Ex: se .python-version diz 3.12.12, e estamos no 3.12.2, é Drift)
+            exact_match = current_full == expected_version
 
-            if match:
+            if exact_match:
                 return DiagnosticResult(
                     "Python Version",
                     True,
-                    f"Python {current_full} compatível com {allowed_versions}",
+                    f"Python {current_full} (Sincronizado)",
                 )
 
+            # Se não bate exato, verifica se estamos no CI (flexível)
             if os.environ.get("CI"):
                 return DiagnosticResult(
                     "Python Version",
                     True,
-                    f"Python {current_full} (CI Environment - Bypass strict check)",
+                    f"Python {current_full} (CI Environment - Drift ignorado)",
                 )
 
+            # Se for local, é um erro crítico de Drift
             return DiagnosticResult(
                 "Python Version",
                 False,
-                f"Python {current_full} detectado, mas .python-version requer: "
-                f"{', '.join(allowed_versions)}",
+                f"⚠️  ENVIRONMENT DRIFT DETECTADO!\n"
+                f"  Versão ativa:   {current_full}\n"
+                f"  Versão esperada: {expected_version}\n"
+                f"  💊 Prescrição: Reinstale o venv com a versão correta:\n"
+                f"      rm -rf .venv && python{expected_version} -m venv .venv "
+                f"&& source .venv/bin/activate && make install-dev",
                 critical=True,
             )
 
@@ -124,8 +127,58 @@ class DevDoctor:
             return DiagnosticResult(
                 "Virtual Environment",
                 False,
-                "Não está em um virtual environment! Use 'python -m venv .venv' "
-                "e ative-o.",
+                "Não está em um virtual environment!\n"
+                "  💊 Prescrição: python -m venv .venv && "
+                "source .venv/bin/activate && make install-dev",
+                critical=True,
+            )
+
+    def check_tool_paths(self) -> DiagnosticResult:
+        """Verifica se ferramentas críticas estão no ambiente correto."""
+        if os.environ.get("CI"):
+            return DiagnosticResult(
+                "Tool Paths", True, "Ambiente CI detectado (Tool check skipped)"
+            )
+
+        # Se não estiver em venv, já falhou no check anterior
+        if sys.prefix == sys.base_prefix:
+            return DiagnosticResult("Tool Paths", False, "Skipped (No Venv)", False)
+
+        venv_bin = Path(sys.prefix) / "bin"
+        tools_to_check = ["pre-commit", "tox"]
+        misaligned_tools = []
+
+        for tool in tools_to_check:
+            tool_path = shutil.which(tool)
+            if not tool_path:
+                misaligned_tools.append(f"{tool} (não encontrado)")
+                continue
+
+            # Verifica se o caminho da ferramenta começa com o caminho do venv
+            # Resolve symlinks para garantir
+            try:
+                tool_path_obj = Path(tool_path).resolve()
+                venv_bin_obj = venv_bin.resolve()
+                if not str(tool_path_obj).startswith(str(venv_bin_obj)):
+                    misaligned_tools.append(f"{tool} -> {tool_path}")
+            except Exception:
+                misaligned_tools.append(f"{tool} (erro ao resolver path)")
+
+        if not misaligned_tools:
+            return DiagnosticResult(
+                "Tool Alignment",
+                True,
+                "Ferramentas (pre-commit, tox) rodando do venv correto",
+            )
+        else:
+            tools_info = "\n".join([f"    - {t}" for t in misaligned_tools])
+            return DiagnosticResult(
+                "Tool Alignment",
+                False,
+                f"⚠️  TOOL MISALIGNMENT detectado!\n"
+                f"  Ferramentas instaladas fora do venv ({venv_bin}):\n{tools_info}\n"
+                f"  💊 Prescrição: pip install -r requirements/dev.txt && "
+                f"pre-commit clean && pre-commit install",
                 critical=True,
             )
 
@@ -155,8 +208,8 @@ class DevDoctor:
             return DiagnosticResult(
                 "Vital Dependencies",
                 False,
-                f"Dependências faltando: {', '.join(missing_deps)}. "
-                "Execute 'make install-dev'",
+                f"Dependências faltando: {', '.join(missing_deps)}.\n"
+                "  💊 Prescrição: make install-dev",
                 critical=True,
             )
 
@@ -179,15 +232,17 @@ class DevDoctor:
                 return DiagnosticResult(
                     "Git Hooks",
                     False,
-                    "Hook pre-commit existe mas não é executável",
+                    "Hook pre-commit existe mas não é executável\n"
+                    "  💊 Prescrição: chmod +x .git/hooks/pre-commit",
                     critical=True,
                 )
         else:
             return DiagnosticResult(
                 "Git Hooks",
                 False,
-                "Hooks não instalados. O pre-commit pode não rodar.",
-                critical=False,
+                "Hooks não instalados. O pre-commit pode não rodar.\n"
+                "  💊 Prescrição: pre-commit install",
+                critical=False,  # Warning apenas
             )
 
     def run_diagnostics(self) -> bool:
@@ -197,6 +252,7 @@ class DevDoctor:
 
         self.results.append(self.check_python_version())
         self.results.append(self.check_virtual_environment())
+        self.results.append(self.check_tool_paths())
         self.results.append(self.check_vital_dependencies())
         self.results.append(self.check_git_hooks())
 
