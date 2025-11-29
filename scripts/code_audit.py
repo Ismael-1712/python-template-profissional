@@ -319,8 +319,16 @@ Examples:
     # Determine workspace root
     workspace_root = Path(__file__).parent.parent
 
+    # Auto-detect config file if not provided
+    config_path = args.config
+    if config_path is None:
+        default_config = workspace_root / "scripts" / "audit_config.yaml"
+        if default_config.exists():
+            config_path = default_config
+            logger.info("Using default config file: %s", config_path)
+
     # Initialize auditor
-    auditor = CodeAuditor(workspace_root, args.config)
+    auditor = CodeAuditor(workspace_root, config_path)
 
     # Run audit
     report = auditor.run_audit(files_to_audit=args.files)

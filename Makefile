@@ -53,13 +53,16 @@ setup: install-dev
 ## install-dev: Instala ambiente de desenvolvimento (Cria .venv se necessário)
 install-dev:
 	@echo "🔧 Verificando ambiente virtual..."
-	@if [ ! -f "$(VENV)/bin/python" ]; then \
-		echo "📦 Criando .venv..."; \
+	@if [ ! -f "$(VENV)/.install_complete" ]; then \
+		echo "📦 Criando/reinstalando ambiente virtual..."; \
+		rm -rf $(VENV); \
 		$(SYSTEM_PYTHON) -m venv $(VENV); \
+		echo "🚀 Instalando dependências..."; \
+		$(VENV)/bin/python $(SCRIPTS_DIR)/install_dev.py && \
+		touch $(VENV)/.install_complete; \
+	else \
+		echo "✅ Ambiente já instalado (use 'make clean-all' para reinstalar)"; \
 	fi
-	@echo "🚀 Instalando dependências no ambiente virtual..."
-	@# Forçamos o uso do Python do Venv aqui para garantir que o pip instale no lugar certo
-	@$(VENV)/bin/python $(SCRIPTS_DIR)/install_dev.py
 
 ## build: Constrói pacote distribuível (wheel + sdist)
 build:
@@ -122,9 +125,10 @@ clean:
 	rm -f audit_report_*.json sync_report_*.json 2>/dev/null || true
 	rm -rf site 2>/dev/null || true
 
-## clean-all: Limpeza profunda incluindo dependências compiladas
+## clean-all: Limpeza profunda incluindo dependências compiladas e ambiente virtual
 clean-all: clean
 	rm -f requirements/dev.txt
+	rm -rf $(VENV)
 
 ## check: Executa verificação rápida (lint + test)
 check: lint test

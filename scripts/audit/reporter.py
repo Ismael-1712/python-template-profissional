@@ -3,13 +3,19 @@
 import datetime
 import json
 import logging
-import os
-import shutil
-import tempfile
+import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+# --- FIX: Adiciona raiz do projeto ao path para imports funcionarem via pre-commit ---
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+# -----------------------------------------------------------------------------------
+
+from scripts.utils.atomic import AtomicFileWriter  # noqa: E402
 
 try:
     import gettext
@@ -195,40 +201,22 @@ class AuditReporter:
         # Ensure parent directory exists
         path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Create temporary file in same directory as target (required for atomic move)
-        temp_fd, temp_path_str = tempfile.mkstemp(
-            dir=path.parent,
-            prefix=".tmp_report_",
-            suffix=path.suffix,
-        )
-        temp_path = Path(temp_path_str)
-
+        # Use atomic writer with fsync guarantees
         try:
-            # Write to temporary file
-            with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+            with AtomicFileWriter(path, fsync=True) as f:
                 if format == "json":
                     json.dump(report, f, indent=2, ensure_ascii=False)
+                    f.write("\n")  # POSIX compliance
                 elif format == "yaml":
                     yaml.dump(report, f, allow_unicode=True)
                 else:
-                    raise ValueError(f"Unsupported format: {format}")
-
-                # Force write to physical disk
-                f.flush()
-                os.fsync(f.fileno())
-
-            # Atomic move (POSIX guarantee - replaces target atomically)
-            shutil.move(str(temp_path), str(path))
+                    msg = f"Unsupported format: {format}"
+                    raise ValueError(msg)
 
             self.logger.info(f"Report saved to {path}")
 
         except Exception:
-            # Cleanup temporary file on failure
-            if temp_path.exists():
-                try:
-                    temp_path.unlink()
-                except OSError:
-                    pass
+            # AtomicFileWriter handles cleanup automatically
             raise
 
     def generate_recommendations(
