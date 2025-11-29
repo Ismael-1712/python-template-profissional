@@ -14,15 +14,24 @@ Usage:
     ./scripts/install_dev.py  # If it has execute permission
 """
 
-import gettext
-import logging
-import os
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 
-from scripts.utils.safe_pip import safe_pip_compile
+# --- FIX: Adiciona raiz do projeto ao path para permitir imports absolutos ---
+# O script roda antes do pacote estar instalado, então precisamos ensinar
+# ao Python onde está a raiz do projeto.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+# ---------------------------------------------------------------------------
+
+import gettext  # noqa: E402
+import logging  # noqa: E402
+import os  # noqa: E402
+import shutil  # noqa: E402
+import subprocess  # noqa: E402
+
+from scripts.utils.safe_pip import safe_pip_compile  # noqa: E402
 
 # i18n configuration
 localedir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "locales")
