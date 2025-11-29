@@ -98,10 +98,21 @@ Este projeto utiliza um sistema de **Auto-Propagação** para manter as variante
 
 ## 📖 Navegação da Documentação
 
+### Documentação Técnica
+
 - **[Referência da API](reference/git_sync.md)** - Documentação automática do código
 - **[Guias e Tutoriais](SMART_GIT_SYNC_GUIDE.md)** - Documentação técnica detalhada
 - **[Code Audit](CODE_AUDIT.md)** - Sistema de auditoria de código
 - **[Contributing](../CONTRIBUTING.md)** - Como contribuir para o projeto
+
+### 📊 Sprint 1 - Refatoração de Logging e Ambiente
+
+!!! info "Nova Documentação - Sprint 1"
+    Documentação completa da auditoria e refatoração do sistema de logs e detecção de ambiente.
+
+- **[Sprint 1 - Relatório de Auditoria Completo](SPRINT1_AUDITORIA_FASE01.md)** - Análise detalhada de logging, drift e hardcoding
+- **[Sprint 1 - Sumário Executivo](SPRINT1_AUDITORIA_SUMARIO.md)** - Visão rápida dos achados principais
+- **[Sprint 1 - Guia de Migração](SPRINT1_MIGRATION_GUIDE.md)** - Exemplos práticos de migração para novo sistema
 
 ---
 

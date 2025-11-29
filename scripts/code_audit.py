@@ -14,7 +14,7 @@ License: MIT
 
 import argparse
 import logging
-import sys
+import sys  # Para exit codes
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -27,16 +27,11 @@ from audit.plugins import check_mock_coverage, simulate_ci
 from audit.reporter import AuditReporter
 from audit.scanner import scan_workspace
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("audit.log", mode="a"),
-    ],
-)
-logger = logging.getLogger(__name__)
+# Import novo sistema de logging
+from scripts.utils.logger import setup_logging
+
+# Configure logging com separação automática de streams
+logger = setup_logging(__name__, log_file="audit.log")
 
 
 class CodeAuditor:
@@ -341,7 +336,7 @@ Examples:
         output_file = workspace_root / f"audit_report_{timestamp}.{args.output}"
 
     # Save report
-    auditor.reporter.save_report(report, output_file, args.output)
+    auditor.reporter.save_report(report, str(output_file), args.output)
 
     # Print summary unless quiet
     if not args.quiet:
