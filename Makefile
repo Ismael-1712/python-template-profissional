@@ -32,7 +32,7 @@ POT_FILE := $(LOCALES_DIR)/messages.pot
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor i18n-extract i18n-init i18n-update i18n-compile i18n-stats
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
@@ -42,6 +42,10 @@ help:
 ## doctor: Executa diagnóstico preventivo do ambiente de desenvolvimento
 doctor:
 	@$(PYTHON) $(SCRIPTS_DIR)/doctor.py
+
+## upgrade-python: Atualiza versões Python para os patches mais recentes (via pyenv)
+upgrade-python:
+	@$(PYTHON) $(SCRIPTS_DIR)/maintain_versions.py
 
 ## setup: Alias para install-dev (configura ambiente completo)
 setup: install-dev
