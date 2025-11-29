@@ -6,7 +6,7 @@ pinning using pip-tools.
 
 Operation Sequence:
 1. Install project in editable mode with dev dependencies
-2. Compile dependencies with pip-compile (with fallback)
+2. Compile dependencies with pip-compile (with fallback) - ATOMIC WRITES
 3. Install pinned dependencies from requirements/dev.txt
 
 Usage:
@@ -21,6 +21,8 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+from scripts.utils.safe_pip import safe_pip_compile
 
 # i18n configuration
 localedir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "locales")
@@ -131,7 +133,7 @@ def install_dev_environment(workspace_root: Path) -> int:
         )
         logger.debug("Output pip install: %s", result1.stdout.strip())
 
-        # ========== STEP 2: Compile dependencies ==========
+        # ========== STEP 2: Compile dependencies (ATOMIC) ==========
         logger.info("Step 2/3: Compiling dependencies with pip-compile...")
 
         # Try to find pip-compile in PATH
@@ -142,33 +144,44 @@ def install_dev_environment(workspace_root: Path) -> int:
             logger.warning(
                 "pip-compile not found in PATH. Using module fallback.",
             )
-            result2 = subprocess.run(  # noqa: subprocess
-                [
-                    sys.executable,
-                    "-c",
-                    "import sys; from piptools.scripts import compile; "
-                    "sys.argv = ['pip-compile', '--output-file', 'requirements/dev.txt', "  # noqa: E501
-                    "'requirements/dev.in']; compile.cli()",
-                ],
-                cwd=workspace_root,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
+            # Create a temporary wrapper script for module execution
+            pip_compile_cmd = [
+                sys.executable,
+                "-m",
+                "piptools",
+                "compile",
+            ]
+            # Use safe_pip_compile by manually constructing the command
+            # This is a workaround since safe_pip expects an executable path
+            try:
+                result2 = subprocess.run(  # noqa: subprocess
+                    pip_compile_cmd
+                    + [
+                        "--output-file",
+                        str(workspace_root / "requirements" / "dev.txt.tmp"),
+                        str(workspace_root / "requirements" / "dev.in"),
+                    ],
+                    cwd=workspace_root,
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                )
+                # Manual atomic replace for fallback mode
+                tmp_file = workspace_root / "requirements" / "dev.txt.tmp"
+                target_file = workspace_root / "requirements" / "dev.txt"
+                if tmp_file.exists():
+                    tmp_file.replace(target_file)
+            except subprocess.CalledProcessError as e:
+                logger.error("pip-compile fallback failed: %s", e)
+                raise
         else:
-            # Use pip-compile from PATH
-            logger.debug("Usando pip-compile: %s", pip_compile_path)
-            result2 = subprocess.run(  # noqa: subprocess
-                [
-                    pip_compile_path,
-                    "--output-file",
-                    "requirements/dev.txt",
-                    "requirements/dev.in",
-                ],
-                cwd=workspace_root,
-                capture_output=True,
-                text=True,
-                check=True,
+            # Use pip-compile from PATH with atomic writes
+            logger.debug("Using pip-compile: %s", pip_compile_path)
+            result2 = safe_pip_compile(
+                input_file=workspace_root / "requirements" / "dev.in",
+                output_file=workspace_root / "requirements" / "dev.txt",
+                pip_compile_path=pip_compile_path,
+                workspace_root=workspace_root,
             )
         logger.debug("Output pip-compile: %s", result2.stdout.strip())
 

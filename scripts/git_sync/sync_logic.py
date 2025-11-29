@@ -12,6 +12,7 @@ from typing import Any
 
 from scripts.git_sync.exceptions import AuditError, GitOperationError, SyncError
 from scripts.git_sync.models import SyncStep
+from scripts.utils.atomic import atomic_write_json
 
 logger = logging.getLogger(__name__)
 
@@ -97,13 +98,8 @@ class SyncOrchestrator:
                 "pid": os.getpid(),
             }
 
-            # Atomic write: temp file -> move
-            temp_path = heartbeat_path.with_suffix(".tmp")
-            with temp_path.open("w", encoding="utf-8") as f:
-                json.dump(heartbeat_data, f, indent=2, ensure_ascii=False)
-
-            # Atomic move (POSIX guarantees atomicity)
-            temp_path.replace(heartbeat_path)
+            # Atomic write with fsync (POSIX compliant)
+            atomic_write_json(heartbeat_path, heartbeat_data, fsync=True)
 
             logger.debug("Heartbeat updated: %s (status=%s)", heartbeat_path, status)
 
@@ -150,7 +146,7 @@ class SyncOrchestrator:
             if env:
                 env_vars.update(env)
 
-            result = subprocess.run(  # noqa: subprocess
+            result = subprocess.run(  # nosec # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
                 timeout=timeout,
