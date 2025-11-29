@@ -223,6 +223,25 @@ eval "$(pyenv init -)"
 pyenv install $(cat .python-version)
 ```
 
+**💡 Dica:** Use `make upgrade-python` para atualizar automaticamente para os patches mais recentes de todas as versões Python suportadas (3.11, 3.12, 3.13).
+
+### ✅ Validação do Ambiente
+
+**Sempre execute após o setup inicial:**
+
+```bash
+make doctor
+```
+
+O `doctor` realiza um diagnóstico completo:
+
+- 🔍 Verifica versão do Python
+- 📦 Valida dependências instaladas
+- 🛠️ Checa ferramentas de desenvolvimento
+- ⚙️ Confirma configuração do ambiente virtual
+
+Se encontrar problemas, ele fornece instruções de correção detalhadas.
+
 ### Testes Multi-Versão (Tox)
 
 O projeto suporta **múltiplas versões do Python** (3.11, 3.12, 3.13). Antes de abrir um PR, valide a compatibilidade:
@@ -300,6 +319,7 @@ Abra PR para `main` no GitHub. O CI validará automaticamente.
 
 ## 🚨 Checklist Antes de Abrir PR
 
+- [ ] Ambiente validado com `make doctor`
 - [ ] `make format` executado
 - [ ] `make lint` passou sem erros
 - [ ] `make test` passou 100%
