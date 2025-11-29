@@ -1,4 +1,3 @@
-# noqa: D107
 #!/usr/bin/env python3
 """Dev Doctor - Diagnóstico Preventivo de Ambiente de Desenvolvimento.
 
@@ -32,6 +31,7 @@ class DiagnosticResult:
     def __init__(
         self, name: str, passed: bool, message: str, critical: bool = True
     ) -> None:
+        """Inicializa o resultado do diagnóstico."""
         self.name = name
         self.passed = passed
         self.message = message
@@ -42,6 +42,7 @@ class DevDoctor:
     """Diagnosticador de ambiente de desenvolvimento."""
 
     def __init__(self, project_root: Path) -> None:
+        """Inicializa o DevDoctor com a raiz do projeto."""
         self.project_root = project_root
         self.results: list[DiagnosticResult] = []
 
