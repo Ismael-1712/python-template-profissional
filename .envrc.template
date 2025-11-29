@@ -1,0 +1,23 @@
+# .envrc.template - Direnv Configuration Template
+# Este arquivo é copiado automaticamente para .envrc durante install_dev.py
+#
+# INSTRUÇÕES:
+# 1. O .envrc já foi criado automaticamente
+# 2. Execute: direnv allow
+# 3. O ambiente virtual será ativado automaticamente ao entrar no diretório
+#
+# PERSONALIZAÇÃO (opcional):
+# - Adicione variáveis de ambiente personalizadas abaixo
+# - Nunca commite o arquivo .envrc (está no .gitignore)
+
+# Ativa o ambiente virtual Python automaticamente
+source .venv/bin/activate
+
+# === VARIÁVEIS DE AMBIENTE PERSONALIZADAS ===
+# Descomente e configure conforme necessário:
+
+# export DEBUG=1
+# export DATABASE_URL="sqlite:///./dev.db"
+# export LOG_LEVEL="DEBUG"
+
+# === FIM DAS CONFIGURAÇÕES ===
