@@ -70,6 +70,15 @@ class DevDoctor:
         Returns:
             DiagnosticResult com status da verificação
         """
+        # CI: Confia na matriz de versões do GitHub Actions
+        if os.environ.get("CI"):
+            current_version = sys.version.split()[0]
+            return DiagnosticResult(
+                "Python Version",
+                True,
+                f"Python {current_version} (CI Environment - Matriz Ativa)",
+            )
+
         python_version_file = self.project_root / ".python-version"
 
         if not python_version_file.exists():
