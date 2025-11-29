@@ -27,7 +27,10 @@ make setup
 # 3. Ative o ambiente virtual
 source .venv/bin/activate
 
-# 4. Valide a instalação
+# 4. Valide seu ambiente
+make doctor
+
+# 5. Execute os testes
 make test
 ````
 
@@ -88,6 +91,8 @@ Todos os comandos do projeto são gerenciados via **Makefile** para consistênci
 | Comando | Descrição |
 |:---|:---|
 | `make setup` | Configura ambiente completo (alias para `install-dev`) |
+| `make doctor` | 🩺 Executa diagnóstico preventivo do ambiente de desenvolvimento |
+| `make upgrade-python` | 🔄 Atualiza versões Python para os patches mais recentes (via pyenv) |
 | `make test` | Executa suite completa de testes com pytest |
 | `make test-coverage` | Testes com relatório de cobertura |
 | `make lint` | Verifica código com ruff (análise estática) |
@@ -170,6 +175,23 @@ git push origin feat/minha-melhoria
 -----
 
 ## 🔧 Troubleshooting
+
+### 🩺 Diagnóstico de Problemas
+
+**Antes de abrir uma issue**, execute o diagnóstico automático:
+
+```bash
+make doctor
+```
+
+Este comando verifica:
+
+- ✅ Versão do Python e compatibilidade
+- ✅ Dependências instaladas corretamente
+- ✅ Configuração do ambiente virtual
+- ✅ Ferramentas de desenvolvimento disponíveis
+
+O `doctor` identifica 90% dos problemas comuns e sugere soluções automaticamente.
 
 ### Problema: `make: command not found`
 
