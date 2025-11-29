@@ -265,6 +265,28 @@ make test-matrix
 - 🟡 **Recomendado** para qualquer mudança em dependências ou código core
 - 🟢 **Opcional** para mudanças apenas em documentação
 
+### ⚡ Automação de Ambiente (Direnv)
+
+Este projeto suporta **ativação automática de ambiente**. Ao entrar na pasta do projeto, o virtualenv é ativado sozinho.
+
+**Pré-requisito:**
+Instale o [direnv](https://direnv.net/) no seu sistema:
+
+```bash
+# Ubuntu/Debian
+sudo apt install direnv
+
+# MacOS
+brew install direnv
+```
+
+**Ativação:**
+Na primeira vez, execute:
+
+```bash
+direnv allow
+```
+
 ---
 
 ## 🔄 Fluxo de Trabalho Git
