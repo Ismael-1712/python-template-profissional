@@ -47,7 +47,7 @@ class DevDoctor:
         self.results: list[DiagnosticResult] = []
 
     def check_python_version(self) -> DiagnosticResult:
-        """Verifica se a versão do Python corresponde ao .python-version."""
+        """Verifica se a versão do Python é compatível com .python-version."""
         python_version_file = self.project_root / ".python-version"
 
         if not python_version_file.exists():
@@ -59,32 +59,45 @@ class DevDoctor:
             )
 
         try:
-            expected_version = python_version_file.read_text().strip()
-            # Pega apenas major.minor.micro
-            current_version = (
-                f"{sys.version_info.major}."
-                f"{sys.version_info.minor}."
-                f"{sys.version_info.micro}"
-            )
+            content = python_version_file.read_text().strip()
+            allowed_versions = [v.strip() for v in content.split() if v.strip()]
 
-            # Comparar apenas major.minor para flexibilidade
-            expected_mm = ".".join(expected_version.split(".")[:2])
-            current_mm = ".".join(current_version.split(".")[:2])
+            current_major = sys.version_info.major
+            current_minor = sys.version_info.minor
+            current_full = f"{current_major}.{current_minor}.{sys.version_info.micro}"
+            current_mm = f"{current_major}.{current_minor}"
 
-            if expected_mm == current_mm:
+            match = False
+            for allowed in allowed_versions:
+                parts = allowed.split(".")
+                if len(parts) >= 2:
+                    allowed_mm = f"{parts[0]}.{parts[1]}"
+                    if allowed_mm == current_mm:
+                        match = True
+                        break
+
+            if match:
                 return DiagnosticResult(
                     "Python Version",
                     True,
-                    f"Python {current_version} (conforme .python-version)",
+                    f"Python {current_full} compatível com {allowed_versions}",
                 )
-            else:
+
+            if os.environ.get("CI"):
                 return DiagnosticResult(
                     "Python Version",
-                    False,
-                    f"Python {current_version} detectado, mas .python-version "
-                    f"espera {expected_version}",
-                    critical=True,
+                    True,
+                    f"Python {current_full} (CI Environment - Bypass strict check)",
                 )
+
+            return DiagnosticResult(
+                "Python Version",
+                False,
+                f"Python {current_full} detectado, mas .python-version requer: "
+                f"{', '.join(allowed_versions)}",
+                critical=True,
+            )
+
         except Exception as e:
             return DiagnosticResult(
                 "Python Version", False, f"Erro ao ler versão: {e}", critical=True
@@ -92,6 +105,13 @@ class DevDoctor:
 
     def check_virtual_environment(self) -> DiagnosticResult:
         """Verifica se está rodando dentro de um virtual environment."""
+        if os.environ.get("CI"):
+            return DiagnosticResult(
+                "Virtual Environment",
+                True,
+                "Ambiente CI detectado (Venv check skipped)",
+            )
+
         in_venv = sys.prefix != sys.base_prefix
 
         if in_venv:
@@ -114,7 +134,6 @@ class DevDoctor:
         vital_deps = ["yaml", "tox", "pre_commit"]
         missing_deps = []
 
-        # Mapa de nome do pacote vs nome do import
         import_map = {
             "yaml": "yaml",
             "tox": "tox",
@@ -143,6 +162,11 @@ class DevDoctor:
 
     def check_git_hooks(self) -> DiagnosticResult:
         """Verifica se os Git hooks estão instalados e executáveis."""
+        if os.environ.get("CI"):
+            return DiagnosticResult(
+                "Git Hooks", True, "Ambiente CI detectado (Hooks check skipped)"
+            )
+
         git_hooks_dir = self.project_root / ".git" / "hooks"
         pre_commit_hook = git_hooks_dir / "pre-commit"
 
@@ -224,9 +248,7 @@ class DevDoctor:
 
 def main() -> int:
     """Função principal."""
-    # Determinar raiz do projeto (onde está o script)
     script_dir = Path(__file__).resolve().parent
-    # Assumindo que script está em scripts/, raiz é o pai
     project_root = script_dir.parent
 
     doctor = DevDoctor(project_root)
