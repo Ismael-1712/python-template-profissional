@@ -136,6 +136,7 @@ def install_dev_environment(workspace_root: Path) -> int:
         result1 = subprocess.run(  # noqa: subprocess
             [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
             cwd=workspace_root,
+            shell=False,  # Security: prevent shell injection
             capture_output=True,
             text=True,
             check=True,
@@ -171,6 +172,7 @@ def install_dev_environment(workspace_root: Path) -> int:
                         str(workspace_root / "requirements" / "dev.in"),
                     ],
                     cwd=workspace_root,
+                    shell=False,  # Security: prevent shell injection
                     capture_output=True,
                     text=True,
                     check=True,
@@ -199,6 +201,7 @@ def install_dev_environment(workspace_root: Path) -> int:
         result3 = subprocess.run(  # noqa: subprocess
             [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
             cwd=workspace_root,
+            shell=False,  # Security: prevent shell injection
             capture_output=True,
             text=True,
             check=True,

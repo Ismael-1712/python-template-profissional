@@ -113,6 +113,7 @@ def simulate_ci(
             cmd,
             check=False,
             env=ci_env,
+            shell=False,  # Security: prevent shell injection
             capture_output=True,
             text=True,
             timeout=ci_timeout,
