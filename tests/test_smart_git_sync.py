@@ -635,8 +635,10 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
     @patch.object(SyncOrchestrator, "_run_code_audit")
     @patch.object(SyncOrchestrator, "_commit_and_push")
     @patch.object(SyncOrchestrator, "_save_sync_report")
+    @patch("scripts.git_sync.sync_logic.atomic_write_json")
     def test_execute_sync_success(
         self,
+        mock_atomic_write: MagicMock,
         mock_save_report: MagicMock,
         mock_commit_push: MagicMock,
         mock_audit: MagicMock,
@@ -712,8 +714,10 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
     @patch.object(SyncOrchestrator, "_run_code_audit")
     @patch.object(SyncOrchestrator, "_commit_and_push")
     @patch.object(SyncOrchestrator, "_save_sync_report")
+    @patch("scripts.git_sync.sync_logic.atomic_write_json")
     def test_execute_sync_audit_fail(
         self,
+        mock_atomic_write: MagicMock,
         mock_save_report: MagicMock,
         mock_commit_push: MagicMock,
         mock_audit: MagicMock,
@@ -766,8 +770,10 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
     @patch("scripts.git_sync.sync_logic.subprocess.run")
     @patch.object(SyncOrchestrator, "_check_git_status")
     @patch.object(SyncOrchestrator, "_save_sync_report")
+    @patch("scripts.git_sync.sync_logic.atomic_write_json")
     def test_execute_sync_clean_repo(
         self,
+        mock_atomic_write: MagicMock,
         mock_save_report: MagicMock,
         mock_git_status: MagicMock,
         mock_run: MagicMock,
@@ -807,8 +813,10 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
 
     @patch("scripts.git_sync.sync_logic.subprocess.run")
     @patch("scripts.git_sync.sync_logic.Path")
+    @patch("scripts.git_sync.sync_logic.atomic_write_json")
     def test_execute_sync_blocks_main_branch(
         self,
+        mock_atomic_write: MagicMock,
         mock_path_cls: MagicMock,
         mock_run: MagicMock,
     ) -> None:
@@ -858,8 +866,10 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
     @patch("scripts.git_sync.sync_logic.subprocess.run")
     @patch("scripts.git_sync.sync_logic.Path")
     @patch("builtins.open", new_callable=MagicMock)
+    @patch("scripts.git_sync.sync_logic.atomic_write_json")
     def test_heartbeat_update(
         self,
+        mock_atomic_write: MagicMock,
         mock_open_fn: MagicMock,
         mock_path_cls: MagicMock,
         mock_run: MagicMock,
@@ -899,11 +909,9 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         sync._update_heartbeat("running")
 
         # ✅ Validations
-        # Verify that temp file was opened for writing
-        mock_temp_path.open.assert_called_once_with("w", encoding="utf-8")
-
-        # Verify that temp file was replaced (atomic write)
-        mock_temp_path.replace.assert_called_once_with(mock_heartbeat_path)
+        # Verify that atomic_write_json was called to write heartbeat
+        # Since we're mocking it, we just verify it was called (no real I/O)
+        mock_atomic_write.assert_called_once()
 
 
 # ============================================================================
