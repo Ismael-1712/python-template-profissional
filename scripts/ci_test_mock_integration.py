@@ -29,14 +29,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# Adiciona o diretório raiz do projeto ao sys.path para permitir imports de 'tests'
+# Adiciona o diretório raiz do projeto ao sys.path para permitir imports
 # Assume que este script está em <raiz>/scripts/
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-if str(PROJECT_ROOT / "tests") not in sys.path:
-    sys.path.append(str(PROJECT_ROOT / "tests"))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from test_mock_generator import TestMockGenerator  # noqa: E402
-from validate_test_mocks import TestMockValidator  # noqa: E402
+from scripts.test_mock_generator import TestMockGenerator  # noqa: E402
+from scripts.validate_test_mocks import TestMockValidator  # noqa: E402
 
 # Configuração de logging para CI/CD
 logging.basicConfig(
@@ -118,6 +118,7 @@ class CITestMockIntegration:
             result = subprocess.run(  # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
+                shell=False,  # Security: prevent shell injection
                 capture_output=True,
                 text=True,
                 check=False,

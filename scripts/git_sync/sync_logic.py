@@ -118,7 +118,7 @@ class SyncOrchestrator:
         """Execute command with security best practices.
 
         Args:
-            command: Command as list (never uses shell=True)  # noqa: subprocess
+            command: Command as list (shell=False explicitly set below)
             timeout: Command timeout in seconds
             capture_output: Whether to capture stdout/stderr
             check: Whether to raise on non-zero exit
@@ -146,10 +146,11 @@ class SyncOrchestrator:
             if env:
                 env_vars.update(env)
 
-            result = subprocess.run(  # nosec # noqa: subprocess
+            result = subprocess.run(  # noqa: subprocess
                 command,
                 cwd=self.workspace_root,
                 timeout=timeout,
+                shell=False,  # Security: prevent shell injection
                 capture_output=capture_output,
                 text=True,
                 check=check,

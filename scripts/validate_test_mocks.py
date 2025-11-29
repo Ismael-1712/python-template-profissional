@@ -20,7 +20,7 @@ import logging
 import sys
 from pathlib import Path
 
-from test_mock_generator import TestMockGenerator
+from scripts.test_mock_generator import TestMockGenerator
 
 # Configuração de logging
 logging.basicConfig(

@@ -62,7 +62,7 @@ def safe_pip_compile(
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Run pip-compile to temporary file
-        result = subprocess.run(  # nosec # noqa: subprocess
+        result = subprocess.run(  # noqa: subprocess
             [
                 pip_compile_path,
                 "--output-file",
@@ -70,6 +70,7 @@ def safe_pip_compile(
                 str(input_file),
             ],
             cwd=workspace_root,
+            shell=False,  # Security: prevent shell injection
             capture_output=True,
             text=True,
             check=True,
