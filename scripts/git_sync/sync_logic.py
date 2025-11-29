@@ -36,6 +36,7 @@ class SyncOrchestrator:
         self.dry_run = dry_run
         self.steps: list[SyncStep] = []
         self.sync_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        self.start_time = datetime.now(timezone.utc)
 
         # Validate workspace is a Git repository
         self._validate_git_repository()
@@ -49,6 +50,66 @@ class SyncOrchestrator:
         git_dir = self.workspace_root / ".git"
         if not git_dir.exists():
             raise SyncError(f"Not a Git repository: {self.workspace_root}")
+
+    def _update_heartbeat(self, status: str) -> None:
+        """Update heartbeat file with current sync state.
+
+        Args:
+            status: Current status ('running', 'success', 'failed', 'crashed')
+
+        Note:
+            Failures in heartbeat updates are logged but do not interrupt sync.
+            The heartbeat is telemetry, not critical business logic.
+
+        """
+        try:
+            heartbeat_path = self.workspace_root / ".git" / "sync_heartbeat"
+
+            # Calculate duration since sync start
+            current_time = datetime.now(timezone.utc)
+            duration_seconds = (current_time - self.start_time).total_seconds()
+
+            # Get current branch if possible
+            try:
+                branch_result = self._run_command(
+                    ["git", "branch", "--show-current"],
+                    timeout=5,
+                    check=False,
+                )
+                if branch_result.returncode == 0:
+                    current_branch = branch_result.stdout.strip()
+                else:
+                    current_branch = "unknown"
+            except GitOperationError:
+                current_branch = "unknown"
+
+            # Build heartbeat data
+            heartbeat_data = {
+                "sync_id": self.sync_id,
+                "status": status,
+                "timestamp": current_time.isoformat(),
+                "workspace": str(self.workspace_root),
+                "branch": current_branch,
+                "duration_seconds": round(duration_seconds, 2),
+                "phases_completed": len(
+                    [s for s in self.steps if s.status == "success"],
+                ),
+                "pid": os.getpid(),
+            }
+
+            # Atomic write: temp file -> move
+            temp_path = heartbeat_path.with_suffix(".tmp")
+            with temp_path.open("w", encoding="utf-8") as f:
+                json.dump(heartbeat_data, f, indent=2, ensure_ascii=False)
+
+            # Atomic move (POSIX guarantees atomicity)
+            temp_path.replace(heartbeat_path)
+
+            logger.debug("Heartbeat updated: %s (status=%s)", heartbeat_path, status)
+
+        except (OSError, GitOperationError) as e:
+            # Heartbeat failures are non-critical - log and continue
+            logger.warning("Failed to update heartbeat: %s", e)
 
     def _run_command(
         self,
@@ -472,6 +533,9 @@ class SyncOrchestrator:
         logger.info("🚀 Starting Smart Git Synchronization")
         logger.info("=" * 60)
 
+        # Update heartbeat: sync started
+        self._update_heartbeat("running")
+
         try:
             # Phase 1: Repository Status Check
             logger.info("📋 PHASE 1: Repository Status Analysis")
@@ -533,15 +597,20 @@ class SyncOrchestrator:
                 logger.info("📦 Commit: %s", commit_hash[:8])
                 logger.info("🌳 Branch: %s", git_status["current_branch"])
 
+            # Update heartbeat: sync successful
+            self._update_heartbeat("success")
+
             return True
 
         except (SyncError, GitOperationError, AuditError) as e:
             logger.error("Synchronization failed: %s", e)
+            self._update_heartbeat("failed")
             self._save_sync_report()
             return False
 
         except Exception as e:
             logger.critical("UNEXPECTED BUG: %s", e, exc_info=True)
+            self._update_heartbeat("crashed")
             self._save_sync_report()
             raise
 
