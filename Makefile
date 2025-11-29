@@ -32,12 +32,16 @@ POT_FILE := $(LOCALES_DIR)/messages.pot
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release i18n-extract i18n-init i18n-update i18n-compile i18n-stats
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor i18n-extract i18n-init i18n-update i18n-compile i18n-stats
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
 	@echo "📋 Comandos Disponíveis:"
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /' | column -t -s ':'
+
+## doctor: Executa diagnóstico preventivo do ambiente de desenvolvimento
+doctor:
+	@$(PYTHON) $(SCRIPTS_DIR)/doctor.py
 
 ## setup: Alias para install-dev (configura ambiente completo)
 setup: install-dev
@@ -79,11 +83,11 @@ save: format
 	@git commit -m "$(m)"
 
 ## audit: Executa auditoria completa do código (análise estática avançada)
-audit:
+audit: doctor
 	PYTHONPATH=. $(PYTHON) $(SCRIPTS_DIR)/code_audit.py
 
 ## test: Executa suite completa de testes com pytest
-test:
+test: doctor
 	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
 
 ## test-verbose: Executa testes em modo verboso
