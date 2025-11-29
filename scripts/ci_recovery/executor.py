@@ -73,7 +73,7 @@ def run_command(
             text=True,
             timeout=timeout,
             check=False,  # Não levanta exceção em exit code não-zero
-            shell=False,  # Medida de segurança explícita
+            shell=False,  # Security: prevent shell injection
         )
 
         if result.returncode != 0:

@@ -17,20 +17,33 @@ import shutil
 import sys
 from pathlib import Path
 
-# Códigos de Cores ANSI (para não depender de libs externas)
-RED = "\033[91m"
-GREEN = "\033[92m"
-YELLOW = "\033[93m"
-BLUE = "\033[94m"
-BOLD = "\033[1m"
-RESET = "\033[0m"
+# Adiciona raiz do projeto ao sys.path para imports
+_script_dir = Path(__file__).resolve().parent
+_project_root = _script_dir.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
+from scripts.utils.logger import get_colors  # noqa: E402
+
+# Obtém cores com detecção automática de terminal
+colors = get_colors()
+RED = colors.RED
+GREEN = colors.GREEN
+YELLOW = colors.YELLOW
+BLUE = colors.BLUE
+BOLD = colors.BOLD
+RESET = colors.RESET
 
 
 class DiagnosticResult:
     """Resultado de uma verificação diagnóstica."""
 
     def __init__(
-        self, name: str, passed: bool, message: str, critical: bool = True
+        self,
+        name: str,
+        passed: bool,
+        message: str,
+        critical: bool = True,
     ) -> None:
         """Inicializa o resultado do diagnóstico."""
         self.name = name
@@ -47,8 +60,25 @@ class DevDoctor:
         self.project_root = project_root
         self.results: list[DiagnosticResult] = []
 
-    def check_python_version(self) -> DiagnosticResult:
-        """Verifica compatibilidade da versão Python e detecta Drift."""
+    def check_python_version(self, *, strict: bool = False) -> DiagnosticResult:
+        """Verifica compatibilidade da versão Python e detecta Drift.
+
+        Args:
+            strict: Se True, exige match exato. Se False (padrão),
+                   aceita diferenças no patch level se major.minor batem.
+
+        Returns:
+            DiagnosticResult com status da verificação
+        """
+        # CI: Confia na matriz de versões do GitHub Actions
+        if os.environ.get("CI"):
+            current_version = sys.version.split()[0]
+            return DiagnosticResult(
+                "Python Version",
+                True,
+                f"Python {current_version} (CI Environment - Matriz Ativa)",
+            )
+
         python_version_file = self.project_root / ".python-version"
 
         if not python_version_file.exists():
@@ -69,41 +99,80 @@ class DevDoctor:
             current_micro = sys.version_info.micro
             current_full = f"{current_major}.{current_minor}.{current_micro}"
 
-            # Drift Check: A versão exata deve bater com a esperada
-            # (Ex: se .python-version diz 3.12.12, e estamos no 3.12.2, é Drift)
-            exact_match = current_full == expected_version
+            # Parse expected version
+            exp_parts = expected_version.split(".")
+            if len(exp_parts) < 3:
+                return DiagnosticResult(
+                    "Python Version",
+                    False,
+                    f"Formato inválido em .python-version: {expected_version}",
+                    critical=True,
+                )
 
-            if exact_match:
+            exp_major = int(exp_parts[0])
+            exp_minor = int(exp_parts[1])
+            exp_micro = int(exp_parts[2])
+
+            # Check major.minor (sempre deve bater)
+            if (current_major, current_minor) != (exp_major, exp_minor):
+                return DiagnosticResult(
+                    "Python Version",
+                    False,
+                    f"⚠️  INCOMPATIBILIDADE DE VERSÃO!\n"
+                    f"  Versão ativa:   {current_full}\n"
+                    f"  Versão esperada: {expected_version}\n"
+                    f"  💊 Prescrição: Instale Python {exp_major}.{exp_minor}:\n"
+                    f"      pyenv install {expected_version} && "
+                    f"pyenv local {expected_version}",
+                    critical=True,
+                )
+
+            # Major.minor batem, verificar patch
+            if current_micro == exp_micro:
                 return DiagnosticResult(
                     "Python Version",
                     True,
                     f"Python {current_full} (Sincronizado)",
                 )
 
-            # Se não bate exato, verifica se estamos no CI (flexível)
-            if os.environ.get("CI"):
+            # Patch diferente
+            if strict:
+                # Modo estrito: exige patch exato
+                return DiagnosticResult(
+                    "Python Version",
+                    False,
+                    f"⚠️  ENVIRONMENT DRIFT DETECTADO!\n"
+                    f"  Versão ativa:   {current_full}\n"
+                    f"  Versão esperada: {expected_version}\n"
+                    f"  💊 Prescrição: Reinstale o venv com a versão correta:\n"
+                    f"      rm -rf .venv && python{expected_version} -m venv .venv "
+                    f"&& source .venv/bin/activate && make install-dev",
+                    critical=True,
+                )
+
+            # Modo flexível (padrão): aceita patch >= ou avisa
+            if current_micro > exp_micro:
                 return DiagnosticResult(
                     "Python Version",
                     True,
-                    f"Python {current_full} (CI Environment - Drift ignorado)",
+                    f"Python {current_full} (Patch mais novo que {expected_version}, "
+                    f"compatível)",
                 )
 
-            # Se for local, é um erro crítico de Drift
+            # current_micro < exp_micro
             return DiagnosticResult(
                 "Python Version",
-                False,
-                f"⚠️  ENVIRONMENT DRIFT DETECTADO!\n"
-                f"  Versão ativa:   {current_full}\n"
-                f"  Versão esperada: {expected_version}\n"
-                f"  💊 Prescrição: Reinstale o venv com a versão correta:\n"
-                f"      rm -rf .venv && python{expected_version} -m venv .venv "
-                f"&& source .venv/bin/activate && make install-dev",
-                critical=True,
+                True,  # Não falhar, mas avisar
+                f"Python {current_full} (Patch mais antigo que {expected_version}, "
+                f"mas compatível. Considere atualizar)",
             )
 
         except Exception as e:
             return DiagnosticResult(
-                "Python Version", False, f"Erro ao ler versão: {e}", critical=True
+                "Python Version",
+                False,
+                f"Erro ao ler versão: {e}",
+                critical=True,
             )
 
     def check_virtual_environment(self) -> DiagnosticResult:
@@ -123,21 +192,22 @@ class DevDoctor:
                 True,
                 f"Virtual environment ativo: {sys.prefix}",
             )
-        else:
-            return DiagnosticResult(
-                "Virtual Environment",
-                False,
-                "Não está em um virtual environment!\n"
-                "  💊 Prescrição: python -m venv .venv && "
-                "source .venv/bin/activate && make install-dev",
-                critical=True,
-            )
+        return DiagnosticResult(
+            "Virtual Environment",
+            False,
+            "Não está em um virtual environment!\n"
+            "  💊 Prescrição: python -m venv .venv && "
+            "source .venv/bin/activate && make install-dev",
+            critical=True,
+        )
 
     def check_tool_paths(self) -> DiagnosticResult:
         """Verifica se ferramentas críticas estão no ambiente correto."""
         if os.environ.get("CI"):
             return DiagnosticResult(
-                "Tool Paths", True, "Ambiente CI detectado (Tool check skipped)"
+                "Tool Paths",
+                True,
+                "Ambiente CI detectado (Tool check skipped)",
             )
 
         # Se não estiver em venv, já falhou no check anterior
@@ -170,17 +240,16 @@ class DevDoctor:
                 True,
                 "Ferramentas (pre-commit, tox) rodando do venv correto",
             )
-        else:
-            tools_info = "\n".join([f"    - {t}" for t in misaligned_tools])
-            return DiagnosticResult(
-                "Tool Alignment",
-                False,
-                f"⚠️  TOOL MISALIGNMENT detectado!\n"
-                f"  Ferramentas instaladas fora do venv ({venv_bin}):\n{tools_info}\n"
-                f"  💊 Prescrição: pip install -r requirements/dev.txt && "
-                f"pre-commit clean && pre-commit install",
-                critical=True,
-            )
+        tools_info = "\n".join([f"    - {t}" for t in misaligned_tools])
+        return DiagnosticResult(
+            "Tool Alignment",
+            False,
+            f"⚠️  TOOL MISALIGNMENT detectado!\n"
+            f"  Ferramentas instaladas fora do venv ({venv_bin}):\n{tools_info}\n"
+            f"  💊 Prescrição: pip install -r requirements/dev.txt && "
+            f"pre-commit clean && pre-commit install",
+            critical=True,
+        )
 
     def check_vital_dependencies(self) -> DiagnosticResult:
         """Verifica se dependências vitais estão instaladas."""
@@ -204,20 +273,21 @@ class DevDoctor:
                 True,
                 f"Todas as dependências vitais instaladas ({', '.join(vital_deps)})",
             )
-        else:
-            return DiagnosticResult(
-                "Vital Dependencies",
-                False,
-                f"Dependências faltando: {', '.join(missing_deps)}.\n"
-                "  💊 Prescrição: make install-dev",
-                critical=True,
-            )
+        return DiagnosticResult(
+            "Vital Dependencies",
+            False,
+            f"Dependências faltando: {', '.join(missing_deps)}.\n"
+            "  💊 Prescrição: make install-dev",
+            critical=True,
+        )
 
     def check_git_hooks(self) -> DiagnosticResult:
         """Verifica se os Git hooks estão instalados e executáveis."""
         if os.environ.get("CI"):
             return DiagnosticResult(
-                "Git Hooks", True, "Ambiente CI detectado (Hooks check skipped)"
+                "Git Hooks",
+                True,
+                "Ambiente CI detectado (Hooks check skipped)",
             )
 
         git_hooks_dir = self.project_root / ".git" / "hooks"
@@ -226,24 +296,24 @@ class DevDoctor:
         if pre_commit_hook.exists():
             if os.access(pre_commit_hook, os.X_OK):
                 return DiagnosticResult(
-                    "Git Hooks", True, "Git hooks instalados e executáveis"
-                )
-            else:
-                return DiagnosticResult(
                     "Git Hooks",
-                    False,
-                    "Hook pre-commit existe mas não é executável\n"
-                    "  💊 Prescrição: chmod +x .git/hooks/pre-commit",
-                    critical=True,
+                    True,
+                    "Git hooks instalados e executáveis",
                 )
-        else:
             return DiagnosticResult(
                 "Git Hooks",
                 False,
-                "Hooks não instalados. O pre-commit pode não rodar.\n"
-                "  💊 Prescrição: pre-commit install",
-                critical=False,  # Warning apenas
+                "Hook pre-commit existe mas não é executável\n"
+                "  💊 Prescrição: chmod +x .git/hooks/pre-commit",
+                critical=True,
             )
+        return DiagnosticResult(
+            "Git Hooks",
+            False,
+            "Hooks não instalados. O pre-commit pode não rodar.\n"
+            "  💊 Prescrição: pre-commit install",
+            critical=False,  # Warning apenas
+        )
 
     def run_diagnostics(self) -> bool:
         """Executa todas as verificações diagnósticas."""
@@ -277,14 +347,14 @@ class DevDoctor:
         if critical_failures == 0 and warnings == 0:
             print(
                 f"{GREEN}{BOLD}✓ Ambiente SAUDÁVEL{RESET} - "
-                "Pronto para desenvolvimento! 🎉\n"
+                "Pronto para desenvolvimento! 🎉\n",
             )
             return True
 
         if critical_failures > 0:
             print(
                 f"{RED}{BOLD}✗ Ambiente DOENTE{RESET} - "
-                f"{critical_failures} problema(s) crítico(s) detectado(s)! 🚨"
+                f"{critical_failures} problema(s) crítico(s) detectado(s)! 🚨",
             )
             if warnings > 0:
                 print(f"  (Também foram encontrados {warnings} avisos)")
@@ -294,7 +364,7 @@ class DevDoctor:
         if warnings > 0:
             print(
                 f"{YELLOW}{BOLD}⚠  Ambiente COM AVISOS{RESET} - "
-                f"{warnings} aviso(s) detectado(s)"
+                f"{warnings} aviso(s) detectado(s)",
             )
             print("  (Não-críticos, mas recomenda-se corrigir)\n")
             return True
