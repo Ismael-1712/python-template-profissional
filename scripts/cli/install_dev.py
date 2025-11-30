@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: RUF100
 """Development Environment Installation Script.
 
 Performs complete installation of the development environment with dependency
@@ -10,27 +11,30 @@ Operation Sequence:
 3. Install pinned dependencies from requirements/dev.txt
 
 Usage:
-    python3 scripts/install_dev.py
-    ./scripts/install_dev.py  # If it has execute permission
+    python3 scripts/cli/install_dev.py
+    make install-dev  # Via Makefile
 """
 
+# Standard library imports
+import logging
+import subprocess
 import sys
 from pathlib import Path
 
-# --- FIX: Adiciona raiz do projeto ao path para permitir imports absolutos ---
-# O script roda antes do pacote estar instalado, então precisamos ensinar
-# ao Python onde está a raiz do projeto.
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# --- BOOTSTRAP FIX: Adiciona raiz ao path ANTES de imports locais ---
+# Necessário porque este script roda antes do pacote estar instalado via pip.
+# Estrutura: root/scripts/cli/install_dev.py -> sobe 3 níveis para root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-# ---------------------------------------------------------------------------
+# -------------------------------------------------------------------
 
+# Standard library imports (continued after sys.path fix)
 import gettext  # noqa: E402
-import logging  # noqa: E402
 import os  # noqa: E402
 import shutil  # noqa: E402
-import subprocess  # noqa: E402
 
+# Local application imports
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.safe_pip import safe_pip_compile  # noqa: E402
 
@@ -134,7 +138,7 @@ def install_dev_environment(workspace_root: Path) -> int:
     try:
         # ========== STEP 1: Install project + pip-tools ==========
         logger.info("Step 1/3: Installing project and pip-tools...")
-        result1 = subprocess.run(  # noqa: subprocess
+        result1 = subprocess.run(  # nosec # noqa: subprocess
             [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection
@@ -165,7 +169,7 @@ def install_dev_environment(workspace_root: Path) -> int:
             # Use safe_pip_compile by manually constructing the command
             # This is a workaround since safe_pip expects an executable path
             try:
-                result2 = subprocess.run(  # noqa: subprocess
+                result2 = subprocess.run(  # nosec # noqa: subprocess
                     pip_compile_cmd
                     + [
                         "--output-file",
@@ -199,7 +203,7 @@ def install_dev_environment(workspace_root: Path) -> int:
 
         # ========== STEP 3: Install pinned dependencies ==========
         logger.info("Step 3/3: Installing pinned dependencies...")
-        result3 = subprocess.run(  # noqa: subprocess
+        result3 = subprocess.run(  # nosec # noqa: subprocess
             [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection
