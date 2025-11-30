@@ -86,6 +86,31 @@ export LANGUAGE=en_US
 
 ## 🛠️ Comandos de Engenharia
 
+### 🎯 Modo de Uso: Makefile vs Console Scripts
+
+O projeto oferece **duas formas** de executar os comandos:
+
+1. **Via Makefile** (recomendado para desenvolvimento): `make doctor`, `make audit`, etc.
+2. **Via Console Scripts** (após instalação): `dev-doctor`, `dev-audit`, etc.
+
+**Instalação dos Console Scripts (Opcional):**
+
+```bash
+# Instalar o pacote em modo editável
+pip install -e .
+
+# Comandos globais disponíveis em qualquer diretório:
+dev-doctor           # Diagnóstico do ambiente
+dev-audit            # Auditoria de código
+git-sync             # Sincronização Git
+upgrade-python       # Atualização Python
+mock-gen             # Gerar mocks de teste
+mock-check           # Validar mocks
+mock-ci              # Integração CI/CD
+```
+
+### 📋 Referência Completa de Comandos
+
 Todos os comandos do projeto são gerenciados via **Makefile** para consistência e automação:
 
 | Comando | Descrição |

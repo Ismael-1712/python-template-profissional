@@ -1,111 +1,36 @@
 #!/usr/bin/env python3
-"""Smart Git Synchronization CLI Wrapper.
+"""DEPRECATED: Backward compatibility wrapper for Smart Git Sync.
 
-A lightweight command-line interface for the Smart Git Sync orchestrator.
-This script delegates all synchronization logic to the git_sync module.
-
-Usage:
-    python3 scripts/smart_git_sync.py [options]
-    python3 scripts/smart_git_sync.py --dry-run
-    python3 scripts/smart_git_sync.py --config custom_config.yaml
-
-Author: DevOps Engineering Team
-License: MIT
+This file will be removed in v3.0.0.
+Please update your scripts to use the new location.
 """
 
-import argparse
-import logging
 import sys
+import warnings
 from pathlib import Path
 
-from scripts.git_sync import SyncOrchestrator, load_config
-from scripts.git_sync.exceptions import SyncError
+# Add project root to sys.path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-# Configure structured logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("smart_git_sync.log", mode="a"),
-    ],
+from scripts.utils.banner import print_deprecation_warning  # noqa: E402
+
+print_deprecation_warning(
+    old_path="scripts/smart_git_sync.py",
+    new_path="scripts.cli.git_sync",
+    removal_version="3.0.0",
 )
-logger = logging.getLogger(__name__)
 
+warnings.warn(
+    "scripts/smart_git_sync.py is deprecated and will be removed in v3.0.0. "
+    "Use 'python -m scripts.cli.git_sync' instead.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
-def main() -> None:
-    """Main entry point for the Smart Git Sync CLI."""
-    parser = argparse.ArgumentParser(
-        description="Smart Git Synchronization with Preventive Audit",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python3 scripts/smart_git_sync.py           # Basic sync
-  python3 scripts/smart_git_sync.py --dry-run       # Test without changes
-  python3 scripts/smart_git_sync.py --config sync.yaml  # Custom config
-  python3 scripts/smart_git_sync.py --no-audit      # Skip audit (not recommended)
-        """,
-    )
-
-    parser.add_argument(
-        "--config",
-        type=Path,
-        help="Path to configuration YAML file",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Show what would be done without making changes",
-    )
-    parser.add_argument(
-        "--no-audit",
-        action="store_true",
-        help="Skip code audit (not recommended)",
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable verbose logging",
-    )
-
-    args = parser.parse_args()
-
-    # Configure logging level
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-
-    # Load configuration
-    config = load_config(args.config)
-
-    # Override config based on CLI arguments
-    if args.no_audit:
-        config["audit_enabled"] = False
-        logger.warning("Code audit disabled via --no-audit flag")
-
-    # Determine workspace root
-    workspace_root = Path(__file__).parent.parent
-
-    try:
-        # Initialize and execute sync
-        sync_manager = SyncOrchestrator(
-            workspace_root=workspace_root,
-            config=config,
-            dry_run=args.dry_run,
-        )
-
-        success = sync_manager.execute_sync()
-        sys.exit(0 if success else 1)
-
-    except KeyboardInterrupt:
-        logger.warning("Synchronization interrupted by user")
-        sys.exit(130)  # Standard SIGINT exit code
-    except SyncError:
-        logger.exception("Synchronization error")
-        sys.exit(1)
-    except Exception as e:
-        logger.critical("UNEXPECTED ERROR (possible bug): %s", e, exc_info=True)
-        sys.exit(2)
-
+# Delegate to new CLI
+from scripts.cli.git_sync import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

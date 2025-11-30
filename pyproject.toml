@@ -32,6 +32,21 @@ dev = [
     "mkdocstrings[python]>=0.25"
 ]
 
+# Console scripts - comandos globais do sistema
+[project.scripts]
+dev-doctor = "scripts.cli.doctor:main"
+dev-audit = "scripts.cli.audit:main"
+git-sync = "scripts.cli.git_sync:main"
+upgrade-python = "scripts.cli.upgrade_python:main"
+mock-gen = "scripts.cli.mock_generate:main"
+mock-check = "scripts.cli.mock_validate:main"
+mock-ci = "scripts.cli.mock_ci:main"
+
+# Configuração do setuptools para incluir pacotes
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*"]
+
 # --- Configuração das Ferramentas ---
 
 # Configuração do Ruff (Linter e Formatador)
