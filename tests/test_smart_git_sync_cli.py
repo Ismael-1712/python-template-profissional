@@ -13,9 +13,9 @@ from scripts.git_sync.exceptions import SyncError
 class TestSmartGitSyncCLI(unittest.TestCase):
     """Test cases for the CLI wrapper main() function."""
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py"])
     def test_main_basic_execution(
         self,
         mock_load_config: MagicMock,
@@ -32,7 +32,7 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator_cls.return_value = mock_orchestrator
 
         # Import and run main
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
@@ -40,9 +40,9 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         self.assertEqual(cm.exception.code, 0)
         mock_orchestrator.execute_sync.assert_called_once()
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py", "--dry-run"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py", "--dry-run"])
     def test_main_dry_run_flag(
         self,
         mock_load_config: MagicMock,
@@ -56,7 +56,7 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.return_value = True
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
@@ -67,9 +67,9 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         self.assertTrue(call_kwargs["dry_run"])
         self.assertEqual(cm.exception.code, 0)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py", "--no-audit"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py", "--no-audit"])
     def test_main_no_audit_flag(
         self,
         mock_load_config: MagicMock,
@@ -83,7 +83,7 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.return_value = True
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
@@ -92,9 +92,9 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         self.assertFalse(mock_config["audit_enabled"])
         self.assertEqual(cm.exception.code, 0)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py"])
     def test_main_sync_failure(
         self,
         mock_load_config: MagicMock,
@@ -108,16 +108,16 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.return_value = False
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
 
         self.assertEqual(cm.exception.code, 1)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py"])
     def test_main_keyboard_interrupt(
         self,
         mock_load_config: MagicMock,
@@ -131,16 +131,16 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.side_effect = KeyboardInterrupt()
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
 
         self.assertEqual(cm.exception.code, 130)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py"])
     def test_main_sync_error(
         self,
         mock_load_config: MagicMock,
@@ -154,16 +154,16 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.side_effect = SyncError("Test error")
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
 
         self.assertEqual(cm.exception.code, 1)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py"])
     def test_main_unexpected_exception(
         self,
         mock_load_config: MagicMock,
@@ -177,16 +177,16 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.side_effect = RuntimeError("Unexpected!")
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
 
         self.assertEqual(cm.exception.code, 2)
 
-    @patch("scripts.smart_git_sync.SyncOrchestrator")
-    @patch("scripts.smart_git_sync.load_config")
-    @patch("sys.argv", ["smart_git_sync.py", "--config", "/tmp/test.yaml"])
+    @patch("scripts.cli.git_sync.SyncOrchestrator")
+    @patch("scripts.cli.git_sync.load_config")
+    @patch("sys.argv", ["git_sync.py", "--config", "/tmp/test.yaml"])
     def test_main_with_config_file(
         self,
         mock_load_config: MagicMock,
@@ -200,7 +200,7 @@ class TestSmartGitSyncCLI(unittest.TestCase):
         mock_orchestrator.execute_sync.return_value = True
         mock_orchestrator_cls.return_value = mock_orchestrator
 
-        from scripts.smart_git_sync import main
+        from scripts.cli.git_sync import main
 
         with self.assertRaises(SystemExit) as cm:
             main()
