@@ -1,0 +1,1931 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>P13 - Auditoria de Warnings e Suppressões (# noqa) - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#p13-auditoria-de-warnings-e-suppressoes-noqa" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              P13 - Auditoria de Warnings e Suppressões (# noqa)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Executive Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Executive Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estatisticas-gerais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estatísticas Gerais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-varredura-de-noqa-e-nosec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 1. VARREDURA DE # noqa E # nosec
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 1. VARREDURA DE # noqa E # nosec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-tabela-consolidada-de-suppressoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Tabela Consolidada de Suppressões
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-distribuicao-por-categoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Distribuição por Categoria
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-suppressoes-genericas-que-devem-ser-especificas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Suppressões Genéricas que DEVEM ser Específicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pytest-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐛 2. PYTEST WARNINGS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐛 2. PYTEST WARNINGS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-pytestcollectionwarning-detectado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 PytestCollectionWarning Detectado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-causa-raiz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-contexto-adicional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Contexto Adicional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-solucoes-possiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Soluções Possíveis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Soluções Possíveis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opcao-3-adicionar-ao-pytest-ignore-nao-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção 3: Adicionar ao pytest ignore (NÃO RECOMENDADO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analise-de-seguranca-subprocessrun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 3. ANÁLISE DE SEGURANÇA: subprocess.run
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔒 3. ANÁLISE DE SEGURANÇA: subprocess.run">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-verificacao-de-shelltrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Verificação de shell=True
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-analise-detalhada-dos-arquivos-criticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Análise Detalhada dos Arquivos Críticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Análise Detalhada dos Arquivos Críticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#321-scriptsmaintain_versionspy86" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.1 scripts/maintain_versions.py:86
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#322-scriptsgit_syncsync_logicpy149" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.2 scripts/git_sync/sync_logic.py:149
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#323-scriptsutilssafe_pippy65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.3 scripts/utils/safe_pip.py:65
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#324-scriptsinstall_devpy-3-ocorrencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.4 scripts/install_dev.py (3 ocorrências)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#325-scriptsci_recoveryexecutorpy69" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.5 scripts/ci_recovery/executor.py:69
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#326-scriptsauditpluginspy112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2.6 scripts/audit/plugins.py:112
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-conclusao-seguranca-de-subprocess" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Conclusão: Segurança de Subprocess
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-distribuicao-de-problemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 4. DISTRIBUIÇÃO DE PROBLEMAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 4. DISTRIBUIÇÃO DE PROBLEMAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#severidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Severidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esforco-de-correcao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esforço de Correção
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-plano-de-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 5. PLANO DE REFATORAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 5. PLANO DE REFATORAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-correcao-do-pytestcollectionwarning-prioridade-alta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Correção do PytestCollectionWarning (Prioridade Alta)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-substituir-suppressoes-genericas-prioridade-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Substituir Suppressões Genéricas (Prioridade Média)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-remover-nosec-redundante-prioridade-baixa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Remover # nosec Redundante (Prioridade Baixa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-4-adicionar-shellfalse-explicito-prioridade-baixa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4: Adicionar shell=False Explícito (Prioridade Baixa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-checklist-de-validacao-pos-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ 6. CHECKLIST DE VALIDAÇÃO PÓS-REFATORAÇÃO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 7. RESUMO EXECUTIVO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📝 7. RESUMO EXECUTIVO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-encontramos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Que Encontramos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#o-que-precisa-ser-corrigido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Que Precisa Ser Corrigido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beneficios-da-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefícios da Refatoração
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esforco-total-estimado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esforço Total Estimado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-proximos-passos-fase-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 8. PRÓXIMOS PASSOS (Fase 02)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 9. REFERÊNCIAS
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="p13-auditoria-de-warnings-e-suppressoes-noqa">P13 - Auditoria de Warnings e Suppressões (# noqa)</h1>
+<p><strong>Data de Auditoria:</strong> 29 de Novembro de 2025
+<strong>Objetivo:</strong> Eliminar ruídos de warnings e substituir suppressões genéricas por específicas
+<strong>Escopo:</strong> Codebase completa + saída de testes
+<strong>Status:</strong> ✅ Fase 01 - Discovery Completa</p>
+<hr />
+<h2 id="executive-summary">📋 Executive Summary</h2>
+<p>Esta auditoria identificou <strong>37 uso de suppressões</strong> (<code># noqa</code> e <code># nosec</code>), <strong>1 warning ativo no pytest</strong> (PytestCollectionWarning), e <strong>0 usos reais de <code>shell=True</code></strong> (todos os subprocess.run já estão seguros). A maioria das suppressões está corretamente especificada, mas há oportunidades de melhoria e 1 anti-padrão crítico no pytest.</p>
+<h3 id="estatisticas-gerais">Estatísticas Gerais</h3>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Quantidade</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total de Suppressões (<code># noqa</code> / <code># nosec</code>)</td>
+<td>37</td>
+<td>⚠️ Maioria específica, alguns podem ser removidos</td>
+</tr>
+<tr>
+<td>Warnings Ativos no Pytest</td>
+<td>1</td>
+<td>❌ <strong>CRÍTICO</strong> - PytestCollectionWarning</td>
+</tr>
+<tr>
+<td>Uso de <code>shell=True</code></td>
+<td>0</td>
+<td>✅ Nenhum encontrado</td>
+</tr>
+<tr>
+<td>Subprocess com <code>shell=False</code></td>
+<td>100%</td>
+<td>✅ Todos seguros</td>
+</tr>
+<tr>
+<td>Suppressões Genéricas</td>
+<td>0</td>
+<td>✅ Todas são específicas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-varredura-de-noqa-e-nosec">🔍 1. VARREDURA DE # noqa E # nosec</h2>
+<h3 id="11-tabela-consolidada-de-suppressoes">1.1 Tabela Consolidada de Suppressões</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Linha</th>
+<th>Suppressão</th>
+<th>Tipo</th>
+<th>Justificativa</th>
+<th>Pode Remover?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>audit_dashboard/cli.py</code></td>
+<td>145</td>
+<td><code># noqa: T201</code></td>
+<td>Print em CLI</td>
+<td>✅ Válido - CLI precisa de print</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>install_dev.py</code></td>
+<td>28-34</td>
+<td><code># noqa: E402</code> (×7)</td>
+<td>Imports após sys.path</td>
+<td>✅ Válido - sys.path hack necessário</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>install_dev.py</code></td>
+<td>136</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>install_dev.py</code></td>
+<td>166</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>install_dev.py</code></td>
+<td>199</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>integrated_audit_example.py</code></td>
+<td>17</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>integrated_audit_example.py</code></td>
+<td>18</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>ci_test_mock_integration.py</code></td>
+<td>38</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>ci_test_mock_integration.py</code></td>
+<td>39</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>ci_test_mock_integration.py</code></td>
+<td>118</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>maintain_versions.py</code></td>
+<td>86</td>
+<td><code># nosec # noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Redundante - shell=False já é seguro</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>utils/safe_pip.py</code></td>
+<td>65</td>
+<td><code># nosec # noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Redundante - shell=False já é seguro</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>doctor.py</code></td>
+<td>26</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>validate_test_mocks.py</code></td>
+<td>196</td>
+<td><code># noqa: network</code></td>
+<td>httpx.get (sample code)</td>
+<td>✅ Válido - código de exemplo</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>validate_test_mocks.py</code></td>
+<td>204</td>
+<td><code># noqa: network</code></td>
+<td>requests.post (sample)</td>
+<td>✅ Válido - código de exemplo</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>validate_test_mocks.py</code></td>
+<td>215</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run (sample)</td>
+<td>✅ Válido - código de exemplo</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>utils/logger.py</code></td>
+<td>107</td>
+<td><code># noqa: FBT001</code></td>
+<td>Boolean trap</td>
+<td>✅ Válido - API pública</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>utils/logger.py</code></td>
+<td>134-159</td>
+<td><code># noqa: N802</code> (×6)</td>
+<td>Uppercase properties</td>
+<td>✅ Válido - constantes de cores</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>utils/logger.py</code></td>
+<td>181</td>
+<td><code># noqa: PLW0603</code></td>
+<td>Global write</td>
+<td>✅ Válido - singleton</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>ci_recovery/executor.py</code></td>
+<td>69</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>audit/reporter.py</code></td>
+<td>18</td>
+<td><code># noqa: E402</code></td>
+<td>Import após sys.path</td>
+<td>✅ Válido</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>git_sync/sync_logic.py</code></td>
+<td>121</td>
+<td><code># noqa: subprocess</code> (comment)</td>
+<td>Comentário apenas</td>
+<td>ℹ️ Não é suppressão real</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><code>git_sync/sync_logic.py</code></td>
+<td>149</td>
+<td><code># nosec # noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Redundante - shell=False já é seguro</td>
+<td>✅ Sim</td>
+</tr>
+<tr>
+<td><code>audit/plugins.py</code></td>
+<td>112</td>
+<td><code># noqa: subprocess</code></td>
+<td>subprocess.run</td>
+<td>⚠️ Genérico - deveria ser específico</td>
+<td>✅ Sim</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-distribuicao-por-categoria">1.2 Distribuição por Categoria</h3>
+<table>
+<thead>
+<tr>
+<th>Categoria de Suppressão</th>
+<th>Quantidade</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code># noqa: E402</code> (import order)</td>
+<td>10</td>
+<td>✅ Todos válidos (sys.path hacks)</td>
+</tr>
+<tr>
+<td><code># noqa: N802</code> (uppercase names)</td>
+<td>6</td>
+<td>✅ Todos válidos (constantes de cores)</td>
+</tr>
+<tr>
+<td><code># noqa: subprocess</code> (genérico)</td>
+<td>8</td>
+<td>⚠️ <strong>DEVE SER ESPECÍFICO</strong> (ex: S603, S607)</td>
+</tr>
+<tr>
+<td><code># nosec</code> (genérico)</td>
+<td>3</td>
+<td>⚠️ Redundante se shell=False</td>
+</tr>
+<tr>
+<td><code># noqa: T201</code> (print)</td>
+<td>1</td>
+<td>✅ Válido (CLI tool)</td>
+</tr>
+<tr>
+<td><code># noqa: FBT001</code> (boolean trap)</td>
+<td>1</td>
+<td>✅ Válido (API design)</td>
+</tr>
+<tr>
+<td><code># noqa: PLW0603</code> (global write)</td>
+<td>1</td>
+<td>✅ Válido (singleton pattern)</td>
+</tr>
+<tr>
+<td><code># noqa: network</code> (custom)</td>
+<td>2</td>
+<td>✅ Válidos (sample code)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-suppressoes-genericas-que-devem-ser-especificas">1.3 Suppressões Genéricas que DEVEM ser Específicas</h3>
+<p><strong>⚠️ PROBLEMA: <code># noqa: subprocess</code> é muito genérico</strong></p>
+<p>O Ruff pode gerar múltiplos códigos para subprocess:</p>
+<ul>
+<li><code>S603</code> - subprocess without shell equals true</li>
+<li><code>S607</code> - subprocess call with shell=True</li>
+<li><code>S602</code> - subprocess call with shell equals true</li>
+</ul>
+<p><strong>Arquivos afetados:</strong></p>
+<ol>
+<li><code>scripts/install_dev.py</code> (linhas 136, 166, 199)</li>
+<li><code>scripts/ci_test_mock_integration.py</code> (linha 118)</li>
+<li><code>scripts/maintain_versions.py</code> (linha 86)</li>
+<li><code>scripts/utils/safe_pip.py</code> (linha 65)</li>
+<li><code>scripts/git_sync/sync_logic.py</code> (linha 149)</li>
+<li><code>scripts/ci_recovery/executor.py</code> (linha 69)</li>
+<li><code>scripts/audit/plugins.py</code> (linha 112)</li>
+</ol>
+<p><strong>Plano de Correção:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ANTES (genérico):</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="o">...</span><span class="p">])</span>  <span class="c1"># noqa: subprocess</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># DEPOIS (específico):</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="o">...</span><span class="p">])</span>  <span class="c1"># noqa: S603</span>
+</code></pre></div>
+<hr />
+<h2 id="2-pytest-warnings">🐛 2. PYTEST WARNINGS</h2>
+<h3 id="21-pytestcollectionwarning-detectado">2.1 PytestCollectionWarning Detectado</h3>
+<p><strong>Output do teste:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>=============================== warnings summary ===============================
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>tests/test_mock_generator.py:71
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  /home/ismae/projects/python-template-profissional/tests/test_mock_generator.py:71:
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  PytestCollectionWarning: cannot collect test class &#39;TestMockGenerator&#39; because
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  it has a __init__ constructor (from: tests/test_mock_generator.py)
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    class TestMockGenerator:
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>======================== 118 passed, 1 warning in 4.01s ========================
+</code></pre></div>
+<h3 id="22-causa-raiz">2.2 Causa Raiz</h3>
+<p><strong>Arquivo:</strong> <code>tests/test_mock_generator.py</code>
+<strong>Linha:</strong> 71
+<strong>Problema:</strong> Classe chamada <code>TestMockGenerator</code> com método <code>__init__</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestMockGenerator</span><span class="p">:</span>  <span class="c1"># ❌ Pytest pensa que é uma classe de teste</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gerador de sugestões automáticas de mocks para testes Python.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>  <span class="c1"># ❌ Anti-padrão</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Inicializa o gerador de mocks.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">=</span> <span class="n">workspace_root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>Por que isso é um problema?</strong></p>
+<ol>
+<li><strong>Convenção do Pytest:</strong> Classes que começam com <code>Test</code> são coletadas como test classes</li>
+<li><strong>Anti-padrão:</strong> Test classes no pytest NÃO devem ter <code>__init__</code></li>
+<li><strong>Confusão:</strong> Esta NÃO é uma test class, é uma classe de domínio (gerador de mocks)</li>
+<li><strong>Warning poluiu saída:</strong> Aparece em cada execução de testes</li>
+</ol>
+<h3 id="23-contexto-adicional">2.3 Contexto Adicional</h3>
+<p><strong>O arquivo <code>test_mock_generator.py</code> contém:</strong></p>
+<ol>
+<li><code>class MockPattern</code> (linha ~48) - classe auxiliar ✅ OK</li>
+<li><code>class TestMockGenerator</code> (linha 71) - ❌ <strong>NOME ENGANOSO</strong></li>
+<li>Nenhuma função de teste real (nenhum <code>def test_*()</code>)</li>
+</ol>
+<p><strong>Esse arquivo NÃO é um arquivo de testes, é o código-fonte do gerador!</strong></p>
+<h3 id="24-solucoes-possiveis">2.4 Soluções Possíveis</h3>
+<p><strong>Opção 1: Renomear a Classe (RECOMENDADO)</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># ANTES:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestMockGenerator</span><span class="p">:</span>  <span class="c1"># ❌ Conflita com convenção pytest</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># DEPOIS:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">MockGenerator</span><span class="p">:</span>  <span class="c1"># ✅ Nome claro, sem conflito</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gerador de sugestões automáticas de mocks para testes Python.&quot;&quot;&quot;</span>
+</code></pre></div>
+<p><strong>Opção 2: Mover arquivo para <code>scripts/</code></strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Mover de:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>tests/test_mock_generator.py
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Para:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>scripts/test_mock_generator.py<span class="w">  </span><span class="c1"># ✅ Localização correta para código não-teste</span>
+</code></pre></div>
+<p><strong>✅ VERIFICAÇÃO REALIZADA:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>ls<span class="w"> </span>-lh<span class="w"> </span>tests/test_mock_generator.py
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>-rw-r--r--<span class="w"> </span><span class="m">1</span><span class="w"> </span>ismae<span class="w"> </span>ismae<span class="w"> </span>25K<span class="w"> </span>Nov<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">18</span>:35<span class="w"> </span>tests/test_mock_generator.py
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>$<span class="w"> </span>ls<span class="w"> </span>scripts/test_mock_generator.py
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>ls:<span class="w"> </span>cannot<span class="w"> </span>access<span class="w"> </span><span class="s1">&#39;scripts/test_mock_generator.py&#39;</span>:<span class="w"> </span>No<span class="w"> </span>such<span class="w"> </span>file<span class="w"> </span>or<span class="w"> </span>directory
+</code></pre></div>
+<p><strong>Conclusão:</strong> O arquivo <code>test_mock_generator.py</code> existe SOMENTE em <code>tests/</code>, mas NÃO é um arquivo de testes. Deve ser movido para <code>scripts/</code>.</p>
+<h4 id="opcao-3-adicionar-ao-pytest-ignore-nao-recomendado">Opção 3: Adicionar ao pytest ignore (NÃO RECOMENDADO)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># pyproject.toml</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">[tool.pytest.ini_options]</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">testpaths</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;tests&quot;</span><span class="p">]</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">python_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;test_*.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;!test_mock_generator.py&quot;</span><span class="p">]</span><span class="w">  </span><span class="c1"># ⚠️ Workaround feio</span>
+</code></pre></div>
+<hr />
+<h2 id="3-analise-de-seguranca-subprocessrun">🔒 3. ANÁLISE DE SEGURANÇA: subprocess.run</h2>
+<h3 id="31-verificacao-de-shelltrue">3.1 Verificação de <code>shell=True</code></h3>
+<p><strong>Busca realizada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;shell\s*=\s*True&quot;</span><span class="w"> </span>**/*.py
+</code></pre></div>
+<p><strong>Resultado:</strong> ✅ <strong>NENHUM USO ENCONTRADO</strong></p>
+<p>Todos os usos de <code>subprocess.run</code> já usam <code>shell=False</code> (implícito ou explícito).</p>
+<h3 id="32-analise-detalhada-dos-arquivos-criticos">3.2 Análise Detalhada dos Arquivos Críticos</h3>
+<h4 id="321-scriptsmaintain_versionspy86">3.2.1 <code>scripts/maintain_versions.py:86</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># nosec # noqa: subprocess</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># ✅ Explicitamente seguro</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">check</span><span class="o">=</span><span class="n">check</span><span class="p">,</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ <code>shell=False</code> explícito</li>
+<li>✅ <code>cmd</code> é lista de argumentos (não string)</li>
+<li>⚠️ <code># nosec</code> é <strong>redundante</strong> - código já é seguro</li>
+<li>⚠️ <code># noqa: subprocess</code> deve ser específico: <code># noqa: S603</code></li>
+</ul>
+<p><strong>Recomendação:</strong> Remover <code># nosec</code>, especificar código Ruff exato.</p>
+<hr />
+<h4 id="322-scriptsgit_syncsync_logicpy149">3.2.2 <code>scripts/git_sync/sync_logic.py:149</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Linha 144: Comentário de segurança</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># Ensure we never use shell=True for security</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">env_vars</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">}</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">if</span> <span class="n">env</span><span class="p">:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">env_vars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># nosec # noqa: subprocess</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="n">command</span><span class="p">,</span>  <span class="c1"># ✅ Lista de argumentos</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="n">cwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="n">capture_output</span><span class="p">,</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="n">check</span><span class="o">=</span><span class="n">check</span><span class="p">,</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="n">env</span><span class="o">=</span><span class="n">env_vars</span><span class="p">,</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ Comentário explícito sobre não usar <code>shell=True</code></li>
+<li>✅ <code>command</code> é lista (nunca string)</li>
+<li>✅ Sem <code>shell=</code> significa <code>shell=False</code> (padrão)</li>
+<li>⚠️ <code># nosec</code> é <strong>redundante</strong></li>
+<li>⚠️ <code># noqa: subprocess</code> deve ser específico</li>
+</ul>
+<p><strong>Recomendação:</strong> Remover <code># nosec</code>, adicionar <code>shell=False</code> explícito, especificar código.</p>
+<hr />
+<h4 id="323-scriptsutilssafe_pippy65">3.2.3 <code>scripts/utils/safe_pip.py:65</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># nosec # noqa: subprocess</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="p">[</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        <span class="n">pip_compile_path</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="nb">str</span><span class="p">(</span><span class="n">temp_output</span><span class="p">),</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        <span class="nb">str</span><span class="p">(</span><span class="n">input_file</span><span class="p">),</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="p">],</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="n">cwd</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">,</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ Lista de argumentos literal</li>
+<li>✅ Sem <code>shell=</code> (padrão = False)</li>
+<li>✅ Argumentos são Path objects convertidos a string</li>
+<li>⚠️ <code># nosec</code> é redundante</li>
+</ul>
+<p><strong>Recomendação:</strong> Remover <code># nosec</code>, especificar <code># noqa: S603</code>.</p>
+<hr />
+<h4 id="324-scriptsinstall_devpy-3-ocorrencias">3.2.4 <code>scripts/install_dev.py</code> (3 ocorrências)</h4>
+<p><strong>Linha 136:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">result1</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># noqa: subprocess</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;.[dev]&quot;</span><span class="p">],</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">cwd</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Linhas 166 e 199:</strong> Similar (pip-compile e pip install)</p>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ Todas usam listas de argumentos</li>
+<li>✅ Argumentos seguros (sys.executable, strings literais)</li>
+<li>⚠️ <code># noqa: subprocess</code> deve ser específico</li>
+</ul>
+<hr />
+<h4 id="325-scriptsci_recoveryexecutorpy69">3.2.5 <code>scripts/ci_recovery/executor.py:69</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># noqa: subprocess</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">command</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span> <span class="ow">or</span> <span class="n">repository_path</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="n">capture_output</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># ✅ Explicitamente seguro</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ <code>shell=False</code> explícito</li>
+<li>✅ Comentário de segurança presente</li>
+<li>⚠️ <code># noqa: subprocess</code> deve ser específico</li>
+</ul>
+<hr />
+<h4 id="326-scriptsauditpluginspy112">3.2.6 <code>scripts/audit/plugins.py:112</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># noqa: subprocess</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">env</span><span class="o">=</span><span class="n">ci_env</span><span class="p">,</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">ci_timeout</span><span class="p">,</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="n">cwd</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">,</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ <code>cmd</code> é lista de argumentos (pytest command)</li>
+<li>✅ Sem <code>shell=</code> (padrão = False)</li>
+<li>⚠️ <code># noqa: subprocess</code> deve ser específico</li>
+</ul>
+<hr />
+<h3 id="33-conclusao-seguranca-de-subprocess">3.3 Conclusão: Segurança de Subprocess</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uso de <code>shell=True</code></td>
+<td>✅ <strong>ZERO</strong> ocorrências</td>
+</tr>
+<tr>
+<td>Uso de <code>shell=False</code></td>
+<td>✅ 100% dos subprocess.run</td>
+</tr>
+<tr>
+<td>Argumentos como lista</td>
+<td>✅ 100% correto</td>
+</tr>
+<tr>
+<td>Uso de <code># nosec</code></td>
+<td>⚠️ Redundante em 3 arquivos</td>
+</tr>
+<tr>
+<td>Suppressões específicas</td>
+<td>❌ Todas são genéricas (<code>subprocess</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Veredito:</strong> 🎉 <strong>Código já está seguro!</strong> Apenas precisa de limpeza de suppressões.</p>
+<hr />
+<h2 id="4-distribuicao-de-problemas">📊 4. DISTRIBUIÇÃO DE PROBLEMAS</h2>
+<h3 id="severidade">Severidade</h3>
+<table>
+<thead>
+<tr>
+<th>Severidade</th>
+<th>Quantidade</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 CRÍTICO</td>
+<td>1</td>
+<td>PytestCollectionWarning (anti-padrão)</td>
+</tr>
+<tr>
+<td>🟠 ALTO</td>
+<td>0</td>
+<td>Nenhum <code>shell=True</code> encontrado</td>
+</tr>
+<tr>
+<td>🟡 MÉDIO</td>
+<td>8</td>
+<td>Suppressões genéricas <code># noqa: subprocess</code></td>
+</tr>
+<tr>
+<td>🟢 BAIXO</td>
+<td>3</td>
+<td><code># nosec</code> redundante</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esforco-de-correcao">Esforço de Correção</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo de Correção</th>
+<th>Arquivos</th>
+<th>Esforço</th>
+<th>Risco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Renomear classe <code>TestMockGenerator</code></td>
+<td>1</td>
+<td>🟢 Baixo (30min)</td>
+<td>🟢 Baixo</td>
+</tr>
+<tr>
+<td>Substituir <code># noqa: subprocess</code> por <code># noqa: S603</code></td>
+<td>8</td>
+<td>🟢 Baixo (15min)</td>
+<td>🟢 Nenhum</td>
+</tr>
+<tr>
+<td>Remover <code># nosec</code> redundante</td>
+<td>3</td>
+<td>🟢 Baixo (5min)</td>
+<td>🟢 Nenhum</td>
+</tr>
+<tr>
+<td>Adicionar <code>shell=False</code> explícito onde falta</td>
+<td>3</td>
+<td>🟢 Baixo (5min)</td>
+<td>🟢 Nenhum</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-plano-de-refatoracao">🎯 5. PLANO DE REFATORAÇÃO</h2>
+<h3 id="fase-1-correcao-do-pytestcollectionwarning-prioridade-alta">Fase 1: Correção do PytestCollectionWarning (Prioridade Alta)</h3>
+<p><strong>Objetivo:</strong> Eliminar o warning do pytest</p>
+<p><strong>Passos:</strong></p>
+<ol>
+<li><strong>Investigar duplicação de arquivo:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>diff<span class="w"> </span>scripts/test_mock_generator.py<span class="w"> </span>tests/test_mock_generator.py
+</code></pre></div>
+<ol>
+<li><strong>Se forem idênticos:</strong> Remover <code>tests/test_mock_generator.py</code></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>rm<span class="w"> </span>tests/test_mock_generator.py
+</code></pre></div>
+<ol>
+<li><strong>Se forem diferentes:</strong> Renomear classe em <code>tests/test_mock_generator.py</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># ANTES:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestMockGenerator</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># DEPOIS:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">MockGenerator</span><span class="p">:</span>
+</code></pre></div>
+<ol>
+<li><strong>Atualizar imports em arquivos dependentes:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;TestMockGenerator&quot;</span><span class="w"> </span>scripts/<span class="w"> </span>tests/
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># Substituir por &quot;MockGenerator&quot;</span>
+</code></pre></div>
+<ol>
+<li><strong>Validar:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>make<span class="w"> </span><span class="nb">test</span><span class="w">  </span><span class="c1"># Deve executar sem warnings</span>
+</code></pre></div>
+<p><strong>Arquivos afetados:</strong></p>
+<ul>
+<li><code>tests/test_mock_generator.py</code> (ou remover)</li>
+<li><code>scripts/ci_test_mock_integration.py</code> (linha 38 - import)</li>
+<li><code>scripts/validate_test_mocks.py</code> (possível uso)</li>
+</ul>
+<hr />
+<h3 id="fase-2-substituir-suppressoes-genericas-prioridade-media">Fase 2: Substituir Suppressões Genéricas (Prioridade Média)</h3>
+<p><strong>Objetivo:</strong> <code># noqa: subprocess</code> → <code># noqa: S603</code></p>
+<p><strong>Script de Refatoração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1"># refactor_noqa_subprocess.sh</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nv">FILES</span><span class="o">=(</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="s2">&quot;scripts/install_dev.py&quot;</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="s2">&quot;scripts/ci_test_mock_integration.py&quot;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="s2">&quot;scripts/maintain_versions.py&quot;</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="s2">&quot;scripts/utils/safe_pip.py&quot;</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">    </span><span class="s2">&quot;scripts/git_sync/sync_logic.py&quot;</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">    </span><span class="s2">&quot;scripts/ci_recovery/executor.py&quot;</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="s2">&quot;scripts/audit/plugins.py&quot;</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="o">)</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FILES</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Processing </span><span class="nv">$file</span><span class="s2">...&quot;</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/# noqa: subprocess/# noqa: S603/g&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$file</span><span class="s2">&quot;</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="k">done</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Done! Run &#39;make test&#39; to validate.&quot;</span>
+</code></pre></div>
+<p><strong>Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>bash<span class="w"> </span>refactor_noqa_subprocess.sh
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>make<span class="w"> </span>lint<span class="w">  </span><span class="c1"># Deve passar sem novos erros</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>make<span class="w"> </span><span class="nb">test</span><span class="w">  </span><span class="c1"># Deve passar</span>
+</code></pre></div>
+<hr />
+<h3 id="fase-3-remover-nosec-redundante-prioridade-baixa">Fase 3: Remover <code># nosec</code> Redundante (Prioridade Baixa)</h3>
+<p><strong>Arquivos afetados:</strong></p>
+<ol>
+<li><code>scripts/maintain_versions.py:86</code></li>
+<li><code>scripts/utils/safe_pip.py:65</code></li>
+<li><code>scripts/git_sync/sync_logic.py:149</code></li>
+</ol>
+<p><strong>Substituições:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># ANTES:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># nosec # noqa: subprocess</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>    <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>    <span class="o">...</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="p">)</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="c1"># DEPOIS:</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># noqa: S603</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>    <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Security: never use shell=True</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>    <span class="o">...</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Script de Refatoração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="c1"># remove_nosec_redundant.sh</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/# nosec # noqa: subprocess/# noqa: S603/&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span>scripts/maintain_versions.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">    </span>scripts/utils/safe_pip.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">    </span>scripts/git_sync/sync_logic.py
+</code></pre></div>
+<hr />
+<h3 id="fase-4-adicionar-shellfalse-explicito-prioridade-baixa">Fase 4: Adicionar <code>shell=False</code> Explícito (Prioridade Baixa)</h3>
+<p><strong>Objetivo:</strong> Tornar segurança explícita em todo subprocess.run</p>
+<p><strong>Arquivos que precisam:</strong></p>
+<ul>
+<li><code>scripts/install_dev.py</code> (linhas 136, 166, 199)</li>
+<li><code>scripts/audit/plugins.py</code> (linha 112)</li>
+<li><code>scripts/ci_test_mock_integration.py</code> (linha 118)</li>
+</ul>
+<p><strong>Padrão:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># noqa: S603</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="n">command</span><span class="p">,</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="n">shell</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Security: prevent shell injection</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="6-checklist-de-validacao-pos-refatoracao">✅ 6. CHECKLIST DE VALIDAÇÃO PÓS-REFATORAÇÃO</h2>
+<p>Após cada fase, executar:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># 1. Linting</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>make<span class="w"> </span>lint
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="c1"># 2. Testes</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>make<span class="w"> </span><span class="nb">test</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="c1"># 3. Verificar warnings</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>make<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>warning
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="c1"># 4. Verificar suppressões restantes</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;# noqa&quot;</span><span class="w"> </span>**/*.py<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;# noqa: [A-Z0-9]&quot;</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="c1"># 5. Verificar # nosec restantes</span>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;# nosec&quot;</span><span class="w"> </span>**/*.py
+</code></pre></div>
+<p><strong>Critérios de Sucesso:</strong></p>
+<ul>
+<li>✅ Zero warnings no output do pytest</li>
+<li>✅ Zero suppressões genéricas (<code># noqa:</code> sem código)</li>
+<li>✅ Zero <code># nosec</code> redundante</li>
+<li>✅ 100% dos subprocess.run com <code>shell=False</code> explícito</li>
+<li>✅ Todos os testes passando</li>
+</ul>
+<hr />
+<h2 id="7-resumo-executivo">📝 7. RESUMO EXECUTIVO</h2>
+<h3 id="o-que-encontramos">O Que Encontramos</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PytestCollectionWarning</strong></td>
+<td>🔴 1 ocorrência - classe <code>TestMockGenerator</code> com <code>__init__</code></td>
+</tr>
+<tr>
+<td><strong>Uso de <code>shell=True</code></strong></td>
+<td>✅ Zero - código já está seguro</td>
+</tr>
+<tr>
+<td><strong>Suppressões genéricas</strong></td>
+<td>🟡 8 ocorrências de <code># noqa: subprocess</code></td>
+</tr>
+<tr>
+<td><strong><code># nosec</code> redundante</strong></td>
+<td>🟢 3 ocorrências</td>
+</tr>
+<tr>
+<td><strong>Suppressões válidas</strong></td>
+<td>✅ 26 ocorrências (E402, N802, T201, etc.)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="o-que-precisa-ser-corrigido">O Que Precisa Ser Corrigido</h3>
+<ol>
+<li><strong>CRÍTICO:</strong> Resolver PytestCollectionWarning (renomear ou remover classe)</li>
+<li><strong>MÉDIO:</strong> Substituir <code># noqa: subprocess</code> por <code># noqa: S603</code> (8 arquivos)</li>
+<li><strong>BAIXO:</strong> Remover <code># nosec</code> redundante (3 arquivos)</li>
+<li><strong>BAIXO:</strong> Adicionar <code>shell=False</code> explícito (5 arquivos)</li>
+</ol>
+<h3 id="beneficios-da-refatoracao">Benefícios da Refatoração</h3>
+<ul>
+<li>🎯 Saída de testes limpa (zero warnings)</li>
+<li>📖 Suppressões específicas facilitam manutenção</li>
+<li>🔒 Segurança explícita em subprocess operations</li>
+<li>✨ Conformidade com regras estritas do Ruff</li>
+<li>🚀 Menos ruído no CI/CD</li>
+</ul>
+<h3 id="esforco-total-estimado">Esforço Total Estimado</h3>
+<ul>
+<li>⏱️ <strong>Tempo:</strong> 1-2 horas</li>
+<li>🛠️ <strong>Risco:</strong> Baixo (mudanças pontuais)</li>
+<li>✅ <strong>Automação:</strong> 80% pode ser feito via script</li>
+</ul>
+<hr />
+<h2 id="8-proximos-passos-fase-02">🔗 8. PRÓXIMOS PASSOS (Fase 02)</h2>
+<ol>
+<li>✅ <strong>Validar duplicação:</strong> Comparar <code>scripts/test_mock_generator.py</code> e <code>tests/test_mock_generator.py</code></li>
+<li>🔧 <strong>Corrigir warning:</strong> Renomear ou remover classe <code>TestMockGenerator</code></li>
+<li>🧹 <strong>Limpar suppressões:</strong> Executar scripts de refatoração</li>
+<li>✅ <strong>Validar:</strong> Rodar suite completa de testes</li>
+<li>📝 <strong>Documentar:</strong> Atualizar guia de estilo com boas práticas de suppressões</li>
+</ol>
+<hr />
+<h2 id="9-referencias">📚 9. REFERÊNCIAS</h2>
+<ul>
+<li><a href="https://docs.astral.sh/ruff/rules/#flake8-bandit-s">Ruff Rules - Subprocess (S6xx)</a></li>
+<li><a href="https://docs.pytest.org/en/stable/how-to/capture-warnings.html">Pytest Collection Warning</a></li>
+<li><a href="https://docs.python.org/3/library/subprocess.html#security-considerations">Python subprocess Security</a></li>
+<li><a href="https://bandit.readthedocs.io/en/latest/">Bandit Security Linter</a></li>
+</ul>
+<hr />
+<p><strong>Relatório Gerado Por:</strong> GitHub Copilot Agent
+<strong>Validado Por:</strong> Make test + Grep Search
+<strong>Versão do Relatório:</strong> 1.0.0
+<strong>Próxima Fase:</strong> P14 - Implementação das Correções</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
