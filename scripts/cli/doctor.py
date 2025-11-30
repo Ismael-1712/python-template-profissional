@@ -17,11 +17,13 @@ import shutil
 import sys
 from pathlib import Path
 
-# Adiciona raiz do projeto ao sys.path para imports
+# --- BOOTSTRAP FIX: Adiciona raiz ao path ANTES de imports locais ---
+# Estrutura: root/scripts/cli/doctor.py -> sobe 3 níveis para root
 _script_dir = Path(__file__).resolve().parent
 _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
+# -------------------------------------------------------------------
 
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.logger import get_colors  # noqa: E402

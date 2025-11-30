@@ -18,11 +18,13 @@ import logging
 import sys
 from pathlib import Path
 
-# Add project root to sys.path
+# --- BOOTSTRAP FIX: Adiciona raiz ao path ANTES de imports locais ---
+# Estrutura: root/scripts/cli/git_sync.py -> sobe 3 níveis para root
 _script_dir = Path(__file__).resolve().parent
 _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
+# -------------------------------------------------------------------
 
 from scripts.git_sync import SyncOrchestrator, load_config  # noqa: E402
 from scripts.git_sync.exceptions import SyncError  # noqa: E402

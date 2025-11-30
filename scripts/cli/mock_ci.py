@@ -10,10 +10,13 @@ Este script é idempotente e pode ser executado em qualquer ambiente CI/CD.
 
 Uso em CI/CD:
     # No pipeline (GitHub Actions, GitLab CI, etc.)
-    python scripts/ci_test_mock_integration.py --check --fail-on-issues
+    python scripts/cli/mock_ci.py --check --fail-on-issues
 
     # Para aplicar correções automaticamente
-    python scripts/ci_test_mock_integration.py --auto-fix --commit
+    python scripts/cli/mock_ci.py --auto-fix --commit
+
+    # Via console script (após pip install -e .)
+    mock-ci --check --fail-on-issues
 
 Autor: DevOps Template Generator
 Versão: 1.0.0
@@ -29,11 +32,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# Adiciona o diretório raiz do projeto ao sys.path para permitir imports
-# Assume que este script está em <raiz>/scripts/
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# --- BOOTSTRAP FIX: Adiciona raiz ao path ANTES de imports locais ---
+# Necessário porque este script roda antes do pacote estar instalado via pip.
+# Estrutura: root/scripts/cli/mock_ci.py -> sobe 3 níveis para root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+# -------------------------------------------------------------------
 
 from scripts.core.mock_generator import TestMockGenerator  # noqa: E402
 from scripts.core.mock_validator import TestMockValidator  # noqa: E402

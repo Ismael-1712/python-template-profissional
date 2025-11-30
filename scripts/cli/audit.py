@@ -19,11 +19,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# Add project root to sys.path
+# --- BOOTSTRAP FIX: Adiciona raiz ao path ANTES de imports locais ---
+# Estrutura: root/scripts/cli/audit.py -> sobe 3 níveis para root
 _script_dir = Path(__file__).resolve().parent
 _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
+# -------------------------------------------------------------------
 
 # Import from the audit package (located in scripts/audit/)
 from scripts.audit.analyzer import CodeAnalyzer  # noqa: E402
