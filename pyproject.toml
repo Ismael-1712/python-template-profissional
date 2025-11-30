@@ -17,8 +17,13 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (O 'main' deve ser neutro)
+# Dependências do projeto (API + CLI)
 dependencies = [
+    # O framework web moderno e rápido
+    "fastapi",
+    # O servidor ASGI (necessário para rodar o FastAPI)
+    "uvicorn[standard]",
+    # CLI framework para scripts de desenvolvimento
     "typer[all]",
 ]
 
@@ -53,7 +58,7 @@ include = ["scripts*"]
 # Define o comprimento máximo da linha (padrão 'black')
 line-length = 88
 
-# Define a versão mínima do Python para compatibilidade de regras
+# Define o versão mínima do Python para compatibilidade de regras
 target-version = "py310"
 
 # Configuração do Linter do Ruff
