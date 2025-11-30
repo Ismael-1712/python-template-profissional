@@ -19,9 +19,7 @@ authors = [
 
 # Dependências do projeto (O 'main' deve ser neutro)
 dependencies = [
-    # Dependências específicas (como 'fastapi' ou 'typer')
-    # devem ser adicionadas nos branches 'api' ou 'cli',
-    # não no 'main'.
+    "typer[all]",
 ]
 
 # Dependências de desenvolvimento
@@ -34,6 +32,7 @@ dev = [
 
 # Console scripts - comandos globais do sistema
 [project.scripts]
+meu-projeto = "src.main:app"
 dev-doctor = "scripts.cli.doctor:main"
 dev-audit = "scripts.cli.audit:main"
 git-sync = "scripts.cli.git_sync:main"
