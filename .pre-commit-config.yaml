@@ -25,7 +25,7 @@ repos:
     hooks:
       - id: code-audit-security
         name: "Auditoria de Segurança Customizada (Delta)"
-        entry: python3 scripts/code_audit.py --config scripts/audit_config.yaml --fail-on HIGH --quiet
+        entry: python3 scripts/cli/audit.py --config scripts/audit_config.yaml --fail-on HIGH --quiet
         language: system
         pass_filenames: true
         types: [python]

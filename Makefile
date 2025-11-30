@@ -58,7 +58,7 @@ install-dev:
 		rm -rf $(VENV); \
 		$(SYSTEM_PYTHON) -m venv $(VENV); \
 		echo "🚀 Instalando dependências..."; \
-		$(VENV)/bin/python $(SCRIPTS_DIR)/install_dev.py && \
+		$(VENV)/bin/python $(SCRIPTS_DIR)/cli/install_dev.py && \
 		touch $(VENV)/.install_complete; \
 	else \
 		echo "✅ Ambiente já instalado (use 'make clean-all' para reinstalar)"; \
