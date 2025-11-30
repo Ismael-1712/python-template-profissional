@@ -1,0 +1,61 @@
+name: "📦 CD: Publicar Pacote no PyPI"
+
+on:
+  push:
+    tags:
+      - "v*.*.*" # Dispara APENAS em tags de versão
+
+jobs:
+  publish-to-test-pypi:
+    name: "Publicar no TestPyPI (Homologação)"
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Permissão para o TestPyPI (OIDC)
+
+    steps:
+      - name: "Checkout do Código"
+        uses: actions/checkout@v4
+
+      - name: "Configurar Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: "Instalar Dependências de Build"
+        run: python3 -m pip install build
+
+      - name: "Construir o Pacote"
+        run: python3 -m build
+
+      - name: "Publicar no TestPyPI"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/ # <-- Ambiente de Teste
+
+  publish-pypi:
+    name: "Publicar no PyPI (Produção)"
+    runs-on: ubuntu-latest
+    needs: publish-to-test-pypi # <-- PORTÃO DE QUALIDADE (P5)
+
+    permissions:
+      id-token: write # Permissão para o PyPI (OIDC)
+
+    steps:
+      - name: "Checkout do Código"
+        uses: actions/checkout@v4
+
+      - name: "Configurar Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: "Instalar Dependências de Build"
+        run: python3 -m pip install build
+
+      - name: "Construir o Pacote"
+        run: python3 -m build
+
+      - name: "Publicar no PyPI (Produção)"
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # (Sem 'repository-url', o padrão é Produção)

@@ -17,12 +17,14 @@ authors = [
     { name = "Seu Nome", email = "seu-email@dominio.com" }
 ]
 
-# Dependências do projeto (API)
+# Dependências do projeto (API + CLI)
 dependencies = [
     # O framework web moderno e rápido
     "fastapi",
     # O servidor ASGI (necessário para rodar o FastAPI)
     "uvicorn[standard]",
+    # CLI framework para scripts de desenvolvimento
+    "typer[all]",
 ]
 
 # Dependências de desenvolvimento
@@ -35,6 +37,7 @@ dev = [
 
 # Console scripts - comandos globais do sistema
 [project.scripts]
+meu-projeto = "src.main:app"
 dev-doctor = "scripts.cli.doctor:main"
 dev-audit = "scripts.cli.audit:main"
 git-sync = "scripts.cli.git_sync:main"
