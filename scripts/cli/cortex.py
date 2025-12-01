@@ -497,6 +497,7 @@ def audit(
                     linked_code=metadata.linked_code or [],
                     related_docs=metadata.related_docs or [],
                     doc_file=md_file,
+                    metadata=metadata,
                 )
 
                 if link_result.broken_code_links:

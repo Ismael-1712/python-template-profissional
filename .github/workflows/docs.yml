@@ -1,0 +1,77 @@
+# ======================================================================
+# 📚 CORTEX DOCUMENTATION GUARDIAN
+# ======================================================================
+# Este workflow protege a integridade da documentação do projeto,
+# garantindo que todos os documentos mantenham links válidos e
+# metadados corretos conforme o padrão CORTEX.
+#
+# ARQUITETURA:
+# Roda auditoria de documentação usando o CORTEX em:
+# - Pull Requests (para prevenir quebras)
+# - Push na main (para monitoramento contínuo)
+#
+# O CORTEX valida:
+# - Frontmatter YAML correto
+# - Links para código existentes
+# - Links entre documentos válidos
+# - Ignora documentos históricos (archived/deprecated)
+# ======================================================================
+
+name: "📚 Docs: CORTEX Audit"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/core/cortex/**/*.py'
+      - 'scripts/cli/cortex.py'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**/*.md'
+      - 'scripts/core/cortex/**/*.py'
+      - 'scripts/cli/cortex.py'
+  # Permite execução manual
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # --------------------------------------------------------------------
+  # JOB: AUDITORIA DE DOCUMENTAÇÃO
+  # --------------------------------------------------------------------
+  cortex-audit:
+    name: "🔍 CORTEX Documentation Audit"
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. CONFIGURAÇÃO ---
+      - name: "📥 Checkout do Repositório"
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+
+      - name: "🐍 Configurar Python 3.12"
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      # --- 2. INSTALAÇÃO DE DEPENDÊNCIAS ---
+      - name: "📦 Instalar Dependências"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+
+      # --- 3. AUDITORIA CORTEX ---
+      - name: "🔍 Executar CORTEX Audit"
+        run: |
+          python -m scripts.cli.cortex audit docs/ --fail-on-error
+
+      # --- 4. RELATÓRIO (se falhar) ---
+      - name: "📊 Resumo de Erros"
+        if: failure()
+        run: |
+          echo "::error::CORTEX encontrou erros na documentação!"
+          echo "Execute localmente: python -m scripts.cli.cortex audit docs/"
+          echo "Para mais detalhes, veja os logs acima."
