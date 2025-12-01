@@ -236,21 +236,67 @@ source .venv/bin/activate  # Linux/macOS
 **Causa:** O comando `make release` é otimizado para rodar no GitHub Actions.
 **Solução:** Não execute release localmente. Deixe o CI cuidar disso após o merge.
 
------
+---
+
+## 🤖 Desenvolvimento Assistido por IA (Protocolo Synapse)
+
+Este projeto utiliza o **sistema Synapse** para contextualização dinâmica, permitindo que assistentes de IA (GitHub Copilot, ChatGPT, etc.) compreendam a arquitetura real do projeto sem alucinações.
+
+### Uso do Sistema Synapse
+
+Antes de iniciar qualquer tarefa com IA, execute:
+
+```bash
+cortex map
+```
+
+Este comando:
+
+- 📊 Gera um mapa atualizado em `.cortex/context.json`
+- 🗺️ Mapeia a arquitetura atual, comandos CLI disponíveis e dependências
+- 🧠 Permite que a IA entenda o contexto real do projeto
+- 🎯 Elimina suposições incorretas sobre estrutura e padrões
+
+### Comandos Disponíveis
+
+```bash
+cortex map      # Gera mapa completo do projeto
+cortex scan     # Valida links entre documentação e código
+cortex init     # Adiciona frontmatter YAML a documentos
+```
+
+### Por Que Usar?
+
+- ✅ **Precisão**: A IA trabalha com fatos, não suposições
+- ✅ **Atualização**: O contexto reflete o estado atual do projeto
+- ✅ **Eficiência**: Reduz iterações de correção e retrabalho
+- ✅ **Agnóstico**: Funciona com qualquer assistente de IA
+
+**💡 Dica:** Execute `cortex map` sempre que:
+
+- Adicionar novos scripts ou comandos CLI
+- Modificar a estrutura de diretórios
+- Atualizar dependências importantes
+- Iniciar uma sessão de desenvolvimento com IA
+
+Para mais detalhes, consulte: [📖 Sistema de Introspecção Cortex](docs/guides/CORTEX_INTROSPECTION_SYSTEM.md)
+
+---
 
 ## 📚 Documentação Adicional
 
 - [🔍 Sistema de Auditoria](https://www.google.com/search?q=docs/CODE_AUDIT.md) - Análise estática avançada
 - [🧪 Sistema de Mocks](https://www.google.com/search?q=docs/README_test_mock_system.md) - Geração automática de mocks
 - [🔄 Smart Git Sync](https://www.google.com/search?q=docs/SMART_GIT_SYNC_GUIDE.md) - Detalhes da sincronização
+- [🤖 Sistema de Introspecção Cortex](docs/guides/CORTEX_INTROSPECTION_SYSTEM.md) - Protocolo Synapse
 
------
+---
 
 ## 📄 Licença
 
 Este projeto está sob a licença especificada no arquivo [LICENSE](https://www.google.com/search?q=LICENSE).
 
------
+---
 
 ## 🙏 Agradecimentos
 
