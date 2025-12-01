@@ -18,7 +18,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from scripts.core.cortex.models import LinkCheckResult
+from scripts.core.cortex.models import DocStatus, DocumentMetadata, LinkCheckResult
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +43,73 @@ class CodeLinkScanner:
         self.workspace_root = workspace_root.resolve()
         logger.debug(f"Initialized CodeLinkScanner with root: {self.workspace_root}")
 
-    def check_python_files(self, linked_code: list[str]) -> list[str]:
+    def _should_ignore_broken_links(
+        self,
+        doc_file: Path,
+        metadata: DocumentMetadata | None = None,
+    ) -> bool:
+        """Determine if broken links should be ignored for a document.
+
+        Links are ignored if:
+        - Document status is 'archived' or 'deprecated'
+        - Document is in docs/history/ directory
+
+        Args:
+            doc_file: Path to the documentation file
+            metadata: Optional parsed metadata for the document
+
+        Returns:
+            True if broken links should be ignored, False otherwise
+        """
+        # Check metadata status
+        if metadata and metadata.status in (DocStatus.ARCHIVED, DocStatus.DEPRECATED):
+            logger.debug(
+                "Ignoring broken links for %s (status: %s)",
+                doc_file,
+                metadata.status.value,
+            )
+            return True
+
+        # Check if file is in history directory
+        try:
+            relative_path = doc_file.relative_to(self.workspace_root)
+            path_parts = relative_path.parts
+            if "history" in path_parts:
+                logger.debug(
+                    "Ignoring broken links for %s (in history directory)",
+                    doc_file,
+                )
+                return True
+        except ValueError:
+            # File is not relative to workspace_root, ignore it
+            pass
+
+        return False
+
+    def check_python_files(
+        self,
+        linked_code: list[str],
+        doc_file: Path | None = None,
+        metadata: DocumentMetadata | None = None,
+    ) -> list[str]:
         """Verify that Python files referenced in frontmatter exist.
 
         Args:
             linked_code: List of relative paths to Python files
+            doc_file: Path to the documentation file being checked
+            metadata: Optional parsed metadata for the document
 
         Returns:
             List of error messages for files that don't exist
         """
+        # Check if we should ignore broken links for archived/deprecated docs
+        if doc_file and self._should_ignore_broken_links(doc_file, metadata):
+            logger.debug(
+                "Skipping Python file validation for archived/deprecated document: %s",
+                doc_file,
+            )
+            return []
+
         errors = []
 
         for relative_path in linked_code:
@@ -61,27 +119,42 @@ class CodeLinkScanner:
             # Check if file exists and is a file (not directory)
             if not full_path.exists():
                 errors.append(f"Python file not found: {relative_path}")
-                logger.warning(f"Missing Python file: {full_path}")
+                logger.warning("Missing Python file: %s", full_path)
             elif not full_path.is_file():
                 errors.append(f"Path is not a file: {relative_path}")
-                logger.warning(f"Path is not a file: {full_path}")
+                logger.warning("Path is not a file: %s", full_path)
             elif not relative_path.endswith(".py"):
                 errors.append(f"Not a Python file: {relative_path}")
-                logger.warning(f"Not a Python file: {full_path}")
+                logger.warning("Not a Python file: %s", full_path)
             else:
-                logger.debug(f"Python file exists: {relative_path}")
+                logger.debug("Python file exists: %s", relative_path)
 
         return errors
 
-    def check_doc_links(self, related_docs: list[str]) -> list[str]:
+    def check_doc_links(
+        self,
+        related_docs: list[str],
+        doc_file: Path | None = None,
+        metadata: DocumentMetadata | None = None,
+    ) -> list[str]:
         """Verify that documentation files referenced in frontmatter exist.
 
         Args:
             related_docs: List of relative paths to markdown files
+            doc_file: Path to the documentation file being checked
+            metadata: Optional parsed metadata for the document
 
         Returns:
             List of error messages for files that don't exist
         """
+        # Check if we should ignore broken links for archived/deprecated docs
+        if doc_file and self._should_ignore_broken_links(doc_file, metadata):
+            logger.debug(
+                "Skipping doc link validation for archived/deprecated document: %s",
+                doc_file,
+            )
+            return []
+
         errors = []
 
         for relative_path in related_docs:
@@ -91,15 +164,15 @@ class CodeLinkScanner:
             # Check if file exists and is a file (not directory)
             if not full_path.exists():
                 errors.append(f"Documentation file not found: {relative_path}")
-                logger.warning(f"Missing doc file: {full_path}")
+                logger.warning("Missing doc file: %s", full_path)
             elif not full_path.is_file():
                 errors.append(f"Path is not a file: {relative_path}")
-                logger.warning(f"Path is not a file: {full_path}")
+                logger.warning("Path is not a file: %s", full_path)
             elif not relative_path.endswith((".md", ".markdown")):
                 errors.append(f"Not a Markdown file: {relative_path}")
-                logger.warning(f"Not a Markdown file: {full_path}")
+                logger.warning("Not a Markdown file: %s", full_path)
             else:
-                logger.debug(f"Documentation file exists: {relative_path}")
+                logger.debug("Documentation file exists: %s", relative_path)
 
         return errors
 
@@ -108,6 +181,7 @@ class CodeLinkScanner:
         linked_code: list[str],
         related_docs: list[str],
         doc_file: Path,
+        metadata: DocumentMetadata | None = None,
     ) -> LinkCheckResult:
         """Check both code and documentation links for a document.
 
@@ -115,15 +189,24 @@ class CodeLinkScanner:
             linked_code: List of relative paths to Python files
             related_docs: List of relative paths to markdown files
             doc_file: Path to the documentation file being checked
+            metadata: Optional parsed metadata for the document
 
         Returns:
             LinkCheckResult with all broken links
         """
         # Check Python files
-        code_errors = self.check_python_files(linked_code)
+        code_errors = self.check_python_files(
+            linked_code,
+            doc_file=doc_file,
+            metadata=metadata,
+        )
 
         # Check documentation files
-        doc_errors = self.check_doc_links(related_docs)
+        doc_errors = self.check_doc_links(
+            related_docs,
+            doc_file=doc_file,
+            metadata=metadata,
+        )
 
         return LinkCheckResult(
             file=doc_file,

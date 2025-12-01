@@ -11,7 +11,7 @@ linked_code:
 - scripts/core/cortex/metadata.py
 - scripts/core/cortex/scanner.py
 - scripts/cli/cortex.py
-- scripts/cortex_migrate.py
+- scripts/core/cortex/migrate.py
 - tests/test_cortex_metadata.py
 - tests/test_cortex_scanner.py
 - scripts/core/cortex/__init__.py
@@ -188,10 +188,12 @@ version: 1.0.0
 author: Test Author
 date: 2025-11-30
 context_tags:
-  - testing
-  - example
+
+- testing
+- example
 linked_code:
-  - scripts/cli/cortex.py
+- scripts/cli/cortex.py
+
 ## ✅ VALIDAÇÃO FINAL
 
 **Antes de considerar o CORTEX completo, validar:**

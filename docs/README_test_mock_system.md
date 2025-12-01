@@ -10,7 +10,6 @@ linked_code:
 - scripts/test_mock_generator.py
 - scripts/validate_test_mocks.py
 - scripts/ci_test_mock_integration.py
-- tests/test_api.py
 title: Test Mock Generator System
 ---
 

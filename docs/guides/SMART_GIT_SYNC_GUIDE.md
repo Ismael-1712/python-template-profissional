@@ -8,7 +8,7 @@ date: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/smart_git_sync.py
-- scripts/test_smart_git_sync.py
+- tests/test_smart_git_sync.py
 - scripts/code_audit.py
 title: Smart Git Sync - Documentação de Uso
 ---
@@ -65,8 +65,10 @@ pip install .[dev]
 scripts/
 ├── smart_git_sync.py              # Script principal
 ├── smart_git_sync_config.yaml     # Configuração
-├── test_smart_git_sync.py         # Testes
 └── code_audit.py                  # Sistema de auditoria (existente)
+
+tests/
+└── test_smart_git_sync.py         # Testes
 ```
 
 ## Uso Básico
@@ -257,13 +259,13 @@ except GitOperationError:
 
 ```bash
 # Testes completos
-python3 scripts/test_smart_git_sync.py
+python3 -m pytest tests/test_smart_git_sync.py
 
 # Apenas testes unitários
-python3 scripts/test_smart_git_sync.py --unit-tests-only
+python3 -m pytest tests/test_smart_git_sync.py -k "unit"
 
 # Modo verbose
-python3 scripts/test_smart_git_sync.py --verbose
+python3 -m pytest tests/test_smart_git_sync.py -v
 ```
 
 ### 2. Validação de Segurança

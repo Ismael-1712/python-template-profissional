@@ -8,7 +8,6 @@ date: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/code_audit.py
-- src/utils.py
 title: Code Security Auditor
 ---
 

@@ -13,7 +13,7 @@ linked_code:
 - tests/test_cortex_metadata.py
 - scripts/core/cortex/scanner.py
 - tests/test_cortex_scanner.py
-- scripts/cortex_migrate.py
+- scripts/core/cortex/migrate.py
 title: '🧠 CORTEX - Relatório de Design (Fase 01): RESUMO EXECUTIVO'
 ---
 
