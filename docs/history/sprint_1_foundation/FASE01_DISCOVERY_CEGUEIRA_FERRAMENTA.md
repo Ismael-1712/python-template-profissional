@@ -1,25 +1,20 @@
+---
+id: fase01-discovery-cegueira-ferramenta
+type: history
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code: []
+title: 'Fase 01 - Discovery: Mapeamento de Configurações e Decisões Silenciosas'
+---
+
 # Fase 01 - Discovery: Mapeamento de Configurações e Decisões Silenciosas
 
 **Data de Auditoria:** 29 de Novembro de 2025
 **Objetivo:** Combater "Cegueira de Ferramenta" mapeando todas as configurações que alteram o comportamento do sistema
 **Escopo:** `scripts/**/*.py`
-
----
-
-## 📋 Executive Summary
-
-Esta auditoria identificou **16 variáveis de ambiente**, **7 scripts CLI principais** com **35+ argumentos**, **4 arquivos de configuração YAML**, e múltiplos pontos de decisão silenciosa que afetam o comportamento do sistema sem visibilidade adequada para o usuário.
-
-### Estatísticas Gerais
-
-| Categoria | Quantidade | Status |
-|-----------|------------|--------|
-| Variáveis de Ambiente | 16 | ⚠️ Requer Documentação |
-| Scripts CLI | 7 | ⚠️ Flags pouco documentadas |
-| Arquivos de Configuração | 4 YAML + 2 templates .env | ✅ Estruturados |
-| Decisões Silenciosas | 15+ pontos críticos | ❌ Sem logging adequado |
-
----
 
 ## 🔍 1. VARIÁVEIS DE AMBIENTE
 
@@ -62,24 +57,6 @@ if env:
 
 **Risco:** Git operations herdam ambiente completo, incluindo tokens sensíveis.
 
----
-
-## 🖥️ 2. ARGUMENTOS CLI
-
-### 2.1 Script: `smart_git_sync.py`
-
-| Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
-|-----------|------|--------|-------------|-----------|--------------|
-| `--config` | `Path` | `None` | ❌ | Arquivo YAML de configuração customizado | ⚠️ |
-| `--dry-run` | `action="store_true"` | `False` | ❌ | Mostra mudanças sem executar | ✅ |
-| `--no-audit` | `action="store_true"` | `False` | ❌ | **PERIGOSO** - Pula auditoria de código | ❌ |
-| `--verbose` | `action="store_true"` | `False` | ❌ | Ativa logging DEBUG | ✅ |
-
-**⚠️ Decisão Silenciosa:**
-Se `--config` não for passado, usa config padrão sem avisar usuário qual arquivo está lendo.
-
----
-
 ### 2.2 Script: `code_audit.py`
 
 | Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
@@ -94,21 +71,6 @@ Se `--config` não for passado, usa config padrão sem avisar usuário qual arqu
 **⚠️ Decisão Silenciosa:**
 Se `files` está vazio, faz scan completo (modo auditoria full) sem notificar usuário sobre diferença de custo.
 
----
-
-### 2.3 Script: `audit_dashboard/cli.py`
-
-| Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
-|-----------|------|--------|-------------|-----------|--------------|
-| `--export-html` | `action="store_true"` | `False` | ❌ | Exporta dashboard como HTML | ✅ |
-| `--export-json` | `str` | `None` | ❌ | Exporta métricas como JSON para arquivo | ✅ |
-| `--reset-stats` | `action="store_true"` | `False` | ❌ | **DESTRUTIVO** - Reseta todas as estatísticas (cria backup) | ⚠️ |
-| `--workspace` | `Path` | `cwd()` | ❌ | Diretório raiz do workspace | ⚠️ |
-| `--metrics-file` | `str` | `"audit_metrics.json"` | ❌ | Nome do arquivo de métricas | ❌ |
-| `--verbose` / `-v` | `action="store_true"` | `False` | ❌ | Ativa logging verbose | ✅ |
-
----
-
 ### 2.4 Script: `ci_recovery/main.py`
 
 | Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
@@ -122,21 +84,6 @@ Se `files` está vazio, faz scan completo (modo auditoria full) sem notificar us
 `dry_run = args.dry_run or os.getenv("CI_RECOVERY_DRY_RUN", "").lower() == "true"`
 Env var pode silenciosamente sobrescrever argumento CLI!
 
----
-
-### 2.5 Script: `ci_test_mock_integration.py`
-
-| Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
-|-----------|------|--------|-------------|-----------|--------------|
-| `--check` | `action="store_true"` | `False` | ❌ | Executa verificação abrangente | ⚠️ |
-| `--auto-fix` | `action="store_true"` | `False` | ❌ | **MODIFICADOR** - Aplica correções automáticas | ⚠️ |
-| `--commit` | `action="store_true"` | `False` | ❌ | **GIT WRITE** - Commita correções (uso com --auto-fix) | ❌ |
-| `--fail-on-issues` | `action="store_true"` | `False` | ❌ | Falha pipeline se problemas críticos encontrados | ✅ |
-| `--report` | `Path` | `None` | ❌ | Gera relatório JSON no arquivo especificado | ✅ |
-| `--workspace` | `Path` | `cwd()` | ❌ | Caminho do workspace | ⚠️ |
-
----
-
 ### 2.6 Script: `validate_test_mocks.py`
 
 | Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
@@ -144,19 +91,6 @@ Env var pode silenciosamente sobrescrever argumento CLI!
 | `--workspace` | `Path` | `cwd()` | ❌ | Caminho do workspace | ⚠️ |
 | `--verbose` / `-v` | `action="store_true"` | `False` | ❌ | Logging detalhado | ✅ |
 | `--fix-found-issues` | `action="store_true"` | `False` | ❌ | **MODIFICADOR** - Corrige problemas automaticamente | ❌ |
-
----
-
-### 2.7 Script: `integrated_audit_example.py`
-
-| Argumento | Tipo | Padrão | Obrigatório | Descrição | Documentado? |
-|-----------|------|--------|-------------|-----------|--------------|
-| `--config` | `Path` | `scripts/audit_config.yaml` | ❌ | Config de auditoria | ⚠️ |
-| `--workspace` | `Path` | `parent dir do script` | ❌ | Raiz do workspace | ⚠️ |
-| `--export-dashboard` | `action="store_true"` | `False` | ❌ | Exporta HTML dashboard após auditoria | ✅ |
-| `--verbose` / `-v` | `action="store_true"` | `False` | ❌ | Logging verbose | ✅ |
-
----
 
 ## 📁 3. ARQUIVOS DE CONFIGURAÇÃO
 
@@ -185,35 +119,6 @@ Env var pode silenciosamente sobrescrever argumento CLI!
 | `pyproject.toml` | `maintain_versions.py` (implícito) | Metadados do projeto | Lido silenciosamente para versões de deps |
 | `.vscode/settings.json` | VS Code (editor) | Configurações do editor | Não afeta scripts diretamente |
 
----
-
-## 🔇 4. DECISÕES SILENCIOSAS CRÍTICAS
-
-### 4.1 Detecção de Ambiente CI
-
-**Arquivos Afetados:** `doctor.py`, `logger.py`, `audit/plugins.py`
-
-```python
-if os.environ.get("CI"):
-    # Pula validações críticas SEM avisar usuário
-    return DiagnosticResult(
-        "Python Version",
-        True,
-        "Python {version} (CI Environment - Matriz Ativa)",  # ⚠️ Assume que está OK
-    )
-```
-
-**Impacto:**
-
-- ❌ Python version checks são **silenciosamente desabilitados**
-- ❌ Virtual environment checks pulados
-- ❌ Tool alignment checks ignorados
-- ❌ Cores desabilitadas se `CI=true` e `TERM` ausente
-
-**Recomendação:** Banner explícito: `"⚙️ CI MODE DETECTED - Skipping local environment checks"`
-
----
-
 ### 4.2 Fallback de Configurações
 
 **Em `code_audit.py:321-334`:**
@@ -231,35 +136,6 @@ else:
 
 **Problema:** Usuário não sabe quais padrões de segurança estão sendo usados.
 
----
-
-### 4.3 Propagação de Ambiente Completo
-
-**Em `audit/plugins.py:94`:**
-
-```python
-ci_env = {
-    **dict(os.environ),  # ⚠️ COPIA TUDO - pode incluir tokens sensíveis
-    "CI": "true",
-    "PYTEST_TIMEOUT": str(ci_timeout),
-}
-```
-
-**Risco de Segurança:**
-
-- Tokens em `GIT_TOKEN`, `GITHUB_TOKEN`, `API_KEY` propagados para subprocess
-- Nenhum log ou sanitização
-
-**Em `git_sync/sync_logic.py:145`:**
-
-```python
-env_vars = {**os.environ}  # ⚠️ Git herda todo o ambiente
-if env:
-    env_vars.update(env)
-```
-
----
-
 ### 4.4 Modo Dry-Run Sobrescrito Silenciosamente
 
 **Em `ci_recovery/main.py:292`:**
@@ -270,32 +146,6 @@ dry_run = args.dry_run or os.getenv("CI_RECOVERY_DRY_RUN", "").lower() == "true"
 
 **Problema:**
 Usuário passa `--dry-run=False` mas env var `CI_RECOVERY_DRY_RUN=true` força dry-run silenciosamente.
-
----
-
-### 4.5 Modo de Auditoria (Full vs Delta)
-
-**Em `code_audit.py:179-192`:**
-
-```python
-if files_to_audit:
-    logger.info(
-        f"Auditing specific file list (Delta Audit): "
-        f"{len(files_to_audit)} files",
-    )
-    python_files = files_to_audit
-else:
-    logger.info("No specific files provided, scanning paths from config...")
-    # ⚠️ FULL SCAN - pode demorar minutos
-    python_files = self._get_python_files()
-```
-
-**Problema:**
-
-- Full scan não tem tempo estimado ou barra de progresso
-- Usuário não é avisado: "Full scan pode levar 2-5 minutos"
-
----
 
 ### 4.6 Configuração de Idioma (i18n)
 
@@ -310,32 +160,6 @@ languages=[os.getenv("LANGUAGE", "pt_BR")],
 - Padrão hardcoded para `pt_BR`
 - Usuários anglófonos veem mensagens em português sem saber como mudar
 - Variável `LANGUAGE` não documentada em nenhum README
-
----
-
-### 4.7 Detecção de Terminal (Cores)
-
-**Em `logger.py:120-128`:**
-
-```python
-if os.environ.get("NO_COLOR"):
-    return False
-
-if not sys.stdout.isatty():
-    return False
-
-if os.environ.get("CI") and not os.environ.get("TERM"):
-    return False
-```
-
-**Problema:**
-Cores desabilitadas silenciosamente em:
-
-- Pipes (`python script.py | tee log.txt`)
-- CI sem `TERM` configurado
-- Presença de `NO_COLOR` (correto, mas não logado)
-
----
 
 ### 4.8 Criação Automática de Arquivos
 
@@ -354,29 +178,6 @@ if not tests_dir.exists():
 
 - Script modifica workspace sem permissão explícita
 - Cria `tests/` e arquivos `.py` sem flag `--auto-fix`
-
----
-
-### 4.9 Leitura de `.python-version`
-
-**Em `doctor.py:82-92`:**
-
-```python
-python_version_file = self.project_root / ".python-version"
-
-if not python_version_file.exists():
-    return DiagnosticResult(
-        "Python Version",
-        False,
-        "Arquivo .python-version não encontrado",
-        critical=False,  # ⚠️ NÃO É CRÍTICO - check passa silenciosamente
-    )
-```
-
-**Problema:**
-Sistema tolera ausência de `.python-version` sem avisar consequências.
-
----
 
 ### 4.10 Simulação de CI Condicional
 
@@ -398,30 +199,6 @@ else:
 - Se `simulate_ci: false` no config, CI simulation passa automaticamente
 - Relatório mostra "SKIPPED" mas contribui para status "PASS" geral
 
----
-
-## 🎯 5. RECOMENDAÇÕES PRIORITÁRIAS
-
-### 5.1 Banners de Inicialização (Prioridade Alta)
-
-**Implementar em todos os scripts principais:**
-
-```python
-def print_startup_banner():
-    """Display configuration summary before main execution."""
-    print("=" * 70)
-    print("🔧 CONFIGURAÇÃO ATIVA:")
-    print(f"  • Workspace: {workspace_root}")
-    print(f"  • Config: {config_file}")
-    print(f"  • Modo CI: {'SIM' if os.getenv('CI') else 'NÃO'}")
-    print(f"  • Dry-run: {'SIM' if dry_run else 'NÃO'}")
-    print(f"  • Idioma: {os.getenv('LANGUAGE', 'pt_BR')}")
-    print(f"  • Cores: {'Desabilitadas' if os.getenv('NO_COLOR') else 'Habilitadas'}")
-    print("=" * 70)
-```
-
----
-
 ### 5.2 Validação de Override de Env Vars (Prioridade Alta)
 
 ```python
@@ -435,24 +212,6 @@ def check_env_overrides(arg_value: bool, env_var: str) -> bool:
     return arg_value or env_value
 ```
 
----
-
-### 5.3 Documentação de Variáveis de Ambiente (Prioridade Média)
-
-Criar `docs/ENVIRONMENT_VARIABLES.md`:
-
-```markdown
-# Variáveis de Ambiente
-
-| Variável | Impacto | Valores Aceitos | Padrão |
-|----------|---------|-----------------|--------|
-| `CI` | Desabilita checks de ambiente local | `true`/`false` | `false` |
-| `LANGUAGE` | Define idioma das mensagens | `pt_BR`/`en_US` | `pt_BR` |
-| `NO_COLOR` | Desabilita cores ANSI | Qualquer valor (presença) | Ausente |
-```
-
----
-
 ### 5.4 Sanitização de Ambiente em Subprocessos (Prioridade Alta)
 
 ```python
@@ -465,20 +224,6 @@ def sanitize_env() -> dict[str, str]:
     }
 ```
 
----
-
-### 5.5 Warnings para Decisões Implícitas (Prioridade Média)
-
-```python
-if not args.config:
-    logger.info(
-        f"ℹ️  Config não especificado, usando: {default_config}\n"
-        f"   Para customizar, use: --config caminho/para/config.yaml"
-    )
-```
-
----
-
 ## 📊 6. MÉTRICAS DE IMPACTO
 
 ### Distribuição de Severidade
@@ -489,20 +234,6 @@ if not args.config:
 | 🟠 ALTO | 5 | Configs não documentados, modo full scan sem aviso, arquivos criados automaticamente |
 | 🟡 MÉDIO | 7 | Idioma hardcoded, fallbacks silenciosos, detecção de terminal |
 | 🟢 BAIXO | 3 | `.python-version` opcional, TERM checking, color detection |
-
----
-
-## ✅ 7. PRÓXIMOS PASSOS (Fase 02)
-
-1. **Implementar Banners de Inicialização** em todos os 7 scripts CLI principais
-2. **Adicionar Validação de Override** para `CI_RECOVERY_DRY_RUN` e outras env vars críticas
-3. **Criar Documentação Centralizada** de variáveis de ambiente (`ENVIRONMENT_VARIABLES.md`)
-4. **Implementar Sanitização de Ambiente** antes de subprocess.run() e git commands
-5. **Adicionar Warnings Explícitos** para fallbacks de config
-6. **Criar Script `scripts/show-config.py`** para dump de configuração ativa
-7. **Adicionar Tests** para validar comportamento de env vars
-
----
 
 ## 📝 Notas de Auditoria
 

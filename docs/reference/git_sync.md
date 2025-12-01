@@ -1,14 +1,18 @@
+---
+id: git-sync
+type: reference
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code: []
+title: Git Sync - Referência da API
+---
+
 # Git Sync - Referência da API
 
 > Sincronização Git inteligente com sistema de auditoria preventiva
-
----
-
-## Visão Geral
-
-O módulo `scripts.git_sync` fornece funcionalidades empresariais para sincronização Git automatizada com capacidades de auditoria preventiva.
-
----
 
 ## Classes Principais
 
@@ -18,36 +22,12 @@ O módulo `scripts.git_sync` fornece funcionalidades empresariais para sincroniz
       show_source: true
       heading_level: 3
 
----
-
-## Modelos de Dados
-
-::: scripts.git_sync.models
-    options:
-      show_root_heading: true
-      members:
-        - SyncStep
-      heading_level: 3
-
----
-
 ## Exceções
 
 ::: scripts.git_sync.exceptions
     options:
       show_root_heading: true
       heading_level: 3
-
----
-
-## Configuração
-
-::: scripts.git_sync.config
-    options:
-      show_root_heading: true
-      heading_level: 3
-
----
 
 !!! tip "Próximos Passos"
     Esta página será automaticamente populada com a documentação completa das classes e funções quando o MkDocs for executado com as dependências instaladas.

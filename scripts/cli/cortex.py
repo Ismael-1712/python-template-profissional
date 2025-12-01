@@ -30,6 +30,7 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
+from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
 from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
@@ -258,6 +259,127 @@ def init(
     except Exception as e:
         logger.error(f"Error initializing frontmatter: {e}", exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command()
+def migrate(
+    path: Annotated[
+        Path,
+        typer.Argument(
+            help="Directory containing Markdown files to migrate (e.g., docs/)",
+            exists=True,
+            file_okay=False,
+            dir_okay=True,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    apply: Annotated[
+        bool,
+        typer.Option(
+            "--apply",
+            help="Apply changes to files (default is dry-run mode)",
+        ),
+    ] = False,
+    force: Annotated[
+        bool,
+        typer.Option(
+            "--force",
+            "-f",
+            help="Overwrite existing frontmatter if present",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive/--no-recursive",
+            "-r",
+            help="Process subdirectories recursively",
+        ),
+    ] = True,
+) -> None:
+    """Migrate documentation files to CORTEX format.
+
+    Intelligently adds YAML frontmatter to Markdown files by:
+    - Generating kebab-case IDs from filenames
+    - Inferring document type from directory structure
+    - Extracting title from first heading
+    - Detecting code references automatically
+
+    By default runs in dry-run mode (shows what would be changed).
+    Use --apply to actually modify files.
+
+    Examples:
+        cortex migrate docs/ --dry-run      # Preview changes (default)
+        cortex migrate docs/ --apply         # Apply changes to files
+        cortex migrate docs/ --apply --force # Overwrite existing frontmatter
+        cortex migrate docs/guides/ --apply  # Migrate specific directory
+    """
+    try:
+        workspace_root = Path.cwd()
+        dry_run = not apply
+
+        logger.info("Starting migration of %s (dry_run=%s)", path, dry_run)
+
+        if dry_run:
+            typer.secho(
+                "\n🔍 DRY-RUN MODE: No files will be modified\n",
+                fg=typer.colors.YELLOW,
+                bold=True,
+            )
+        else:
+            typer.secho(
+                "\n⚠️  APPLY MODE: Files will be modified!\n",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+
+        # Initialize migrator
+        migrator = DocumentMigrator(workspace_root=workspace_root)
+
+        # Perform migration
+        typer.echo(f"📂 Scanning {path} for Markdown files...\n")
+
+        results = migrator.migrate_directory(
+            directory=path,
+            dry_run=dry_run,
+            force=force,
+            recursive=recursive,
+        )
+
+        # Print summary
+        migrator.print_summary(results, dry_run=dry_run)
+
+        # Count results
+        created = sum(1 for r in results if r.action == "created")
+        updated = sum(1 for r in results if r.action == "updated")
+        errors = sum(1 for r in results if r.action == "error")
+
+        # Provide next steps
+        if dry_run and (created + updated > 0):
+            typer.echo("\n" + "=" * 70)
+            typer.secho(
+                "\n💡 To apply these changes, run:\n",
+                fg=typer.colors.CYAN,
+                bold=True,
+            )
+            typer.secho(f"   cortex migrate {path} --apply", fg=typer.colors.WHITE)
+            typer.echo()
+
+        if errors > 0:
+            logger.warning("Migration completed with %d error(s)", errors)
+            raise typer.Exit(code=1)
+
+        logger.info("Migration completed successfully")
+
+    except typer.Exit:
+        # Re-raise Exit exceptions
+        raise
+
+    except Exception as e:
+        logger.exception("Error during migration")
+        typer.secho(f"❌ Migration failed: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
 
