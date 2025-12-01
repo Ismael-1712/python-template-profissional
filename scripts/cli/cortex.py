@@ -26,6 +26,7 @@ _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
+from scripts.core.cortex.mapper import generate_context_map  # noqa: E402
 from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
@@ -571,6 +572,81 @@ def audit(
     except Exception as e:
         logger.error(f"Error during audit: {e}", exc_info=True)
         typer.secho(f"❌ Audit failed: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command(name="map")
+def project_map(
+    output: Annotated[
+        Path,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Output path for context JSON file",
+        ),
+    ] = Path(".cortex/context.json"),
+    verbose: Annotated[
+        bool,
+        typer.Option(
+            "--verbose",
+            "-v",
+            help="Show detailed output",
+        ),
+    ] = False,
+) -> None:
+    """Generate project context map for introspection.
+
+    Scans the project structure and generates a comprehensive context map
+    containing information about CLI commands, documentation, dependencies,
+    and architecture. This map can be used by LLMs or automation tools.
+
+    The output is saved to .cortex/context.json by default.
+
+    Example:
+        cortex map                          # Generate context map
+        cortex map --verbose               # Show detailed information
+        cortex map -o custom/path.json     # Custom output location
+    """
+    try:
+        logger.info("Generating project context map...")
+
+        if verbose:
+            typer.echo("🔍 Scanning project structure...")
+
+        # Generate context map
+        project_root = _project_root
+        context = generate_context_map(project_root, output)
+
+        # Display summary
+        typer.secho("✓ Context map generated successfully!", fg=typer.colors.GREEN)
+        typer.echo(f"📍 Output: {output}")
+        typer.echo()
+        typer.echo(f"📦 Project: {context.project_name} v{context.version}")
+        typer.echo(f"🐍 Python: {context.python_version}")
+        typer.echo(f"🔧 CLI Commands: {len(context.cli_commands)}")
+        typer.echo(f"📄 Documents: {len(context.documents)}")
+        typer.echo(f"🏗️  Architecture Docs: {len(context.architecture_docs)}")
+        typer.echo(f"📦 Dependencies: {len(context.dependencies)}")
+        typer.echo(f"🛠️  Dev Dependencies: {len(context.dev_dependencies)}")
+
+        if verbose:
+            typer.echo()
+            typer.echo("Available CLI Commands:")
+            for cmd in context.cli_commands:
+                desc = f" - {cmd.description}" if cmd.description else ""
+                typer.echo(f"  • {cmd.name}{desc}")
+
+            if context.architecture_docs:
+                typer.echo()
+                typer.echo("Architecture Documents:")
+                for doc in context.architecture_docs:
+                    typer.echo(f"  • {doc.title} ({doc.path})")
+
+        logger.info(f"Context map saved to {output}")
+
+    except Exception as e:
+        logger.error(f"Error generating context map: {e}", exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
 
