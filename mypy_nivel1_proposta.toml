@@ -1,0 +1,141 @@
+# ================================================================================
+# PROPOSTA DE CONFIGURAÇÃO MYPY - STATE OF THE ART
+# Sprint 4 - Nível 1 (Rigor Básico Estendido)
+# ================================================================================
+#
+# Esta configuração representa um upgrade incremental do Mypy para
+# melhorar a segurança de tipos sem causar uma explosão de erros.
+#
+# ANTES (Configuração Atual):
+# - 7 regras ativas
+# - 13 erros em 5 arquivos
+#
+# DEPOIS (Nível 1 Proposto):
+# - 13 regras ativas (+6 novas)
+# - ~40 erros em 17 arquivos (requer correções)
+#
+# ================================================================================
+
+[tool.mypy]
+python_version = "3.10"
+
+# ================================================================================
+# RIGOR DE TIPAGEM
+# ================================================================================
+# Exige que todas as funções tenham anotações de tipo completas
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+
+# ⭐ NOVO: Força especificação de parâmetros de tipos genéricos
+# Exemplo: dict[str, Any] em vez de apenas dict
+disallow_any_generics = true
+
+# ⭐ NOVO: Previne herança de classes tipadas como Any
+# Reduz propagação de tipos vagos na hierarquia
+disallow_subclassing_any = true
+
+# ================================================================================
+# WARNINGS E ALERTAS
+# ================================================================================
+# Avisa quando uma função retorna Any
+warn_return_any = true
+
+# Avisa sobre configurações não utilizadas
+warn_unused_configs = true
+
+# ⭐ NOVO: Detecta type casts redundantes (ex: cast(str, "hello"))
+warn_redundant_casts = true
+
+# ⭐ NOVO: Detecta comentários # type: ignore que não são mais necessários
+# Mantém o código limpo removendo suppressões obsoletas
+warn_unused_ignores = true
+
+# ⭐ NOVO: Avisa sobre funções que deveriam retornar um valor mas não retornam
+warn_no_return = true
+
+# ⭐ NOVO (FUTURO): Avisa sobre código inalcançável (código morto)
+# Comentado por enquanto pois gera muitos falsos positivos
+# warn_unreachable = true
+
+# ================================================================================
+# CONTROLE DE NONE E OPTIONAL
+# ================================================================================
+# ⭐ NOVO: Não permite Optional implícito
+# Antes: def foo(x: str = None)  # Erro!
+# Depois: def foo(x: str | None = None)  # OK
+no_implicit_optional = true
+
+# Ativa verificação estrita de None
+strict_optional = true
+
+# ================================================================================
+# IMPORTS E DEPENDÊNCIAS
+# ================================================================================
+# MANTIDO TEMPORARIAMENTE: Ignora imports sem stubs
+# TODO Sprint 4.1: Instalar stubs faltantes e mudar para false
+# - types-PyYAML
+# - types-python-frontmatter
+ignore_missing_imports = true
+
+# Segue imports normalmente para checagem completa
+follow_imports = "normal"
+
+# ================================================================================
+# VALIDAÇÕES ADICIONAIS
+# ================================================================================
+# ⭐ NOVO: Valida igualdades entre tipos incompatíveis
+# Exemplo: if "hello" == 123:  # Erro! Comparação sempre False
+strict_equality = true
+
+# ================================================================================
+# EXCLUSÕES
+# ================================================================================
+# Não verificar testes, ambientes virtuais e builds
+exclude = [
+    "tests/",
+    "venv/",
+    ".venv/",
+    "build/",
+    "dist/"
+]
+
+# ================================================================================
+# OVERRIDES PER-MODULE (Opcional)
+# ================================================================================
+# Use esta seção para aplicar configurações específicas a módulos legados
+# enquanto gradualmente adapta o código
+#
+# Exemplo:
+# [[tool.mypy.overrides]]
+# module = "scripts.legacy.*"
+# disallow_untyped_defs = false
+# ignore_errors = false
+
+# ================================================================================
+# PRÓXIMAS ETAPAS (Sprint 4.2 - Nível 2)
+# ================================================================================
+# disallow_untyped_calls = true      # Não permite chamar funções sem tipos
+# disallow_untyped_decorators = true # Decoradores devem ter tipos
+# warn_unreachable = true            # Detecta código morto
+
+# ================================================================================
+# META FINAL (Sprint 4.3 - Nível 3)
+# ================================================================================
+# strict = true  # Ativa TODAS as verificações estritas
+#
+# Equivale a:
+# - check_untyped_defs = true
+# - disallow_any_generics = true
+# - disallow_incomplete_defs = true
+# - disallow_subclassing_any = true
+# - disallow_untyped_calls = true
+# - disallow_untyped_decorators = true
+# - disallow_untyped_defs = true
+# - no_implicit_optional = true
+# - strict_equality = true
+# - warn_redundant_casts = true
+# - warn_return_any = true
+# - warn_unused_configs = true
+# - warn_unused_ignores = true
+# ================================================================================

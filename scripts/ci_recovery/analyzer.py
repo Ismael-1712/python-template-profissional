@@ -82,7 +82,7 @@ def _assess_file_risk(file_path: str) -> RiskLevel:
 
 def analyze_changed_files(
     report: RecoveryReport,
-    log_step_callback: Callable,
+    log_step_callback: Callable[..., None],
     commit_hash: str,
     repository_path: Path,
     dry_run: bool,
@@ -145,8 +145,10 @@ def analyze_changed_files(
         log_step_callback(
             "File Risk Analysis",
             RecoveryStatus.SUCCESS,
-            f"Analyzed {len(changed_files)} files - "
-            f"Overall risk: {analysis.overall_risk.value}",
+            details=(
+                f"Analyzed {len(changed_files)} files - "
+                f"Overall risk: {analysis.overall_risk.value}"
+            ),
         )
 
         return analysis

@@ -53,7 +53,7 @@ class MetricsStorage:
             try:
                 if self.metrics_file.exists():
                     with open(self.metrics_file, encoding="utf-8") as f:
-                        metrics = json.load(f)
+                        metrics: dict[str, Any] = json.load(f)
                     logger.info(f"Loaded metrics from {self.metrics_file}")
                 else:
                     metrics = self._get_default_metrics()

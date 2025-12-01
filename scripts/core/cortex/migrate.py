@@ -26,6 +26,7 @@ import re
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -40,7 +41,7 @@ class MigrationResult:
     success: bool
     action: str  # "created", "updated", "skipped", "error"
     message: str
-    inferred_metadata: dict | None = None
+    inferred_metadata: dict[str, Any] | None = None
     error: str | None = None
 
 
@@ -181,7 +182,7 @@ class DocumentMigrator:
         content: str,
         *,
         force: bool = False,
-    ) -> tuple[dict, str]:
+    ) -> tuple[dict[str, Any], str]:
         """Generate frontmatter metadata for a file.
 
         Args:
@@ -222,7 +223,7 @@ class DocumentMigrator:
         action = "updated" if has_existing else "created"
         return metadata, action
 
-    def _inject_frontmatter(self, content: str, metadata: dict) -> str:
+    def _inject_frontmatter(self, content: str, metadata: dict[str, Any]) -> str:
         """Inject YAML frontmatter into markdown content.
 
         Args:

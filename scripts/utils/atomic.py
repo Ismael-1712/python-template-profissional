@@ -23,7 +23,7 @@ import json
 import os
 from pathlib import Path
 from types import TracebackType
-from typing import Any
+from typing import IO, Any
 
 
 class AtomicFileWriter:
@@ -69,7 +69,7 @@ class AtomicFileWriter:
         self.mode = mode
         # Use PID in temp filename to avoid race conditions
         self.temp_path = target.with_suffix(f".tmp.{os.getpid()}")
-        self._file = None  # type: ignore
+        self._file: IO[str] | None = None
 
     def __enter__(self):  # type: ignore
         """Open temporary file for writing."""
@@ -85,7 +85,7 @@ class AtomicFileWriter:
         exc_type: type[BaseException] | None,
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
-    ) -> bool:
+    ) -> None:
         """Close file and perform atomic replace or cleanup.
 
         On success (exc_type is None):
@@ -119,9 +119,6 @@ class AtomicFileWriter:
                 with contextlib.suppress(OSError):
                     self._file.close()
             raise
-
-        # Don't suppress exceptions - let them propagate
-        return False
 
 
 def atomic_write_json(

@@ -89,7 +89,7 @@ class TestMockGenerator:
 
         try:
             with self.config_path.open("r", encoding="utf-8") as f:
-                config = yaml.safe_load(f)
+                config: dict[str, Any] = yaml.safe_load(f) or {}
                 logger.info(f"Configuração carregada de {self.config_path}")
                 return config
         except Exception as e:
@@ -98,7 +98,7 @@ class TestMockGenerator:
 
     def _parse_patterns_from_config(self) -> dict[str, MockPattern]:
         """Converte os padrões do config YAML em objetos MockPattern."""
-        patterns_dict = {}
+        patterns_dict: dict[str, MockPattern] = {}
         if "mock_patterns" not in self.config:
             return patterns_dict
 
@@ -265,18 +265,20 @@ class TestMockGenerator:
             "*_test.py",
         ]
 
-        test_files = set()
+        test_files: set[Path] = set()
         for pattern in test_patterns:
             test_files.update(self.workspace_root.glob(pattern))
 
-        test_files = [f for f in test_files if f.is_file() and f.name != "__init__.py"]
+        test_files_list = [
+            f for f in test_files if f.is_file() and f.name != "__init__.py"
+        ]
 
-        logger.info(f"Encontrados {len(test_files)} arquivos de teste")
+        logger.info(f"Encontrados {len(test_files_list)} arquivos de teste")
 
         all_suggestions = []
         required_imports: set[str] = set()
 
-        for test_file in test_files:
+        for test_file in test_files_list:
             file_suggestions = self._analyze_test_file(test_file)
             all_suggestions.extend(file_suggestions)
 
@@ -308,7 +310,9 @@ class TestMockGenerator:
 
         self.suggestions = all_suggestions
 
-        total_suggestions = report["summary"]["total_suggestions"]
+        summary = report.get("summary")
+        assert isinstance(summary, dict), "Report summary must be a dict"
+        total_suggestions = summary["total_suggestions"]
         logger.info(f"Escaneamento concluído: {total_suggestions} sugestões geradas")
 
         return report

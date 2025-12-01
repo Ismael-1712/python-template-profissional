@@ -21,7 +21,7 @@ def run_command(
     cwd: Path | None = None,
     capture_output: bool = True,
     timeout: int = 300,
-) -> subprocess.CompletedProcess:
+) -> subprocess.CompletedProcess[str]:
     """Executa um comando de forma segura usando subprocess.
 
     Args:

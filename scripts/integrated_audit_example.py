@@ -8,6 +8,7 @@ tracking audit metrics in DevOps pipelines.
 import logging
 import sys
 from pathlib import Path
+from typing import Any
 
 # Add the scripts directory to the path for imports
 scripts_dir = Path(__file__).parent
@@ -84,7 +85,7 @@ def run_integrated_audit(workspace_root: Path, config_path: Path | None = None) 
         return 1
 
 
-def transform_audit_for_dashboard(audit_report: dict) -> dict:
+def transform_audit_for_dashboard(audit_report: dict[str, Any]) -> dict[str, Any]:
     """Transform code_audit.py report format to audit_dashboard.py expected format.
 
     Args:
