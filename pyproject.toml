@@ -151,7 +151,8 @@ exclude = [
     "venv/",
     ".venv/",
     "build/",
-    "dist/"
+    "dist/",
+    "scripts/audit_dashboard.py"  # Wrapper deprecado - conflita com package
 ]
 
 # Override para bibliotecas sem stubs de tipagem
