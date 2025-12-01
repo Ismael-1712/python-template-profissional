@@ -1,3 +1,17 @@
+---
+id: cortex-implementation-summary
+type: history
+status: archived
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: [cortex, introspection, sprint-2]
+linked_code:
+- scripts/core/cortex/mapper.py
+- scripts/cli/cortex.py
+title: Sistema de Introspecção Dinâmica - Implementação Completa
+---
+
 # ✅ Sistema de Introspecção Dinâmica - Implementação Completa
 
 ## 🎯 Objetivo Alcançado

@@ -469,10 +469,32 @@ def audit(
         parser = FrontmatterParser()
         scanner = CodeLinkScanner(workspace_root=workspace_root)
 
+        # ============================================================
+        # ROOT LOCKDOWN: Check for unauthorized .md files in root
+        # ============================================================
+        typer.echo("🔒 Checking Root Lockdown policy...")
+        root_violations = scanner.check_root_markdown_files()
+
+        if root_violations:
+            typer.secho(
+                f"  ❌ {len(root_violations)} violation(s):",
+                fg=typer.colors.RED,
+            )
+            for violation in root_violations:
+                typer.secho(f"     • {violation}", fg=typer.colors.RED)
+            typer.echo()
+        else:
+            typer.secho("  ✅ Root Lockdown: OK", fg=typer.colors.GREEN)
+            typer.echo()
+
         # Track errors and warnings
-        total_errors = 0
+        total_errors = len(root_violations)  # Start with root violations
         total_warnings = 0
         files_with_errors = []
+
+        # Add root violations to error tracking
+        if root_violations:
+            files_with_errors.append(Path("PROJECT_ROOT"))
 
         # Audit each file
         for md_file in md_files:
