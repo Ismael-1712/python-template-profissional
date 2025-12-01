@@ -22,7 +22,7 @@ def safe_pip_compile(
     pip_compile_path: str,
     *,
     workspace_root: Path | None = None,
-) -> subprocess.CompletedProcess:
+) -> subprocess.CompletedProcess[str]:
     """Execute pip-compile with atomic output guarantees.
 
     Strategy:

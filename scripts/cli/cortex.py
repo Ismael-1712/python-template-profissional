@@ -501,8 +501,8 @@ def audit(
             relative_path = md_file.relative_to(workspace_root)
             typer.echo(f"🔍 Auditing {relative_path}...")
 
-            file_errors = []
-            file_warnings = []
+            file_errors: list[str] = []
+            file_warnings: list[str] = []
 
             # 1. Parse and validate frontmatter
             try:
