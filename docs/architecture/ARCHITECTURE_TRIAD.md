@@ -1,3 +1,16 @@
+---
+id: architecture-triad
+type: arch
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- src/main.py
+title: 📜 O MANIFESTO DA TRÍADE (V2.0)
+---
+
 # 📜 O MANIFESTO DA TRÍADE (V2.0)
 
 **Protocolo de Sobrevivência e Arquitetura de Branches**

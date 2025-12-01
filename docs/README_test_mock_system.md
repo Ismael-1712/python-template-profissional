@@ -1,3 +1,19 @@
+---
+id: readme-test-mock-system
+type: guide
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/test_mock_generator.py
+- scripts/validate_test_mocks.py
+- scripts/ci_test_mock_integration.py
+- tests/test_api.py
+title: Test Mock Generator System
+---
+
 # Test Mock Generator System
 
 Sistema robusto de geração automática de mocks para testes Python, seguindo padrões DevOps e SRE.

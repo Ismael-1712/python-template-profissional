@@ -1,29 +1,28 @@
+---
+id: cortex-checklist-implementacao
+type: arch
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/core/cortex/__init__.py
+- scripts/core/cortex/models.py
+- scripts/core/cortex/metadata.py
+- tests/test_cortex_metadata.py
+- scripts/cli/cortex.py
+- scripts/core/cortex/scanner.py
+- tests/test_cortex_scanner.py
+- scripts/cortex_migrate.py
+title: 🧠 CORTEX - Checklist de Implementação
+---
+
 # 🧠 CORTEX - Checklist de Implementação
 
 **Referência:** [CORTEX_FASE01_DESIGN.md](./CORTEX_FASE01_DESIGN.md)
 **Status Geral:** 🔴 Não Iniciado
 **Última Atualização:** 2025-11-30
-
----
-
-## 🎯 FASE 00: PRÉ-REQUISITOS
-
-### Dependências
-
-- [ ] Atualizar `pyproject.toml` com dependências CORTEX
-  - [ ] Adicionar `python-frontmatter>=1.0.0`
-  - [ ] Adicionar `pyyaml>=6.0`
-  - [ ] Adicionar entry point `cortex = "scripts.cli.cortex:main"`
-- [ ] Executar `pip install -e .[dev]`
-- [ ] Validar instalação com `python -c "import frontmatter; print(frontmatter.__version__)"`
-
-### Estrutura de Diretórios
-
-- [ ] Criar `scripts/core/cortex/`
-- [ ] Criar `scripts/core/cortex/__init__.py`
-- [ ] Criar `tests/fixtures/sample_docs/`
-
----
 
 ## 🚀 SPRINT 1: FOUNDATION (11h)
 
@@ -86,56 +85,6 @@
 
 **Entregável Sprint 1:** ✅ `cortex init file.md` funcionando
 
----
-
-## 🔍 SPRINT 2: VALIDATION (12h)
-
-**Objetivo:** Auditoria de docs com detecção de links quebrados
-**Status:** 🔴 Não Iniciado
-
-### Task 5: Implementar scanner (5h)
-
-- [ ] Criar `scripts/core/cortex/scanner.py`
-- [ ] Implementar `class CodeLinkScanner`
-- [ ] Implementar método `check_python_files(linked_code: list[str]) -> list[Issue]`
-- [ ] Implementar verificação de existência de arquivos `.py`
-- [ ] Implementar método `check_doc_links(related_docs: list[str]) -> list[Issue]`
-- [ ] Implementar verificação de existência de arquivos `.md`
-- [ ] Implementar método `analyze_python_exports(py_file: Path) -> list[str]`
-- [ ] Usar `ast.parse()` para extrair classes e funções públicas
-- [ ] Implementar detecção de referências órfãs
-- [ ] Adicionar tratamento de erros para paths inválidos
-
-### Task 6: CLI audit command (3h)
-
-- [ ] Adicionar comando `@app.command() def audit(path: Path = None)`
-- [ ] Implementar scan recursivo de `.md` com `Path.rglob("*.md")`
-- [ ] Implementar iteração sobre todos os arquivos encontrados
-- [ ] Chamar `FrontmatterParser.parse_file()` para cada arquivo
-- [ ] Chamar `CodeLinkScanner` para validar links
-- [ ] Implementar flag `--fail-on-error` (exit code 1 se erros encontrados)
-- [ ] Implementar output formatado (tabela de erros)
-- [ ] Adicionar contadores de estatísticas (total, válidos, inválidos)
-- [ ] Testar execução: `cortex audit docs/`
-
-### Task 7: Testes de integração (4h)
-
-- [ ] Criar `tests/test_cortex_scanner.py`
-- [ ] Criar fixtures de estrutura de diretórios fake
-- [ ] Criar fixtures de arquivos `.md` com links válidos
-- [ ] Criar fixtures de arquivos `.md` com links quebrados
-- [ ] Teste: `test_check_valid_python_file()`
-- [ ] Teste: `test_check_missing_python_file()`
-- [ ] Teste: `test_check_valid_doc_link()`
-- [ ] Teste: `test_check_missing_doc_link()`
-- [ ] Teste: `test_analyze_python_exports_with_ast()`
-- [ ] Mockar filesystem completamente
-- [ ] Validar cobertura de testes (mínimo 90%)
-
-**Entregável Sprint 2:** ✅ `cortex audit docs/` detectando links quebrados
-
----
-
 ## 🔄 SPRINT 3: MIGRATION (16h)
 
 **Objetivo:** Migrar todos os docs existentes para o novo formato
@@ -190,52 +139,6 @@
 
 **Entregável Sprint 3:** ✅ Todos os 30+ docs com Frontmatter válido
 
----
-
-## 🤖 SPRINT 4: AUTOMATION (7h)
-
-**Objetivo:** Validação automática em commits e PRs
-**Status:** 🔴 Não Iniciado
-
-### Task 11: Pre-commit hook (1h)
-
-- [ ] Atualizar `.pre-commit-config.yaml`
-- [ ] Adicionar hook `cortex-audit`
-- [ ] Configurar para rodar apenas em arquivos `.md` modificados
-- [ ] Testar localmente com `pre-commit run --all-files`
-- [ ] Validar que o hook falha em Frontmatter inválido
-- [ ] Validar que o hook passa em Frontmatter válido
-
-### Task 12: CI/CD workflow (2h)
-
-- [ ] Criar `.github/workflows/docs-validation.yml`
-- [ ] Configurar trigger em `push` e `pull_request`
-- [ ] Adicionar step para setup Python 3.10
-- [ ] Adicionar step para instalar dependências (`pip install -e .[dev]`)
-- [ ] Adicionar step para executar `cortex audit --fail-on-error`
-- [ ] Testar workflow com PR de teste
-- [ ] Validar que o workflow falha em Frontmatter inválido
-- [ ] Validar que o workflow passa em Frontmatter válido
-
-### Task 13: Report command (4h)
-
-- [ ] Adicionar comando `@app.command() def report()`
-- [ ] Implementar agregação de estatísticas de docs/
-- [ ] Calcular métricas:
-  - [ ] Total de arquivos `.md`
-  - [ ] % de arquivos com Frontmatter
-  - [ ] % de arquivos com `linked_code` preenchido
-  - [ ] Distribuição por `type` (guide, arch, reference, history)
-  - [ ] Distribuição por `status` (draft, active, deprecated, archived)
-- [ ] Implementar flag `--format json|yaml|table`
-- [ ] Implementar flag `--output FILE` para salvar relatório
-- [ ] Gerar gráficos ASCII simples (opcional)
-- [ ] Testar execução: `cortex report --format json --output cortex-report.json`
-
-**Entregável Sprint 4:** ✅ Validação automática em commits e PRs funcionando
-
----
-
 ## ✅ CRITÉRIOS DE CONCLUSÃO
 
 **O projeto CORTEX está completo quando:**
@@ -250,24 +153,6 @@
 - [ ] Pre-commit hook está ativo e funcionando
 - [ ] CI/CD workflow está verde
 - [ ] Documentação do CORTEX está atualizada (README, guides)
-
----
-
-## 📊 PROGRESSO GERAL
-
-```
-Sprint 1 (Foundation):     [ ] 0/4 tasks (0%)
-Sprint 2 (Validation):     [ ] 0/3 tasks (0%)
-Sprint 3 (Migration):      [ ] 0/3 tasks (0%)
-Sprint 4 (Automation):     [ ] 0/3 tasks (0%)
-────────────────────────────────────────────
-Total:                     [ ] 0/13 tasks (0%)
-```
-
-**Status:** 🔴 Não Iniciado
-**Próxima Ação:** Criar branch `feature/cortex-implementation` e iniciar Sprint 1
-
----
 
 ## 🔗 REFERÊNCIAS
 
