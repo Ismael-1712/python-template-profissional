@@ -14,7 +14,7 @@ linked_code:
 - scripts/cli/cortex.py
 - scripts/core/cortex/scanner.py
 - tests/test_cortex_scanner.py
-- scripts/cortex_migrate.py
+- scripts/core/cortex/migrate.py
 title: 🧠 CORTEX - Checklist de Implementação
 ---
 
