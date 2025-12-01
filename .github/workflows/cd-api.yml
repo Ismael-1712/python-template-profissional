@@ -21,7 +21,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}-smoketest
 
       - name: "Construir Imagem para Teste"
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false # Não empurrar esta imagem
@@ -60,7 +60,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}
 
       - name: "Construir e Enviar Imagem Docker (Produção)"
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true # Agora publica
