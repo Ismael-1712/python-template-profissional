@@ -1,0 +1,1174 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Sistema de Introspecção Dinâmica - Implementação Completa - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sistema-de-introspeccao-dinamica-implementacao-completa" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sistema de Introspecção Dinâmica - Implementação Completa
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo-alcancado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Objetivo Alcançado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entregas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 Entregas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 Entregas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-instrucoes-agnosticas-perpetuas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Instruções Agnósticas Perpétuas ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-sistema-de-introspeccao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Sistema de Introspecção ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-contexto-dinamico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Contexto Dinâmico ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-configuracao-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Configuração Git ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testes-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Testes de Validação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estatisticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Estatísticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparacao-antes-vs-depois" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎭 Comparação: Antes vs Depois
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎭 Comparação: Antes vs Depois">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#abordagem-antiga-hardcoded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Abordagem Antiga (Hardcoded)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abordagem-nova-introspectiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Abordagem Nova (Introspectiva)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Como Usar
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Como Usar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#para-llmsgithub-copilot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para LLMs/GitHub Copilot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-desenvolvedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Desenvolvedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-projetos-derivados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Projetos Derivados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquivos-criadosmodificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Arquivos Criados/Modificados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Documentação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principios-implementados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Princípios Implementados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-trabalho-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Fluxo de Trabalho Completo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exemplos-de-uso-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Exemplos de Uso Real
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Exemplos de Uso Real">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-1-adicionar-novo-comando-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 1: Adicionar Novo Comando CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-2-descobrir-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 2: Descobrir Arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-3-projeto-derivado-com-arquitetura-diferente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 3: Projeto Derivado com Arquitetura Diferente
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#avisos-importantes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Avisos Importantes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beneficios-alcancados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 Benefícios Alcançados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📞 Suporte
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="sistema-de-introspeccao-dinamica-implementacao-completa">✅ Sistema de Introspecção Dinâmica - Implementação Completa</h1>
+<h2 id="objetivo-alcancado">🎯 Objetivo Alcançado</h2>
+<p>Automatizar o contexto da LLM tornando o template agnóstico e introspectivo, eliminando
+hardcoding de padrões arquiteturais.</p>
+<h2 id="entregas">📦 Entregas</h2>
+<h3 id="1-instrucoes-agnosticas-perpetuas">1. Instruções Agnósticas Perpétuas ✅</h3>
+<p><strong>Arquivo</strong>: <code>.github/copilot-instructions.md</code></p>
+<p>Regras universais de SRE que <strong>não assumem nada</strong> sobre a arquitetura:</p>
+<ul>
+<li>✅ Consulte <code>docs/architecture/</code> para topologia</li>
+<li>✅ Use <code>cortex map</code> para descobrir comandos</li>
+<li>✅ Verifique Git antes de sugerir operações</li>
+<li>✅ Não presuma branches ou estruturas específicas</li>
+</ul>
+<p><strong>Princípio</strong>: "Não assuma - sempre verifique"</p>
+<h3 id="2-sistema-de-introspeccao">2. Sistema de Introspecção ✅</h3>
+<p><strong>Arquivos</strong>:</p>
+<ul>
+<li><code>scripts/core/cortex/mapper.py</code> - Motor de introspecção</li>
+<li><code>scripts/cli/cortex.py</code> - Comando CLI <code>map</code></li>
+</ul>
+<p><strong>Capacidades</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cortex<span class="w"> </span>map<span class="w">                    </span><span class="c1"># Gera contexto</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>cortex<span class="w"> </span>map<span class="w"> </span>--verbose<span class="w">         </span><span class="c1"># Com detalhes</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cortex<span class="w"> </span>map<span class="w"> </span>-o<span class="w"> </span>custom.json<span class="w">    </span><span class="c1"># Caminho customizado</span>
+</code></pre></div>
+<p><strong>Escaneia</strong>:</p>
+<ul>
+<li>✅ Comandos CLI em <code>scripts/cli/</code></li>
+<li>✅ Documentos em <code>docs/</code></li>
+<li>✅ Arquitetura em <code>docs/architecture/</code></li>
+<li>✅ Configurações em <code>pyproject.toml</code></li>
+<li>✅ Dependências e scripts</li>
+</ul>
+<h3 id="3-contexto-dinamico">3. Contexto Dinâmico ✅</h3>
+<p><strong>Arquivo</strong>: <code>.cortex/context.json</code> (volátil)</p>
+<p>Contém mapa completo do projeto:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;project_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;nome-do-projeto&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;python_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&gt;=3.10&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">&quot;cli_commands&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span><span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="err">coma</span><span class="kc">n</span><span class="err">dos</span><span class="w"> </span><span class="err">descober</span><span class="kc">t</span><span class="err">os</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">&quot;documents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span><span class="w">            </span><span class="err">#</span><span class="w"> </span><span class="mi">22</span><span class="w"> </span><span class="err">docume</span><span class="kc">nt</span><span class="err">os</span><span class="w"> </span><span class="err">esca</span><span class="kc">nea</span><span class="err">dos</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">&quot;architecture_docs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span><span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="err">docs</span><span class="w"> </span><span class="err">arqui</span><span class="kc">tetura</span><span class="err">is</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nt">&quot;dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span><span class="w">         </span><span class="err">#</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="err">depe</span><span class="kc">n</span><span class="err">dê</span><span class="kc">n</span><span class="err">cias</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&quot;dev_dependencies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="err">dev</span><span class="w"> </span><span class="err">deps</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">&quot;scripts_available&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}</span><span class="w">     </span><span class="err">#</span><span class="w"> </span><span class="err">Scrip</span><span class="kc">ts</span><span class="w"> </span><span class="err">i</span><span class="kc">nstal</span><span class="err">áveis</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="4-configuracao-git">4. Configuração Git ✅</h3>
+<p><strong>Arquivo</strong>: <code>.gitignore</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a># CORTEX - Contexto dinâmico gerado (volátil, não deve ser commitado)
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>.cortex/
+</code></pre></div>
+<p>Garante que contexto local não vai para repositório.</p>
+<h2 id="testes-de-validacao">🧪 Testes de Validação</h2>
+<p>Todos os testes passaram:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>Comando<span class="w"> </span>funciona
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">2</span>:<span class="w"> </span>.cortex/<span class="w"> </span>está<span class="w"> </span>no<span class="w"> </span>.gitignore
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">3</span>:<span class="w"> </span>Instruções<span class="w"> </span>agnósticas<span class="w"> </span>criadas
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">4</span>:<span class="w"> </span>JSON<span class="w"> </span>válido
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="m">9</span><span class="w"> </span>comandos<span class="w"> </span>CLI<span class="w"> </span>encontrados
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>✅<span class="w"> </span>Teste<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="m">9</span><span class="w"> </span>docs<span class="w"> </span>de<span class="w"> </span>arquitetura<span class="w"> </span>encontrados
+</code></pre></div>
+<h2 id="estatisticas">📊 Estatísticas</h2>
+<ul>
+<li><strong>Linhas de código</strong>: ~300 (mapper.py)</li>
+<li><strong>Comandos CLI</strong>: 9 descobertos automaticamente</li>
+<li><strong>Documentos</strong>: 22 escaneados</li>
+<li><strong>Arquitetura</strong>: 9 documentos identificados</li>
+<li><strong>Tempo de execução</strong>: ~200ms</li>
+</ul>
+<h2 id="comparacao-antes-vs-depois">🎭 Comparação: Antes vs Depois</h2>
+<h3 id="abordagem-antiga-hardcoded">❌ Abordagem Antiga (Hardcoded)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="gh"># Instruções hardcoded</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Este projeto usa a Tríade (API + CLI + LIB)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>API está em src/api/
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>CLI está em src/cli/
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>Branch de desenvolvimento: develop
+</code></pre></div>
+<p><strong>Problemas</strong>:</p>
+<ul>
+<li>Template inflexível</li>
+<li>Projetos derivados quebram as instruções</li>
+<li>Manutenção manual constante</li>
+</ul>
+<h3 id="abordagem-nova-introspectiva">✅ Abordagem Nova (Introspectiva)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gh"># Instruções agnósticas</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Nunca pressuponha a arquitetura
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Execute: cortex map
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Leia: .cortex/context.json
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Consulte: docs/architecture/
+</code></pre></div>
+<p><strong>Benefícios</strong>:</p>
+<ul>
+<li>Template genérico e reutilizável</li>
+<li>Projetos derivados funcionam automaticamente</li>
+<li>Manutenção zero para instruções base</li>
+</ul>
+<h2 id="como-usar">🚀 Como Usar</h2>
+<h3 id="para-llmsgithub-copilot">Para LLMs/GitHub Copilot</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 1. Descobrir contexto</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>cortex<span class="w"> </span>map
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>cat<span class="w"> </span>.cortex/context.json
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># 2. Consultar arquitetura</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>cat<span class="w"> </span>docs/architecture/CORTEX_INDICE.md
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># 3. Verificar Git</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>git<span class="w"> </span>branch<span class="w"> </span>-a
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># 4. Agir com contexto real</span>
+</code></pre></div>
+<h3 id="para-desenvolvedores">Para Desenvolvedores</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Após mudanças estruturais</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>cortex<span class="w"> </span>map
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Adicionar novo comando CLI</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Sistema descobre automaticamente no próximo map</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Validar instruções permanecem agnósticas</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;hardcoded-term&quot;</span><span class="w"> </span>.github/copilot-instructions.md
+</code></pre></div>
+<h3 id="para-projetos-derivados">Para Projetos Derivados</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Clone o template</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>clone<span class="w"> </span>&lt;template-repo&gt;<span class="w"> </span>my-project
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 2. Customize a arquitetura</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># (mude o que quiser)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># 3. Gere contexto</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>cortex<span class="w"> </span>map
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># 4. LLM descobre automaticamente a nova estrutura</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># Sem necessidade de atualizar instruções!</span>
+</code></pre></div>
+<h2 id="arquivos-criadosmodificados">🔧 Arquivos Criados/Modificados</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>.github/
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  ✅ copilot-instructions.md          # NOVO - Instruções agnósticas
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>scripts/
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>  core/cortex/
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    ✅ mapper.py                       # NOVO - Motor de introspecção
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>  cli/
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    ✏️ cortex.py                       # MODIFICADO - Comando &#39;map&#39; adicionado
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>docs/
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>  guides/
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    ✅ CORTEX_INTROSPECTION_SYSTEM.md # NOVO - Documentação completa
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>.cortex/
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>  ✅ README.md                         # NOVO - Quick start
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>  ✅ context.json                      # GERADO - Contexto (volátil)
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>✏️ .gitignore                          # MODIFICADO - Ignorar .cortex/
+</code></pre></div>
+<h2 id="documentacao">📚 Documentação</h2>
+<ul>
+<li><strong>Quick Start</strong>: <code>.cortex/README.md</code></li>
+<li><strong>Guia Completo</strong>: <code>docs/guides/CORTEX_INTROSPECTION_SYSTEM.md</code></li>
+<li><strong>Instruções Agnósticas</strong>: <code>.github/copilot-instructions.md</code></li>
+<li><strong>Código Fonte</strong>: <code>scripts/core/cortex/mapper.py</code></li>
+</ul>
+<h2 id="principios-implementados">🎯 Princípios Implementados</h2>
+<ol>
+<li><strong>✅ Sem Suposições</strong>: Nada hardcoded sobre arquitetura</li>
+<li><strong>✅ Descoberta Dinâmica</strong>: Tudo descoberto em runtime</li>
+<li><strong>✅ Volátil por Design</strong>: Contexto é local e regenerável</li>
+<li><strong>✅ Extensível</strong>: Fácil adicionar novas fontes</li>
+<li><strong>✅ Agnóstico</strong>: Funciona com qualquer arquitetura</li>
+</ol>
+<h2 id="fluxo-de-trabalho-completo">🔄 Fluxo de Trabalho Completo</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>graph TD
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    A[LLM recebe requisição] --&gt; B[Executa: cortex map]
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    B --&gt; C[Lê: .cortex/context.json]
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    C --&gt; D{Precisa entender arquitetura?}
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    D --&gt;|Sim| E[Lê docs em architecture_docs]
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    D --&gt;|Não| F[Usa contexto direto]
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    E --&gt; F
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    F --&gt; G[Executa ação com contexto real]
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    G --&gt; H{Mudou estrutura?}
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    H --&gt;|Sim| B
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    H --&gt;|Não| I[Fim]
+</code></pre></div>
+<h2 id="exemplos-de-uso-real">🎓 Exemplos de Uso Real</h2>
+<h3 id="exemplo-1-adicionar-novo-comando-cli">Exemplo 1: Adicionar Novo Comando CLI</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># LLM precisa criar novo comando</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>$<span class="w"> </span>cortex<span class="w"> </span>map<span class="w"> </span>--verbose
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># Saída mostra: CLI commands estão em scripts/cli/</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># LLM cria: scripts/cli/new_cmd.py ✅</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1"># Próxima vez que executar</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>$<span class="w"> </span>cortex<span class="w"> </span>map
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># Novo comando é descoberto automaticamente ✅</span>
+</code></pre></div>
+<h3 id="exemplo-2-descobrir-arquitetura">Exemplo 2: Descobrir Arquitetura</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># LLM não sabe qual padrão arquitetural usar</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>$<span class="w"> </span>cortex<span class="w"> </span>map
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>$<span class="w"> </span>cat<span class="w"> </span>.cortex/context.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.architecture_docs&#39;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Saída lista documentos arquiteturais</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>$<span class="w"> </span>cat<span class="w"> </span>docs/architecture/ARCHITECTURE_TRIAD.md
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="c1"># LLM descobre: projeto usa Tríade ✅</span>
+</code></pre></div>
+<h3 id="exemplo-3-projeto-derivado-com-arquitetura-diferente">Exemplo 3: Projeto Derivado com Arquitetura Diferente</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Projeto filho usa hexagonal em vez de Tríade</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>$<span class="w"> </span>cortex<span class="w"> </span>map
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># context.json reflete estrutura hexagonal</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># LLM adapta sugestões automaticamente ✅</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Instruções base permanecem inalteradas ✅</span>
+</code></pre></div>
+<h2 id="avisos-importantes">🚨 Avisos Importantes</h2>
+<ol>
+<li><strong>NÃO COMMITE</strong> <code>.cortex/</code> - é volátil e local</li>
+<li><strong>NÃO HARDCODE</strong> padrões nas instruções base</li>
+<li><strong>SEMPRE REGENERE</strong> após mudanças estruturais</li>
+<li><strong>PROJETOS DERIVADOS</strong> mantêm instruções base</li>
+</ol>
+<h2 id="beneficios-alcancados">🎉 Benefícios Alcançados</h2>
+<ul>
+<li>✅ Template verdadeiramente genérico</li>
+<li>✅ LLM descobre contexto dinamicamente</li>
+<li>✅ Projetos derivados funcionam out-of-the-box</li>
+<li>✅ Manutenção zero para instruções</li>
+<li>✅ Extensível e escalável</li>
+<li>✅ Documentado e testado</li>
+</ul>
+<h2 id="suporte">📞 Suporte</h2>
+<ul>
+<li><strong>Issues</strong>: Repositório GitHub</li>
+<li><strong>Documentação</strong>: <code>docs/guides/CORTEX_INTROSPECTION_SYSTEM.md</code></li>
+<li><strong>Logs</strong>: <code>cortex.log</code>, <code>cortex_mapper.log</code></li>
+<li><strong>Quick Start</strong>: <code>.cortex/README.md</code></li>
+</ul>
+<hr />
+<p><strong>Status</strong>: ✅ Implementado, testado e documentado
+<strong>Versão</strong>: 1.0
+<strong>Data</strong>: 2025-12-01
+<strong>Autor</strong>: Engineering Team</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
