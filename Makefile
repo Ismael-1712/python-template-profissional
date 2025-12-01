@@ -76,9 +76,13 @@ release:
 lint:
 	PYTHONPATH=. $(PYTHON) -m ruff check .
 
-## type-check: Executa verificação de tipos estáticos com mypy
+## type-check: Executa verificação de tipos com mypy
 type-check:
 	$(PYTHON) -m mypy scripts/ src/
+
+## validate: Executa validação completa (lint + type-check + test)
+validate: lint type-check test
+	@echo "✅ Validação completa concluída"
 
 ## format: Formata código automaticamente com ruff
 format:
