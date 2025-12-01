@@ -20,6 +20,7 @@ exclude_paths:
   - "node_modules/"
   - "dist/"
   - "build/"
+  - "tests/test_audit_analyzer.py"  # Contém strings de vulnerabilidade intencionais para testes
 
 # CI simulation timeout in seconds
 ci_timeout: 300
