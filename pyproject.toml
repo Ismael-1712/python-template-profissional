@@ -153,3 +153,8 @@ exclude = [
     "build/",
     "dist/"
 ]
+
+# Override para bibliotecas sem stubs de tipagem
+[[tool.mypy.overrides]]
+module = "frontmatter"
+ignore_missing_imports = true
