@@ -1,3 +1,17 @@
+---
+id: code-audit
+type: arch
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/code_audit.py
+- src/utils.py
+title: Code Security Auditor
+---
+
 # Code Security Auditor
 
 Enterprise-grade security and quality auditing tool for Python projects. This tool performs static analysis to detect security vulnerabilities, external dependencies, and potential CI/CD issues before code commits.

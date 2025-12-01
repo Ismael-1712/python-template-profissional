@@ -1,3 +1,16 @@
+---
+id: testing
+type: guide
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- tests/test_smart_git_sync.py
+title: Guia de Testes (SRE Standard)
+---
+
 # 🧪 Guia de Testes (SRE Standard)
 
 Este projeto adota uma filosofia estrita de **Testes Unitários Isolados**.

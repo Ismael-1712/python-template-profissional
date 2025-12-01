@@ -1,3 +1,14 @@
+---
+id: cortex-fase01-design
+type: arch
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code: []
+---
+
 docs/architecture/
 ├── CORTEX_FASE01_DESIGN.md           # ← Design completo (LEIA PRIMEIRO)
 ├── CORTEX_RESUMO_EXECUTIVO.md        # ← Resumo para stakeholders

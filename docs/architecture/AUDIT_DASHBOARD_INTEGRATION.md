@@ -1,3 +1,17 @@
+---
+id: audit-dashboard-integration
+type: arch
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/code_audit.py
+- scripts/audit_dashboard.py
+title: Audit Dashboard Integration Guide
+---
+
 # Audit Dashboard Integration Guide
 
 ## Overview
