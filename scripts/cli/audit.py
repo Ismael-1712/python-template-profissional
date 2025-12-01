@@ -67,6 +67,18 @@ class CodeAuditor:
 
         logger.info("Initialized auditor for workspace: %s", self.workspace_root)
 
+    def _should_exclude(self, file_path: Path) -> bool:
+        """Check if a file path should be excluded from audit.
+
+        Args:
+            file_path: Path to check
+
+        Returns:
+            True if the path should be excluded, False otherwise
+        """
+        file_path_str = str(file_path)
+        return any(exclude in file_path_str for exclude in self.config["exclude_paths"])
+
     def _load_config(self, config_path: Path | None) -> dict[str, Any]:
         """Load configuration from YAML file with fallback defaults."""
         config = load_config(config_path)
@@ -190,7 +202,13 @@ class CodeAuditor:
                 f"Auditing specific file list (Delta Audit): "
                 f"{len(files_to_audit)} files",
             )
-            python_files = files_to_audit
+            # Filter out excluded files
+            python_files = [f for f in files_to_audit if not self._should_exclude(f)]
+            if len(python_files) < len(files_to_audit):
+                logger.info(
+                    f"Excluded {len(files_to_audit) - len(python_files)} files "
+                    f"based on exclude_paths configuration",
+                )
         else:
             logger.info("No specific files provided, scanning paths from config...")
             # Scan all Python files (Comportamento antigo)
