@@ -229,8 +229,8 @@ class CITestMockIntegration:
     def _generate_recommendations(
         self,
         validation_results: dict[str, bool],
-        critical_issues: list[dict],
-        blocking_issues: list[dict],
+        critical_issues: list[dict[str, Any]],
+        blocking_issues: list[dict[str, Any]],
     ) -> list[str]:
         """Gera recomendações baseadas nos resultados.
 
@@ -271,8 +271,8 @@ class CITestMockIntegration:
     def _determine_overall_status(
         self,
         validation_results: dict[str, bool],
-        critical_issues: list[dict],
-        blocking_issues: list[dict],
+        critical_issues: list[dict[str, Any]],
+        blocking_issues: list[dict[str, Any]],
     ) -> str:
         """Determina status geral da verificação.
 

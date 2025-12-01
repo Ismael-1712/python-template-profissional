@@ -117,17 +117,39 @@ major_on_breaking_change = true
 # Seções do changelog
 categories = ["feat", "fix", "docs", "refactor", "perf"]
 
-# Configuração do Mypy (Type Checking)
+# Configuração do Mypy (Type Checking) - Nível 1: State of the Art
 [tool.mypy]
 python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
+
+# === RIGOR DE TIPAGEM ===
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+
+# === WARNINGS ===
+warn_return_any = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+
+# === CONTROLE DE NONE ===
+no_implicit_optional = true
+strict_optional = true
+
+# === IMPORTS ===
 ignore_missing_imports = true  # Temporário até instalarmos todos os stubs
+follow_imports = "normal"
+
+# === MISC ===
+strict_equality = true
+
 exclude = [
     "tests/",
     "venv/",
-    ".venv/"
+    ".venv/",
+    "build/",
+    "dist/"
 ]

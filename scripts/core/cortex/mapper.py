@@ -136,7 +136,8 @@ class ProjectMapper:
 
         try:
             with open(self.pyproject_path, "rb") as f:
-                return tomllib.load(f)
+                result: dict[str, Any] = tomllib.load(f)
+                return result
         except Exception as e:
             logger.error(f"Failed to parse pyproject.toml: {e}")
             return {}
@@ -147,7 +148,7 @@ class ProjectMapper:
         Returns:
             List of discovered CLI commands
         """
-        commands = []
+        commands: list[CLICommand] = []
 
         if not self.scripts_cli_path.exists():
             logger.warning(f"CLI directory not found: {self.scripts_cli_path}")
@@ -176,7 +177,7 @@ class ProjectMapper:
         Returns:
             List of discovered documents
         """
-        documents = []
+        documents: list[Document] = []
 
         if not self.docs_path.exists():
             logger.warning(f"Docs directory not found: {self.docs_path}")
@@ -209,7 +210,7 @@ class ProjectMapper:
         Returns:
             List of architecture documents
         """
-        documents = []
+        documents: list[Document] = []
         arch_path = self.docs_path / "architecture"
 
         if not arch_path.exists():

@@ -25,6 +25,7 @@ Versão: 1.0.0
 import logging
 import os
 import sys
+from typing import Any
 
 # ============================================================
 # 1. HANDLERS CUSTOMIZADOS COM SEPARAÇÃO DE STREAMS
@@ -50,7 +51,7 @@ class StdoutFilter(logging.Filter):
         return record.levelno <= logging.INFO
 
 
-class InfoHandler(logging.StreamHandler):
+class InfoHandler(logging.StreamHandler[Any]):
     """Handler que envia INFO/DEBUG para stdout.
 
     Usa StdoutFilter para garantir que apenas mensagens informativas
@@ -63,7 +64,7 @@ class InfoHandler(logging.StreamHandler):
         self.addFilter(StdoutFilter())
 
 
-class ErrorHandler(logging.StreamHandler):
+class ErrorHandler(logging.StreamHandler[Any]):
     """Handler que envia WARNING/ERROR/CRITICAL para stderr.
 
     Este handler é responsável por enviar mensagens de diagnóstico
