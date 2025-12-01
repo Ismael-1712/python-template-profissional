@@ -10,6 +10,7 @@ License: MIT
 __version__ = "0.1.0"
 
 __all__ = [
+    "CodeLinkScanner",
     "DocStatus",
     "DocType",
     "DocumentMetadata",
@@ -24,3 +25,4 @@ from scripts.core.cortex.models import (
     LinkCheckResult,
     ValidationResult,
 )
+from scripts.core.cortex.scanner import CodeLinkScanner

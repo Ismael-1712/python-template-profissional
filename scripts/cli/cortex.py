@@ -30,6 +30,7 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
+from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
@@ -257,6 +258,196 @@ def init(
     except Exception as e:
         logger.error(f"Error initializing frontmatter: {e}", exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command()
+def audit(
+    path: Annotated[
+        Path | None,
+        typer.Argument(
+            help="Path to directory or file to audit (default: docs/)",
+            exists=False,
+            resolve_path=True,
+        ),
+    ] = None,
+    fail_on_error: Annotated[
+        bool,
+        typer.Option(
+            "--fail-on-error",
+            help="Exit with error code if validation fails (useful for CI)",
+        ),
+    ] = False,
+) -> None:
+    """Audit documentation files for metadata and link integrity.
+
+    Scans Markdown files to verify:
+    - Valid YAML frontmatter
+    - Required metadata fields
+    - Links to code files exist
+    - Links to other docs exist
+
+    Examples:
+        cortex audit                    # Audit all docs in docs/
+        cortex audit docs/guides/       # Audit specific directory
+        cortex audit docs/guide.md      # Audit single file
+        cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)
+    """
+    try:
+        # Default to docs/ if no path provided
+        if path is None:
+            path = Path("docs")
+
+        workspace_root = Path.cwd()
+        logger.info(f"Starting audit of {path}")
+
+        # Collect markdown files to audit
+        md_files: list[Path] = []
+
+        if not path.exists():
+            typer.secho(
+                f"❌ Error: Path {path} does not exist",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(code=1)
+
+        if path.is_file():
+            if path.suffix in [".md", ".markdown"]:
+                md_files = [path]
+            else:
+                typer.secho(
+                    f"❌ Error: {path} is not a Markdown file",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(code=1)
+        elif path.is_dir():
+            # Recursively find all .md files
+            md_files = list(path.rglob("*.md")) + list(path.rglob("*.markdown"))
+        else:
+            typer.secho(
+                f"❌ Error: {path} is neither a file nor directory",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(code=1)
+
+        if not md_files:
+            typer.secho(
+                f"⚠️  No Markdown files found in {path}",
+                fg=typer.colors.YELLOW,
+            )
+            return
+
+        typer.echo(f"\n📋 Found {len(md_files)} Markdown file(s) to audit\n")
+
+        # Initialize parser and scanner
+        parser = FrontmatterParser()
+        scanner = CodeLinkScanner(workspace_root=workspace_root)
+
+        # Track errors and warnings
+        total_errors = 0
+        total_warnings = 0
+        files_with_errors = []
+
+        # Audit each file
+        for md_file in md_files:
+            relative_path = md_file.relative_to(workspace_root)
+            typer.echo(f"🔍 Auditing {relative_path}...")
+
+            file_errors = []
+            file_warnings = []
+
+            # 1. Parse and validate frontmatter
+            try:
+                # parse_file already validates and returns DocumentMetadata
+                metadata = parser.parse_file(md_file)
+                # No errors if we got here
+
+            except (FrontmatterParseError, ValueError, TypeError) as e:
+                file_errors.append(f"Frontmatter error: {e}")
+                metadata = None
+
+            # 2. Check code and documentation links
+            if metadata:
+                link_result = scanner.check_all_links(
+                    linked_code=metadata.linked_code or [],
+                    related_docs=metadata.related_docs or [],
+                    doc_file=md_file,
+                )
+
+                if link_result.broken_code_links:
+                    file_errors.extend(link_result.broken_code_links)
+
+                if link_result.broken_doc_links:
+                    file_errors.extend(link_result.broken_doc_links)
+
+            # Report results for this file
+            if file_errors:
+                typer.secho(f"  ❌ {len(file_errors)} error(s):", fg=typer.colors.RED)
+                for error in file_errors:
+                    typer.secho(f"     • {error}", fg=typer.colors.RED)
+                files_with_errors.append(relative_path)
+                total_errors += len(file_errors)
+
+            if file_warnings:
+                typer.secho(
+                    f"  ⚠️  {len(file_warnings)} warning(s):",
+                    fg=typer.colors.YELLOW,
+                )
+                for warning in file_warnings:
+                    typer.secho(f"     • {warning}", fg=typer.colors.YELLOW)
+                total_warnings += len(file_warnings)
+
+            if not file_errors and not file_warnings:
+                typer.secho("  ✅ No issues found", fg=typer.colors.GREEN)
+
+            typer.echo()  # Blank line between files
+
+        # Print summary
+        typer.echo("=" * 70)
+        typer.echo("\n📊 Audit Summary\n")
+        typer.echo(f"Files scanned: {len(md_files)}")
+
+        if total_errors > 0:
+            typer.secho(
+                f"Total errors: {total_errors} (in {len(files_with_errors)} file(s))",
+                fg=typer.colors.RED,
+            )
+
+        if total_warnings > 0:
+            typer.secho(f"Total warnings: {total_warnings}", fg=typer.colors.YELLOW)
+
+        if total_errors == 0 and total_warnings == 0:
+            typer.secho("\n✅ All checks passed!", fg=typer.colors.GREEN, bold=True)
+        elif total_errors == 0:
+            typer.secho(
+                "\n✅ No errors found (only warnings)",
+                fg=typer.colors.GREEN,
+            )
+        else:
+            msg = (
+                f"\n❌ Found {total_errors} error(s) in "
+                f"{len(files_with_errors)} file(s)"
+            )
+            typer.secho(msg, fg=typer.colors.RED, bold=True)
+
+        logger.info(
+            f"Audit complete: {total_errors} errors, {total_warnings} warnings",
+        )
+
+        # Exit with error code if requested and errors found
+        if fail_on_error and total_errors > 0:
+            raise typer.Exit(code=1)
+
+    except typer.Exit:
+        # Re-raise Exit exceptions
+        raise
+
+    except Exception as e:
+        logger.error(f"Error during audit: {e}", exc_info=True)
+        typer.secho(f"❌ Audit failed: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
 
