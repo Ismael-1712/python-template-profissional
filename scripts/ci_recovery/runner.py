@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def run_code_quality_checks(
-    log_step_callback: Callable,
+    log_step_callback: Callable[..., None],
     repository_path: Path,
     dry_run: bool,
 ) -> bool:
@@ -71,7 +71,7 @@ def run_code_quality_checks(
 
 
 def run_tests(
-    log_step_callback: Callable,
+    log_step_callback: Callable[..., None],
     repository_path: Path,
     dry_run: bool,
 ) -> bool:
@@ -103,18 +103,22 @@ def run_tests(
             log_step_callback(
                 "Test Execution",
                 RecoveryStatus.SUCCESS,
-                "All tests passed",
+                details="All tests passed",
             )
             return True
         log_step_callback(
             "Test Execution",
             RecoveryStatus.FAILED,
-            f"Tests failed with exit code {result.returncode}",
+            details=f"Tests failed with exit code {result.returncode}",
         )
         return False
 
     except subprocess.TimeoutExpired:
-        log_step_callback("Test Execution", RecoveryStatus.FAILED, "Tests timed out")
+        log_step_callback(
+            "Test Execution",
+            RecoveryStatus.FAILED,
+            details="Tests timed out",
+        )
         return False
     except Exception as e:
         log_step_callback(

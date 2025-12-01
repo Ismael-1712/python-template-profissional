@@ -236,7 +236,7 @@ class AuditReporter:
 
         # Check mock usage
         if "_check_test_mocks" in AuditReporter.__dict__:
-            missing_mocks = AuditReporter._check_test_mocks()  # type: ignore
+            missing_mocks = AuditReporter._check_test_mocks()
             if missing_mocks > 0:
                 recs.append(
                     _("🧪 Add mocks to {count} test files").format(count=missing_mocks),
