@@ -29,3 +29,11 @@ repos:
         language: system
         pass_filenames: true
         types: [python]
+
+      - id: cortex-audit
+        name: "CORTEX - Auditoria de Documentação"
+        entry: python3 -m scripts.cli.cortex audit docs/ --fail-on-error
+        language: system
+        pass_filenames: false
+        types_or: [markdown, python]
+        files: \.(md|py)$
