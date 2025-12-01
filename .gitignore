@@ -65,6 +65,9 @@ audit_dashboard.html
 audit_report_*.json
 sync_report_*.json
 
+# CORTEX - Contexto dinâmico gerado (volátil, não deve ser commitado)
+.cortex/
+
 # --- Lixo de Ferramental e Cache ---
 .ruff_cache/
 .vscode/tasks.json
