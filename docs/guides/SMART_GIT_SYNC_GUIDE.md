@@ -1,3 +1,18 @@
+---
+id: smart-git-sync-guide
+type: guide
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/smart_git_sync.py
+- scripts/test_smart_git_sync.py
+- scripts/code_audit.py
+title: Smart Git Sync - Documentação de Uso
+---
+
 # Smart Git Sync - Documentação de Uso
 
 ## Visão Geral

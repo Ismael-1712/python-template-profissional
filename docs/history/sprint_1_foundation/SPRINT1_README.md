@@ -1,20 +1,24 @@
+---
+id: sprint1-readme
+type: history
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- scripts/utils/logger.py
+- scripts/code_audit.py
+- scripts/smart_git_sync.py
+- scripts/audit_dashboard/cli.py
+- scripts/ci_recovery/main.py
+- scripts/maintain_versions.py
+title: Sprint 1 - Índice de Documentação
+---
+
 # 📚 Sprint 1 - Índice de Documentação
 
 **Sprint 1: Refatoração de Logging e Detecção de Ambiente**
-
----
-
-## 🎯 Visão Rápida
-
-Esta sprint foca em resolver problemas de logging e detecção de ambiente identificados no sistema:
-
-- **Problema 1:** Logs de erro poluem stdout (deveriam ir para stderr)
-- **Problema 2:** Doctor.py é inconsistente entre CI e desenvolvimento local
-- **Problema 3:** Códigos ANSI hardcoded sem detecção de terminal
-
-**Status Atual:** ✅ Fase 01 Completa (Auditoria) | 📝 Fase 02 Pendente (Implementação)
-
----
 
 ## 📄 Documentos por Tipo de Leitor
 
@@ -42,46 +46,6 @@ Esta sprint foca em resolver problemas de logging e detecção de ambiente ident
 - Trechos de código comentados
 - Proposta de arquitetura detalhada
 
----
-
-## 📊 Documentos por Ordem Sugerida de Leitura
-
-### Fluxo 1: Entendimento Rápido (15 min)
-
-1. **[Sumário Executivo](./SPRINT1_AUDITORIA_SUMARIO.md)** (5 min)
-   - O que foi encontrado
-   - Severidade dos problemas
-   - Solução proposta
-
-2. **[Guia de Migração - Seção "Exemplos"](./SPRINT1_MIGRATION_GUIDE.md#-exemplos-de-migração)** (10 min)
-   - Ver código antes/depois
-   - Entender benefícios práticos
-
-### Fluxo 2: Implementação Prática (2h)
-
-1. **[Guia de Migração](./SPRINT1_MIGRATION_GUIDE.md)** (30 min)
-   - Ler todos os exemplos
-   - Entender API do novo sistema
-
-2. **[Relatório Completo - Seção 4](./SPRINT1_AUDITORIA_FASE01.md#-4-proposta-de-arquitetura)** (1h)
-   - Arquitetura do `logger.py`
-   - Código completo proposto
-
-3. **Implementar** (ver checklist abaixo)
-
-### Fluxo 3: Auditoria Completa (4h)
-
-1. **[Relatório Completo](./SPRINT1_AUDITORIA_FASE01.md)** (3h)
-   - Todas as seções
-   - Todos os anexos
-   - Referências externas
-
-2. **[Guia de Migração](./SPRINT1_MIGRATION_GUIDE.md)** (1h)
-   - Validar exemplos
-   - Propor melhorias
-
----
-
 ## 🔍 Navegação por Problema Específico
 
 ### Problema: "Meus erros não aparecem quando uso `2>/dev/null`"
@@ -101,37 +65,6 @@ Esta sprint foca em resolver problemas de logging e detecção de ambiente ident
 **Vá para:** [Relatório Completo - Seção 3](./SPRINT1_AUDITORIA_FASE01.md#-3-verificação-de-hardcoding-códigos-ansi)
 
 **Solução:** [Guia de Migração - Exemplo 2](./SPRINT1_MIGRATION_GUIDE.md#exemplo-2-scriptsdoctorpy-com-cores)
-
----
-
-## 📂 Estrutura dos Documentos
-
-```
-docs/
-├── SPRINT1_AUDITORIA_FASE01.md       # 📋 Relatório completo (30+ páginas)
-│   ├── 1. Análise de Logging
-│   ├── 2. Análise de Drift
-│   ├── 3. Verificação de Hardcoding
-│   ├── 4. Proposta de Arquitetura
-│   ├── 5. Recomendações
-│   └── 8. Anexos
-│
-├── SPRINT1_AUDITORIA_SUMARIO.md      # 📊 Sumário executivo (3 páginas)
-│   ├── Achados principais
-│   ├── Solução proposta
-│   ├── Métricas de impacto
-│   └── Próximos passos
-│
-├── SPRINT1_MIGRATION_GUIDE.md        # 🔧 Guia prático (20 páginas)
-│   ├── Exemplos de migração
-│   ├── Templates de código
-│   ├── Testes sugeridos
-│   └── Checklist de migração
-│
-└── SPRINT1_README.md                 # 📚 Este arquivo (navegação)
-```
-
----
 
 ## ✅ Checklist de Implementação (Fase 02)
 
@@ -189,28 +122,6 @@ docs/
 - [ ] Code review
 - [ ] Merge para main
 
----
-
-## 📚 Referências Externas
-
-### Padrões e Convenções
-
-- [POSIX Standard - stdout/stderr](https://pubs.opengroup.org/onlinepubs/9699919799/)
-- [Python Logging Cookbook](https://docs.python.org/3/howto/logging-cookbook.html)
-- [NO_COLOR Standard](https://no-color.org/)
-
-### GitHub Actions
-
-- [Workflow Commands](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions)
-- [Environment Variables](https://docs.github.com/en/actions/learn-github-actions/variables)
-
-### Python Version Management
-
-- [PEP 440 - Version Identification](https://peps.python.org/pep-0440/)
-- [Semantic Versioning](https://semver.org/)
-
----
-
 ## 🤝 Contribuindo
 
 ### Encontrou um problema na documentação?
@@ -224,15 +135,6 @@ docs/
 1. Leia o [CONTRIBUTING.md](../CONTRIBUTING.md)
 2. Crie uma branch: `feature/sprint1-improvements`
 3. Envie um PR com suas sugestões
-
----
-
-## 📞 Contatos
-
-**Responsável pela Sprint 1:** DevOps Engineering Team
-**Status:** Fase 01 Completa - Aguardando aprovação para Fase 02
-
----
 
 ## 🗂️ Histórico de Versões
 

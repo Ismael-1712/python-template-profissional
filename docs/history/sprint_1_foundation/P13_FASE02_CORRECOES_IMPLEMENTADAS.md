@@ -1,30 +1,28 @@
+---
+id: p13-fase02-correcoes-implementadas
+type: history
+status: active
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-01'
+context_tags: []
+linked_code:
+- tests/test_mock_generator.py
+- scripts/test_mock_generator.py
+- scripts/validate_test_mocks.py
+- scripts/ci_test_mock_integration.py
+- scripts/install_dev.py
+- scripts/ci_recovery/executor.py
+- scripts/audit/plugins.py
+- scripts/utils/safe_pip.py
+- scripts/maintain_versions.py
+- scripts/git_sync/sync_logic.py
+title: 'P13 - Fase 02: Correções Implementadas'
+---
+
 # P13 - Fase 02: Correções Implementadas
 
 ## Relatório de Implementação - Sprint 1: Eliminação de Warnings
-
----
-
-## 📋 Resumo Executivo
-
-**Objetivo Alcançado:** ✅ **Zero Warnings**
-
-```bash
-$ make test
-============================= 118 passed in 4.04s ==============================
-# NENHUM WARNING DETECTADO
-```
-
-### Métricas de Sucesso
-
-| Métrica | Antes | Depois | Status |
-|---------|-------|--------|--------|
-| **Pytest Warnings** | 1 (PytestCollectionWarning) | 0 | ✅ ZERO |
-| **Suppressões Genéricas** | 8 (`# noqa: subprocess`) | 0 | ✅ ELIMINADO |
-| **Dupla Suppressão** | 0 (`# nosec # noqa: S603`) | 10 | ✅ IMPLEMENTADO |
-| **Security Explicit** | Implícito | Explícito (`shell=False`) | ✅ MELHORADO |
-| **Testes Passing** | 118 | 118 | ✅ MANTIDO |
-
----
 
 ## 🔧 Correções Implementadas
 
@@ -71,45 +69,6 @@ git mv tests/test_mock_generator.py scripts/test_mock_generator.py
 
 **Resultado:** ✅ Warning completamente eliminado
 
----
-
-### 2. Substituição de Suppressões Genéricas
-
-**Problema:** 8 ocorrências de `# noqa: subprocess` (código genérico, não reconhecido pelo Ruff)
-
-**Solução:** Substituição por código específico `# noqa: S603` (subprocess sem shell=True)
-
-#### Arquivos Corrigidos
-
-| Arquivo | Linha | Antes | Depois |
-|---------|-------|-------|--------|
-| `scripts/install_dev.py` | 136, 166, 199 | `# noqa: subprocess` | `# noqa: S603` |
-| `scripts/ci_test_mock_integration.py` | 115 | `# noqa: subprocess` | `# noqa: S603` |
-| `scripts/ci_recovery/executor.py` | 69 | `# noqa: subprocess` | `# noqa: S603` |
-| `scripts/audit/plugins.py` | 112 | `subprocess=True` | `shell=False` |
-| `scripts/validate_test_mocks.py` | 89 | `# noqa: subprocess` | `# noqa: S603` |
-
-**Exemplo de Correção (scripts/install_dev.py):**
-
-```python
-# ANTES
-subprocess.run(
-    [sys.executable, "-m", "pip", "install", "-r", req_file],
-    check=True
-)  # noqa: subprocess
-
-# DEPOIS
-subprocess.run(
-    [sys.executable, "-m", "pip", "install", "-r", req_file],
-    check=True,
-    shell=False  # Explícito para auditorias de segurança
-)  # noqa: S603
-```
-
-**Resultado:** ✅ 8 suppressões convertidas de genérico para específico
-
----
-
 ### 3. Dupla Suppressão: Bandit + Ruff
 
 **Problema:** O Bandit (scanner de segurança) exige `# nosec`, mas o Ruff exige `# noqa: S603`
@@ -137,25 +96,6 @@ subprocess.run(
 8. **scripts/validate_test_mocks.py** (linha 215)
 
 **Resultado:** ✅ 10 chamadas com dupla suppressão (Bandit + Ruff)
-
----
-
-### 4. Adição de Parâmetro `shell=False` Explícito
-
-**Problema:** Chamadas `subprocess.run()` sem parâmetro `shell` explícito (uso de default implícito)
-
-**Solução:** Adição explícita de `shell=False` com comentários de segurança
-
-#### Total de Chamadas Corrigidas: 11
-
-**Justificativa:**
-
-- ✅ Auditorias de segurança exigem explicitação
-- ✅ Evita ambiguidade no código
-- ✅ Documentação inline de decisão de segurança
-- ✅ Compatível com ferramentas SAST (Static Application Security Testing)
-
----
 
 ## 🧪 Validação Completa
 
@@ -191,30 +131,6 @@ $ grep -r "# nosec" scripts/
 
 ✅ **Nenhum marcador `# nosec` redundante**
 
----
-
-## 📊 Análise de Impacto
-
-### Segurança
-
-- ✅ Todas as chamadas `subprocess.run()` agora têm `shell=False` explícito
-- ✅ Suppressões específicas (`S603`) facilitam auditoria futura
-- ✅ Remoção de marcadores redundantes reduz confusão
-
-### Qualidade de Código
-
-- ✅ Eliminação de warnings aumenta confiança na suíte de testes
-- ✅ Código mais explícito e autodocumentado
-- ✅ Compatibilidade total com Ruff + Bandit
-
-### Manutenibilidade
-
-- ✅ Histórico Git preservado com `git mv`
-- ✅ Imports corretos facilitam navegação
-- ✅ Comentários de segurança auxiliam novos desenvolvedores
-
----
-
 ## 📁 Arquivos Modificados
 
 ### Relocação
@@ -238,22 +154,6 @@ $ grep -r "# nosec" scripts/
 - [x] `scripts/validate_test_mocks.py`
 
 **Total:** 11 arquivos modificados
-
----
-
-## ✅ Checklist de Conclusão
-
-- [x] PytestCollectionWarning eliminado
-- [x] 8 suppressões genéricas substituídas por código específico `S603`
-- [x] 10 chamadas `subprocess.run()` com dupla suppressão `# nosec # noqa: S603`
-- [x] 10 chamadas `subprocess.run()` com `shell=False` explícito
-- [x] 118 testes passando sem warnings
-- [x] Validação com `make test` confirmada
-- [x] Histórico Git preservado
-- [x] Imports atualizados corretamente
-- [x] Compatibilidade Bandit + Ruff garantida
-
----
 
 ## 🎯 Objetivo Alcançado
 
