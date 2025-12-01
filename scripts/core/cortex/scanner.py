@@ -22,6 +22,18 @@ from scripts.core.cortex.models import DocStatus, DocumentMetadata, LinkCheckRes
 
 logger = logging.getLogger(__name__)
 
+# Allowlist de arquivos Markdown permitidos na raiz do projeto
+ALLOWED_ROOT_MARKDOWN_FILES = frozenset(
+    [
+        "README.md",
+        "CONTRIBUTING.md",
+        "CHANGELOG.md",
+        "LICENSE",
+        "SECURITY.md",
+        "CODE_OF_CONDUCT.md",
+    ]
+)
+
 
 class CodeLinkScanner:
     """Scanner for validating links between documentation and code.
@@ -292,3 +304,47 @@ class CodeLinkScanner:
             logger.error(f"Error analyzing {python_file}: {e}", exc_info=True)
 
         return result
+
+    def check_root_markdown_files(self) -> list[str]:
+        """Validate that only approved Markdown files exist in project root.
+
+        This implements the "Root Lockdown" policy - only specific documentation
+        files are allowed in the project root. All other documentation must
+        reside in the docs/ directory.
+
+        Returns:
+            List of error messages for unauthorized .md files in root
+        """
+        errors = []
+
+        # Get all .md files in root (non-recursive)
+        root_md_files = [
+            f
+            for f in self.workspace_root.iterdir()
+            if f.is_file() and f.suffix.lower() in (".md", ".markdown")
+        ]
+
+        for md_file in root_md_files:
+            filename = md_file.name
+
+            if filename not in ALLOWED_ROOT_MARKDOWN_FILES:
+                allowed_files = ", ".join(sorted(ALLOWED_ROOT_MARKDOWN_FILES))
+                error_msg = (
+                    f"File placement violation: '{filename}' found in project root. "
+                    "Documentation must reside in docs/, not project root. "
+                    f"Allowed root files: {allowed_files}"
+                )
+                errors.append(error_msg)
+                logger.warning("Root Lockdown violation: %s", filename)
+            else:
+                logger.debug("Approved root markdown file: %s", filename)
+
+        if errors:
+            logger.warning(
+                "Found %d unauthorized markdown file(s) in project root",
+                len(errors),
+            )
+        else:
+            logger.debug("Root Lockdown check passed: All root .md files are approved")
+
+        return errors
