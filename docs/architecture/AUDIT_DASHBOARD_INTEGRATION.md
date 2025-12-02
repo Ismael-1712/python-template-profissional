@@ -5,6 +5,7 @@ status: active
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-01'
+last_updated: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/code_audit.py
@@ -47,13 +48,13 @@ Add to your CI/CD pipeline (e.g., `.github/workflows/audit.yml`):
 ```yaml
 steps:
   - name: Run Code Audit
-    run: python3 scripts/code_audit.py --output json --config scripts/audit_config.yaml
+    run: dev-audit --output json --config scripts/audit_config.yaml
 
   - name: Update Dashboard Metrics
-    run: python3 scripts/audit_dashboard.py
+    run: audit-dashboard
 
   - name: Export Dashboard
-    run: python3 scripts/audit_dashboard.py --export-html
+    run: audit-dashboard --export-html
 
   - name: Upload Dashboard Artifact
     uses: actions/upload-artifact@v3
@@ -72,7 +73,7 @@ repos:
     hooks:
       - id: audit-dashboard-update
         name: Update Audit Dashboard
-        entry: python3 scripts/audit_dashboard.py
+        entry: audit-dashboard
         language: system
         pass_filenames: false
         stages: [post-commit]
@@ -83,25 +84,25 @@ repos:
 ### Console Dashboard
 
 ```bash
-python3 scripts/audit_dashboard.py
+audit-dashboard
 ```
 
 ### HTML Export
 
 ```bash
-python3 scripts/audit_dashboard.py --export-html
+audit-dashboard --export-html
 ```
 
 ### JSON Export for Monitoring
 
 ```bash
-python3 scripts/audit_dashboard.py --export-json monitoring_metrics.json
+audit-dashboard --export-json monitoring_metrics.json
 ```
 
 ### Reset Statistics
 
 ```bash
-python3 scripts/audit_dashboard.py --reset-stats
+audit-dashboard --reset-stats
 ```
 
 ## Monitoring Integration
