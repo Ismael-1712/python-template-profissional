@@ -1,0 +1,310 @@
+# Guardian Whitelist - Configurações de ambiente de bibliotecas third-party
+# Este arquivo exclui variáveis de ambiente usadas por dependências externas
+# da verificação de "Shadow Configuration" do Guardian.
+#
+# Categoria: Dependências Third-Party
+# Última atualização: 2025-12-01
+
+whitelist:
+  # ============================================================================
+  # Coverage.py - Cobertura de testes
+  # ============================================================================
+  - COVERAGE_RCFILE
+  - COVERAGE_FILE
+  - COVERAGE_CORE
+
+  # ============================================================================
+  # Requests - HTTP client
+  # ============================================================================
+  - NETRC
+  - REQUESTS_CA_BUNDLE
+  - CURL_CA_BUNDLE
+
+  # ============================================================================
+  # Wrapt - Decorator utilities
+  # ============================================================================
+  - WRAPT_DISABLE_EXTENSIONS
+
+  # ============================================================================
+  # Mypyc - MyPy compiled extension
+  # ============================================================================
+  - MYPYC_OPT_LEVEL
+  - MYPYC_DEBUG_LEVEL
+  - MYPYC_STRICT_DUNDER_TYPING
+  - MYPYC_LOG_TRACE
+
+  # ============================================================================
+  # Jupyter/Databricks - Notebook runtime
+  # ============================================================================
+  - DATABRICKS_RUNTIME_VERSION
+
+  # ============================================================================
+  # Android/Mobile - Platform detection
+  # ============================================================================
+  - ANDROID_DATA
+  - ANDROID_ROOT
+
+  # ============================================================================
+  # Shell/System - Standard Unix/Linux vars
+  # ============================================================================
+  - SHELL
+  - PREFIX
+  - HOME
+  - USERPROFILE
+  - USER
+  - USERNAME
+  - windir
+  - SYSTEMROOT
+
+  # ============================================================================
+  # XDG Base Directory Specification
+  # ============================================================================
+  - XDG_DATA_HOME
+  - XDG_DATA_DIRS
+  - XDG_CONFIG_HOME
+  - XDG_CONFIG_DIRS
+  - XDG_CACHE_HOME
+  - XDG_STATE_HOME
+  - XDG_RUNTIME_DIR
+
+  # ============================================================================
+  # Pytest - Testing framework
+  # ============================================================================
+  - PYTEST_DEBUG_TEMPROOT
+  - PY_IGNORE_IMPORTMISMATCH
+  - _ARGCOMPLETE
+  - TOX_ENV_DIR
+  - PYTEST_VERSION
+  - PYTEST_DEBUG
+  - PYTEST_PLUGINS
+  - PYTEST_DISABLE_PLUGIN_AUTOLOAD
+  - PYTEST_ADDOPTS
+  - PY_COLORS
+  - FORCE_COLOR
+  - PYTEST_THEME
+  - PYTEST_THEME_MODE
+
+  # ============================================================================
+  # Tox - Testing automation
+  # ============================================================================
+  - TOX_DISABLED_EXTERNAL_PLUGINS
+  - PYTHONHASHSEED
+  - _TOX_SHOW_CONFIG_RAISE
+
+  # ============================================================================
+  # Terminal/Color - Output formatting
+  # ============================================================================
+  - COLORTERM
+
+  # ============================================================================
+  # Python Packaging - eggs, pkg_resources
+  # ============================================================================
+  - PYTHON_EGG_CACHE
+  - _PYTHON_HOST_PLATFORM
+  - _PYTHON_PROJECT_BASE
+  - __PYVENV_LAUNCHER__
+
+  # ============================================================================
+  # SSL/TLS - Certificate configuration
+  # ============================================================================
+  - SSLKEYLOGFILE
+
+  # ============================================================================
+  # UV - Modern Python package installer
+  # ============================================================================
+  - UV_PYTHON_INSTALL_DIR
+
+  # ============================================================================
+  # Virtual Environment - Standard vars
+  # ============================================================================
+  - VIRTUAL_ENV
+  - VIRTUAL_ENV_PROMPT
+
+  # ============================================================================
+  # Version Control Systems
+  # ============================================================================
+  - GIT_DIR
+  - GIT_COMMON_DIR
+  - GIT_WORK_TREE
+
+  # ============================================================================
+  # CI/CD Platforms
+  # ============================================================================
+  - BITBUCKET_REPO_FULL_NAME
+  - BITBUCKET_USER
+  - GITHUB_SERVER_URL
+  - GITHUB_API_URL
+  - GITHUB_REPOSITORY
+  - GITHUB_ACTOR
+  - GITEA_SERVER_URL
+  - GITEA_API_URL
+  - GITEA_ACTIONS
+  - CI_SERVER_URL
+  - CI_PROJECT_NAMESPACE
+  - CI_PROJECT_NAME
+
+  # ============================================================================
+  # Semantic Release
+  # ============================================================================
+  - PSR_DOCKER_GITHUB_ACTION
+  - PSR_BUILD_METADATA
+
+  # ============================================================================
+  # Setuptools/Distutils - Build system
+  # ============================================================================
+  - SETUPTOOLS_EXT_SUFFIX
+  - SETUPTOOLS_USE_DISTUTILS
+  - PYTHONDONTWRITEBYTECODE
+  - PRE_BUILT_SETUPTOOLS_SDIST
+  - PRE_BUILT_SETUPTOOLS_WHEEL
+  - DIST_EXTRA_CONFIG
+  - DISTUTILS_DEBUG
+  - DISTUTILS_USE_SDK
+  - SOURCE_DATE_EPOCH
+  - ENSUREPIP_OPTIONS
+
+  # ============================================================================
+  # Compilers - C/C++ toolchain
+  # ============================================================================
+  - CC
+  - CXX
+  - CPP
+  - LDSHARED
+  - LDCXXSHARED
+  - LDFLAGS
+  - AR
+  - ARFLAGS
+  - RANLIB
+  - CFLAGS
+  - CXXFLAGS
+  - CPPFLAGS
+  - VSCMD_ARG_TGT_ARCH
+  - MACOSX_DEPLOYMENT_TARGET
+  - ProgramFiles(x86)
+  - ProgramFiles
+
+  # ============================================================================
+  # Environment/Path - System paths
+  # ============================================================================
+  - PATHEXT
+  - PLAT
+
+  # ============================================================================
+  # Pre-commit - Git hooks framework
+  # ============================================================================
+  - PRE_COMMIT_USE_MICROMAMBA
+  - PRE_COMMIT_USE_MAMBA
+  - R_HOME
+  - PRE_COMMIT_RUNNING_LEGACY
+  - PRE_COMMIT_ALLOW_NO_CONFIG
+
+  # ============================================================================
+  # Pydantic - Data validation
+  # ============================================================================
+  - PYDANTIC_DISABLE_PLUGINS
+
+  # ============================================================================
+  # Timezone
+  # ============================================================================
+  - TZ
+
+  # ============================================================================
+  # MyPy - Type checker (test suite)
+  # ============================================================================
+  - MYPY_TEST_PREFIX
+  - TEST_MYPYC
+
+  # ============================================================================
+  # PyCharm - IDE detection
+  # ============================================================================
+  - PYCHARM_HOSTED
+
+  # ============================================================================
+  # Pip - Package installer
+  # ============================================================================
+  - PIP_CONFIG_FILE
+  - PIP_CONSTRAINT
+  - PIP_USER_AGENT_USER_DATA
+  - PIP_EXISTS_ACTION
+  - PIP_NO_INPUT
+  - COMP_WORDS
+  - COMP_CWORD
+  - _PIP_RUNNING_IN_SUBPROCESS
+  - _PIP_IN_BUILD_IGNORE_CONSTRAINTS
+  - _PIP_USE_IMPORTLIB_METADATA
+  - VISUAL
+  - EDITOR
+  - PIP_BUILD_TRACKER
+  - _PYPROJECT_HOOKS_BACKEND_PATH
+  - _PYPROJECT_HOOKS_BUILD_BACKEND
+
+  # ============================================================================
+  # Distro/Platform - Linux distribution detection
+  # ============================================================================
+  - UNIXCONFDIR
+  - UNIXUSRLIBDIR
+
+  # ============================================================================
+  # Msgpack - Serialization
+  # ============================================================================
+  - MSGPACK_PUREPYTHON
+
+  # ============================================================================
+  # App Engine - Google Cloud
+  # ============================================================================
+  - APPENGINE_RUNTIME
+  - SERVER_SOFTWARE
+
+  # ============================================================================
+  # Network/Testing - Integration tests
+  # ============================================================================
+  - NETWORK_REQUIRED
+  - DOWNLOAD_PATH
+  - NO_NETWORK
+  - VALIDATE_PYPROJECT_NO_NETWORK
+  - TIMEOUT_BACKEND_TEST
+
+  # ============================================================================
+  # JSON Schema - Code generation
+  # ============================================================================
+  - JSONSCHEMA_DEBUG_CODE_GENERATION
+
+  # ============================================================================
+  # Babel/i18n - Internationalization
+  # ============================================================================
+  - LANGUAGE
+
+  # ============================================================================
+  # Pygments - Syntax highlighting
+  # ============================================================================
+  - HOME  # (already listed but used by pygments too)
+
+  # ============================================================================
+  # Shellingham - Shell detection
+  # ============================================================================
+  # SHELL (already listed)
+
+  # ============================================================================
+  # Platformdirs - Cross-platform directories
+  # ============================================================================
+  # (All XDG_* vars already listed above)
+
+  # ============================================================================
+  # App-specific (CI Recovery) - This project
+  # ============================================================================
+  - CI_RECOVERY_DRY_RUN
+
+  # ============================================================================
+  # Standard Environment - General use
+  # ============================================================================
+  - NO_COLOR
+  - CI
+  - TERM
+  - PATH
+  - GITHUB_ACTIONS
+  - GITLAB_CI
+
+# Notas:
+# - Estas variáveis são usadas internamente por bibliotecas third-party
+# - Não requerem documentação no nosso projeto
+# - Apenas variáveis definidas/usadas pelo NOSSO código devem ser documentadas

@@ -146,7 +146,9 @@ def install_dev_environment(workspace_root: Path) -> int:
             text=True,
             check=True,
         )
-        logger.debug("Output pip install: %s", result1.stdout.strip())
+        logger.info("pip install output:\n%s", result1.stdout.strip())
+        if result1.stderr:
+            logger.warning("pip install warnings:\n%s", result1.stderr.strip())
 
         # ========== STEP 2: Compile dependencies (ATOMIC) ==========
         logger.info("Step 2/3: Compiling dependencies with pip-compile...")

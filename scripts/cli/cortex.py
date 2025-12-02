@@ -832,7 +832,9 @@ def guardian_check(
 
         # Step 1: Scan código
         typer.echo("📝 Step 1: Scanning code for configurations...")
-        scanner = ConfigScanner()
+        # Passa project_root para carregar whitelist
+        project_root = Path.cwd()
+        scanner = ConfigScanner(project_root=project_root)
 
         # Determina se é arquivo ou diretório
         if path.is_file():
