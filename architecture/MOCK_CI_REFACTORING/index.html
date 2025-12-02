@@ -1397,11 +1397,11 @@
 <li>Return appropriate exit codes</li>
 </ul>
 <p><strong>CLI Interface</strong> (preserved 100%):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check<span class="w">              </span><span class="c1"># Verification mode</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--auto-fix<span class="w">           </span><span class="c1"># Apply fixes</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--auto-fix<span class="w"> </span>--commit<span class="w">  </span><span class="c1"># Fix + commit</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check<span class="w"> </span>--fail-on-issues<span class="w">  </span><span class="c1"># Exit 1 on warnings</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--report<span class="w"> </span>output.json<span class="w"> </span><span class="c1"># Save JSON report</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mock-ci<span class="w"> </span>--check<span class="w">              </span><span class="c1"># Verification mode</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>mock-ci<span class="w"> </span>--auto-fix<span class="w">           </span><span class="c1"># Apply fixes</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>mock-ci<span class="w"> </span>--auto-fix<span class="w"> </span>--commit<span class="w">  </span><span class="c1"># Fix + commit</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>mock-ci<span class="w"> </span>--check<span class="w"> </span>--fail-on-issues<span class="w">  </span><span class="c1"># Exit 1 on warnings</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>mock-ci<span class="w"> </span>--report<span class="w"> </span>output.json<span class="w"> </span><span class="c1"># Save JSON report</span>
 </code></pre></div>
 <p><strong>Dependencies</strong>: <code>MockCIRunner</code> (single import)</p>
 <h2 id="refactoring-phases">Refactoring Phases</h2>
@@ -1514,24 +1514,24 @@
 <h2 id="usage-examples">Usage Examples</h2>
 <h3 id="basic-check">Basic Check</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Run comprehensive check</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>mock-ci<span class="w"> </span>--check
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Check with failure on warnings</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check<span class="w"> </span>--fail-on-issues
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>mock-ci<span class="w"> </span>--check<span class="w"> </span>--fail-on-issues
 </code></pre></div>
 <h3 id="auto-fix">Auto-Fix</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Fix without committing</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--auto-fix
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>mock-ci<span class="w"> </span>--auto-fix
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Fix and commit automatically</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--auto-fix<span class="w"> </span>--commit
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>mock-ci<span class="w"> </span>--auto-fix<span class="w"> </span>--commit
 </code></pre></div>
 <h3 id="generate-reports">Generate Reports</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Save JSON report</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check<span class="w"> </span>--report<span class="w"> </span>ci_report.json
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>mock-ci<span class="w"> </span>--check<span class="w"> </span>--report<span class="w"> </span>ci_report.json
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Check, report, and fail on issues</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check<span class="w"> </span>--report<span class="w"> </span>output.json<span class="w"> </span>--fail-on-issues
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>mock-ci<span class="w"> </span>--check<span class="w"> </span>--report<span class="w"> </span>output.json<span class="w"> </span>--fail-on-issues
 </code></pre></div>
 <h3 id="programmatic-usage">Programmatic Usage</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.mock_ci</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockCIRunner</span>
