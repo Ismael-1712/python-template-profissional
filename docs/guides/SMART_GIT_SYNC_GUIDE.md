@@ -5,6 +5,7 @@ status: active
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-01'
+last_updated: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/smart_git_sync.py
@@ -77,13 +78,13 @@ tests/
 
 ```bash
 # Sincronização completa com auditoria
-python3 scripts/smart_git_sync.py
+git-sync
 
 # Modo dry-run (apenas simula)
-python3 scripts/smart_git_sync.py --dry-run
+git-sync --dry-run
 
 # Com configuração personalizada
-python3 scripts/smart_git_sync.py --config custom_config.yaml
+git-sync --config custom_config.yaml
 ```
 
 ### 2. Configuração Personalizada
@@ -139,7 +140,7 @@ jobs:
           pip install .[dev]
 
       - name: Run Smart Git Sync (Dry Run)
-        run: python3 scripts/smart_git_sync.py --dry-run --verbose
+        run: git-sync --dry-run --verbose
 ```
 
 ## Funcionalidades Avançadas
@@ -331,7 +332,7 @@ log_file: "smart_git_sync.log"
 ```bash
 # .git/hooks/pre-commit
 #!/bin/bash
-python3 scripts/smart_git_sync.py --dry-run
+git-sync --dry-run
 ```
 
 ## Solução de Problemas
@@ -349,7 +350,7 @@ git init
 
 ```bash
 # Execute auditoria manualmente para debug
-python3 scripts/code_audit.py --verbose
+dev-audit --verbose
 ```
 
 **Erro: "Push failed"**
@@ -364,7 +365,7 @@ git push origin main
 
 ```bash
 # Ativar debug completo
-python3 scripts/smart_git_sync.py --verbose
+git-sync --verbose
 
 # Verificar logs
 tail -f smart_git_sync.log
@@ -374,10 +375,10 @@ tail -f smart_git_sync.log
 
 ```bash
 # Se algo der errado, use dry-run primeiro
-python3 scripts/smart_git_sync.py --dry-run --verbose
+git-sync --dry-run --verbose
 
 # Desabilite auditoria temporariamente
-python3 scripts/smart_git_sync.py --no-audit
+git-sync --no-audit
 ```
 
 ## Boas Práticas

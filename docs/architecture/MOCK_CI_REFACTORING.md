@@ -315,11 +315,11 @@ def __init__(self, workspace_root: Path, config_file: Path):
 **CLI Interface** (preserved 100%):
 
 ```bash
-python scripts/cli/mock_ci.py --check              # Verification mode
-python scripts/cli/mock_ci.py --auto-fix           # Apply fixes
-python scripts/cli/mock_ci.py --auto-fix --commit  # Fix + commit
-python scripts/cli/mock_ci.py --check --fail-on-issues  # Exit 1 on warnings
-python scripts/cli/mock_ci.py --report output.json # Save JSON report
+mock-ci --check              # Verification mode
+mock-ci --auto-fix           # Apply fixes
+mock-ci --auto-fix --commit  # Fix + commit
+mock-ci --check --fail-on-issues  # Exit 1 on warnings
+mock-ci --report output.json # Save JSON report
 ```
 
 **Dependencies**: `MockCIRunner` (single import)
@@ -411,30 +411,30 @@ The refactoring followed a 4-phase approach:
 
 ```bash
 # Run comprehensive check
-python scripts/cli/mock_ci.py --check
+mock-ci --check
 
 # Check with failure on warnings
-python scripts/cli/mock_ci.py --check --fail-on-issues
+mock-ci --check --fail-on-issues
 ```
 
 ### Auto-Fix
 
 ```bash
 # Fix without committing
-python scripts/cli/mock_ci.py --auto-fix
+mock-ci --auto-fix
 
 # Fix and commit automatically
-python scripts/cli/mock_ci.py --auto-fix --commit
+mock-ci --auto-fix --commit
 ```
 
 ### Generate Reports
 
 ```bash
 # Save JSON report
-python scripts/cli/mock_ci.py --check --report ci_report.json
+mock-ci --check --report ci_report.json
 
 # Check, report, and fail on issues
-python scripts/cli/mock_ci.py --check --report output.json --fail-on-issues
+mock-ci --check --report output.json --fail-on-issues
 ```
 
 ### Programmatic Usage

@@ -5,6 +5,7 @@ status: active
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-01'
+last_updated: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/test_mock_generator.py
@@ -41,25 +42,25 @@ scripts/
 ### 1. Escanear Arquivos de Teste
 
 ```bash
-python3 scripts/test_mock_generator.py --scan
+mock-ci --scan
 ```
 
 ### 2. Preview das Correções
 
 ```bash
-python3 scripts/test_mock_generator.py --apply --dry-run
+mock-ci --apply --dry-run
 ```
 
 ### 3. Aplicar Correções
 
 ```bash
-python3 scripts/test_mock_generator.py --apply
+mock-ci --apply
 ```
 
 ### 4. Validar Sistema
 
 ```bash
-python3 scripts/validate_test_mocks.py --fix-found-issues
+mock-ci --check --fail-on-issues
 ```
 
 ## 📋 Funcionalidades
@@ -91,10 +92,10 @@ python3 scripts/validate_test_mocks.py --fix-found-issues
 
 ```yaml
 - name: Check Test Mocks
-  run: python3 scripts/ci_test_mock_integration.py --check --fail-on-issues
+  run: mock-ci --check --fail-on-issues
 
 - name: Auto-fix Test Issues
-  run: python3 scripts/ci_test_mock_integration.py --auto-fix --commit
+  run: mock-ci --auto-fix --commit
 ```
 
 ### GitLab CI
@@ -102,7 +103,7 @@ python3 scripts/validate_test_mocks.py --fix-found-issues
 ```yaml
 test_mock_check:
   script:
-    - python3 scripts/ci_test_mock_integration.py --check --fail-on-issues
+    - mock-ci --check --fail-on-issues
   allow_failure: false
 ```
 
@@ -237,8 +238,8 @@ generator.apply_suggestions(dry_run=False)
 ### Problema: "Nenhuma sugestão encontrada"
 
 ```bash
-# Criar arquivos de teste de exemplo
-python3 scripts/validate_test_mocks.py --fix-found-issues
+# Verificar configuração e reescanear
+mock-ci --scan
 ```
 
 ### Problema: "Erro de sintaxe após aplicação"

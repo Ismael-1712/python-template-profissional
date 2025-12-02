@@ -5,6 +5,7 @@ status: active
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-01'
+last_updated: '2025-12-01'
 context_tags: []
 linked_code:
 - scripts/code_audit.py
@@ -32,16 +33,16 @@ Enterprise-grade security and quality auditing tool for Python projects. This to
 
 ```bash
 # Run basic security audit
-python scripts/code_audit.py
+dev-audit
 
 # Use custom configuration
-python scripts/code_audit.py --config scripts/audit_config.yaml
+dev-audit --config scripts/audit_config.yaml
 
 # Generate YAML report
-python scripts/code_audit.py --output yaml
+dev-audit --output yaml
 
 # Fail on medium severity issues
-python scripts/code_audit.py --fail-on MEDIUM
+dev-audit --fail-on MEDIUM
 ```
 
 ## 📋 Security Patterns Detected
@@ -150,7 +151,7 @@ The auditor generates comprehensive reports in JSON or YAML format:
 ## 🔧 Command Line Options
 
 ```
-python scripts/code_audit.py [OPTIONS]
+dev-audit [OPTIONS]
 
 Options:
   --config PATH         Path to configuration YAML file
@@ -170,7 +171,7 @@ Add to your `.github/workflows/ci.yml`:
 ```yaml
 - name: Security Audit
   run: |
-    python scripts/code_audit.py --fail-on HIGH --output json
+    dev-audit --fail-on HIGH --output json
 
 - name: Upload Audit Report
   uses: actions/upload-artifact@v3
@@ -188,7 +189,7 @@ COPY scripts/code_audit.py /app/scripts/
 RUN pip install pyyaml
 
 # Run audit during build
-RUN python scripts/code_audit.py --fail-on CRITICAL
+RUN dev-audit --fail-on CRITICAL
 ```
 
 ## 🛡️ Security Best Practices
@@ -239,7 +240,7 @@ pip install pytest pytest-timeout
 **"Config file not found"**: Use absolute path or place config in scripts/
 
 ```bash
-python scripts/code_audit.py --config /full/path/to/config.yaml
+dev-audit --config /full/path/to/config.yaml
 ```
 
 **"Too many findings"**: Adjust `max_findings_per_file` in config
