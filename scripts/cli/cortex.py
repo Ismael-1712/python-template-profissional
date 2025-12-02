@@ -33,6 +33,9 @@ from scripts.core.cortex.metadata import (  # noqa: E402
 )
 from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
 from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
+from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
+from scripts.core.guardian.models import ScanResult  # noqa: E402
+from scripts.core.guardian.scanner import ConfigScanner  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
@@ -764,6 +767,164 @@ def project_map(
 
     except Exception as e:
         logger.error(f"Error generating context map: {e}", exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+# ============================================================================
+# Guardian Commands - Visibility Guardian for orphaned configs
+# ============================================================================
+
+guardian_app = typer.Typer(
+    name="guardian",
+    help="Visibility Guardian - Detect undocumented configurations",
+)
+app.add_typer(guardian_app, name="guardian")
+
+
+@guardian_app.command("check")
+def guardian_check(
+    path: Annotated[
+        Path,
+        typer.Argument(
+            help="Path to scan for configurations (file or directory)",
+            exists=True,
+            readable=True,
+            resolve_path=True,
+        ),
+    ],
+    fail_on_error: Annotated[
+        bool,
+        typer.Option(
+            "--fail-on-error",
+            "-f",
+            help="Exit with error code if orphans are found",
+        ),
+    ] = False,
+    docs_path: Annotated[
+        Path,
+        typer.Option(
+            "--docs",
+            "-d",
+            help="Path to documentation directory",
+            exists=True,
+            dir_okay=True,
+            file_okay=False,
+            resolve_path=True,
+        ),
+    ] = Path("docs"),
+) -> None:
+    """Check for undocumented configurations (orphans).
+
+    Scans Python code for environment variables and other configurations,
+    then checks if they are documented. Reports any "orphans" - configurations
+    that appear in code but not in documentation.
+
+    Examples:
+        cortex guardian check src/
+        cortex guardian check src/config.py --fail-on-error
+        cortex guardian check . --docs custom_docs/
+    """
+    try:
+        typer.secho("\n🔍 Visibility Guardian - Orphan Detection", bold=True)
+        typer.echo(f"Scanning: {path}")
+        typer.echo(f"Documentation: {docs_path}\n")
+
+        # Step 1: Scan código
+        typer.echo("📝 Step 1: Scanning code for configurations...")
+        scanner = ConfigScanner()
+
+        # Determina se é arquivo ou diretório
+        if path.is_file():
+            # Scan de arquivo único
+            try:
+                findings = scanner.scan_file(path)
+                scan_result = ScanResult(
+                    findings=findings,
+                    files_scanned=1,
+                )
+            except Exception as e:
+                typer.secho(
+                    f"❌ Error scanning file: {e}",
+                    fg=typer.colors.RED,
+                )
+                raise typer.Exit(code=1) from e
+        else:
+            # Scan de diretório
+            scan_result = scanner.scan_project(path)
+
+        if scan_result.has_errors():
+            typer.secho(
+                "⚠️  Some files had errors during scanning:",
+                fg=typer.colors.YELLOW,
+            )
+            for error in scan_result.errors:
+                typer.echo(f"   • {error}")
+
+        findings_msg = (
+            f"   Found {scan_result.total_findings} configurations in "
+            f"{scan_result.files_scanned} files"
+        )
+        typer.echo(findings_msg)
+
+        if scan_result.total_findings == 0:
+            typer.secho(
+                "✅ No configurations found - nothing to check!",
+                fg=typer.colors.GREEN,
+            )
+            return
+
+        # Step 2: Match com documentação
+        typer.echo("\n📚 Step 2: Checking documentation...")
+        matcher = DocumentationMatcher(docs_path)
+        orphans, documented = matcher.find_orphans(scan_result.findings)
+
+        # Step 3: Report
+        typer.echo("\n" + "=" * 70)
+        typer.secho("📊 RESULTS", bold=True)
+        typer.echo("=" * 70)
+
+        if not orphans:
+            typer.secho(
+                "\n✅ SUCCESS: All configurations are documented!",
+                fg=typer.colors.GREEN,
+                bold=True,
+            )
+            typer.echo(f"   {len(documented)} configurations found in documentation")
+        else:
+            typer.secho(
+                f"\n❌ ORPHANS DETECTED: {len(orphans)} undocumented configurations",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+            typer.echo()
+
+            for orphan in orphans:
+                typer.secho(f"  • {orphan.key}", fg=typer.colors.RED, bold=True)
+                typer.echo(f"    Location: {orphan.source_file}:{orphan.line_number}")
+                if orphan.context:
+                    typer.echo(f"    Context: {orphan.context}")
+                if orphan.default_value:
+                    typer.echo(f"    Default: {orphan.default_value}")
+                typer.echo()
+
+            if documented:
+                typer.echo(f"✅ {len(documented)} configurations ARE documented:")
+                for key, files in documented.items():
+                    typer.echo(f"   • {key} → {', '.join(str(f.name) for f in files)}")
+
+            if fail_on_error:
+                typer.echo()
+                typer.secho(
+                    "💥 Exiting with error (--fail-on-error)",
+                    fg=typer.colors.RED,
+                )
+                raise typer.Exit(code=1)
+
+        typer.echo()
+
+    except Exception as e:
+        logger.error("Error during guardian check: %s", e, exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
