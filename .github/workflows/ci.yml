@@ -43,7 +43,7 @@ jobs:
     steps:
       # --- 1. CONFIGURAÇÃO (Checkout e Setup) ---
       - name: "Checkout do Repositório"
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v4.3.1
 
       - name: "Configurar Python ${{ matrix.python-version }}"
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
