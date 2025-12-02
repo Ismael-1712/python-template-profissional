@@ -5,6 +5,7 @@ status: active
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-01'
+last_updated: '2025-12-01'
 context_tags: []
 linked_code:
 - tests/test_smart_git_sync.py
@@ -18,9 +19,9 @@ O objetivo é garantir que a suíte de testes seja rápida (< 50ms), determinís
 
 ## 🚫 O Que Não Fazer (Anti-Patterns)
 
-1.  **Nunca toque no disco real:** Não use `os.mkdir`, `open("arquivo_real")` ou `tempfile.mkdtemp`.
-2.  **Nunca execute comandos reais:** Não chame `subprocess.run(["git", ...])` sem mock.
-3.  **Nunca dependa de estado externo:** Não assuma que o usuário tem Git instalado ou configurado.
+1. **Nunca toque no disco real:** Não use `os.mkdir`, `open("arquivo_real")` ou `tempfile.mkdtemp`.
+2. **Nunca execute comandos reais:** Não chame `subprocess.run(["git", ...])` sem mock.
+3. **Nunca dependa de estado externo:** Não assuma que o usuário tem Git instalado ou configurado.
 
 ## ✅ Como Escrever Testes (The Right Way)
 
