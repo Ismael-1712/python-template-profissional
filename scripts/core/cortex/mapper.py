@@ -21,7 +21,11 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-import tomllib
+# Compatibilidade com Python 3.10 (tomllib disponível apenas em 3.11+)
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 # Add project root to sys.path
 _script_dir = Path(__file__).resolve().parent

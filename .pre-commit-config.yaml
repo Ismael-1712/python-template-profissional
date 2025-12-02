@@ -49,3 +49,10 @@ repos:
         pass_filenames: false
         types_or: [markdown, python]
         files: \.(md|py)$
+
+      - id: cortex-guardian
+        name: "CORTEX Guardian - Bloqueia Shadow Configuration"
+        entry: python3 -m scripts.cli.cortex guardian check . --fail-on-error
+        language: system
+        pass_filenames: false
+        types: [python]
