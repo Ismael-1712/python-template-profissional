@@ -56,6 +56,19 @@ jobs:
       - name: "Instalar Dependências"
         run: make install-dev
 
+      # --- 2.1. DEBUG: VERIFICAR PACOTES INSTALADOS ---
+      - name: "Debug: Listar Pacotes Instalados"
+        run: |
+          echo "=== Pacotes instalados (typer, fastapi, uvicorn) ==="
+          .venv/bin/pip list | grep -E "(typer|fastapi|uvicorn)" || echo "⚠️ Dependências principais não encontradas!"
+          echo ""
+          echo "=== Teste de import ==="
+          .venv/bin/python -c "import typer; print(f'✅ typer {typer.__version__} importado com sucesso!')" || echo "❌ Falha ao importar typer!"
+
+      # --- 2.5. VERIFICAÇÃO DE SHADOW CONFIGURATION ---
+      - name: "Check Undocumented Configuration"
+        run: .venv/bin/python -m scripts.cli.cortex guardian check . --fail-on-error
+
       # --- 3. EXECUÇÃO (Delegação ao Makefile) ---
       - name: "Executar Verificação de Formatação"
         run: |

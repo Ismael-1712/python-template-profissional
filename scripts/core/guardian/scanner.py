@@ -10,10 +10,33 @@ import ast
 import time
 from pathlib import Path
 
+import yaml
+
 from scripts.core.guardian.models import ConfigFinding, ConfigType, ScanResult
 
 # Constantes para detecção de argumentos
 MIN_ARGS_WITH_DEFAULT = 2  # Mínimo de args para ter valor default
+
+
+def load_whitelist(project_root: Path) -> set[str]:
+    """Carrega whitelist de variáveis de ambiente a ignorar.
+
+    Args:
+        project_root: Diretório raiz do projeto
+
+    Returns:
+        Conjunto de variáveis de ambiente na whitelist
+    """
+    whitelist_file = project_root / ".guardian-whitelist.yaml"
+    if not whitelist_file.exists():
+        return set()
+
+    try:
+        with whitelist_file.open(encoding="utf-8") as f:
+            config = yaml.safe_load(f)
+            return set(config.get("whitelist", []))
+    except Exception:  # noqa: BLE001 - Captura intencional
+        return set()
 
 
 class EnvVarVisitor(ast.NodeVisitor):
@@ -103,7 +126,8 @@ class EnvVarVisitor(ast.NodeVisitor):
 
         # Verifica se há valor padrão (segundo argumento)
         if len(node.args) >= MIN_ARGS_WITH_DEFAULT and isinstance(
-            node.args[1], ast.Constant
+            node.args[1],
+            ast.Constant,
         ):
             default_value = str(node.args[1].value)
             required = False
@@ -130,7 +154,8 @@ class EnvVarVisitor(ast.NodeVisitor):
 
         # Verifica se há valor padrão (segundo argumento)
         if len(node.args) >= MIN_ARGS_WITH_DEFAULT and isinstance(
-            node.args[1], ast.Constant
+            node.args[1],
+            ast.Constant,
         ):
             default_value = str(node.args[1].value)
             required = False
@@ -171,6 +196,14 @@ class ConfigScanner:
     Escaneia arquivos Python usando AST para detectar configurações.
     """
 
+    def __init__(self, project_root: Path | None = None) -> None:
+        """Inicializa o scanner com whitelist.
+
+        Args:
+            project_root: Diretório raiz do projeto (para carregar whitelist)
+        """
+        self.whitelist = load_whitelist(project_root) if project_root else set()
+
     def scan_file(self, file_path: Path) -> list[ConfigFinding]:
         """Analisa um arquivo Python e retorna configurações encontradas.
 
@@ -178,7 +211,7 @@ class ConfigScanner:
             file_path: Caminho do arquivo a ser analisado
 
         Returns:
-            Lista de ConfigFinding encontradas
+            Lista de ConfigFinding encontradas (excluindo itens na whitelist)
 
         Raises:
             SyntaxError: Se o arquivo tem erros de sintaxe
@@ -191,12 +224,12 @@ class ConfigScanner:
             visitor = EnvVarVisitor(file_path)
             visitor.visit(tree)
 
+            # Filtra findings usando whitelist
+            return [f for f in visitor.findings if f.key not in self.whitelist]
+
         except SyntaxError as e:
             error_msg = f"Erro de sintaxe em {file_path}: {e}"
             raise SyntaxError(error_msg) from e
-
-        else:
-            return visitor.findings
 
     def scan_project(
         self,
@@ -218,8 +251,12 @@ class ConfigScanner:
         python_files = list(root.glob(pattern))
 
         for file_path in python_files:
-            # Ignora arquivos em __pycache__ e .venv
-            if "__pycache__" in file_path.parts or ".venv" in file_path.parts:
+            # Ignora arquivos em __pycache__, .venv, .tox e site-packages
+            path_parts = file_path.parts
+            if any(
+                part in path_parts
+                for part in ["__pycache__", ".venv", ".tox", "site-packages"]
+            ):
                 continue
 
             try:
