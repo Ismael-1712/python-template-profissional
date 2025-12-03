@@ -28,29 +28,43 @@ class TestMockValidator:
     para garantir que o sistema funcione corretamente.
     """
 
-    def __init__(self, workspace_root: Path):
+    def __init__(
+        self,
+        workspace_root: Path,
+        config_path: Path | None = None,
+    ) -> None:
         """Inicializa o validador.
 
         Args:
             workspace_root: Caminho raiz do workspace
+            config_path: Caminho opcional para o arquivo de configuração.
+                        Se None, tenta localizar automaticamente.
 
         """
         self.workspace_root = workspace_root.resolve()
-
-        # --- INÍCIO DA CORREÇÃO ---
-        # Localiza o arquivo de config, que está no mesmo diretório deste script
-        script_dir = Path(__file__).parent
-        config_file = script_dir / "test_mock_config.yaml"
-
-        if not config_file.exists():
-            logger.error(f"Config do gerador não encontrado: {config_file}")
-            # Levanta uma exceção pois o validador não pode funcionar sem o gerador
-            raise FileNotFoundError(f"Config do gerador não encontrado: {config_file}")
-
-        self.generator = TestMockGenerator(workspace_root, config_file)
-        # --- FIM DA CORREÇÃO ---
-
+        self._init_error: str | None = None
+        self.generator: TestMockGenerator | None = None
         self.validation_errors: list[dict[str, str]] = []
+
+        # Tenta localizar o arquivo de config
+        if config_path is None:
+            script_dir = Path(__file__).parent
+            config_path = script_dir / "test_mock_config.yaml"
+
+        if not config_path.exists():
+            error_msg = f"Config do gerador não encontrado: {config_path}"
+            logger.warning(error_msg)
+            self._init_error = error_msg
+            # NÃO levanta exceção - permite construção resiliente
+            return
+
+        try:
+            self.generator = TestMockGenerator(workspace_root, config_path)
+            logger.debug(f"TestMockValidator inicializado com config: {config_path}")
+        except Exception as e:
+            error_msg = f"Erro ao inicializar gerador de mocks: {e}"
+            logger.warning(error_msg)
+            self._init_error = error_msg
 
     def validate_workspace_structure(self) -> bool:
         """Valida se a estrutura do workspace está adequada.
@@ -264,6 +278,19 @@ def test_path_operations():
         """
         logger.info("Testando geração de mocks...")
 
+        # Guarda de inicialização
+        if self.generator is None or self._init_error:
+            error_msg = self._init_error or "Gerador não inicializado"
+            logger.error(f"Validação bloqueada: {error_msg}")
+            self.validation_errors.append(
+                {
+                    "type": "INIT_ERROR",
+                    "path": str(self.workspace_root),
+                    "message": error_msg,
+                },
+            )
+            return False
+
         try:
             # Escaneia arquivos
             report = self.generator.scan_test_files()
@@ -320,6 +347,19 @@ def test_path_operations():
 
         """
         logger.info("Testando aplicação em modo dry-run...")
+
+        # Guarda de inicialização
+        if self.generator is None or self._init_error:
+            error_msg = self._init_error or "Gerador não inicializado"
+            logger.error(f"Dry-run bloqueado: {error_msg}")
+            self.validation_errors.append(
+                {
+                    "type": "INIT_ERROR",
+                    "path": str(self.workspace_root),
+                    "message": error_msg,
+                },
+            )
+            return False
 
         try:
             # Garante que há sugestões
