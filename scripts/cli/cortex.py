@@ -37,6 +37,7 @@ from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
 from scripts.core.guardian.models import ScanResult  # noqa: E402
 from scripts.core.guardian.scanner import ConfigScanner  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
+from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
 # Configure logging
@@ -968,8 +969,10 @@ def callback(
 
 def main() -> None:
     """Entry point for the cortex CLI."""
-    app()
+    with trace_context():
+        app()
 
 
 if __name__ == "__main__":
-    app()
+    with trace_context():
+        app()
