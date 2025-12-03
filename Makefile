@@ -2,6 +2,9 @@
 # CONFIGURAÇÃO DO AMBIENTE (VENV AWARE)
 # =============================================================================
 
+# Define o shell explicitamente para garantir compatibilidade com sintaxe avançada
+SHELL := /bin/bash
+
 # Define o caminho do ambiente virtual
 VENV := .venv
 SYSTEM_PYTHON := python3
@@ -53,15 +56,38 @@ setup: install-dev
 ## install-dev: Instala ambiente de desenvolvimento (Cria .venv se necessário)
 install-dev:
 	@echo "🔧 Verificando ambiente virtual..."
-	@if [ ! -f "$(VENV)/.install_complete" ]; then \
-		echo "📦 Criando/reinstalando ambiente virtual..."; \
+	@REQUIREMENTS_IN="requirements/dev.in"; \
+	HASH_FILE="$(VENV)/.install_complete"; \
+	if [ ! -f "$$REQUIREMENTS_IN" ]; then \
+		echo "❌ Erro: $$REQUIREMENTS_IN não encontrado!"; \
+		exit 1; \
+	fi; \
+	CURRENT_HASH=$$(sha256sum "$$REQUIREMENTS_IN" 2>/dev/null | cut -d' ' -f1 || md5sum "$$REQUIREMENTS_IN" 2>/dev/null | cut -d' ' -f1); \
+	if [ -z "$$CURRENT_HASH" ]; then \
+		echo "⚠️  Aviso: Comando de hash não disponível. Usando validação baseada em timestamp."; \
+		CURRENT_HASH=$$(stat -c %Y "$$REQUIREMENTS_IN" 2>/dev/null || stat -f %m "$$REQUIREMENTS_IN" 2>/dev/null); \
+	fi; \
+	NEEDS_INSTALL=false; \
+	if [ ! -f "$$HASH_FILE" ]; then \
+		echo "📦 Marcador de instalação não encontrado. Instalação necessária."; \
+		NEEDS_INSTALL=true; \
+	else \
+		STORED_HASH=$$(cat "$$HASH_FILE" 2>/dev/null); \
+		if [ "$$CURRENT_HASH" != "$$STORED_HASH" ]; then \
+			echo "🔄 Dependências alteradas detectadas (hash: $${CURRENT_HASH:0:12}...). Atualizando ambiente..."; \
+			NEEDS_INSTALL=true; \
+		else \
+			echo "✅ Ambiente sincronizado (hash: $${CURRENT_HASH:0:12}...). Nenhuma ação necessária."; \
+		fi; \
+	fi; \
+	if [ "$$NEEDS_INSTALL" = "true" ]; then \
+		echo "🚀 Iniciando instalação/atualização do ambiente..."; \
 		rm -rf $(VENV); \
 		$(SYSTEM_PYTHON) -m venv $(VENV); \
-		echo "🚀 Instalando dependências..."; \
+		echo "📥 Instalando dependências via install_dev.py..."; \
 		$(VENV)/bin/python $(SCRIPTS_DIR)/cli/install_dev.py && \
-		touch $(VENV)/.install_complete; \
-	else \
-		echo "✅ Ambiente já instalado (use 'make clean-all' para reinstalar)"; \
+		echo "$$CURRENT_HASH" > "$$HASH_FILE" && \
+		echo "✅ Instalação concluída. Hash armazenado: $${CURRENT_HASH:0:12}..."; \
 	fi
 
 ## build: Constrói pacote distribuível (wheel + sdist)
