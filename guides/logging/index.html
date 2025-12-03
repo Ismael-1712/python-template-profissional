@@ -1,0 +1,1483 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="DevOps Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Guia de Observabilidade e Logging - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-de-observabilidade-e-logging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guia de Observabilidade e Logging
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Visão Geral
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Visão Geral">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principais-caracteristicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principais Características
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Configuração
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 Configuração">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-de-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis de Ambiente
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Variáveis de Ambiente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#log_level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LOG_LEVEL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log_format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LOG_FORMAT
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sistema-de-trace-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Sistema de Trace ID
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Sistema de Trace ID">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como Funciona
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uso-basico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uso Básico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Uso Básico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-em-clis-entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Em CLIs (Entry Points)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-em-modulos-internos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Em Módulos Internos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace-id-customizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace ID Customizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#json-structured-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 JSON Structured Logging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 JSON Structured Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quando-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formato-de-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formato de Saída
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uso-em-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uso em Produção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing-de-logs-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parsing de Logs JSON
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parsing de Logs JSON">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#com-jq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Com jq
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#com-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Com Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-e-debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Troubleshooting e Debug
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Troubleshooting e Debug">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rastreando-uma-operacao-especifica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rastreando uma Operação Específica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-de-fluxo-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debug de Fluxo Completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identificar-gargalos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identificar Gargalos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exemplos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Exemplos Práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Exemplos Práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-1-cli-com-logging-estruturado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 1: CLI com Logging Estruturado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-2-propagacao-entre-modulos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 2: Propagação entre Módulos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-3-integracao-com-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 3: Integração com CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-tecnica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Arquitetura Técnica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Arquitetura Técnica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#componentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Componentes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thread-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boas-praticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Boas Práticas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 Boas Práticas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ DO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ DON'T
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links-relacionados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 Links Relacionados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📞 Suporte
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-de-observabilidade-e-logging">Guia de Observabilidade e Logging</h1>
+<h2 id="visao-geral">📋 Visão Geral</h2>
+<p>Este guia documenta o sistema de <strong>Logging Estruturado com Distributed Tracing</strong> implementado no projeto. O sistema fornece observabilidade completa através de Trace IDs automáticos, suporte a JSON structured logging e configuração flexível via variáveis de ambiente.</p>
+<h3 id="principais-caracteristicas">Principais Características</h3>
+<ul>
+<li>✅ <strong>Trace ID Automático</strong>: Correlação de logs via UUID único por operação</li>
+<li>✅ <strong>JSON Structured Logging</strong>: Formato parseable para ferramentas de APM</li>
+<li>✅ <strong>Thread-safe e Async-safe</strong>: Usa <code>contextvars</code> do Python 3.7+</li>
+<li>✅ <strong>Separação de Streams</strong>: INFO/DEBUG → stdout, WARNING/ERROR → stderr</li>
+<li>✅ <strong>Configuração via ENV</strong>: Controle sem modificar código</li>
+</ul>
+<hr />
+<h2 id="configuracao">🔧 Configuração</h2>
+<h3 id="variaveis-de-ambiente">Variáveis de Ambiente</h3>
+<h4 id="log_level"><code>LOG_LEVEL</code></h4>
+<p>Controla o nível de verbosidade dos logs.</p>
+<p><strong>Valores aceitos:</strong></p>
+<ul>
+<li><code>DEBUG</code> - Máximo detalhe (desenvolvimento)</li>
+<li><code>INFO</code> - Informações gerais (padrão)</li>
+<li><code>WARNING</code> - Apenas avisos e erros</li>
+<li><code>ERROR</code> - Apenas erros</li>
+<li><code>CRITICAL</code> - Apenas erros críticos</li>
+</ul>
+<p><strong>Exemplo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Ativar modo debug</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span>python<span class="w"> </span>scripts/cli/cortex.py
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Apenas erros (produção)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>ERROR<span class="w"> </span>python<span class="w"> </span>scripts/cli/audit.py
+</code></pre></div>
+<hr />
+<h4 id="log_format"><code>LOG_FORMAT</code></h4>
+<p>Define o formato de saída dos logs.</p>
+<p><strong>Valores aceitos:</strong></p>
+<ul>
+<li><code>text</code> - Formato texto legível (padrão)</li>
+<li><code>json</code> - JSON structured logging</li>
+</ul>
+<p><strong>Exemplo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Formato texto (padrão)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>scripts/cli/cortex.py
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Formato JSON (para integração com ELK, Splunk, etc.)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nv">LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span>python<span class="w"> </span>scripts/cli/cortex.py
+</code></pre></div>
+<hr />
+<h2 id="sistema-de-trace-id">🎯 Sistema de Trace ID</h2>
+<h3 id="como-funciona">Como Funciona</h3>
+<p>O <strong>Trace ID</strong> é um identificador único (UUID4) gerado automaticamente no início de cada operação. Ele é propagado automaticamente através de todas as chamadas de função dentro do mesmo contexto.</p>
+<p><strong>Arquitetura:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────────────────────────────────────┐
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│  Entry Point (CLI)                          │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│  with trace_context():                      │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│    ├─ Trace ID gerado: a1b2c3d4-...        │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│    ├─ function_1()                          │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│    │   └─ logger.info() [a1b2c3d4]         │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│    ├─ function_2()                          │
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│    │   └─ logger.warning() [a1b2c3d4]      │
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│    └─ function_3()                          │
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│        └─ logger.error() [a1b2c3d4]        │
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>└─────────────────────────────────────────────┘
+</code></pre></div>
+<p><strong>Todos os logs compartilham o mesmo Trace ID = Correlação perfeita!</strong></p>
+<hr />
+<h3 id="uso-basico">Uso Básico</h3>
+<h4 id="1-em-clis-entry-points">1. Em CLIs (Entry Points)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point com Trace ID automático.&quot;&quot;&quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;CLI iniciado&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="n">process_command</span><span class="p">()</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;CLI finalizado&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>2025-12-03 19:40:21,340 - [9f872d32-6557-4e5f-a44f-e31c1412ccdc] - __main__ - INFO - CLI iniciado
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>2025-12-03 19:40:21,341 - [9f872d32-6557-4e5f-a44f-e31c1412ccdc] - __main__ - INFO - CLI finalizado
+</code></pre></div>
+<hr />
+<h4 id="2-em-modulos-internos">2. Em Módulos Internos</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_trace_id</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Função que herda Trace ID automaticamente.&quot;&quot;&quot;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processando dados&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="c1"># Trace ID está disponível</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">trace_id</span> <span class="o">=</span> <span class="n">get_trace_id</span><span class="p">()</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Current Trace ID: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="c1"># Processar...</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dados processados com sucesso&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Não é necessário passar Trace ID explicitamente!</strong> Ele é propagado via <code>contextvars</code>.</p>
+<hr />
+<h3 id="trace-id-customizado">Trace ID Customizado</h3>
+<p>Para propagar Trace ID de sistemas externos (ex: HTTP headers):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">handle_http_request</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Propaga Trace ID do HTTP header.&quot;&quot;&quot;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">incoming_trace_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Trace-ID&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">(</span><span class="n">incoming_trace_id</span><span class="p">):</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processando request com Trace ID externo&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        <span class="n">process_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="json-structured-logging">📊 JSON Structured Logging</h2>
+<h3 id="quando-usar">Quando Usar</h3>
+<p>Use JSON logging quando:</p>
+<ul>
+<li>✅ Integrar com ferramentas de APM (Datadog, New Relic, Elastic)</li>
+<li>✅ Processar logs automaticamente</li>
+<li>✅ Criar métricas e alertas baseados em logs</li>
+<li>✅ Armazenar logs em bancos de dados NoSQL</li>
+</ul>
+<h3 id="formato-de-saida">Formato de Saída</h3>
+<p><strong>Exemplo de Log JSON:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-03T22:40:28.253346+00:00&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">&quot;logger&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;scripts.cli.audit&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Starting comprehensive code audit&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">&quot;trace_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5d21eb17-a504-4ebc-9cbb-6d2ca86aa1c8&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;audit.py:195&quot;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Campos:</strong></p>
+<ul>
+<li><code>timestamp</code> - ISO8601 com timezone UTC</li>
+<li><code>level</code> - Nível do log (INFO, WARNING, ERROR, etc.)</li>
+<li><code>logger</code> - Nome do módulo</li>
+<li><code>message</code> - Mensagem do log</li>
+<li><code>trace_id</code> - Identificador único da operação</li>
+<li><code>location</code> - Arquivo e linha do código</li>
+<li><code>exception</code> - Stacktrace (se presente)</li>
+</ul>
+<hr />
+<h3 id="uso-em-producao">Uso em Produção</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Docker/Kubernetes</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>ENV<span class="w"> </span><span class="nv">LOG_FORMAT</span><span class="o">=</span>json
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>ENV<span class="w"> </span><span class="nv">LOG_LEVEL</span><span class="o">=</span>INFO
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># Systemd</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nv">Environment</span><span class="o">=</span><span class="s2">&quot;LOG_FORMAT=json&quot;</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nv">Environment</span><span class="o">=</span><span class="s2">&quot;LOG_LEVEL=WARNING&quot;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="c1"># GitHub Actions</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>-<span class="w"> </span>name:<span class="w"> </span>Run<span class="w"> </span>audit
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">  </span>env:
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span>LOG_FORMAT:<span class="w"> </span>json
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span>LOG_LEVEL:<span class="w"> </span>INFO
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">  </span>run:<span class="w"> </span>python<span class="w"> </span>scripts/cli/audit.py
+</code></pre></div>
+<hr />
+<h3 id="parsing-de-logs-json">Parsing de Logs JSON</h3>
+<h4 id="com-jq">Com <code>jq</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Filtrar por Trace ID</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>cat<span class="w"> </span>audit.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;select(.trace_id == &quot;5d21eb17-a504&quot;)&#39;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Filtrar por nível ERROR</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>cat<span class="w"> </span>audit.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;select(.level == &quot;ERROR&quot;)&#39;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Contar logs por logger</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>cat<span class="w"> </span>audit.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.logger&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Extrair apenas mensagens</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>cat<span class="w"> </span>audit.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.message&#39;</span>
+</code></pre></div>
+<h4 id="com-python">Com Python</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;audit.log&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="n">log</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        <span class="k">if</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="troubleshooting-e-debug">🔍 Troubleshooting e Debug</h2>
+<h3 id="rastreando-uma-operacao-especifica">Rastreando uma Operação Específica</h3>
+<p><strong>Cenário:</strong> Usuário reporta erro com Trace ID <code>a1b2c3d4-5678</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Formato texto</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>grep<span class="w"> </span><span class="s2">&quot;a1b2c3d4-5678&quot;</span><span class="w"> </span>cortex.log
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Formato JSON</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>cat<span class="w"> </span>cortex.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;select(.trace_id | startswith(&quot;a1b2c3d4&quot;))&#39;</span>
+</code></pre></div>
+<p><strong>Resultado:</strong> Todos os logs dessa operação, em ordem cronológica.</p>
+<hr />
+<h3 id="debug-de-fluxo-completo">Debug de Fluxo Completo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Ativar modo DEBUG + JSON</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span><span class="nv">LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>map
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Processar output</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>cat<span class="w"> </span>cortex.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;select(.level == &quot;DEBUG&quot;)&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>debug_flow.json
+</code></pre></div>
+<hr />
+<h3 id="identificar-gargalos">Identificar Gargalos</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Timestamp de cada operação</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>cat<span class="w"> </span>audit.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;[.timestamp, .trace_id, .message] | @tsv&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort
+</code></pre></div>
+<hr />
+<h2 id="exemplos-praticos">📚 Exemplos Práticos</h2>
+<h3 id="exemplo-1-cli-com-logging-estruturado">Exemplo 1: CLI com Logging Estruturado</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="ch">#!/usr/bin/env python3</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="sd">&quot;&quot;&quot;My CLI with structured logging.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">log_file</span><span class="o">=</span><span class="s2">&quot;mycli.log&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Process a file with automatic tracing.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>        <span class="c1"># Processar arquivo</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>        <span class="n">result</span> <span class="o">=</span> <span class="n">do_processing</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing completed successfully&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>        <span class="k">return</span> <span class="n">result</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Processing failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point with trace context.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>        <span class="n">app</span><span class="p">()</span>
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a>
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>        <span class="n">app</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h3 id="exemplo-2-propagacao-entre-modulos">Exemplo 2: Propagação entre Módulos</h3>
+<p><strong><code>main.py</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">my_module</span><span class="w"> </span><span class="kn">import</span> <span class="n">process_data</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="k">with</span> <span class="n">trace_context</span><span class="p">()</span> <span class="k">as</span> <span class="n">trace_id</span><span class="p">:</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting batch job&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="n">process_data</span><span class="p">()</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Batch job completed&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong><code>my_module.py</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">():</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Esta função herda o Trace ID automaticamente.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Processing data&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="c1"># Trabalho...</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Data processed&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output (mesmo Trace ID):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>2025-12-03 19:40:21,340 - [abc-123] - __main__ - INFO - Starting batch job
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>2025-12-03 19:40:21,341 - [abc-123] - my_module - INFO - Processing data
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>2025-12-03 19:40:21,342 - [abc-123] - my_module - INFO - Data processed
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>2025-12-03 19:40:21,343 - [abc-123] - __main__ - INFO - Batch job completed
+</code></pre></div>
+<hr />
+<h3 id="exemplo-3-integracao-com-cicd">Exemplo 3: Integração com CI/CD</h3>
+<p><strong><code>.github/workflows/test.yml</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Tests with Structured Logging</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run tests with JSON logging</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="w">          </span><span class="nt">LOG_FORMAT</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="w">          </span><span class="nt">LOG_LEVEL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a><span class="w">          </span><span class="no">python -m pytest tests/ -v</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload logs as artifacts</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-logs</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*.log&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="arquitetura-tecnica">🏗️ Arquitetura Técnica</h2>
+<h3 id="componentes">Componentes</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>│  scripts/utils/context.py                           │
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>│  ├─ ContextVar storage (thread-safe)                │
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>│  ├─ get_trace_id() → UUID4 ou contexto              │
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>│  ├─ set_trace_id(custom_id)                         │
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>│  └─ trace_context() → Context Manager               │
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>└─────────────────────────────────────────────────────┘
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>                          ↓
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>│  scripts/utils/logger.py                            │
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>│  ├─ TraceIDFilter → Injeta trace_id em LogRecord    │
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>│  ├─ JSONFormatter → Formata como JSON               │
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>│  ├─ InfoHandler → stdout (INFO/DEBUG)               │
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>│  ├─ ErrorHandler → stderr (WARNING/ERROR)           │
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>│  └─ setup_logging() → Configura tudo                │
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>└─────────────────────────────────────────────────────┘
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>                          ↓
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>│  Entry Points (CLIs)                                │
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>│  └─ with trace_context(): app()                     │
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>└─────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h3 id="thread-safety">Thread Safety</h3>
+<p>O sistema usa <code>contextvars.ContextVar</code> (Python 3.7+), que é:</p>
+<ul>
+<li>✅ <strong>Thread-safe</strong>: Cada thread tem seu próprio contexto</li>
+<li>✅ <strong>Async-safe</strong>: Funciona com <code>asyncio</code> e <code>async/await</code></li>
+<li>✅ <strong>Propagation-aware</strong>: Herda contexto em tarefas filhas</li>
+</ul>
+<p><strong>Exemplo Async:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_task</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%s</span><span class="s2"> started&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%s</span><span class="s2"> completed&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>        <span class="c1"># Todas as tasks compartilham o mesmo Trace ID</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a>        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>            <span class="n">async_task</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">),</span>
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a>            <span class="n">async_task</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">),</span>
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a>            <span class="n">async_task</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">),</span>
+<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>        <span class="p">)</span>
+<a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a>
+<a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+<hr />
+<h2 id="boas-praticas">🚨 Boas Práticas</h2>
+<h3 id="do">✅ DO</h3>
+<ul>
+<li>✅ Sempre use <code>with trace_context()</code> em entry points</li>
+<li>✅ Use <code>logger.info("Message: %s", value)</code> ao invés de f-strings</li>
+<li>✅ Configure JSON logging em produção</li>
+<li>✅ Use <code>LOG_LEVEL=DEBUG</code> apenas em desenvolvimento</li>
+<li>✅ Inclua contexto relevante nas mensagens de log</li>
+</ul>
+<h3 id="dont">❌ DON'T</h3>
+<ul>
+<li>❌ Não use <code>print()</code> - sempre use logger</li>
+<li>❌ Não logue senhas ou dados sensíveis</li>
+<li>❌ Não use f-strings em logs (lazy evaluation é melhor)</li>
+<li>❌ Não crie múltiplos <code>trace_context()</code> sem necessidade</li>
+<li>❌ Não ignore exceptions sem logar</li>
+</ul>
+<hr />
+<h2 id="links-relacionados">🔗 Links Relacionados</h2>
+<ul>
+<li><strong>Código:</strong> <a href="../../scripts/utils/logger.py"><code>scripts/utils/logger.py</code></a></li>
+<li><strong>Contexto:</strong> <a href="../../scripts/utils/context.py"><code>scripts/utils/context.py</code></a></li>
+<li><strong>Exemplo:</strong> <a href="../../demo_logging.py"><code>demo_logging.py</code></a></li>
+<li><strong>Arquitetura:</strong> <a href="../../architecture/CORTEX_INDICE/"><code>docs/architecture/CORTEX_INDICE.md</code></a></li>
+</ul>
+<hr />
+<h2 id="suporte">📞 Suporte</h2>
+<p>Para dúvidas ou problemas:</p>
+<ol>
+<li>Consulte este guia primeiro</li>
+<li>Execute <code>demo_logging.py</code> para exemplos práticos</li>
+<li>Verifique os logs em modo DEBUG</li>
+<li>Abra uma issue no repositório</li>
+</ol>
+<hr />
+<p><strong>Última atualização:</strong> 2025-12-03
+<strong>Versão:</strong> 1.0.0
+<strong>Mantido por:</strong> DevOps Engineering Team</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
