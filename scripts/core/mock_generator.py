@@ -5,13 +5,18 @@ It analyzes Python test files and suggests appropriate mocks for external
 dependencies that could fail in CI/CD environments.
 
 Classes:
-    MockPattern: Represents a code pattern that requires mocking
     TestMockGenerator: Main engine for mock generation and application
+
+Note:
+    MockPattern migrated to scripts.core.mock_ci.models_pydantic (P08)
+    Uses lazy import to avoid circular dependency with checker.py
 
 Author: DevOps Engineering Team
 License: MIT
-Version: 2.0.0 (Refactored)
+Version: 2.1.0 (Pydantic Migration - P08)
 """
+
+from __future__ import annotations
 
 import ast
 import json
@@ -19,32 +24,21 @@ import logging
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import yaml
+
+if TYPE_CHECKING:
+    from scripts.core.mock_ci.models_pydantic import MockPattern
 
 logger = logging.getLogger(__name__)
 
 
-class MockPattern:
-    """Representa um padrão de código que precisa de mock."""
+def _get_mock_pattern_class() -> type[MockPattern]:
+    """Lazy import to avoid circular dependency."""
+    from scripts.core.mock_ci.models_pydantic import MockPattern
 
-    def __init__(
-        self,
-        pattern: str,
-        mock_type: str,
-        mock_template: str,
-        required_imports: list[str],
-        description: str,
-        severity: str = "MEDIUM",
-    ):
-        """Inicializa a instância."""
-        self.pattern = pattern
-        self.mock_type = mock_type
-        self.mock_template = mock_template
-        self.required_imports = required_imports
-        self.description = description
-        self.severity = severity
+    return MockPattern
 
 
 class TestMockGenerator:
@@ -98,6 +92,7 @@ class TestMockGenerator:
 
     def _parse_patterns_from_config(self) -> dict[str, MockPattern]:
         """Converte os padrões do config YAML em objetos MockPattern."""
+        MockPatternClass = _get_mock_pattern_class()  # noqa: N806
         patterns_dict: dict[str, MockPattern] = {}
         if "mock_patterns" not in self.config:
             return patterns_dict
@@ -113,7 +108,7 @@ class TestMockGenerator:
                     if not pattern_key:
                         continue
 
-                    patterns_dict[pattern_key] = MockPattern(
+                    patterns_dict[pattern_key] = MockPatternClass(
                         pattern=pattern_key,
                         mock_type=p.get("type", "UNKNOWN"),
                         # Usa .get() para mock_template para evitar KeyError

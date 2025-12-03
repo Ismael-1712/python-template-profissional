@@ -25,6 +25,8 @@ dependencies = [
     "uvicorn[standard]",
     # CLI framework para scripts de desenvolvimento
     "typer[all]",
+    # Validação de dados robusta e type-safe
+    "pydantic>=2.0",
 ]
 
 # Dependências de desenvolvimento
