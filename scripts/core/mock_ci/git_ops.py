@@ -6,12 +6,19 @@ dedicada, facilitando testes e manutenção.
 
 import logging
 import subprocess
+import time
 from pathlib import Path
+from subprocess import TimeoutExpired
 
 from scripts.core.mock_ci.config import format_commit_message
 from scripts.core.mock_ci.models import GitInfo
 
 logger = logging.getLogger(__name__)
+
+# Constantes para timeout e retry
+DEFAULT_TIMEOUT = 30  # segundos
+MAX_RETRIES = 3
+BACKOFF_FACTOR = 1.5
 
 
 class GitOperations:
@@ -35,7 +42,7 @@ class GitOperations:
         self.workspace_root = workspace_root.resolve()
 
     def run_command(self, command: list[str]) -> tuple[bool, str]:
-        """Executa comando git de forma segura.
+        """Executa comando git de forma segura com timeout e retry.
 
         Args:
             command: Lista com comando git e argumentos
@@ -56,6 +63,8 @@ class GitOperations:
         Security:
             - Usa shell=False para prevenir shell injection
             - Valida que comando inicia com "git"
+            - Timeout de 30s para prevenir travamentos
+            - Retry automático com backoff exponencial
 
         """
         # Security check: comando deve começar com "git"
@@ -63,27 +72,100 @@ class GitOperations:
             logger.error("Comando inválido: deve começar com 'git'")
             return False, ""
 
-        try:
-            result = subprocess.run(  # nosec # noqa: subprocess
-                command,
-                cwd=self.workspace_root,
-                shell=False,  # Security: prevent shell injection
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+        sleep_time = 1.0  # Tempo inicial de espera entre tentativas
+        last_error = ""
 
-            success = result.returncode == 0
-            output = result.stdout.strip() if success else ""
+        for attempt in range(MAX_RETRIES):
+            try:
+                result = subprocess.run(  # nosec # noqa: subprocess
+                    command,
+                    cwd=self.workspace_root,
+                    shell=False,  # Security: prevent shell injection
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=DEFAULT_TIMEOUT,  # Previne travamentos
+                )
 
-            if not success and result.stderr:
-                logger.debug(f"Git command stderr: {result.stderr.strip()}")
+                success = result.returncode == 0
+                output = result.stdout.strip() if success else ""
 
-            return success, output
+                if not success and result.stderr:
+                    last_error = result.stderr.strip()
+                    logger.debug(
+                        "Git command stderr (attempt %d/%d): %s",
+                        attempt + 1,
+                        MAX_RETRIES,
+                        last_error,
+                    )
 
-        except Exception as e:
-            logger.error(f"Erro ao executar comando git: {e}")
-            return False, ""
+                # Se sucesso, retorna imediatamente
+                if success:
+                    if attempt > 0:
+                        logger.info(
+                            "Git command succeeded on attempt %d/%d",
+                            attempt + 1,
+                            MAX_RETRIES,
+                        )
+                    return True, output
+
+                # Se falhou mas não é a última tentativa, espera e tenta de novo
+                if attempt < MAX_RETRIES - 1:
+                    logger.warning(
+                        "Git command failed (attempt %d/%d), retrying in %.1fs...",
+                        attempt + 1,
+                        MAX_RETRIES,
+                        sleep_time,
+                    )
+                    time.sleep(sleep_time)
+                    sleep_time *= BACKOFF_FACTOR
+
+            except TimeoutExpired:
+                logger.warning(
+                    "Git command timeout after %ds (attempt %d/%d): %s",
+                    DEFAULT_TIMEOUT,
+                    attempt + 1,
+                    MAX_RETRIES,
+                    " ".join(command),
+                )
+
+                # Se não é a última tentativa, espera e tenta de novo
+                if attempt < MAX_RETRIES - 1:
+                    logger.info("Retrying in %.1fs...", sleep_time)
+                    time.sleep(sleep_time)
+                    sleep_time *= BACKOFF_FACTOR
+                else:
+                    logger.error(
+                        "Git command failed permanently after %d timeouts",
+                        MAX_RETRIES,
+                    )
+                    return False, ""
+
+            except OSError as e:
+                # Erros de sistema (arquivo não encontrado, permissões, etc.)
+                logger.error(
+                    "System error executing git command: %s",
+                    str(e),
+                    exc_info=True,
+                )
+                return False, ""
+
+            except Exception as e:
+                # Outras exceções inesperadas
+                logger.error(
+                    "Unexpected error executing git command: %s",
+                    str(e),
+                    exc_info=True,
+                )
+                return False, ""
+
+        # Se chegou aqui, esgotou todas as tentativas
+        logger.error(
+            "Git command failed after %d attempts. Last error: %s",
+            MAX_RETRIES,
+            last_error,
+        )
+        return False, ""
 
     def get_status(self) -> GitInfo:
         """Coleta informações completas do repositório git.
