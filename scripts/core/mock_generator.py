@@ -21,7 +21,6 @@ from __future__ import annotations
 import ast
 import json
 import logging
-import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -30,6 +29,12 @@ import yaml
 
 if TYPE_CHECKING:
     from scripts.core.mock_ci.models_pydantic import MockPattern
+    from scripts.utils.filesystem import FileSystemAdapter
+    from scripts.utils.platform_strategy import PlatformStrategy
+else:
+    # Lazy imports para evitar dependências circulares em tempo de execução
+    FileSystemAdapter = None
+    PlatformStrategy = None
 
 logger = logging.getLogger(__name__)
 
@@ -51,14 +56,40 @@ class TestMockGenerator:
     - Backup automático de arquivos
     """
 
-    def __init__(self, workspace_root: Path, config_path: Path):
+    def __init__(
+        self,
+        workspace_root: Path,
+        config_path: Path,
+        fs: FileSystemAdapter | None = None,
+        platform: PlatformStrategy | None = None,
+    ):
         """Inicializa o gerador de mocks.
 
         Args:
             workspace_root: Caminho raiz do workspace
             config_path: Caminho para o test_mock_config.yaml
+            fs: FileSystemAdapter para operações de I/O (default: RealFileSystem)
+            platform: PlatformStrategy para operações específicas de plataforma
+                     (default: detecção automática via get_platform_strategy)
 
+        Note:
+            A injeção de dependências permite:
+            - Testes unitários com MemoryFileSystem (sem I/O real)
+            - Compatibilidade retroativa (defaults mantêm comportamento original)
+            - Extensibilidade para mock de operações de plataforma
         """
+        # Lazy imports para evitar overhead em tempo de importação
+        if fs is None:
+            from scripts.utils.filesystem import RealFileSystem
+
+            fs = RealFileSystem()
+        if platform is None:
+            from scripts.utils.platform_strategy import get_platform_strategy
+
+            platform = get_platform_strategy()
+
+        self.fs = fs
+        self.platform = platform
         self.workspace_root = workspace_root.resolve()
         self.config_path = config_path
         self.backup_dir = self.workspace_root / ".test_mock_backups"
@@ -76,16 +107,21 @@ class TestMockGenerator:
         )
 
     def _load_config(self) -> dict[str, Any]:
-        """Carrega a configuração do arquivo YAML."""
-        if not self.config_path.exists():
+        """Carrega a configuração do arquivo YAML.
+
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02).
+            Permite testes sem I/O real usando MemoryFileSystem.
+        """
+        if not self.fs.exists(self.config_path):
             logger.error(f"Arquivo de configuração não encontrado: {self.config_path}")
             return {}
 
         try:
-            with self.config_path.open("r", encoding="utf-8") as f:
-                config: dict[str, Any] = yaml.safe_load(f) or {}
-                logger.info(f"Configuração carregada de {self.config_path}")
-                return config
+            content = self.fs.read_text(self.config_path, encoding="utf-8")
+            config: dict[str, Any] = yaml.safe_load(content) or {}
+            logger.info(f"Configuração carregada de {self.config_path}")
+            return config
         except Exception as e:
             logger.error(f"Erro ao carregar configuração YAML: {e}")
             return {}
@@ -132,15 +168,18 @@ class TestMockGenerator:
         Returns:
             Caminho do arquivo de backup criado
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 3).
+            Usa self.fs.copy() ao invés de shutil.copy2().
         """
-        if not self.backup_dir.exists():
-            self.backup_dir.mkdir(parents=True, exist_ok=True)
+        if not self.fs.exists(self.backup_dir):
+            self.fs.mkdir(self.backup_dir, parents=True, exist_ok=True)
 
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         backup_name = f"{file_path.name}.{timestamp}.backup"
         backup_path = self.backup_dir / backup_name
 
-        shutil.copy2(file_path, backup_path)
+        self.fs.copy(file_path, backup_path)
         logger.debug(f"Backup criado: {backup_path}")
 
         return backup_path
@@ -154,11 +193,12 @@ class TestMockGenerator:
         Returns:
             AST do arquivo ou None se houver erro
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 2).
+            Permite testes sem I/O real usando MemoryFileSystem.
         """
         try:
-            with file_path.open("r", encoding="utf-8") as f:
-                content = f.read()
-
+            content = self.fs.read_text(file_path, encoding="utf-8")
             return ast.parse(content, filename=str(file_path))
 
         except (SyntaxError, UnicodeDecodeError) as e:
@@ -250,6 +290,9 @@ class TestMockGenerator:
         Returns:
             Dicionário com todas as sugestões geradas
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 2).
+            Usa self.fs.glob() para permitir testes com MemoryFileSystem.
         """
         logger.info("Iniciando escaneamento de arquivos de teste...")
 
@@ -262,10 +305,12 @@ class TestMockGenerator:
 
         test_files: set[Path] = set()
         for pattern in test_patterns:
-            test_files.update(self.workspace_root.glob(pattern))
+            # FileSystemAdapter.glob retorna list[Path]
+            matched_files = self.fs.glob(self.workspace_root, pattern)
+            test_files.update(matched_files)
 
         test_files_list = [
-            f for f in test_files if f.is_file() and f.name != "__init__.py"
+            f for f in test_files if self.fs.is_file(f) and f.name != "__init__.py"
         ]
 
         logger.info(f"Encontrados {len(test_files_list)} arquivos de teste")
@@ -321,6 +366,9 @@ class TestMockGenerator:
         Returns:
             Lista de sugestões para o arquivo
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 2).
+            Permite testes sem I/O real usando MemoryFileSystem.
         """
         logger.debug(f"Analisando arquivo: {test_file}")
 
@@ -331,8 +379,7 @@ class TestMockGenerator:
 
         # Lê conteúdo para verificações adicionais
         try:
-            with test_file.open("r", encoding="utf-8") as f:
-                file_content = f.read()
+            file_content = self.fs.read_text(test_file, encoding="utf-8")
         except Exception as e:
             logger.error(f"Erro ao ler {test_file}: {e}")
             return []
@@ -427,11 +474,13 @@ class TestMockGenerator:
         Returns:
             True se aplicada com sucesso
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 3).
+            Usa self.fs para leitura e escrita de arquivos.
         """
         try:
             # Lê arquivo atual
-            with file_path.open("r", encoding="utf-8") as f:
-                content = f.read()
+            content = self.fs.read_text(file_path, encoding="utf-8")
 
             # Verifica se mock já existe
             if self._has_existing_mock(content, suggestion["pattern"]):
@@ -451,8 +500,7 @@ class TestMockGenerator:
             modified_content = self._inject_mock_code(content, suggestion)
 
             # Salva arquivo modificado
-            with file_path.open("w", encoding="utf-8") as f:
-                f.write(modified_content)
+            self.fs.write_text(file_path, modified_content, encoding="utf-8")
 
             logger.info(f"Mock aplicado: {file_path.name}:{suggestion['function']}")
             return True
@@ -572,6 +620,9 @@ class TestMockGenerator:
         Returns:
             Caminho do arquivo de relatório gerado
 
+        Note:
+            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02 Passo 3).
+            Usa self.fs.write_text() com json.dumps().
         """
         if output_file is None:
             timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -580,8 +631,8 @@ class TestMockGenerator:
         report_data = self.scan_test_files()
 
         try:
-            with output_file.open("w", encoding="utf-8") as f:
-                json.dump(report_data, f, indent=2, ensure_ascii=False)
+            json_content = json.dumps(report_data, indent=2, ensure_ascii=False)
+            self.fs.write_text(output_file, json_content, encoding="utf-8")
 
             logger.info(f"Relatório gerado: {output_file}")
             return output_file
