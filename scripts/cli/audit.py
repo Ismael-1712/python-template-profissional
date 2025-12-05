@@ -31,10 +31,11 @@ from scripts.audit.config import load_config  # noqa: E402
 from scripts.audit.models import AuditResult, SecurityPattern  # noqa: E402
 from scripts.audit.plugins import check_mock_coverage, simulate_ci  # noqa: E402
 from scripts.audit.reporter import AuditReporter  # noqa: E402
-from scripts.audit.scanner import scan_workspace  # noqa: E402
+from scripts.audit.scanner import FileScanner  # noqa: E402
 
 # Import novo sistema de logging e banner
 from scripts.utils.banner import print_startup_banner  # noqa: E402
+from scripts.utils.filesystem import RealFileSystem  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
 # Configure logging com separação automática de streams
@@ -55,11 +56,15 @@ class CodeAuditor:
         self.findings: list[AuditResult] = []
         self.patterns = self._load_security_patterns()
 
+        # Initialize filesystem adapter for dependency injection
+        self.fs = RealFileSystem()
+
         # Initialize analyzer with loaded patterns and config
         self.analyzer = CodeAnalyzer(
             patterns=self.patterns,
             workspace_root=self.workspace_root,
             max_findings_per_file=self.config["max_findings_per_file"],
+            fs_adapter=self.fs,
         )
 
         # Initialize reporter
@@ -89,81 +94,95 @@ class CodeAuditor:
         return [
             # Subprocess security risks
             SecurityPattern(
-                "subprocess.run(",
-                "HIGH",
-                (
+                pattern="subprocess.run(",
+                severity="HIGH",
+                description=(
                     "Subprocess execution detected - ensure shell=False "
                     "and validate inputs"
                 ),
-                "subprocess",
+                category="subprocess",
             ),
             SecurityPattern(
-                "subprocess.call(",
-                "HIGH",
-                ("Subprocess call detected - ensure shell=False and validate inputs"),
-                "subprocess",
+                pattern="subprocess.call(",
+                severity="HIGH",
+                description=(
+                    "Subprocess call detected - ensure shell=False and validate inputs"
+                ),
+                category="subprocess",
             ),
             SecurityPattern(
-                "os.system(",
-                "CRITICAL",
-                "os.system() is dangerous - use subprocess with shell=False instead",
-                "subprocess",
+                pattern="os.system(",
+                severity="CRITICAL",
+                description=(
+                    "os.system() is dangerous - use subprocess with shell=False instead"
+                ),
+                category="subprocess",
             ),
             SecurityPattern(
-                "shell=True",
-                "CRITICAL",
-                "shell=True is a security risk - use shell=False with list arguments",
-                "subprocess",
+                pattern="shell=True",
+                severity="CRITICAL",
+                description=(
+                    "shell=True is a security risk - use shell=False "
+                    "with list arguments"
+                ),
+                category="subprocess",
             ),
             # Network requests without mocking
             SecurityPattern(
-                "requests.get(",
-                "MEDIUM",
-                "HTTP request detected - ensure proper mocking in tests",
-                "network",
+                pattern="requests.get(",
+                severity="MEDIUM",
+                description="HTTP request detected - ensure proper mocking in tests",
+                category="network",
             ),
             SecurityPattern(
-                "requests.post(",
-                "MEDIUM",
-                "HTTP request detected - ensure proper mocking in tests",
-                "network",
+                pattern="requests.post(",
+                severity="MEDIUM",
+                description="HTTP request detected - ensure proper mocking in tests",
+                category="network",
             ),
             SecurityPattern(
-                "httpx.get(",
-                "MEDIUM",
-                "HTTP request detected - ensure proper mocking in tests",
-                "network",
+                pattern="httpx.get(",
+                severity="MEDIUM",
+                description="HTTP request detected - ensure proper mocking in tests",
+                category="network",
             ),
             SecurityPattern(
-                "urllib.request",
-                "MEDIUM",
-                "URL request detected - ensure proper mocking in tests",
-                "network",
+                pattern="urllib.request",
+                severity="MEDIUM",
+                description="URL request detected - ensure proper mocking in tests",
+                category="network",
             ),
             # File system operations
             SecurityPattern(
-                "open(",
-                "LOW",
-                "File operation detected - ensure proper error handling and encoding",
-                "filesystem",
+                pattern="open(",
+                severity="LOW",
+                description=(
+                    "File operation detected - ensure proper error handling "
+                    "and encoding"
+                ),
+                category="filesystem",
             ),
             # External service dependencies
             SecurityPattern(
-                "socket.connect",
-                "HIGH",
-                "Socket connection detected - ensure proper mocking in tests",
-                "network",
+                pattern="socket.connect",
+                severity="HIGH",
+                description=(
+                    "Socket connection detected - ensure proper mocking in tests"
+                ),
+                category="network",
             ),
         ]
 
     def _get_python_files(self) -> list[Path]:
         """Get all Python files to audit based on configuration."""
-        files = scan_workspace(
+        scanner = FileScanner(
             workspace_root=self.workspace_root,
             scan_paths=self.config["scan_paths"],
             file_patterns=self.config["file_patterns"],
             exclude_paths=self.config["exclude_paths"],
+            fs_adapter=self.fs,
         )
+        files = scanner.scan()
         return list(files)  # Cast to ensure list[Path] type
 
     def _analyze_file(self, file_path: Path) -> list[AuditResult]:

@@ -436,11 +436,11 @@ class MemoryFileSystem:
     def glob(self, path: Path, pattern: str) -> list[Path]:
         """Find files matching a glob pattern in memory.
 
-        Supports basic wildcards (* and ?) via fnmatch.
+        Supports wildcards (* and ?) via fnmatch, and recursive patterns (**).
 
         Args:
             path: Directory path to search in
-            pattern: Glob pattern (e.g., "*.py", "test_*.py")
+            pattern: Glob pattern (e.g., "*.py", "**/*.py", "test_*.py")
 
         Returns:
             List of Path objects matching the pattern
@@ -450,17 +450,28 @@ class MemoryFileSystem:
             >>> fs.write_text(Path("tests/test_foo.py"), "")
             >>> fs.glob(Path("tests"), "test_*.py")
             [Path("tests/test_foo.py")]
+            >>> fs.glob(Path("tests"), "**/*.py")
+            [Path("tests/test_foo.py"), Path("tests/subdir/bar.py")]
         """
         results: list[Path] = []
+
+        # Check if pattern is recursive
+        is_recursive = pattern.startswith("**/")
+        file_pattern = pattern[3:] if is_recursive else pattern
 
         # Search in files
         for file_path in self._files:
             # Check if file is under the search path
             try:
                 relative = file_path.relative_to(path)
-                # Match only direct children (not recursive)
-                if "/" not in str(relative) and "\\" not in str(relative):
-                    if fnmatch.fnmatch(file_path.name, pattern):
+
+                if is_recursive:
+                    # Recursive: match anywhere under path
+                    if fnmatch.fnmatch(file_path.name, file_pattern):
+                        results.append(file_path)
+                # Non-recursive: match only direct children
+                elif "/" not in str(relative) and "\\" not in str(relative):
+                    if fnmatch.fnmatch(file_path.name, file_pattern):
                         results.append(file_path)
             except ValueError:
                 # File is not under the search path

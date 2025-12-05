@@ -15,7 +15,8 @@ import logging
 import re
 from pathlib import Path
 
-from .models import AuditResult, SecurityPattern
+from scripts.audit.models import AuditResult, SecurityPattern
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 # Configure module logger
 logger = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class CodeAnalyzer:
         patterns: list[SecurityPattern],
         workspace_root: Path,
         max_findings_per_file: int = 50,
+        fs_adapter: FileSystemAdapter | None = None,
     ) -> None:
         """Initialize the code analyzer.
 
@@ -40,10 +42,12 @@ class CodeAnalyzer:
             patterns: List of SecurityPattern objects to detect
             workspace_root: Root directory of the workspace
             max_findings_per_file: Maximum findings to report per file
+            fs_adapter: FileSystemAdapter for I/O operations (default: RealFileSystem)
         """
         self.patterns = patterns
         self.workspace_root = workspace_root.resolve()
         self.max_findings_per_file = max_findings_per_file
+        self.fs = fs_adapter or RealFileSystem()
 
     def analyze_file(self, file_path: Path) -> list[AuditResult]:
         """Analyze a single Python file for security patterns.
@@ -62,9 +66,8 @@ class CodeAnalyzer:
         findings: list[AuditResult] = []
 
         try:
-            with file_path.open(encoding="utf-8") as f:
-                content = f.read()
-                lines = content.splitlines()
+            content = self.fs.read_text(file_path, encoding="utf-8")
+            lines = content.splitlines()
 
             # Parse AST for syntax validation
             try:

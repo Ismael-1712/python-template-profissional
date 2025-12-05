@@ -13,6 +13,8 @@ License: MIT
 import logging
 from pathlib import Path
 
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+
 # Configure module logger
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,7 @@ class FileScanner:
         scan_paths: list[str],
         file_patterns: list[str],
         exclude_paths: list[str],
+        fs_adapter: FileSystemAdapter | None = None,
     ) -> None:
         """Initialize the file scanner.
 
@@ -39,11 +42,13 @@ class FileScanner:
             file_patterns: List of glob patterns (e.g., ['*.py'])
             exclude_paths: List of path patterns to exclude
                 (e.g., ['.venv/', '__pycache__/'])
+            fs_adapter: FileSystemAdapter for I/O operations (default: RealFileSystem)
         """
         self.workspace_root = workspace_root.resolve()
         self.scan_paths = scan_paths
         self.file_patterns = file_patterns
         self.exclude_paths = exclude_paths
+        self.fs = fs_adapter or RealFileSystem()
 
     def scan(self) -> list[Path]:
         """Scan workspace for Python files matching criteria.
@@ -60,16 +65,22 @@ class FileScanner:
 
         for scan_path in self.scan_paths:
             scan_dir = self.workspace_root / scan_path
-            if not scan_dir.exists():
+            if not self.fs.exists(scan_dir):
                 logger.warning("Scan path does not exist: %s", scan_dir)
                 continue
 
             for pattern in self.file_patterns:
-                for file_path in scan_dir.rglob(pattern):
+                # Use recursive glob pattern for adapter compatibility
+                recursive_pattern = f"**/{pattern}"
+                matched_files = self.fs.glob(scan_dir, recursive_pattern)
+
+                for file_path in matched_files:
                     # Skip excluded paths
                     if self._should_exclude(file_path):
                         continue
-                    python_files.append(file_path)
+                    # Ensure it's a file (not directory)
+                    if self.fs.is_file(file_path):
+                        python_files.append(file_path)
 
         logger.info("Found %d Python files to audit (Full Scan)", len(python_files))
         return python_files

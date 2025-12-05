@@ -13,68 +13,59 @@ License: MIT
 """
 
 from pathlib import Path
-from typing import Any
+
+from pydantic import BaseModel, Field, field_validator
 
 
-class SecurityPattern:
-    """Represents a security pattern to detect in code."""
+class SecurityPattern(BaseModel):
+    """Represents a security pattern to detect in code.
 
-    def __init__(
-        self,
-        pattern: str,
-        severity: str,
-        description: str,
-        category: str = "security",
-    ) -> None:
-        """Initialize a security pattern.
+    Attributes:
+        pattern: The regex pattern or string to match in code
+        severity: Severity level (LOW, MEDIUM, HIGH, CRITICAL)
+        description: Human-readable description of the risk
+        category: Category of the pattern (security, subprocess, network, etc.)
+    """
 
-        Args:
-            pattern: The regex pattern or string to match in code
-            severity: Severity level (LOW, MEDIUM, HIGH, CRITICAL)
-            description: Human-readable description of the risk
-            category: Category of the pattern (security, subprocess, network, etc.)
-        """
-        self.pattern = pattern
-        self.severity = severity
-        self.description = description
-        self.category = category
+    pattern: str
+    severity: str
+    description: str
+    category: str = "security"
 
-    def __repr__(self) -> str:
-        """Return string representation of the pattern."""
-        return (
-            f"SecurityPattern(pattern={self.pattern!r}, "
-            f"severity={self.severity!r}, category={self.category!r})"
-        )
+    @field_validator("severity")
+    @classmethod
+    def validate_severity(cls, v: str) -> str:
+        """Validate severity level is one of the allowed values."""
+        allowed = {"LOW", "MEDIUM", "HIGH", "CRITICAL"}
+        if v not in allowed:
+            msg = f"Severity must be one of {allowed}, got {v!r}"
+            raise ValueError(msg)
+        return v
+
+    model_config = {"frozen": True}  # Make immutable
 
 
-class AuditResult:
-    """Represents an audit finding."""
+class AuditResult(BaseModel):
+    """Represents an audit finding.
 
-    def __init__(
-        self,
-        file_path: Path,
-        line_number: int,
-        pattern: SecurityPattern,
-        code_snippet: str,
-        suggestion: str | None = None,
-    ) -> None:
-        """Initialize an audit result.
+    Attributes:
+        file_path: Path to the file containing the finding
+        line_number: Line number where the pattern was found (must be > 0)
+        pattern: The SecurityPattern that was matched
+        code_snippet: The actual code snippet that matched
+        suggestion: Optional suggestion for fixing the issue
+    """
 
-        Args:
-            file_path: Path to the file containing the finding
-            line_number: Line number where the pattern was found
-            pattern: The SecurityPattern that was matched
-            code_snippet: The actual code snippet that matched
-            suggestion: Optional suggestion for fixing the issue
-        """
-        self.file_path = file_path
-        self.line_number = line_number
-        self.pattern = pattern
-        self.code_snippet = code_snippet
-        self.suggestion = suggestion
+    file_path: Path
+    line_number: int = Field(gt=0, description="Line number must be greater than 0")
+    pattern: SecurityPattern
+    code_snippet: str = Field(min_length=1, description="Code snippet cannot be empty")
+    suggestion: str | None = None
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, str | int | None]:
         """Convert to dictionary for JSON serialization.
+
+        Provided for backward compatibility. Prefer using model_dump() directly.
 
         Returns:
             Dictionary representation of the audit result
@@ -88,10 +79,3 @@ class AuditResult:
             "code": self.code_snippet,
             "suggestion": self.suggestion,
         }
-
-    def __repr__(self) -> str:
-        """Return string representation of the result."""
-        return (
-            f"AuditResult(file={self.file_path}, line={self.line_number}, "
-            f"severity={self.pattern.severity})"
-        )
