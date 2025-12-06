@@ -4,6 +4,8 @@ Validates sanitization of environment variables to prevent
 data leakage in subprocess execution.
 """
 
+from __future__ import annotations
+
 from scripts.utils.security import sanitize_env
 
 

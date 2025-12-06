@@ -5,6 +5,8 @@ This file will be removed in v3.0.0.
 Please update your scripts to use the new location.
 """
 
+from __future__ import annotations
+
 import sys
 import warnings
 from pathlib import Path

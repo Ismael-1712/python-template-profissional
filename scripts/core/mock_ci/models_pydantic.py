@@ -10,6 +10,8 @@ License: MIT
 Version: 1.0.0
 """
 
+from __future__ import annotations
+
 from pydantic import BaseModel, Field
 
 

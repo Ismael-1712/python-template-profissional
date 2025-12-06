@@ -4,6 +4,8 @@ Detecta "Configurações Órfãs" - configurações que aparecem no código mas 
 estão documentadas em nenhum arquivo .md em docs/.
 """
 
+from __future__ import annotations
+
 import logging
 import re
 import time

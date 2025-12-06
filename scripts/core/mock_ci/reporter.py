@@ -4,6 +4,8 @@ Este módulo fornece funcionalidades para gerar relatórios de verificação
 em formato JSON (para parsing) e console (para visualização humana).
 """
 
+from __future__ import annotations
+
 import json
 import logging
 from datetime import datetime, timezone

@@ -4,6 +4,8 @@ This module provides plugin functions for analyzing test coverage
 and simulating CI environments.
 """
 
+from __future__ import annotations
+
 import logging
 import os
 import subprocess

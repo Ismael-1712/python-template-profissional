@@ -23,6 +23,8 @@ Autor: DevOps Engineering Team
 Versão: 1.0.0
 """
 
+from __future__ import annotations
+
 import contextvars
 import uuid
 from collections.abc import Generator

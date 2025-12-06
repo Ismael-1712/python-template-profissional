@@ -6,6 +6,8 @@ Para o Sistema de Recuperação de CI.
 (Extraído do monólito P8.1)
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

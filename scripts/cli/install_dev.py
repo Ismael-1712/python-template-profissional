@@ -15,6 +15,8 @@ Usage:
     make install-dev  # Via Makefile
 """
 
+from __future__ import annotations
+
 # Standard library imports
 import subprocess
 import sys

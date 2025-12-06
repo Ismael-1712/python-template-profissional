@@ -4,6 +4,8 @@ Este módulo fornece a classe MockCIRunner que coordena todos os componentes
 da integração CI/CD: verificação, correção, reporting e operações git.
 """
 
+from __future__ import annotations
+
 import logging
 from pathlib import Path
 

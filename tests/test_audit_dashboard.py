@@ -15,6 +15,8 @@ Usage:
     pytest tests/test_audit_dashboard.py --cov=scripts.audit_dashboard
 """
 
+from __future__ import annotations
+
 # ruff: noqa: S101, PLR2004, SLF001, ANN001, ANN201, ARG001, ARG002, DTZ001
 # S101: Use of assert (required for pytest)
 # PLR2004: Magic value in comparison (test constants are acceptable)
@@ -23,7 +25,6 @@ Usage:
 # ARG001/ARG002: Unused arguments (fixtures used by pytest dependency injection)
 # E501: Line too long (test data and assertions can be longer)
 # DTZ001: Datetime without timezone (mocked datetime in tests)
-
 from collections.abc import Generator
 from datetime import datetime
 from pathlib import Path

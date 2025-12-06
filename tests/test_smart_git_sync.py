@@ -14,6 +14,8 @@ Usage:
     pytest tests/test_smart_git_sync.py --cov=scripts.git_sync
 """
 
+from __future__ import annotations
+
 import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch

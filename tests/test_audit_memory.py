@@ -15,6 +15,8 @@ License: MIT
 Ticket: P11 - Fase 02 Passo 3
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 
 import pytest

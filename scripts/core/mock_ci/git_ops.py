@@ -4,6 +4,8 @@ Este módulo encapsula todas as operações relacionadas ao Git em uma classe
 dedicada, facilitando testes e manutenção.
 """
 
+from __future__ import annotations
+
 import logging
 import subprocess
 import time
