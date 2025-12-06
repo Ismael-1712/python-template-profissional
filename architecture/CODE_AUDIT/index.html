@@ -736,6 +736,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#itens-auditados-e-resolvidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 Itens Auditados e Resolvidos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Itens Auditados e Resolvidos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p002-atomicidade-do-pip-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P00.2] Atomicidade do Pip Install
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#contributing" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -983,6 +1011,78 @@
 <li><strong>Configurable Limits</strong>: Prevents analysis paralysis with finding limits</li>
 <li><strong>Early Exit</strong>: Stops on critical issues for fast feedback</li>
 </ul>
+<hr />
+<h2 id="itens-auditados-e-resolvidos">🔐 Itens Auditados e Resolvidos</h2>
+<p>Esta seção documenta vulnerabilidades identificadas e suas resoluções.</p>
+<h3 id="p002-atomicidade-do-pip-install">[P00.2] Atomicidade do Pip Install</h3>
+<p><strong>Status:</strong> ✅ Concluído (v8.0)
+<strong>Data:</strong> 2025-12-06
+<strong>Tipo:</strong> Estabilidade / SRE
+<strong>Severidade:</strong> 🔴 Alta (corrupção de ambiente de desenvolvimento)</p>
+<p><strong>Problema Original:</strong></p>
+<p>O script <code>scripts/cli/install_dev.py</code> realizava operações críticas (<code>pip-compile</code>, <code>pip install</code>) sem garantia de atomicidade. Se o processo falhasse no meio, o arquivo <code>requirements/dev.txt</code> poderia ficar corrompido ou inconsistente, quebrando o ambiente para todos os desenvolvedores.</p>
+<p><strong>Vulnerabilidades Identificadas:</strong></p>
+<ol>
+<li><strong>V1 - Ausência de Rollback (ALTA)</strong>: Se <code>pip install</code> falhasse após <code>pip-compile</code>, o ambiente ficava em estado inconsistente</li>
+<li><strong>V2 - Inconsistência no Fallback (MÉDIA)</strong>: Modo fallback não usava mesmas validações do modo PATH</li>
+<li><strong>V3 - Arquivos Temporários Órfãos (BAIXA)</strong>: Cleanup incompleto em caso de exceção</li>
+</ol>
+<p><strong>Solução Implementada:</strong></p>
+<ol>
+<li><strong>Backup Preemptivo</strong>: Cópia de segurança com preservação de metadados (<code>shutil.copy2</code>) antes da compilação</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">backup_file</span> <span class="o">=</span> <span class="n">target_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.txt.bak&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">target_file</span><span class="p">,</span> <span class="n">backup_file</span><span class="p">)</span>
+</code></pre></div>
+<ol>
+<li><strong>Atomicidade</strong>: Uso de arquivos temporários validados para o <code>pip-compile</code></li>
+<li>Validação de existência do arquivo</li>
+<li>Validação de tamanho (não vazio)</li>
+<li>Validação de sintaxe (header com comentário)</li>
+<li>
+<p>Atomic replace usando <code>Path.replace()</code> (garantia POSIX)</p>
+</li>
+<li>
+<p><strong>Rollback Automático</strong>: Bloco <code>try/except</code> que restaura o backup se a instalação falhar</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;dev.txt&quot;</span><span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">backup_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>  <span class="c1"># Restaura versão anterior</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">raise</span>
+</code></pre></div>
+<ol>
+<li><strong>UX Melhorada</strong>: Mensagem de erro refatorada para focar na proteção</li>
+<li><strong>Antes</strong>: <code>"⚠️ Installation failed. Rolled back: /path/to/dev.txt"</code></li>
+<li>
+<p><strong>Depois</strong>: <code>"🛡️ ROLLBACK ATIVADO: A instalação falhou, mas seu ambiente foi restaurado com segurança para a versão anterior (dev.txt). Nenhuma alteração foi aplicada."</code></p>
+</li>
+<li>
+<p><strong>Cleanup Garantido</strong>: Remoção de arquivos temporários após sucesso</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">if</span> <span class="n">backup_file</span> <span class="ow">and</span> <span class="n">backup_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">backup_file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>  <span class="c1"># Remove .bak após sucesso</span>
+</code></pre></div>
+<p><strong>Impacto:</strong></p>
+<ul>
+<li>✅ Ambiente sempre em estado consistente</li>
+<li>✅ Rollback automático transparente</li>
+<li>✅ Redução de ansiedade do desenvolvedor</li>
+<li>✅ Menor necessidade de intervenção manual</li>
+<li>✅ Zero downtime em caso de falha</li>
+</ul>
+<p><strong>Arquivos Modificados:</strong></p>
+<ul>
+<li><code>scripts/cli/install_dev.py</code> (~95 linhas de mudança)</li>
+</ul>
+<p><strong>Referências:</strong></p>
+<ul>
+<li>Relatório de Auditoria (Fase 01)</li>
+<li>Relatório de Implementação (Fase 02)</li>
+<li>Relatório de Refinamento de UX (Fase 03)</li>
+</ul>
 <h2 id="contributing">🤝 Contributing</h2>
 <p>When extending the auditor:</p>
 <ol>
@@ -1002,18 +1102,18 @@
 <h2 id="troubleshooting">🔍 Troubleshooting</h2>
 <h3 id="common-issues">Common Issues</h3>
 <p><strong>"pytest not found"</strong>: Install pytest for CI simulation</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-timeout
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-timeout
 </code></pre></div>
 <p><strong>"Config file not found"</strong>: Use absolute path or place config in scripts/</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>dev-audit<span class="w"> </span>--config<span class="w"> </span>/full/path/to/config.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>dev-audit<span class="w"> </span>--config<span class="w"> </span>/full/path/to/config.yaml
 </code></pre></div>
 <p><strong>"Too many findings"</strong>: Adjust <code>max_findings_per_file</code> in config</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">max_findings_per_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">  </span><span class="c1"># Reduce from default 50</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">max_findings_per_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">  </span><span class="c1"># Reduce from default 50</span>
 </code></pre></div>
 <p><strong>"False positives"</strong>: Add exclusion patterns or adjust severity thresholds</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">exclude_paths</span><span class="p">:</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;tests/fixtures/&quot;</span><span class="w">  </span><span class="c1"># Exclude test fixtures</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;migrations/&quot;</span><span class="w">      </span><span class="c1"># Exclude database migrations</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">exclude_paths</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;tests/fixtures/&quot;</span><span class="w">  </span><span class="c1"># Exclude test fixtures</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;migrations/&quot;</span><span class="w">      </span><span class="c1"># Exclude database migrations</span>
 </code></pre></div>
 <h2 id="support">📞 Support</h2>
 <p>For issues, feature requests, or questions:</p>

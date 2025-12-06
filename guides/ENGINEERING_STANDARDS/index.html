@@ -885,6 +885,100 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#atomicidade-em-scripts-de-infraestrutura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 Atomicidade em Scripts de Infraestrutura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔒 Atomicidade em Scripts de Infraestrutura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivacao_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-padrao-backup-try-rollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução: Padrão Backup-Try-Rollback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checklist-de-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist de Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-real-install_devpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo Real: install_dev.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padroes-evitar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Padrões (Evitar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quando-aplicar-este-padrao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Aplicar Este Padrão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mensagens-user-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mensagens User-Friendly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resumo-executivo" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -943,6 +1037,7 @@
 <li><a href="#sanitização-de-ambiente">Sanitização de Ambiente</a></li>
 <li><a href="#tipagem-em-testes">Tipagem em Testes</a></li>
 <li><a href="#future-annotations">Future Annotations</a></li>
+<li><a href="#atomicidade-em-scripts-de-infraestrutura">Atomicidade em Scripts de Infraestrutura</a></li>
 </ol>
 <hr />
 <h2 id="lazy-imports">🔄 Lazy Imports</h2>
@@ -1389,6 +1484,181 @@
 <a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">disallow_untyped_defs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
 <hr />
+<h2 id="atomicidade-em-scripts-de-infraestrutura">🔒 Atomicidade em Scripts de Infraestrutura</h2>
+<h3 id="motivacao_4">Motivação</h3>
+<p>Scripts que modificam arquivos de configuração críticos (como <code>requirements.txt</code>, <code>.env</code>, <code>config.yaml</code>) podem deixar o sistema em estado inconsistente se falharem no meio da execução. Isso resulta em:</p>
+<ul>
+<li><strong>Ambientes Quebrados</strong>: Desenvolvedores não conseguem instalar dependências</li>
+<li><strong>Debugging Difícil</strong>: Estado parcial é difícil de diagnosticar</li>
+<li><strong>Perda de Confiança</strong>: Desenvolvedores evitam usar ferramentas não confiáveis</li>
+<li><strong>Intervenção Manual</strong>: Tempo perdido restaurando backups manualmente</li>
+</ul>
+<h3 id="solucao-padrao-backup-try-rollback">Solução: Padrão Backup-Try-Rollback</h3>
+<p>Todo script de infraestrutura que modifica arquivos críticos deve implementar o padrão <strong>Backup-Try-Rollback</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">atomic_update_config</span><span class="p">(</span><span class="n">config_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Update configuration file atomically.</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="sd">    Args:</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="sd">        config_file: Path to configuration file</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="sd">        Exception: If update fails (after rollback)</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    <span class="n">backup_file</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.bak&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    <span class="c1"># 1. CREATE BACKUP</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>    <span class="k">if</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>        <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="n">backup_file</span><span class="p">)</span>  <span class="c1"># Preserva metadados</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📦 Backup criado: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">backup_file</span><span class="p">)</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>        <span class="c1"># 2. EXECUTE CRITICAL OPERATION</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>        <span class="c1"># Escreve em arquivo temporário primeiro</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>        <span class="n">temp_file</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.tmp&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">generate_new_config</span><span class="p">())</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a>        <span class="c1"># Validação antes de sobrescrever</span>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>        <span class="n">validate_config</span><span class="p">(</span><span class="n">temp_file</span><span class="p">)</span>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a>        <span class="c1"># Atomic replace (POSIX garantido)</span>
+<a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a>        <span class="n">temp_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Configuração atualizada com sucesso&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a>
+<a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a>        <span class="c1"># 3. ROLLBACK ON FAILURE</span>
+<a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a>        <span class="k">if</span> <span class="n">backup_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a>            <span class="n">backup_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a>                <span class="s2">&quot;🛡️ ROLLBACK ATIVADO: Operação falhou, mas sistema &quot;</span>
+<a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a>                <span class="s2">&quot;restaurado para estado anterior. Nenhuma alteração aplicada.&quot;</span>
+<a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a>            <span class="p">)</span>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a>        <span class="k">raise</span>  <span class="c1"># Re-lança exceção após rollback</span>
+<a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a>
+<a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a>    <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>        <span class="c1"># 4. CLEANUP</span>
+<a id="__codelineno-18-46" name="__codelineno-18-46" href="#__codelineno-18-46"></a>        <span class="k">if</span> <span class="n">backup_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-18-47" name="__codelineno-18-47" href="#__codelineno-18-47"></a>            <span class="n">backup_file</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+<a id="__codelineno-18-48" name="__codelineno-18-48" href="#__codelineno-18-48"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;🧹 Backup removido&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="checklist-de-implementacao">Checklist de Implementação</h3>
+<p><strong>Antes da Operação:</strong></p>
+<ul>
+<li>✅ Criar backup com <code>shutil.copy2()</code> (preserva timestamps, permissões)</li>
+<li>✅ Usar sufixo <code>.bak</code> para consistência</li>
+<li>✅ Verificar se arquivo original existe (primeira execução)</li>
+</ul>
+<p><strong>Durante a Operação:</strong></p>
+<ul>
+<li>✅ Escrever em arquivo temporário primeiro (<code>.tmp</code>)</li>
+<li>✅ Validar conteúdo antes de sobrescrever</li>
+<li>✅ Usar <code>Path.replace()</code> para atomic rename (POSIX)</li>
+<li>✅ Nunca sobrescrever diretamente com <code>open(..., 'w')</code></li>
+</ul>
+<p><strong>Após a Operação:</strong></p>
+<ul>
+<li>✅ Em caso de sucesso: remover backup</li>
+<li>✅ Em caso de falha: restaurar backup e re-lançar exceção</li>
+<li>✅ Sempre fazer cleanup de arquivos temporários (<code>.tmp</code>)</li>
+</ul>
+<h3 id="exemplo-real-install_devpy">Exemplo Real: install_dev.py</h3>
+<p>O script <code>scripts/cli/install_dev.py</code> implementa este padrão:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">install_dev_environment</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Install development environment with rollback protection.&quot;&quot;&quot;</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="n">requirements_file</span> <span class="o">=</span> <span class="n">workspace_root</span> <span class="o">/</span> <span class="s2">&quot;requirements&quot;</span> <span class="o">/</span> <span class="s2">&quot;dev.txt&quot;</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="n">backup_file</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>        <span class="c1"># Step 1: Install pip-tools</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;.[dev]&quot;</span><span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>        <span class="c1"># Step 2: Create backup before compilation</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>        <span class="n">backup_file</span> <span class="o">=</span> <span class="n">_create_backup</span><span class="p">(</span><span class="n">requirements_file</span><span class="p">)</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>        <span class="c1"># Step 3: Compile dependencies (atomic)</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>        <span class="n">safe_pip_compile</span><span class="p">(</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>            <span class="n">input_file</span><span class="o">=</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="s2">&quot;requirements&quot;</span> <span class="o">/</span> <span class="s2">&quot;dev.in&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>            <span class="n">output_file</span><span class="o">=</span><span class="n">requirements_file</span><span class="p">,</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>            <span class="n">pip_compile_path</span><span class="o">=</span><span class="s2">&quot;pip-compile&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>            <span class="n">workspace_root</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">,</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>        <span class="p">)</span>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>        <span class="c1"># Step 4: Install with rollback protection</span>
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a>            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a>                <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">requirements_file</span><span class="p">)],</span>
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>                <span class="n">check</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a>            <span class="p">)</span>
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a>            <span class="n">_restore_backup</span><span class="p">(</span><span class="n">backup_file</span><span class="p">,</span> <span class="n">requirements_file</span><span class="p">)</span>  <span class="c1"># Rollback!</span>
+<a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a>            <span class="k">raise</span>
+<a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a>
+<a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a>        <span class="c1"># Step 5: Cleanup on success</span>
+<a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a>        <span class="n">_cleanup_backup</span><span class="p">(</span><span class="n">backup_file</span><span class="p">)</span>
+<a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a>        <span class="k">return</span> <span class="mi">0</span>
+<a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a>
+<a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-19-36" name="__codelineno-19-36" href="#__codelineno-19-36"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;❌ Installation failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-19-37" name="__codelineno-19-37" href="#__codelineno-19-37"></a>        <span class="k">return</span> <span class="mi">1</span>
+</code></pre></div>
+<h3 id="anti-padroes-evitar">Anti-Padrões (Evitar)</h3>
+<p>❌ <strong>Sobrescrever Direto</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># ERRADO: Sem backup, sem validação</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_config</span><span class="p">)</span>  <span class="c1"># Se falhar aqui, arquivo corrompido!</span>
+</code></pre></div>
+<p>❌ <strong>Backup Sem Rollback</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># ERRADO: Backup existe mas não é usado</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;config.yaml.bak&quot;</span><span class="p">)</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_config</span><span class="p">)</span>  <span class="c1"># Falha aqui = arquivo corrompido</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># Backup nunca é restaurado automaticamente!</span>
+</code></pre></div>
+<p>❌ <strong>Rollback Sem Re-raise</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># ERRADO: Rollback silencioso esconde erro</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>    <span class="n">update_config</span><span class="p">()</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>    <span class="n">restore_backup</span><span class="p">()</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>    <span class="c1"># Faltou: raise!  Erro é engolido silenciosamente</span>
+</code></pre></div>
+<h3 id="quando-aplicar-este-padrao">Quando Aplicar Este Padrão</h3>
+<p><strong>Aplicar sempre em:</strong></p>
+<ul>
+<li>✅ Scripts de instalação/configuração</li>
+<li>✅ Migrações de banco de dados</li>
+<li>✅ Atualizações de arquivos <code>.env</code></li>
+<li>✅ Compilação de dependências (<code>pip-compile</code>, <code>poetry lock</code>)</li>
+<li>✅ Geração de configuração a partir de templates</li>
+</ul>
+<p><strong>Não necessário em:</strong></p>
+<ul>
+<li>❌ Logs (append-only, não crítico)</li>
+<li>❌ Cache (pode ser recriado)</li>
+<li>❌ Arquivos temporários de build</li>
+<li>❌ Outputs de testes</li>
+</ul>
+<h3 id="mensagens-user-friendly">Mensagens User-Friendly</h3>
+<p>Mensagens de erro devem focar na <strong>solução</strong>, não no problema:</p>
+<p><strong>❌ Mensagem Técnica (Gera Ansiedade):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>⚠️ Installation failed. Rolled back: /path/to/requirements/dev.txt
+</code></pre></div>
+<p><strong>✅ Mensagem Orientada a Solução (Gera Confiança):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>🛡️ ROLLBACK ATIVADO: A instalação falhou, mas seu ambiente foi
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>restaurado com segurança para a versão anterior (dev.txt).
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>Nenhuma alteração foi aplicada.
+</code></pre></div>
+<p><strong>Princípios:</strong></p>
+<ol>
+<li>Use emoji de proteção (🛡️) não de perigo (⚠️)</li>
+<li>Enfatize "restaurado com segurança" antes de "falhou"</li>
+<li>Seja explícito: "Nenhuma alteração aplicada"</li>
+<li>Use apenas nome do arquivo, não path completo (menos poluição visual)</li>
+</ol>
+<hr />
 <h2 id="resumo-executivo">🎯 Resumo Executivo</h2>
 <table>
 <thead>
@@ -1418,6 +1688,11 @@
 <td><strong>Future Annotations</strong></td>
 <td>Todo arquivo Python</td>
 <td>Evita ciclos, melhora performance</td>
+</tr>
+<tr>
+<td><strong>Atomicidade (Backup-Try-Rollback)</strong></td>
+<td>Scripts de infra, arquivos críticos</td>
+<td>Previne corrupção, zero downtime</td>
 </tr>
 </tbody>
 </table>
