@@ -24,7 +24,11 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 from scripts.utils.banner import print_startup_banner  # noqa: E402
-from scripts.utils.logger import get_colors  # noqa: E402
+from scripts.utils.context import trace_context  # noqa: E402
+from scripts.utils.logger import get_colors, setup_logging  # noqa: E402
+
+# Configure structured logging
+logger = setup_logging(__name__)
 
 # Obtém cores com detecção automática de terminal
 colors = get_colors()
@@ -393,4 +397,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    with trace_context():
+        sys.exit(main())

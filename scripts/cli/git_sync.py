@@ -27,17 +27,11 @@ if str(_project_root) not in sys.path:
 from scripts.git_sync import SyncOrchestrator, load_config  # noqa: E402
 from scripts.git_sync.exceptions import SyncError  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
+from scripts.utils.context import trace_context  # noqa: E402
+from scripts.utils.logger import setup_logging  # noqa: E402
 
 # Configure structured logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("smart_git_sync.log", mode="a"),
-    ],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging(__name__, log_file="smart_git_sync.log")
 
 
 def main() -> None:
@@ -123,4 +117,5 @@ Examples:
 
 
 if __name__ == "__main__":
-    main()
+    with trace_context():
+        main()

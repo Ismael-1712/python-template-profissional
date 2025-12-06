@@ -20,6 +20,8 @@ from scripts.ci_recovery.models import (
     RecoveryStatus,
     RecoveryStep,
 )
+from scripts.utils.context import trace_context
+from scripts.utils.logger import setup_logging
 
 # --- Fim das Importações S.O.L.I.D. ---
 
@@ -41,15 +43,7 @@ except Exception:
 
 # Configuração do Logger
 # (Esta configuração deve permanecer com o entrypoint)
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("ci_recovery.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging(__name__, log_file="ci_recovery.log")
 
 
 class CIFailureRecoverySystem:
@@ -307,8 +301,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
-
-
-if __name__ == "__main__":
-    main()
+    with trace_context():
+        main()
