@@ -21,6 +21,7 @@ Este documento consolida as decisões técnicas e padrões de engenharia adotado
 2. [Sanitização de Ambiente](#sanitização-de-ambiente)
 3. [Tipagem em Testes](#tipagem-em-testes)
 4. [Future Annotations](#future-annotations)
+5. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
 
 ---
 
@@ -549,6 +550,212 @@ disallow_untyped_defs = true
 
 ---
 
+## 🔒 Atomicidade em Scripts de Infraestrutura
+
+### Motivação
+
+Scripts que modificam arquivos de configuração críticos (como `requirements.txt`, `.env`, `config.yaml`) podem deixar o sistema em estado inconsistente se falharem no meio da execução. Isso resulta em:
+
+- **Ambientes Quebrados**: Desenvolvedores não conseguem instalar dependências
+- **Debugging Difícil**: Estado parcial é difícil de diagnosticar
+- **Perda de Confiança**: Desenvolvedores evitam usar ferramentas não confiáveis
+- **Intervenção Manual**: Tempo perdido restaurando backups manualmente
+
+### Solução: Padrão Backup-Try-Rollback
+
+Todo script de infraestrutura que modifica arquivos críticos deve implementar o padrão **Backup-Try-Rollback**:
+
+```python
+from pathlib import Path
+import shutil
+
+def atomic_update_config(config_file: Path) -> None:
+    """Update configuration file atomically.
+
+    Args:
+        config_file: Path to configuration file
+
+    Raises:
+        Exception: If update fails (after rollback)
+    """
+    backup_file = config_file.with_suffix(".bak")
+
+    # 1. CREATE BACKUP
+    if config_file.exists():
+        shutil.copy2(config_file, backup_file)  # Preserva metadados
+        logger.info("📦 Backup criado: %s", backup_file)
+
+    try:
+        # 2. EXECUTE CRITICAL OPERATION
+        # Escreve em arquivo temporário primeiro
+        temp_file = config_file.with_suffix(".tmp")
+        with open(temp_file, 'w') as f:
+            f.write(generate_new_config())
+
+        # Validação antes de sobrescrever
+        validate_config(temp_file)
+
+        # Atomic replace (POSIX garantido)
+        temp_file.replace(config_file)
+        logger.info("✅ Configuração atualizada com sucesso")
+
+    except Exception as e:
+        # 3. ROLLBACK ON FAILURE
+        if backup_file.exists():
+            backup_file.replace(config_file)
+            logger.warning(
+                "🛡️ ROLLBACK ATIVADO: Operação falhou, mas sistema "
+                "restaurado para estado anterior. Nenhuma alteração aplicada."
+            )
+        raise  # Re-lança exceção após rollback
+
+    finally:
+        # 4. CLEANUP
+        if backup_file.exists():
+            backup_file.unlink()
+            logger.debug("🧹 Backup removido")
+```
+
+### Checklist de Implementação
+
+**Antes da Operação:**
+
+- ✅ Criar backup com `shutil.copy2()` (preserva timestamps, permissões)
+- ✅ Usar sufixo `.bak` para consistência
+- ✅ Verificar se arquivo original existe (primeira execução)
+
+**Durante a Operação:**
+
+- ✅ Escrever em arquivo temporário primeiro (`.tmp`)
+- ✅ Validar conteúdo antes de sobrescrever
+- ✅ Usar `Path.replace()` para atomic rename (POSIX)
+- ✅ Nunca sobrescrever diretamente com `open(..., 'w')`
+
+**Após a Operação:**
+
+- ✅ Em caso de sucesso: remover backup
+- ✅ Em caso de falha: restaurar backup e re-lançar exceção
+- ✅ Sempre fazer cleanup de arquivos temporários (`.tmp`)
+
+### Exemplo Real: install_dev.py
+
+O script `scripts/cli/install_dev.py` implementa este padrão:
+
+```python
+def install_dev_environment(workspace_root: Path) -> int:
+    """Install development environment with rollback protection."""
+    requirements_file = workspace_root / "requirements" / "dev.txt"
+    backup_file: Path | None = None
+
+    try:
+        # Step 1: Install pip-tools
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", ".[dev]"], check=True)
+
+        # Step 2: Create backup before compilation
+        backup_file = _create_backup(requirements_file)
+
+        # Step 3: Compile dependencies (atomic)
+        safe_pip_compile(
+            input_file=workspace_root / "requirements" / "dev.in",
+            output_file=requirements_file,
+            pip_compile_path="pip-compile",
+            workspace_root=workspace_root,
+        )
+
+        # Step 4: Install with rollback protection
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "-r", str(requirements_file)],
+                check=True
+            )
+        except subprocess.CalledProcessError:
+            _restore_backup(backup_file, requirements_file)  # Rollback!
+            raise
+
+        # Step 5: Cleanup on success
+        _cleanup_backup(backup_file)
+        return 0
+
+    except Exception as e:
+        logger.error("❌ Installation failed: %s", e)
+        return 1
+```
+
+### Anti-Padrões (Evitar)
+
+❌ **Sobrescrever Direto**
+
+```python
+# ERRADO: Sem backup, sem validação
+with open("config.yaml", "w") as f:
+    f.write(new_config)  # Se falhar aqui, arquivo corrompido!
+```
+
+❌ **Backup Sem Rollback**
+
+```python
+# ERRADO: Backup existe mas não é usado
+shutil.copy2("config.yaml", "config.yaml.bak")
+with open("config.yaml", "w") as f:
+    f.write(new_config)  # Falha aqui = arquivo corrompido
+# Backup nunca é restaurado automaticamente!
+```
+
+❌ **Rollback Sem Re-raise**
+
+```python
+# ERRADO: Rollback silencioso esconde erro
+try:
+    update_config()
+except Exception:
+    restore_backup()
+    # Faltou: raise!  Erro é engolido silenciosamente
+```
+
+### Quando Aplicar Este Padrão
+
+**Aplicar sempre em:**
+
+- ✅ Scripts de instalação/configuração
+- ✅ Migrações de banco de dados
+- ✅ Atualizações de arquivos `.env`
+- ✅ Compilação de dependências (`pip-compile`, `poetry lock`)
+- ✅ Geração de configuração a partir de templates
+
+**Não necessário em:**
+
+- ❌ Logs (append-only, não crítico)
+- ❌ Cache (pode ser recriado)
+- ❌ Arquivos temporários de build
+- ❌ Outputs de testes
+
+### Mensagens User-Friendly
+
+Mensagens de erro devem focar na **solução**, não no problema:
+
+**❌ Mensagem Técnica (Gera Ansiedade):**
+
+```
+⚠️ Installation failed. Rolled back: /path/to/requirements/dev.txt
+```
+
+**✅ Mensagem Orientada a Solução (Gera Confiança):**
+
+```
+🛡️ ROLLBACK ATIVADO: A instalação falhou, mas seu ambiente foi
+restaurado com segurança para a versão anterior (dev.txt).
+Nenhuma alteração foi aplicada.
+```
+
+**Princípios:**
+
+1. Use emoji de proteção (🛡️) não de perigo (⚠️)
+2. Enfatize "restaurado com segurança" antes de "falhou"
+3. Seja explícito: "Nenhuma alteração aplicada"
+4. Use apenas nome do arquivo, não path completo (menos poluição visual)
+
+---
+
 ## 🎯 Resumo Executivo
 
 | Padrão | Quando Usar | Benefício |
@@ -557,6 +764,7 @@ disallow_untyped_defs = true
 | **Sanitização de Ambiente** | Sempre em `subprocess.run()` | Previne vazamento de credenciais |
 | **Tipagem em Testes** | Todo teste e fixture | Type safety, refactoring seguro |
 | **Future Annotations** | Todo arquivo Python | Evita ciclos, melhora performance |
+| **Atomicidade (Backup-Try-Rollback)** | Scripts de infra, arquivos críticos | Previne corrupção, zero downtime |
 
 ---
 
