@@ -32,6 +32,8 @@ from typing import Any
 
 import yaml
 
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+
 logger = logging.getLogger(__name__)
 
 
@@ -69,12 +71,20 @@ class DocumentMigrator:
         re.DOTALL | re.MULTILINE,
     )
 
-    def __init__(self, workspace_root: Path) -> None:
+    def __init__(
+        self,
+        workspace_root: Path,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
         """Initialize the migrator.
 
         Args:
             workspace_root: Root directory of the workspace
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
         """
+        if fs is None:
+            fs = RealFileSystem()
+        self.fs = fs
         self.workspace_root = workspace_root.resolve()
         logger.debug(
             "Initialized DocumentMigrator with root: %s",
@@ -289,8 +299,7 @@ class DocumentMigrator:
                 )
 
             # Read content
-            with file_path.open(encoding="utf-8") as f:
-                content = f.read()
+            content = self.fs.read_text(file_path)
 
             # Generate frontmatter
             metadata, action = self._generate_frontmatter(
@@ -314,8 +323,7 @@ class DocumentMigrator:
 
             # Write to disk if not dry-run
             if not dry_run:
-                with file_path.open("w", encoding="utf-8") as f:
-                    f.write(new_content)
+                self.fs.write_text(file_path, new_content)
                 logger.info("Migrated file: %s", file_path)
 
             return MigrationResult(

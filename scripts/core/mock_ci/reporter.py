@@ -13,6 +13,7 @@ from pathlib import Path
 
 from scripts.core.mock_ci.config import REPORT_INDENT, get_report_filename
 from scripts.core.mock_ci.models import CIReport
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 logger = logging.getLogger(__name__)
 
@@ -25,16 +26,25 @@ class CIReporter:
 
     Attributes:
         workspace_root: Diretório raiz do workspace
+        fs: FileSystemAdapter para operações de I/O
 
     """
 
-    def __init__(self, workspace_root: Path) -> None:
+    def __init__(
+        self,
+        workspace_root: Path,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
         """Inicializa o gerador de relatórios.
 
         Args:
             workspace_root: Caminho raiz do workspace
+            fs: FileSystemAdapter para operações de I/O (default: RealFileSystem)
 
         """
+        if fs is None:
+            fs = RealFileSystem()
+        self.fs = fs
         self.workspace_root = workspace_root.resolve()
 
     def generate_json_report(
@@ -69,8 +79,12 @@ class CIReporter:
         report_data = report.to_dict()
 
         # Salva arquivo JSON
-        with output_file.open("w", encoding="utf-8") as f:
-            json.dump(report_data, f, indent=REPORT_INDENT, ensure_ascii=False)
+        json_content = json.dumps(
+            report_data,
+            indent=REPORT_INDENT,
+            ensure_ascii=False,
+        )
+        self.fs.write_text(output_file, json_content)
 
         logger.info("Relatório CI/CD gerado: %s", output_file)
         return output_file

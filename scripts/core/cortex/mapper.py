@@ -35,6 +35,7 @@ _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
 logger = setup_logging(__name__, log_file="cortex_mapper.log")
@@ -78,12 +79,20 @@ class ProjectContext:
 class ProjectMapper:
     """Maps the project structure and generates context."""
 
-    def __init__(self, project_root: Path) -> None:
+    def __init__(
+        self,
+        project_root: Path,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
         """Initialize the mapper.
 
         Args:
             project_root: Root directory of the project
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
         """
+        if fs is None:
+            fs = RealFileSystem()
+        self.fs = fs
         self.project_root = project_root
         self.pyproject_path = project_root / "pyproject.toml"
         self.docs_path = project_root / "docs"
@@ -136,14 +145,15 @@ class ProjectMapper:
         Returns:
             Parsed TOML configuration
         """
-        if not self.pyproject_path.exists():
+        if not self.fs.exists(self.pyproject_path):
             logger.warning("pyproject.toml not found")
             return {}
 
         try:
-            with open(self.pyproject_path, "rb") as f:
-                result: dict[str, Any] = tomllib.load(f)
-                return result
+            # tomllib.loads espera string, então read_text é suficiente
+            content = self.fs.read_text(self.pyproject_path)
+            result: dict[str, Any] = tomllib.loads(content)
+            return result
         except Exception as e:
             logger.error(f"Failed to parse pyproject.toml: {e}")
             return {}
@@ -247,23 +257,23 @@ class ProjectMapper:
             First line of module docstring or empty string
         """
         try:
-            with open(file_path, encoding="utf-8") as f:
-                lines = f.readlines()
-                in_docstring = False
-                for line in lines[:20]:  # Only check first 20 lines
-                    if '"""' in line or "'''" in line:
-                        if in_docstring:
-                            cleaned = line.strip()
-                            for delim in ['"""', "'''"]:
-                                cleaned = cleaned.replace(delim, "")
-                            return cleaned.strip()
-                        in_docstring = True
-                        # Check if single-line docstring
-                        if line.count('"""') == 2 or line.count("'''") == 2:
-                            cleaned = line.strip()
-                            for delim in ['"""', "'''"]:
-                                cleaned = cleaned.replace(delim, "")
-                            return cleaned.strip()
+            content = self.fs.read_text(file_path)
+            lines = content.splitlines(keepends=True)
+            in_docstring = False
+            for line in lines[:20]:  # Only check first 20 lines
+                if '"""' in line or "'''" in line:
+                    if in_docstring:
+                        cleaned = line.strip()
+                        for delim in ['"""', "'''"]:
+                            cleaned = cleaned.replace(delim, "")
+                        return cleaned.strip()
+                    in_docstring = True
+                    # Check if single-line docstring
+                    if line.count('"""') == 2 or line.count("'''") == 2:
+                        cleaned = line.strip()
+                        for delim in ['"""', "'''"]:
+                            cleaned = cleaned.replace(delim, "")
+                        return cleaned.strip()
         except Exception as e:
             logger.debug(f"Could not extract docstring from {file_path}: {e}")
 
@@ -279,11 +289,11 @@ class ProjectMapper:
             Title or filename if not found
         """
         try:
-            with open(file_path, encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith("# "):
-                        return line[2:].strip()
+            content = self.fs.read_text(file_path)
+            for line in content.splitlines():
+                line = line.strip()
+                if line.startswith("# "):
+                    return line[2:].strip()
         except Exception as e:
             logger.debug(f"Could not extract title from {file_path}: {e}")
 
@@ -296,10 +306,10 @@ class ProjectMapper:
             context: Project context to save
             output_path: Path to output JSON file
         """
-        output_path.parent.mkdir(parents=True, exist_ok=True)
+        self.fs.mkdir(output_path.parent, parents=True, exist_ok=True)
 
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(asdict(context), f, indent=2, ensure_ascii=False)
+        json_content = json.dumps(asdict(context), indent=2, ensure_ascii=False)
+        self.fs.write_text(output_path, json_content)
 
         logger.info(f"Context saved to {output_path}")
 
