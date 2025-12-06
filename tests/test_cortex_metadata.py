@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from datetime import date
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
@@ -542,7 +543,7 @@ class TestFrontmatterParser:
     def test_extract_missing_fields_all(self) -> None:
         """Test extracting when all required fields are missing."""
         # Setup
-        metadata = {}  # Empty metadata
+        metadata: dict[str, Any] = {}  # Empty metadata
 
         # Execute
         missing = self.parser.extract_missing_fields(metadata)
