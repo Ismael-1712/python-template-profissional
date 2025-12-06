@@ -5,6 +5,8 @@
 (Extraído do monólito P8.4).
 """
 
+from __future__ import annotations
+
 import logging
 import subprocess
 import sys

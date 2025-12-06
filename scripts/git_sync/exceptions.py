@@ -1,5 +1,7 @@
 """Custom exceptions for the Git synchronization system."""
 
+from __future__ import annotations
+
 
 class SyncError(Exception):
     """Base exception for synchronization errors."""

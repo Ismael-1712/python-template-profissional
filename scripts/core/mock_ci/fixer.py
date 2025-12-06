@@ -4,6 +4,8 @@ Este módulo contém a lógica para aplicar correções automaticamente,
 incluindo geração de mocks e commits.
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime, timezone
 

@@ -4,6 +4,8 @@
 Demonstra como usar o scanner para detectar configurações no projeto.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 
 from scripts.core.guardian.models import ConfigFinding

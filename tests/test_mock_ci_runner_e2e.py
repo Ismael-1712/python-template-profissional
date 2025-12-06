@@ -5,6 +5,8 @@ Testes funcionais completos requerem correção prévia do TestMockValidator
 para aceitar config_file como parâmetro.
 """
 
+from __future__ import annotations
+
 from scripts.core.mock_ci import MockCIRunner
 
 

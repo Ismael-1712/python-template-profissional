@@ -14,6 +14,8 @@ Usage:
     ./scripts/install_dev.py  # If it has execute permission
 """
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 

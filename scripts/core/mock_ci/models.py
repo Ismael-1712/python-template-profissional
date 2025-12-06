@@ -6,6 +6,8 @@ de git, sugestões de mock, relatórios CI e status de verificação.
 Migrado para Pydantic v2 (P14 - Hardening de Dados).
 """
 
+from __future__ import annotations
+
 from enum import Enum
 from typing import Any
 
@@ -126,7 +128,7 @@ class MockSuggestions(BaseModel):
         cls,
         suggestions: list[dict[str, Any]],
         blocking_mock_types: set[str],
-    ) -> "MockSuggestions":
+    ) -> MockSuggestions:
         """Cria MockSuggestions a partir de lista de dicionários.
 
         Args:

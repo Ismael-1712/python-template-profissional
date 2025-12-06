@@ -5,6 +5,8 @@
 (Extracted from P8.3 monolith).
 """
 
+from __future__ import annotations
+
 import logging
 from collections.abc import Callable
 from pathlib import Path

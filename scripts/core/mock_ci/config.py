@@ -5,6 +5,8 @@ integração CI/CD, incluindo detecção de ambientes, classificação de
 severidade e templates de mensagens.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Final
 

@@ -4,6 +4,8 @@ Este módulo contém a lógica de verificação e análise de testes sem fazer
 modificações no código.
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime, timezone
 from pathlib import Path

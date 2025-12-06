@@ -4,6 +4,8 @@
 Testa a separação correta de streams, detecção de terminal e cores ANSI.
 """
 
+from __future__ import annotations
+
 import logging
 
 from scripts.utils.logger import (

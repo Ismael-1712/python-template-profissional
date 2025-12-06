@@ -6,6 +6,8 @@ entrypoint (main) para o sistema de recuperação, refatorado
 seguindo os princípios S.O.L.I.D. (P8.7).
 """
 
+from __future__ import annotations
+
 import gettext
 import logging
 import os

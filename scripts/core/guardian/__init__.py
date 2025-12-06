@@ -8,6 +8,8 @@ Este módulo implementa um scanner AST que identifica:
 Garante que toda configuração no código tenha documentação correspondente.
 """
 
+from __future__ import annotations
+
 from scripts.core.guardian.models import ConfigFinding, ScanResult
 from scripts.core.guardian.scanner import ConfigScanner
 

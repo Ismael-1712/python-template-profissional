@@ -19,6 +19,8 @@ Autor: DevOps Template Generator
 Versão: 2.0.0 (Refatorado)
 """
 
+from __future__ import annotations
+
 import argparse
 import logging
 import sys

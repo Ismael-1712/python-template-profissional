@@ -4,6 +4,8 @@ This module contains the business logic for calculating and updating
 audit metrics, pattern statistics, and monthly aggregations.
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import Any

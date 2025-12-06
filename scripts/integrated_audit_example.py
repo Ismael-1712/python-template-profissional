@@ -5,6 +5,8 @@ This example demonstrates enterprise-grade integration patterns for
 tracking audit metrics in DevOps pipelines.
 """
 
+from __future__ import annotations
+
 import logging
 import sys
 from pathlib import Path

@@ -4,6 +4,8 @@
 Permite `python -m scripts.ci_recovery`.
 """
 
+from __future__ import annotations
+
 if __name__ == "__main__":
     # Import and execute main() function from main.py module
     from .main import main
