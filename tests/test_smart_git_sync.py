@@ -153,7 +153,7 @@ class TestSyncOrchestrator(unittest.TestCase):
         """Set up test environment with STRICT MOCKS."""
         # ✅ Mock: Path for workspace (NO real mkdtemp)
         self.temp_dir = MagicMock(spec=Path)
-        self.temp_dir.__str__ = MagicMock(return_value="/fake/workspace")
+        self.temp_dir.__str__ = MagicMock(return_value="/fake/workspace")  # type: ignore[method-assign]
         self.temp_dir.__truediv__ = MagicMock(return_value=MagicMock(spec=Path))
         self.temp_dir.resolve.return_value = self.temp_dir
 
@@ -880,7 +880,7 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         # ✅ Setup: Mock workspace
         mock_workspace = MagicMock(spec=Path)
         mock_workspace.resolve.return_value = mock_workspace
-        mock_workspace.__str__ = MagicMock(return_value="/fake/workspace")
+        mock_workspace.__str__ = MagicMock(return_value="/fake/workspace")  # type: ignore[method-assign]
         mock_git_dir = MagicMock(spec=Path)
         mock_git_dir.exists.return_value = True
 
