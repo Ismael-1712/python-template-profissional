@@ -11,65 +11,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from scripts.utils.security import sanitize_env
+
 logger = logging.getLogger(__name__)
-
-
-def _sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
-    """Sanitize environment variables to prevent leaking sensitive data.
-
-    Implements a whitelist-based approach with explicit blocklist for secrets.
-    Only safe and necessary variables are propagated to subprocesses.
-
-    Args:
-        original_env: Original environment dictionary from os.environ
-
-    Returns:
-        Sanitized environment dictionary safe for subprocess execution
-
-    Security:
-        - Blocks: TOKEN, KEY, SECRET, PASSWORD, CREDENTIAL patterns
-        - Allows: Essential system vars + Python-specific vars
-    """
-    # Whitelist: Essential system and Python variables
-    allowed_keys = {
-        "PATH",
-        "PYTHONPATH",
-        "HOME",
-        "LANG",
-        "LC_ALL",
-        "TZ",
-        "USER",
-        "VIRTUAL_ENV",
-        "TMPDIR",
-        "TEMP",
-        "TMP",
-    }
-
-    # Blocklist patterns for sensitive data (case-insensitive)
-    blocked_patterns = ("TOKEN", "KEY", "SECRET", "PASSWORD", "CREDENTIAL", "API")
-
-    sanitized: dict[str, str] = {}
-
-    for key, value in original_env.items():
-        # Explicit block: reject any key containing sensitive patterns
-        if any(pattern in key.upper() for pattern in blocked_patterns):
-            logger.debug("Blocked sensitive environment variable: %s", key)
-            continue
-
-        # Allow whitelisted keys
-        if key in allowed_keys:
-            sanitized[key] = value
-            continue
-
-        # Allow Python-specific variables (PYTHON*, PY*)
-        if key.startswith(("PYTHON", "PY")):
-            sanitized[key] = value
-            continue
-
-        # Implicitly deny everything else (Least Privilege principle)
-        logger.debug("Filtered environment variable: %s", key)
-
-    return sanitized
 
 
 def check_mock_coverage(
@@ -150,7 +94,7 @@ def simulate_ci(
     # Security: Sanitize environment to prevent leaking sensitive credentials
     # Only safe, whitelisted variables are propagated to pytest subprocess
     ci_env = {
-        **_sanitize_env(dict(os.environ)),
+        **sanitize_env(dict(os.environ)),
         "CI": "true",
         "PYTEST_TIMEOUT": str(ci_timeout),
     }
