@@ -39,6 +39,7 @@ from scripts.core.cortex.models import (
     DocumentMetadata,
     ValidationResult,
 )
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 logger = logging.getLogger(__name__)
 
@@ -59,8 +60,15 @@ class FrontmatterParser:
         >>> result = parser.validate_metadata(metadata_dict)
     """
 
-    def __init__(self) -> None:
-        """Initialize the frontmatter parser."""
+    def __init__(self, fs: FileSystemAdapter | None = None) -> None:
+        """Initialize the frontmatter parser.
+
+        Args:
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
+        """
+        if fs is None:
+            fs = RealFileSystem()
+        self.fs = fs
         self.logger = logging.getLogger(__name__)
 
     def parse_file(self, path: Path) -> DocumentMetadata:
@@ -86,17 +94,17 @@ class FrontmatterParser:
             'testing-guide'
         """
         # Validate file exists
-        if not path.exists():
+        if not self.fs.exists(path):
             raise FrontmatterParseError(f"File does not exist: {path}")
 
         # Validate file is readable
-        if not path.is_file():
+        if not self.fs.is_file(path):
             raise FrontmatterParseError(f"Path is not a file: {path}")
 
         try:
             # Read file and parse frontmatter
-            with open(path, encoding="utf-8") as f:
-                post = frontmatter.load(f)
+            content = self.fs.read_text(path)
+            post = frontmatter.loads(content)
 
             # Check if frontmatter exists
             if not post.metadata:
