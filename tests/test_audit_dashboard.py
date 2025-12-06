@@ -17,20 +17,21 @@ Usage:
 
 from __future__ import annotations
 
-# ruff: noqa: S101, PLR2004, SLF001, ANN001, ANN201, ARG001, ARG002, DTZ001
+# ruff: noqa: S101, PLR2004, SLF001, ARG001, ARG002, DTZ001
 # S101: Use of assert (required for pytest)
 # PLR2004: Magic value in comparison (test constants are acceptable)
 # SLF001: Private member access (necessary for unit testing internals)
-# ANN001/ANN201: Missing type annotations (pytest fixtures don't need them)
 # ARG001/ARG002: Unused arguments (fixtures used by pytest dependency injection)
-# E501: Line too long (test data and assertions can be longer)
 # DTZ001: Datetime without timezone (mocked datetime in tests)
-from collections.abc import Generator
 from datetime import datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 from scripts.audit_dashboard import AuditDashboard
 
@@ -160,7 +161,7 @@ def mock_os_getpid() -> Generator[MagicMock, None, None]:
 
 
 @pytest.fixture
-def dashboard(
+def dashboard(  # noqa: PLR0913
     mock_translation: MagicMock,
     mock_fs: dict[str, MagicMock],
     mock_json_load: MagicMock,
@@ -203,7 +204,7 @@ def dashboard(
 class TestAuditDashboardInitialization:
     """Test cases for AuditDashboard initialization and default state."""
 
-    def test_initialization_defaults(self, dashboard):
+    def test_initialization_defaults(self, dashboard: AuditDashboard) -> None:
         """Test that dashboard initializes with correct default metrics structure.
 
         Validates:
@@ -236,12 +237,12 @@ class TestAuditDashboardInitialization:
 
     def test_initialization_with_custom_paths(
         self,
-        mock_translation,
-        mock_fs,
-        mock_json_load,
-        mock_json_dump,
-        tmp_path,
-    ):
+        mock_translation: MagicMock,
+        mock_fs: dict[str, MagicMock],
+        mock_json_load: MagicMock,
+        mock_json_dump: MagicMock,
+        tmp_path: Path,
+    ) -> None:
         """Test initialization with custom workspace root and filename."""
         custom_root = tmp_path / "custom_workspace"
         custom_filename = "custom_metrics.json"
@@ -254,7 +255,7 @@ class TestAuditDashboardInitialization:
         assert dashboard.workspace_root == custom_root
         assert dashboard.metrics_file == custom_root / custom_filename
 
-    def test_initialization_creates_directory(self, tmp_path):
+    def test_initialization_creates_directory(self, tmp_path: Path) -> None:
         """Test that initialization creates directory if missing."""
         with (
             patch("scripts.audit_dashboard.exporters._", side_effect=lambda x: x),
@@ -273,18 +274,18 @@ class TestAuditDashboardInitialization:
             assert dashboard.workspace_root == new_dir
             assert new_dir.exists(), "Workspace directory should be created"
 
-    def test_initialization_thread_safety(self, dashboard):
+    def test_initialization_thread_safety(self, dashboard: AuditDashboard) -> None:
         """Test that dashboard has thread-safe lock initialized."""
         assert hasattr(dashboard, "_lock"), "Should have _lock attribute"
         assert dashboard._lock is not None, "Lock should be initialized"
 
     def test_initialization_without_existing_file(
         self,
-        mock_translation,
-        mock_json_load,
-        mock_json_dump,
-        tmp_path,
-    ):
+        mock_translation: MagicMock,
+        mock_json_load: MagicMock,
+        mock_json_dump: MagicMock,
+        tmp_path: Path,
+    ) -> None:
         """Test initialization when metrics file doesn't exist.
 
         Should create default metrics structure.
@@ -308,7 +309,7 @@ class TestAuditDashboardInitialization:
 class TestMetricsProcessing:
     """Test cases for audit metrics processing and business logic."""
 
-    def test_record_audit_success(self, dashboard):
+    def test_record_audit_success(self, dashboard: AuditDashboard) -> None:
         """Test recording an audit with no failures (clean audit).
 
         Validates:
@@ -337,7 +338,7 @@ class TestMetricsProcessing:
             "Should have 1 history entry"
         )
 
-    def test_record_audit_with_failures(self, dashboard):
+    def test_record_audit_with_failures(self, dashboard: AuditDashboard) -> None:
         """Test recording an audit with multiple failures detected.
 
         Validates:
@@ -397,7 +398,7 @@ class TestMetricsProcessing:
             "History should record time saved"
         )
 
-    def test_pattern_statistics(self, dashboard):
+    def test_pattern_statistics(self, dashboard: AuditDashboard) -> None:
         """Test that pattern statistics are tracked correctly.
 
         Validates:
@@ -455,7 +456,7 @@ class TestMetricsProcessing:
         assert docstring_stats["count"] == 1, "Pattern count should be 1"
         assert docstring_stats["severity_distribution"]["LOW"] == 1, "Should have 1 LOW"
 
-    def test_history_limit(self, dashboard):
+    def test_history_limit(self, dashboard: AuditDashboard) -> None:
         """Test that audit history respects the maximum size limit (50 records).
 
         Validates:
@@ -493,7 +494,7 @@ class TestMetricsProcessing:
             "Total failures should be 60 (not capped)"
         )
 
-    def test_multiple_audits_cumulative(self, dashboard):
+    def test_multiple_audits_cumulative(self, dashboard: AuditDashboard) -> None:
         """Test that multiple audits accumulate metrics correctly.
 
         Validates:
@@ -554,7 +555,7 @@ class TestMetricsProcessing:
             "Third audit: CI simulation failed"
         )
 
-    def test_success_rate_calculation(self, dashboard):
+    def test_success_rate_calculation(self, dashboard: AuditDashboard) -> None:
         """Test that success rate is calculated correctly based on CI results.
 
         Validates:
@@ -609,7 +610,7 @@ class TestMetricsProcessing:
             f"Should be {expected_rate:.2f}% with 4/6 passing"
         )
 
-    def test_monthly_statistics(self, dashboard):
+    def test_monthly_statistics(self, dashboard: AuditDashboard) -> None:
         """Test that monthly statistics are aggregated correctly.
 
         Validates:
@@ -647,7 +648,7 @@ class TestMetricsProcessing:
             assert nov_stats["failures_prevented"] == 3, "Should have 3 failures"
             assert nov_stats["time_saved"] == 21, "Should have 21 minutes saved (3 x 7)"
 
-    def test_invalid_audit_result_type(self, dashboard):
+    def test_invalid_audit_result_type(self, dashboard: AuditDashboard) -> None:
         """Test that invalid audit result type raises ValueError.
 
         Validates:
@@ -656,15 +657,15 @@ class TestMetricsProcessing:
         """
         # Act & Assert: Test with various invalid types
         with pytest.raises(ValueError, match="audit_result must be a dictionary"):
-            dashboard.record_audit(None)
+            dashboard.record_audit(None)  # type: ignore[arg-type]
 
         with pytest.raises(ValueError, match="audit_result must be a dictionary"):
-            dashboard.record_audit("invalid")
+            dashboard.record_audit("invalid")  # type: ignore[arg-type]
 
         with pytest.raises(ValueError, match="audit_result must be a dictionary"):
-            dashboard.record_audit([])
+            dashboard.record_audit([])  # type: ignore[arg-type]
 
-    def test_malformed_dependencies_handling(self, dashboard):
+    def test_malformed_dependencies_handling(self, dashboard: AuditDashboard) -> None:
         """Test graceful handling of malformed dependency data.
 
         Validates:
@@ -713,7 +714,7 @@ class TestMetricsProcessing:
 class TestHTMLGeneration:
     """Test cases for HTML dashboard generation and rendering."""
 
-    def test_generate_html_no_crash(self, dashboard):
+    def test_generate_html_no_crash(self, dashboard: AuditDashboard) -> None:
         """Test that HTML generation completes without crashing.
 
         Validates:
@@ -744,7 +745,7 @@ class TestHTMLGeneration:
         assert "<head>" in html_output, "Should have head section"
         assert "<body>" in html_output, "Should have body section"
 
-    def test_html_data_injection(self, dashboard):
+    def test_html_data_injection(self, dashboard: AuditDashboard) -> None:
         """Test that metrics data is properly injected into HTML.
 
         Validates:
@@ -775,7 +776,7 @@ class TestHTMLGeneration:
             "Should contain time saved in hours (11.6h rounded)"
         )
 
-    def test_html_sanitization(self, dashboard):
+    def test_html_sanitization(self, dashboard: AuditDashboard) -> None:
         """Test that HTML special characters are properly escaped.
 
         Validates:
@@ -808,7 +809,7 @@ class TestHTMLGeneration:
             "Script should be escaped or truncated"
         )
 
-    def test_html_contains_metrics(self, dashboard):
+    def test_html_contains_metrics(self, dashboard: AuditDashboard) -> None:
         """Test that all major metric sections are present in HTML.
 
         Validates:
@@ -838,7 +839,7 @@ class TestHTMLGeneration:
             "Should have data visualization sections"
         )
 
-    def test_empty_dashboard_html(self, dashboard):
+    def test_empty_dashboard_html(self, dashboard: AuditDashboard) -> None:
         """Test HTML generation with no audit data.
 
         Validates:
@@ -865,7 +866,12 @@ class TestHTMLGeneration:
 class TestExportFunctions:
     """Test cases for export functionality (JSON and HTML)."""
 
-    def test_export_json_metrics(self, dashboard, mock_json_dump, mock_os_chmod):
+    def test_export_json_metrics(
+        self,
+        dashboard: AuditDashboard,
+        mock_json_dump: MagicMock,
+        mock_os_chmod: MagicMock,
+    ) -> None:
         """Test JSON export functionality.
 
         Validates:
@@ -903,7 +909,12 @@ class TestExportFunctions:
         assert export_path is not None, "Should return export path"
         assert str(export_path).endswith(".json"), "Should return JSON file path"
 
-    def test_export_json_custom_path(self, dashboard, mock_json_dump, tmp_path):
+    def test_export_json_custom_path(
+        self,
+        dashboard: AuditDashboard,
+        mock_json_dump: MagicMock,
+        tmp_path: Path,
+    ) -> None:
         """Test JSON export with custom output path.
 
         Validates:
@@ -924,7 +935,11 @@ class TestExportFunctions:
         assert export_path == custom_path, "Should return custom path"
         mock_file.assert_called_once()
 
-    def test_export_html_dashboard(self, dashboard, mock_os_chmod):
+    def test_export_html_dashboard(
+        self,
+        dashboard: AuditDashboard,
+        mock_os_chmod: MagicMock,
+    ) -> None:
         """Test HTML export functionality.
 
         Validates:
@@ -967,7 +982,7 @@ class TestExportFunctions:
         assert export_path is not None, "Should return export path"
         assert str(export_path).endswith(".html"), "Should return HTML file path"
 
-    def test_export_html_contains_data(self, dashboard):
+    def test_export_html_contains_data(self, dashboard: AuditDashboard) -> None:
         """Test that exported HTML contains actual metric data.
 
         Validates:
@@ -1002,7 +1017,7 @@ class TestExportFunctions:
         # Simplified: just verify export succeeded
         assert True, "HTML export completed successfully"
 
-    def test_get_metrics_summary(self, dashboard):
+    def test_get_metrics_summary(self, dashboard: AuditDashboard) -> None:
         """Test programmatic metrics summary access.
 
         Validates:
