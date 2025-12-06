@@ -17,8 +17,15 @@ from __future__ import annotations
 import ast
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from scripts.core.mock_generator import TestMockGenerator
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+
+if TYPE_CHECKING:
+    from scripts.core.mock_generator import TestMockGenerator
+else:
+    # Import at runtime to avoid circular dependencies
+    from scripts.core.mock_generator import TestMockGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -33,27 +40,40 @@ class TestMockValidator:
     def __init__(
         self,
         workspace_root: Path,
+        fs: FileSystemAdapter | None = None,
+        generator: TestMockGenerator | None = None,
         config_path: Path | None = None,
     ) -> None:
         """Inicializa o validador.
 
         Args:
             workspace_root: Caminho raiz do workspace
+            fs: Adaptador de filesystem (opcional, usa RealFileSystem se None)
+            generator: Instância do TestMockGenerator (opcional, instancia se None)
             config_path: Caminho opcional para o arquivo de configuração.
                         Se None, tenta localizar automaticamente.
 
         """
         self.workspace_root = workspace_root.resolve()
+        self.fs = fs or RealFileSystem()
         self._init_error: str | None = None
-        self.generator: TestMockGenerator | None = None
         self.validation_errors: list[dict[str, str]] = []
+        self.generator: TestMockGenerator | None = None
+
+        # Se generator foi injetado, usa-o diretamente
+        if generator is not None:
+            self.generator = generator
+            logger.debug("TestMockValidator inicializado com generator injetado")
+            return
+
+        # Caso contrário, tenta instanciar (backward compatibility)
 
         # Tenta localizar o arquivo de config
         if config_path is None:
             script_dir = Path(__file__).parent
             config_path = script_dir / "test_mock_config.yaml"
 
-        if not config_path.exists():
+        if not self.fs.exists(config_path):
             error_msg = f"Config do gerador não encontrado: {config_path}"
             logger.warning(error_msg)
             self._init_error = error_msg
@@ -93,10 +113,10 @@ class TestMockValidator:
         # Verifica caminhos obrigatórios
         for path_name in required_paths:
             path = self.workspace_root / path_name
-            if not path.exists() and path_name == "tests":
+            if not self.fs.exists(path) and path_name == "tests":
                 # Tenta criar diretório de testes se não existir
                 try:
-                    path.mkdir(parents=True, exist_ok=True)
+                    self.fs.mkdir(path, parents=True, exist_ok=True)
                     logger.info(f"Diretório de testes criado: {path}")
                 except Exception as e:
                     logger.error(f"Erro ao criar diretório {path}: {e}")
@@ -111,7 +131,7 @@ class TestMockValidator:
 
         # Verifica se há pelo menos um arquivo de configuração Python
         has_config = any(
-            (self.workspace_root / path).exists() for path in optional_paths
+            self.fs.exists(self.workspace_root / path) for path in optional_paths
         )
         if not has_config:
             self.validation_errors.append(
@@ -139,7 +159,7 @@ class TestMockValidator:
         """
         logger.info("Validando sintaxe dos arquivos de teste...")
 
-        test_files = list(self.workspace_root.glob("tests/**/*.py"))
+        test_files = self.fs.glob(self.workspace_root / "tests", "**/*.py")
         if not test_files:
             logger.warning("Nenhum arquivo de teste encontrado")
             return True
@@ -148,8 +168,7 @@ class TestMockValidator:
 
         for test_file in test_files:
             try:
-                with test_file.open("r", encoding="utf-8") as f:
-                    content = f.read()
+                content = self.fs.read_text(test_file, encoding="utf-8")
 
                 ast.parse(content, filename=str(test_file))
                 valid_files += 1
@@ -253,16 +272,15 @@ def test_path_operations():
 
         created_files = []
         tests_dir = self.workspace_root / "tests"
-        tests_dir.mkdir(exist_ok=True)
+        self.fs.mkdir(tests_dir, exist_ok=True)
 
         for filename, content in sample_tests.items():
             file_path = tests_dir / filename
 
             # Só cria se não existir
-            if not file_path.exists():
+            if not self.fs.exists(file_path):
                 try:
-                    with file_path.open("w", encoding="utf-8") as f:
-                        f.write(content)
+                    self.fs.write_text(file_path, content, encoding="utf-8")
                     created_files.append(file_path)
                     logger.debug(f"Arquivo de exemplo criado: {filename}")
                 except Exception as e:
@@ -437,19 +455,19 @@ def test_path_operations():
 
         # Corrige diretório de testes ausente
         tests_dir = self.workspace_root / "tests"
-        if not tests_dir.exists():
+        if not self.fs.exists(tests_dir):
             try:
-                tests_dir.mkdir(parents=True, exist_ok=True)
+                self.fs.mkdir(tests_dir, parents=True, exist_ok=True)
                 # Cria __init__.py
                 init_file = tests_dir / "__init__.py"
-                init_file.write_text("# Tests package\n")
+                self.fs.write_text(init_file, "# Tests package\n")
                 fixed_count += 1
                 logger.info("Diretório de testes criado")
             except Exception as e:
                 logger.error(f"Erro ao criar diretório de testes: {e}")
 
         # Cria arquivos de exemplo se não há testes
-        test_files = list(tests_dir.glob("*.py"))
+        test_files = self.fs.glob(tests_dir, "*.py")
         if len(test_files) <= 1:  # Apenas __init__.py ou vazio
             created = self.create_sample_test_files()
             fixed_count += len(created)
