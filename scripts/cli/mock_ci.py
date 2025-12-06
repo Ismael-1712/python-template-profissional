@@ -33,13 +33,10 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from scripts.core.mock_ci import MockCIRunner  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
+from scripts.utils.logger import setup_logging  # noqa: E402
 
-# Configuração de logging para CI/CD
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
-logger = logging.getLogger("ci_test_mock_integration")
+# Configurar logging centralizado para CI/CD
+logger = setup_logging("ci_test_mock_integration", level=logging.INFO)
 
 
 def main() -> int:
