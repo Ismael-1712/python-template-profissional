@@ -186,31 +186,40 @@ class GitOperations:
             ...     print(f"Commit: {info.commit_hash}")
 
         """
-        info = GitInfo()
-
         # Verifica se é repositório git
         success, _ = self.run_command(["git", "status", "--porcelain"])
         if not success:
-            return info
+            # Não é um repositório git válido
+            return GitInfo()
 
-        info.is_git_repo = True
+        # Coleta todas as informações antes de instanciar (GitInfo é imutável)
+        is_git_repo = True
+        has_changes = False
+        current_branch = None
+        commit_hash = None
 
         # Verifica mudanças pendentes
         success, output = self.run_command(["git", "status", "--porcelain"])
         if success:
-            info.has_changes = bool(output.strip())
+            has_changes = bool(output.strip())
 
         # Branch atual
         success, branch = self.run_command(["git", "branch", "--show-current"])
         if success and branch:
-            info.current_branch = branch
+            current_branch = branch
 
         # Hash do commit atual (8 primeiros caracteres)
         success, commit = self.run_command(["git", "rev-parse", "HEAD"])
         if success and commit:
-            info.commit_hash = commit[:8]
+            commit_hash = commit[:8]
 
-        return info
+        # Instancia GitInfo uma única vez com todos os valores coletados
+        return GitInfo(
+            is_git_repo=is_git_repo,
+            has_changes=has_changes,
+            current_branch=current_branch,
+            commit_hash=commit_hash,
+        )
 
     def add_all(self) -> bool:
         """Adiciona todos os arquivos modificados ao staging.

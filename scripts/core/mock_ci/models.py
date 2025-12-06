@@ -9,7 +9,7 @@ Migrado para Pydantic v2 (P14 - Hardening de Dados).
 from enum import Enum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Severity(str, Enum):
@@ -53,6 +53,8 @@ class GitInfo(BaseModel):
 
     """
 
+    model_config = ConfigDict(frozen=True)
+
     is_git_repo: bool = False
     has_changes: bool = False
     current_branch: str | None = None
@@ -72,12 +74,23 @@ class MockSuggestion(BaseModel):
 
     """
 
+    model_config = ConfigDict(frozen=True)
+
     severity: str  # Mantém como str para compatibilidade com código existente
     mock_type: str  # Mantém como str para compatibilidade
     file_path: str
     line_number: int
     reason: str
     pattern: str | None = None
+
+    @field_validator("line_number")
+    @classmethod
+    def validate_line_number(cls, v: int) -> int:
+        """Valida que o número da linha é positivo."""
+        if v <= 0:
+            msg = "line_number deve ser maior que 0"
+            raise ValueError(msg)
+        return v
 
     @property
     def severity_enum(self) -> Severity:
@@ -100,6 +113,8 @@ class MockSuggestions(BaseModel):
         details: Lista de sugestões detalhadas
 
     """
+
+    model_config = ConfigDict(frozen=True)
 
     total: int
     high_priority: int
