@@ -43,10 +43,10 @@ from scripts.utils.logger import setup_logging  # noqa: E402
 from scripts.utils.safe_pip import safe_pip_compile  # noqa: E402
 
 # i18n configuration
-localedir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "locales")
+localedir = Path(__file__).parent.parent / "locales"
 translation = gettext.translation(
     "messages",
-    localedir=localedir,
+    localedir=str(localedir),
     languages=[os.getenv("LANGUAGE", "pt_BR")],
     fallback=True,
 )
