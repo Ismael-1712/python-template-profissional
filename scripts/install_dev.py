@@ -26,11 +26,12 @@ if str(PROJECT_ROOT) not in sys.path:
 # ---------------------------------------------------------------------------
 
 import gettext  # noqa: E402
-import logging  # noqa: E402
 import os  # noqa: E402
 import shutil  # noqa: E402
 import subprocess  # noqa: E402
 
+from scripts.utils.context import trace_context  # noqa: E402
+from scripts.utils.logger import setup_logging  # noqa: E402
 from scripts.utils.safe_pip import safe_pip_compile  # noqa: E402
 
 # i18n configuration
@@ -44,11 +45,7 @@ translation = gettext.translation(
 _ = translation.gettext
 
 # Logging configuration
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(levelname)s - %(message)s",
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging(__name__)
 
 
 def _setup_direnv(workspace_root: Path) -> None:
@@ -240,4 +237,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    with trace_context():
+        sys.exit(main())

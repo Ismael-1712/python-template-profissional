@@ -12,6 +12,8 @@ from pathlib import Path
 
 from scripts.audit_dashboard.dashboard import AuditDashboard
 from scripts.audit_dashboard.models import AuditMetricsError
+from scripts.utils.context import trace_context
+from scripts.utils.logger import setup_logging
 
 # i18n setup
 _locale_dir = Path(__file__).parent.parent.parent / "locales"
@@ -30,15 +32,7 @@ except Exception:
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("audit_dashboard.log", mode="a"),
-    ],
-)
-logger = logging.getLogger(__name__)
+logger = setup_logging(__name__, log_file="audit_dashboard.log")
 
 
 def create_argument_parser() -> argparse.ArgumentParser:
@@ -163,4 +157,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    with trace_context():
+        sys.exit(main())

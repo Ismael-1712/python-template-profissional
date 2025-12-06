@@ -27,6 +27,11 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 from scripts.utils.banner import print_startup_banner  # noqa: E402
+from scripts.utils.context import trace_context  # noqa: E402
+from scripts.utils.logger import setup_logging  # noqa: E402
+
+# Configure structured logging
+logger = setup_logging(__name__)
 
 # ======================================================================
 # CONFIGURAÇÃO
@@ -329,14 +334,15 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    try:
-        sys.exit(main())
-    except KeyboardInterrupt:
-        print_error("\n\nOperação cancelada pelo usuário")
-        sys.exit(130)
-    except Exception as e:
-        print_error(f"\n\nErro inesperado: {e}")
-        import traceback
+    with trace_context():
+        try:
+            sys.exit(main())
+        except KeyboardInterrupt:
+            print_error("\n\nOperação cancelada pelo usuário")
+            sys.exit(130)
+        except Exception as e:
+            print_error(f"\n\nErro inesperado: {e}")
+            import traceback
 
-        traceback.print_exc()
-        sys.exit(1)
+            traceback.print_exc()
+            sys.exit(1)
