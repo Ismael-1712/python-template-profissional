@@ -3,13 +3,13 @@
 Este módulo define as estruturas de dados usadas para representar informações
 de git, sugestões de mock, relatórios CI e status de verificação.
 
-Usa dataclasses padrão do Python para manter consistência com o restante do
-projeto até a migração global para Pydantic (P16).
+Migrado para Pydantic v2 (P14 - Hardening de Dados).
 """
 
-from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class Severity(str, Enum):
@@ -42,8 +42,7 @@ class CIStatus(str, Enum):
     FAILURE = "FAILURE"
 
 
-@dataclass
-class GitInfo:
+class GitInfo(BaseModel):
     """Informações sobre o repositório git.
 
     Attributes:
@@ -60,8 +59,7 @@ class GitInfo:
     commit_hash: str | None = None
 
 
-@dataclass
-class MockSuggestion:
+class MockSuggestion(BaseModel):
     """Sugestão de mock para um teste.
 
     Attributes:
@@ -92,8 +90,7 @@ class MockSuggestion:
         return MockType(self.mock_type)
 
 
-@dataclass
-class MockSuggestions:
+class MockSuggestions(BaseModel):
     """Agregação de sugestões de mock.
 
     Attributes:
@@ -107,7 +104,7 @@ class MockSuggestions:
     total: int
     high_priority: int
     blocking: int
-    details: list[MockSuggestion] = field(default_factory=list)
+    details: list[MockSuggestion] = Field(default_factory=list)
 
     @classmethod
     def from_suggestions_list(
@@ -148,8 +145,7 @@ class MockSuggestions:
         )
 
 
-@dataclass
-class CIReport:
+class CIReport(BaseModel):
     """Relatório completo de verificação CI/CD.
 
     Attributes:
@@ -187,41 +183,11 @@ class CIReport:
             Dicionário com todos os campos do relatório
 
         """
-        return {
-            "timestamp": self.timestamp,
-            "environment": self.environment,
-            "workspace": self.workspace,
-            "git_info": {
-                "is_git_repo": self.git_info.is_git_repo,
-                "has_changes": self.git_info.has_changes,
-                "current_branch": self.git_info.current_branch,
-                "commit_hash": self.git_info.commit_hash,
-            },
-            "validation_results": self.validation_results,
-            "mock_suggestions": {
-                "total": self.mock_suggestions.total,
-                "high_priority": self.mock_suggestions.high_priority,
-                "blocking": self.mock_suggestions.blocking,
-                "details": [
-                    {
-                        "severity": s.severity,
-                        "mock_type": s.mock_type,
-                        "file_path": s.file_path,
-                        "line_number": s.line_number,
-                        "reason": s.reason,
-                        "pattern": s.pattern,
-                    }
-                    for s in self.mock_suggestions.details
-                ],
-            },
-            "summary": self.summary,
-            "recommendations": self.recommendations,
-            "status": self.status,
-        }
+        # Usa model_dump do Pydantic para manter compatibilidade
+        return self.model_dump(mode="python")
 
 
-@dataclass
-class FixResult:
+class FixResult(BaseModel):
     """Resultado de aplicação de correções automáticas.
 
     Attributes:
@@ -250,14 +216,16 @@ class FixResult:
             Dicionário com todos os campos
 
         """
+        # Mantém formato customizado para compatibilidade
+        base = self.model_dump(mode="python")
         return {
-            "timestamp": self.timestamp,
-            "validation_fixes": self.validation_fixes,
+            "timestamp": base["timestamp"],
+            "validation_fixes": base["validation_fixes"],
             "mock_fixes": {
-                "applied": self.mock_fixes_applied,
-                "details": self.mock_fixes_details,
+                "applied": base["mock_fixes_applied"],
+                "details": base["mock_fixes_details"],
             },
-            "total_fixes": self.total_fixes,
-            "commit_created": self.commit_created,
-            "commit_message": self.commit_message,
+            "total_fixes": base["total_fixes"],
+            "commit_created": base["commit_created"],
+            "commit_message": base["commit_message"],
         }
