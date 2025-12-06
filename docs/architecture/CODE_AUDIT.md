@@ -209,6 +209,83 @@ The auditor enforces these security principles:
 - **Configurable Limits**: Prevents analysis paralysis with finding limits
 - **Early Exit**: Stops on critical issues for fast feedback
 
+---
+
+## 🔐 Itens Auditados e Resolvidos
+
+Esta seção documenta vulnerabilidades identificadas e suas resoluções.
+
+### [P00.2] Atomicidade do Pip Install
+
+**Status:** ✅ Concluído (v8.0)
+**Data:** 2025-12-06
+**Tipo:** Estabilidade / SRE
+**Severidade:** 🔴 Alta (corrupção de ambiente de desenvolvimento)
+
+**Problema Original:**
+
+O script `scripts/cli/install_dev.py` realizava operações críticas (`pip-compile`, `pip install`) sem garantia de atomicidade. Se o processo falhasse no meio, o arquivo `requirements/dev.txt` poderia ficar corrompido ou inconsistente, quebrando o ambiente para todos os desenvolvedores.
+
+**Vulnerabilidades Identificadas:**
+
+1. **V1 - Ausência de Rollback (ALTA)**: Se `pip install` falhasse após `pip-compile`, o ambiente ficava em estado inconsistente
+2. **V2 - Inconsistência no Fallback (MÉDIA)**: Modo fallback não usava mesmas validações do modo PATH
+3. **V3 - Arquivos Temporários Órfãos (BAIXA)**: Cleanup incompleto em caso de exceção
+
+**Solução Implementada:**
+
+1. **Backup Preemptivo**: Cópia de segurança com preservação de metadados (`shutil.copy2`) antes da compilação
+
+   ```python
+   backup_file = target_file.with_suffix(".txt.bak")
+   shutil.copy2(target_file, backup_file)
+   ```
+
+2. **Atomicidade**: Uso de arquivos temporários validados para o `pip-compile`
+   - Validação de existência do arquivo
+   - Validação de tamanho (não vazio)
+   - Validação de sintaxe (header com comentário)
+   - Atomic replace usando `Path.replace()` (garantia POSIX)
+
+3. **Rollback Automático**: Bloco `try/except` que restaura o backup se a instalação falhar
+
+   ```python
+   try:
+       subprocess.run(["pip", "install", "-r", "dev.txt"], check=True)
+   except subprocess.CalledProcessError:
+       backup_file.replace(target_file)  # Restaura versão anterior
+       raise
+   ```
+
+4. **UX Melhorada**: Mensagem de erro refatorada para focar na proteção
+   - **Antes**: `"⚠️ Installation failed. Rolled back: /path/to/dev.txt"`
+   - **Depois**: `"🛡️ ROLLBACK ATIVADO: A instalação falhou, mas seu ambiente foi restaurado com segurança para a versão anterior (dev.txt). Nenhuma alteração foi aplicada."`
+
+5. **Cleanup Garantido**: Remoção de arquivos temporários após sucesso
+
+   ```python
+   if backup_file and backup_file.exists():
+       backup_file.unlink()  # Remove .bak após sucesso
+   ```
+
+**Impacto:**
+
+- ✅ Ambiente sempre em estado consistente
+- ✅ Rollback automático transparente
+- ✅ Redução de ansiedade do desenvolvedor
+- ✅ Menor necessidade de intervenção manual
+- ✅ Zero downtime em caso de falha
+
+**Arquivos Modificados:**
+
+- `scripts/cli/install_dev.py` (~95 linhas de mudança)
+
+**Referências:**
+
+- Relatório de Auditoria (Fase 01)
+- Relatório de Implementação (Fase 02)
+- Relatório de Refinamento de UX (Fase 03)
+
 ## 🤝 Contributing
 
 When extending the auditor:
