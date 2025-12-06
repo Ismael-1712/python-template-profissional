@@ -36,6 +36,8 @@ License: MIT
 Version: 2.0.0 (Refactored)
 """
 
+from __future__ import annotations
+
 import sys
 
 # Re-export main classes for backward compatibility

@@ -4,6 +4,8 @@
 Smoke tests to validate the CLI entry point functionality.
 """
 
+from __future__ import annotations
+
 import unittest
 from unittest.mock import MagicMock, patch
 

@@ -1,5 +1,7 @@
 """Testes unitários para o Visibility Guardian Scanner."""
 
+from __future__ import annotations
+
 import ast
 from pathlib import Path
 

@@ -18,6 +18,8 @@ Usage:
     atomic_write_json(target_path, {"key": "value"})
 """
 
+from __future__ import annotations
+
 import contextlib
 import json
 import os

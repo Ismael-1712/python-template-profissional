@@ -4,6 +4,8 @@ Valida que as dataclasses, enums e funções de configuração funcionam
 corretamente e mantêm tipagem estrita.
 """
 
+from __future__ import annotations
+
 from datetime import datetime, timezone
 from pathlib import Path
 

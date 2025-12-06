@@ -1,5 +1,7 @@
 """Audit package initialization."""
 
+from __future__ import annotations
+
 from .analyzer import CodeAnalyzer
 from .config import load_config
 from .models import AuditResult, SecurityPattern

@@ -4,6 +4,8 @@ This module provides the high-level AuditDashboard class that
 orchestrates all metrics operations.
 """
 
+from __future__ import annotations
+
 import logging
 import threading
 from datetime import datetime, timezone

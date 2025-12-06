@@ -10,6 +10,8 @@ Author: DevOps Engineering Team
 License: MIT
 """
 
+from __future__ import annotations
+
 __all__ = [
     "mock_generator",
     "mock_validator",

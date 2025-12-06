@@ -4,6 +4,8 @@ This package provides enterprise-grade audit metrics tracking,
 dashboard generation, and reporting capabilities.
 """
 
+from __future__ import annotations
+
 from scripts.audit_dashboard.dashboard import AuditDashboard
 from scripts.audit_dashboard.models import (
     AuditHistoryRecord,

@@ -2,3 +2,5 @@
 
 This package contains all test modules and fixtures for the project.
 """
+
+from __future__ import annotations

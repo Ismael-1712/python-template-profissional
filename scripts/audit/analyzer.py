@@ -10,6 +10,8 @@ Author: DevOps Engineering Team
 License: MIT
 """
 
+from __future__ import annotations
+
 import ast
 import logging
 import re
