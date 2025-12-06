@@ -148,6 +148,25 @@ class FileSystemAdapter(Protocol):
         """
         ...
 
+    def rglob(self, path: Path, pattern: str) -> list[Path]:
+        """Find files matching a pattern recursively.
+
+        Equivalent to path.rglob(pattern) but works through the adapter.
+        Searches recursively in all subdirectories under the given path.
+
+        Args:
+            path: Directory path to search in
+            pattern: Glob pattern (e.g., "*.py", "test_*.py")
+
+        Returns:
+            List of Path objects matching the pattern recursively
+
+        Example:
+            >>> fs.rglob(Path("tests"), "*.py")
+            [Path("tests/test_foo.py"), Path("tests/sub/test_bar.py")]
+        """
+        ...
+
     def copy(self, src: Path, dst: Path) -> None:
         """Copy a file from source to destination.
 
@@ -287,6 +306,23 @@ class RealFileSystem:
             [Path("tests/test_foo.py"), Path("tests/test_bar.py")]
         """
         return list(path.glob(pattern))
+
+    def rglob(self, path: Path, pattern: str) -> list[Path]:
+        """Find files matching a pattern recursively on disk.
+
+        Args:
+            path: Directory path to search in
+            pattern: Glob pattern (e.g., "*.py", "test_*.py")
+
+        Returns:
+            List of Path objects matching the pattern recursively
+
+        Example:
+            >>> fs = RealFileSystem()
+            >>> fs.rglob(Path("tests"), "*.py")
+            [Path("tests/test_foo.py"), Path("tests/sub/test_bar.py")]
+        """
+        return list(path.rglob(pattern))
 
     def copy(self, src: Path, dst: Path) -> None:
         """Copy a file from source to destination on disk.
@@ -480,6 +516,25 @@ class MemoryFileSystem:
                 continue
 
         return sorted(results)
+
+    def rglob(self, path: Path, pattern: str) -> list[Path]:
+        """Find files matching a pattern recursively in memory.
+
+        Args:
+            path: Directory path to search in
+            pattern: Glob pattern (e.g., "*.py", "test_*.py")
+
+        Returns:
+            List of Path objects matching the pattern recursively
+
+        Example:
+            >>> fs = MemoryFileSystem()
+            >>> fs.write_text(Path("tests/sub/test.py"), "")
+            >>> fs.rglob(Path("tests"), "*.py")
+            [Path("tests/sub/test.py")]
+        """
+        # Reuse existing glob logic with recursive pattern
+        return self.glob(path, f"**/{pattern}")
 
     def copy(self, src: Path, dst: Path) -> None:
         """Copy a file in memory.
