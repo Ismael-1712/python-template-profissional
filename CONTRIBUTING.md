@@ -143,7 +143,49 @@ make lint
 make format
 ```
 
-**Regras Ativas:**
+**Regras de Tipagem Moderna:**
+
+1. **Future Annotations (Obrigatório):**
+   - Todo arquivo Python deve começar com:
+
+     ```python
+     from __future__ import annotations
+     ```
+
+   - Isso habilita tipagem lazy (PEP 563) e evita problemas de referência circular.
+
+2. **Imports Tardios para Evitar Ciclos:**
+   - Use `TYPE_CHECKING` para imports apenas de tipagem:
+
+     ```python
+     from __future__ import annotations
+     from typing import TYPE_CHECKING
+
+     if TYPE_CHECKING:
+         from module import MyClass  # Só importado durante type checking
+
+     def my_function() -> MyClass:  # OK, string annotation é lazy
+         ...
+     ```
+
+   - Para imports em runtime, considere importar dentro de métodos:
+
+     ```python
+     def process_data(self) -> None:
+         from .heavy_module import DataProcessor  # Late import
+         processor = DataProcessor()
+         ...
+     ```
+
+3. **Tipagem em Testes:**
+   - Funções de teste devem ter anotação `-> None`:
+
+     ```python
+     def test_my_feature() -> None:
+         assert True
+     ```
+
+**Regras de Linting Ativas:**
 
 - ✅ Pycodestyle (E, W)
 - ✅ Pyflakes (F)

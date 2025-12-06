@@ -309,4 +309,65 @@ Desenvolvido com ❤️ usando as melhores práticas de engenharia de software P
 - 🛡️ **Sistema de Auditoria Customizado** - Análise profunda
 - 🔧 **pip-tools** - Gestão determinística de dependências
 
+---
+
+## 🔐 Segurança e Variáveis de Ambiente
+
+Este projeto implementa uma **política de segurança hardened** para proteção contra vazamento de credenciais em subprocessos.
+
+### Whitelist de Variáveis Permitidas
+
+Apenas as seguintes variáveis de ambiente são propagadas para subprocessos (ex: `subprocess.run()`):
+
+**Variáveis de Sistema Essenciais:**
+
+- `PATH` - Localização de executáveis
+- `HOME` - Diretório home do usuário
+- `USER` - Nome do usuário atual
+- `LANG`, `LC_ALL` - Configurações de locale
+- `TZ` - Timezone
+- `TMPDIR`, `TEMP`, `TMP` - Diretórios temporários
+
+**Variáveis Python Seguras:**
+
+- `PYTHONPATH` - Caminhos adicionais de módulos
+- `PYTHONUNBUFFERED` - Saída sem buffer (útil em CI/CD)
+- `PYTHONHASHSEED` - Seed para hash (reprodutibilidade)
+- `PYTHONDONTWRITEBYTECODE` - Desabilita `.pyc` (útil em containers)
+- `PYTHONIOENCODING` - Encoding padrão de I/O
+- `VIRTUAL_ENV` - Caminho do virtualenv ativo
+- `PY*` - Variáveis curtas como `PYTEST_*`
+
+### Variáveis Bloqueadas (Blocklist)
+
+As seguintes padrões são **explicitamente bloqueados** para prevenir vazamento de credenciais:
+
+- `*TOKEN*` - Tokens de autenticação (GitHub, CI/CD, etc.)
+- `*KEY*` - Chaves de API (AWS, Azure, GCP, etc.)
+- `*SECRET*` - Segredos genéricos
+- `*PASSWORD*` - Senhas
+- `*CREDENTIAL*` - Credenciais
+- `*API*` - Chaves/tokens de API
+
+**Variáveis Python Perigosas (Hardened Block):**
+
+- `PYTHONSTARTUP` - Pode executar código arbitrário no startup
+- `PYTHONHOME` - Pode redirecionar instalação Python
+- `PYTHONINSPECT` - Abre modo interativo após execução
+
+### Implementação
+
+A sanitização é aplicada automaticamente pelo módulo `scripts/utils/security.py`:
+
+```python
+from scripts.utils.security import sanitize_env
+import os
+
+# Ambiente seguro para subprocessos
+safe_env = sanitize_env(os.environ)
+subprocess.run(["comando"], env=safe_env, check=True)
+```
+
+**Nota de Segurança:** Esta abordagem implementa o **Princípio do Menor Privilégio** - apenas o mínimo necessário é exposto. Qualquer variável não explicitamente permitida é automaticamente bloqueada.
+
 <!-- end list -->
