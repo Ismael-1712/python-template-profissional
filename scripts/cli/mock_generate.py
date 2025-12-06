@@ -19,13 +19,11 @@ from pathlib import Path
 
 from scripts.core.mock_generator import TestMockGenerator
 from scripts.utils.banner import print_startup_banner
+from scripts.utils.context import trace_context
+from scripts.utils.logger import setup_logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-logger = logging.getLogger(__name__)
+# Configure structured logging
+logger = setup_logging(__name__)
 
 
 def main() -> int:
@@ -149,4 +147,5 @@ Examples:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    with trace_context():
+        sys.exit(main())
