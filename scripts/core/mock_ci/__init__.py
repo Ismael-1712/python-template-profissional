@@ -14,6 +14,8 @@ Exports principais:
     - Enums: Severity, MockType, CIStatus
 """
 
+from __future__ import annotations
+
 from scripts.core.mock_ci.checker import CIChecker
 from scripts.core.mock_ci.detector import detect_ci_environment
 from scripts.core.mock_ci.fixer import CIFixer

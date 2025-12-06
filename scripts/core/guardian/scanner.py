@@ -6,6 +6,8 @@ Usa o módulo ast nativo do Python para analisar código-fonte e extrair:
 - Subscrições a os.environ["VAR"]
 """
 
+from __future__ import annotations
+
 import ast
 import time
 from pathlib import Path

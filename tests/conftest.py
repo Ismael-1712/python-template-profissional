@@ -4,6 +4,8 @@ This conftest.py file is automatically loaded by pytest before running tests.
 It configures the Python path to ensure that the 'scripts' package is importable.
 """
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 

@@ -10,6 +10,8 @@ Key Features:
 - Preserves pip-compile exit codes and output
 """
 
+from __future__ import annotations
+
 import contextlib
 import os
 import subprocess

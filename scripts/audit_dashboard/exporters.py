@@ -4,6 +4,8 @@ This module provides exporters for different output formats:
 HTML dashboards, JSON exports, and console reports.
 """
 
+from __future__ import annotations
+
 import gettext
 import html
 import json

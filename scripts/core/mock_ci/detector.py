@@ -4,6 +4,8 @@ Este módulo fornece funções para detectar automaticamente o ambiente CI/CD
 onde o código está sendo executado, baseado em variáveis de ambiente.
 """
 
+from __future__ import annotations
+
 import os
 
 from scripts.core.mock_ci.config import CI_ENVIRONMENT_VARS

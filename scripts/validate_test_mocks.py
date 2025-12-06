@@ -9,6 +9,8 @@ This wrapper will be removed in version 3.0.0.
 Please update your scripts and automation.
 """
 
+from __future__ import annotations
+
 import sys
 import warnings
 from pathlib import Path

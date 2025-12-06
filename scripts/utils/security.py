@@ -4,6 +4,8 @@ This module provides functions for sanitizing environment variables
 and other security-related operations to prevent data leakage.
 """
 
+from __future__ import annotations
+
 import logging
 
 logger = logging.getLogger(__name__)

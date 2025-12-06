@@ -6,6 +6,8 @@ This module contains reusable utility functions for:
 - Common I/O operations
 """
 
+from __future__ import annotations
+
 from scripts.utils.atomic import AtomicFileWriter, atomic_write_json
 
 __all__ = ["AtomicFileWriter", "atomic_write_json"]
