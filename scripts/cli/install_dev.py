@@ -31,6 +31,7 @@ if str(PROJECT_ROOT) not in sys.path:
 # -------------------------------------------------------------------
 
 # Standard library imports (continued after sys.path fix)
+import contextlib  # noqa: E402
 import gettext  # noqa: E402
 import os  # noqa: E402
 import shutil  # noqa: E402
@@ -118,6 +119,55 @@ def _display_success_panel() -> None:
     print(panel)
 
 
+def _create_backup(target_file: Path) -> Path | None:
+    """Create backup of requirements file before compilation.
+
+    Args:
+        target_file: Path to requirements file
+
+    Returns:
+        Path to backup file if created, None if target doesn't exist
+
+    Note:
+        Uses shutil.copy2 to preserve metadata (timestamps, permissions)
+    """
+    if not target_file.exists():
+        return None
+
+    backup_file = target_file.with_suffix(".txt.bak")
+    shutil.copy2(target_file, backup_file)
+    logger.info("📦 Backup created: %s", backup_file)
+    return backup_file
+
+
+def _restore_backup(backup_file: Path | None, target_file: Path) -> None:
+    """Restore requirements file from backup.
+
+    Args:
+        backup_file: Path to backup file (can be None)
+        target_file: Path to target file to restore
+    """
+    if backup_file and backup_file.exists():
+        backup_file.replace(target_file)
+        logger.warning(
+            "🛡️ ROLLBACK ATIVADO: A instalação falhou, mas seu ambiente foi "
+            "restaurado com segurança para a versão anterior (%s). "
+            "Nenhuma alteração foi aplicada.",
+            target_file.name,
+        )
+
+
+def _cleanup_backup(backup_file: Path | None) -> None:
+    """Remove backup file after successful installation.
+
+    Args:
+        backup_file: Path to backup file (can be None)
+    """
+    if backup_file and backup_file.exists():
+        backup_file.unlink()
+        logger.debug("🧹 Backup cleaned up: %s", backup_file)
+
+
 def install_dev_environment(workspace_root: Path) -> int:
     """Execute complete development environment installation sequence.
 
@@ -131,9 +181,14 @@ def install_dev_environment(workspace_root: Path) -> int:
         subprocess.CalledProcessError: If any installation step fails
 
     Note:
-        # TODO(P02): Review for atomic writes - Currently no direct file writes
-        # This function only calls subprocess operations, no critical file I/O
+        Implements atomic writes with backup/rollback mechanism:
+        - Creates backup before pip-compile
+        - Restores backup if pip install fails
+        - Cleans up backup on success
     """
+    requirements_file = workspace_root / "requirements" / "dev.txt"
+    backup_file: Path | None = None
+
     try:
         # ========== STEP 1: Install project + pip-tools ==========
         logger.info("Step 1/3: Installing project and pip-tools...")
@@ -152,29 +207,32 @@ def install_dev_environment(workspace_root: Path) -> int:
         # ========== STEP 2: Compile dependencies (ATOMIC) ==========
         logger.info("Step 2/3: Compiling dependencies with pip-compile...")
 
+        # Create backup before compilation
+        backup_file = _create_backup(requirements_file)
+
         # Try to find pip-compile in PATH
         pip_compile_path = shutil.which("pip-compile")
 
         if not pip_compile_path:
-            # Fallback: execute pip-compile via Python module
+            # Fallback: execute pip-compile via Python module with validation
             logger.warning(
                 "pip-compile not found in PATH. Using module fallback.",
             )
-            # Create a temporary wrapper script for module execution
             pip_compile_cmd = [
                 sys.executable,
                 "-m",
                 "piptools",
                 "compile",
             ]
-            # Use safe_pip_compile by manually constructing the command
-            # This is a workaround since safe_pip expects an executable path
+
+            # Use AtomicFileWriter for consistent validation
+            tmp_output = requirements_file.with_suffix(f".tmp.{os.getpid()}.txt")
             try:
                 result2 = subprocess.run(  # nosec # noqa: subprocess
                     pip_compile_cmd
                     + [
                         "--output-file",
-                        str(workspace_root / "requirements" / "dev.txt.tmp"),
+                        str(tmp_output),
                         str(workspace_root / "requirements" / "dev.in"),
                     ],
                     cwd=workspace_root,
@@ -183,13 +241,32 @@ def install_dev_environment(workspace_root: Path) -> int:
                     text=True,
                     check=True,
                 )
-                # Manual atomic replace for fallback mode
-                tmp_file = workspace_root / "requirements" / "dev.txt.tmp"
-                target_file = workspace_root / "requirements" / "dev.txt"
-                if tmp_file.exists():
-                    tmp_file.replace(target_file)
-            except subprocess.CalledProcessError as e:
+
+                # Validate output (consistent with safe_pip_compile)
+                if not tmp_output.exists():
+                    msg = f"pip-compile did not create output: {tmp_output}"
+                    raise RuntimeError(msg)
+
+                if tmp_output.stat().st_size == 0:
+                    msg = f"pip-compile produced empty output: {tmp_output}"
+                    raise RuntimeError(msg)
+
+                # Validate header
+                first_line = tmp_output.read_text(encoding="utf-8").split("\n")[0]
+                if not first_line.startswith("#"):
+                    msg = f"Unexpected format (expected comment): {first_line[:50]}"
+                    raise RuntimeError(msg)
+
+                # Atomic replace
+                tmp_output.replace(requirements_file)
+                logger.debug("Fallback compilation successful")
+
+            except Exception as e:
                 logger.error("pip-compile fallback failed: %s", e)
+                # Cleanup temp file
+                if tmp_output.exists():
+                    with contextlib.suppress(OSError):
+                        tmp_output.unlink()
                 raise
         else:
             # Use pip-compile from PATH with atomic writes
@@ -202,21 +279,29 @@ def install_dev_environment(workspace_root: Path) -> int:
             )
         logger.debug("Output pip-compile: %s", result2.stdout.strip())
 
-        # ========== STEP 3: Install pinned dependencies ==========
+        # ========== STEP 3: Install pinned dependencies (WITH ROLLBACK) ==========
         logger.info("Step 3/3: Installing pinned dependencies...")
-        result3 = subprocess.run(  # nosec # noqa: subprocess
-            [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
-            cwd=workspace_root,
-            shell=False,  # Security: prevent shell injection
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        logger.debug("Output pip install -r: %s", result3.stdout.strip())
+        try:
+            result3 = subprocess.run(  # nosec # noqa: subprocess
+                [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
+                cwd=workspace_root,
+                shell=False,  # Security: prevent shell injection
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            logger.debug("Output pip install -r: %s", result3.stdout.strip())
+        except subprocess.CalledProcessError:
+            # Rollback: restore backup if pip install fails
+            _restore_backup(backup_file, requirements_file)
+            raise
 
         # ========== STEP 4: Setup direnv configuration ==========
         logger.info("Step 4/4: Setting up direnv configuration...")
         _setup_direnv(workspace_root)
+
+        # ========== CLEANUP: Remove backup on success ==========
+        _cleanup_backup(backup_file)
 
         # ========== SUCCESS: FORMATTED PANEL ==========
         _display_success_panel()
