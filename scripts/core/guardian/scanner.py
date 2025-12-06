@@ -15,28 +15,36 @@ from pathlib import Path
 import yaml
 
 from scripts.core.guardian.models import ConfigFinding, ConfigType, ScanResult
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 # Constantes para detecção de argumentos
 MIN_ARGS_WITH_DEFAULT = 2  # Mínimo de args para ter valor default
 
 
-def load_whitelist(project_root: Path) -> set[str]:
+def load_whitelist(
+    project_root: Path,
+    fs: FileSystemAdapter | None = None,
+) -> set[str]:
     """Carrega whitelist de variáveis de ambiente a ignorar.
 
     Args:
         project_root: Diretório raiz do projeto
+        fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
 
     Returns:
         Conjunto de variáveis de ambiente na whitelist
     """
+    if fs is None:
+        fs = RealFileSystem()
+
     whitelist_file = project_root / ".guardian-whitelist.yaml"
-    if not whitelist_file.exists():
+    if not fs.exists(whitelist_file):
         return set()
 
     try:
-        with whitelist_file.open(encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-            return set(config.get("whitelist", []))
+        content = fs.read_text(whitelist_file)
+        config = yaml.safe_load(content)
+        return set(config.get("whitelist", []))
     except Exception:  # noqa: BLE001 - Captura intencional
         return set()
 

@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.core.cortex.models import DocStatus, DocumentMetadata, LinkCheckResult
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 logger = logging.getLogger(__name__)
 
@@ -46,14 +47,23 @@ class CodeLinkScanner:
 
     Attributes:
         workspace_root: Root directory of the workspace
+        fs: FileSystemAdapter for I/O operations
     """
 
-    def __init__(self, workspace_root: Path) -> None:
+    def __init__(
+        self,
+        workspace_root: Path,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
         """Initialize the scanner.
 
         Args:
             workspace_root: Root directory of the workspace
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
         """
+        if fs is None:
+            fs = RealFileSystem()
+        self.fs = fs
         self.workspace_root = workspace_root.resolve()
         logger.debug(f"Initialized CodeLinkScanner with root: {self.workspace_root}")
 
@@ -280,8 +290,7 @@ class CodeLinkScanner:
 
         try:
             # Parse Python file with AST
-            with open(full_path, encoding="utf-8") as f:
-                source_code = f.read()
+            source_code = self.fs.read_text(full_path)
 
             tree = ast.parse(source_code, filename=str(full_path))
 

@@ -12,12 +12,13 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 from typing import Any
-from unittest.mock import MagicMock, mock_open, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from scripts.core.cortex.metadata import FrontmatterParseError, FrontmatterParser
 from scripts.core.cortex.models import DocStatus, DocType, DocumentMetadata
+from scripts.utils.filesystem import MemoryFileSystem
 
 # ============================================================================
 # TEST FIXTURES (Markdown content as strings)
@@ -155,26 +156,20 @@ class TestFrontmatterParser:
 
     def setup_method(self) -> None:
         """Set up test fixtures."""
-        self.parser = FrontmatterParser()
+        self.fs = MemoryFileSystem()
+        self.parser = FrontmatterParser(fs=self.fs)
         self.test_path = Path("test.md")
 
     # ------------------------------------------------------------------------
     # Tests for parse_file() - Success Cases
     # ------------------------------------------------------------------------
 
-    @patch("builtins.open", new_callable=mock_open, read_data=VALID_FRONTMATTER)
-    @patch("pathlib.Path.exists")
-    @patch("pathlib.Path.is_file")
     def test_parse_valid_frontmatter(
         self,
-        mock_is_file: MagicMock,
-        mock_exists: MagicMock,
-        mock_file: MagicMock,
     ) -> None:
         """Test parsing a file with valid frontmatter."""
-        # Setup mocks
-        mock_exists.return_value = True
-        mock_is_file.return_value = True
+        # Setup: write file to memory filesystem
+        self.fs.write_text(self.test_path, VALID_FRONTMATTER)
 
         # Execute
         metadata = self.parser.parse_file(self.test_path)
@@ -192,19 +187,12 @@ class TestFrontmatterParser:
         assert "scripts/core/cortex/metadata.py" in metadata.linked_code
         assert metadata.source_file == self.test_path
 
-    @patch("builtins.open", new_callable=mock_open, read_data=MINIMAL_VALID_FRONTMATTER)
-    @patch("pathlib.Path.exists")
-    @patch("pathlib.Path.is_file")
     def test_parse_minimal_frontmatter(
         self,
-        mock_is_file: MagicMock,
-        mock_exists: MagicMock,
-        mock_file: MagicMock,
     ) -> None:
         """Test parsing with only required fields (no optional fields)."""
-        # Setup mocks
-        mock_exists.return_value = True
-        mock_is_file.return_value = True
+        # Setup: write file to memory filesystem
+        self.fs.write_text(self.test_path, MINIMAL_VALID_FRONTMATTER)
 
         # Execute (should emit warnings but succeed)
         metadata = self.parser.parse_file(self.test_path)
@@ -230,53 +218,34 @@ class TestFrontmatterParser:
         with pytest.raises(FrontmatterParseError, match="does not exist"):
             self.parser.parse_file(self.test_path)
 
-    @patch("pathlib.Path.exists")
-    @patch("pathlib.Path.is_file")
     def test_parse_path_is_directory(
         self,
-        mock_is_file: MagicMock,
-        mock_exists: MagicMock,
     ) -> None:
         """Test parsing when path is a directory, not a file."""
-        # Setup
-        mock_exists.return_value = True
-        mock_is_file.return_value = False
+        # Setup: create directory in memory filesystem
+        self.fs.mkdir(self.test_path)
 
         # Execute & Assert
         with pytest.raises(FrontmatterParseError, match="not a file"):
             self.parser.parse_file(self.test_path)
 
-    @patch("builtins.open", new_callable=mock_open, read_data=NO_FRONTMATTER)
-    @patch("pathlib.Path.exists")
-    @patch("pathlib.Path.is_file")
     def test_parse_no_frontmatter(
         self,
-        mock_is_file: MagicMock,
-        mock_exists: MagicMock,
-        mock_file: MagicMock,
     ) -> None:
         """Test parsing a file without YAML frontmatter."""
-        # Setup mocks
-        mock_exists.return_value = True
-        mock_is_file.return_value = True
+        # Setup: write file without frontmatter to memory filesystem
+        self.fs.write_text(self.test_path, NO_FRONTMATTER)
 
         # Execute & Assert
         with pytest.raises(FrontmatterParseError, match="No YAML frontmatter"):
             self.parser.parse_file(self.test_path)
 
-    @patch("builtins.open", new_callable=mock_open, read_data=MISSING_ID_FRONTMATTER)
-    @patch("pathlib.Path.exists")
-    @patch("pathlib.Path.is_file")
     def test_parse_missing_required_field(
         self,
-        mock_is_file: MagicMock,
-        mock_exists: MagicMock,
-        mock_file: MagicMock,
     ) -> None:
         """Test parsing frontmatter missing a required field."""
-        # Setup mocks
-        mock_exists.return_value = True
-        mock_is_file.return_value = True
+        # Setup: write file with missing ID to memory filesystem
+        self.fs.write_text(self.test_path, MISSING_ID_FRONTMATTER)
 
         # Execute & Assert
         with pytest.raises(ValueError, match="validation failed"):
