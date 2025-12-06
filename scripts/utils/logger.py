@@ -34,6 +34,13 @@ try:
     from scripts.utils.context import get_trace_id
 except ImportError:
     # Fallback if context module is not available
+    import logging
+
+    logging.getLogger(__name__).warning(
+        "⚠️  OBSERVABILITY DEGRADED: Context module not found. "
+        "Trace IDs will be disabled ('no-trace-id').",
+    )
+
     def get_trace_id() -> str:
         """Fallback trace ID when context module is unavailable."""
         return "no-trace-id"

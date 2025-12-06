@@ -33,7 +33,7 @@ ALLOWED_ROOT_MARKDOWN_FILES = frozenset(
         "LICENSE",
         "SECURITY.md",
         "CODE_OF_CONDUCT.md",
-    ]
+    ],
 )
 
 
@@ -95,8 +95,14 @@ class CodeLinkScanner:
                 )
                 return True
         except ValueError:
-            # File is not relative to workspace_root, ignore it
-            pass
+            # File is not relative to workspace_root (Security/Logic anomaly)
+            logger.warning(
+                "⚠️  PATH ANOMALY: File '%s' is outside workspace root '%s'. "
+                "Skipping link check.",
+                doc_file,
+                self.workspace_root,
+            )
+            return False
 
         return False
 
