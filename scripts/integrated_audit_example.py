@@ -19,8 +19,10 @@ sys.path.insert(0, str(scripts_dir))
 # Now we can safely import the local modules after modifying sys.path
 from audit_dashboard import AuditDashboard, AuditMetricsError  # noqa: E402
 from code_audit import CodeAuditor, print_summary, save_report  # noqa: E402
+from utils.logger import setup_logging  # noqa: E402
 
-logger = logging.getLogger(__name__)
+# Initialize module logger (will be reconfigured in main with proper level)
+logger = setup_logging(__name__)
 
 
 def run_integrated_audit(workspace_root: Path, config_path: Path | None = None) -> int:
@@ -168,10 +170,7 @@ def main() -> None:
 
     # Configure logging
     log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
+    logger = setup_logging(__name__, level=log_level)
 
     # Determine workspace root
     workspace_root = args.workspace or Path(__file__).parent.parent
