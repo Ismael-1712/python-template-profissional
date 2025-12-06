@@ -67,6 +67,68 @@ class TestMemoryFileSystem:
         assert Path("tests/test_bar.py") in test_files
         assert Path("tests/conftest.py") not in test_files
 
+    def test_rglob_recursive_search(self) -> None:
+        """Test recursive glob pattern matching."""
+        fs = MemoryFileSystem()
+
+        # Create nested directory structure with multiple levels
+        fs.write_text(Path("project/src/main.py"), "# main")
+        fs.write_text(Path("project/src/utils/helpers.py"), "# helpers")
+        fs.write_text(Path("project/tests/test_main.py"), "# test main")
+        fs.write_text(Path("project/tests/unit/test_helpers.py"), "# test helpers")
+        fs.write_text(Path("project/tests/integration/test_api.py"), "# test api")
+        fs.write_text(Path("project/docs/readme.txt"), "# readme")
+        fs.write_text(Path("project/config.yaml"), "# config")
+
+        # Search recursively for all .py files
+        py_files = fs.rglob(Path("project"), "*.py")
+
+        # Should find all 5 Python files across all subdirectories
+        expected_count = 5
+        assert len(py_files) == expected_count
+        assert Path("project/src/main.py") in py_files
+        assert Path("project/src/utils/helpers.py") in py_files
+        assert Path("project/tests/test_main.py") in py_files
+        assert Path("project/tests/unit/test_helpers.py") in py_files
+        assert Path("project/tests/integration/test_api.py") in py_files
+
+        # Should not find non-.py files
+        assert Path("project/docs/readme.txt") not in py_files
+        assert Path("project/config.yaml") not in py_files
+
+    def test_rglob_with_specific_pattern(self) -> None:
+        """Test rglob with specific filename pattern."""
+        fs = MemoryFileSystem()
+
+        # Create test files at different levels
+        fs.write_text(Path("tests/test_foo.py"), "# test foo")
+        fs.write_text(Path("tests/unit/test_bar.py"), "# test bar")
+        fs.write_text(Path("tests/unit/helper.py"), "# helper")
+        fs.write_text(Path("tests/integration/test_baz.py"), "# test baz")
+
+        # Search recursively only for test_*.py files
+        test_files = fs.rglob(Path("tests"), "test_*.py")
+
+        # Should find only files starting with "test_"
+        expected_count = 3
+        assert len(test_files) == expected_count
+        assert Path("tests/test_foo.py") in test_files
+        assert Path("tests/unit/test_bar.py") in test_files
+        assert Path("tests/integration/test_baz.py") in test_files
+        assert Path("tests/unit/helper.py") not in test_files
+
+    def test_rglob_empty_directory(self) -> None:
+        """Test rglob on empty directory structure."""
+        fs = MemoryFileSystem()
+
+        # Create empty directory structure
+        fs.mkdir(Path("empty/sub1/sub2"))
+
+        # Search should return empty list
+        results = fs.rglob(Path("empty"), "*.py")
+        assert len(results) == 0
+        assert results == []
+
     def test_file_copy(self) -> None:
         """Test file copying."""
         fs = MemoryFileSystem()
@@ -196,6 +258,62 @@ class TestRealFileSystem:
         assert test_dir / "test_foo.py" in test_files
         assert test_dir / "test_bar.py" in test_files
         assert test_dir / "conftest.py" not in test_files
+
+    def test_rglob_recursive_search(self, tmp_path: Path) -> None:
+        """Test recursive glob pattern matching on real filesystem."""
+        fs = RealFileSystem()
+
+        # Create nested directory structure
+        project_dir = tmp_path / "project"
+        project_dir.mkdir()
+
+        # Create files at multiple levels
+        fs.write_text(project_dir / "main.py", "# main")
+        fs.write_text(project_dir / "src/utils.py", "# utils")
+        fs.write_text(project_dir / "src/core/engine.py", "# engine")
+        fs.write_text(project_dir / "tests/test_main.py", "# test main")
+        fs.write_text(project_dir / "tests/unit/test_utils.py", "# test utils")
+        fs.write_text(project_dir / "docs/readme.txt", "# readme")
+
+        # Search recursively for all .py files
+        py_files = fs.rglob(project_dir, "*.py")
+
+        # Should find all 5 Python files
+        expected_count = 5
+        assert len(py_files) == expected_count
+        assert project_dir / "main.py" in py_files
+        assert project_dir / "src/utils.py" in py_files
+        assert project_dir / "src/core/engine.py" in py_files
+        assert project_dir / "tests/test_main.py" in py_files
+        assert project_dir / "tests/unit/test_utils.py" in py_files
+
+        # Should not find non-.py files
+        assert project_dir / "docs/readme.txt" not in py_files
+
+    def test_rglob_with_specific_pattern(self, tmp_path: Path) -> None:
+        """Test rglob with specific filename pattern on real filesystem."""
+        fs = RealFileSystem()
+
+        # Create test directory structure
+        tests_dir = tmp_path / "tests"
+        tests_dir.mkdir()
+
+        # Create test files at different levels
+        fs.write_text(tests_dir / "test_foo.py", "# test foo")
+        fs.write_text(tests_dir / "unit/test_bar.py", "# test bar")
+        fs.write_text(tests_dir / "unit/helper.py", "# helper")
+        fs.write_text(tests_dir / "integration/test_baz.py", "# test baz")
+
+        # Search recursively only for test_*.py files
+        test_files = fs.rglob(tests_dir, "test_*.py")
+
+        # Should find only files starting with "test_"
+        expected_count = 3
+        assert len(test_files) == expected_count
+        assert tests_dir / "test_foo.py" in test_files
+        assert tests_dir / "unit/test_bar.py" in test_files
+        assert tests_dir / "integration/test_baz.py" in test_files
+        assert tests_dir / "unit/helper.py" not in test_files
 
     def test_file_copy(self, tmp_path: Path) -> None:
         """Test file copying on real filesystem."""
