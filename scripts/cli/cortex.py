@@ -28,6 +28,7 @@ _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
+from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
 from scripts.core.cortex.mapper import generate_context_map  # noqa: E402
 from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
@@ -697,6 +698,99 @@ fi
     )
     typer.echo()
     typer.echo("💡 Test it: git checkout - (to switch back and forth)")
+
+
+@app.command(name="knowledge-scan")
+def knowledge_scan(
+    verbose: Annotated[
+        bool,
+        typer.Option(
+            "--verbose",
+            "-v",
+            help="Show detailed information about each entry",
+        ),
+    ] = False,
+) -> None:
+    """Scan and validate the Knowledge Base (docs/knowledge).
+
+    Scans the docs/knowledge directory for markdown files with valid
+    frontmatter representing knowledge entries. Validates the structure
+    and displays a summary of found entries.
+
+    Knowledge entries should have:
+    - id: Unique identifier
+    - status: Entry status (active, deprecated, draft)
+    - golden_paths: Related code paths
+    - tags: (optional) Classification tags
+    - sources: (optional) External reference URLs
+
+    Examples:
+        cortex knowledge-scan              # Scan knowledge base
+        cortex knowledge-scan --verbose    # Show detailed info
+    """
+    try:
+        workspace_root = Path.cwd()
+        logger.info("Scanning Knowledge Base...")
+
+        typer.secho("\n🧠 Knowledge Base Scanner", bold=True, fg=typer.colors.CYAN)
+        typer.echo(f"Workspace: {workspace_root}")
+        typer.echo("Knowledge Directory: docs/knowledge/\n")
+
+        # Instantiate scanner and scan
+        scanner = KnowledgeScanner(workspace_root=workspace_root)
+        entries = scanner.scan()
+
+        # Display results
+        if not entries:
+            typer.secho(
+                "⚠️  No knowledge entries found",
+                fg=typer.colors.YELLOW,
+            )
+            typer.echo(
+                "\nTip: Create knowledge entries in docs/knowledge/ "
+                "with valid YAML frontmatter.",
+            )
+            return
+
+        # Success summary
+        entry_word = "entry" if len(entries) == 1 else "entries"
+        typer.secho(
+            f"✅ Found {len(entries)} knowledge {entry_word}",
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+        typer.echo()
+
+        # List entries
+        for entry in entries:
+            # Status emoji mapping
+            status_emoji = {
+                "active": "✅",
+                "deprecated": "🚫",
+                "draft": "📝",
+            }.get(entry.status.value, "📎")
+
+            typer.echo(f"{status_emoji} {entry.id} ({entry.status.value})")
+
+            if verbose:
+                if entry.tags:
+                    tags_str = ", ".join(entry.tags)
+                    typer.echo(f"   Tags: {tags_str}")
+                if entry.golden_paths:
+                    typer.echo(f"   Golden Paths: {entry.golden_paths}")
+                if entry.sources:
+                    typer.echo(f"   Sources: {len(entry.sources)} reference(s)")
+                if entry.cached_content:
+                    content_preview = entry.cached_content[:80].replace("\n", " ")
+                    typer.echo(f"   Content: {content_preview}...")
+                typer.echo()  # Blank line between entries
+
+        logger.info(f"Knowledge scan completed: {len(entries)} entries found")
+
+    except Exception as e:
+        logger.error(f"Error scanning knowledge base: {e}", exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
 
 
 @app.command(name="map")

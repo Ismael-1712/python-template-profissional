@@ -41,7 +41,7 @@ TAG_PATTERN: re.Pattern[str] = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 # ============================================================================
 
 # Valid document types (must match DocType enum)
-ALLOWED_TYPES: list[str] = ["guide", "arch", "reference", "history"]
+ALLOWED_TYPES: list[str] = ["guide", "arch", "reference", "history", "knowledge"]
 
 # Valid document statuses (must match DocStatus enum)
 ALLOWED_STATUSES: list[str] = ["draft", "active", "deprecated", "archived"]
