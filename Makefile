@@ -104,7 +104,7 @@ lint:
 
 ## type-check: Executa verificação de tipos com mypy
 type-check:
-	$(PYTHON) -m mypy scripts/ src/
+	$(PYTHON) -m mypy scripts/ src/ tests/
 
 ## validate: Executa validação completa (lint + type-check + test)
 validate: lint type-check test

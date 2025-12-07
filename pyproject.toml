@@ -149,7 +149,6 @@ follow_imports = "normal"
 strict_equality = true
 
 exclude = [
-    "tests/",
     "venv/",
     ".venv/",
     "build/",
