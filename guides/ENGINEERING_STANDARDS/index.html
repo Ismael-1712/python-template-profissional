@@ -990,6 +990,122 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#enums-vs-magic-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔢 Enums vs Magic Strings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔢 Enums vs Magic Strings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivacao_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-enums-nativos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução: Enums Nativos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beneficios_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-herdar-de-str-enum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão: Herdar de str, Enum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-real-auditoria-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo Real: Auditoria de Código
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quando-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migracao-de-strings-para-enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migração de Strings para Enums
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-executivo_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Resumo Executivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#referencias" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1038,6 +1154,7 @@
 <li><a href="#tipagem-em-testes">Tipagem em Testes</a></li>
 <li><a href="#future-annotations">Future Annotations</a></li>
 <li><a href="#atomicidade-em-scripts-de-infraestrutura">Atomicidade em Scripts de Infraestrutura</a></li>
+<li><a href="#enums-vs-magic-strings">Enums vs Magic Strings</a></li>
 </ol>
 <hr />
 <h2 id="lazy-imports">🔄 Lazy Imports</h2>
@@ -1694,8 +1811,167 @@
 <td>Scripts de infra, arquivos críticos</td>
 <td>Previne corrupção, zero downtime</td>
 </tr>
+<tr>
+<td><strong>Enums vs Magic Strings</strong></td>
+<td>Campos com valores restritos</td>
+<td>Validação automática, type safety</td>
+</tr>
 </tbody>
 </table>
+<hr />
+<h2 id="enums-vs-magic-strings">🔢 Enums vs Magic Strings</h2>
+<h3 id="motivacao_5">Motivação</h3>
+<p>O uso de strings literais ("magic strings") em modelos de dados apresenta riscos significativos:</p>
+<ul>
+<li><strong>Erros de Digitação</strong>: <code>severity = "HIHG"</code> passa despercebido até runtime</li>
+<li><strong>Falta de Autocomplete</strong>: IDEs não sugerem valores válidos</li>
+<li><strong>Validação Manual</strong>: Necessidade de validadores boilerplate</li>
+<li><strong>Refatoração Frágil</strong>: Mudanças em strings exigem busca manual no código</li>
+<li><strong>Documentação Implícita</strong>: Valores válidos ficam ocultos na implementação</li>
+</ul>
+<h3 id="solucao-enums-nativos">Solução: Enums Nativos</h3>
+<p>Em modelos de dados (Pydantic), <strong>proíbe-se</strong> o uso de strings literais para campos com valores restritos (ex: status, tipos, severidade).</p>
+<p><strong>❌ Incorreto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">field_validator</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>    <span class="n">severity</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Qualquer string é aceita!</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;severity&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_severity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Manual validation boilerplate.&quot;&quot;&quot;</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;LOW&quot;</span><span class="p">,</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span> <span class="s2">&quot;HIGH&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]:</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid severity: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>        <span class="k">return</span> <span class="n">v</span>
+</code></pre></div>
+<p><strong>✅ Correto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecuritySeverity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Severity levels for security issues.</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="sd">    Inherits from str for JSON serialization compatibility.</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;LOW&quot;</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;MEDIUM&quot;</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;HIGH&quot;</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a>    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;CRITICAL&quot;</span>
+<a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a>
+<a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Categories of security issues.&quot;&quot;&quot;</span>
+<a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a>    <span class="n">INJECTION</span> <span class="o">=</span> <span class="s2">&quot;INJECTION&quot;</span>
+<a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a>    <span class="n">CRYPTO</span> <span class="o">=</span> <span class="s2">&quot;CRYPTO&quot;</span>
+<a id="__codelineno-26-18" name="__codelineno-26-18" href="#__codelineno-26-18"></a>    <span class="n">AUTH</span> <span class="o">=</span> <span class="s2">&quot;AUTH&quot;</span>
+<a id="__codelineno-26-19" name="__codelineno-26-19" href="#__codelineno-26-19"></a>    <span class="n">XSS</span> <span class="o">=</span> <span class="s2">&quot;XSS&quot;</span>
+<a id="__codelineno-26-20" name="__codelineno-26-20" href="#__codelineno-26-20"></a>
+<a id="__codelineno-26-21" name="__codelineno-26-21" href="#__codelineno-26-21"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-26-22" name="__codelineno-26-22" href="#__codelineno-26-22"></a>    <span class="n">severity</span><span class="p">:</span> <span class="n">SecuritySeverity</span>  <span class="c1"># Type-safe, auto-validated</span>
+<a id="__codelineno-26-23" name="__codelineno-26-23" href="#__codelineno-26-23"></a>    <span class="n">category</span><span class="p">:</span> <span class="n">SecurityCategory</span>
+</code></pre></div>
+<h3 id="beneficios_1">Benefícios</h3>
+<ol>
+<li><strong>Validação Automática</strong>: Pydantic rejeita valores inválidos na instanciação</li>
+<li><strong>Autocomplete</strong>: IDEs mostram valores válidos ao digitar</li>
+<li><strong>Type Safety</strong>: Mypy detecta erros de tipo em tempo de análise</li>
+<li><strong>Zero Boilerplate</strong>: Elimina validadores manuais</li>
+<li><strong>Refatoração Segura</strong>: Renomear enum value é detectado pelo IDE</li>
+<li><strong>Documentação Explícita</strong>: Valores válidos ficam visíveis na definição</li>
+</ol>
+<h3 id="padrao-herdar-de-str-enum">Padrão: Herdar de <code>str, Enum</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Status</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Status must inherit from str for JSON serialization.&quot;&quot;&quot;</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>    <span class="n">PENDING</span> <span class="o">=</span> <span class="s2">&quot;PENDING&quot;</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>    <span class="n">RUNNING</span> <span class="o">=</span> <span class="s2">&quot;RUNNING&quot;</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>    <span class="n">COMPLETED</span> <span class="o">=</span> <span class="s2">&quot;COMPLETED&quot;</span>
+</code></pre></div>
+<p><strong>Por que <code>str, Enum</code> e não apenas <code>Enum</code>?</strong></p>
+<ul>
+<li><strong>JSON Serialization</strong>: <code>str</code> permite serialização direta para JSON/YAML</li>
+<li><strong>Backward Compatibility</strong>: Valores são strings comuns em APIs/DBs</li>
+<li><strong>Pydantic Integration</strong>: Funciona perfeitamente com <code>model_dump()</code> e <code>model_dump_json()</code></li>
+</ul>
+<h3 id="exemplo-real-auditoria-de-codigo">Exemplo Real: Auditoria de Código</h3>
+<p><strong>Antes (v7.0):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># 30+ linhas de validadores manuais</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>    <span class="n">severity</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;severity&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_severity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>        <span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LOW&quot;</span><span class="p">,</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span> <span class="s2">&quot;HIGH&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]</span>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid severity: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>        <span class="k">return</span> <span class="n">v</span>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_category</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a>        <span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;INJECTION&quot;</span><span class="p">,</span> <span class="s2">&quot;CRYPTO&quot;</span><span class="p">,</span> <span class="s2">&quot;AUTH&quot;</span><span class="p">,</span> <span class="s2">&quot;XSS&quot;</span><span class="p">]</span>
+<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid category: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>        <span class="k">return</span> <span class="n">v</span>
+</code></pre></div>
+<p><strong>Depois (v8.0):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># Zero validadores, validação automática</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>    <span class="n">severity</span><span class="p">:</span> <span class="n">SecuritySeverity</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>    <span class="n">category</span><span class="p">:</span> <span class="n">SecurityCategory</span>
+</code></pre></div>
+<p><strong>Resultado:</strong></p>
+<ul>
+<li>30+ linhas de código removidas</li>
+<li>Validação mais robusta (detecta erros antes do runtime com mypy)</li>
+<li>Melhor experiência de desenvolvimento (autocomplete, type hints)</li>
+</ul>
+<h3 id="quando-usar">Quando Usar</h3>
+<p>✅ <strong>Use Enums para:</strong></p>
+<ul>
+<li>Status de workflows (<code>PENDING</code>, <code>RUNNING</code>, <code>COMPLETED</code>)</li>
+<li>Níveis de severidade (<code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>)</li>
+<li>Categorias de classificação (<code>TYPE_A</code>, <code>TYPE_B</code>)</li>
+<li>Modos de operação (<code>READ</code>, <code>WRITE</code>, <code>ADMIN</code>)</li>
+<li>Qualquer campo com conjunto finito e conhecido de valores</li>
+</ul>
+<p>❌ <strong>NÃO use Enums para:</strong></p>
+<ul>
+<li>Strings de texto livre (nomes, descrições)</li>
+<li>Valores dinâmicos (IDs gerados, timestamps)</li>
+<li>Conjuntos que mudam frequentemente (adicionar valor requer código change)</li>
+</ul>
+<h3 id="integracao-com-testes">Integração com Testes</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_enum_validation</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify Enum provides automatic validation.&quot;&quot;&quot;</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>    <span class="c1"># Valid: instanciação bem-sucedida</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>    <span class="n">issue</span> <span class="o">=</span> <span class="n">SecurityIssue</span><span class="p">(</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>        <span class="n">severity</span><span class="o">=</span><span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>        <span class="n">category</span><span class="o">=</span><span class="n">SecurityCategory</span><span class="o">.</span><span class="n">INJECTION</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>    <span class="p">)</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>    <span class="k">assert</span> <span class="n">issue</span><span class="o">.</span><span class="n">severity</span> <span class="o">==</span> <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">HIGH</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a>    <span class="c1"># Invalid: Pydantic rejeita automaticamente</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a>    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a>        <span class="n">SecurityIssue</span><span class="p">(</span>
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a>            <span class="n">severity</span><span class="o">=</span><span class="s2">&quot;HIHG&quot;</span><span class="p">,</span>  <span class="c1"># Typo detectado!</span>
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a>            <span class="n">category</span><span class="o">=</span><span class="s2">&quot;INJECTION&quot;</span>
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a>        <span class="p">)</span>
+</code></pre></div>
+<h3 id="migracao-de-strings-para-enums">Migração de Strings para Enums</h3>
+<p><strong>Checklist:</strong></p>
+<ol>
+<li>Definir Enum herdando de <code>str, Enum</code></li>
+<li>Substituir <code>field: str</code> por <code>field: EnumName</code></li>
+<li>Remover validadores manuais (<code>@field_validator</code>)</li>
+<li>Atualizar testes para usar valores do Enum</li>
+<li>Executar mypy para detectar usos incorretos</li>
+<li>Validar serialização JSON/YAML</li>
+</ol>
+<hr />
+<h2 id="resumo-executivo_1">🎯 Resumo Executivo</h2>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
 <ul>

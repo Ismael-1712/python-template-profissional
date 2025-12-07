@@ -824,6 +824,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#historico-de-melhorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Histórico de Melhorias
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Histórico de Melhorias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p29-hardening-de-dados-com-enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P29] Hardening de Dados com Enums
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1123,6 +1151,84 @@
 <li>Examine audit logs in <code>audit.log</code></li>
 <li>Create an issue with audit report attached</li>
 </ol>
+<hr />
+<h2 id="historico-de-melhorias">📋 Histórico de Melhorias</h2>
+<h3 id="p29-hardening-de-dados-com-enums">[P29] Hardening de Dados com Enums</h3>
+<p><strong>Status:</strong> ✅ Concluído (v8.0)
+<strong>Data:</strong> 2025-12-06
+<strong>Tipo:</strong> Arquitetura / Segurança</p>
+<p><strong>Problema Original:</strong></p>
+<p>Modelos usavam strings soltas ("magic strings") para definir severidade e status. Erros de digitação passavam despercebidos até o runtime.</p>
+<p>Exemplo do problema:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># ❌ ANTES: Strings soltas permitiam erros silenciosos</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">severity</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;HIHG&quot; (typo) seria aceito!</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;severity&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="nd">@classmethod</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_severity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="c1"># 30+ linhas de boilerplate para cada campo</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;LOW&quot;</span><span class="p">,</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span> <span class="s2">&quot;HIGH&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">]:</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid severity: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>        <span class="k">return</span> <span class="n">v</span>
+</code></pre></div>
+<p><strong>Solução Implementada:</strong></p>
+<ol>
+<li>
+<p><strong>Conversão de Campos para Enums</strong>: Todos os campos de domínio finito foram convertidos para <code>Enum</code> (herdando de <code>str</code> para compatibilidade JSON).</p>
+</li>
+<li>
+<p><strong>Criação de Enums Específicos</strong>:</p>
+</li>
+<li><code>SecurityCategory</code>: Categorias de vulnerabilidades (<code>INJECTION</code>, <code>CRYPTO</code>, <code>AUTH</code>, <code>XSS</code>)</li>
+<li>
+<p><code>SecuritySeverity</code>: Níveis de severidade (<code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>, <code>CRITICAL</code>)</p>
+</li>
+<li>
+<p><strong>Eliminação de Validadores Manuais</strong>: Remoção de 30+ linhas de código boilerplate (validadores <code>@field_validator</code>).</p>
+</li>
+<li>
+<p><strong>Cobertura de Tipagem Estrita</strong>: Testes atualizados para usar valores do Enum, garantindo type safety completo.</p>
+</li>
+</ol>
+<p><strong>Exemplo da Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># ✅ DEPOIS: Enums fornecem validação automática</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecuritySeverity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Severity levels with automatic validation.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;LOW&quot;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;MEDIUM&quot;</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;HIGH&quot;</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;CRITICAL&quot;</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityIssue</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>    <span class="n">severity</span><span class="p">:</span> <span class="n">SecuritySeverity</span>  <span class="c1"># Typos detectados em tempo de análise!</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>    <span class="n">category</span><span class="p">:</span> <span class="n">SecurityCategory</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="c1"># Zero validadores manuais necessários</span>
+</code></pre></div>
+<p><strong>Benefícios Mensuráveis:</strong></p>
+<ul>
+<li><strong>-30+ linhas de código</strong>: Eliminação de validadores boilerplate</li>
+<li><strong>100% Type Safety</strong>: Mypy detecta erros antes do runtime</li>
+<li><strong>Melhor DX</strong>: Autocomplete e validação automática na IDE</li>
+<li><strong>Zero Regressões</strong>: Testes garantem compatibilidade JSON/YAML</li>
+<li><strong>Documentação Explícita</strong>: Valores válidos ficam visíveis no código</li>
+</ul>
+<p><strong>Impacto em Arquivos:</strong></p>
+<ul>
+<li><code>scripts/core/mock_ci/models.py</code>: Modelos de CI/CD</li>
+<li><code>scripts/audit/models.py</code>: Modelos de auditoria</li>
+<li><code>tests/test_*.py</code>: Testes atualizados com Enum values</li>
+<li><code>docs/guides/ENGINEERING_STANDARDS.md</code>: Padrão documentado</li>
+</ul>
+<p><strong>Referências:</strong></p>
+<ul>
+<li><a href="../../guides/ENGINEERING_STANDARDS/#enums-vs-magic-strings">ENGINEERING_STANDARDS.md - Enums vs Magic Strings</a></li>
+<li>Sprint Issue: [P29] - Refatoração Enum Completa</li>
+</ul>
+<hr />
 
 
 
