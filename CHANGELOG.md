@@ -17,6 +17,9 @@
 
 ### Changed
 
+- Refatoração completa dos modelos Pydantic (`mock_ci`, `audit`) para usar `Enum` nativo em vez de strings ([P29])
+- Introduzido `SecurityCategory` e `SecuritySeverity` para tipagem forte em auditorias de segurança
+- Eliminados validadores manuais em favor da validação nativa do Pydantic v2
 - Movido `IMPLEMENTATION_SUMMARY.md` para `docs/history/sprint_2_cortex/IMPLEMENTATION_SUMMARY.md`
 - Renomeado e movido `docs/README_test_mock_system.md` para `docs/guides/MOCK_SYSTEM.md`
 - Adicionado frontmatter YAML aos arquivos movidos para conformidade com CORTEX

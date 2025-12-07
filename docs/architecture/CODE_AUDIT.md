@@ -342,3 +342,87 @@ For issues, feature requests, or questions:
 2. Review the troubleshooting section
 3. Examine audit logs in `audit.log`
 4. Create an issue with audit report attached
+
+---
+
+## 📋 Histórico de Melhorias
+
+### [P29] Hardening de Dados com Enums
+
+**Status:** ✅ Concluído (v8.0)
+**Data:** 2025-12-06
+**Tipo:** Arquitetura / Segurança
+
+**Problema Original:**
+
+Modelos usavam strings soltas ("magic strings") para definir severidade e status. Erros de digitação passavam despercebidos até o runtime.
+
+Exemplo do problema:
+
+```python
+# ❌ ANTES: Strings soltas permitiam erros silenciosos
+class SecurityIssue(BaseModel):
+    severity: str  # "HIHG" (typo) seria aceito!
+    category: str
+
+    @field_validator("severity")
+    @classmethod
+    def validate_severity(cls, v: str) -> str:
+        # 30+ linhas de boilerplate para cada campo
+        if v not in ["LOW", "MEDIUM", "HIGH", "CRITICAL"]:
+            raise ValueError(f"Invalid severity: {v}")
+        return v
+```
+
+**Solução Implementada:**
+
+1. **Conversão de Campos para Enums**: Todos os campos de domínio finito foram convertidos para `Enum` (herdando de `str` para compatibilidade JSON).
+
+2. **Criação de Enums Específicos**:
+   - `SecurityCategory`: Categorias de vulnerabilidades (`INJECTION`, `CRYPTO`, `AUTH`, `XSS`)
+   - `SecuritySeverity`: Níveis de severidade (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`)
+
+3. **Eliminação de Validadores Manuais**: Remoção de 30+ linhas de código boilerplate (validadores `@field_validator`).
+
+4. **Cobertura de Tipagem Estrita**: Testes atualizados para usar valores do Enum, garantindo type safety completo.
+
+**Exemplo da Solução:**
+
+```python
+# ✅ DEPOIS: Enums fornecem validação automática
+from enum import Enum
+
+class SecuritySeverity(str, Enum):
+    """Severity levels with automatic validation."""
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+class SecurityIssue(BaseModel):
+    severity: SecuritySeverity  # Typos detectados em tempo de análise!
+    category: SecurityCategory
+    # Zero validadores manuais necessários
+```
+
+**Benefícios Mensuráveis:**
+
+- **-30+ linhas de código**: Eliminação de validadores boilerplate
+- **100% Type Safety**: Mypy detecta erros antes do runtime
+- **Melhor DX**: Autocomplete e validação automática na IDE
+- **Zero Regressões**: Testes garantem compatibilidade JSON/YAML
+- **Documentação Explícita**: Valores válidos ficam visíveis no código
+
+**Impacto em Arquivos:**
+
+- `scripts/core/mock_ci/models.py`: Modelos de CI/CD
+- `scripts/audit/models.py`: Modelos de auditoria
+- `tests/test_*.py`: Testes atualizados com Enum values
+- `docs/guides/ENGINEERING_STANDARDS.md`: Padrão documentado
+
+**Referências:**
+
+- [ENGINEERING_STANDARDS.md - Enums vs Magic Strings](../guides/ENGINEERING_STANDARDS.md#enums-vs-magic-strings)
+- Sprint Issue: [P29] - Refatoração Enum Completa
+
+---
