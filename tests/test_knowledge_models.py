@@ -24,7 +24,7 @@ class TestKnowledgeSource:
     def test_valid_instantiation(self) -> None:
         """Test creating a valid KnowledgeSource instance."""
         source = KnowledgeSource(
-            url="https://example.com/docs/guide.md",
+            url="https://example.com/docs/guide.md",  # type: ignore[arg-type]
             last_synced=datetime(2025, 12, 7, 10, 30, 0),
             etag='"abc123"',
         )
@@ -35,7 +35,7 @@ class TestKnowledgeSource:
 
     def test_valid_instantiation_minimal(self) -> None:
         """Test creating KnowledgeSource with only required fields."""
-        source = KnowledgeSource(url="https://example.com")
+        source = KnowledgeSource(url="https://example.com")  # type: ignore[arg-type]
 
         assert str(source.url) == "https://example.com/"
         assert source.last_synced is None
@@ -44,7 +44,7 @@ class TestKnowledgeSource:
     def test_invalid_url(self) -> None:
         """Test that invalid URLs raise ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
-            KnowledgeSource(url="not-a-valid-url")
+            KnowledgeSource(url="not-a-valid-url")  # type: ignore[arg-type]
 
         errors = exc_info.value.errors()
         assert len(errors) > 0
@@ -54,7 +54,7 @@ class TestKnowledgeSource:
     def test_invalid_url_scheme(self) -> None:
         """Test that non-HTTP(S) schemes raise ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
-            KnowledgeSource(url="ftp://example.com/file.txt")
+            KnowledgeSource(url="ftp://example.com/file.txt")  # type: ignore[arg-type]
 
         errors = exc_info.value.errors()
         assert len(errors) > 0
@@ -62,10 +62,10 @@ class TestKnowledgeSource:
 
     def test_immutability(self) -> None:
         """Test that KnowledgeSource is immutable (frozen=True)."""
-        source = KnowledgeSource(url="https://example.com")
+        source = KnowledgeSource(url="https://example.com")  # type: ignore[arg-type]
 
         with pytest.raises(ValidationError) as exc_info:
-            source.url = "https://other.com"  # type: ignore[misc]
+            source.url = "https://other.com"  # type: ignore[assignment]
 
         errors = exc_info.value.errors()
         assert errors[0]["type"] == "frozen_instance"
@@ -73,7 +73,7 @@ class TestKnowledgeSource:
     def test_serialization_model_dump(self) -> None:
         """Test serialization with model_dump()."""
         source = KnowledgeSource(
-            url="https://example.com/docs",
+            url="https://example.com/docs",  # type: ignore[arg-type]
             last_synced=datetime(2025, 12, 7, 15, 45, 30),
             etag='"xyz789"',
         )
@@ -88,7 +88,7 @@ class TestKnowledgeSource:
     def test_serialization_model_dump_json(self) -> None:
         """Test JSON serialization with model_dump_json()."""
         source = KnowledgeSource(
-            url="https://example.com/api",
+            url="https://example.com/api",  # type: ignore[arg-type]
             last_synced=datetime(2025, 12, 7, 12, 0, 0),
         )
 
@@ -102,7 +102,7 @@ class TestKnowledgeSource:
     def test_deserialization_round_trip(self) -> None:
         """Test JSON round-trip (serialize -> deserialize -> serialize)."""
         original = KnowledgeSource(
-            url="https://example.com/resource",
+            url="https://example.com/resource",  # type: ignore[arg-type]
             last_synced=datetime(2025, 12, 7, 9, 15, 0),
             etag='"tag123"',
         )
@@ -127,7 +127,7 @@ class TestKnowledgeEntry:
 
     def test_valid_instantiation(self) -> None:
         """Test creating a valid KnowledgeEntry instance."""
-        source = KnowledgeSource(url="https://example.com/docs/auth.md")
+        source = KnowledgeSource(url="https://example.com/docs/auth.md")  # type: ignore[arg-type]
         entry = KnowledgeEntry(
             id="kno-001",
             status=DocStatus.ACTIVE,
@@ -196,9 +196,9 @@ class TestKnowledgeEntry:
     def test_multiple_sources(self) -> None:
         """Test KnowledgeEntry with multiple sources."""
         sources = [
-            KnowledgeSource(url="https://example.com/doc1.md"),
-            KnowledgeSource(url="https://example.com/doc2.md"),
-            KnowledgeSource(url="https://example.com/doc3.md"),
+            KnowledgeSource(url="https://example.com/doc1.md"),  # type: ignore[arg-type]
+            KnowledgeSource(url="https://example.com/doc2.md"),  # type: ignore[arg-type]
+            KnowledgeSource(url="https://example.com/doc3.md"),  # type: ignore[arg-type]
         ]
 
         entry = KnowledgeEntry(
@@ -220,14 +220,14 @@ class TestKnowledgeEntry:
         )
 
         with pytest.raises(ValidationError) as exc_info:
-            entry.id = "kno-modified"  # type: ignore[misc]
+            entry.id = "kno-modified"
 
         errors = exc_info.value.errors()
         assert errors[0]["type"] == "frozen_instance"
 
     def test_serialization_model_dump(self) -> None:
         """Test serialization with model_dump()."""
-        source = KnowledgeSource(url="https://example.com/docs")
+        source = KnowledgeSource(url="https://example.com/docs")  # type: ignore[arg-type]
         entry = KnowledgeEntry(
             id="kno-serialize",
             status=DocStatus.ACTIVE,
@@ -247,7 +247,7 @@ class TestKnowledgeEntry:
     def test_serialization_model_dump_json(self) -> None:
         """Test JSON serialization with model_dump_json()."""
         source = KnowledgeSource(
-            url="https://example.com/api",
+            url="https://example.com/api",  # type: ignore[arg-type]
             etag='"abc"',
         )
         entry = KnowledgeEntry(
@@ -274,11 +274,11 @@ class TestKnowledgeEntry:
         """Test JSON round-trip with nested KnowledgeSource objects."""
         sources = [
             KnowledgeSource(
-                url="https://example.com/doc1",
+                url="https://example.com/doc1",  # type: ignore[arg-type]
                 last_synced=datetime(2025, 12, 7, 10, 0, 0),
                 etag='"tag1"',
             ),
-            KnowledgeSource(url="https://example.com/doc2"),
+            KnowledgeSource(url="https://example.com/doc2"),  # type: ignore[arg-type]
         ]
 
         original = KnowledgeEntry(
@@ -338,7 +338,7 @@ class TestKnowledgeEntry:
                     "id": "kno-invalid",
                     "status": "invalid_status",
                     "golden_paths": "test/path",
-                }
+                },
             )
 
         errors = exc_info.value.errors()
@@ -357,7 +357,7 @@ class TestKnowledgeEntry:
                     "sources": [
                         {"url": "not-a-valid-url"},
                     ],
-                }
+                },
             )
 
         errors = exc_info.value.errors()
