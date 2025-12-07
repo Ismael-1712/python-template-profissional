@@ -22,6 +22,7 @@ Este documento consolida as decisões técnicas e padrões de engenharia adotado
 3. [Tipagem em Testes](#tipagem-em-testes)
 4. [Future Annotations](#future-annotations)
 5. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
+6. [Enums vs Magic Strings](#enums-vs-magic-strings)
 
 ---
 
@@ -765,6 +766,189 @@ Nenhuma alteração foi aplicada.
 | **Tipagem em Testes** | Todo teste e fixture | Type safety, refactoring seguro |
 | **Future Annotations** | Todo arquivo Python | Evita ciclos, melhora performance |
 | **Atomicidade (Backup-Try-Rollback)** | Scripts de infra, arquivos críticos | Previne corrupção, zero downtime |
+| **Enums vs Magic Strings** | Campos com valores restritos | Validação automática, type safety |
+
+---
+
+## 🔢 Enums vs Magic Strings
+
+### Motivação
+
+O uso de strings literais ("magic strings") em modelos de dados apresenta riscos significativos:
+
+- **Erros de Digitação**: `severity = "HIHG"` passa despercebido até runtime
+- **Falta de Autocomplete**: IDEs não sugerem valores válidos
+- **Validação Manual**: Necessidade de validadores boilerplate
+- **Refatoração Frágil**: Mudanças em strings exigem busca manual no código
+- **Documentação Implícita**: Valores válidos ficam ocultos na implementação
+
+### Solução: Enums Nativos
+
+Em modelos de dados (Pydantic), **proíbe-se** o uso de strings literais para campos com valores restritos (ex: status, tipos, severidade).
+
+**❌ Incorreto:**
+
+```python
+from pydantic import BaseModel, field_validator
+
+class SecurityIssue(BaseModel):
+    severity: str  # Qualquer string é aceita!
+    category: str
+
+    @field_validator("severity")
+    @classmethod
+    def validate_severity(cls, v: str) -> str:
+        """Manual validation boilerplate."""
+        if v not in ["LOW", "MEDIUM", "HIGH", "CRITICAL"]:
+            raise ValueError(f"Invalid severity: {v}")
+        return v
+```
+
+**✅ Correto:**
+
+```python
+from enum import Enum
+from pydantic import BaseModel
+
+class SecuritySeverity(str, Enum):
+    """Severity levels for security issues.
+
+    Inherits from str for JSON serialization compatibility.
+    """
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+class SecurityCategory(str, Enum):
+    """Categories of security issues."""
+    INJECTION = "INJECTION"
+    CRYPTO = "CRYPTO"
+    AUTH = "AUTH"
+    XSS = "XSS"
+
+class SecurityIssue(BaseModel):
+    severity: SecuritySeverity  # Type-safe, auto-validated
+    category: SecurityCategory
+```
+
+### Benefícios
+
+1. **Validação Automática**: Pydantic rejeita valores inválidos na instanciação
+2. **Autocomplete**: IDEs mostram valores válidos ao digitar
+3. **Type Safety**: Mypy detecta erros de tipo em tempo de análise
+4. **Zero Boilerplate**: Elimina validadores manuais
+5. **Refatoração Segura**: Renomear enum value é detectado pelo IDE
+6. **Documentação Explícita**: Valores válidos ficam visíveis na definição
+
+### Padrão: Herdar de `str, Enum`
+
+```python
+class Status(str, Enum):
+    """Status must inherit from str for JSON serialization."""
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+```
+
+**Por que `str, Enum` e não apenas `Enum`?**
+
+- **JSON Serialization**: `str` permite serialização direta para JSON/YAML
+- **Backward Compatibility**: Valores são strings comuns em APIs/DBs
+- **Pydantic Integration**: Funciona perfeitamente com `model_dump()` e `model_dump_json()`
+
+### Exemplo Real: Auditoria de Código
+
+**Antes (v7.0):**
+
+```python
+# 30+ linhas de validadores manuais
+class SecurityIssue(BaseModel):
+    severity: str
+    category: str
+
+    @field_validator("severity")
+    @classmethod
+    def validate_severity(cls, v: str) -> str:
+        allowed = ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        if v not in allowed:
+            raise ValueError(f"Invalid severity: {v}")
+        return v
+
+    @field_validator("category")
+    @classmethod
+    def validate_category(cls, v: str) -> str:
+        allowed = ["INJECTION", "CRYPTO", "AUTH", "XSS"]
+        if v not in allowed:
+            raise ValueError(f"Invalid category: {v}")
+        return v
+```
+
+**Depois (v8.0):**
+
+```python
+# Zero validadores, validação automática
+class SecurityIssue(BaseModel):
+    severity: SecuritySeverity
+    category: SecurityCategory
+```
+
+**Resultado:**
+
+- 30+ linhas de código removidas
+- Validação mais robusta (detecta erros antes do runtime com mypy)
+- Melhor experiência de desenvolvimento (autocomplete, type hints)
+
+### Quando Usar
+
+✅ **Use Enums para:**
+
+- Status de workflows (`PENDING`, `RUNNING`, `COMPLETED`)
+- Níveis de severidade (`LOW`, `MEDIUM`, `HIGH`)
+- Categorias de classificação (`TYPE_A`, `TYPE_B`)
+- Modos de operação (`READ`, `WRITE`, `ADMIN`)
+- Qualquer campo com conjunto finito e conhecido de valores
+
+❌ **NÃO use Enums para:**
+
+- Strings de texto livre (nomes, descrições)
+- Valores dinâmicos (IDs gerados, timestamps)
+- Conjuntos que mudam frequentemente (adicionar valor requer código change)
+
+### Integração com Testes
+
+```python
+def test_enum_validation() -> None:
+    """Verify Enum provides automatic validation."""
+    # Valid: instanciação bem-sucedida
+    issue = SecurityIssue(
+        severity=SecuritySeverity.HIGH,
+        category=SecurityCategory.INJECTION
+    )
+    assert issue.severity == SecuritySeverity.HIGH
+
+    # Invalid: Pydantic rejeita automaticamente
+    with pytest.raises(ValidationError):
+        SecurityIssue(
+            severity="HIHG",  # Typo detectado!
+            category="INJECTION"
+        )
+```
+
+### Migração de Strings para Enums
+
+**Checklist:**
+
+1. Definir Enum herdando de `str, Enum`
+2. Substituir `field: str` por `field: EnumName`
+3. Remover validadores manuais (`@field_validator`)
+4. Atualizar testes para usar valores do Enum
+5. Executar mypy para detectar usos incorretos
+6. Validar serialização JSON/YAML
+
+---
+
+## 🎯 Resumo Executivo
 
 ---
 
