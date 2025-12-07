@@ -23,7 +23,7 @@ from unittest.mock import mock_open, patch
 import pytest
 
 from scripts.audit.analyzer import CodeAnalyzer
-from scripts.audit.models import SecurityPattern, SecuritySeverity
+from scripts.audit.models import SecurityCategory, SecurityPattern, SecuritySeverity
 
 
 @pytest.fixture
@@ -40,19 +40,19 @@ def security_patterns() -> list[SecurityPattern]:
             pattern="shell=True",
             severity=SecuritySeverity.CRITICAL,
             description="Shell injection vulnerability",
-            category="subprocess",
+            category=SecurityCategory.SUBPROCESS,
         ),
         SecurityPattern(
             pattern="os.system(",
             severity=SecuritySeverity.HIGH,
             description="Unsafe system command execution",
-            category="subprocess",
+            category=SecurityCategory.SUBPROCESS,
         ),
         SecurityPattern(
             pattern="requests.get(",
             severity=SecuritySeverity.MEDIUM,
             description="Network request without mocking",
-            category="network",
+            category=SecurityCategory.NETWORK,
         ),
     ]
 

@@ -9,6 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from scripts.audit.models import SecuritySeverity
+
 # Configuration constants
 DEFAULT_TIME_PER_FAILURE_MINUTES = 7
 MAX_HISTORY_RECORDS = 50
@@ -42,8 +44,13 @@ class PatternStatistics:
     pattern: str
     count: int = 0
     files_affected: set[str] = field(default_factory=set)
-    severity_distribution: dict[str, int] = field(
-        default_factory=lambda: {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0},
+    severity_distribution: dict[SecuritySeverity, int] = field(
+        default_factory=lambda: {
+            SecuritySeverity.CRITICAL: 0,
+            SecuritySeverity.HIGH: 0,
+            SecuritySeverity.MEDIUM: 0,
+            SecuritySeverity.LOW: 0,
+        },
     )
 
     def to_dict(self) -> dict[str, Any]:

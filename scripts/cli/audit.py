@@ -32,6 +32,7 @@ from scripts.audit.analyzer import CodeAnalyzer  # noqa: E402
 from scripts.audit.config import load_config  # noqa: E402
 from scripts.audit.models import (  # noqa: E402
     AuditResult,
+    SecurityCategory,
     SecurityPattern,
     SecuritySeverity,
 )
@@ -106,7 +107,7 @@ class CodeAuditor:
                     "Subprocess execution detected - ensure shell=False "
                     "and validate inputs"
                 ),
-                category="subprocess",
+                category=SecurityCategory.SUBPROCESS,
             ),
             SecurityPattern(
                 pattern="subprocess.call(",
@@ -114,7 +115,7 @@ class CodeAuditor:
                 description=(
                     "Subprocess call detected - ensure shell=False and validate inputs"
                 ),
-                category="subprocess",
+                category=SecurityCategory.SUBPROCESS,
             ),
             SecurityPattern(
                 pattern="os.system(",
@@ -122,7 +123,7 @@ class CodeAuditor:
                 description=(
                     "os.system() is dangerous - use subprocess with shell=False instead"
                 ),
-                category="subprocess",
+                category=SecurityCategory.SUBPROCESS,
             ),
             SecurityPattern(
                 pattern="shell=True",
@@ -131,32 +132,32 @@ class CodeAuditor:
                     "shell=True is a security risk - use shell=False "
                     "with list arguments"
                 ),
-                category="subprocess",
+                category=SecurityCategory.SUBPROCESS,
             ),
             # Network requests without mocking
             SecurityPattern(
                 pattern="requests.get(",
                 severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
-                category="network",
+                category=SecurityCategory.NETWORK,
             ),
             SecurityPattern(
                 pattern="requests.post(",
                 severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
-                category="network",
+                category=SecurityCategory.NETWORK,
             ),
             SecurityPattern(
                 pattern="httpx.get(",
                 severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
-                category="network",
+                category=SecurityCategory.NETWORK,
             ),
             SecurityPattern(
                 pattern="urllib.request",
                 severity=SecuritySeverity.MEDIUM,
                 description="URL request detected - ensure proper mocking in tests",
-                category="network",
+                category=SecurityCategory.NETWORK,
             ),
             # File system operations
             SecurityPattern(
@@ -166,7 +167,7 @@ class CodeAuditor:
                     "File operation detected - ensure proper error handling "
                     "and encoding"
                 ),
-                category="filesystem",
+                category=SecurityCategory.FILESYSTEM,
             ),
             # External service dependencies
             SecurityPattern(
@@ -175,7 +176,7 @@ class CodeAuditor:
                 description=(
                     "Socket connection detected - ensure proper mocking in tests"
                 ),
-                category="network",
+                category=SecurityCategory.NETWORK,
             ),
         ]
 
