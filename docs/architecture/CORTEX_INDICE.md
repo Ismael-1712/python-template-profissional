@@ -2,18 +2,57 @@
 id: cortex-indice
 type: arch
 status: active
-version: 1.0.0
+version: 1.1.0
 author: Engineering Team
-date: '2025-12-01'
-context_tags: []
-linked_code: []
-title: 🧠 CORTEX - Índice da Documentação (Fase 01)
+date: '2025-12-07'
+context_tags: [knowledge-node, models, pydantic]
+linked_code: [scripts/core/cortex/models.py]
+title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
 ---
 
-# 🧠 CORTEX - Índice da Documentação (Fase 01)
+# 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
 
-**Data:** 30 de Novembro de 2025
-**Status:** 🟢 Design Completo - Pronto para Implementação
+**Data:** 07 de Dezembro de 2025
+**Status:** 🟢 Fase 01 Completa + Fase 02 (Knowledge Node) em Andamento
+
+---
+
+## 📦 NOVIDADES - FASE 02: KNOWLEDGE NODE
+
+### 🔷 Modelos de Dados (v2 - Pydantic)
+
+**Arquivo:** `scripts/core/cortex/models.py`
+
+**Novos Modelos Implementados:**
+
+| Modelo | Tipo | Propósito | Status |
+|--------|------|-----------|--------|
+| `KnowledgeSource` | Pydantic BaseModel | Fonte externa de conhecimento (URL + metadados de sync) | ✅ Implementado |
+| `KnowledgeEntry` | Pydantic BaseModel | Entrada de conhecimento com tags, golden paths e fontes | ✅ Implementado |
+
+**Características Técnicas:**
+
+- ✅ Pydantic v2 (`BaseModel`, `ConfigDict`, `Field`, `HttpUrl`)
+- ✅ Imutabilidade garantida (`frozen=True`)
+- ✅ Validação automática de URLs (apenas HTTP/HTTPS)
+- ✅ Serialização/Deserialização JSON nativa
+- ✅ Coexistência com dataclasses legados (sem breaking changes)
+- ✅ Reutilização do Enum `DocStatus`
+
+**Testes:**
+
+- ✅ 21 testes unitários em `tests/test_knowledge_models.py`
+- ✅ Cobertura: instanciação, validação, imutabilidade, serialização, round-trip
+
+**Documentação:**
+
+- Campo `url` (HttpUrl): Validação automática de esquema HTTP/HTTPS
+- Campo `last_synced` (datetime | None): Timestamp da última sincronização
+- Campo `etag` (str | None): Cache HTTP ETag
+- Campo `golden_paths` (str): Regras imutáveis de relacionamento
+- Campo `sources` (list[KnowledgeSource]): Fontes externas do conhecimento
+
+---
 
 ### 2. 📄 Resumo Executivo
 
@@ -125,6 +164,7 @@ title: 🧠 CORTEX - Índice da Documentação (Fase 01)
 
 | Versão | Data | Mudanças |
 |--------|------|----------|
+| v1.1.0 | 2025-12-07 | **Fase 02:** Adição dos modelos `KnowledgeSource` e `KnowledgeEntry` (Pydantic v2) |
 | v1.0.0 | 2025-11-30 | Design inicial completo (Fase 01) |
 
 **Status:** 🟢 **APROVADO E PRONTO PARA IMPLEMENTAÇÃO**
