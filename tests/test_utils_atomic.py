@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 import pytest
+from pytest import MonkeyPatch
 
 from scripts.utils.atomic import AtomicFileWriter, atomic_write_json
 
@@ -85,7 +86,9 @@ class TestAtomicFileWriter:
         # Original file should be unchanged
         assert target.read_text() == original_content
 
-    def test_fsync_called_when_enabled(self, tmp_path: Path, monkeypatch) -> None:
+    def test_fsync_called_when_enabled(
+        self, tmp_path: Path, monkeypatch: MonkeyPatch
+    ) -> None:
         """Test that fsync is called when fsync=True."""
         target = tmp_path / "test.txt"
         fsync_called = []
@@ -106,7 +109,7 @@ class TestAtomicFileWriter:
     def test_fsync_not_called_when_disabled(
         self,
         tmp_path: Path,
-        monkeypatch,
+        monkeypatch: MonkeyPatch,
     ) -> None:
         """Test that fsync is not called when fsync=False."""
         target = tmp_path / "test.txt"
@@ -179,7 +182,7 @@ class TestAtomicWriteJson:
     def test_write_json_fsync_enabled_by_default(
         self,
         tmp_path: Path,
-        monkeypatch,
+        monkeypatch: MonkeyPatch,
     ) -> None:
         """Test that fsync is enabled by default."""
         target = tmp_path / "data.json"
@@ -200,7 +203,7 @@ class TestAtomicWriteJson:
     def test_write_json_fsync_can_be_disabled(
         self,
         tmp_path: Path,
-        monkeypatch,
+        monkeypatch: MonkeyPatch,
     ) -> None:
         """Test that fsync can be disabled."""
         target = tmp_path / "data.json"
