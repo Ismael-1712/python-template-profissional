@@ -180,6 +180,27 @@ class TestMemoryFileSystem:
         with pytest.raises(FileExistsError, match="already exists"):
             fs.mkdir(dir_path, parents=True, exist_ok=False)
 
+    def test_mkdir_no_parents(self) -> None:
+        """Test directory creation without parent creation (parents=False)."""
+        fs = MemoryFileSystem()
+
+        # Create parent directory first
+        parent_dir = Path("data")
+        fs.mkdir(parent_dir, parents=False, exist_ok=True)
+
+        # Now create child with parents=False (parent exists)
+        child_dir = Path("data/cache")
+        fs.mkdir(child_dir, parents=False, exist_ok=True)
+
+        # Verify both exist
+        assert fs.exists(parent_dir)
+        assert fs.exists(child_dir)
+        assert fs.is_dir(child_dir)
+
+        # Note: MemoryFileSystem doesn't validate parent existence
+        # when parents=False (simplified implementation for testing)
+        # This tests the else branch (line 472) is executed
+
     def test_isolation_between_instances(self) -> None:
         """Test that different instances are isolated."""
         fs1 = MemoryFileSystem()
