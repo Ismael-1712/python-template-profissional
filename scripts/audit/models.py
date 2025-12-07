@@ -36,6 +36,22 @@ class SecuritySeverity(str, Enum):
     LOW = "LOW"
 
 
+class SecurityCategory(str, Enum):
+    """Categories for security patterns.
+
+    Attributes:
+        SECURITY: General security-related patterns
+        SUBPROCESS: Subprocess execution and shell command patterns
+        NETWORK: Network requests and socket operations
+        FILESYSTEM: File system operations
+    """
+
+    SECURITY = "security"
+    SUBPROCESS = "subprocess"
+    NETWORK = "network"
+    FILESYSTEM = "filesystem"
+
+
 class SecurityPattern(BaseModel):
     """Represents a security pattern to detect in code.
 
@@ -49,7 +65,7 @@ class SecurityPattern(BaseModel):
     pattern: str
     severity: SecuritySeverity
     description: str
-    category: str = "security"
+    category: SecurityCategory = SecurityCategory.SECURITY
 
     model_config = {"frozen": True}  # Make immutable
 
