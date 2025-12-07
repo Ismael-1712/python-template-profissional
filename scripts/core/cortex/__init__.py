@@ -19,11 +19,13 @@ __all__ = [
     "KnowledgeEntry",
     "KnowledgeScanner",
     "KnowledgeSource",
+    "KnowledgeSyncer",
     "LinkCheckResult",
     "ValidationResult",
 ]
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
+from scripts.core.cortex.knowledge_sync import KnowledgeSyncer
 from scripts.core.cortex.models import (
     DocStatus,
     DocType,
