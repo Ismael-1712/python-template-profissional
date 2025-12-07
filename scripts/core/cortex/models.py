@@ -193,6 +193,7 @@ class KnowledgeEntry(BaseModel):
         golden_paths: Immutable rules or paths for this knowledge
         sources: List of external knowledge sources
         cached_content: Optional cached content from sources
+        file_path: Path to the source .md file (excluded from serialization)
 
     Example:
         >>> entry = KnowledgeEntry(
@@ -213,5 +214,6 @@ class KnowledgeEntry(BaseModel):
     golden_paths: str
     sources: list[KnowledgeSource] = Field(default_factory=list)
     cached_content: str | None = None
+    file_path: Path | None = Field(default=None, exclude=True)
 
     model_config = ConfigDict(frozen=True)
