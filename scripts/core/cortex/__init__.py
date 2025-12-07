@@ -16,6 +16,8 @@ __all__ = [
     "DocStatus",
     "DocType",
     "DocumentMetadata",
+    "KnowledgeEntry",
+    "KnowledgeSource",
     "LinkCheckResult",
     "ValidationResult",
 ]
@@ -24,6 +26,8 @@ from scripts.core.cortex.models import (
     DocStatus,
     DocType,
     DocumentMetadata,
+    KnowledgeEntry,
+    KnowledgeSource,
     LinkCheckResult,
     ValidationResult,
 )

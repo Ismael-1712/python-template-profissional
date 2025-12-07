@@ -11,9 +11,12 @@ License: MIT
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from pathlib import Path
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
 
 class DocType(Enum):
@@ -146,3 +149,67 @@ class LinkCheckResult:
     broken_code_links: list[str] = field(default_factory=list)
     broken_doc_links: list[str] = field(default_factory=list)
     missing_files: list[str] = field(default_factory=list)
+
+
+class KnowledgeSource(BaseModel):
+    """External source of knowledge for the Knowledge Node.
+
+    Represents an external URL that provides knowledge content,
+    with metadata for synchronization and caching.
+
+    Attributes:
+        url: HTTP/HTTPS URL of the knowledge source
+        last_synced: Timestamp of last successful sync (None if never synced)
+        etag: HTTP ETag header for cache validation
+
+    Example:
+        >>> source = KnowledgeSource(
+        ...     url="https://example.com/docs/guide.md",
+        ...     last_synced=datetime(2025, 12, 7, 10, 30),
+        ...     etag='"abc123"',
+        ... )
+    """
+
+    url: HttpUrl
+    last_synced: datetime | None = None
+    etag: str | None = None
+
+    model_config = ConfigDict(frozen=True)
+
+
+class KnowledgeEntry(BaseModel):
+    """Knowledge Node entry with rich metadata and external sources.
+
+    Represents a unit of knowledge in the CORTEX system, with support
+    for external sources, golden path rules, and content caching.
+
+    Attributes:
+        id: Unique identifier in kebab-case (e.g., "kno-001")
+        type: Fixed literal "knowledge" for type discrimination
+        status: Lifecycle status (uses DocStatus enum)
+        tags: List of categorization tags
+        golden_paths: Immutable rules or paths for this knowledge
+        sources: List of external knowledge sources
+        cached_content: Optional cached content from sources
+
+    Example:
+        >>> entry = KnowledgeEntry(
+        ...     id="kno-001",
+        ...     status=DocStatus.ACTIVE,
+        ...     tags=["api", "authentication"],
+        ...     golden_paths="auth/jwt.py -> docs/auth.md",
+        ...     sources=[
+        ...         KnowledgeSource(url="https://example.com/docs/auth.md")
+        ...     ],
+        ... )
+    """
+
+    id: str
+    type: Literal["knowledge"] = "knowledge"
+    status: DocStatus
+    tags: list[str] = Field(default_factory=list)
+    golden_paths: str
+    sources: list[KnowledgeSource] = Field(default_factory=list)
+    cached_content: str | None = None
+
+    model_config = ConfigDict(frozen=True)
