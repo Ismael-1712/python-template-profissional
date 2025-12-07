@@ -27,12 +27,14 @@ class DocType(Enum):
         ARCH: Architecture and design documents
         REFERENCE: API references and technical specs
         HISTORY: Historical records and changelog entries
+        KNOWLEDGE: Knowledge base and contextual documentation
     """
 
     GUIDE = "guide"
     ARCH = "arch"
     REFERENCE = "reference"
     HISTORY = "history"
+    KNOWLEDGE = "knowledge"
 
 
 class DocStatus(Enum):
