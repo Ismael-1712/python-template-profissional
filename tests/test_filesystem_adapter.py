@@ -11,10 +11,11 @@ License: MIT
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 
-from scripts.utils.filesystem import MemoryFileSystem, RealFileSystem
+from scripts.utils.filesystem import FileSystemAdapter, MemoryFileSystem, RealFileSystem
 
 
 class TestMemoryFileSystem:
@@ -376,7 +377,7 @@ class TestIntegrationScenarios:
     def test_config_loader_with_memory_fs(self) -> None:
         """Test config loader pattern with MemoryFileSystem."""
 
-        def load_config(fs, config_path: Path) -> dict:
+        def load_config(fs: FileSystemAdapter, config_path: Path) -> dict[str, Any]:
             """Load YAML config from filesystem."""
             import yaml
 
@@ -384,7 +385,7 @@ class TestIntegrationScenarios:
                 return {}
 
             content = fs.read_text(config_path)
-            return yaml.safe_load(content)
+            return cast("dict[str, Any]", yaml.safe_load(content))
 
         # Test with MemoryFileSystem (no disk I/O!)
         fs = MemoryFileSystem()
