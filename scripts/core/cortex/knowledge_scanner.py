@@ -210,4 +210,5 @@ class KnowledgeScanner:
             golden_paths=golden_paths,
             sources=sources,
             cached_content=cached_content,
+            file_path=file_path,
         )
