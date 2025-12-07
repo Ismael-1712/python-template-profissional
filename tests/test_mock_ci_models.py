@@ -82,32 +82,34 @@ class TestMockSuggestion:
     def test_mock_suggestion_creation(self) -> None:
         """Testa criação de MockSuggestion."""
         suggestion = MockSuggestion(
-            severity="HIGH",
-            mock_type="HTTP_REQUEST",
+            severity=Severity.HIGH,
+            mock_type=MockType.HTTP_REQUEST,
             file_path="tests/test_api.py",
             line_number=42,
             reason="Chamada HTTP não mockada",
         )
 
-        assert suggestion.severity == "HIGH"
-        assert suggestion.mock_type == "HTTP_REQUEST"
+        assert suggestion.severity == Severity.HIGH
+        assert suggestion.mock_type == MockType.HTTP_REQUEST
         assert suggestion.file_path == "tests/test_api.py"
         assert suggestion.line_number == 42
         assert suggestion.reason == "Chamada HTTP não mockada"
         assert suggestion.pattern is None
 
-    def test_mock_suggestion_enum_properties(self) -> None:
-        """Testa conversão para enums."""
+    def test_mock_suggestion_enum_types(self) -> None:
+        """Testa que os campos são Enums nativos."""
         suggestion = MockSuggestion(
-            severity="HIGH",
-            mock_type="SUBPROCESS",
+            severity=Severity.HIGH,
+            mock_type=MockType.SUBPROCESS,
             file_path="test.py",
             line_number=1,
             reason="Test",
         )
 
-        assert suggestion.severity_enum == Severity.HIGH
-        assert suggestion.mock_type_enum == MockType.SUBPROCESS
+        assert suggestion.severity == Severity.HIGH
+        assert suggestion.mock_type == MockType.SUBPROCESS
+        assert isinstance(suggestion.severity, Severity)
+        assert isinstance(suggestion.mock_type, MockType)
 
 
 class TestMockSuggestions:
@@ -186,13 +188,13 @@ class TestCIReport:
             mock_suggestions=mock_suggestions,
             summary={"files_scanned": 10},
             recommendations=["Apply mocks"],
-            status="SUCCESS",
+            status=CIStatus.SUCCESS,
         )
 
         assert report.environment == "github-actions"
         assert report.git_info.current_branch == "main"
         assert report.mock_suggestions.total == 5
-        assert report.status_enum == CIStatus.SUCCESS
+        assert report.status == CIStatus.SUCCESS
 
     def test_ci_report_to_dict(self) -> None:
         """Testa serialização para dict."""
@@ -213,7 +215,7 @@ class TestCIReport:
             mock_suggestions=mock_suggestions,
             summary={},
             recommendations=[],
-            status="SUCCESS",
+            status=CIStatus.SUCCESS,
         )
 
         data = report.to_dict()

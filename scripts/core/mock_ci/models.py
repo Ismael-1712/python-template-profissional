@@ -78,8 +78,8 @@ class MockSuggestion(BaseModel):
 
     model_config = ConfigDict(frozen=True)
 
-    severity: str  # Mantém como str para compatibilidade com código existente
-    mock_type: str  # Mantém como str para compatibilidade
+    severity: Severity
+    mock_type: MockType
     file_path: str
     line_number: int
     reason: str
@@ -93,16 +93,6 @@ class MockSuggestion(BaseModel):
             msg = "line_number deve ser maior que 0"
             raise ValueError(msg)
         return v
-
-    @property
-    def severity_enum(self) -> Severity:
-        """Converte severity string para enum."""
-        return Severity(self.severity)
-
-    @property
-    def mock_type_enum(self) -> MockType:
-        """Converte mock_type string para enum."""
-        return MockType(self.mock_type)
 
 
 class MockSuggestions(BaseModel):
@@ -186,12 +176,7 @@ class CIReport(BaseModel):
     mock_suggestions: MockSuggestions
     summary: dict[str, Any]
     recommendations: list[str]
-    status: str  # Mantém como str para compatibilidade com JSON
-
-    @property
-    def status_enum(self) -> CIStatus:
-        """Converte status string para enum."""
-        return CIStatus(self.status)
+    status: CIStatus
 
     def to_dict(self) -> dict[str, Any]:
         """Serializa relatório para dicionário (compatível com JSON).

@@ -14,9 +14,26 @@ License: MIT
 
 from __future__ import annotations
 
+from enum import Enum
 from pathlib import Path
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
+
+
+class SecuritySeverity(str, Enum):
+    """Severity levels for security patterns.
+
+    Attributes:
+        CRITICAL: Critical security issue requiring immediate attention
+        HIGH: High severity issue that should be addressed soon
+        MEDIUM: Medium severity issue for regular attention
+        LOW: Low severity issue for informational purposes
+    """
+
+    CRITICAL = "CRITICAL"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
 
 
 class SecurityPattern(BaseModel):
@@ -30,19 +47,9 @@ class SecurityPattern(BaseModel):
     """
 
     pattern: str
-    severity: str
+    severity: SecuritySeverity
     description: str
     category: str = "security"
-
-    @field_validator("severity")
-    @classmethod
-    def validate_severity(cls, v: str) -> str:
-        """Validate severity level is one of the allowed values."""
-        allowed = {"LOW", "MEDIUM", "HIGH", "CRITICAL"}
-        if v not in allowed:
-            msg = f"Severity must be one of {allowed}, got {v!r}"
-            raise ValueError(msg)
-        return v
 
     model_config = {"frozen": True}  # Make immutable
 

@@ -22,7 +22,7 @@ from pathlib import Path
 import pytest
 
 from scripts.audit.analyzer import CodeAnalyzer
-from scripts.audit.models import SecurityPattern
+from scripts.audit.models import SecurityPattern, SecuritySeverity
 from scripts.audit.scanner import FileScanner
 from scripts.utils.filesystem import MemoryFileSystem
 
@@ -41,25 +41,25 @@ class TestAuditWithMemoryFileSystem:
         return [
             SecurityPattern(
                 pattern="subprocess.run(",
-                severity="HIGH",
+                severity=SecuritySeverity.HIGH,
                 description="Subprocess execution detected",
                 category="subprocess",
             ),
             SecurityPattern(
                 pattern="shell=True",
-                severity="CRITICAL",
+                severity=SecuritySeverity.CRITICAL,
                 description="Shell injection risk",
                 category="subprocess",
             ),
             SecurityPattern(
                 pattern="eval(",
-                severity="CRITICAL",
+                severity=SecuritySeverity.CRITICAL,
                 description="Dangerous eval() usage",
                 category="security",
             ),
             SecurityPattern(
                 pattern="os.system(",
-                severity="HIGH",
+                severity=SecuritySeverity.HIGH,
                 description="Direct OS command execution",
                 category="subprocess",
             ),
