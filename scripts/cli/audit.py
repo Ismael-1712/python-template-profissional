@@ -30,7 +30,11 @@ if str(_project_root) not in sys.path:
 # Import from the audit package (located in scripts/audit/)
 from scripts.audit.analyzer import CodeAnalyzer  # noqa: E402
 from scripts.audit.config import load_config  # noqa: E402
-from scripts.audit.models import AuditResult, SecurityPattern  # noqa: E402
+from scripts.audit.models import (  # noqa: E402
+    AuditResult,
+    SecurityPattern,
+    SecuritySeverity,
+)
 from scripts.audit.plugins import check_mock_coverage, simulate_ci  # noqa: E402
 from scripts.audit.reporter import AuditReporter  # noqa: E402
 from scripts.audit.scanner import FileScanner  # noqa: E402
@@ -97,7 +101,7 @@ class CodeAuditor:
             # Subprocess security risks
             SecurityPattern(
                 pattern="subprocess.run(",
-                severity="HIGH",
+                severity=SecuritySeverity.HIGH,
                 description=(
                     "Subprocess execution detected - ensure shell=False "
                     "and validate inputs"
@@ -106,7 +110,7 @@ class CodeAuditor:
             ),
             SecurityPattern(
                 pattern="subprocess.call(",
-                severity="HIGH",
+                severity=SecuritySeverity.HIGH,
                 description=(
                     "Subprocess call detected - ensure shell=False and validate inputs"
                 ),
@@ -114,7 +118,7 @@ class CodeAuditor:
             ),
             SecurityPattern(
                 pattern="os.system(",
-                severity="CRITICAL",
+                severity=SecuritySeverity.CRITICAL,
                 description=(
                     "os.system() is dangerous - use subprocess with shell=False instead"
                 ),
@@ -122,7 +126,7 @@ class CodeAuditor:
             ),
             SecurityPattern(
                 pattern="shell=True",
-                severity="CRITICAL",
+                severity=SecuritySeverity.CRITICAL,
                 description=(
                     "shell=True is a security risk - use shell=False "
                     "with list arguments"
@@ -132,32 +136,32 @@ class CodeAuditor:
             # Network requests without mocking
             SecurityPattern(
                 pattern="requests.get(",
-                severity="MEDIUM",
+                severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
                 category="network",
             ),
             SecurityPattern(
                 pattern="requests.post(",
-                severity="MEDIUM",
+                severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
                 category="network",
             ),
             SecurityPattern(
                 pattern="httpx.get(",
-                severity="MEDIUM",
+                severity=SecuritySeverity.MEDIUM,
                 description="HTTP request detected - ensure proper mocking in tests",
                 category="network",
             ),
             SecurityPattern(
                 pattern="urllib.request",
-                severity="MEDIUM",
+                severity=SecuritySeverity.MEDIUM,
                 description="URL request detected - ensure proper mocking in tests",
                 category="network",
             ),
             # File system operations
             SecurityPattern(
                 pattern="open(",
-                severity="LOW",
+                severity=SecuritySeverity.LOW,
                 description=(
                     "File operation detected - ensure proper error handling "
                     "and encoding"
@@ -167,7 +171,7 @@ class CodeAuditor:
             # External service dependencies
             SecurityPattern(
                 pattern="socket.connect",
-                severity="HIGH",
+                severity=SecuritySeverity.HIGH,
                 description=(
                     "Socket connection detected - ensure proper mocking in tests"
                 ),

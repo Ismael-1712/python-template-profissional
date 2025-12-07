@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.core.mock_ci.config import BLOCKING_MOCK_TYPES, determine_status
-from scripts.core.mock_ci.models import CIReport, GitInfo, MockSuggestions
+from scripts.core.mock_ci.models import CIReport, CIStatus, GitInfo, MockSuggestions
 from scripts.core.mock_generator import TestMockGenerator
 from scripts.core.mock_validator import TestMockValidator
 
@@ -117,7 +117,7 @@ class CIChecker:
             mock_suggestions=mock_suggestions,
             summary=generator_report.get("summary", {}),
             recommendations=recommendations,
-            status=status,
+            status=CIStatus(status),
         )
 
         logger.info("Verificação concluída - Status: %s", status)

@@ -23,7 +23,7 @@ from unittest.mock import mock_open, patch
 import pytest
 
 from scripts.audit.analyzer import CodeAnalyzer
-from scripts.audit.models import SecurityPattern
+from scripts.audit.models import SecurityPattern, SecuritySeverity
 
 
 @pytest.fixture
@@ -38,19 +38,19 @@ def security_patterns() -> list[SecurityPattern]:
     return [
         SecurityPattern(
             pattern="shell=True",
-            severity="CRITICAL",
+            severity=SecuritySeverity.CRITICAL,
             description="Shell injection vulnerability",
             category="subprocess",
         ),
         SecurityPattern(
             pattern="os.system(",
-            severity="HIGH",
+            severity=SecuritySeverity.HIGH,
             description="Unsafe system command execution",
             category="subprocess",
         ),
         SecurityPattern(
             pattern="requests.get(",
-            severity="MEDIUM",
+            severity=SecuritySeverity.MEDIUM,
             description="Network request without mocking",
             category="network",
         ),
@@ -250,7 +250,7 @@ def test_max_findings_per_file_respected(
         [
             "import subprocess",
             *[f"subprocess.run('cmd{i}', shell=True)" for i in range(10)],
-        ]
+        ],
     )
 
     mock_file_path = workspace_root / "many_issues.py"
