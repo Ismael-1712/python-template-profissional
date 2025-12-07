@@ -17,11 +17,13 @@ __all__ = [
     "DocType",
     "DocumentMetadata",
     "KnowledgeEntry",
+    "KnowledgeScanner",
     "KnowledgeSource",
     "LinkCheckResult",
     "ValidationResult",
 ]
 
+from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
 from scripts.core.cortex.models import (
     DocStatus,
     DocType,
