@@ -3,10 +3,10 @@ id: guide-engineering-standards
 title: Padrões de Engenharia e Boas Práticas
 type: guide
 status: active
-version: 1.0.0
+version: 1.1.0
 author: DevOps Team
-date: 2025-12-05
-tags: [standards, python, security, typing, testing]
+date: 2025-12-07
+tags: [standards, python, security, typing, testing, observability, http]
 ---
 
 # Padrões de Engenharia e Boas Práticas
@@ -23,6 +23,7 @@ Este documento consolida as decisões técnicas e padrões de engenharia adotado
 4. [Future Annotations](#future-annotations)
 5. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
 6. [Enums vs Magic Strings](#enums-vs-magic-strings)
+7. [Requisições HTTP e Observabilidade](#requisições-http-e-observabilidade)
 
 ---
 
@@ -948,6 +949,176 @@ def test_enum_validation() -> None:
 
 ---
 
+## 🌐 Requisições HTTP e Observabilidade
+
+### Motivação
+
+Sistemas distribuídos requerem **rastreabilidade end-to-end** para diagnóstico de problemas. Quando um serviço faz chamadas HTTP para APIs externas ou outros microserviços, precisamos:
+
+- **Correlacionar logs** entre diferentes sistemas usando Trace IDs
+- **Medir performance** (latência, taxa de erro, throughput)
+- **Detectar falhas** rapidamente em cascatas de serviços
+- **Garantir consistência** na instrumentação de código
+
+### Princípio Fundamental
+
+> **REGRA DE OURO:**
+> É **PROIBIDO** usar `requests`, `httpx` ou qualquer cliente HTTP diretamente no código de produção.
+> **OBRIGATÓRIO** usar wrapper centralizado com observabilidade integrada.
+
+### Status Atual
+
+⚠️ **ATENÇÃO:** O projeto atualmente **NÃO FAZ CHAMADAS HTTP EXTERNAS**.
+
+Esta regra está documentada para **implementação futura**. Se você for o primeiro a precisar de chamadas HTTP:
+
+1. Consulte `docs/architecture/OBSERVABILITY.md` para templates completos
+2. Implemente `scripts/utils/http_client.py` baseado no padrão
+3. Adicione testes em `tests/test_http_client.py`
+4. Valide injeção de `X-Trace-ID` nos headers
+
+### Padrão CORRETO ✅
+
+```python
+from scripts.utils.http_client import HttpClient
+from scripts.utils.context import trace_context
+
+def fetch_external_data(resource_id: str) -> dict:
+    """Busca dados de API externa com observabilidade completa."""
+
+    # Context manager garante Trace ID único para a operação
+    with trace_context():
+        client = HttpClient(base_url="https://api.example.com")
+
+        # X-Trace-ID injetado automaticamente
+        # Métricas de sucesso/falha registradas
+        # Logs correlacionados
+        response = client.get(f"/resources/{resource_id}")
+        response.raise_for_status()
+
+        return response.json()
+
+# Benefícios automáticos:
+# ✅ Header X-Trace-ID propagado
+# ✅ Métricas: http_requests_total, http_request_duration_seconds
+# ✅ Logs estruturados com Trace ID
+# ✅ Tratamento de erros padronizado
+```
+
+### Padrão INCORRETO ❌
+
+```python
+import requests
+
+def fetch_external_data(resource_id: str) -> dict:
+    """NÃO FAZER ISSO!"""
+
+    # ❌ Sem Trace ID - impossível correlacionar com logs internos
+    # ❌ Sem métricas - não sabemos se está falhando
+    # ❌ Sem logging padronizado - dificulta debugging
+    # ❌ Sem retry logic - falhas transitórias viram incidentes
+    response = requests.get(f"https://api.example.com/resources/{resource_id}")
+    return response.json()
+```
+
+### Caso de Uso: Microserviços Distribuídos
+
+Imagine um fluxo onde **Serviço A** → **Serviço B** → **Serviço C**:
+
+```python
+# Serviço A (entry point)
+@app.post("/api/order")
+def create_order(request: Request):
+    # Extrai ou cria Trace ID
+    trace_id = request.headers.get("X-Trace-ID")
+
+    with trace_context(trace_id):
+        logger.info("Starting order creation")
+
+        # Chama Serviço B
+        client = HttpClient()
+        inventory_response = client.post(
+            "http://service-b/api/reserve",
+            json={"items": [...]}
+        )
+
+        # Trace ID propagado automaticamente para Serviço B!
+        # Se Serviço B chamar Serviço C, o Trace ID continua o mesmo
+
+        logger.info("Order creation completed")
+        return {"order_id": "123", "trace_id": get_trace_id()}
+
+# Resultado: Todos os logs de A, B e C têm o MESMO Trace ID
+# Facilita debugar problemas em cascata
+```
+
+### Infraestrutura Atual
+
+O projeto já possui **infraestrutura completa de Trace ID**:
+
+| Componente | Status | Localização |
+|-----------|--------|-------------|
+| **Trace ID Context** | ✅ Implementado | `scripts/utils/context.py` |
+| **Structured Logging** | ✅ Implementado | `scripts/utils/logger.py` |
+| **HTTP Client Wrapper** | 📋 Template disponível | `docs/architecture/OBSERVABILITY.md` |
+| **Metrics System** | 📋 Template disponível | `docs/architecture/OBSERVABILITY.md` |
+
+### Justificativa
+
+**Por que não usar `requests` diretamente?**
+
+1. **Rastreabilidade Distribuída**
+   - Sem Trace ID, é impossível correlacionar logs entre serviços
+   - Debugging vira "caça às bruxas" sem contexto
+
+2. **Métricas de Confiabilidade**
+   - Precisamos saber: "Quantas chamadas para API X falharam hoje?"
+   - SLAs e SLOs dependem de métricas precisas
+
+3. **Consistência de Implementação**
+   - Retry logic, timeouts, circuit breakers devem ser uniformes
+   - Centralizar evita código duplicado
+
+4. **Auditoria e Compliance**
+   - Facilita auditorias de segurança
+   - Permite rate limiting centralizado
+
+### Exceções à Regra
+
+✅ **Permitido usar `requests` diretamente em:**
+
+- **Testes unitários** (com mocking apropriado)
+- **Scripts de desenvolvimento** one-off (não em produção)
+- **Exemplos didáticos** em documentação
+
+❌ **NUNCA use `requests` diretamente em:**
+
+- Código de produção (APIs, serviços)
+- Scripts de CI/CD
+- CLIs que fazem chamadas externas
+
+### Checklist de Implementação
+
+Ao adicionar a primeira chamada HTTP no projeto:
+
+- [ ] Ler `docs/architecture/OBSERVABILITY.md` completamente
+- [ ] Implementar `scripts/utils/http_client.py` baseado no template
+- [ ] Implementar `scripts/utils/metrics.py` baseado no template
+- [ ] Adicionar dependência `requests` ou `httpx` em `pyproject.toml`
+- [ ] Criar `tests/test_http_client.py`
+- [ ] Validar injeção de `X-Trace-ID` com testes
+- [ ] Validar registro de métricas
+- [ ] Executar `dev-audit` para verificar conformidade
+- [ ] Atualizar este documento com exemplos reais
+
+### Referências
+
+- **Documentação Completa:** `docs/architecture/OBSERVABILITY.md`
+- **Trace ID API:** `docs/guides/logging.md`
+- **Sistema de Contexto:** `scripts/utils/context.py`
+
+---
+
 ## 🎯 Resumo Executivo
 
 ---
@@ -972,6 +1143,6 @@ Se você identificar novos padrões ou melhorias para estes guidelines:
 
 ---
 
-**Última Atualização:** 2025-12-05
-**Versão:** 1.0.0
+**Última Atualização:** 2025-12-07
+**Versão:** 1.1.0
 **Autores:** DevOps Team
