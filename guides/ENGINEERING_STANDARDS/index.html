@@ -1095,6 +1095,144 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#requisicoes-http-e-observabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🌐 Requisições HTTP e Observabilidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌐 Requisições HTTP e Observabilidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motivacao_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motivação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principio-fundamental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípio Fundamental
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-correto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão CORRETO ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-incorreto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão INCORRETO ❌
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-de-uso-microservicos-distribuidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de Uso: Microserviços Distribuídos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infraestrutura-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infraestrutura Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#justificativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Justificativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#excecoes-a-regra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exceções à Regra
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checklist-de-implementacao_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist de Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resumo-executivo_1" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1106,7 +1244,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#referencias" class="md-nav__link">
+  <a href="#referencias_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         📚 Referências
@@ -1155,6 +1293,7 @@
 <li><a href="#future-annotations">Future Annotations</a></li>
 <li><a href="#atomicidade-em-scripts-de-infraestrutura">Atomicidade em Scripts de Infraestrutura</a></li>
 <li><a href="#enums-vs-magic-strings">Enums vs Magic Strings</a></li>
+<li><a href="#requisições-http-e-observabilidade">Requisições HTTP e Observabilidade</a></li>
 </ol>
 <hr />
 <h2 id="lazy-imports">🔄 Lazy Imports</h2>
@@ -1971,9 +2110,192 @@
 <li>Validar serialização JSON/YAML</li>
 </ol>
 <hr />
+<h2 id="requisicoes-http-e-observabilidade">🌐 Requisições HTTP e Observabilidade</h2>
+<h3 id="motivacao_6">Motivação</h3>
+<p>Sistemas distribuídos requerem <strong>rastreabilidade end-to-end</strong> para diagnóstico de problemas. Quando um serviço faz chamadas HTTP para APIs externas ou outros microserviços, precisamos:</p>
+<ul>
+<li><strong>Correlacionar logs</strong> entre diferentes sistemas usando Trace IDs</li>
+<li><strong>Medir performance</strong> (latência, taxa de erro, throughput)</li>
+<li><strong>Detectar falhas</strong> rapidamente em cascatas de serviços</li>
+<li><strong>Garantir consistência</strong> na instrumentação de código</li>
+</ul>
+<h3 id="principio-fundamental">Princípio Fundamental</h3>
+<blockquote>
+<p><strong>REGRA DE OURO:</strong>
+É <strong>PROIBIDO</strong> usar <code>requests</code>, <code>httpx</code> ou qualquer cliente HTTP diretamente no código de produção.
+<strong>OBRIGATÓRIO</strong> usar wrapper centralizado com observabilidade integrada.</p>
+</blockquote>
+<h3 id="status-atual">Status Atual</h3>
+<p>⚠️ <strong>ATENÇÃO:</strong> O projeto atualmente <strong>NÃO FAZ CHAMADAS HTTP EXTERNAS</strong>.</p>
+<p>Esta regra está documentada para <strong>implementação futura</strong>. Se você for o primeiro a precisar de chamadas HTTP:</p>
+<ol>
+<li>Consulte <code>docs/architecture/OBSERVABILITY.md</code> para templates completos</li>
+<li>Implemente <code>scripts/utils/http_client.py</code> baseado no padrão</li>
+<li>Adicione testes em <code>tests/test_http_client.py</code></li>
+<li>Valide injeção de <code>X-Trace-ID</code> nos headers</li>
+</ol>
+<h3 id="padrao-correto">Padrão CORRETO ✅</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.http_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpClient</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">trace_context</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_external_data</span><span class="p">(</span><span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Busca dados de API externa com observabilidade completa.&quot;&quot;&quot;</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>    <span class="c1"># Context manager garante Trace ID único para a operação</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">():</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>        <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://api.example.com&quot;</span><span class="p">)</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a>        <span class="c1"># X-Trace-ID injetado automaticamente</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a>        <span class="c1"># Métricas de sucesso/falha registradas</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a>        <span class="c1"># Logs correlacionados</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/resources/</span><span class="si">{</span><span class="n">resource_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a>
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a>
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a><span class="c1"># Benefícios automáticos:</span>
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a><span class="c1"># ✅ Header X-Trace-ID propagado</span>
+<a id="__codelineno-31-21" name="__codelineno-31-21" href="#__codelineno-31-21"></a><span class="c1"># ✅ Métricas: http_requests_total, http_request_duration_seconds</span>
+<a id="__codelineno-31-22" name="__codelineno-31-22" href="#__codelineno-31-22"></a><span class="c1"># ✅ Logs estruturados com Trace ID</span>
+<a id="__codelineno-31-23" name="__codelineno-31-23" href="#__codelineno-31-23"></a><span class="c1"># ✅ Tratamento de erros padronizado</span>
+</code></pre></div>
+<h3 id="padrao-incorreto">Padrão INCORRETO ❌</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_external_data</span><span class="p">(</span><span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;NÃO FAZER ISSO!&quot;&quot;&quot;</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>    <span class="c1"># ❌ Sem Trace ID - impossível correlacionar com logs internos</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a>    <span class="c1"># ❌ Sem métricas - não sabemos se está falhando</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>    <span class="c1"># ❌ Sem logging padronizado - dificulta debugging</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a>    <span class="c1"># ❌ Sem retry logic - falhas transitórias viram incidentes</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://api.example.com/resources/</span><span class="si">{</span><span class="n">resource_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="caso-de-uso-microservicos-distribuidos">Caso de Uso: Microserviços Distribuídos</h3>
+<p>Imagine um fluxo onde <strong>Serviço A</strong> → <strong>Serviço B</strong> → <strong>Serviço C</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="c1"># Serviço A (entry point)</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/order&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_order</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>    <span class="c1"># Extrai ou cria Trace ID</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>    <span class="n">trace_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;X-Trace-ID&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a>    <span class="k">with</span> <span class="n">trace_context</span><span class="p">(</span><span class="n">trace_id</span><span class="p">):</span>
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting order creation&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a>        <span class="c1"># Chama Serviço B</span>
+<a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a>        <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">()</span>
+<a id="__codelineno-33-12" name="__codelineno-33-12" href="#__codelineno-33-12"></a>        <span class="n">inventory_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+<a id="__codelineno-33-13" name="__codelineno-33-13" href="#__codelineno-33-13"></a>            <span class="s2">&quot;http://service-b/api/reserve&quot;</span><span class="p">,</span>
+<a id="__codelineno-33-14" name="__codelineno-33-14" href="#__codelineno-33-14"></a>            <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">]}</span>
+<a id="__codelineno-33-15" name="__codelineno-33-15" href="#__codelineno-33-15"></a>        <span class="p">)</span>
+<a id="__codelineno-33-16" name="__codelineno-33-16" href="#__codelineno-33-16"></a>
+<a id="__codelineno-33-17" name="__codelineno-33-17" href="#__codelineno-33-17"></a>        <span class="c1"># Trace ID propagado automaticamente para Serviço B!</span>
+<a id="__codelineno-33-18" name="__codelineno-33-18" href="#__codelineno-33-18"></a>        <span class="c1"># Se Serviço B chamar Serviço C, o Trace ID continua o mesmo</span>
+<a id="__codelineno-33-19" name="__codelineno-33-19" href="#__codelineno-33-19"></a>
+<a id="__codelineno-33-20" name="__codelineno-33-20" href="#__codelineno-33-20"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Order creation completed&quot;</span><span class="p">)</span>
+<a id="__codelineno-33-21" name="__codelineno-33-21" href="#__codelineno-33-21"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;order_id&quot;</span><span class="p">:</span> <span class="s2">&quot;123&quot;</span><span class="p">,</span> <span class="s2">&quot;trace_id&quot;</span><span class="p">:</span> <span class="n">get_trace_id</span><span class="p">()}</span>
+<a id="__codelineno-33-22" name="__codelineno-33-22" href="#__codelineno-33-22"></a>
+<a id="__codelineno-33-23" name="__codelineno-33-23" href="#__codelineno-33-23"></a><span class="c1"># Resultado: Todos os logs de A, B e C têm o MESMO Trace ID</span>
+<a id="__codelineno-33-24" name="__codelineno-33-24" href="#__codelineno-33-24"></a><span class="c1"># Facilita debugar problemas em cascata</span>
+</code></pre></div>
+<h3 id="infraestrutura-atual">Infraestrutura Atual</h3>
+<p>O projeto já possui <strong>infraestrutura completa de Trace ID</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Status</th>
+<th>Localização</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Trace ID Context</strong></td>
+<td>✅ Implementado</td>
+<td><code>scripts/utils/context.py</code></td>
+</tr>
+<tr>
+<td><strong>Structured Logging</strong></td>
+<td>✅ Implementado</td>
+<td><code>scripts/utils/logger.py</code></td>
+</tr>
+<tr>
+<td><strong>HTTP Client Wrapper</strong></td>
+<td>📋 Template disponível</td>
+<td><code>docs/architecture/OBSERVABILITY.md</code></td>
+</tr>
+<tr>
+<td><strong>Metrics System</strong></td>
+<td>📋 Template disponível</td>
+<td><code>docs/architecture/OBSERVABILITY.md</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="justificativa">Justificativa</h3>
+<p><strong>Por que não usar <code>requests</code> diretamente?</strong></p>
+<ol>
+<li><strong>Rastreabilidade Distribuída</strong></li>
+<li>Sem Trace ID, é impossível correlacionar logs entre serviços</li>
+<li>
+<p>Debugging vira "caça às bruxas" sem contexto</p>
+</li>
+<li>
+<p><strong>Métricas de Confiabilidade</strong></p>
+</li>
+<li>Precisamos saber: "Quantas chamadas para API X falharam hoje?"</li>
+<li>
+<p>SLAs e SLOs dependem de métricas precisas</p>
+</li>
+<li>
+<p><strong>Consistência de Implementação</strong></p>
+</li>
+<li>Retry logic, timeouts, circuit breakers devem ser uniformes</li>
+<li>
+<p>Centralizar evita código duplicado</p>
+</li>
+<li>
+<p><strong>Auditoria e Compliance</strong></p>
+</li>
+<li>Facilita auditorias de segurança</li>
+<li>Permite rate limiting centralizado</li>
+</ol>
+<h3 id="excecoes-a-regra">Exceções à Regra</h3>
+<p>✅ <strong>Permitido usar <code>requests</code> diretamente em:</strong></p>
+<ul>
+<li><strong>Testes unitários</strong> (com mocking apropriado)</li>
+<li><strong>Scripts de desenvolvimento</strong> one-off (não em produção)</li>
+<li><strong>Exemplos didáticos</strong> em documentação</li>
+</ul>
+<p>❌ <strong>NUNCA use <code>requests</code> diretamente em:</strong></p>
+<ul>
+<li>Código de produção (APIs, serviços)</li>
+<li>Scripts de CI/CD</li>
+<li>CLIs que fazem chamadas externas</li>
+</ul>
+<h3 id="checklist-de-implementacao_1">Checklist de Implementação</h3>
+<p>Ao adicionar a primeira chamada HTTP no projeto:</p>
+<ul>
+<li>[ ] Ler <code>docs/architecture/OBSERVABILITY.md</code> completamente</li>
+<li>[ ] Implementar <code>scripts/utils/http_client.py</code> baseado no template</li>
+<li>[ ] Implementar <code>scripts/utils/metrics.py</code> baseado no template</li>
+<li>[ ] Adicionar dependência <code>requests</code> ou <code>httpx</code> em <code>pyproject.toml</code></li>
+<li>[ ] Criar <code>tests/test_http_client.py</code></li>
+<li>[ ] Validar injeção de <code>X-Trace-ID</code> com testes</li>
+<li>[ ] Validar registro de métricas</li>
+<li>[ ] Executar <code>dev-audit</code> para verificar conformidade</li>
+<li>[ ] Atualizar este documento com exemplos reais</li>
+</ul>
+<h3 id="referencias">Referências</h3>
+<ul>
+<li><strong>Documentação Completa:</strong> <code>docs/architecture/OBSERVABILITY.md</code></li>
+<li><strong>Trace ID API:</strong> <code>docs/guides/logging.md</code></li>
+<li><strong>Sistema de Contexto:</strong> <code>scripts/utils/context.py</code></li>
+</ul>
+<hr />
 <h2 id="resumo-executivo_1">🎯 Resumo Executivo</h2>
 <hr />
-<h2 id="referencias">📚 Referências</h2>
+<h2 id="referencias_1">📚 Referências</h2>
 <ul>
 <li><a href="https://peps.python.org/pep-0563/">PEP 563 - Postponed Evaluation of Annotations</a></li>
 <li><a href="https://peps.python.org/pep-0484/">PEP 484 - Type Hints</a></li>
@@ -1990,8 +2312,8 @@
 <li>Referencie este documento em code reviews</li>
 </ol>
 <hr />
-<p><strong>Última Atualização:</strong> 2025-12-05
-<strong>Versão:</strong> 1.0.0
+<p><strong>Última Atualização:</strong> 2025-12-07
+<strong>Versão:</strong> 1.1.0
 <strong>Autores:</strong> DevOps Team</p>
 
 
