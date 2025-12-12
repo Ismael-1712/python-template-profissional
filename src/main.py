@@ -7,13 +7,13 @@ app = typer.Typer()
 
 
 @app.command()
-def hello(name: str = "Mundo"):
+def hello(name: str = "Mundo") -> None:
     """Diz Olá para NAME."""
     print(f"Olá, {name}!")
 
 
 @app.command()
-def goodbye():
+def goodbye() -> None:
     """Diz Adeus."""
     print("Adeus!")
 
