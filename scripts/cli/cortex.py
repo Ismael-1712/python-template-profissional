@@ -37,6 +37,7 @@ from scripts.core.cortex.metadata import (  # noqa: E402
 )
 from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
 from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
+from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
 from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
 from scripts.core.guardian.models import ScanResult  # noqa: E402
 from scripts.core.guardian.scanner import ConfigScanner  # noqa: E402
@@ -919,7 +920,9 @@ def knowledge_sync(
                     was_updated = any(
                         new.last_synced != old.last_synced
                         for old, new in zip(
-                            entry.sources, updated_entry.sources, strict=True
+                            entry.sources,
+                            updated_entry.sources,
+                            strict=True,
                         )
                     )
                     if was_updated:
@@ -969,6 +972,122 @@ def knowledge_sync(
         raise
     except Exception as e:
         logger.error(f"Error during knowledge sync: {e}", exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command(name="guardian-probe")
+def guardian_probe(
+    canary_id: Annotated[
+        str,
+        typer.Option(
+            "--canary-id",
+            help="ID of the canary knowledge entry to search for (default: kno-001)",
+        ),
+    ] = "kno-001",
+    verbose: Annotated[
+        bool,
+        typer.Option(
+            "--verbose",
+            "-v",
+            help="Show detailed validation information",
+        ),
+    ] = False,
+) -> None:
+    """Run the Hallucination Probe to verify Knowledge Node integrity.
+
+    The Hallucination Probe implements the "Needle Test" pattern to detect
+    hallucination in the knowledge system. It searches for a specific canary
+    knowledge entry and validates its properties to ensure the system is not
+    fabricating or losing knowledge.
+
+    This serves as a sanity check for the Knowledge Scanner and ensures the
+    integrity of the knowledge base.
+
+    Examples:
+        cortex guardian-probe                      # Run probe with default canary
+        cortex guardian-probe --canary-id kno-002  # Test specific entry
+        cortex guardian-probe --verbose            # Show detailed validation
+    """
+    try:
+        workspace_root = Path.cwd()
+        logger.info(f"Running Hallucination Probe for canary: {canary_id}")
+
+        typer.secho("\n🔍 Hallucination Probe", bold=True, fg=typer.colors.CYAN)
+        typer.echo(f"Workspace: {workspace_root}")
+        typer.echo(f"Target Canary: {canary_id}\n")
+
+        # Initialize and run probe
+        probe = HallucinationProbe(
+            workspace_root=workspace_root,
+            canary_id=canary_id,
+        )
+
+        if verbose:
+            # Detailed validation mode
+            result = probe.run()
+
+            if result.passed:
+                typer.secho(
+                    f"✅ PASSED: Canary '{canary_id}' found and validated",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                typer.echo("\n📊 Scan Details:")
+                typer.echo(f"   Total entries scanned: {result.total_entries_scanned}")
+                if result.found_entry:
+                    typer.echo(f"   Canary status: {result.found_entry.status.value}")
+                    if result.found_entry.golden_paths:
+                        typer.echo(
+                            f"   Golden paths: {result.found_entry.golden_paths}",
+                        )
+                    if result.found_entry.tags:
+                        tags_str = ", ".join(result.found_entry.tags)
+                        typer.echo(f"   Tags: {tags_str}")
+                typer.echo(f"\n💬 Message: {result.message}")
+            else:
+                typer.secho(
+                    f"❌ FAILED: {result.message}",
+                    fg=typer.colors.RED,
+                    bold=True,
+                )
+                typer.echo("\n📊 Scan Details:")
+                typer.echo(f"   Total entries scanned: {result.total_entries_scanned}")
+                typer.echo(
+                    "\n⚠️  WARNING: Knowledge system may be hallucinating or "
+                    "canary entry is missing!",
+                )
+                logger.error(f"Hallucination probe failed: {result.message}")
+                raise typer.Exit(code=1)
+        # Simple boolean check
+        elif probe.probe():
+            typer.secho(
+                f"✅ System healthy - canary '{canary_id}' found and active",
+                fg=typer.colors.GREEN,
+                bold=True,
+            )
+            typer.echo("\n💡 Tip: Use --verbose for detailed validation info")
+        else:
+            typer.secho(
+                f"❌ System check failed - canary '{canary_id}' not found or inactive",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+            typer.echo(
+                f"\n⚠️  WARNING: Knowledge system may be hallucinating!\n"
+                f"   - Verify that docs/knowledge/{canary_id}.md exists\n"
+                f"   - Check that the entry has status: active\n"
+                f"   - Run 'cortex knowledge-scan' to see all entries",
+            )
+            logger.error(f"Hallucination probe failed for canary: {canary_id}")
+            raise typer.Exit(code=1)
+
+        logger.info("Hallucination probe completed successfully")
+
+    except typer.Exit:
+        raise
+    except Exception as e:
+        logger.error(f"Error during hallucination probe: {e}", exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
