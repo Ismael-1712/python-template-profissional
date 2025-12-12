@@ -96,7 +96,7 @@ pygments==2.19.2
     #   rich
 pyproject-api==1.10.0
     # via tox
-pytest==9.0.1
+pytest==9.0.2
     # via
     #   -r requirements/dev.in
     #   pytest-cov

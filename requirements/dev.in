@@ -4,7 +4,7 @@
 # Dependências de desenvolvimento migradas do pyproject.toml
 
 ruff==0.14.8
-pytest==9.0.1
+pytest==9.0.2
 pytest-cov==7.0.0
 PyYAML==6.0.3
 pre-commit==4.5.0
