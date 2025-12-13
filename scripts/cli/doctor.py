@@ -28,6 +28,7 @@ if str(_project_root) not in sys.path:
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import get_colors, setup_logging  # noqa: E402
+from scripts.utils.platform_strategy import get_platform_strategy  # noqa: E402
 
 # Configure structured logging
 logger = setup_logging(__name__)
@@ -288,6 +289,37 @@ class DevDoctor:
             critical=True,
         )
 
+    def check_platform(self) -> DiagnosticResult:
+        """Verifica a estratégia de plataforma e comando git resolvido."""
+        try:
+            strategy = get_platform_strategy()
+            strategy_name = strategy.__class__.__name__
+            git_cmd = strategy.get_git_command()
+
+            # Verifica se fsync está disponível
+            has_fsync = hasattr(strategy, "ensure_durability")
+            fsync_status = "✓ fsync" if has_fsync else "⚠ no fsync"
+
+            # Identifica plataforma base
+            platform_display = "Linux/Unix" if "Unix" in strategy_name else "Windows"
+
+            # Localiza git no sistema (se possível)
+            git_path = shutil.which(git_cmd) or git_cmd
+
+            return DiagnosticResult(
+                "Platform Strategy",
+                True,
+                f"🖥️  Platform: {platform_display} ({strategy_name}) | "
+                f"Git: {git_path} | {fsync_status}",
+            )
+        except Exception as e:
+            return DiagnosticResult(
+                "Platform Strategy",
+                False,
+                f"Erro ao detectar estratégia de plataforma: {e}",
+                critical=False,
+            )
+
     def check_git_hooks(self) -> DiagnosticResult:
         """Verifica se os Git hooks estão instalados e executáveis."""
         if os.environ.get("CI"):
@@ -327,6 +359,7 @@ class DevDoctor:
         print(f"{BOLD}{BLUE}🔍 Dev Doctor - Diagnóstico de Ambiente{RESET}\n")
         print(f"Projeto: {self.project_root}\n")
 
+        self.results.append(self.check_platform())
         self.results.append(self.check_python_version())
         self.results.append(self.check_virtual_environment())
         self.results.append(self.check_tool_paths())
