@@ -6,8 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Architecture and integration guide for the visual audit dashboard">
       
-        <meta name="author" content="Engineering Team">
+      
+        <meta name="author" content="Ismael-1712">
       
       
       
@@ -21,7 +23,7 @@
     
     
       
-        <title>Audit Dashboard Integration Guide - Python Template Profissional</title>
+        <title>Audit Dashboard Integration System - Python Template Profissional</title>
       
     
     
@@ -108,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Audit Dashboard Integration Guide
+              Audit Dashboard Integration System
             
           </span>
         </div>
@@ -553,22 +555,55 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#integration-points" class="md-nav__link">
+  <a href="#cli-integration-v200" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Integration Points
+        CLI Integration (v2.0.0+)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Integration Points">
+    <nav class="md-nav" aria-label="CLI Integration (v2.0.0+)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-with-code_auditpy" class="md-nav__link">
+  <a href="#uso-basico" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. With code_audit.py
+        Uso Básico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#argumentos-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Argumentos Disponíveis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integracao-automatica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração Automática
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigo-de-integracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código de Integração
       
     </span>
   </a>
@@ -615,10 +650,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#console-dashboard" class="md-nav__link">
+  <a href="#exemplo-1-auditoria-basica-com-dashboard-console" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Console Dashboard
+        Exemplo 1: Auditoria Básica com Dashboard Console
       
     </span>
   </a>
@@ -626,10 +661,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#html-export" class="md-nav__link">
+  <a href="#exemplo-2-exportar-dashboard-html" class="md-nav__link">
     <span class="md-ellipsis">
       
-        HTML Export
+        Exemplo 2: Exportar Dashboard HTML
       
     </span>
   </a>
@@ -637,10 +672,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#json-export-for-monitoring" class="md-nav__link">
+  <a href="#exemplo-3-exportar-e-abrir-no-browser" class="md-nav__link">
     <span class="md-ellipsis">
       
-        JSON Export for Monitoring
+        Exemplo 3: Exportar e Abrir no Browser
       
     </span>
   </a>
@@ -648,10 +683,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#reset-statistics" class="md-nav__link">
+  <a href="#exemplo-4-combinacao-completa" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Reset Statistics
+        Exemplo 4: Combinação Completa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standalone-dashboard-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Standalone Dashboard Access
       
     </span>
   </a>
@@ -821,110 +867,171 @@
 
 <h1 id="audit-dashboard-integration-guide">Audit Dashboard Integration Guide</h1>
 <h2 id="overview">Overview</h2>
-<p>O <code>audit_dashboard.py</code> é um sistema de métricas empresarial para rastreamento de auditorias DevOps, integrado com o <code>code_audit.py</code> para fornecer visibilidade completa sobre a efetividade das auditorias de CI/CD.</p>
-<h2 id="integration-points">Integration Points</h2>
-<h3 id="1-with-code_auditpy">1. With <code>code_audit.py</code></h3>
-<p>O dashboard pode ser integrado ao sistema de auditoria principal adicionando estas linhas ao final do <code>code_audit.py</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Add to code_audit.py imports</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.audit_dashboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuditDashboard</span>
+<p>O <code>audit_dashboard</code> é um sistema de métricas empresarial para rastreamento de auditorias DevOps, <strong>totalmente integrado</strong> ao <code>dev-audit</code> CLI para fornecer visibilidade completa sobre a efetividade das auditorias de CI/CD.</p>
+<h2 id="cli-integration-v200">CLI Integration (v2.0.0+)</h2>
+<h3 id="uso-basico">Uso Básico</h3>
+<p>O Dashboard agora está integrado diretamente no comando <code>dev-audit</code> através dos seguintes argumentos:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Executar audit e exibir dashboard no console</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>dev-audit<span class="w"> </span>--dashboard
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Add to the end of your audit process</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">integrate_dashboard_recording</span><span class="p">(</span><span class="n">audit_results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Record audit results in dashboard metrics.&quot;&quot;&quot;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">)</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="n">dashboard</span><span class="o">.</span><span class="n">record_audit</span><span class="p">(</span><span class="n">audit_results</span><span class="p">)</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Audit metrics recorded successfully&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to record audit metrics: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="c1"># Don&#39;t fail the audit if dashboard recording fails</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Executar audit e exportar dashboard HTML</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>dev-audit<span class="w"> </span>--html
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Executar audit, exportar HTML e abrir no browser</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>dev-audit<span class="w"> </span>--html<span class="w"> </span>--open
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Combinar com outras opções</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>dev-audit<span class="w"> </span>--output<span class="w"> </span>yaml<span class="w"> </span>--dashboard<span class="w"> </span>--html
+</code></pre></div>
+<h3 id="argumentos-disponiveis">Argumentos Disponíveis</h3>
+<ul>
+<li><code>--dashboard</code>: Exibe métricas consolidadas no console após a auditoria</li>
+<li><code>--html</code>: Exporta o relatório HTML do dashboard (<code>audit_dashboard.html</code>)</li>
+<li><code>--open</code>: Abre automaticamente o HTML gerado no navegador (requer <code>--html</code>)</li>
+</ul>
+<h3 id="integracao-automatica">Integração Automática</h3>
+<p>A integração acontece automaticamente ao final de cada auditoria:</p>
+<ol>
+<li><strong>Registro de Métricas</strong>: Os resultados da auditoria são automaticamente registrados no sistema de métricas</li>
+<li><strong>Dashboard Console</strong>: Se <code>--dashboard</code> for usado, exibe estatísticas consolidadas</li>
+<li><strong>Exportação HTML</strong>: Se <code>--html</code> for usado, gera arquivo HTML com visualizações ricas</li>
+<li><strong>Abertura Automática</strong>: Se <code>--open</code> for usado junto com <code>--html</code>, abre o relatório no browser padrão</li>
+</ol>
+<h3 id="codigo-de-integracao">Código de Integração</h3>
+<p>A integração foi implementada em <code>scripts/cli/audit.py</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Imports adicionados</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.audit_dashboard</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuditDashboard</span><span class="p">,</span> <span class="n">AuditMetricsError</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">webbrowser</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Lógica de integração (após a auditoria)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="c1"># Registra automaticamente os resultados</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">dashboard</span><span class="o">.</span><span class="n">record_audit</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="c1"># Exibe no console se solicitado</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dashboard</span><span class="p">:</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="n">dashboard</span><span class="o">.</span><span class="n">print_console_dashboard</span><span class="p">()</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="c1"># Exporta HTML se solicitado</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">html</span><span class="p">:</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        <span class="n">html_path</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">.</span><span class="n">export_html_dashboard</span><span class="p">()</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        <span class="c1"># Abre no browser se solicitado</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">open</span><span class="p">:</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>            <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file://</span><span class="si">{</span><span class="n">html_path</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="k">except</span> <span class="n">AuditMetricsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Dashboard integration failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="c1"># Continua execução - dashboard é opcional</span>
 </code></pre></div>
 <h3 id="2-cicd-pipeline-integration">2. CI/CD Pipeline Integration</h3>
 <p>Add to your CI/CD pipeline (e.g., <code>.github/workflows/audit.yml</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Code Audit</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-audit --output json --config scripts/audit_config.yaml</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update Dashboard Metrics</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Export Dashboard</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard --export-html</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload Dashboard Artifact</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit_dashboard.html</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Code Audit with Dashboard</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-audit --html</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload Dashboard Artifact</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v3</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit_dashboard.html</span>
 </code></pre></div>
 <h3 id="3-pre-commit-hook-integration">3. Pre-commit Hook Integration</h3>
 <p>Add to <code>.pre-commit-config.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">repos</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard-update</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update Audit Dashboard</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-dashboard</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="nt">stages</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">post-commit</span><span class="p p-Indicator">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">repos</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-with-metrics</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Code Audit with Metrics Tracking</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dev-audit --dashboard</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="nt">stages</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">commit</span><span class="p p-Indicator">]</span>
 </code></pre></div>
 <h2 id="usage-examples">Usage Examples</h2>
-<h3 id="console-dashboard">Console Dashboard</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>audit-dashboard
+<h3 id="exemplo-1-auditoria-basica-com-dashboard-console">Exemplo 1: Auditoria Básica com Dashboard Console</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>dev-audit<span class="w"> </span>--dashboard
 </code></pre></div>
-<h3 id="html-export">HTML Export</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>audit-dashboard<span class="w"> </span>--export-html
+<p><strong>Saída:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>📊 DASHBOARD DE AUDITORIA DEVOPS
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>==================================================
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>🎯 MÉTRICAS PRINCIPAIS:
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>   • Auditorias realizadas: 42
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>   • Falhas evitadas: 156
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>   • Tempo economizado: 26.0 horas
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>   • Taxa de sucesso: 98.5%
 </code></pre></div>
-<h3 id="json-export-for-monitoring">JSON Export for Monitoring</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>audit-dashboard<span class="w"> </span>--export-json<span class="w"> </span>monitoring_metrics.json
+<h3 id="exemplo-2-exportar-dashboard-html">Exemplo 2: Exportar Dashboard HTML</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>dev-audit<span class="w"> </span>--html
 </code></pre></div>
-<h3 id="reset-statistics">Reset Statistics</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>audit-dashboard<span class="w"> </span>--reset-stats
+<p><strong>Resultado:</strong> Cria <code>audit_dashboard.html</code> no workspace root.</p>
+<h3 id="exemplo-3-exportar-e-abrir-no-browser">Exemplo 3: Exportar e Abrir no Browser</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>dev-audit<span class="w"> </span>--html<span class="w"> </span>--open
+</code></pre></div>
+<p><strong>Resultado:</strong> Exporta HTML e abre automaticamente no navegador padrão.</p>
+<h3 id="exemplo-4-combinacao-completa">Exemplo 4: Combinação Completa</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>dev-audit<span class="w"> </span>--output<span class="w"> </span>yaml<span class="w"> </span>--dashboard<span class="w"> </span>--html<span class="w"> </span>--open
+</code></pre></div>
+<p><strong>Resultado:</strong></p>
+<ul>
+<li>Gera relatório em YAML</li>
+<li>Exibe dashboard no console</li>
+<li>Exporta dashboard HTML</li>
+<li>Abre HTML no browser</li>
+</ul>
+<h3 id="standalone-dashboard-access">Standalone Dashboard Access</h3>
+<p>Se você quiser apenas visualizar o dashboard sem executar nova auditoria:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Via módulo direto (usa dados históricos)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>python<span class="w"> </span>scripts/audit_dashboard.py
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>python<span class="w"> </span>scripts/audit_dashboard.py<span class="w"> </span>--export-html
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>audit-dashboard<span class="w"> </span>--reset-stats
 </code></pre></div>
 <h2 id="monitoring-integration">Monitoring Integration</h2>
 <h3 id="prometheusgrafana">Prometheus/Grafana</h3>
 <p>Export metrics to Prometheus format:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">export_prometheus_metrics</span><span class="p">(</span><span class="n">dashboard</span><span class="p">:</span> <span class="n">AuditDashboard</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Export metrics in Prometheus format.&quot;&quot;&quot;</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">.</span><span class="n">get_metrics_summary</span><span class="p">()</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">prometheus_metrics</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s2"># HELP audit_total_performed Total number of audits performed</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s2"># TYPE audit_total_performed counter</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s2">audit_total_performed </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;audits_performed&#39;</span><span class="p">]</span><span class="si">}</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="s2"># HELP audit_failures_prevented Total number of failures prevented</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="s2"># TYPE audit_failures_prevented counter</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s2">audit_failures_prevented </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;failures_prevented&#39;</span><span class="p">]</span><span class="si">}</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="s2"># HELP audit_time_saved_hours Total hours saved by audits</span>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="s2"># TYPE audit_time_saved_hours counter</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="s2">audit_time_saved_hours </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;time_saved_hours&#39;</span><span class="p">]</span><span class="si">}</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="s2"># HELP audit_success_rate Current audit success rate percentage</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="s2"># TYPE audit_success_rate gauge</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="s2">audit_success_rate </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;success_rate&#39;</span><span class="p">]</span><span class="si">}</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>    <span class="k">return</span> <span class="n">prometheus_metrics</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">export_prometheus_metrics</span><span class="p">(</span><span class="n">dashboard</span><span class="p">:</span> <span class="n">AuditDashboard</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Export metrics in Prometheus format.&quot;&quot;&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">.</span><span class="n">get_metrics_summary</span><span class="p">()</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">prometheus_metrics</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="s2"># HELP audit_total_performed Total number of audits performed</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="s2"># TYPE audit_total_performed counter</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s2">audit_total_performed </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;audits_performed&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="s2"># HELP audit_failures_prevented Total number of failures prevented</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="s2"># TYPE audit_failures_prevented counter</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="s2">audit_failures_prevented </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;failures_prevented&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="s2"># HELP audit_time_saved_hours Total hours saved by audits</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="s2"># TYPE audit_time_saved_hours counter</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="s2">audit_time_saved_hours </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;time_saved_hours&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="s2"># HELP audit_success_rate Current audit success rate percentage</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="s2"># TYPE audit_success_rate gauge</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="s2">audit_success_rate </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;success_rate&#39;</span><span class="p">]</span><span class="si">}</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>    <span class="k">return</span> <span class="n">prometheus_metrics</span>
 </code></pre></div>
 <h3 id="datadog-integration">Datadog Integration</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">send_to_datadog</span><span class="p">(</span><span class="n">dashboard</span><span class="p">:</span> <span class="n">AuditDashboard</span><span class="p">):</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Send metrics to Datadog.&quot;&quot;&quot;</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">datadog</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">.</span><span class="n">get_metrics_summary</span><span class="p">()</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">datadog</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">Metric</span><span class="o">.</span><span class="n">send</span><span class="p">([</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="p">{</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>            <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;devops.audit.performed&#39;</span><span class="p">,</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>            <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;audits_performed&#39;</span><span class="p">]</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>        <span class="p">},</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="p">{</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>            <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;devops.audit.failures_prevented&#39;</span><span class="p">,</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>            <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;failures_prevented&#39;</span><span class="p">]</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        <span class="p">}</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="p">])</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">send_to_datadog</span><span class="p">(</span><span class="n">dashboard</span><span class="p">:</span> <span class="n">AuditDashboard</span><span class="p">):</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Send metrics to Datadog.&quot;&quot;&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">datadog</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">metrics</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">.</span><span class="n">get_metrics_summary</span><span class="p">()</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="n">datadog</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">Metric</span><span class="o">.</span><span class="n">send</span><span class="p">([</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>        <span class="p">{</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>            <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;devops.audit.performed&#39;</span><span class="p">,</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>            <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;audits_performed&#39;</span><span class="p">]</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        <span class="p">},</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>        <span class="p">{</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>            <span class="s1">&#39;metric&#39;</span><span class="p">:</span> <span class="s1">&#39;devops.audit.failures_prevented&#39;</span><span class="p">,</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>            <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;failures_prevented&#39;</span><span class="p">]</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="p">}</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="p">])</span>
 </code></pre></div>
 <h2 id="security-considerations">Security Considerations</h2>
 <ol>
@@ -935,15 +1042,15 @@
 </ol>
 <h2 id="customization">Customization</h2>
 <h3 id="configure-time-estimation">Configure Time Estimation</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">)</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># Modify configuration</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">dashboard</span><span class="o">.</span><span class="n">_metrics</span><span class="p">[</span><span class="s2">&quot;configuration&quot;</span><span class="p">][</span><span class="s2">&quot;time_per_failure_minutes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Custom time estimate</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># Modify configuration</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">dashboard</span><span class="o">.</span><span class="n">_metrics</span><span class="p">[</span><span class="s2">&quot;configuration&quot;</span><span class="p">][</span><span class="s2">&quot;time_per_failure_minutes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Custom time estimate</span>
 </code></pre></div>
 <h3 id="custom-metrics-file-location">Custom Metrics File Location</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">workspace_root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/custom/path&quot;</span><span class="p">),</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">metrics_filename</span><span class="o">=</span><span class="s2">&quot;custom_metrics.json&quot;</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">workspace_root</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/custom/path&quot;</span><span class="p">),</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">metrics_filename</span><span class="o">=</span><span class="s2">&quot;custom_metrics.json&quot;</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3 id="common-issues">Common Issues</h3>
@@ -954,7 +1061,7 @@
 </ol>
 <h3 id="log-analysis">Log Analysis</h3>
 <p>Dashboard logs to both console and <code>audit_dashboard.log</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>tail<span class="w"> </span>-f<span class="w"> </span>audit_dashboard.log
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>tail<span class="w"> </span>-f<span class="w"> </span>audit_dashboard.log
 </code></pre></div>
 <h2 id="future-enhancements">Future Enhancements</h2>
 <p>This dashboard is designed for the <strong>main</strong> branch of <code>python-template-profissional</code> and will work across:</p>
