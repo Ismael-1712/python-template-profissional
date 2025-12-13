@@ -448,7 +448,7 @@ Função principal CLI para integração CI/CD.
     Returns:
         Código de saída (0 = sucesso, 1 = warning, 2 = failure)
 
-    
+
 
 ## `install-dev` - Development Environment Installation Script.
 
@@ -501,7 +501,7 @@ Fluxo principal de execução.
 
     Returns:
         0 se sucesso, 1 se erro
-    
+
 
 ## 🗺️ Diagrama de Comandos
 
