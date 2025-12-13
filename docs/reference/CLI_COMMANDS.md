@@ -18,7 +18,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **2025-12-13 22:31 UTC**
+Gerado em: **2025-12-13 23:09 UTC**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -534,5 +534,5 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** 2025-12-13 22:31 UTC
+**Última Atualização:** 2025-12-13 23:09 UTC
 **Gerado por:** `scripts/core/doc_gen.py` v1.1.0
