@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os  # For environment detection
 import sys  # Para exit codes
 import webbrowser
 from datetime import datetime, timezone
@@ -438,13 +439,27 @@ Examples:
         logger.error("Audit failed due to CI simulation failures")
         sys.exit(1)
 
+    # Detect execution context to avoid metrics write during pre-commit
+    # This prevents the "commit loop" where hooks modify tracked files
+    is_pre_commit = os.getenv("PRE_COMMIT") == "1"
+    is_git_hook = os.getenv("GIT_AUTHOR_NAME") is not None  # Fallback detection
+
+    # Skip metrics recording in pre-commit context unless explicitly requested
+    skip_metrics = (is_pre_commit or is_git_hook) and not args.dashboard
+
     # Dashboard integration: Record audit and display/export if requested
     try:
         dashboard = AuditDashboard(workspace_root=workspace_root)
 
-        # Record the audit results in metrics
-        dashboard.record_audit(report)
-        logger.info("Audit results recorded in metrics")
+        # Record the audit results in metrics (ONLY if not in pre-commit context)
+        if not skip_metrics:
+            dashboard.record_audit(report)
+            logger.info("Audit results recorded in metrics")
+        else:
+            logger.debug(
+                "Pre-commit context detected - skipping metrics persistence "
+                "(validation still performed)",
+            )
 
         # Display console dashboard if requested
         if args.dashboard:
