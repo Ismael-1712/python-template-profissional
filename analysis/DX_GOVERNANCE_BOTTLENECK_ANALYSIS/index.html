@@ -1,0 +1,2077 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GitHub Copilot (DevOps Architect)">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>DX & Governance Bottleneck Analysis: The Commit Loop Problem - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dx-governance-bottleneck-analysis-the-commit-loop-problem" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DX & Governance Bottleneck Analysis: The Commit Loop Problem
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-diagnostico-anatomia-do-problema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 1. DIAGNÓSTICO: Anatomia do Problema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 1. DIAGNÓSTICO: Anatomia do Problema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-o-loop-da-perfeicao-identificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 O "Loop da Perfeição" Identificado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-arquivos-volateis-identificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Arquivos Voláteis Identificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-analise-de-codigo-o-culpado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Análise de Código: O Culpado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-matriz-de-solucoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 2. MATRIZ DE SOLUÇÕES
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 2. MATRIZ DE SOLUÇÕES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criterios-de-avaliacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critérios de Avaliação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-hipotese-volatile-ignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Hipótese "Volatile Ignore" ⚠️
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-hipotese-ci-shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Hipótese "CI Shift" ⭐⭐⭐⭐⭐
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-hipotese-automation-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Hipótese "Automation Wrapper" 🤖
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-hipotese-lazy-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Hipótese "Lazy Audit" 🧠
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-solucao-hibrida-smart-governance-recomendacao-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Solução Híbrida: "Smart Governance" 🎯 (RECOMENDAÇÃO FINAL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-recomendacao-tecnica-definitiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 3. RECOMENDAÇÃO TÉCNICA DEFINITIVA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 3. RECOMENDAÇÃO TÉCNICA DEFINITIVA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#posicao-governanca-agressiva-e-anti-pattern-em-pre-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Posição: Governança Agressiva é Anti-Pattern em Pre-Commit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisao-arquitetural-adotar-smart-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisão Arquitetural: Adotar "Smart Governance"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-plano-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ 4. PLANO DE EXECUÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ 4. PLANO DE EXECUÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-quick-win-lazy-audit-esforco-30-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Quick Win (Lazy Audit) ⚡ [Esforço: 30 minutos]
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 1: Quick Win (Lazy Audit) ⚡ [Esforço: 30 minutos]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-11-modificar-auditpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1.1: Modificar audit.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-12-atualizar-pre-commit-configyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1.2: Atualizar .pre-commit-config.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-13-testar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1.3: Testar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-ci-shift-deep-validation-esforco-2-horas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: CI Shift (Deep Validation) 🏗️ [Esforço: 2 horas]
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 2: CI Shift (Deep Validation) 🏗️ [Esforço: 2 horas]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-21-criar-githubworkflowsgovernanceyml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2.1: Criar .github/workflows/governance.yml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-22-simplificar-pre-commit-configyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2.2: Simplificar .pre-commit-config.yaml
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-23-atualizar-gitignore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2.3: Atualizar .gitignore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-developer-convenience-opcional-esforco-30-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Developer Convenience (Opcional) 🎁 [Esforço: 30 minutos]
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 3: Developer Convenience (Opcional) 🎁 [Esforço: 30 minutos]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-31-adicionar-ao-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 3.1: Adicionar ao Makefile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-32-documentar-no-readme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 3.2: Documentar no README
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacao-local-vs-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validação Local vs CI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validação Local vs CI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-42-atualizar-contributingmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 4.2: Atualizar CONTRIBUTING.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacao-profunda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Validação Profunda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-metricas-de-sucesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 5. MÉTRICAS DE SUCESSO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 5. MÉTRICAS DE SUCESSO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antes-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antes (Baseline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depois-esperado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depois (Esperado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kpis-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KPIs de Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-analise-de-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 6. ANÁLISE DE RISCOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔒 6. ANÁLISE DE RISCOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risco-1-metricas-perdidas-por-falha-de-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 1: Métricas Perdidas por Falha de CI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-2-desenvolvedores-nao-veem-problemas-localmente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 2: Desenvolvedores Não Veem Problemas Localmente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-3-bypass-de-hooks-via-no-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 3: Bypass de Hooks via --no-verify
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-licoes-aprendidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 7. LIÇÕES APRENDIDAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 7. LIÇÕES APRENDIDAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principios-validados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípios Validados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-patterns-identificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Patterns Identificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-como-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template como Referência
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-proximos-passos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 8. PRÓXIMOS PASSOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 8. PRÓXIMOS PASSOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#curto-prazo-sprint-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Curto Prazo (Sprint Atual)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#medio-prazo-proxima-sprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Médio Prazo (Próxima Sprint)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longo-prazo-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longo Prazo (Roadmap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="dx-governance-bottleneck-analysis-the-commit-loop-problem">DX &amp; Governance Bottleneck Analysis: The Commit Loop Problem</h1>
+<p><strong>Executive Summary</strong>: Este relatório diagnostica e propõe soluções para o gargalo severo no fluxo de <code>git commit</code>, causado por hooks agressivos que modificam arquivos voláteis durante a fase de validação.</p>
+<hr />
+<h2 id="1-diagnostico-anatomia-do-problema">📊 1. DIAGNÓSTICO: Anatomia do Problema</h2>
+<h3 id="11-o-loop-da-perfeicao-identificado">1.1 O "Loop da Perfeição" Identificado</h3>
+<p><strong>Sintoma</strong>: O desenvolvedor executa <code>git commit</code> e entra em um ciclo infinito:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>add<span class="w"> </span>file.py
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: nova funcionalidade&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Hook roda → modifica audit_metrics.json (timestamp atualizado)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Git bloqueia: &quot;Você tem mudanças não staged&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>add<span class="w"> </span>audit_metrics.json
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: nova funcionalidade&quot;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Hook roda novamente → audit_metrics.json muda novamente</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Loop infinito ou frustração máxima</span>
+</code></pre></div>
+<h3 id="12-arquivos-volateis-identificados">1.2 Arquivos Voláteis Identificados</h3>
+<p>Baseado na análise de <code>.pre-commit-config.yaml</code>, <code>audit.py</code> e <code>doc_gen.py</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Hook Responsável</th>
+<th>Motivo da Modificação</th>
+<th>Frequência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>audit_metrics.json</code></td>
+<td><code>code-audit-security</code></td>
+<td>Timestamp de <code>last_audit</code> atualizado a cada execução</td>
+<td><strong>SEMPRE</strong></td>
+</tr>
+<tr>
+<td><code>docs/reference/CLI_COMMANDS.md</code></td>
+<td><code>auto-doc-gen</code></td>
+<td>Regenerado se CLI mudar (mas tem hash check idempotente)</td>
+<td>Condicional</td>
+</tr>
+<tr>
+<td><code>audit_report_*.json</code></td>
+<td><code>code-audit-security</code></td>
+<td>Relatórios timestampados gerados</td>
+<td><strong>SEMPRE</strong></td>
+</tr>
+<tr>
+<td><code>audit_dashboard.html</code></td>
+<td>Comando manual (não hook)</td>
+<td>Gerado apenas com <code>--html</code></td>
+<td>Manual</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Gargalo Crítico</strong>: <code>audit_metrics.json</code> é modificado <strong>SEMPRE</strong>, mesmo em auditorias que não encontram problemas.</p>
+<h3 id="13-analise-de-codigo-o-culpado">1.3 Análise de Código: O Culpado</h3>
+<p><strong>Arquivo</strong>: <a href="../../../scripts/audit_dashboard/storage.py"><code>scripts/audit_dashboard/storage.py</code></a> (linhas 78-97)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">save_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Save metrics with atomic write guarantees (POSIX).&quot;&quot;&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">temp_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;.tmp.</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>            <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>            <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>  <span class="c1"># SEMPRE GRAVA NO DISCO</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="n">temp_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics_file</span><span class="p">)</span>  <span class="c1"># SEMPRE ATUALIZA O ARQUIVO</span>
+</code></pre></div>
+<p><strong>Arquivo</strong>: <a href="../../../scripts/cli/audit.py"><code>scripts/cli/audit.py</code></a> (linhas 445-461)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="c1"># SEMPRE GRAVA, MESMO EM MODO --quiet</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="n">dashboard</span><span class="o">.</span><span class="n">record_audit</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Audit results recorded in metrics&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Veredicto</strong>: O sistema de métricas foi projetado para <strong>rastreabilidade total</strong>, mas não considera o contexto de execução (hook vs CI).</p>
+<hr />
+<h2 id="2-matriz-de-solucoes">🔍 2. MATRIZ DE SOLUÇÕES</h2>
+<h3 id="criterios-de-avaliacao">Critérios de Avaliação</h3>
+<ul>
+<li><strong>DX Impact</strong>: Quão rápido o desenvolvedor pode fazer commits?</li>
+<li><strong>Security Impact</strong>: Perdemos visibilidade de segurança?</li>
+<li><strong>Traceability</strong>: Histórico de métricas preservado?</li>
+<li><strong>Complexity</strong>: Esforço de implementação (1-5 ⭐)</li>
+</ul>
+<h3 id="21-hipotese-volatile-ignore">2.1 Hipótese "Volatile Ignore" ⚠️</h3>
+<p><strong>Descrição</strong>: Adicionar <code>audit_metrics.json</code> ao <code>.gitignore</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Score</th>
+<th>Análise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DX Impact</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Excelente</strong> - Elimina o loop completamente</td>
+</tr>
+<tr>
+<td><strong>Security Impact</strong></td>
+<td>⚠️⚠️⚠️</td>
+<td><strong>Ruim</strong> - Perde histórico de métricas no repo</td>
+</tr>
+<tr>
+<td><strong>Traceability</strong></td>
+<td>❌</td>
+<td><strong>Péssimo</strong> - Métricas não são versionadas</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>⭐</td>
+<td>Trivial (1 linha no .gitignore)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prós</strong>:</p>
+<ul>
+<li>✅ Fix imediato e simples</li>
+<li>✅ Nenhum código modificado</li>
+<li>✅ Arquivo continua sendo gerado localmente</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>❌ <strong>Perda de auditoria histórica</strong>: Métricas não são rastreáveis em Git</li>
+<li>❌ <strong>Dashboards de CI/CD</strong>: Sem métricas persistentes, análises de tendência são impossíveis</li>
+<li>❌ <strong>Revisões de PR</strong>: Impossível ver evolução de vulnerabilidades detectadas</li>
+</ul>
+<p><strong>Recomendação</strong>: ❌ <strong>NÃO USAR</strong> - Conflita com o princípio de "Documentação como Código" do projeto.</p>
+<hr />
+<h3 id="22-hipotese-ci-shift">2.2 Hipótese "CI Shift" ⭐⭐⭐⭐⭐</h3>
+<p><strong>Descrição</strong>: Mover hooks pesados (audit, doc-gen) para GitHub Actions, mantendo apenas linters locais.</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Score</th>
+<th>Análise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DX Impact</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Excelente</strong> - Commits instantâneos</td>
+</tr>
+<tr>
+<td><strong>Security Impact</strong></td>
+<td>⭐⭐⭐⭐</td>
+<td><strong>Bom</strong> - CI ainda valida tudo</td>
+</tr>
+<tr>
+<td><strong>Traceability</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Perfeito</strong> - Métricas gravadas no CI</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>⭐⭐⭐</td>
+<td>Moderado (requer CI config)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Arquitetura Proposta</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># .pre-commit-config.yaml (LOCAL - RÁPIDO)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">repos</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/astral-sh/ruff-pre-commit</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff-format</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-mypy</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypy</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># .github/workflows/governance.yml (CI - RIGOROSO)</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="nt">deep-audit</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Security Audit</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python scripts/cli/audit.py --html --open</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload Metrics</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v4</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-metrics</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit_metrics.json</span>
+</code></pre></div>
+<p><strong>Prós</strong>:</p>
+<ul>
+<li>✅ <strong>Shift-Left Pragmático</strong>: Validação rápida local, profunda no CI</li>
+<li>✅ <strong>Métricas Centralizadas</strong>: CI gera e armazena métricas como artifacts</li>
+<li>✅ <strong>Developer Flow</strong>: Commits não bloqueiam, feedback assíncrono</li>
+<li>✅ <strong>Parallelização</strong>: CI pode rodar múltiplas auditorias em paralelo</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>⚠️ <strong>Feedback Tardio</strong>: Desenvolvedor descobre problemas apenas no PR</li>
+<li>⚠️ <strong>Custo de CI</strong>: Mais tempo de CI consumido</li>
+<li>⚠️ <strong>Falha Silenciosa</strong>: Se CI falhar, métricas não são gravadas</li>
+</ul>
+<p><strong>Recomendação</strong>: ⭐⭐⭐⭐⭐ <strong>ALTAMENTE RECOMENDADO</strong> - Equilibra DX e Governança.</p>
+<hr />
+<h3 id="23-hipotese-automation-wrapper">2.3 Hipótese "Automation Wrapper" 🤖</h3>
+<p><strong>Descrição</strong>: Criar <code>make commit</code> que lida com o ciclo automaticamente.</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Score</th>
+<th>Análise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DX Impact</strong></td>
+<td>⭐⭐⭐</td>
+<td><strong>Médio</strong> - Requer aprender novo comando</td>
+</tr>
+<tr>
+<td><strong>Security Impact</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Perfeito</strong> - Mantém hooks intactos</td>
+</tr>
+<tr>
+<td><strong>Traceability</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Perfeito</strong> - Métricas versionadas</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>⭐⭐</td>
+<td>Simples (20 linhas Makefile)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implementação</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c">## commit: Commit inteligente que lida com hooks voláteis</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nf">commit</span><span class="o">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;🔄 Preparando commit com auto-ajuste de arquivos voláteis...&quot;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w"> </span>@git<span class="w"> </span>add<span class="w"> </span>-u<span class="w">  </span><span class="c1"># Stage todas as modificações rastreadas</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w"> </span>@MAX_ATTEMPTS<span class="o">=</span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w"> </span><span class="nv">ATTEMPT</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$$</span>ATTEMPT<span class="w"> </span>-le<span class="w"> </span><span class="nv">$$</span>MAX_ATTEMPTS<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔄 Tentativa </span><span class="nv">$$</span><span class="s2">ATTEMPT de </span><span class="nv">$$</span><span class="s2">MAX_ATTEMPTS&quot;</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>git<span class="w"> </span>commit<span class="w"> </span><span class="k">$(</span>ARGS<span class="k">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="cp">  if [ $$ATTEMPT -eq $$MAX_ATTEMPTS ]; then \</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="cp">   echo &quot;❌ Falha após $$MAX_ATTEMPTS tentativas&quot;; \</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="cp">   exit 1; \</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="cp">  fi; \</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="cp">  echo &quot;⏳ Hook modificou arquivos, re-staging...&quot;; \</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="cp">  git add audit_metrics.json audit_report_*.json docs/reference/CLI_COMMANDS.md 2&gt;/dev/null || true; \</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="cp">  ATTEMPT=$$((ATTEMPT + 1)); \</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="cp"> done</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Commit realizado com sucesso!&quot;</span>
+</code></pre></div>
+<p><strong>Uso</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>make<span class="w"> </span>commit<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;-m &#39;feat: nova funcionalidade&#39;&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>make<span class="w"> </span>commit<span class="w"> </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;--amend --no-edit&quot;</span>
+</code></pre></div>
+<p><strong>Prós</strong>:</p>
+<ul>
+<li>✅ <strong>Transparente para Hooks</strong>: Não modifica o sistema de auditoria</li>
+<li>✅ <strong>Histórico Preservado</strong>: Métricas continuam versionadas</li>
+<li>✅ <strong>Fácil Migração</strong>: Desenvolvedores podem adotar gradualmente</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>⚠️ <strong>Educação Necessária</strong>: Time precisa aprender novo workflow</li>
+<li>⚠️ <strong>Não Funciona em IDEs</strong>: VSCode/PyCharm usam <code>git commit</code> diretamente</li>
+<li>⚠️ <strong>Loop Ainda Existe</strong>: Apenas mascara o problema</li>
+</ul>
+<p><strong>Recomendação</strong>: ⭐⭐⭐ <strong>SOLUÇÃO PALIATIVA</strong> - Útil como bridge para CI Shift.</p>
+<hr />
+<h3 id="24-hipotese-lazy-audit">2.4 Hipótese "Lazy Audit" 🧠</h3>
+<p><strong>Descrição</strong>: Modificar <code>audit.py</code> para detectar ambiente de pre-commit e não gravar métricas.</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Score</th>
+<th>Análise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DX Impact</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Excelente</strong> - Elimina o loop</td>
+</tr>
+<tr>
+<td><strong>Security Impact</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td><strong>Perfeito</strong> - Validação continua acontecendo</td>
+</tr>
+<tr>
+<td><strong>Traceability</strong></td>
+<td>⭐⭐⭐⭐</td>
+<td><strong>Bom</strong> - Métricas só gravadas em contextos relevantes</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>⭐⭐</td>
+<td>Simples (10 linhas Python)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Implementação</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># scripts/cli/audit.py (linha 445)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="c1"># Detect execution context</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">is_pre_commit</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PRE_COMMIT&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">is_ci</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CI&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="c1"># ONLY record metrics in meaningful contexts</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_pre_commit</span><span class="p">:</span>  <span class="c1"># Grava no CI ou em execuções manuais</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>            <span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>            <span class="n">dashboard</span><span class="o">.</span><span class="n">record_audit</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Audit results recorded in metrics&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>        <span class="k">except</span> <span class="n">AuditMetricsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Dashboard integration failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Pre-commit context detected, skipping metrics recording&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Variação: Lazy Write com Throttle</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">record_audit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audit_result</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Record audit with throttle to avoid excessive writes.&quot;&quot;&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="c1"># Check if last audit was recent (&lt; 5 minutes)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        <span class="n">last_audit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;last_audit&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="k">if</span> <span class="n">last_audit</span><span class="p">:</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>            <span class="n">last_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">last_audit</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>            <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">-</span> <span class="n">last_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>            <span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>  <span class="c1"># 5 minutes</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Throttling metrics write (last audit </span><span class="si">{</span><span class="n">delta</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">s ago)&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>                <span class="k">return</span>  <span class="c1"># Skip write, still validate code</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>        <span class="c1"># Proceed with normal recording</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        <span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>Prós</strong>:</p>
+<ul>
+<li>✅ <strong>Contexto-Aware</strong>: Métricas gravadas onde fazem sentido (CI, manual)</li>
+<li>✅ <strong>DX Imediato</strong>: Commits locais não bloqueiam</li>
+<li>✅ <strong>Rastreabilidade Inteligente</strong>: Métricas ainda geradas, mas em contextos significativos</li>
+<li>✅ <strong>Compatível com Ferramental</strong>: IDEs continuam funcionando</li>
+</ul>
+<p><strong>Contras</strong>:</p>
+<ul>
+<li>⚠️ <strong>Métricas Locais Perdidas</strong>: Desenvolvedores não veem suas próprias estatísticas</li>
+<li>⚠️ <strong>Lógica de Detecção</strong>: Depende de variáveis de ambiente (pode ser frágil)</li>
+</ul>
+<p><strong>Recomendação</strong>: ⭐⭐⭐⭐⭐ <strong>EXCELENTE SOLUÇÃO</strong> - Simples e eficaz, combina bem com CI Shift.</p>
+<hr />
+<h3 id="25-solucao-hibrida-smart-governance-recomendacao-final">2.5 Solução Híbrida: "Smart Governance" 🎯 (RECOMENDAÇÃO FINAL)</h3>
+<p><strong>Descrição</strong>: Combinação de <strong>CI Shift</strong> + <strong>Lazy Audit</strong> + <strong>Automation Wrapper</strong>.</p>
+<p><strong>Arquitetura</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>┌─────────────────────────────────────────────────────────┐
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│ LOCAL PRE-COMMIT (Fast Feedback)                        │
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>├─────────────────────────────────────────────────────────┤
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>│ ✅ ruff-format      (Formatação instantânea)            │
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>│ ✅ ruff             (Linting rápido)                     │
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>│ ✅ mypy             (Type checking)                      │
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>│ ✅ audit --quiet    (Validação SEM gravação de métricas)│
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>│ ✅ cortex guardian  (Bloqueia Shadow Config)            │
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>└─────────────────────────────────────────────────────────┘
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>                            ⬇️
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>┌─────────────────────────────────────────────────────────┐
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>│ GITHUB ACTIONS (Deep Validation)                        │
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>├─────────────────────────────────────────────────────────┤
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>│ 🔍 audit --html     (Auditoria completa + métricas)     │
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>│ 🔍 cortex audit     (Validação de docs)                 │
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>│ 🔍 Mock CI          (Simula CI end-to-end)              │
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>│ 📊 Upload Metrics   (Artefatos versionados)             │
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>└─────────────────────────────────────────────────────────┘
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>                            ⬇️
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>┌─────────────────────────────────────────────────────────┐
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>│ OPCIONAL: make commit (Developer Convenience)           │
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>├─────────────────────────────────────────────────────────┤
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>│ 🤖 Auto-stage arquivos voláteis                         │
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>│ 🤖 Retry automático em caso de modificações de hooks    │
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>└─────────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="3-recomendacao-tecnica-definitiva">🎯 3. RECOMENDAÇÃO TÉCNICA DEFINITIVA</h2>
+<h3 id="posicao-governanca-agressiva-e-anti-pattern-em-pre-commit">Posição: <strong>Governança Agressiva é Anti-Pattern em Pre-Commit</strong></h3>
+<p><strong>Fundamento Teórico</strong>:</p>
+<blockquote>
+<p>"Pre-commit hooks devem ser <strong>gatekeepers</strong>, não <strong>record-keepers</strong>."</p>
+</blockquote>
+<p>O sistema atual viola o princípio de <strong>Separation of Concerns</strong>:</p>
+<ul>
+<li><strong>Pre-commit</strong>: Deve <strong>VALIDAR</strong> (fail fast)</li>
+<li><strong>CI/CD</strong>: Deve <strong>PERSISTIR</strong> (record metrics, generate reports)</li>
+<li><strong>Local Dev</strong>: Deve ser <strong>RÁPIDO</strong> (&lt; 10s por commit)</li>
+</ul>
+<h3 id="decisao-arquitetural-adotar-smart-governance">Decisão Arquitetural: Adotar "Smart Governance"</h3>
+<p><strong>Razões</strong>:</p>
+<ol>
+<li><strong>DX Crítico</strong>: Desenvolvedores estão no caminho crítico. Cada segundo economizado = produtividade exponencial</li>
+<li><strong>Rastreabilidade Preservada</strong>: Métricas centralizadas no CI são mais confiáveis (ambiente controlado)</li>
+<li><strong>Fail Fast, Record Slow</strong>: Validação local rápida, análise profunda assíncrona</li>
+<li><strong>Template Profissional</strong>: Este template deve ser exemplo de <strong>DX moderno</strong></li>
+</ol>
+<hr />
+<h2 id="4-plano-de-execucao">🛠️ 4. PLANO DE EXECUÇÃO</h2>
+<h3 id="fase-1-quick-win-lazy-audit-esforco-30-minutos">Fase 1: Quick Win (Lazy Audit) ⚡ [Esforço: 30 minutos]</h3>
+<p><strong>Objetivo</strong>: Eliminar o loop imediatamente sem mudanças estruturais.</p>
+<h4 id="passo-11-modificar-auditpy">Passo 1.1: Modificar <code>audit.py</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Editar scripts/cli/audit.py</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Adicionar após linha 390 (antes de dashboard.record_audit)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Detect execution context to avoid metrics write during pre-commit</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">is_pre_commit</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PRE_COMMIT&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">is_git_hook</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GIT_AUTHOR_NAME&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># Fallback detection</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">if</span> <span class="n">is_pre_commit</span> <span class="ow">or</span> <span class="p">(</span><span class="n">is_git_hook</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">dashboard</span><span class="p">):</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Git hook context detected - skipping metrics persistence&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="n">skip_metrics</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    <span class="n">skip_metrics</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="c1"># Dashboard integration: Record audit ONLY if not in pre-commit</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">skip_metrics</span><span class="p">:</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>        <span class="n">dashboard</span> <span class="o">=</span> <span class="n">AuditDashboard</span><span class="p">(</span><span class="n">workspace_root</span><span class="o">=</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>        <span class="n">dashboard</span><span class="o">.</span><span class="n">record_audit</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>        <span class="c1"># ... resto do código ...</span>
+</code></pre></div>
+<h4 id="passo-12-atualizar-pre-commit-configyaml">Passo 1.2: Atualizar <code>.pre-commit-config.yaml</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Adicionar variável de ambiente ao hook</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code-audit-security</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Auditoria</span><span class="nv"> </span><span class="s">de</span><span class="nv"> </span><span class="s">Segurança</span><span class="nv"> </span><span class="s">Customizada</span><span class="nv"> </span><span class="s">(Delta)&quot;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">env PRE_COMMIT=1 python3 scripts/cli/audit.py --config scripts/audit_config.yaml --fail-on HIGH --quiet</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">python</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h4 id="passo-13-testar">Passo 1.3: Testar</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Criar mudança de teste</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# test&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>README.md
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>git<span class="w"> </span>add<span class="w"> </span>README.md
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;test: validate lazy audit&quot;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># ✅ Deve commitar sem pedir re-add de audit_metrics.json</span>
+</code></pre></div>
+<hr />
+<h3 id="fase-2-ci-shift-deep-validation-esforco-2-horas">Fase 2: CI Shift (Deep Validation) 🏗️ [Esforço: 2 horas]</h3>
+<p><strong>Objetivo</strong>: Mover auditoria profunda para CI com métricas persistentes.</p>
+<h4 id="passo-21-criar-githubworkflowsgovernanceyml">Passo 2.1: Criar <code>.github/workflows/governance.yml</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Governance &amp; Security Audit</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cli</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">api</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="nt">deep-audit</span><span class="p">:</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deep Security Audit</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.12&#39;</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-13-24" name="__codelineno-13-24" href="#__codelineno-13-24"></a><span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<a id="__codelineno-13-25" name="__codelineno-13-25" href="#__codelineno-13-25"></a><span class="w">          </span><span class="no">pip install -r requirements/dev.txt</span>
+<a id="__codelineno-13-26" name="__codelineno-13-26" href="#__codelineno-13-26"></a>
+<a id="__codelineno-13-27" name="__codelineno-13-27" href="#__codelineno-13-27"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Deep Audit</span>
+<a id="__codelineno-13-28" name="__codelineno-13-28" href="#__codelineno-13-28"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-13-29" name="__codelineno-13-29" href="#__codelineno-13-29"></a><span class="w">          </span><span class="no">python scripts/cli/audit.py \</span>
+<a id="__codelineno-13-30" name="__codelineno-13-30" href="#__codelineno-13-30"></a><span class="w">            </span><span class="no">--config scripts/audit_config.yaml \</span>
+<a id="__codelineno-13-31" name="__codelineno-13-31" href="#__codelineno-13-31"></a><span class="w">            </span><span class="no">--html \</span>
+<a id="__codelineno-13-32" name="__codelineno-13-32" href="#__codelineno-13-32"></a><span class="w">            </span><span class="no">--fail-on HIGH</span>
+<a id="__codelineno-13-33" name="__codelineno-13-33" href="#__codelineno-13-33"></a>
+<a id="__codelineno-13-34" name="__codelineno-13-34" href="#__codelineno-13-34"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upload Metrics</span>
+<a id="__codelineno-13-35" name="__codelineno-13-35" href="#__codelineno-13-35"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always()</span>
+<a id="__codelineno-13-36" name="__codelineno-13-36" href="#__codelineno-13-36"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v4</span>
+<a id="__codelineno-13-37" name="__codelineno-13-37" href="#__codelineno-13-37"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-13-38" name="__codelineno-13-38" href="#__codelineno-13-38"></a><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">audit-metrics-${{ github.sha }}</span>
+<a id="__codelineno-13-39" name="__codelineno-13-39" href="#__codelineno-13-39"></a><span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-13-40" name="__codelineno-13-40" href="#__codelineno-13-40"></a><span class="w">            </span><span class="no">audit_metrics.json</span>
+<a id="__codelineno-13-41" name="__codelineno-13-41" href="#__codelineno-13-41"></a><span class="w">            </span><span class="no">audit_report_*.json</span>
+<a id="__codelineno-13-42" name="__codelineno-13-42" href="#__codelineno-13-42"></a><span class="w">            </span><span class="no">audit_dashboard.html</span>
+<a id="__codelineno-13-43" name="__codelineno-13-43" href="#__codelineno-13-43"></a><span class="w">          </span><span class="nt">retention-days</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span>
+<a id="__codelineno-13-44" name="__codelineno-13-44" href="#__codelineno-13-44"></a>
+<a id="__codelineno-13-45" name="__codelineno-13-45" href="#__codelineno-13-45"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Comment PR with Results</span>
+<a id="__codelineno-13-46" name="__codelineno-13-46" href="#__codelineno-13-46"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.event_name == &#39;pull_request&#39;</span>
+<a id="__codelineno-13-47" name="__codelineno-13-47" href="#__codelineno-13-47"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/github-script@v7</span>
+<a id="__codelineno-13-48" name="__codelineno-13-48" href="#__codelineno-13-48"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-13-49" name="__codelineno-13-49" href="#__codelineno-13-49"></a><span class="w">          </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-13-50" name="__codelineno-13-50" href="#__codelineno-13-50"></a><span class="w">            </span><span class="no">const fs = require(&#39;fs&#39;);</span>
+<a id="__codelineno-13-51" name="__codelineno-13-51" href="#__codelineno-13-51"></a><span class="w">            </span><span class="no">const report = JSON.parse(fs.readFileSync(&#39;audit_metrics.json&#39;, &#39;utf8&#39;));</span>
+<a id="__codelineno-13-52" name="__codelineno-13-52" href="#__codelineno-13-52"></a>
+<a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a><span class="w">            </span><span class="no">const comment = `</span>
+<a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a><span class="w">            </span><span class="no">## 🔒 Security Audit Results</span>
+<a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>
+<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a><span class="w">            </span><span class="no">- **Audits Performed**: ${report.audits_performed}</span>
+<a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a><span class="w">            </span><span class="no">- **Failures Prevented**: ${report.failures_prevented}</span>
+<a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a><span class="w">            </span><span class="no">- **Time Saved**: ${report.time_saved_minutes} minutes</span>
+<a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>
+<a id="__codelineno-13-60" name="__codelineno-13-60" href="#__codelineno-13-60"></a><span class="w">            </span><span class="no">[View Full Report](../artifacts/audit-metrics-${{ github.sha }})</span>
+<a id="__codelineno-13-61" name="__codelineno-13-61" href="#__codelineno-13-61"></a><span class="w">            </span><span class="no">`;</span>
+<a id="__codelineno-13-62" name="__codelineno-13-62" href="#__codelineno-13-62"></a>
+<a id="__codelineno-13-63" name="__codelineno-13-63" href="#__codelineno-13-63"></a><span class="w">            </span><span class="no">github.rest.issues.createComment({</span>
+<a id="__codelineno-13-64" name="__codelineno-13-64" href="#__codelineno-13-64"></a><span class="w">              </span><span class="no">issue_number: context.issue.number,</span>
+<a id="__codelineno-13-65" name="__codelineno-13-65" href="#__codelineno-13-65"></a><span class="w">              </span><span class="no">owner: context.repo.owner,</span>
+<a id="__codelineno-13-66" name="__codelineno-13-66" href="#__codelineno-13-66"></a><span class="w">              </span><span class="no">repo: context.repo.repo,</span>
+<a id="__codelineno-13-67" name="__codelineno-13-67" href="#__codelineno-13-67"></a><span class="w">              </span><span class="no">body: comment</span>
+<a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a><span class="w">            </span><span class="no">});</span>
+</code></pre></div>
+<h4 id="passo-22-simplificar-pre-commit-configyaml">Passo 2.2: Simplificar <code>.pre-commit-config.yaml</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">repos</span><span class="p">:</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="c1"># Mantém apenas hooks rápidos (&lt;5s)</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/pre-commit-hooks</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v4.6.0</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-added-large-files</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-toml</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">check-yaml</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--unsafe</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">end-of-file-fixer</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">trailing-whitespace</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/astral-sh/ruff-pre-commit</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v0.14.6</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff-format</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/pre-commit/mirrors-mypy</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">    </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1.19.0</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypy</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">--config-file=pyproject.toml</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="w">        </span><span class="nt">additional_dependencies</span><span class="p">:</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">types-PyYAML==6.0.12.20250915</span>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pydantic&gt;=2.0</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="w">  </span><span class="c1"># Audit SEM gravação de métricas (validação apenas)</span>
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code-audit-security</span>
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Security</span><span class="nv"> </span><span class="s">Validation</span><span class="nv"> </span><span class="s">(Fast)&quot;</span>
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">env PRE_COMMIT=1 python3 scripts/cli/audit.py --quiet --fail-on HIGH</span>
+<a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a><span class="w">        </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">python</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a>
+<a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a><span class="w">  </span><span class="c1"># Cortex Guardian (crítico para governança)</span>
+<a id="__codelineno-14-39" name="__codelineno-14-39" href="#__codelineno-14-39"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<a id="__codelineno-14-40" name="__codelineno-14-40" href="#__codelineno-14-40"></a><span class="w">    </span><span class="nt">hooks</span><span class="p">:</span>
+<a id="__codelineno-14-41" name="__codelineno-14-41" href="#__codelineno-14-41"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cortex-guardian</span>
+<a id="__codelineno-14-42" name="__codelineno-14-42" href="#__codelineno-14-42"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CORTEX</span><span class="nv"> </span><span class="s">Guardian</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">Shadow</span><span class="nv"> </span><span class="s">Config</span><span class="nv"> </span><span class="s">Blocker&quot;</span>
+<a id="__codelineno-14-43" name="__codelineno-14-43" href="#__codelineno-14-43"></a><span class="w">        </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3 -m scripts.cli.cortex guardian check . --fail-on-error</span>
+<a id="__codelineno-14-44" name="__codelineno-14-44" href="#__codelineno-14-44"></a><span class="w">        </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-14-45" name="__codelineno-14-45" href="#__codelineno-14-45"></a><span class="w">        </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-14-46" name="__codelineno-14-46" href="#__codelineno-14-46"></a><span class="w">        </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">python</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h4 id="passo-23-atualizar-gitignore">Passo 2.3: Atualizar <code>.gitignore</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a># Relatórios de Auditoria (gerados no CI, não localmente)
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>audit_report_*.json
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>audit_dashboard.html
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a># CORTEX - Contexto dinâmico gerado (volátil, não deve ser commitado)
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>.cortex/
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a># Métricas locais (CI gera a versão oficial)
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a># audit_metrics.json  # MANTÉM VERSIONADO (CI faz commit)
+</code></pre></div>
+<p><strong>Nota</strong>: <code>audit_metrics.json</code> continua versionado, mas só é atualizado pelo CI.</p>
+<hr />
+<h3 id="fase-3-developer-convenience-opcional-esforco-30-minutos">Fase 3: Developer Convenience (Opcional) 🎁 [Esforço: 30 minutos]</h3>
+<p><strong>Objetivo</strong>: Fornecer wrapper para quem preferir workflow automatizado.</p>
+<h4 id="passo-31-adicionar-ao-makefile">Passo 3.1: Adicionar ao <code>Makefile</code></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c">## commit: Commit inteligente com auto-staging de arquivos voláteis (OPCIONAL)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nf">commit</span><span class="o">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;🔄 Executando commit inteligente...&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w"> </span>@if<span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>MSG<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Uso: make commit MSG=&#39;sua mensagem de commit&#39;&quot;</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w"> </span><span class="k">fi</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="w"> </span>@git<span class="w"> </span>add<span class="w"> </span>-u
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w"> </span>@MAX_TRIES<span class="o">=</span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="w"> </span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">$$</span><span class="o">(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="nv">$$</span>MAX_TRIES<span class="o">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔄 Tentativa </span><span class="nv">$$</span><span class="s2">i de </span><span class="nv">$$</span><span class="s2">MAX_TRIES&quot;</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="w">  </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>MSG<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="cp">  if [ $$i -eq $$MAX_TRIES ]; then \</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="cp">   echo &quot;❌ Commit falhou após validação&quot;; \</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="cp">   exit 1; \</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="cp">  fi; \</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a><span class="cp">  echo &quot;⏳ Re-staging arquivos modificados por hooks...&quot;; \</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="cp">  git add audit_metrics.json docs/reference/CLI_COMMANDS.md 2&gt;/dev/null || true; \</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="cp"> done</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Commit concluído!&quot;</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="c">## commit-amend: Amend último commit com auto-staging</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="nf">commit-amend</span><span class="o">:</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="w"> </span>@git<span class="w"> </span>add<span class="w"> </span>-u
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="w"> </span>@git<span class="w"> </span>add<span class="w"> </span>audit_metrics.json<span class="w"> </span>docs/reference/CLI_COMMANDS.md<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a><span class="w"> </span>@git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w"> </span>--no-edit
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Commit amended!&quot;</span>
+</code></pre></div>
+<h4 id="passo-32-documentar-no-readme">Passo 3.2: Documentar no README</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="gu">## 🚀 Quick Start</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="gu">### Workflow Rápido</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>```bash
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="gh"># Opção 1: Commit direto (após Fase 1/2, não trava mais)</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>git commit -m &quot;feat: minha mudança&quot;
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="gh"># Opção 2: Wrapper automatizado (garante sucesso)</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>make commit MSG=&quot;feat: minha mudança&quot;
+</code></pre></div>
+<h3 id="validacao-local-vs-ci">Validação Local vs CI</h3>
+<ul>
+<li><strong>Local (pre-commit)</strong>: Validação rápida (linters + type check + security scan)</li>
+<li><strong>CI (GitHub Actions)</strong>: Auditoria profunda + métricas + relatórios HTML</li>
+</ul>
+<p>Isso garante <strong>commits rápidos</strong> sem sacrificar <strong>qualidade</strong>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>---
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>### Fase 4: Documentação &amp; Comunicação 📚 [Esforço: 1 hora]
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>#### Passo 4.1: Criar ADR (Architecture Decision Record)
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>```bash
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a># docs/architecture/ADR_002_PRE_COMMIT_OPTIMIZATION.md
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>---
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>id: adr-002-pre-commit-optimization
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>type: adr
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>status: accepted
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>version: 1.0.0
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="gu">date: &#39;2025-12-13&#39;</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="gu">---</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="gh"># ADR 002: Pre-Commit Hook Optimization</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="gu">## Context</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>Pre-commit hooks estavam causando loop infinito devido a:
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="k">-</span><span class="w"> </span>Gravação de <span class="sb">`audit_metrics.json`</span> a cada execução
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="k">-</span><span class="w"> </span>Regeneração de documentação timestampada
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>Isso violava o princípio de DX e tornava commits lentos e frustrantes.
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="gu">## Decision</span>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>Adotar &quot;Smart Governance&quot;:
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="k">1.</span> <span class="gs">**Lazy Audit**</span>: Não gravar métricas em contexto de pre-commit
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="k">2.</span> <span class="gs">**CI Shift**</span>: Mover auditoria profunda para GitHub Actions
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="k">3.</span> <span class="gs">**Fast Local**</span>: Manter apenas validações rápidas (&lt;10s) localmente
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a><span class="gu">## Consequences</span>
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a><span class="gu">### Positive</span>
+<a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a><span class="k">-</span><span class="w"> </span>✅ Commits 10x mais rápidos
+<a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a><span class="k">-</span><span class="w"> </span>✅ Métricas centralizadas e confiáveis (CI)
+<a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a><span class="k">-</span><span class="w"> </span>✅ Developer Experience moderno
+<a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a>
+<a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a><span class="gu">### Negative</span>
+<a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a><span class="k">-</span><span class="w"> </span>⚠️ Feedback de auditoria profunda é assíncrono (PR comments)
+<a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a><span class="k">-</span><span class="w"> </span>⚠️ Desenvolvedores não veem métricas locais em tempo real
+<a id="__codelineno-19-36" name="__codelineno-19-36" href="#__codelineno-19-36"></a>
+<a id="__codelineno-19-37" name="__codelineno-19-37" href="#__codelineno-19-37"></a><span class="gu">## Alternatives Considered</span>
+<a id="__codelineno-19-38" name="__codelineno-19-38" href="#__codelineno-19-38"></a>
+<a id="__codelineno-19-39" name="__codelineno-19-39" href="#__codelineno-19-39"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Volatile Ignore**</span>: Descartado por perder rastreabilidade
+<a id="__codelineno-19-40" name="__codelineno-19-40" href="#__codelineno-19-40"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Automation Wrapper**</span>: Mantido como opcional para conveniência
+</code></pre></div>
+<h4 id="passo-42-atualizar-contributingmd">Passo 4.2: Atualizar CONTRIBUTING.md</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="gu">## Processo de Commit</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="gu">### ⚡ Modo Rápido (Recomendado)</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>Após implementação do ADR-002, commits são instantâneos:
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>```bash
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>git add src/my_module.py
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>git commit -m &quot;feat: adiciona nova funcionalidade&quot;
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="gh"># ✅ Hook roda validação SEM travar</span>
+</code></pre></div>
+<h3 id="validacao-profunda">🔍 Validação Profunda</h3>
+<p>Auditoria completa acontece no CI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature/minha-branch
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="c1"># GitHub Actions roda:</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="c1"># - Auditoria de segurança</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># - Geração de métricas</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># - Relatórios HTML</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># Resultados aparecem como comentário no PR</span>
+</code></pre></div>
+<h3 id="troubleshooting">🛠️ Troubleshooting</h3>
+<p>Se ainda encontrar loop em commits:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Opção 1: Use o wrapper</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>make<span class="w"> </span>commit<span class="w"> </span><span class="nv">MSG</span><span class="o">=</span><span class="s2">&quot;feat: minha mudança&quot;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># Opção 2: Bypass hooks (emergência)</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>git<span class="w"> </span>commit<span class="w"> </span>--no-verify<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: emergência&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>#### Passo 4.3: Changelog
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>```markdown
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>## [Unreleased]
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>### Changed
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>- **BREAKING**: Pre-commit hooks otimizados - `audit_metrics.json` só é atualizado no CI
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>- `audit.py` detecta contexto de pre-commit e skip gravação de métricas
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>- GitHub Actions agora executa auditoria profunda com persistência
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>### Added
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>- Workflow CI `.github/workflows/governance.yml` para auditoria centralizada
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>- Target `make commit` para commits com auto-staging (opcional)
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>- ADR-002 documentando otimização de hooks
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a>### Fixed
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a>
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a>- **DX Critical**: Eliminado loop infinito em `git commit` causado por hooks que modificam arquivos
+</code></pre></div>
+<hr />
+<h2 id="5-metricas-de-sucesso">📈 5. MÉTRICAS DE SUCESSO</h2>
+<h3 id="antes-baseline">Antes (Baseline)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>Tempo médio de commit: 30-60s (com retries manuais)
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>Frustração do desenvolvedor: 🔥🔥🔥🔥🔥 (máxima)
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>Commits abandonados: ~20% (desenvolvedores usam --no-verify)
+</code></pre></div>
+<h3 id="depois-esperado">Depois (Esperado)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>Tempo médio de commit: 5-10s (validação rápida)
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>Frustração do desenvolvedor: ⭐⭐⭐⭐⭐ (satisfação)
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>Commits abandonados: &lt;1% (processo fluido)
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>Cobertura de auditoria: 100% (CI obrigatório em PRs)
+</code></pre></div>
+<h3 id="kpis-de-validacao">KPIs de Validação</h3>
+<ul>
+<li>✅ <strong>Commits completam em &lt; 15s</strong> (medido com <code>time git commit</code>)</li>
+<li>✅ <strong>Zero loops de re-add</strong> (testado com 10 commits consecutivos)</li>
+<li>✅ <strong>CI gera métricas em 100% dos PRs</strong> (GitHub Actions)</li>
+<li>✅ <strong>Nenhum commit usa <code>--no-verify</code></strong> (audit logs)</li>
+</ul>
+<hr />
+<h2 id="6-analise-de-riscos">🔒 6. ANÁLISE DE RISCOS</h2>
+<h3 id="risco-1-metricas-perdidas-por-falha-de-ci">Risco 1: Métricas Perdidas por Falha de CI</h3>
+<p><strong>Severidade</strong>: Média
+<strong>Probabilidade</strong>: Baixa
+<strong>Mitigação</strong>:</p>
+<ul>
+<li>Retry automático do workflow (3 tentativas)</li>
+<li>Métricas armazenadas como artefatos (retention 90 dias)</li>
+<li>Fallback para métricas locais se CI estiver down</li>
+</ul>
+<h3 id="risco-2-desenvolvedores-nao-veem-problemas-localmente">Risco 2: Desenvolvedores Não Veem Problemas Localmente</h3>
+<p><strong>Severidade</strong>: Média
+<strong>Probabilidade</strong>: Média
+<strong>Mitigação</strong>:</p>
+<ul>
+<li>Hook local ainda VALIDA (fail fast), só não grava métricas</li>
+<li>CI comenta em PRs em &lt; 5 minutos</li>
+<li>Desenvolvedores podem rodar <code>python scripts/cli/audit.py --html</code> manualmente</li>
+</ul>
+<h3 id="risco-3-bypass-de-hooks-via-no-verify">Risco 3: Bypass de Hooks via --no-verify</h3>
+<p><strong>Severidade</strong>: Alta
+<strong>Probabilidade</strong>: Baixa (se DX for boa)
+<strong>Mitigação</strong>:</p>
+<ul>
+<li>CI é obrigatório, bypass local não afeta qualidade</li>
+<li>Branch protection rules exigem CI passing</li>
+<li>Educação do time sobre importância dos hooks</li>
+</ul>
+<hr />
+<h2 id="7-licoes-aprendidas">🎓 7. LIÇÕES APRENDIDAS</h2>
+<h3 id="principios-validados">Princípios Validados</h3>
+<ol>
+<li><strong>"Shift Left, But Not Too Left"</strong>: Validação precoce é boa, mas não deve bloquear o fluxo criativo.</li>
+<li><strong>"Record Async, Validate Sync"</strong>: Métricas podem esperar, validação não pode.</li>
+<li><strong>"Developer First, Governance Second"</strong>: Se o processo é doloroso, desenvolvedores vão contorná-lo.</li>
+</ol>
+<h3 id="anti-patterns-identificados">Anti-Patterns Identificados</h3>
+<p>❌ <strong>"The Perfect is the Enemy of the Good"</strong>: Hooks que fazem demais
+❌ <strong>"State Mutation in Validators"</strong>: Hooks que modificam arquivos rastreados
+❌ <strong>"Synchronous Record Keeping"</strong>: Gravar métricas em tempo de commit</p>
+<h3 id="template-como-referencia">Template como Referência</h3>
+<p>Este template deve demonstrar <strong>DevOps Moderno</strong>, não <strong>DevOps Antigo</strong>:</p>
+<ul>
+<li>✅ Automação inteligente, não burocracia</li>
+<li>✅ Feedback rápido, análise profunda assíncrona</li>
+<li>✅ Rastreabilidade sem fricção</li>
+</ul>
+<hr />
+<h2 id="8-proximos-passos">🚀 8. PRÓXIMOS PASSOS</h2>
+<h3 id="curto-prazo-sprint-atual">Curto Prazo (Sprint Atual)</h3>
+<ol>
+<li>✅ Implementar Fase 1 (Lazy Audit) - <strong>HOJE</strong></li>
+<li>✅ Testar com 10 commits reais</li>
+<li>✅ Documentar no README e CONTRIBUTING</li>
+</ol>
+<h3 id="medio-prazo-proxima-sprint">Médio Prazo (Próxima Sprint)</h3>
+<ol>
+<li>⬜ Implementar Fase 2 (CI Shift)</li>
+<li>⬜ Configurar branch protection rules</li>
+<li>⬜ Treinar time no novo workflow</li>
+</ol>
+<h3 id="longo-prazo-roadmap">Longo Prazo (Roadmap)</h3>
+<ol>
+<li>⬜ Dashboard de métricas no GitHub Pages (auto-deploy do <code>audit_dashboard.html</code>)</li>
+<li>⬜ Análise de tendências (métricas ao longo do tempo)</li>
+<li>⬜ Alertas automáticos para degradação de qualidade</li>
+</ol>
+<hr />
+<h2 id="conclusao">📝 Conclusão</h2>
+<p><strong>Veredicto Final</strong>: A governança atual é <strong>excessivamente rígida</strong> para o contexto de desenvolvimento local. A solução "Smart Governance" equilibra:</p>
+<ul>
+<li><strong>Velocidade</strong> (commits &lt; 10s)</li>
+<li><strong>Segurança</strong> (validação rigorosa no CI)</li>
+<li><strong>Rastreabilidade</strong> (métricas centralizadas)</li>
+</ul>
+<p><strong>Call to Action</strong>: Implementar Fase 1 <strong>IMEDIATAMENTE</strong> (ROI de 30 minutos de trabalho para horas economizadas por semana).</p>
+<hr />
+<p><strong>Assinado</strong>:
+🤖 GitHub Copilot (Senior DevOps Architect &amp; DX Specialist)
+📅 2025-12-13
+🔗 Ref: ADR-002, <code>.pre-commit-config.yaml</code>, <code>audit.py</code></p>
+<hr />
+<h2 id="referencias">🔗 Referências</h2>
+<ul>
+<li><a href="https://pre-commit.com/#usage">Pre-commit Best Practices</a></li>
+<li><a href="https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts">GitHub Actions Artifacts</a></li>
+<li><a href="https://12factor.net/dev-prod-parity">The Twelve-Factor App - Dev/Prod Parity</a></li>
+<li><a href="https://sre.google/sre-book/eliminating-toil/">Google SRE Book - Eliminating Toil</a></li>
+<li><a href="https://martinfowler.com/articles/continuousIntegration.html">Martin Fowler - Continuous Integration</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
