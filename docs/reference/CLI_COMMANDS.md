@@ -18,7 +18,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **2025-12-13 02:05 UTC**
+Gerado em: **2025-12-13 20:59 UTC**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -73,13 +73,13 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `path` | `Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]` | `None` | ❌ Não |
+| `path` | `Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]` | ❌ Não | `None` | Path to directory or file to audit (default: docs/) |
 
-| `fail_on_error` | `Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]` | `False` | ❌ Não |
+| `fail_on_error` | `Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]` | ❌ Não | `False` | Exit with error code if validation fails (useful for CI) |
 
 
 **Exemplo:**
@@ -109,13 +109,13 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `canary_id` | `Annotated[str, typer.Option('--canary-id', help='ID of the canary knowledge entry to search for (default: kno-001)')]` | `"kno-001"` | ❌ Não |
+| `canary_id` | `Annotated[str, typer.Option('--canary-id', help='ID of the canary knowledge entry to search for (default: kno-001)')]` | ❌ Não | `"kno-001"` | ID of the canary knowledge entry to search for (default: kno-001) |
 
-| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed validation information')]` | `False` | ❌ Não |
+| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed validation information')]` | ❌ Não | `False` | Show detailed validation information |
 
 
 **Exemplo:**
@@ -140,13 +140,13 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `path` | `Annotated[Path, typer.Argument(help='Path to the Markdown file to initialize with frontmatter', exists=True, file_okay=True, dir_okay=False, readable=True, resolve_path=True)]` | `-` | ✅ Sim |
+| `path` | `Annotated[Path, typer.Argument(help='Path to the Markdown file to initialize with frontmatter', exists=True, file_okay=True, dir_okay=False, readable=True, resolve_path=True)]` | ✅ Sim | `-` | Path to the Markdown file to initialize with frontmatter |
 
-| `force` | `Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]` | `False` | ❌ Não |
+| `force` | `Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]` | ❌ Não | `False` | Overwrite existing frontmatter if present |
 
 
 **Exemplo:**
@@ -178,11 +178,11 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed information about each entry')]` | `False` | ❌ Não |
+| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed information about each entry')]` | ❌ Não | `False` | Show detailed information about each entry |
 
 
 **Exemplo:**
@@ -213,13 +213,13 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `entry_id` | `Annotated[str | None, typer.Option('--entry-id', help="Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries.")]` | `None` | ❌ Não |
+| `entry_id` | `Annotated[str | None, typer.Option('--entry-id', help="Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries.")]` | ❌ Não | `None` | Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries. |
 
-| `dry_run` | `Annotated[bool, typer.Option('--dry-run', help='Preview sync operations without writing to disk')]` | `False` | ❌ Não |
+| `dry_run` | `Annotated[bool, typer.Option('--dry-run', help='Preview sync operations without writing to disk')]` | ❌ Não | `False` | Preview sync operations without writing to disk |
 
 
 **Exemplo:**
@@ -247,13 +247,13 @@ Example:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `output` | `Annotated[Path, typer.Option('--output', '-o', help='Output path for context JSON file')]` | `.cortex/context.json` | ❌ Não |
+| `output` | `Annotated[Path, typer.Option('--output', '-o', help='Output path for context JSON file')]` | ❌ Não | `.cortex/context.json` | Output path for context JSON file |
 
-| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed output')]` | `False` | ❌ Não |
+| `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed output')]` | ❌ Não | `False` | Show detailed output |
 
 
 **Exemplo:**
@@ -285,17 +285,17 @@ Examples:
 **Parâmetros:**
 
 
-| Nome | Tipo | Padrão | Obrigatório |
+| Nome | Tipo | Obrigatório | Default | Descrição |
 
-|:-----|:-----|:-------|:------------|
+|:-----|:-----|:------------|:--------|:----------|
 
-| `path` | `Annotated[Path, typer.Argument(help='Directory containing Markdown files to migrate (e.g., docs/)', exists=True, file_okay=False, dir_okay=True, readable=True, resolve_path=True)]` | `-` | ✅ Sim |
+| `path` | `Annotated[Path, typer.Argument(help='Directory containing Markdown files to migrate (e.g., docs/)', exists=True, file_okay=False, dir_okay=True, readable=True, resolve_path=True)]` | ✅ Sim | `-` | Directory containing Markdown files to migrate (e.g., docs/) |
 
-| `apply` | `Annotated[bool, typer.Option('--apply', help='Apply changes to files (default is dry-run mode)')]` | `False` | ❌ Não |
+| `apply` | `Annotated[bool, typer.Option('--apply', help='Apply changes to files (default is dry-run mode)')]` | ❌ Não | `False` | Apply changes to files (default is dry-run mode) |
 
-| `force` | `Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]` | `False` | ❌ Não |
+| `force` | `Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]` | ❌ Não | `False` | Overwrite existing frontmatter if present |
 
-| `recursive` | `Annotated[bool, typer.Option('--recursive/--no-recursive', '-r', help='Process subdirectories recursively')]` | `True` | ❌ Não |
+| `recursive` | `Annotated[bool, typer.Option('--recursive/--no-recursive', '-r', help='Process subdirectories recursively')]` | ❌ Não | `True` | Process subdirectories recursively |
 
 
 **Exemplo:**
@@ -503,6 +503,20 @@ Fluxo principal de execução.
         0 se sucesso, 1 se erro
 
 
+## 🗺️ Diagrama de Comandos
+
+```mermaid
+graph TD
+  cortex[cortex] --> audit[audit]
+  cortex[cortex] --> guardianprobe[guardian-probe]
+  cortex[cortex] --> init[init]
+  cortex[cortex] --> knowledgescan[knowledge-scan]
+  cortex[cortex] --> knowledgesync[knowledge-sync]
+  cortex[cortex] --> map[map]
+  cortex[cortex] --> migrate[migrate]
+  cortex[cortex] --> setuphooks[setup-hooks]
+```
+
 ---
 
 ## 🔄 Atualização Automática
@@ -520,5 +534,5 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** 2025-12-13 02:05 UTC
-**Gerado por:** `scripts/core/doc_gen.py` v1.0.0
+**Última Atualização:** 2025-12-13 20:59 UTC
+**Gerado por:** `scripts/core/doc_gen.py` v1.1.0
