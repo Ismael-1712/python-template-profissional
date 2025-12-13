@@ -1,0 +1,50 @@
+# Este é um exemplo de workflow do GitHub Actions para validação de documentação
+# Copie este arquivo para .github/workflows/validate-docs.yml para ativar
+
+name: Validate Documentation
+
+on:
+  # Executa em pushes para branches principais
+  push:
+    branches:
+      - main
+      - develop
+
+  # Executa em Pull Requests
+  pull_request:
+    branches:
+      - main
+      - develop
+
+  # Permite execução manual
+  workflow_dispatch:
+
+jobs:
+  validate-cli-docs:
+    name: Validate CLI Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/dev.txt
+
+      - name: 🔍 Validate CLI Documentation
+        run: |
+          python scripts/ci/check_docs.py
+
+      - name: 💡 Provide fix instructions on failure
+        if: failure()
+        run: |
+          echo "::error::CLI documentation is outdated!"
+          echo "::notice::Run 'python scripts/core/doc_gen.py' locally and commit the changes."
