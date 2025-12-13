@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import logging
 import sys  # Para exit codes
+import webbrowser
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -39,6 +40,9 @@ from scripts.audit.models import (  # noqa: E402
 from scripts.audit.plugins import check_mock_coverage, simulate_ci  # noqa: E402
 from scripts.audit.reporter import AuditReporter  # noqa: E402
 from scripts.audit.scanner import FileScanner  # noqa: E402
+
+# Import Audit Dashboard for metrics tracking and visualization
+from scripts.audit_dashboard import AuditDashboard, AuditMetricsError  # noqa: E402
 
 # Import novo sistema de logging e banner
 from scripts.utils.banner import print_startup_banner  # noqa: E402
@@ -356,6 +360,21 @@ Examples:
         default="HIGH",
         help="Exit with error on this severity level or higher",
     )
+    parser.add_argument(
+        "--dashboard",
+        action="store_true",
+        help="Display audit metrics dashboard in console after audit",
+    )
+    parser.add_argument(
+        "--html",
+        action="store_true",
+        help="Export audit dashboard as HTML report",
+    )
+    parser.add_argument(
+        "--open",
+        action="store_true",
+        help="Open HTML dashboard in browser (requires --html)",
+    )
 
     parser.add_argument(
         "files",
@@ -418,6 +437,41 @@ Examples:
     if ci_result.get("passed") is False:
         logger.error("Audit failed due to CI simulation failures")
         sys.exit(1)
+
+    # Dashboard integration: Record audit and display/export if requested
+    try:
+        dashboard = AuditDashboard(workspace_root=workspace_root)
+
+        # Record the audit results in metrics
+        dashboard.record_audit(report)
+        logger.info("Audit results recorded in metrics")
+
+        # Display console dashboard if requested
+        if args.dashboard:
+            logger.info("Displaying audit metrics dashboard...")
+            dashboard.print_console_dashboard()
+
+        # Export HTML dashboard if requested
+        if args.html:
+            logger.info("Exporting HTML dashboard...")
+            html_path = dashboard.export_html_dashboard()
+            logger.info("HTML Dashboard exported to: %s", html_path)
+
+            # Open in browser if requested
+            if args.open:
+                logger.info("Opening HTML dashboard in browser...")
+                webbrowser.open(f"file://{html_path.absolute()}")
+                logger.info("Dashboard opened in browser")
+
+        elif args.open:
+            # User requested --open without --html
+            logger.warning(
+                "--open flag requires --html to export the dashboard first",
+            )
+
+    except AuditMetricsError as e:
+        logger.warning("Dashboard integration failed: %s", e)
+        # Continue execution - dashboard is optional
 
     logger.info("Audit completed successfully")
     sys.exit(0)

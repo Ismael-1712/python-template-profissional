@@ -1,44 +1,88 @@
 ---
 id: audit-dashboard-integration
-type: arch
+title: Audit Dashboard Integration System
+description: Architecture and integration guide for the visual audit dashboard
 status: active
+type: arch
 version: 1.0.0
-author: Engineering Team
-date: '2025-12-01'
-last_updated: '2025-12-01'
-context_tags: []
-linked_code:
-- scripts/code_audit.py
-- scripts/audit_dashboard.py
-title: Audit Dashboard Integration Guide
+author: Ismael-1712
+date: 2025-12-13
+tags: [audit, dashboard, observability, cli]
+linked_code: [scripts/audit_dashboard/__init__.py]
 ---
 
 # Audit Dashboard Integration Guide
 
 ## Overview
 
-O `audit_dashboard.py` é um sistema de métricas empresarial para rastreamento de auditorias DevOps, integrado com o `code_audit.py` para fornecer visibilidade completa sobre a efetividade das auditorias de CI/CD.
+O `audit_dashboard` é um sistema de métricas empresarial para rastreamento de auditorias DevOps, **totalmente integrado** ao `dev-audit` CLI para fornecer visibilidade completa sobre a efetividade das auditorias de CI/CD.
 
-## Integration Points
+## CLI Integration (v2.0.0+)
 
-### 1. With `code_audit.py`
+### Uso Básico
 
-O dashboard pode ser integrado ao sistema de auditoria principal adicionando estas linhas ao final do `code_audit.py`:
+O Dashboard agora está integrado diretamente no comando `dev-audit` através dos seguintes argumentos:
+
+```bash
+# Executar audit e exibir dashboard no console
+dev-audit --dashboard
+
+# Executar audit e exportar dashboard HTML
+dev-audit --html
+
+# Executar audit, exportar HTML e abrir no browser
+dev-audit --html --open
+
+# Combinar com outras opções
+dev-audit --output yaml --dashboard --html
+```
+
+### Argumentos Disponíveis
+
+- `--dashboard`: Exibe métricas consolidadas no console após a auditoria
+- `--html`: Exporta o relatório HTML do dashboard (`audit_dashboard.html`)
+- `--open`: Abre automaticamente o HTML gerado no navegador (requer `--html`)
+
+### Integração Automática
+
+A integração acontece automaticamente ao final de cada auditoria:
+
+1. **Registro de Métricas**: Os resultados da auditoria são automaticamente registrados no sistema de métricas
+2. **Dashboard Console**: Se `--dashboard` for usado, exibe estatísticas consolidadas
+3. **Exportação HTML**: Se `--html` for usado, gera arquivo HTML com visualizações ricas
+4. **Abertura Automática**: Se `--open` for usado junto com `--html`, abre o relatório no browser padrão
+
+### Código de Integração
+
+A integração foi implementada em `scripts/cli/audit.py`:
 
 ```python
-# Add to code_audit.py imports
-from scripts.audit_dashboard import AuditDashboard
+# Imports adicionados
+from scripts.audit_dashboard import AuditDashboard, AuditMetricsError
+import webbrowser
 
-# Add to the end of your audit process
-def integrate_dashboard_recording(audit_results: dict, workspace_root: Path):
-    """Record audit results in dashboard metrics."""
-    try:
-        dashboard = AuditDashboard(workspace_root)
-        dashboard.record_audit(audit_results)
-        logger.info("Audit metrics recorded successfully")
-    except Exception as e:
-        logger.warning(f"Failed to record audit metrics: {e}")
-        # Don't fail the audit if dashboard recording fails
+# Lógica de integração (após a auditoria)
+try:
+    dashboard = AuditDashboard(workspace_root=workspace_root)
+
+    # Registra automaticamente os resultados
+    dashboard.record_audit(report)
+
+    # Exibe no console se solicitado
+    if args.dashboard:
+        dashboard.print_console_dashboard()
+
+    # Exporta HTML se solicitado
+    if args.html:
+        html_path = dashboard.export_html_dashboard()
+
+        # Abre no browser se solicitado
+        if args.open:
+            webbrowser.open(f"file://{html_path.absolute()}")
+
+except AuditMetricsError as e:
+    logger.warning("Dashboard integration failed: %s", e)
+    # Continua execução - dashboard é opcional
 ```
 
 ### 2. CI/CD Pipeline Integration
@@ -47,14 +91,8 @@ Add to your CI/CD pipeline (e.g., `.github/workflows/audit.yml`):
 
 ```yaml
 steps:
-  - name: Run Code Audit
-    run: dev-audit --output json --config scripts/audit_config.yaml
-
-  - name: Update Dashboard Metrics
-    run: audit-dashboard
-
-  - name: Export Dashboard
-    run: audit-dashboard --export-html
+  - name: Run Code Audit with Dashboard
+    run: dev-audit --html
 
   - name: Upload Dashboard Artifact
     uses: actions/upload-artifact@v3
@@ -71,37 +109,72 @@ Add to `.pre-commit-config.yaml`:
 repos:
   - repo: local
     hooks:
-      - id: audit-dashboard-update
-        name: Update Audit Dashboard
-        entry: audit-dashboard
+      - id: audit-with-metrics
+        name: Code Audit with Metrics Tracking
+        entry: dev-audit --dashboard
         language: system
         pass_filenames: false
-        stages: [post-commit]
+        stages: [commit]
 ```
 
 ## Usage Examples
 
-### Console Dashboard
+### Exemplo 1: Auditoria Básica com Dashboard Console
 
 ```bash
-audit-dashboard
+dev-audit --dashboard
 ```
 
-### HTML Export
+**Saída:**
 
-```bash
-audit-dashboard --export-html
+```
+📊 DASHBOARD DE AUDITORIA DEVOPS
+==================================================
+
+🎯 MÉTRICAS PRINCIPAIS:
+   • Auditorias realizadas: 42
+   • Falhas evitadas: 156
+   • Tempo economizado: 26.0 horas
+   • Taxa de sucesso: 98.5%
 ```
 
-### JSON Export for Monitoring
+### Exemplo 2: Exportar Dashboard HTML
 
 ```bash
-audit-dashboard --export-json monitoring_metrics.json
+dev-audit --html
 ```
 
-### Reset Statistics
+**Resultado:** Cria `audit_dashboard.html` no workspace root.
+
+### Exemplo 3: Exportar e Abrir no Browser
 
 ```bash
+dev-audit --html --open
+```
+
+**Resultado:** Exporta HTML e abre automaticamente no navegador padrão.
+
+### Exemplo 4: Combinação Completa
+
+```bash
+dev-audit --output yaml --dashboard --html --open
+```
+
+**Resultado:**
+
+- Gera relatório em YAML
+- Exibe dashboard no console
+- Exporta dashboard HTML
+- Abre HTML no browser
+
+### Standalone Dashboard Access
+
+Se você quiser apenas visualizar o dashboard sem executar nova auditoria:
+
+```bash
+# Via módulo direto (usa dados históricos)
+python scripts/audit_dashboard.py
+python scripts/audit_dashboard.py --export-html
 audit-dashboard --reset-stats
 ```
 
