@@ -57,3 +57,11 @@ repos:
         language: system
         pass_filenames: false
         types: [python]
+
+      - id: auto-doc-gen
+        name: "Auto-Generate CLI Docs"
+        entry: python3 scripts/core/doc_gen.py
+        language: system
+        pass_filenames: false
+        files: ^(scripts/cli/|scripts/core/).*\.py$
+        types: [python]
