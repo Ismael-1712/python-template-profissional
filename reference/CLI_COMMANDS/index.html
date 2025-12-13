@@ -882,6 +882,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#diagrama-de-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Diagrama de Comandos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#atualizacao-automatica" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -912,7 +923,7 @@
 <h1 id="referencia-de-comandos-cli-auto-generated">📚 Referência de Comandos CLI (Auto-Generated)</h1>
 <p><strong>⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE</strong></p>
 <p>Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: <strong>2025-12-13 02:05 UTC</strong>
+Gerado em: <strong>2025-12-13 20:59 UTC</strong>
 Fonte: <code>scripts/core/doc_gen.py</code></p>
 <p>Este documento contém a referência completa de todos os comandos CLI disponíveis
 no projeto. A documentação é extraída automaticamente dos códigos-fonte usando
@@ -954,10 +965,10 @@ using the CORTEX system.</p>
     cortex audit docs/guide.md      # Audit single file
     cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>path</code> | <code>Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]</code> | <code>None</code> | ❌ Não |</p>
-<p>| <code>fail_on_error</code> | <code>Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>path</code> | <code>Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]</code> | ❌ Não | <code>None</code> | Path to directory or file to audit (default: docs/) |</p>
+<p>| <code>fail_on_error</code> | <code>Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]</code> | ❌ Não | <code>False</code> | Exit with error code if validation fails (useful for CI) |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cortex<span class="w"> </span>audit
 </code></pre></div></p>
@@ -974,10 +985,10 @@ integrity of the knowledge base.</p>
     cortex guardian-probe --canary-id kno-002  # Test specific entry
     cortex guardian-probe --verbose            # Show detailed validation</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>canary_id</code> | <code>Annotated[str, typer.Option('--canary-id', help='ID of the canary knowledge entry to search for (default: kno-001)')]</code> | <code>"kno-001"</code> | ❌ Não |</p>
-<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed validation information')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>canary_id</code> | <code>Annotated[str, typer.Option('--canary-id', help='ID of the canary knowledge entry to search for (default: kno-001)')]</code> | ❌ Não | <code>"kno-001"</code> | ID of the canary knowledge entry to search for (default: kno-001) |</p>
+<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed validation information')]</code> | ❌ Não | <code>False</code> | Show detailed validation information |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cortex<span class="w"> </span>guardian-probe
 </code></pre></div></p>
@@ -990,10 +1001,10 @@ confirmation unless --force is used.</p>
     cortex init docs/new-guide.md
     cortex init docs/existing.md --force</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>path</code> | <code>Annotated[Path, typer.Argument(help='Path to the Markdown file to initialize with frontmatter', exists=True, file_okay=True, dir_okay=False, readable=True, resolve_path=True)]</code> | <code>-</code> | ✅ Sim |</p>
-<p>| <code>force</code> | <code>Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>path</code> | <code>Annotated[Path, typer.Argument(help='Path to the Markdown file to initialize with frontmatter', exists=True, file_okay=True, dir_okay=False, readable=True, resolve_path=True)]</code> | ✅ Sim | <code>-</code> | Path to the Markdown file to initialize with frontmatter |</p>
+<p>| <code>force</code> | <code>Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]</code> | ❌ Não | <code>False</code> | Overwrite existing frontmatter if present |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cortex<span class="w"> </span>init<span class="w"> </span>&lt;path&gt;
 </code></pre></div></p>
@@ -1012,9 +1023,9 @@ and displays a summary of found entries.</p>
     cortex knowledge-scan              # Scan knowledge base
     cortex knowledge-scan --verbose    # Show detailed info</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed information about each entry')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed information about each entry')]</code> | ❌ Não | <code>False</code> | Show detailed information about each entry |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cortex<span class="w"> </span>knowledge-scan
 </code></pre></div></p>
@@ -1031,10 +1042,10 @@ Otherwise, all entries with external sources will be processed.</p>
     cortex knowledge-sync --entry-id kno-001 # Sync specific entry
     cortex knowledge-sync --dry-run          # Preview sync operations</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>entry_id</code> | <code>Annotated[str | None, typer.Option('--entry-id', help="Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries.")]</code> | <code>None</code> | ❌ Não |</p>
-<p>| <code>dry_run</code> | <code>Annotated[bool, typer.Option('--dry-run', help='Preview sync operations without writing to disk')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>entry_id</code> | <code>Annotated[str | None, typer.Option('--entry-id', help="Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries.")]</code> | ❌ Não | <code>None</code> | Specific entry ID to synchronize (e.g., 'kno-001'). If omitted, syncs all entries. |</p>
+<p>| <code>dry_run</code> | <code>Annotated[bool, typer.Option('--dry-run', help='Preview sync operations without writing to disk')]</code> | ❌ Não | <code>False</code> | Preview sync operations without writing to disk |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cortex<span class="w"> </span>knowledge-sync
 </code></pre></div></p>
@@ -1049,10 +1060,10 @@ and architecture. This map can be used by LLMs or automation tools.</p>
     cortex map --verbose               # Show detailed information
     cortex map -o custom/path.json     # Custom output location</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>output</code> | <code>Annotated[Path, typer.Option('--output', '-o', help='Output path for context JSON file')]</code> | <code>.cortex/context.json</code> | ❌ Não |</p>
-<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed output')]</code> | <code>False</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>output</code> | <code>Annotated[Path, typer.Option('--output', '-o', help='Output path for context JSON file')]</code> | ❌ Não | <code>.cortex/context.json</code> | Output path for context JSON file |</p>
+<p>| <code>verbose</code> | <code>Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed output')]</code> | ❌ Não | <code>False</code> | Show detailed output |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cortex<span class="w"> </span>map
 </code></pre></div></p>
@@ -1071,12 +1082,12 @@ Use --apply to actually modify files.</p>
     cortex migrate docs/ --apply --force # Overwrite existing frontmatter
     cortex migrate docs/guides/ --apply  # Migrate specific directory</p>
 <p><strong>Parâmetros:</strong></p>
-<p>| Nome | Tipo | Padrão | Obrigatório |</p>
-<p>|:-----|:-----|:-------|:------------|</p>
-<p>| <code>path</code> | <code>Annotated[Path, typer.Argument(help='Directory containing Markdown files to migrate (e.g., docs/)', exists=True, file_okay=False, dir_okay=True, readable=True, resolve_path=True)]</code> | <code>-</code> | ✅ Sim |</p>
-<p>| <code>apply</code> | <code>Annotated[bool, typer.Option('--apply', help='Apply changes to files (default is dry-run mode)')]</code> | <code>False</code> | ❌ Não |</p>
-<p>| <code>force</code> | <code>Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]</code> | <code>False</code> | ❌ Não |</p>
-<p>| <code>recursive</code> | <code>Annotated[bool, typer.Option('--recursive/--no-recursive', '-r', help='Process subdirectories recursively')]</code> | <code>True</code> | ❌ Não |</p>
+<p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
+<p>|:-----|:-----|:------------|:--------|:----------|</p>
+<p>| <code>path</code> | <code>Annotated[Path, typer.Argument(help='Directory containing Markdown files to migrate (e.g., docs/)', exists=True, file_okay=False, dir_okay=True, readable=True, resolve_path=True)]</code> | ✅ Sim | <code>-</code> | Directory containing Markdown files to migrate (e.g., docs/) |</p>
+<p>| <code>apply</code> | <code>Annotated[bool, typer.Option('--apply', help='Apply changes to files (default is dry-run mode)')]</code> | ❌ Não | <code>False</code> | Apply changes to files (default is dry-run mode) |</p>
+<p>| <code>force</code> | <code>Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]</code> | ❌ Não | <code>False</code> | Overwrite existing frontmatter if present |</p>
+<p>| <code>recursive</code> | <code>Annotated[bool, typer.Option('--recursive/--no-recursive', '-r', help='Process subdirectories recursively')]</code> | ❌ Não | <code>True</code> | Process subdirectories recursively |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cortex<span class="w"> </span>migrate<span class="w"> </span>&lt;path&gt;
 </code></pre></div></p>
@@ -1195,6 +1206,17 @@ mais recentes disponíveis no pyenv, garantindo paridade com o GitHub Actions.</
 <div class="highlight"><pre><span></span><code>Returns:
     0 se sucesso, 1 se erro
 </code></pre></div>
+<h2 id="diagrama-de-comandos">🗺️ Diagrama de Comandos</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>graph TD
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  cortex[cortex] --&gt; audit[audit]
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  cortex[cortex] --&gt; guardianprobe[guardian-probe]
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  cortex[cortex] --&gt; init[init]
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>  cortex[cortex] --&gt; knowledgescan[knowledge-scan]
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>  cortex[cortex] --&gt; knowledgesync[knowledge-sync]
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>  cortex[cortex] --&gt; map[map]
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>  cortex[cortex] --&gt; migrate[migrate]
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>  cortex[cortex] --&gt; setuphooks[setup-hooks]
+</code></pre></div>
 <hr />
 <h2 id="atualizacao-automatica">🔄 Atualização Automática</h2>
 <p>Esta documentação é regenerada automaticamente:</p>
@@ -1204,11 +1226,11 @@ mais recentes disponíveis no pyenv, garantindo paridade com o GitHub Actions.</
 <li><strong>Script:</strong> <code>scripts/core/doc_gen.py</code></li>
 </ol>
 <p><strong>Para forçar regeneração manual:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>python<span class="w"> </span>scripts/core/doc_gen.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>python<span class="w"> </span>scripts/core/doc_gen.py
 </code></pre></div></p>
 <hr />
-<p><strong>Última Atualização:</strong> 2025-12-13 02:05 UTC
-<strong>Gerado por:</strong> <code>scripts/core/doc_gen.py</code> v1.0.0</p>
+<p><strong>Última Atualização:</strong> 2025-12-13 20:59 UTC
+<strong>Gerado por:</strong> <code>scripts/core/doc_gen.py</code> v1.1.0</p>
 
 
 
