@@ -18,7 +18,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **2025-12-13 21:58 UTC**
+Gerado em: **2025-12-13 22:31 UTC**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -448,7 +448,7 @@ Função principal CLI para integração CI/CD.
     Returns:
         Código de saída (0 = sucesso, 1 = warning, 2 = failure)
 
-
+    
 
 ## `install-dev` - Development Environment Installation Script.
 
@@ -501,7 +501,7 @@ Fluxo principal de execução.
 
     Returns:
         0 se sucesso, 1 se erro
-
+    
 
 ## 🗺️ Diagrama de Comandos
 
@@ -534,5 +534,5 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** 2025-12-13 21:58 UTC
+**Última Atualização:** 2025-12-13 22:31 UTC
 **Gerado por:** `scripts/core/doc_gen.py` v1.1.0
