@@ -20,7 +20,7 @@ Integration:
 
 Author: DevOps Engineering Team
 License: MIT
-Version: 1.0.0
+Version: 1.1.0
 """
 
 from __future__ import annotations
@@ -28,11 +28,14 @@ from __future__ import annotations
 import hashlib
 import inspect
 import sys
+import typing
 from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
+
+import click
 
 # Add project root to sys.path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -71,6 +74,8 @@ class CLIDocGenerator:
             ("install-dev", "scripts.cli.install_dev"),
             ("upgrade-python", "scripts.cli.upgrade_python"),
         ]
+        # Track command hierarchy for Mermaid diagram
+        self.mermaid_edges: list[tuple[str, str]] = []
 
     def generate_documentation(self) -> str:
         """Generate complete CLI documentation in Markdown format.
@@ -120,6 +125,7 @@ class CLIDocGenerator:
         # Assemble final document
         sections.append(self._generate_toc(toc_entries))
         sections.extend(command_sections)
+        sections.append(self._generate_mermaid_diagram())
         sections.append(self._generate_footer())
 
         return "\n\n".join(sections)
@@ -176,6 +182,31 @@ introspecção do Typer."""
 
         return "\n".join(toc_lines)
 
+    def _generate_mermaid_diagram(self) -> str:
+        """Generate Mermaid diagram of command hierarchy.
+
+        Returns:
+            Markdown section with Mermaid graph
+        """
+        if not self.mermaid_edges:
+            return ""
+
+        lines = [
+            "## 🗺️ Diagrama de Comandos",
+            "",
+            "```mermaid",
+            "graph TD",
+        ]
+
+        # Add all edges (parent -> child relationships)
+        for parent, child in sorted(set(self.mermaid_edges)):
+            parent_id = parent.replace("-", "").replace("_", "")
+            child_id = child.replace("-", "").replace("_", "")
+            lines.append(f"  {parent_id}[{parent}] --> {child_id}[{child}]")
+
+        lines.append("```")
+        return "\n".join(lines)
+
     def _generate_footer(self) -> str:
         """Generate document footer."""
         return f"""---
@@ -196,7 +227,7 @@ python scripts/core/doc_gen.py
 ---
 
 **Última Atualização:** {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
-**Gerado por:** `scripts/core/doc_gen.py` v1.0.0"""
+**Gerado por:** `scripts/core/doc_gen.py` v1.1.0"""
 
     def _import_module(self, module_path: str) -> ModuleType:
         """Dynamically import a module by path.
@@ -216,13 +247,17 @@ python scripts/core/doc_gen.py
         cli_name: str,
         app: typer.Typer,
         module: ModuleType,
+        parent_path: str = "",
+        level: int = 2,
     ) -> tuple[str, list[tuple[str, str]]]:
-        """Process a Typer application and extract commands.
+        """Process a Typer application and extract commands recursively.
 
         Args:
             cli_name: Name of the CLI (e.g., 'cortex')
             app: Typer application instance
             module: Module containing the app
+            parent_path: Full command path for nested commands
+            level: Heading level for Markdown (2=##, 3=###, 4=####)
 
         Returns:
             Tuple of (markdown_section, toc_entries)
@@ -232,7 +267,8 @@ python scripts/core/doc_gen.py
 
         # CLI Header
         cli_anchor = cli_name.replace("-", "")
-        sections.append(f"## `{cli_name}` - {self._get_cli_description(module)}")
+        heading = "#" * level
+        sections.append(f"{heading} `{cli_name}` - {self._get_cli_description(module)}")
         toc_entries.append((cli_name, cli_anchor))
 
         # Module docstring
@@ -247,15 +283,39 @@ python scripts/core/doc_gen.py
             sections.append("*Nenhum comando encontrado via introspecção.*")
             return "\n\n".join(sections), toc_entries
 
-        # Process each command
+        # Process each command (with recursive subcommand support)
         for cmd_name, cmd_info in sorted(commands.items()):
-            cmd_section, cmd_anchor = self._process_command(
-                cli_name,
-                cmd_name,
-                cmd_info,
-            )
-            sections.append(cmd_section)
-            toc_entries.append((f"{cli_name} - {cmd_name}", cmd_anchor))
+            full_path = f"{parent_path} {cmd_name}".strip() if parent_path else cmd_name
+
+            # Add edge to Mermaid graph
+            parent_for_mermaid = parent_path.split()[-1] if parent_path else cli_name
+            self.mermaid_edges.append((parent_for_mermaid, cmd_name))
+
+            # Check if this command is actually a Typer group (nested subcommands)
+            is_subgroup = isinstance(cmd_info.get("callback"), typer.Typer)
+
+            if is_subgroup:
+                # Recursively process subcommands
+                sub_app = cmd_info["callback"]
+                sub_section, sub_toc = self._process_typer_app(
+                    cmd_name,
+                    sub_app,
+                    module,
+                    parent_path=full_path,
+                    level=level + 1,
+                )
+                sections.append(sub_section)
+                toc_entries.extend(sub_toc)
+            else:
+                # Regular command - process normally
+                cmd_section, cmd_anchor = self._process_command(
+                    cli_name,
+                    cmd_name,
+                    cmd_info,
+                    level=level + 1,
+                )
+                sections.append(cmd_section)
+                toc_entries.append((f"{cli_name} - {cmd_name}", cmd_anchor))
 
         return "\n\n".join(sections), toc_entries
 
@@ -350,13 +410,13 @@ python scripts/core/doc_gen.py
         return commands
 
     def _extract_params(self, func: Callable[..., Any] | None) -> list[dict[str, Any]]:
-        """Extract parameters from function signature.
+        """Extract parameters from function signature with deep Click introspection.
 
         Args:
             func: Function to introspect (can be None)
 
         Returns:
-            List of parameter metadata dictionaries
+            List of parameter metadata dictionaries with enhanced info
         """
         # Guard against None function
         if func is None:
@@ -366,29 +426,98 @@ python scripts/core/doc_gen.py
 
         try:
             sig = inspect.signature(func)
-        except (ValueError, TypeError):
-            # Function signature cannot be inspected
+            # Resolve forward references in annotations
+            type_hints = typing.get_type_hints(func, include_extras=True)
+        except (ValueError, TypeError, NameError):
+            # Function signature cannot be inspected or hints cannot be resolved
             return []
+
+        # Try to get Click command for deep introspection
+        click_params = self._get_click_params(func)
 
         for param_name, param in sig.parameters.items():
             if param_name in ("self", "cls"):
                 continue
 
+            # Try to find corresponding Click parameter for enhanced metadata
+            click_meta = click_params.get(param_name, {})
+
+            # Extract help from resolved type hints
+            help_text = click_meta.get("help", "")
+            if not help_text and param_name in type_hints:
+                help_text = self._extract_help_from_annotation(type_hints[param_name])
+
+            # Extract values to avoid long lines
+            default_val = click_meta.get("default") or self._format_default(
+                param.default,
+            )
+            is_required = click_meta.get(
+                "required",
+                param.default == inspect.Parameter.empty,
+            )
+
             param_info = {
                 "name": param_name,
                 "type": self._format_type(param.annotation),
-                "default": self._format_default(param.default),
-                "required": param.default == inspect.Parameter.empty,
+                "default": default_val,
+                "required": is_required,
+                "help": help_text,
             }
             params.append(param_info)
 
         return params
+
+    def _extract_help_from_annotation(self, annotation: Any) -> str:
+        """Extract help text from Typer Annotated type hints.
+
+        Args:
+            annotation: Type annotation (might be Annotated[Type, typer.Option(...)])
+
+        Returns:
+            Help text string or empty string
+        """
+        # Check if it's typing.Annotated
+        if hasattr(annotation, "__metadata__"):
+            # Iterate through metadata (second+ args of Annotated)
+            for metadata in annotation.__metadata__:
+                # Check if it's a Typer argument/option with help
+                if hasattr(metadata, "help") and metadata.help:
+                    return str(metadata.help)
+        return ""
+
+    def _get_click_params(self, func: Callable[..., Any]) -> dict[str, dict[str, Any]]:
+        """Extract Click parameter metadata from decorated function.
+
+        Args:
+            func: Function potentially decorated with Click/Typer decorators
+
+        Returns:
+            Dictionary mapping parameter names to their Click metadata
+        """
+        click_params: dict[str, dict[str, Any]] = {}
+
+        # Check if function has __click_params__ attribute (from Typer/Click decorators)
+        if hasattr(func, "__click_params__"):
+            for click_param in func.__click_params__:
+                param_name = click_param.name
+
+                # Extract metadata from Click Option or Argument
+                metadata: dict[str, Any] = {"help": click_param.help or ""}
+
+                if isinstance(click_param, (click.Option, click.Argument)):
+                    metadata["required"] = click_param.required
+                    metadata["default"] = self._format_default(click_param.default)
+
+                click_params[param_name] = metadata
+
+        return click_params
 
     def _process_command(
         self,
         cli_name: str,
         cmd_name: str,
         cmd_info: dict[str, Any],
+        level: int = 3,
     ) -> tuple[str, str]:
         """Process individual command and generate documentation.
 
@@ -396,6 +525,7 @@ python scripts/core/doc_gen.py
             cli_name: Parent CLI name
             cmd_name: Command name
             cmd_info: Command metadata
+            level: Heading level for Markdown (3=###, 4=####)
 
         Returns:
             Tuple of (markdown_section, anchor)
@@ -403,8 +533,9 @@ python scripts/core/doc_gen.py
         sections: list[str] = []
         anchor = f"{cli_name}-{cmd_name}".replace("-", "").replace("_", "")
 
-        # Command header
-        sections.append(f"### `{cli_name} {cmd_name}`")
+        # Command header with dynamic heading level
+        heading = "#" * level
+        sections.append(f"{heading} `{cli_name} {cmd_name}`")
 
         # Help text
         help_text = cmd_info.get("help", "")
@@ -419,17 +550,18 @@ python scripts/core/doc_gen.py
                 docstring = inspect.cleandoc(callback_doc)
                 sections.append(f"\n{docstring}\n")
 
-        # Parameters table
+        # Parameters table with enhanced columns
         if cmd_info["params"]:
             sections.append("**Parâmetros:**\n")
-            sections.append("| Nome | Tipo | Padrão | Obrigatório |")
-            sections.append("|:-----|:-----|:-------|:------------|")
+            sections.append("| Nome | Tipo | Obrigatório | Default | Descrição |")
+            sections.append("|:-----|:-----|:------------|:--------|:----------|")
 
             for param in cmd_info["params"]:
                 required = "✅ Sim" if param["required"] else "❌ Não"
+                help_text = param.get("help", "-")
                 sections.append(
-                    f"| `{param['name']}` | `{param['type']}` | "
-                    f"`{param['default']}` | {required} |",
+                    f"| `{param['name']}` | `{param['type']}` | {required} | "
+                    f"`{param['default']}` | {help_text} |",
                 )
 
         # Usage example
