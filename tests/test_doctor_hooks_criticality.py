@@ -203,6 +203,7 @@ class TestDoctorHooksCriticality:
         assert result.passed is True, "CI should skip hooks check"
         assert "CI" in result.message, "Message should indicate CI skip"
 
+    @patch.dict(os.environ, {}, clear=True)  # Ensure not in CI
     def test_missing_git_directory_fails_gracefully(self, tmp_path: Path) -> None:
         """Verify that missing .git directory is handled gracefully.
 
