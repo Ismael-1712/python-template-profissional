@@ -89,6 +89,57 @@ title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
 **Tamanho:** ~500 linhas
 **Público:** Desenvolvedores, DevOps, Arquitetos
 
+---
+
+## 📚 ARQUITETURA E DESIGN
+
+### 🔌 Catálogo de Plugins de Auditoria
+
+**Arquivo:** [CODE_AUDIT.md - Catálogo de Plugins](./CODE_AUDIT.md#🔌-catálogo-de-plugins-disponíveis)
+
+**Conteúdo:**
+
+- Documentação completa de plugins de auditoria disponíveis
+- **Plugin `check_mock_coverage`**: Análise de cobertura de mocks em testes
+- **Plugin `simulate_ci`**: Simulação de ambiente CI/CD local
+- Templates para desenvolvimento de novos plugins
+- Best practices de integração
+- Exemplos de uso programático
+
+**Plugins Documentados:**
+
+| Plugin | Propósito | Status |
+|--------|-----------|--------|
+| `check_mock_coverage` | Verifica uso de mocks em testes | ✅ Documentado |
+| `simulate_ci` | Simula variáveis de ambiente CI/CD | ✅ Documentado |
+
+**Público:** Desenvolvedores, QA Engineers, DevOps
+
+---
+
+## 📖 GUIAS
+
+### 🔬 Arquitetura Interna do Mock CI
+
+**Arquivo:** [MOCK_SYSTEM.md - Arquitetura Interna](../guides/MOCK_SYSTEM.md#🔬-arquitetura-interna-do-mock-ci)
+
+**Conteúdo:**
+
+- Pipeline completo: **Detector → Checker → Fixer**
+- Documentação detalhada de cada componente:
+  - **Detector** (`detector.py`): Análise AST e detecção de ambiente CI/CD
+  - **Checker** (`checker.py`): Validação read-only de testes e mocks
+  - **Fixer** (`fixer.py`): Aplicação de patches e transformações AST
+  - **Git Operations** (`git_ops.py`): Gestão de commits automáticos
+- Fluxo de execução completo com exemplos
+- Decisões de design e padrões arquiteturais
+- Diagramas visuais do pipeline
+
+**Público:** Desenvolvedores, Arquitetos de Software, SRE
+
+**Tamanho:** ~180 linhas (nova seção)
+**Status:** ✅ Completo
+
 ## 🎯 GUIA DE LEITURA POR PERFIL
 
 ### 👔 Para Gerentes/Product Owners

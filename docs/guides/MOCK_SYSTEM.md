@@ -37,7 +37,169 @@ scripts/
 └── README_test_mock_system.md  # Este arquivo
 ```
 
-## 🚀 Uso Rápido
+## � Arquitetura Interna do Mock CI
+
+O sistema Mock CI segue um pipeline de 3 estágios com separação clara de responsabilidades:
+
+### Pipeline: Detector → Checker → Fixer
+
+```
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│  Detector   │ ───> │   Checker   │ ───> │    Fixer    │
+│             │      │             │      │             │
+│ • Scan AST  │      │ • Validate  │      │ • Apply     │
+│ • Find      │      │ • Report    │      │   Patches   │
+│   Patterns  │      │ • Classify  │      │ • Commit    │
+└─────────────┘      └─────────────┘      └─────────────┘
+       ↓                    ↓                    ↓
+   External            Mock State          Code Modified
+   Calls Found         Analyzed             & Committed
+```
+
+### Componentes Principais
+
+#### 1️⃣ **Detector** (`scripts/core/mock_ci/detector.py`)
+
+**Responsabilidade:** Análise AST para identificar dependências externas.
+
+```python
+from scripts.core.mock_ci.detector import detect_ci_environment
+
+# Detecta ambiente CI/CD baseado em variáveis de ambiente
+env = detect_ci_environment()  # "github-actions", "gitlab-ci", "local"
+```
+
+**Funcionalidades:**
+
+- ✅ Detecção automática de ambiente CI/CD (GitHub Actions, GitLab CI, Jenkins)
+- ✅ Identificação de chamadas externas em código Python via AST
+- ✅ Classificação de dependências (HTTP, subprocess, filesystem, database)
+- ✅ Suporte a múltiplas plataformas CI/CD
+
+**Padrões Detectados:**
+
+- HTTP: `requests.*`, `httpx.*`, `urllib.*`
+- Subprocess: `subprocess.run()`, `subprocess.Popen()`
+- Filesystem: `open()`, `Path.read_text()`
+- Database: `sqlite3.connect()`, `psycopg2.connect()`
+
+---
+
+#### 2️⃣ **Checker** (`scripts/core/mock_ci/checker.py`)
+
+**Responsabilidade:** Validação read-only de estado de testes e mocks.
+
+```python
+from scripts.core.mock_ci.checker import CIChecker
+
+checker = CIChecker(generator, validator, ci_environment="github-actions")
+report = checker.check_tests(git_info)
+```
+
+**Funcionalidades:**
+
+- ✅ Verificação de cobertura de mocks sem modificar arquivos
+- ✅ Geração de relatórios detalhados (CIReport)
+- ✅ Classificação de severidade (CRITICAL, HIGH, MEDIUM, LOW)
+- ✅ Detecção de testes instáveis (dependências externas não mockadas)
+
+**Outputs:**
+
+- `CIReport`: Relatório estruturado com findings e recomendações
+- `CIStatus`: Estado do CI (PASS, WARNING, FAIL)
+- `MockSuggestions`: Lista de sugestões de mocks para aplicar
+
+---
+
+#### 3️⃣ **Fixer** (`scripts/core/mock_ci/fixer.py`)
+
+**Responsabilidade:** Aplicação automática de patches e transformações AST.
+
+```python
+from scripts.core.mock_ci.fixer import CIFixer
+
+fixer = CIFixer(generator, validator, git_ops)
+result = fixer.apply_fixes(git_info, dry_run=False)
+```
+
+**Funcionalidades:**
+
+- ✅ Aplicação de mocks em código Python
+- ✅ Transformações AST seguras (validação pré/pós aplicação)
+- ✅ Modo dry-run para preview de mudanças
+- ✅ Rollback automático em caso de erro
+
+**Operações:**
+
+1. Aplica patches usando `TestMockGenerator`
+2. Valida sintaxe e semântica pós-patch
+3. Integra com `GitOperations` para commit automático
+
+---
+
+#### 4️⃣ **Git Operations** (`scripts/core/mock_ci/git_ops.py`)
+
+**Responsabilidade:** Gestão de commits automáticos e controle de versão.
+
+**Funcionalidades:**
+
+- ✅ Commits atômicos com mensagens descritivas
+- ✅ Detecção de repositório Git
+- ✅ Validação de estado limpo antes de modificações
+- ✅ Integração com CI/CD (skip CI flags quando apropriado)
+
+**Exemplo de Commit:**
+
+```
+fix(tests): Apply automatic mocks for CI stability
+
+- Added mocks for httpx.get() in test_api.py
+- Added mocks for subprocess.run() in test_cli.py
+- Detected by Mock CI system
+
+[skip ci]
+```
+
+---
+
+### Fluxo de Execução Completo
+
+```python
+# 1. DETECÇÃO
+ci_env = detect_ci_environment()  # "github-actions"
+
+# 2. VERIFICAÇÃO (Read-Only)
+checker = CIChecker(generator, validator, ci_env)
+report = checker.check_tests(git_info)
+
+if report.status == CIStatus.FAIL:
+    # 3. CORREÇÃO (Write)
+    fixer = CIFixer(generator, validator, git_ops)
+    fix_result = fixer.apply_fixes(git_info, dry_run=False)
+
+    # 4. COMMIT AUTOMÁTICO
+    if fix_result.success:
+        git_ops.commit_changes("fix(tests): Apply automatic mocks")
+```
+
+### Decisões de Design
+
+**Separação de Concerns:**
+
+- `Detector`: Apenas leitura e análise
+- `Checker`: Apenas validação e relatório
+- `Fixer`: Apenas modificação e commit
+
+**Vantagens:**
+
+- ✅ Testabilidade: Cada componente é testável isoladamente
+- ✅ Reusabilidade: Componentes podem ser usados em diferentes contextos
+- ✅ Segurança: Operações destrutivas isoladas no Fixer
+- ✅ Auditabilidade: Logs estruturados em cada estágio
+
+---
+
+## �🚀 Uso Rápido
 
 ### 1. Escanear Arquivos de Teste
 
