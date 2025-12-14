@@ -24,6 +24,7 @@ def safe_pip_compile(
     pip_compile_path: str,
     *,
     workspace_root: Path | None = None,
+    timeout: int | None = None,
 ) -> subprocess.CompletedProcess[str]:
     """Execute pip-compile with atomic output guarantees.
 
@@ -40,6 +41,7 @@ def safe_pip_compile(
         output_file: Path to requirements output file (.txt)
         pip_compile_path: Path to pip-compile executable
         workspace_root: Optional working directory for subprocess
+        timeout: Optional timeout in seconds for pip-compile execution
 
     Returns:
         CompletedProcess with stdout, stderr, and returncode
@@ -76,6 +78,7 @@ def safe_pip_compile(
             capture_output=True,
             text=True,
             check=True,
+            timeout=timeout,
         )
 
         # Validate output file

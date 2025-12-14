@@ -36,6 +36,9 @@ from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 from scripts.utils.safe_pip import safe_pip_compile  # noqa: E402
 
+# Security: Timeout for all subprocess calls to prevent CI freezes
+PIP_TIMEOUT_SECONDS = 300  # 5 minutes
+
 # i18n configuration
 localedir = Path(__file__).parent.parent / "locales"
 translation = gettext.translation(
@@ -139,6 +142,7 @@ def install_dev_environment(workspace_root: Path) -> int:
             capture_output=True,
             text=True,
             check=True,
+            timeout=PIP_TIMEOUT_SECONDS,
         )
         logger.debug("Output pip install: %s", result1.stdout.strip())
 
@@ -175,6 +179,7 @@ def install_dev_environment(workspace_root: Path) -> int:
                     capture_output=True,
                     text=True,
                     check=True,
+                    timeout=PIP_TIMEOUT_SECONDS,
                 )
                 # Manual atomic replace for fallback mode
                 tmp_file = workspace_root / "requirements" / "dev.txt.tmp"
@@ -192,6 +197,7 @@ def install_dev_environment(workspace_root: Path) -> int:
                 output_file=workspace_root / "requirements" / "dev.txt",
                 pip_compile_path=pip_compile_path,
                 workspace_root=workspace_root,
+                timeout=PIP_TIMEOUT_SECONDS,
             )
         logger.debug("Output pip-compile: %s", result2.stdout.strip())
 
@@ -204,6 +210,7 @@ def install_dev_environment(workspace_root: Path) -> int:
             capture_output=True,
             text=True,
             check=True,
+            timeout=PIP_TIMEOUT_SECONDS,
         )
         logger.debug("Output pip install -r: %s", result3.stdout.strip())
 
@@ -215,6 +222,13 @@ def install_dev_environment(workspace_root: Path) -> int:
         _display_success_panel()
         return 0
 
+    except subprocess.TimeoutExpired as e:
+        logger.critical(
+            "❌ Command timed out after %ss: %s",
+            PIP_TIMEOUT_SECONDS,
+            " ".join(e.cmd) if e.cmd else "unknown command",
+        )
+        return 1
     except subprocess.CalledProcessError as e:
         logger.error("❌ Installation failed with exit code %s", e.returncode)
         logger.error("Failed command: %s", " ".join(e.cmd))
