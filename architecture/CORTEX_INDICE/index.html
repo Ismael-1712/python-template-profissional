@@ -592,6 +592,62 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#arquitetura-e-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 ARQUITETURA E DESIGN
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 ARQUITETURA E DESIGN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catalogo-de-plugins-de-auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔌 Catálogo de Plugins de Auditoria
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 GUIAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 GUIAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arquitetura-interna-do-mock-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔬 Arquitetura Interna do Mock CI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#guia-de-leitura-por-perfil" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -775,6 +831,61 @@
 </ul>
 <p><strong>Tamanho:</strong> ~500 linhas
 <strong>Público:</strong> Desenvolvedores, DevOps, Arquitetos</p>
+<hr />
+<h2 id="arquitetura-e-design">📚 ARQUITETURA E DESIGN</h2>
+<h3 id="catalogo-de-plugins-de-auditoria">🔌 Catálogo de Plugins de Auditoria</h3>
+<p><strong>Arquivo:</strong> <a href="../CODE_AUDIT/#🔌-catálogo-de-plugins-disponíveis">CODE_AUDIT.md - Catálogo de Plugins</a></p>
+<p><strong>Conteúdo:</strong></p>
+<ul>
+<li>Documentação completa de plugins de auditoria disponíveis</li>
+<li><strong>Plugin <code>check_mock_coverage</code></strong>: Análise de cobertura de mocks em testes</li>
+<li><strong>Plugin <code>simulate_ci</code></strong>: Simulação de ambiente CI/CD local</li>
+<li>Templates para desenvolvimento de novos plugins</li>
+<li>Best practices de integração</li>
+<li>Exemplos de uso programático</li>
+</ul>
+<p><strong>Plugins Documentados:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Plugin</th>
+<th>Propósito</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>check_mock_coverage</code></td>
+<td>Verifica uso de mocks em testes</td>
+<td>✅ Documentado</td>
+</tr>
+<tr>
+<td><code>simulate_ci</code></td>
+<td>Simula variáveis de ambiente CI/CD</td>
+<td>✅ Documentado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Público:</strong> Desenvolvedores, QA Engineers, DevOps</p>
+<hr />
+<h2 id="guias">📖 GUIAS</h2>
+<h3 id="arquitetura-interna-do-mock-ci">🔬 Arquitetura Interna do Mock CI</h3>
+<p><strong>Arquivo:</strong> <a href="../../guides/MOCK_SYSTEM/#🔬-arquitetura-interna-do-mock-ci">MOCK_SYSTEM.md - Arquitetura Interna</a></p>
+<p><strong>Conteúdo:</strong></p>
+<ul>
+<li>Pipeline completo: <strong>Detector → Checker → Fixer</strong></li>
+<li>Documentação detalhada de cada componente:</li>
+<li><strong>Detector</strong> (<code>detector.py</code>): Análise AST e detecção de ambiente CI/CD</li>
+<li><strong>Checker</strong> (<code>checker.py</code>): Validação read-only de testes e mocks</li>
+<li><strong>Fixer</strong> (<code>fixer.py</code>): Aplicação de patches e transformações AST</li>
+<li><strong>Git Operations</strong> (<code>git_ops.py</code>): Gestão de commits automáticos</li>
+<li>Fluxo de execução completo com exemplos</li>
+<li>Decisões de design e padrões arquiteturais</li>
+<li>Diagramas visuais do pipeline</li>
+</ul>
+<p><strong>Público:</strong> Desenvolvedores, Arquitetos de Software, SRE</p>
+<p><strong>Tamanho:</strong> ~180 linhas (nova seção)
+<strong>Status:</strong> ✅ Completo</p>
 <h2 id="guia-de-leitura-por-perfil">🎯 GUIA DE LEITURA POR PERFIL</h2>
 <h3 id="para-gerentesproduct-owners">👔 Para Gerentes/Product Owners</h3>
 <p><strong>Leia primeiro:</strong></p>
