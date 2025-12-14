@@ -1,0 +1,29 @@
+# ======================================================================
+# 🛡️ CODEOWNERS - PROTEÇÃO DE CÓDIGO CRÍTICO
+# ======================================================================
+# Este arquivo define os proprietários de código para módulos críticos.
+# Mudanças nesses arquivos requerem aprovação explícita dos times
+# responsáveis para garantir a integridade arquitetural.
+#
+# Documentação: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# MÓDULOS CORE - UTILIDADES CRÍTICAS
+# ----------------------------------------------------------------------
+# Estes módulos são a base de toda a infraestrutura do projeto.
+# Mudanças aqui impactam múltiplos sistemas e requerem revisão rigorosa.
+
+# Logger: Sistema de logging centralizado com proteção de secrets
+scripts/utils/logger.py      @sre-team
+
+# Filesystem: Operações atômicas de arquivo e integridade de dados
+scripts/utils/filesystem.py  @sre-team
+
+# ----------------------------------------------------------------------
+# CONFIGURAÇÃO FUTURA
+# ----------------------------------------------------------------------
+# Adicione aqui outros módulos críticos conforme o projeto evolui:
+# - scripts/core/
+# - scripts/audit/
+# - .github/workflows/
