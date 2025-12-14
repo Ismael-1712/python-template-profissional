@@ -128,6 +128,116 @@ class TraceIDFilter(logging.Filter):
 
 
 # ============================================================
+# 2.5.1. SENSITIVE DATA FILTER
+# ============================================================
+
+
+class SensitiveDataFilter(logging.Filter):
+    """Redacts sensitive data from log records to prevent credential leaks.
+
+    This filter intercepts log messages and replaces sensitive patterns with
+    [REDACTED] before they are emitted, preventing accidental exposure of:
+    - API keys and tokens (GitHub, OpenAI, etc.)
+    - Passwords and secrets from environment variables
+    - Any credentials matching known patterns
+
+    Security Patterns:
+        - ghp_[A-Za-z0-9]+ → GitHub Personal Access Tokens
+        - sk-[A-Za-z0-9]+ → OpenAI API Keys
+        - Environment variables containing TOKEN, KEY, SECRET, PASSWORD
+
+    Example:
+        >>> handler.addFilter(SensitiveDataFilter())
+        >>> logger.info("Token: ghp_ABC123")  # Logs: "Token: [REDACTED]"
+    """
+
+    # Regex patterns for known sensitive data formats
+    SENSITIVE_PATTERNS = [
+        (r"ghp_[A-Za-z0-9]+", "[REDACTED]"),  # GitHub Personal Access Token
+        (r"sk-[A-Za-z0-9_-]+", "[REDACTED]"),  # OpenAI API Key
+        (r"glpat-[A-Za-z0-9_-]+", "[REDACTED]"),  # GitLab Personal Access Token
+        (r"xoxb-[A-Za-z0-9-]+", "[REDACTED]"),  # Slack Bot Token
+        (r"AKIA[0-9A-Z]{16}", "[REDACTED]"),  # AWS Access Key ID
+    ]
+
+    # Environment variable names that contain sensitive data
+    SENSITIVE_ENV_KEYS = [
+        "TOKEN",
+        "KEY",
+        "SECRET",
+        "PASSWORD",
+        "CREDENTIAL",
+        "API_KEY",
+        "ACCESS_TOKEN",
+        "AUTH",
+    ]
+
+    def __init__(self) -> None:
+        """Initialize the sensitive data filter with regex patterns."""
+        super().__init__()
+        # Pre-compile regex patterns for performance
+        import re
+
+        self._patterns = [
+            (re.compile(pattern), replacement)
+            for pattern, replacement in self.SENSITIVE_PATTERNS
+        ]
+
+    def _redact_text(self, text: str) -> str:
+        """Redact sensitive data from a text string.
+
+        Args:
+            text: Text to redact
+
+        Returns:
+            Text with sensitive patterns replaced by [REDACTED]
+        """
+        if not isinstance(text, str):
+            return text
+
+        result = text
+        for pattern, replacement in self._patterns:
+            result = pattern.sub(replacement, result)
+
+        # Redact environment variable values if they match sensitive keys
+        for key in self.SENSITIVE_ENV_KEYS:
+            for env_var, value in os.environ.items():
+                if key in env_var.upper() and value and len(value) > 3:
+                    # Only redact non-trivial values
+                    result = result.replace(value, "[REDACTED]")
+
+        return result
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Redact sensitive data from log record.
+
+        Args:
+            record: Log record to filter
+
+        Returns:
+            Always True (record is always processed)
+        """
+        # Redact the message
+        if isinstance(record.msg, str):
+            record.msg = self._redact_text(record.msg)
+
+        # Redact arguments if present
+        if record.args:
+            if isinstance(record.args, dict):
+                record.args = {
+                    k: self._redact_text(v) if isinstance(v, str) else v
+                    for k, v in record.args.items()
+                }
+            elif isinstance(record.args, tuple):
+                record.args = tuple(
+                    self._redact_text(arg) if isinstance(arg, str) else arg
+                    for arg in record.args
+                )
+
+        return True
+
+
+# ============================================================
 # 2.6. JSON FORMATTER
 # ============================================================
 
@@ -373,19 +483,22 @@ def setup_logging(
             )
         formatter = logging.Formatter(format_string)
 
-    # Create Trace ID filter
+    # Create filters
     trace_filter = TraceIDFilter()
+    sensitive_filter = SensitiveDataFilter()
 
     # Handler para INFO/DEBUG → stdout
     stdout_handler = InfoHandler()
     stdout_handler.setFormatter(formatter)
     stdout_handler.addFilter(trace_filter)
+    stdout_handler.addFilter(sensitive_filter)
     logger.addHandler(stdout_handler)
 
     # Handler para WARNING/ERROR/CRITICAL → stderr
     stderr_handler = ErrorHandler()
     stderr_handler.setFormatter(formatter)
     stderr_handler.addFilter(trace_filter)
+    stderr_handler.addFilter(sensitive_filter)
     logger.addHandler(stderr_handler)
 
     # Handler opcional para arquivo (todos os níveis)
@@ -393,6 +506,7 @@ def setup_logging(
         file_handler = logging.FileHandler(log_file, mode="a")
         file_handler.setFormatter(formatter)
         file_handler.addFilter(trace_filter)
+        file_handler.addFilter(sensitive_filter)
         logger.addHandler(file_handler)
 
     return logger
