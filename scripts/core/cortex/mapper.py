@@ -40,6 +40,17 @@ from scripts.utils.logger import setup_logging  # noqa: E402
 
 logger = setup_logging(__name__, log_file="cortex_mapper.log")
 
+# Import Knowledge components
+try:
+    from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
+    from scripts.core.cortex.link_resolver import LinkResolver
+    from scripts.core.cortex.models import KnowledgeEntry
+
+    KNOWLEDGE_AVAILABLE = True
+except ImportError:
+    KNOWLEDGE_AVAILABLE = False
+    logger.debug("Knowledge components not available")
+
 
 @dataclass
 class CLICommand:
@@ -74,6 +85,9 @@ class ProjectContext:
     dependencies: list[str] = field(default_factory=list)
     dev_dependencies: list[str] = field(default_factory=list)
     scripts_available: dict[str, str] = field(default_factory=dict)
+    knowledge_entries_count: int = 0
+    knowledge_links_valid: int = 0
+    knowledge_links_broken: int = 0
 
 
 class ProjectMapper:
@@ -130,6 +144,10 @@ class ProjectMapper:
 
         # Scan architecture documents
         context.architecture_docs = self._scan_architecture()
+
+        # Process knowledge entries (scan + resolve links)
+        if KNOWLEDGE_AVAILABLE:
+            self._process_knowledge_entries(context)
 
         logger.info(
             f"Project mapping complete. Found {len(context.cli_commands)} CLI commands",
@@ -298,6 +316,82 @@ class ProjectMapper:
             logger.debug(f"Could not extract title from {file_path}: {e}")
 
         return file_path.stem
+
+    def _process_knowledge_entries(self, context: ProjectContext) -> None:
+        """Process knowledge entries: scan and resolve links.
+
+        Updates the context with knowledge statistics.
+
+        Args:
+            context: ProjectContext to update with knowledge stats
+        """
+        try:
+            # Scan knowledge entries
+            scanner = KnowledgeScanner(workspace_root=self.project_root, fs=self.fs)
+            entries = scanner.scan()
+
+            if not entries:
+                logger.debug("No knowledge entries found")
+                return
+
+            # Resolve links
+            resolver = LinkResolver(entries, workspace_root=self.project_root)
+            resolved_entries = resolver.resolve_all()
+
+            # Calculate statistics
+            from scripts.core.cortex.models import LinkStatus
+
+            total_valid = sum(
+                sum(1 for link in entry.links if link.status == LinkStatus.VALID)
+                for entry in resolved_entries
+            )
+            total_broken = sum(
+                sum(1 for link in entry.links if link.status == LinkStatus.BROKEN)
+                for entry in resolved_entries
+            )
+
+            # Update context
+            context.knowledge_entries_count = len(resolved_entries)
+            context.knowledge_links_valid = total_valid
+            context.knowledge_links_broken = total_broken
+
+            # Save knowledge entries to separate file
+            self._save_knowledge_entries(resolved_entries)
+
+            logger.info(
+                f"Processed {len(resolved_entries)} knowledge entries: "
+                f"{total_valid} valid links, {total_broken} broken links",
+            )
+
+        except Exception as e:
+            logger.warning(f"Failed to process knowledge entries: {e}")
+
+    def _save_knowledge_entries(self, entries: list[KnowledgeEntry]) -> None:
+        """Save knowledge entries to JSON file.
+
+        Args:
+            entries: List of KnowledgeEntry objects
+        """
+        try:
+            import json
+
+            output_path = self.project_root / ".cortex" / "knowledge.json"
+            self.fs.mkdir(output_path.parent, parents=True, exist_ok=True)
+
+            # Convert Pydantic models to dict
+            entries_data = [entry.model_dump(mode="json") for entry in entries]
+
+            json_content = json.dumps(
+                {"entries": entries_data, "count": len(entries)},
+                indent=2,
+                ensure_ascii=False,
+            )
+            self.fs.write_text(output_path, json_content)
+
+            logger.debug(f"Knowledge entries saved to {output_path}")
+
+        except Exception as e:
+            logger.error(f"Failed to save knowledge entries: {e}")
 
     def save_context(self, context: ProjectContext, output_path: Path) -> None:
         """Save context to JSON file.

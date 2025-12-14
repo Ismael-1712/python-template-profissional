@@ -160,3 +160,21 @@ exclude = [
 [[tool.mypy.overrides]]
 module = "frontmatter"
 ignore_missing_imports = true
+
+# Configuração do Pytest
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--showlocals",
+]
+markers = [
+    "unit: mark a test as a unit test.",
+    "integration: mark a test as an integration test.",
+    "e2e: mark a test as an end-to-end test.",
+]
