@@ -69,6 +69,24 @@ class LinkType(Enum):
     CODE_REFERENCE = "code_reference"
 
 
+class LinkStatus(Enum):
+    """Status of link resolution and validation.
+
+    Attributes:
+        UNRESOLVED: Link has not been resolved yet
+        VALID: Link was successfully resolved to a target
+        BROKEN: Link target could not be found
+        EXTERNAL: Link points to external resource (http/https)
+        AMBIGUOUS: Link matches multiple targets
+    """
+
+    UNRESOLVED = "unresolved"
+    VALID = "valid"
+    BROKEN = "broken"
+    EXTERNAL = "external"
+    AMBIGUOUS = "ambiguous"
+
+
 @dataclass
 class DocumentMetadata:
     """Structured representation of YAML frontmatter in documentation.
@@ -205,19 +223,23 @@ class KnowledgeLink(BaseModel):
         source_id: ID of the source Knowledge Node
         target_raw: Raw string extracted from content (before resolution)
         target_resolved: Resolved target ID or path (None if unresolved)
+        target_id: Resolved Knowledge Node ID (None if not a knowledge node)
         type: Type of link (markdown, wikilink, code reference)
         line_number: Line number where link was found (1-indexed)
         context: Snippet of text around the link for context
-        is_valid: True if target was successfully resolved and validated
+        status: Resolution status (UNRESOLVED, VALID, BROKEN, etc)
+        is_valid: True if target was successfully resolved and validated (deprecated)
 
     Example:
         >>> link = KnowledgeLink(
         ...     source_id="kno-001",
         ...     target_raw="Fase 01",
         ...     target_resolved="kno-002",
+        ...     target_id="kno-002",
         ...     type=LinkType.WIKILINK,
         ...     line_number=42,
         ...     context="...Veja [[Fase 01]] para mais...",
+        ...     status=LinkStatus.VALID,
         ...     is_valid=True,
         ... )
     """
@@ -225,9 +247,11 @@ class KnowledgeLink(BaseModel):
     source_id: str
     target_raw: str
     target_resolved: str | None = None
+    target_id: str | None = None
     type: LinkType
     line_number: int
     context: str
+    status: LinkStatus = LinkStatus.UNRESOLVED
     is_valid: bool = False
 
     model_config = ConfigDict(frozen=True)
