@@ -349,9 +349,10 @@ class DevDoctor:
         return DiagnosticResult(
             "Git Hooks",
             False,
-            "Hooks não instalados. O pre-commit pode não rodar.\n"
+            "🚨 SEGURANÇA: Hooks não instalados. Ambiente VULNERÁVEL!\n"
+            "  Desenvolvedores podem commitar código sem verificações de qualidade.\n"
             "  💊 Prescrição: pre-commit install",
-            critical=False,  # Warning apenas
+            critical=True,  # BLOQUEADOR: sem hooks = ambiente inseguro
         )
 
     def run_diagnostics(self) -> bool:

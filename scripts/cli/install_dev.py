@@ -297,8 +297,44 @@ def install_dev_environment(workspace_root: Path) -> int:
             raise
 
         # ========== STEP 4: Setup direnv configuration ==========
-        logger.info("Step 4/4: Setting up direnv configuration...")
+        logger.info("Step 4/5: Setting up direnv configuration...")
         _setup_direnv(workspace_root)
+
+        # ========== STEP 5: Install Git Hooks (MANDATORY) ==========
+        logger.info("Step 5/5: Installing mandatory Git hooks...")
+        try:
+            result_hooks = subprocess.run(  # nosec # noqa: subprocess
+                ["pre-commit", "install", "--install-hooks"],
+                cwd=workspace_root,
+                shell=False,  # Security: prevent shell injection
+                capture_output=True,
+                text=True,
+                check=False,  # Don't break installation if git fails
+            )
+            if result_hooks.returncode == 0:
+                logger.info("✅ Git hooks instalados e validados!")
+            else:
+                logger.warning(
+                    "⚠️  AVISO: Falha ao instalar hooks (exit code %s)",
+                    result_hooks.returncode,
+                )
+                if result_hooks.stderr:
+                    logger.warning("Detalhes: %s", result_hooks.stderr.strip())
+                logger.critical(
+                    "🚨 SEGURANÇA: Ambiente sem hooks é INSEGURO! "
+                    "Instale manualmente com: pre-commit install",
+                )
+        except FileNotFoundError:
+            logger.critical(
+                "🚨 SEGURANÇA: Comando 'pre-commit' não encontrado! "
+                "Hooks NÃO foram instalados. Ambiente VULNERÁVEL!",
+            )
+        except Exception as e:
+            logger.warning("⚠️  Erro ao instalar hooks: %s", e)
+            logger.critical(
+                "🚨 SEGURANÇA: Ambiente sem hooks é INSEGURO! "
+                "Instale manualmente com: pre-commit install",
+            )
 
         # ========== CLEANUP: Remove backup on success ==========
         _cleanup_backup(backup_file)
