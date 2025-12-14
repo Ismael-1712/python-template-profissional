@@ -18,7 +18,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **2025-12-14 16:57 UTC**
+Gerado em: **2025-12-14**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -29,6 +29,7 @@ introspecção do Typer.
 
 - **[cortex](#cortex)**
   - [cortex - audit](#cortexaudit)
+  - [cortex - config](#cortexconfig)
   - [cortex - guardian-probe](#cortexguardianprobe)
   - [cortex - init](#cortexinit)
   - [cortex - knowledge-scan](#cortexknowledgescan)
@@ -85,6 +86,39 @@ Examples:
 **Exemplo:**
 ```bash
 cortex audit
+```
+
+### `cortex config`
+
+
+Manage CORTEX and Audit configurations.
+
+Display, validate, or manage configuration files used by the auditor
+and other CORTEX tools.
+
+Examples:
+    cortex config --show                    # Display current config
+    cortex config --validate                # Validate YAML syntax
+    cortex config --path custom_config.yaml --show
+
+
+**Parâmetros:**
+
+
+| Nome | Tipo | Obrigatório | Default | Descrição |
+
+|:-----|:-----|:------------|:--------|:----------|
+
+| `show` | `Annotated[bool, typer.Option('--show', help='Display current audit configuration')]` | ❌ Não | `False` | Display current audit configuration |
+
+| `validate` | `Annotated[bool, typer.Option('--validate', help='Validate configuration file syntax')]` | ❌ Não | `False` | Validate configuration file syntax |
+
+| `path` | `Annotated[Path, typer.Option('--path', '-p', help='Path to audit configuration file')]` | ❌ Não | `scripts/audit_config.yaml` | Path to audit configuration file |
+
+
+**Exemplo:**
+```bash
+cortex config
 ```
 
 ### `cortex guardian-probe`
@@ -448,7 +482,7 @@ Função principal CLI para integração CI/CD.
     Returns:
         Código de saída (0 = sucesso, 1 = warning, 2 = failure)
 
-    
+
 
 ## `install-dev` - Development Environment Installation Script.
 
@@ -501,13 +535,14 @@ Fluxo principal de execução.
 
     Returns:
         0 se sucesso, 1 se erro
-    
+
 
 ## 🗺️ Diagrama de Comandos
 
 ```mermaid
 graph TD
   cortex[cortex] --> audit[audit]
+  cortex[cortex] --> config[config]
   cortex[cortex] --> guardianprobe[guardian-probe]
   cortex[cortex] --> init[init]
   cortex[cortex] --> knowledgescan[knowledge-scan]
@@ -534,5 +569,5 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** 2025-12-14 16:57 UTC
+**Última Atualização:** 2025-12-14
 **Gerado por:** `scripts/core/doc_gen.py` v1.1.0

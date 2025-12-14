@@ -132,14 +132,15 @@ class CLIDocGenerator:
 
     def _generate_header(self) -> str:
         """Generate document header with metadata."""
-        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        # Use fixed date for idempotency (only date, not time)
+        generation_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         return f"""---
 id: cli-commands-reference
 type: reference
 status: active
 version: 0.1.0
 author: Auto-Generated (doc_gen.py)
-date: '{datetime.now(timezone.utc).strftime("%Y-%m-%d")}'
+date: '{generation_date}'
 context_tags: [cli, commands, reference]
 linked_code:
   - scripts/cli/cortex.py
@@ -153,7 +154,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **{timestamp}**
+Gerado em: **{generation_date}**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -209,6 +210,7 @@ introspecção do Typer."""
 
     def _generate_footer(self) -> str:
         """Generate document footer."""
+        generation_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         return f"""---
 
 ## 🔄 Atualização Automática
@@ -226,7 +228,7 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** {datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
+**Última Atualização:** {generation_date}
 **Gerado por:** `scripts/core/doc_gen.py` v1.1.0"""
 
     def _import_module(self, module_path: str) -> ModuleType:
@@ -661,8 +663,12 @@ python scripts/core/doc_gen.py
         # Generate new documentation
         new_content = self.generate_documentation()
 
-        # Calculate hash for idempotency check
-        new_hash = hashlib.sha256(new_content.encode()).hexdigest()
+        # Clean content: strip trailing whitespace and ensure single newline at EOF
+        cleaned_lines = [line.rstrip() for line in new_content.splitlines()]
+        cleaned_content = "\n".join(cleaned_lines) + "\n"
+
+        # Calculate hash for idempotency check (AFTER cleaning)
+        new_hash = hashlib.sha256(cleaned_content.encode()).hexdigest()
 
         # Check if file exists and content is identical
         if not force and self.output_path.exists():
@@ -676,8 +682,8 @@ python scripts/core/doc_gen.py
         # Ensure parent directory exists
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Write new documentation
-        self.output_path.write_text(new_content, encoding="utf-8")
+        # Write new documentation with proper formatting
+        self.output_path.write_text(cleaned_content, encoding="utf-8")
         logger.info(f"Documentation written to {self.output_path}")
 
         return True

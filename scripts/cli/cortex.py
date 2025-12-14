@@ -1092,6 +1092,145 @@ def guardian_probe(
         raise typer.Exit(code=1) from e
 
 
+@app.command(name="config")
+def config_manager(
+    show: Annotated[
+        bool,
+        typer.Option(
+            "--show",
+            help="Display current audit configuration",
+        ),
+    ] = False,
+    validate: Annotated[
+        bool,
+        typer.Option(
+            "--validate",
+            help="Validate configuration file syntax",
+        ),
+    ] = False,
+    path: Annotated[
+        Path,
+        typer.Option(
+            "--path",
+            "-p",
+            help="Path to audit configuration file",
+        ),
+    ] = Path("scripts/audit_config.yaml"),
+) -> None:
+    """Manage CORTEX and Audit configurations.
+
+    Display, validate, or manage configuration files used by the auditor
+    and other CORTEX tools.
+
+    Examples:
+        cortex config --show                    # Display current config
+        cortex config --validate                # Validate YAML syntax
+        cortex config --path custom_config.yaml --show
+    """
+    import yaml
+
+    try:
+        # Resolve path relative to project root
+        config_path = _project_root / path if not path.is_absolute() else path
+
+        if not config_path.exists():
+            typer.secho(
+                f"❌ Configuration file not found: {config_path}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(code=1)
+
+        # Read configuration
+        logger.info(f"Reading configuration from: {config_path}")
+        with config_path.open("r", encoding="utf-8") as f:
+            config_data = yaml.safe_load(f)
+
+        # Validate YAML syntax
+        if validate:
+            typer.echo("🔍 Validating configuration file...")
+            if config_data is None:
+                typer.secho(
+                    "⚠️  Configuration file is empty",
+                    fg=typer.colors.YELLOW,
+                )
+                raise typer.Exit(code=1)
+
+            # Check for required keys
+            required_keys = ["scan_paths", "file_patterns", "exclude_paths"]
+            missing_keys = [key for key in required_keys if key not in config_data]
+
+            if missing_keys:
+                typer.secho(
+                    f"❌ Missing required keys: {', '.join(missing_keys)}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(code=1)
+
+            typer.secho("✓ Configuration is valid!", fg=typer.colors.GREEN)
+            typer.echo()
+
+        # Display configuration
+        if show:
+            typer.echo(f"📄 Configuration: {config_path}")
+            typer.echo("=" * 60)
+            typer.echo()
+
+            # Format and display YAML
+            formatted_yaml = yaml.dump(
+                config_data,
+                default_flow_style=False,
+                sort_keys=False,
+                allow_unicode=True,
+            )
+            typer.echo(formatted_yaml)
+
+            typer.echo("=" * 60)
+            typer.echo()
+
+            # Display summary statistics
+            typer.secho("📊 Configuration Summary:", fg=typer.colors.CYAN, bold=True)
+            typer.echo(f"  Scan Paths: {len(config_data.get('scan_paths', []))}")
+            typer.echo(
+                f"  File Patterns: {len(config_data.get('file_patterns', []))}",
+            )
+            typer.echo(
+                f"  Exclude Paths: {len(config_data.get('exclude_paths', []))}",
+            )
+            typer.echo(
+                f"  Custom Patterns: {len(config_data.get('custom_patterns', []))}",
+            )
+            typer.echo()
+
+        # If neither show nor validate, display help
+        if not show and not validate:
+            typer.echo("💡 Use --show to display configuration")
+            typer.echo("💡 Use --validate to check syntax")
+            typer.echo("💡 Use --help for more options")
+
+    except yaml.YAMLError as e:
+        logger.error(f"YAML parsing error: {e}", exc_info=True)
+        typer.secho(
+            f"❌ Invalid YAML syntax: {e}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1) from e
+    except OSError as e:
+        logger.error(f"File error: {e}", exc_info=True)
+        typer.secho(
+            f"❌ Error reading file: {e}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1) from e
+    except Exception as e:
+        logger.error(f"Error managing configuration: {e}", exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
 @app.command(name="map")
 def project_map(
     output: Annotated[
