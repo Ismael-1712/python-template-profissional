@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "analysis_date": "2025-12-14T11:29:33.100176",
+    "project": "python-template-profissional",
+    "task": "Tarefa [004] - Dependências Cíclicas",
+    "scope": "scripts/"
+  },
+  "architectural_layers": {
+    "utils": {
+      "description": "Funções base, logging, filesystem",
+      "rule": "Não deve importar core ou cli"
+    },
+    "core": {
+      "description": "Lógica de negócio",
+      "rule": "Pode importar utils, não deve importar cli"
+    },
+    "cli": {
+      "description": "Interface de comando",
+      "rule": "Pode importar utils e core"
+    }
+  },
+  "findings": {
+    "layer_violations": {
+      "count": 0,
+      "severity": "NONE",
+      "details": []
+    },
+    "deferred_imports": {
+      "count": 1,
+      "severity": "LOW",
+      "details": [
+        {
+          "file": "core/mock_generator.py",
+          "line": 44,
+          "import": "from scripts.core.mock_ci.models_pydantic import MockPattern",
+          "reason": "Lazy import para evitar dependência circular",
+          "mitigation": "Usando TYPE_CHECKING corretamente"
+        }
+      ]
+    },
+    "type_checking_blocks": {
+      "count": 3,
+      "severity": "INFO",
+      "files": [
+        "core/mock_generator.py",
+        "core/mock_validator.py",
+        "core/cortex/knowledge_sync.py"
+      ],
+      "assessment": "Uso correto para type hints sem import em runtime"
+    },
+    "circular_dependencies": {
+      "count": 0,
+      "severity": "NONE",
+      "details": []
+    }
+  },
+  "hub_modules": {
+    "top_15": [
+      {
+        "module": "scripts.core.mock_ci",
+        "imports": 23
+      },
+      {
+        "module": "scripts.utils.banner",
+        "imports": 16
+      },
+      {
+        "module": "scripts.core.cortex",
+        "imports": 16
+      },
+      {
+        "module": "scripts.utils.logger",
+        "imports": 14
+      },
+      {
+        "module": "scripts.utils.filesystem",
+        "imports": 12
+      },
+      {
+        "module": "scripts.utils.context",
+        "imports": 10
+      },
+      {
+        "module": "scripts.core.guardian",
+        "imports": 10
+      },
+      {
+        "module": "scripts.ci_recovery",
+        "imports": 4
+      },
+      {
+        "module": "scripts.core.mock_generator",
+        "imports": 4
+      },
+      {
+        "module": "scripts.core.mock_validator",
+        "imports": 4
+      }
+    ],
+    "critical_hubs": [
+      {
+        "module": "scripts.utils.logger",
+        "reason": "Importado por quase todos os módulos CLI e core",
+        "risk": "Mudanças podem afetar todo o sistema",
+        "recommendation": "Manter API estável, evitar breaking changes"
+      },
+      {
+        "module": "scripts.utils.filesystem",
+        "reason": "Base para abstração de I/O testável",
+        "risk": "Mudanças no protocolo FileSystemAdapter afetam múltiplos módulos",
+        "recommendation": "Usar versionamento semântico para mudanças no protocol"
+      }
+    ]
+  },
+  "special_cases": {
+    "logger_context_import": {
+      "file": "scripts/utils/logger.py",
+      "issue": "Import try/except de scripts.utils.context",
+      "line": 34,
+      "reason": "Graceful degradation quando context não disponível",
+      "assessment": "Padrão aceitável para resiliência"
+    }
+  }
+}
