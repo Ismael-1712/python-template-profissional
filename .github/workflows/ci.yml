@@ -56,7 +56,11 @@ jobs:
       - name: "Instalar Dependências"
         run: make install-dev
 
-      # --- 2.1. DEBUG: VERIFICAR PACOTES INSTALADOS ---
+      # --- 2.1. AUDITORIA DE DEPENDÊNCIAS ---
+      - name: "🛡️ Audit Dependencies"
+        run: .venv/bin/python scripts/audit_dependencies.py --ci
+
+      # --- 2.2. DEBUG: VERIFICAR PACOTES INSTALADOS ---
       - name: "Debug: Listar Pacotes Instalados"
         run: |
           echo "=== Pacotes instalados (typer, fastapi, uvicorn) ==="
