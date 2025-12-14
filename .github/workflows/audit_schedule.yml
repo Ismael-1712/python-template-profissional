@@ -1,0 +1,129 @@
+# ======================================================================
+# 🔍 AUDITORIA AGENDADA DE DEPENDÊNCIAS
+# ======================================================================
+# Este workflow executa auditoria automatizada de dependências de forma
+# periódica para detectar violações arquiteturais antes que se tornem
+# problemas críticos.
+#
+# ESTRATÉGIA:
+# - Execução: Toda segunda-feira às 09:00 UTC
+# - Objetivo: Detectar dependências cíclicas e violações de hierarquia
+# - Notificação: Cria issue automática em caso de falhas
+#
+# AUTOR: DevOps Engineering Team
+# VERSÃO: 1.0.0
+# ======================================================================
+
+name: "🔍 Auditoria Agendada de Dependências"
+
+on:
+  # Execução agendada: Toda segunda-feira às 09:00 UTC
+  schedule:
+    - cron: '0 9 * * 1'
+
+  # Permite execução manual para testes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write  # Para criar issues em caso de problemas
+
+jobs:
+  # --------------------------------------------------------------------
+  # JOB: AUDITORIA DE DEPENDÊNCIAS
+  # --------------------------------------------------------------------
+  audit-dependencies:
+    name: "🛡️ Verificar Saúde Arquitetural"
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- 1. CHECKOUT ---
+      - name: "Checkout do Repositório"
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      # --- 2. CONFIGURAR PYTHON ---
+      - name: "Configurar Python 3.11"
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # --- 3. INSTALAR DEPENDÊNCIAS ---
+      - name: "Instalar Dependências do Projeto"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/dev.txt
+
+      # --- 4. EXECUTAR AUDITORIA ---
+      - name: "🔍 Executar Auditoria de Dependências"
+        id: audit
+        run: |
+          echo "::group::Auditoria de Dependências"
+          python scripts/audit_dependencies.py --json > audit_result.json
+          echo "::endgroup::"
+
+          # Verificar se há violações
+          if python scripts/audit_dependencies.py --ci; then
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+          fi
+
+      # --- 5. UPLOAD DE ARTEFATOS ---
+      - name: "📦 Upload Resultado da Auditoria"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-report-${{ github.run_number }}
+          path: audit_result.json
+          retention-days: 30
+
+      # --- 6. CRIAR ISSUE EM CASO DE FALHA ---
+      - name: "🚨 Criar Issue de Violação Detectada"
+        if: steps.audit.outputs.status == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const auditData = JSON.parse(fs.readFileSync('audit_result.json', 'utf8'));
+
+            const violationCount = auditData.violations.length;
+            const timestamp = auditData.timestamp;
+
+            const issueBody = `## 🚨 Violações Arquiteturais Detectadas
+
+            **Data da Auditoria:** ${timestamp}
+            **Total de Violações:** ${violationCount}
+
+            ### Detalhes
+
+            \`\`\`json
+            ${JSON.stringify(auditData, null, 2)}
+            \`\`\`
+
+            ### Ação Requerida
+
+            Por favor, revise as violações acima e tome as medidas corretivas:
+            1. Corrija as dependências cíclicas identificadas
+            2. Reverta violações de hierarquia de camadas
+            3. Execute \`python scripts/audit_dependencies.py\` localmente para validar
+
+            ---
+            _Este issue foi criado automaticamente pelo workflow de auditoria agendada._
+            _Workflow Run: [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})_
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Auditoria: ${violationCount} Violação(ões) Arquitetural(is) Detectada(s)`,
+              body: issueBody,
+              labels: ['audit', 'dependencies', 'tech-debt', 'automated']
+            });
+
+      # --- 7. NOTIFICAR SUCESSO ---
+      - name: "✅ Auditoria Concluída com Sucesso"
+        if: steps.audit.outputs.status == 'success'
+        run: |
+          echo "✅ Nenhuma violação arquitetural detectada!"
+          echo "📊 Relatório completo disponível nos artefatos."
