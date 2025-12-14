@@ -26,7 +26,7 @@ import pytest
 from pydantic import HttpUrl
 
 if TYPE_CHECKING:
-    from requests import Response  # type: ignore[import-untyped]
+    from requests import Response
 
 from scripts.core.cortex.knowledge_sync import (
     HTTP_NOT_MODIFIED,
