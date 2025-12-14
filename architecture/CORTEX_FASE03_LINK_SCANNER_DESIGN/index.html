@@ -1,0 +1,1975 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🧠 CORTEX - Fase 3: The Link Scanner (Design Técnico) - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-fase-3-the-link-scanner-design-tecnico" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🧠 CORTEX - Fase 3: The Link Scanner (Design Técnico)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 ÍNDICE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 VISÃO GERAL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 VISÃO GERAL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objetivo-da-fase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivo da Fase 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-do-componente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ ARQUITETURA DO COMPONENTE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ ARQUITETURA DO COMPONENTE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#decisao-de-design-composicao-sobre-heranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisão de Design: Composição sobre Herança
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagrama-de-classes-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama de Classes (Mermaid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelo-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 MODELO DE DADOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 MODELO DE DADOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-enum-linktype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Enum LinkType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-modelo-knowledgelink-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Modelo KnowledgeLink (Pydantic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-extensao-de-knowledgeentry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Extensão de KnowledgeEntry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrategia-de-parsing-regex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 ESTRATÉGIA DE PARSING (REGEX)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 ESTRATÉGIA DE PARSING (REGEX)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-links-markdown-padrao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Links Markdown Padrão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-wikilinks-obsidian-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Wikilinks (Obsidian Style)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-code-references-proposta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Code References (Proposta)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-utilitario-extracao-de-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Utilitário: Extração de Contexto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resolucao-de-caminhos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 RESOLUÇÃO DE CAMINHOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 RESOLUÇÃO DE CAMINHOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrategias-de-resolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estratégias de Resolução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Estratégias de Resolução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-referencia-por-id-canonico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Referência por ID Canônico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-referencia-por-titulolabel-fuzzy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Referência por Título/Label Fuzzy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-referencia-por-caminho-relativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Referência por Caminho Relativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-referencia-a-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Referência a Código
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementacao-do-resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementação do Resolver
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-processamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 FLUXO DE PROCESSAMENTO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 FLUXO DE PROCESSAMENTO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pseudocodigo-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pseudocódigo Completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagrama-de-fluxo-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama de Fluxo (Mermaid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🖥️ INTEGRAÇÃO COM CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🖥️ INTEGRAÇÃO COM CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#novo-comando-cortex-knowledge-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novo Comando: cortex knowledge-graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎮 CASOS DE USO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎮 CASOS DE USO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-1-deteccao-de-broken-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 1: Detecção de Broken Links
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-2-visualizacao-de-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 2: Visualização de Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-3-validacao-em-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 3: Validação em CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-aceitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ CRITÉRIOS DE ACEITAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ CRITÉRIOS DE ACEITAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-31-link-extraction-mvp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3.1: Link Extraction (MVP)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-32-link-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3.2: Link Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-33-graph-building" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3.3: Graph Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-34-cli-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3.4: CLI Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-35-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3.5: Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 REFERÊNCIAS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changelog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 CHANGELOG
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cortex-fase-3-the-link-scanner-design-tecnico">🧠 CORTEX - Fase 3: The Link Scanner (Design Técnico)</h1>
+<p><strong>Data:</strong> 14 de Dezembro de 2025
+<strong>Status:</strong> 🔵 Design em Aprovação
+<strong>Missão:</strong> [006] - Transformar Nós Isolados em Grafo Conectado</p>
+<hr />
+<h2 id="indice">📋 ÍNDICE</h2>
+<ol>
+<li><a href="#visão-geral">Visão Geral</a></li>
+<li><a href="#arquitetura-do-componente">Arquitetura do Componente</a></li>
+<li><a href="#modelo-de-dados">Modelo de Dados</a></li>
+<li><a href="#estratégia-de-parsing-regex">Estratégia de Parsing (Regex)</a></li>
+<li><a href="#resolução-de-caminhos">Resolução de Caminhos</a></li>
+<li><a href="#fluxo-de-processamento">Fluxo de Processamento</a></li>
+<li><a href="#integração-com-cli">Integração com CLI</a></li>
+<li><a href="#casos-de-uso">Casos de Uso</a></li>
+<li><a href="#critérios-de-aceitação">Critérios de Aceitação</a></li>
+</ol>
+<hr />
+<h2 id="visao-geral">🎯 VISÃO GERAL</h2>
+<h3 id="problema-atual">Problema Atual</h3>
+<p>A <strong>Fase 2</strong> implementou o sistema de Knowledge Nodes, onde cada documento Markdown é representado como um <code>KnowledgeEntry</code> com metadados estruturados. No entanto:</p>
+<ul>
+<li>✅ O campo <code>cached_content</code> armazena o texto completo do documento</li>
+<li>❌ Esse conteúdo <strong>não é processado semanticamente</strong></li>
+<li>❌ Links entre documentos (<code>[[...]]</code>, <code>[...](...)</code>), permanecem invisíveis ao sistema</li>
+<li>❌ Não há modelo de grafo para navegação entre nós</li>
+</ul>
+<p><strong>Resultado:</strong> Temos nós isolados, não um grafo conectado.</p>
+<h3 id="objetivo-da-fase-3">Objetivo da Fase 3</h3>
+<p>Implementar um <strong>Link Analyzer</strong> que:</p>
+<ol>
+<li><strong>Extrai</strong> todas as referências semânticas de <code>cached_content</code></li>
+<li><strong>Resolve</strong> essas referências para IDs canônicos do sistema</li>
+<li><strong>Constrói</strong> um grafo bidirecional (outbound/inbound links)</li>
+<li><strong>Valida</strong> se os alvos dos links existem (detecção de broken links)</li>
+</ol>
+<hr />
+<h2 id="arquitetura-do-componente">🏗️ ARQUITETURA DO COMPONENTE</h2>
+<h3 id="decisao-de-design-composicao-sobre-heranca">Decisão de Design: Composição sobre Herança</h3>
+<p><strong>❌ Opção Descartada:</strong> Estender <code>KnowledgeScanner</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Anti-pattern: Viola Single Responsibility Principle</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeScanner</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">]:</span> <span class="o">...</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">KnowledgeEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeLink</span><span class="p">]:</span> <span class="o">...</span>  <span class="c1"># ❌</span>
+</code></pre></div>
+<p><strong>✅ Opção Escolhida:</strong> Criar <code>LinkAnalyzer</code> como componente independente</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Clean Architecture: Separation of Concerns</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">LinkAnalyzer</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Analisa conteúdo textual e extrai links semânticos.&quot;&quot;&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">extract_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeLink</span><span class="p">]:</span> <span class="o">...</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeLink</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeLink</span><span class="p">]:</span> <span class="o">...</span>
+</code></pre></div>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li><strong>SRP:</strong> <code>KnowledgeScanner</code> = I/O + Parsing de Frontmatter</li>
+<li><strong>SRP:</strong> <code>LinkAnalyzer</code> = Análise semântica de texto</li>
+<li><strong>Testabilidade:</strong> Componentes podem ser testados isoladamente</li>
+<li><strong>Reusabilidade:</strong> <code>LinkAnalyzer</code> pode ser usado em outros contextos (e.g., validação de PRs)</li>
+</ul>
+<hr />
+<h3 id="diagrama-de-classes-mermaid">Diagrama de Classes (Mermaid)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>classDiagram
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    class KnowledgeEntry {
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        +str id
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        +str cached_content
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        +list~KnowledgeLink~ outbound_links
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        +list~str~ inbound_link_ids
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    }
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    class KnowledgeLink {
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        +str source_id
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        +str target_raw
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        +str target_resolved
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        +LinkType type
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        +int line_number
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        +str context
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        +bool is_valid
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    }
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    class LinkType {
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        &lt;&lt;enumeration&gt;&gt;
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        MARKDOWN
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        WIKILINK
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        WIKILINK_ALIASED
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>        CODE_REFERENCE
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    }
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    class LinkAnalyzer {
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        +extract_links(content, source_id) list~KnowledgeLink~
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        +resolve_links(links, index) list~KnowledgeLink~
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        -_parse_markdown_links(content) list~dict~
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        -_parse_wikilinks(content) list~dict~
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>        -_parse_code_references(content) list~dict~
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>    }
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>    class LinkResolver {
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>        +resolve_target(raw, index) str
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>        +is_valid_target(target_id, index) bool
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>        -_resolve_id_reference(id) str
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>        -_resolve_path_reference(path) str
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>    }
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    KnowledgeEntry &quot;1&quot; --&gt; &quot;*&quot; KnowledgeLink : outbound_links
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>    KnowledgeLink --&gt; LinkType : type
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>    LinkAnalyzer ..&gt; KnowledgeLink : creates
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>    LinkAnalyzer --&gt; LinkResolver : uses
+</code></pre></div>
+<hr />
+<h2 id="modelo-de-dados">📊 MODELO DE DADOS</h2>
+<h3 id="1-enum-linktype">1. Enum <code>LinkType</code></h3>
+<p>Define os tipos de links suportados.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="sd">&quot;&quot;&quot;Extensão de models.py - Novos tipos para Link Analysis.&quot;&quot;&quot;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">LinkType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Tipos de links semânticos entre Knowledge Nodes.</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="sd">    Attributes:</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="sd">        MARKDOWN: Link padrão Markdown [label](target)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="sd">        WIKILINK: Wikilink simples [[target]]</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="sd">        WIKILINK_ALIASED: Wikilink com alias [[target|label]]</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="sd">        CODE_REFERENCE: Referência a código [[code:path/to/file.py]]</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="n">MARKDOWN</span> <span class="o">=</span> <span class="s2">&quot;markdown&quot;</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">WIKILINK</span> <span class="o">=</span> <span class="s2">&quot;wikilink&quot;</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>    <span class="n">WIKILINK_ALIASED</span> <span class="o">=</span> <span class="s2">&quot;wikilink_aliased&quot;</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="n">CODE_REFERENCE</span> <span class="o">=</span> <span class="s2">&quot;code_reference&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="2-modelo-knowledgelink-pydantic">2. Modelo <code>KnowledgeLink</code> (Pydantic)</h3>
+<p>Representa uma aresta no grafo de conhecimento.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeLink</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Aresta do grafo de conhecimento.</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="sd">    Representa uma conexão semântica entre dois Knowledge Nodes,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="sd">    extraída do conteúdo textual (cached_content).</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="sd">    Attributes:</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="sd">        source_id: ID do documento de origem (e.g., &quot;kno-001&quot;)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="sd">        target_raw: String original extraída do link (e.g., &quot;[[Fase 01]]&quot;)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="sd">        target_resolved: ID canônico do alvo resolvido (e.g., &quot;cortex-fase01-design&quot;)</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="sd">        type: Tipo do link (markdown, wikilink, etc.)</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="sd">        line_number: Linha onde o link foi encontrado (1-indexed)</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="sd">        context: Snippet de contexto ao redor do link (±50 chars)</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="sd">        is_valid: Se True, o alvo foi encontrado no índice</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="sd">    Example:</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="sd">        &gt;&gt;&gt; link = KnowledgeLink(</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="sd">        ...     source_id=&quot;kno-architecture-overview&quot;,</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="sd">        ...     target_raw=&quot;[[CORTEX Fase 01]]&quot;,</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="sd">        ...     target_resolved=&quot;cortex-fase01-design&quot;,</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="sd">        ...     type=LinkType.WIKILINK,</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="sd">        ...     line_number=42,</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="sd">        ...     context=&quot;...conforme descrito em [[CORTEX Fase 01]], o sistema...&quot;,</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="sd">        ...     is_valid=True,</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="sd">        ... )</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>    <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>    <span class="n">target_raw</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>    <span class="n">target_resolved</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>    <span class="nb">type</span><span class="p">:</span> <span class="n">LinkType</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>    <span class="n">line_number</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>    <span class="n">is_valid</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h3 id="3-extensao-de-knowledgeentry">3. Extensão de <code>KnowledgeEntry</code></h3>
+<p>Adicionar campos para suportar grafo.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeEntry</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Knowledge Node com suporte a grafo conectado.&quot;&quot;&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="c1"># Campos existentes (Fase 2)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;knowledge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;knowledge&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">status</span><span class="p">:</span> <span class="n">DocStatus</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">golden_paths</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">sources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeSource</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">cached_content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="c1"># 🆕 Novos campos (Fase 3)</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">outbound_links</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeLink</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Links que saem deste documento (referências)&quot;</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="p">)</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="n">inbound_link_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;IDs dos documentos que referenciam este (backlinks)&quot;</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>    <span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="estrategia-de-parsing-regex">🔍 ESTRATÉGIA DE PARSING (REGEX)</h2>
+<h3 id="1-links-markdown-padrao">1. Links Markdown Padrão</h3>
+<p><strong>Pattern:</strong> <code>[Label](target)</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">MARKDOWN_LINK_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="sa">r</span><span class="s1">&#39;\[([^\]]+)\]\(([^)]+)\)&#39;</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># Exemplos de Match:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># ✅ [Veja o guia](docs/guide.md)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># ✅ [RFC 001](../reference/rfc-001.md)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># ✅ [API Docs](https://example.com/api)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1"># ❌ [[Wikilink]]  (não deve capturar)</span>
+</code></pre></div>
+<p><strong>Extração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_markdown_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrai links Markdown padrão do conteúdo.&quot;&quot;&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">for</span> <span class="n">line_num</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">MARKDOWN_LINK_PATTERN</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>            <span class="n">label</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>            <span class="c1"># Ignorar URLs externas (HTTP/HTTPS)</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>            <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;http://&#39;</span><span class="p">,</span> <span class="s1">&#39;https://&#39;</span><span class="p">)):</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>                <span class="k">continue</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>            <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>                <span class="s1">&#39;target_raw&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>                <span class="s1">&#39;line_number&#39;</span><span class="p">:</span> <span class="n">line_num</span><span class="p">,</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>                <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_context</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()),</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">LinkType</span><span class="o">.</span><span class="n">MARKDOWN</span><span class="p">,</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>            <span class="p">})</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    <span class="k">return</span> <span class="n">links</span>
+</code></pre></div>
+<hr />
+<h3 id="2-wikilinks-obsidian-style">2. Wikilinks (Obsidian Style)</h3>
+<p><strong>Pattern:</strong> <code>[[target]]</code> ou <code>[[target|alias]]</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">WIKILINK_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="sa">r</span><span class="s1">&#39;\[\[([^\]|]+)(?:\|([^\]]+))?\]\]&#39;</span><span class="p">,</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># Exemplos de Match:</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># ✅ [[CORTEX Fase 01]]           → target=&quot;CORTEX Fase 01&quot;, alias=None</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># ✅ [[cortex-fase01-design]]     → target=&quot;cortex-fase01-design&quot;, alias=None</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="c1"># ✅ [[Fase 01|Documentação]]     → target=&quot;Fase 01&quot;, alias=&quot;Documentação&quot;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># ✅ [[docs/guide.md]]            → target=&quot;docs/guide.md&quot;, alias=None</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># ❌ [Markdown](link)             (não deve capturar)</span>
+</code></pre></div>
+<p><strong>Extração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_wikilinks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrai Wikilinks do conteúdo.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="k">for</span> <span class="n">line_num</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">WIKILINK_PATTERN</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="n">target</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>            <span class="n">alias</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>            <span class="n">link_type</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>                <span class="n">LinkType</span><span class="o">.</span><span class="n">WIKILINK_ALIASED</span> <span class="k">if</span> <span class="n">alias</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>                <span class="k">else</span> <span class="n">LinkType</span><span class="o">.</span><span class="n">WIKILINK</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>            <span class="p">)</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>            <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>                <span class="s1">&#39;target_raw&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>                <span class="s1">&#39;line_number&#39;</span><span class="p">:</span> <span class="n">line_num</span><span class="p">,</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>                <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_context</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()),</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">link_type</span><span class="p">,</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>            <span class="p">})</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>    <span class="k">return</span> <span class="n">links</span>
+</code></pre></div>
+<hr />
+<h3 id="3-code-references-proposta">3. Code References (Proposta)</h3>
+<p><strong>Pattern:</strong> <code>[[code:path/to/file.py]]</code> ou <code>[[code:path/to/file.py::ClassName]]</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">CODE_REFERENCE_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="sa">r</span><span class="s1">&#39;\[\[code:([^\]]+?)(?:::([^\]]+))?\]\]&#39;</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># Exemplos de Match:</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># ✅ [[code:scripts/core/cortex/scanner.py]]</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># ✅ [[code:scripts/core/cortex/models.py::KnowledgeEntry]]</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># ✅ [[code:tests/test_link_analyzer.py::test_wikilinks]]</span>
+</code></pre></div>
+<p><strong>Extração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_code_references</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrai referências a código.&quot;&quot;&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="k">for</span> <span class="n">line_num</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">CODE_REFERENCE_PATTERN</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>            <span class="n">file_path</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>            <span class="n">target_raw</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;code:</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>            <span class="k">if</span> <span class="n">symbol</span><span class="p">:</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>                <span class="n">target_raw</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;::</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>            <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>                <span class="s1">&#39;target_raw&#39;</span><span class="p">:</span> <span class="n">target_raw</span><span class="p">,</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>                <span class="s1">&#39;line_number&#39;</span><span class="p">:</span> <span class="n">line_num</span><span class="p">,</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>                <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_context</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()),</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">LinkType</span><span class="o">.</span><span class="n">CODE_REFERENCE</span><span class="p">,</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>            <span class="p">})</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>    <span class="k">return</span> <span class="n">links</span>
+</code></pre></div>
+<hr />
+<h3 id="4-utilitario-extracao-de-contexto">4. Utilitário: Extração de Contexto</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_extract_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">match_pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Extrai snippet de contexto ao redor do match.</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="sd">    Args:</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="sd">        line: Linha completa onde o match foi encontrado</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="sd">        match_pos: Posição inicial do match na linha</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="sd">        window: Número de caracteres antes/depois (padrão: 50)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="sd">        String de contexto com elipses se truncado</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="n">start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">match_pos</span> <span class="o">-</span> <span class="n">window</span><span class="p">)</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">),</span> <span class="n">match_pos</span> <span class="o">+</span> <span class="n">window</span><span class="p">)</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    <span class="n">snippet</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    <span class="c1"># Adicionar elipses se truncado</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>        <span class="n">snippet</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span> <span class="o">+</span> <span class="n">snippet</span>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>        <span class="n">snippet</span> <span class="o">=</span> <span class="n">snippet</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    <span class="k">return</span> <span class="n">snippet</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="resolucao-de-caminhos">🔗 RESOLUÇÃO DE CAMINHOS</h2>
+<h3 id="estrategias-de-resolucao">Estratégias de Resolução</h3>
+<p>O <code>LinkResolver</code> deve suportar diferentes tipos de referências:</p>
+<h4 id="1-referencia-por-id-canonico">1. Referência por ID Canônico</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Input: &quot;cortex-fase01-design&quot;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># Output: &quot;cortex-fase01-design&quot; (já é canônico)</span>
+</code></pre></div>
+<h4 id="2-referencia-por-titulolabel-fuzzy">2. Referência por Título/Label Fuzzy</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Input: &quot;CORTEX Fase 01&quot; ou &quot;Fase 01&quot; ou &quot;fase-01&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1"># Output: &quot;cortex-fase01-design&quot; (busca fuzzy no índice)</span>
+</code></pre></div>
+<h4 id="3-referencia-por-caminho-relativo">3. Referência por Caminho Relativo</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Input: &quot;../architecture/CORTEX_FASE01_DESIGN.md&quot;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1"># Output: &quot;cortex-fase01-design&quot; (resolve caminho → lê frontmatter → extrai ID)</span>
+</code></pre></div>
+<h4 id="4-referencia-a-codigo">4. Referência a Código</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Input: &quot;code:scripts/core/cortex/models.py::KnowledgeEntry&quot;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="c1"># Output: &quot;code:scripts/core/cortex/models.py::KnowledgeEntry&quot; (validação de existência)</span>
+</code></pre></div>
+<hr />
+<h3 id="implementacao-do-resolver">Implementação do Resolver</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">frontmatter</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeIndexProtocol</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface para índice de Knowledge Nodes.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KnowledgeEntry</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">find_by_title_fuzzy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KnowledgeEntry</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span> <span class="o">...</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">LinkResolver</span><span class="p">:</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve referências em links para IDs canônicos.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">knowledge_index</span><span class="p">:</span> <span class="n">KnowledgeIndexProtocol</span><span class="p">):</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">=</span> <span class="n">workspace_root</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">knowledge_index</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">link_type</span><span class="p">:</span> <span class="n">LinkType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve um link bruto para ID canônico.</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="sd">        Args:</span>
+<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a><span class="sd">            target_raw: String original do link (e.g., &quot;[[Fase 01]]&quot;)</span>
+<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a><span class="sd">            link_type: Tipo do link</span>
+<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>
+<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a><span class="sd">            ID canônico se resolvido, None caso contrário</span>
+<a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a>        <span class="c1"># 1. Verificar se já é um ID canônico</span>
+<a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">target_raw</span><span class="p">):</span>
+<a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a>            <span class="k">return</span> <span class="n">target_raw</span>
+<a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a>
+<a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a>        <span class="c1"># 2. Tentar resolver por caminho (se contém &quot;/&quot; ou termina com .md)</span>
+<a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a>        <span class="k">if</span> <span class="s1">&#39;/&#39;</span> <span class="ow">in</span> <span class="n">target_raw</span> <span class="ow">or</span> <span class="n">target_raw</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.md&#39;</span><span class="p">):</span>
+<a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_path_reference</span><span class="p">(</span><span class="n">target_raw</span><span class="p">)</span>
+<a id="__codelineno-17-36" name="__codelineno-17-36" href="#__codelineno-17-36"></a>
+<a id="__codelineno-17-37" name="__codelineno-17-37" href="#__codelineno-17-37"></a>        <span class="c1"># 3. Tentar busca fuzzy por título</span>
+<a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a>        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">find_by_title_fuzzy</span><span class="p">(</span><span class="n">target_raw</span><span class="p">)</span>
+<a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a>        <span class="k">if</span> <span class="n">entry</span><span class="p">:</span>
+<a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a>            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a>
+<a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a>        <span class="c1"># 4. Caso especial: referências a código</span>
+<a id="__codelineno-17-43" name="__codelineno-17-43" href="#__codelineno-17-43"></a>        <span class="k">if</span> <span class="n">link_type</span> <span class="o">==</span> <span class="n">LinkType</span><span class="o">.</span><span class="n">CODE_REFERENCE</span><span class="p">:</span>
+<a id="__codelineno-17-44" name="__codelineno-17-44" href="#__codelineno-17-44"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_code_reference</span><span class="p">(</span><span class="n">target_raw</span><span class="p">)</span>
+<a id="__codelineno-17-45" name="__codelineno-17-45" href="#__codelineno-17-45"></a>
+<a id="__codelineno-17-46" name="__codelineno-17-46" href="#__codelineno-17-46"></a>        <span class="c1"># Não foi possível resolver</span>
+<a id="__codelineno-17-47" name="__codelineno-17-47" href="#__codelineno-17-47"></a>        <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-17-48" name="__codelineno-17-48" href="#__codelineno-17-48"></a>
+<a id="__codelineno-17-49" name="__codelineno-17-49" href="#__codelineno-17-49"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_path_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-17-50" name="__codelineno-17-50" href="#__codelineno-17-50"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve caminho relativo para ID do documento.</span>
+<a id="__codelineno-17-51" name="__codelineno-17-51" href="#__codelineno-17-51"></a>
+<a id="__codelineno-17-52" name="__codelineno-17-52" href="#__codelineno-17-52"></a><span class="sd">        Lê o arquivo .md, extrai o frontmatter, e retorna o campo &#39;id&#39;.</span>
+<a id="__codelineno-17-53" name="__codelineno-17-53" href="#__codelineno-17-53"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-17-54" name="__codelineno-17-54" href="#__codelineno-17-54"></a>        <span class="c1"># Normalizar caminho (remover ../, etc.)</span>
+<a id="__codelineno-17-55" name="__codelineno-17-55" href="#__codelineno-17-55"></a>        <span class="n">full_path</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-17-56" name="__codelineno-17-56" href="#__codelineno-17-56"></a>
+<a id="__codelineno-17-57" name="__codelineno-17-57" href="#__codelineno-17-57"></a>        <span class="c1"># Verificar se arquivo existe</span>
+<a id="__codelineno-17-58" name="__codelineno-17-58" href="#__codelineno-17-58"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-17-59" name="__codelineno-17-59" href="#__codelineno-17-59"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-17-60" name="__codelineno-17-60" href="#__codelineno-17-60"></a>
+<a id="__codelineno-17-61" name="__codelineno-17-61" href="#__codelineno-17-61"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-17-62" name="__codelineno-17-62" href="#__codelineno-17-62"></a>            <span class="c1"># Ler frontmatter</span>
+<a id="__codelineno-17-63" name="__codelineno-17-63" href="#__codelineno-17-63"></a>            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-17-64" name="__codelineno-17-64" href="#__codelineno-17-64"></a>                <span class="n">post</span> <span class="o">=</span> <span class="n">frontmatter</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-17-65" name="__codelineno-17-65" href="#__codelineno-17-65"></a>
+<a id="__codelineno-17-66" name="__codelineno-17-66" href="#__codelineno-17-66"></a>            <span class="c1"># Extrair ID</span>
+<a id="__codelineno-17-67" name="__codelineno-17-67" href="#__codelineno-17-67"></a>            <span class="k">return</span> <span class="n">post</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+<a id="__codelineno-17-68" name="__codelineno-17-68" href="#__codelineno-17-68"></a>        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-17-69" name="__codelineno-17-69" href="#__codelineno-17-69"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-17-70" name="__codelineno-17-70" href="#__codelineno-17-70"></a>
+<a id="__codelineno-17-71" name="__codelineno-17-71" href="#__codelineno-17-71"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_code_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-17-72" name="__codelineno-17-72" href="#__codelineno-17-72"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida se referência a código existe.</span>
+<a id="__codelineno-17-73" name="__codelineno-17-73" href="#__codelineno-17-73"></a>
+<a id="__codelineno-17-74" name="__codelineno-17-74" href="#__codelineno-17-74"></a><span class="sd">        Format: &quot;code:path/to/file.py&quot; ou &quot;code:path/to/file.py::Symbol&quot;</span>
+<a id="__codelineno-17-75" name="__codelineno-17-75" href="#__codelineno-17-75"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-17-76" name="__codelineno-17-76" href="#__codelineno-17-76"></a>        <span class="c1"># Extrair caminho do arquivo</span>
+<a id="__codelineno-17-77" name="__codelineno-17-77" href="#__codelineno-17-77"></a>        <span class="n">parts</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;code:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;::&#39;</span><span class="p">)</span>
+<a id="__codelineno-17-78" name="__codelineno-17-78" href="#__codelineno-17-78"></a>        <span class="n">file_path</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-17-79" name="__codelineno-17-79" href="#__codelineno-17-79"></a>
+<a id="__codelineno-17-80" name="__codelineno-17-80" href="#__codelineno-17-80"></a>        <span class="c1"># Verificar se arquivo existe</span>
+<a id="__codelineno-17-81" name="__codelineno-17-81" href="#__codelineno-17-81"></a>        <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="n">file_path</span>
+<a id="__codelineno-17-82" name="__codelineno-17-82" href="#__codelineno-17-82"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-17-83" name="__codelineno-17-83" href="#__codelineno-17-83"></a>            <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-17-84" name="__codelineno-17-84" href="#__codelineno-17-84"></a>
+<a id="__codelineno-17-85" name="__codelineno-17-85" href="#__codelineno-17-85"></a>        <span class="c1"># Se especificou símbolo, validar (usando AST - opcional)</span>
+<a id="__codelineno-17-86" name="__codelineno-17-86" href="#__codelineno-17-86"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-17-87" name="__codelineno-17-87" href="#__codelineno-17-87"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a id="__codelineno-17-88" name="__codelineno-17-88" href="#__codelineno-17-88"></a>            <span class="c1"># TODO: Usar CodeLinkScanner.analyze_python_exports()</span>
+<a id="__codelineno-17-89" name="__codelineno-17-89" href="#__codelineno-17-89"></a>            <span class="c1"># para verificar se símbolo existe</span>
+<a id="__codelineno-17-90" name="__codelineno-17-90" href="#__codelineno-17-90"></a>
+<a id="__codelineno-17-91" name="__codelineno-17-91" href="#__codelineno-17-91"></a>        <span class="k">return</span> <span class="n">target</span>  <span class="c1"># Retorna como canônico se válido</span>
+</code></pre></div>
+<hr />
+<h2 id="fluxo-de-processamento">🔄 FLUXO DE PROCESSAMENTO</h2>
+<h3 id="pseudocodigo-completo">Pseudocódigo Completo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_knowledge_graph</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Pipeline completo de análise do grafo de conhecimento.&quot;&quot;&quot;</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>    <span class="c1"># ETAPA 1: Scan de Knowledge Nodes (Fase 2 - já implementado)</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    <span class="n">scanner</span> <span class="o">=</span> <span class="n">KnowledgeScanner</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    <span class="n">entries</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="n">scan</span><span class="p">()</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="c1"># ETAPA 2: Criar índice para resolução rápida</span>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="n">index</span> <span class="o">=</span> <span class="n">KnowledgeIndex</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>    <span class="c1"># ETAPA 3: Análise de links</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">LinkAnalyzer</span><span class="p">()</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    <span class="n">resolver</span> <span class="o">=</span> <span class="n">LinkResolver</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>        <span class="c1"># 3.1: Extrair links brutos do conteúdo</span>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>        <span class="n">raw_links</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>            <span class="n">content</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">cached_content</span><span class="p">,</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>            <span class="n">source_id</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>        <span class="p">)</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>        <span class="c1"># 3.2: Resolver cada link para ID canônico</span>
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>        <span class="n">resolved_links</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>        <span class="k">for</span> <span class="n">link_data</span> <span class="ow">in</span> <span class="n">raw_links</span><span class="p">:</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>            <span class="n">resolved_id</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">.</span><span class="n">resolve_target</span><span class="p">(</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>                <span class="n">target_raw</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;target_raw&#39;</span><span class="p">],</span>
+<a id="__codelineno-18-27" name="__codelineno-18-27" href="#__codelineno-18-27"></a>                <span class="n">link_type</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+<a id="__codelineno-18-28" name="__codelineno-18-28" href="#__codelineno-18-28"></a>            <span class="p">)</span>
+<a id="__codelineno-18-29" name="__codelineno-18-29" href="#__codelineno-18-29"></a>
+<a id="__codelineno-18-30" name="__codelineno-18-30" href="#__codelineno-18-30"></a>            <span class="c1"># Criar KnowledgeLink</span>
+<a id="__codelineno-18-31" name="__codelineno-18-31" href="#__codelineno-18-31"></a>            <span class="n">link</span> <span class="o">=</span> <span class="n">KnowledgeLink</span><span class="p">(</span>
+<a id="__codelineno-18-32" name="__codelineno-18-32" href="#__codelineno-18-32"></a>                <span class="n">source_id</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-18-33" name="__codelineno-18-33" href="#__codelineno-18-33"></a>                <span class="n">target_raw</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;target_raw&#39;</span><span class="p">],</span>
+<a id="__codelineno-18-34" name="__codelineno-18-34" href="#__codelineno-18-34"></a>                <span class="n">target_resolved</span><span class="o">=</span><span class="n">resolved_id</span><span class="p">,</span>
+<a id="__codelineno-18-35" name="__codelineno-18-35" href="#__codelineno-18-35"></a>                <span class="nb">type</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">],</span>
+<a id="__codelineno-18-36" name="__codelineno-18-36" href="#__codelineno-18-36"></a>                <span class="n">line_number</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;line_number&#39;</span><span class="p">],</span>
+<a id="__codelineno-18-37" name="__codelineno-18-37" href="#__codelineno-18-37"></a>                <span class="n">context</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;context&#39;</span><span class="p">],</span>
+<a id="__codelineno-18-38" name="__codelineno-18-38" href="#__codelineno-18-38"></a>                <span class="n">is_valid</span><span class="o">=</span><span class="p">(</span><span class="n">resolved_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-18-39" name="__codelineno-18-39" href="#__codelineno-18-39"></a>            <span class="p">)</span>
+<a id="__codelineno-18-40" name="__codelineno-18-40" href="#__codelineno-18-40"></a>            <span class="n">resolved_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+<a id="__codelineno-18-41" name="__codelineno-18-41" href="#__codelineno-18-41"></a>
+<a id="__codelineno-18-42" name="__codelineno-18-42" href="#__codelineno-18-42"></a>        <span class="c1"># 3.3: Atualizar entry com outbound links</span>
+<a id="__codelineno-18-43" name="__codelineno-18-43" href="#__codelineno-18-43"></a>        <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span> <span class="o">=</span> <span class="n">resolved_links</span>
+<a id="__codelineno-18-44" name="__codelineno-18-44" href="#__codelineno-18-44"></a>
+<a id="__codelineno-18-45" name="__codelineno-18-45" href="#__codelineno-18-45"></a>    <span class="c1"># ETAPA 4: Construir grafo bidirecional (backlinks)</span>
+<a id="__codelineno-18-46" name="__codelineno-18-46" href="#__codelineno-18-46"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-18-47" name="__codelineno-18-47" href="#__codelineno-18-47"></a>        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">:</span>
+<a id="__codelineno-18-48" name="__codelineno-18-48" href="#__codelineno-18-48"></a>            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+<a id="__codelineno-18-49" name="__codelineno-18-49" href="#__codelineno-18-49"></a>                <span class="n">target_entry</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">target_resolved</span><span class="p">)</span>
+<a id="__codelineno-18-50" name="__codelineno-18-50" href="#__codelineno-18-50"></a>                <span class="k">if</span> <span class="n">target_entry</span><span class="p">:</span>
+<a id="__codelineno-18-51" name="__codelineno-18-51" href="#__codelineno-18-51"></a>                    <span class="n">target_entry</span><span class="o">.</span><span class="n">inbound_link_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-18-52" name="__codelineno-18-52" href="#__codelineno-18-52"></a>
+<a id="__codelineno-18-53" name="__codelineno-18-53" href="#__codelineno-18-53"></a>    <span class="c1"># ETAPA 5: Gerar relatório</span>
+<a id="__codelineno-18-54" name="__codelineno-18-54" href="#__codelineno-18-54"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-18-55" name="__codelineno-18-55" href="#__codelineno-18-55"></a>        <span class="s1">&#39;total_nodes&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span>
+<a id="__codelineno-18-56" name="__codelineno-18-56" href="#__codelineno-18-56"></a>        <span class="s1">&#39;total_links&#39;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">),</span>
+<a id="__codelineno-18-57" name="__codelineno-18-57" href="#__codelineno-18-57"></a>        <span class="s1">&#39;broken_links&#39;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span>
+<a id="__codelineno-18-58" name="__codelineno-18-58" href="#__codelineno-18-58"></a>            <span class="mi">1</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-18-59" name="__codelineno-18-59" href="#__codelineno-18-59"></a>            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">outbound_links</span>
+<a id="__codelineno-18-60" name="__codelineno-18-60" href="#__codelineno-18-60"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span>
+<a id="__codelineno-18-61" name="__codelineno-18-61" href="#__codelineno-18-61"></a>        <span class="p">),</span>
+<a id="__codelineno-18-62" name="__codelineno-18-62" href="#__codelineno-18-62"></a>        <span class="s1">&#39;graph&#39;</span><span class="p">:</span> <span class="n">entries</span>
+<a id="__codelineno-18-63" name="__codelineno-18-63" href="#__codelineno-18-63"></a>    <span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="diagrama-de-fluxo-mermaid">Diagrama de Fluxo (Mermaid)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>flowchart TD
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>    Start([Início]) --&gt; Scan[KnowledgeScanner.scan]
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    Scan --&gt; Index[Criar KnowledgeIndex]
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    Index --&gt; Loop{Para cada KnowledgeEntry}
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>    Loop --&gt; Extract[LinkAnalyzer.extract_links]
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>    Extract --&gt; Parse{Tipo de link?}
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>    Parse --&gt;|Markdown| ParseMD[Regex MARKDOWN_LINK_PATTERN]
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    Parse --&gt;|Wikilink| ParseWiki[Regex WIKILINK_PATTERN]
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>    Parse --&gt;|Code Ref| ParseCode[Regex CODE_REFERENCE_PATTERN]
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>    ParseMD --&gt; Resolve[LinkResolver.resolve_target]
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>    ParseWiki --&gt; Resolve
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>    ParseCode --&gt; Resolve
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>    Resolve --&gt; Check{ID Resolvido?}
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>    Check --&gt;|Sim| Valid[KnowledgeLink.is_valid = True]
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>    Check --&gt;|Não| Invalid[KnowledgeLink.is_valid = False]
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>    Valid --&gt; AddOutbound[Adicionar a entry.outbound_links]
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>    Invalid --&gt; AddOutbound
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a>
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a>    AddOutbound --&gt; Loop
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a>    Loop --&gt;|Fim| BuildBacklinks[Construir grafo bidirecional]
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>    BuildBacklinks --&gt; Report[Gerar relatório]
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a>    Report --&gt; End([Fim])
+</code></pre></div>
+<hr />
+<h2 id="integracao-com-cli">🖥️ INTEGRAÇÃO COM CLI</h2>
+<h3 id="novo-comando-cortex-knowledge-graph">Novo Comando: <code>cortex knowledge-graph</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;knowledge-graph&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">knowledge_graph</span><span class="p">(</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="n">knowledge_dir</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>        <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>            <span class="s2">&quot;--dir&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Knowledge directory to analyze (default: docs/knowledge)&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>        <span class="p">),</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>    <span class="n">show_broken</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>        <span class="nb">bool</span><span class="p">,</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>            <span class="s2">&quot;--show-broken&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show only broken links&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a>        <span class="p">),</span>
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a>    <span class="n">export</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a>        <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+<a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a>            <span class="s2">&quot;--export&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a>            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Export graph as JSON or DOT format (json|dot)&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a>        <span class="p">),</span>
+<a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a>    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a>    <span class="n">verbose</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+<a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a>        <span class="nb">bool</span><span class="p">,</span>
+<a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
+<a id="__codelineno-20-27" name="__codelineno-20-27" href="#__codelineno-20-27"></a>            <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-28" name="__codelineno-20-28" href="#__codelineno-20-28"></a>            <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-29" name="__codelineno-20-29" href="#__codelineno-20-29"></a>            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show detailed link information&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-30" name="__codelineno-20-30" href="#__codelineno-20-30"></a>        <span class="p">),</span>
+<a id="__codelineno-20-31" name="__codelineno-20-31" href="#__codelineno-20-31"></a>    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-20-32" name="__codelineno-20-32" href="#__codelineno-20-32"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-20-33" name="__codelineno-20-33" href="#__codelineno-20-33"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze knowledge graph and display connections.</span>
+<a id="__codelineno-20-34" name="__codelineno-20-34" href="#__codelineno-20-34"></a>
+<a id="__codelineno-20-35" name="__codelineno-20-35" href="#__codelineno-20-35"></a><span class="sd">    Scans all Knowledge Nodes, extracts semantic links from content,</span>
+<a id="__codelineno-20-36" name="__codelineno-20-36" href="#__codelineno-20-36"></a><span class="sd">    resolves references, and displays the resulting graph.</span>
+<a id="__codelineno-20-37" name="__codelineno-20-37" href="#__codelineno-20-37"></a>
+<a id="__codelineno-20-38" name="__codelineno-20-38" href="#__codelineno-20-38"></a><span class="sd">    Examples:</span>
+<a id="__codelineno-20-39" name="__codelineno-20-39" href="#__codelineno-20-39"></a><span class="sd">        # Analyze default knowledge directory</span>
+<a id="__codelineno-20-40" name="__codelineno-20-40" href="#__codelineno-20-40"></a><span class="sd">        cortex knowledge-graph</span>
+<a id="__codelineno-20-41" name="__codelineno-20-41" href="#__codelineno-20-41"></a>
+<a id="__codelineno-20-42" name="__codelineno-20-42" href="#__codelineno-20-42"></a><span class="sd">        # Show only broken links</span>
+<a id="__codelineno-20-43" name="__codelineno-20-43" href="#__codelineno-20-43"></a><span class="sd">        cortex knowledge-graph --show-broken</span>
+<a id="__codelineno-20-44" name="__codelineno-20-44" href="#__codelineno-20-44"></a>
+<a id="__codelineno-20-45" name="__codelineno-20-45" href="#__codelineno-20-45"></a><span class="sd">        # Export as JSON for programmatic access</span>
+<a id="__codelineno-20-46" name="__codelineno-20-46" href="#__codelineno-20-46"></a><span class="sd">        cortex knowledge-graph --export json &gt; graph.json</span>
+<a id="__codelineno-20-47" name="__codelineno-20-47" href="#__codelineno-20-47"></a>
+<a id="__codelineno-20-48" name="__codelineno-20-48" href="#__codelineno-20-48"></a><span class="sd">        # Export as DOT for Graphviz visualization</span>
+<a id="__codelineno-20-49" name="__codelineno-20-49" href="#__codelineno-20-49"></a><span class="sd">        cortex knowledge-graph --export dot | dot -Tpng &gt; graph.png</span>
+<a id="__codelineno-20-50" name="__codelineno-20-50" href="#__codelineno-20-50"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-20-51" name="__codelineno-20-51" href="#__codelineno-20-51"></a>    <span class="n">workspace_root</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
+<a id="__codelineno-20-52" name="__codelineno-20-52" href="#__codelineno-20-52"></a>
+<a id="__codelineno-20-53" name="__codelineno-20-53" href="#__codelineno-20-53"></a>    <span class="k">if</span> <span class="n">knowledge_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-20-54" name="__codelineno-20-54" href="#__codelineno-20-54"></a>        <span class="n">knowledge_dir</span> <span class="o">=</span> <span class="n">workspace_root</span> <span class="o">/</span> <span class="s2">&quot;docs&quot;</span> <span class="o">/</span> <span class="s2">&quot;knowledge&quot;</span>
+<a id="__codelineno-20-55" name="__codelineno-20-55" href="#__codelineno-20-55"></a>
+<a id="__codelineno-20-56" name="__codelineno-20-56" href="#__codelineno-20-56"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🧠 Analyzing knowledge graph: </span><span class="si">{</span><span class="n">knowledge_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-57" name="__codelineno-20-57" href="#__codelineno-20-57"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-58" name="__codelineno-20-58" href="#__codelineno-20-58"></a>
+<a id="__codelineno-20-59" name="__codelineno-20-59" href="#__codelineno-20-59"></a>    <span class="c1"># ETAPA 1: Scan</span>
+<a id="__codelineno-20-60" name="__codelineno-20-60" href="#__codelineno-20-60"></a>    <span class="n">scanner</span> <span class="o">=</span> <span class="n">KnowledgeScanner</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-20-61" name="__codelineno-20-61" href="#__codelineno-20-61"></a>    <span class="n">entries</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">knowledge_dir</span><span class="p">)</span>
+<a id="__codelineno-20-62" name="__codelineno-20-62" href="#__codelineno-20-62"></a>
+<a id="__codelineno-20-63" name="__codelineno-20-63" href="#__codelineno-20-63"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span><span class="si">}</span><span class="s2"> knowledge nodes&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-64" name="__codelineno-20-64" href="#__codelineno-20-64"></a>
+<a id="__codelineno-20-65" name="__codelineno-20-65" href="#__codelineno-20-65"></a>    <span class="c1"># ETAPA 2: Build Index</span>
+<a id="__codelineno-20-66" name="__codelineno-20-66" href="#__codelineno-20-66"></a>    <span class="n">index</span> <span class="o">=</span> <span class="n">KnowledgeIndex</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+<a id="__codelineno-20-67" name="__codelineno-20-67" href="#__codelineno-20-67"></a>
+<a id="__codelineno-20-68" name="__codelineno-20-68" href="#__codelineno-20-68"></a>    <span class="c1"># ETAPA 3: Analyze Links</span>
+<a id="__codelineno-20-69" name="__codelineno-20-69" href="#__codelineno-20-69"></a>    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">LinkAnalyzer</span><span class="p">()</span>
+<a id="__codelineno-20-70" name="__codelineno-20-70" href="#__codelineno-20-70"></a>    <span class="n">resolver</span> <span class="o">=</span> <span class="n">LinkResolver</span><span class="p">(</span><span class="n">workspace_root</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+<a id="__codelineno-20-71" name="__codelineno-20-71" href="#__codelineno-20-71"></a>
+<a id="__codelineno-20-72" name="__codelineno-20-72" href="#__codelineno-20-72"></a>    <span class="n">total_links</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-20-73" name="__codelineno-20-73" href="#__codelineno-20-73"></a>    <span class="n">broken_links</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-20-74" name="__codelineno-20-74" href="#__codelineno-20-74"></a>
+<a id="__codelineno-20-75" name="__codelineno-20-75" href="#__codelineno-20-75"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-76" name="__codelineno-20-76" href="#__codelineno-20-76"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">cached_content</span><span class="p">:</span>
+<a id="__codelineno-20-77" name="__codelineno-20-77" href="#__codelineno-20-77"></a>            <span class="k">continue</span>
+<a id="__codelineno-20-78" name="__codelineno-20-78" href="#__codelineno-20-78"></a>
+<a id="__codelineno-20-79" name="__codelineno-20-79" href="#__codelineno-20-79"></a>        <span class="c1"># Extract + Resolve</span>
+<a id="__codelineno-20-80" name="__codelineno-20-80" href="#__codelineno-20-80"></a>        <span class="n">raw_links</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">cached_content</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-20-81" name="__codelineno-20-81" href="#__codelineno-20-81"></a>
+<a id="__codelineno-20-82" name="__codelineno-20-82" href="#__codelineno-20-82"></a>        <span class="k">for</span> <span class="n">link_data</span> <span class="ow">in</span> <span class="n">raw_links</span><span class="p">:</span>
+<a id="__codelineno-20-83" name="__codelineno-20-83" href="#__codelineno-20-83"></a>            <span class="n">resolved</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">.</span><span class="n">resolve_target</span><span class="p">(</span>
+<a id="__codelineno-20-84" name="__codelineno-20-84" href="#__codelineno-20-84"></a>                <span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;target_raw&#39;</span><span class="p">],</span>
+<a id="__codelineno-20-85" name="__codelineno-20-85" href="#__codelineno-20-85"></a>                <span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+<a id="__codelineno-20-86" name="__codelineno-20-86" href="#__codelineno-20-86"></a>            <span class="p">)</span>
+<a id="__codelineno-20-87" name="__codelineno-20-87" href="#__codelineno-20-87"></a>
+<a id="__codelineno-20-88" name="__codelineno-20-88" href="#__codelineno-20-88"></a>            <span class="n">link</span> <span class="o">=</span> <span class="n">KnowledgeLink</span><span class="p">(</span>
+<a id="__codelineno-20-89" name="__codelineno-20-89" href="#__codelineno-20-89"></a>                <span class="n">source_id</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-20-90" name="__codelineno-20-90" href="#__codelineno-20-90"></a>                <span class="n">target_raw</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;target_raw&#39;</span><span class="p">],</span>
+<a id="__codelineno-20-91" name="__codelineno-20-91" href="#__codelineno-20-91"></a>                <span class="n">target_resolved</span><span class="o">=</span><span class="n">resolved</span><span class="p">,</span>
+<a id="__codelineno-20-92" name="__codelineno-20-92" href="#__codelineno-20-92"></a>                <span class="nb">type</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">],</span>
+<a id="__codelineno-20-93" name="__codelineno-20-93" href="#__codelineno-20-93"></a>                <span class="n">line_number</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;line_number&#39;</span><span class="p">],</span>
+<a id="__codelineno-20-94" name="__codelineno-20-94" href="#__codelineno-20-94"></a>                <span class="n">context</span><span class="o">=</span><span class="n">link_data</span><span class="p">[</span><span class="s1">&#39;context&#39;</span><span class="p">],</span>
+<a id="__codelineno-20-95" name="__codelineno-20-95" href="#__codelineno-20-95"></a>                <span class="n">is_valid</span><span class="o">=</span><span class="p">(</span><span class="n">resolved</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+<a id="__codelineno-20-96" name="__codelineno-20-96" href="#__codelineno-20-96"></a>            <span class="p">)</span>
+<a id="__codelineno-20-97" name="__codelineno-20-97" href="#__codelineno-20-97"></a>
+<a id="__codelineno-20-98" name="__codelineno-20-98" href="#__codelineno-20-98"></a>            <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+<a id="__codelineno-20-99" name="__codelineno-20-99" href="#__codelineno-20-99"></a>            <span class="n">total_links</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-20-100" name="__codelineno-20-100" href="#__codelineno-20-100"></a>
+<a id="__codelineno-20-101" name="__codelineno-20-101" href="#__codelineno-20-101"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+<a id="__codelineno-20-102" name="__codelineno-20-102" href="#__codelineno-20-102"></a>                <span class="n">broken_links</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-20-103" name="__codelineno-20-103" href="#__codelineno-20-103"></a>
+<a id="__codelineno-20-104" name="__codelineno-20-104" href="#__codelineno-20-104"></a>    <span class="c1"># ETAPA 4: Build Backlinks</span>
+<a id="__codelineno-20-105" name="__codelineno-20-105" href="#__codelineno-20-105"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-106" name="__codelineno-20-106" href="#__codelineno-20-106"></a>        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">:</span>
+<a id="__codelineno-20-107" name="__codelineno-20-107" href="#__codelineno-20-107"></a>            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+<a id="__codelineno-20-108" name="__codelineno-20-108" href="#__codelineno-20-108"></a>                <span class="n">target</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">get_by_id</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">target_resolved</span><span class="p">)</span>
+<a id="__codelineno-20-109" name="__codelineno-20-109" href="#__codelineno-20-109"></a>                <span class="k">if</span> <span class="n">target</span><span class="p">:</span>
+<a id="__codelineno-20-110" name="__codelineno-20-110" href="#__codelineno-20-110"></a>                    <span class="n">target</span><span class="o">.</span><span class="n">inbound_link_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-20-111" name="__codelineno-20-111" href="#__codelineno-20-111"></a>
+<a id="__codelineno-20-112" name="__codelineno-20-112" href="#__codelineno-20-112"></a>    <span class="c1"># ETAPA 5: Display Results</span>
+<a id="__codelineno-20-113" name="__codelineno-20-113" href="#__codelineno-20-113"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🔗 Total links: </span><span class="si">{</span><span class="n">total_links</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-114" name="__codelineno-20-114" href="#__codelineno-20-114"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;❌&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">broken_links</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;✅&#39;</span><span class="si">}</span><span class="s2"> Broken links: </span><span class="si">{</span><span class="n">broken_links</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-115" name="__codelineno-20-115" href="#__codelineno-20-115"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-116" name="__codelineno-20-116" href="#__codelineno-20-116"></a>
+<a id="__codelineno-20-117" name="__codelineno-20-117" href="#__codelineno-20-117"></a>    <span class="k">if</span> <span class="n">export</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">:</span>
+<a id="__codelineno-20-118" name="__codelineno-20-118" href="#__codelineno-20-118"></a>        <span class="c1"># Export as JSON</span>
+<a id="__codelineno-20-119" name="__codelineno-20-119" href="#__codelineno-20-119"></a>        <span class="n">graph_data</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-20-120" name="__codelineno-20-120" href="#__codelineno-20-120"></a>            <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[</span>
+<a id="__codelineno-20-121" name="__codelineno-20-121" href="#__codelineno-20-121"></a>                <span class="p">{</span>
+<a id="__codelineno-20-122" name="__codelineno-20-122" href="#__codelineno-20-122"></a>                    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-20-123" name="__codelineno-20-123" href="#__codelineno-20-123"></a>                    <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
+<a id="__codelineno-20-124" name="__codelineno-20-124" href="#__codelineno-20-124"></a>                    <span class="s1">&#39;outbound_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">),</span>
+<a id="__codelineno-20-125" name="__codelineno-20-125" href="#__codelineno-20-125"></a>                    <span class="s1">&#39;inbound_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">inbound_link_ids</span><span class="p">),</span>
+<a id="__codelineno-20-126" name="__codelineno-20-126" href="#__codelineno-20-126"></a>                <span class="p">}</span>
+<a id="__codelineno-20-127" name="__codelineno-20-127" href="#__codelineno-20-127"></a>                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-20-128" name="__codelineno-20-128" href="#__codelineno-20-128"></a>            <span class="p">],</span>
+<a id="__codelineno-20-129" name="__codelineno-20-129" href="#__codelineno-20-129"></a>            <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="p">[</span>
+<a id="__codelineno-20-130" name="__codelineno-20-130" href="#__codelineno-20-130"></a>                <span class="p">{</span>
+<a id="__codelineno-20-131" name="__codelineno-20-131" href="#__codelineno-20-131"></a>                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">link</span><span class="o">.</span><span class="n">source_id</span><span class="p">,</span>
+<a id="__codelineno-20-132" name="__codelineno-20-132" href="#__codelineno-20-132"></a>                    <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">link</span><span class="o">.</span><span class="n">target_resolved</span><span class="p">,</span>
+<a id="__codelineno-20-133" name="__codelineno-20-133" href="#__codelineno-20-133"></a>                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">link</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-20-134" name="__codelineno-20-134" href="#__codelineno-20-134"></a>                    <span class="s1">&#39;valid&#39;</span><span class="p">:</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span><span class="p">,</span>
+<a id="__codelineno-20-135" name="__codelineno-20-135" href="#__codelineno-20-135"></a>                <span class="p">}</span>
+<a id="__codelineno-20-136" name="__codelineno-20-136" href="#__codelineno-20-136"></a>                <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-20-137" name="__codelineno-20-137" href="#__codelineno-20-137"></a>                <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">outbound_links</span>
+<a id="__codelineno-20-138" name="__codelineno-20-138" href="#__codelineno-20-138"></a>            <span class="p">]</span>
+<a id="__codelineno-20-139" name="__codelineno-20-139" href="#__codelineno-20-139"></a>        <span class="p">}</span>
+<a id="__codelineno-20-140" name="__codelineno-20-140" href="#__codelineno-20-140"></a>        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-20-141" name="__codelineno-20-141" href="#__codelineno-20-141"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">graph_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<a id="__codelineno-20-142" name="__codelineno-20-142" href="#__codelineno-20-142"></a>
+<a id="__codelineno-20-143" name="__codelineno-20-143" href="#__codelineno-20-143"></a>    <span class="k">elif</span> <span class="n">export</span> <span class="o">==</span> <span class="s2">&quot;dot&quot;</span><span class="p">:</span>
+<a id="__codelineno-20-144" name="__codelineno-20-144" href="#__codelineno-20-144"></a>        <span class="c1"># Export as Graphviz DOT</span>
+<a id="__codelineno-20-145" name="__codelineno-20-145" href="#__codelineno-20-145"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;digraph KnowledgeGraph {&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-146" name="__codelineno-20-146" href="#__codelineno-20-146"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">&#39;  rankdir=LR;&#39;</span><span class="p">)</span>
+<a id="__codelineno-20-147" name="__codelineno-20-147" href="#__codelineno-20-147"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s1">&#39;  node [shape=box];&#39;</span><span class="p">)</span>
+<a id="__codelineno-20-148" name="__codelineno-20-148" href="#__codelineno-20-148"></a>
+<a id="__codelineno-20-149" name="__codelineno-20-149" href="#__codelineno-20-149"></a>        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-150" name="__codelineno-20-150" href="#__codelineno-20-150"></a>            <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  &quot;</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">&quot;;&#39;</span><span class="p">)</span>
+<a id="__codelineno-20-151" name="__codelineno-20-151" href="#__codelineno-20-151"></a>
+<a id="__codelineno-20-152" name="__codelineno-20-152" href="#__codelineno-20-152"></a>        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-153" name="__codelineno-20-153" href="#__codelineno-20-153"></a>            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">:</span>
+<a id="__codelineno-20-154" name="__codelineno-20-154" href="#__codelineno-20-154"></a>                <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+<a id="__codelineno-20-155" name="__codelineno-20-155" href="#__codelineno-20-155"></a>                    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  &quot;</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">&quot; -&gt; &quot;</span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">target_resolved</span><span class="si">}</span><span class="s1">&quot;;&#39;</span><span class="p">)</span>
+<a id="__codelineno-20-156" name="__codelineno-20-156" href="#__codelineno-20-156"></a>
+<a id="__codelineno-20-157" name="__codelineno-20-157" href="#__codelineno-20-157"></a>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-158" name="__codelineno-20-158" href="#__codelineno-20-158"></a>
+<a id="__codelineno-20-159" name="__codelineno-20-159" href="#__codelineno-20-159"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-20-160" name="__codelineno-20-160" href="#__codelineno-20-160"></a>        <span class="c1"># Display as table</span>
+<a id="__codelineno-20-161" name="__codelineno-20-161" href="#__codelineno-20-161"></a>        <span class="k">if</span> <span class="n">show_broken</span><span class="p">:</span>
+<a id="__codelineno-20-162" name="__codelineno-20-162" href="#__codelineno-20-162"></a>            <span class="c1"># Only show broken links</span>
+<a id="__codelineno-20-163" name="__codelineno-20-163" href="#__codelineno-20-163"></a>            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-164" name="__codelineno-20-164" href="#__codelineno-20-164"></a>                <span class="n">broken</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">l</span><span class="o">.</span><span class="n">is_valid</span><span class="p">]</span>
+<a id="__codelineno-20-165" name="__codelineno-20-165" href="#__codelineno-20-165"></a>                <span class="k">if</span> <span class="n">broken</span><span class="p">:</span>
+<a id="__codelineno-20-166" name="__codelineno-20-166" href="#__codelineno-20-166"></a>                    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-167" name="__codelineno-20-167" href="#__codelineno-20-167"></a>                    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">broken</span><span class="p">:</span>
+<a id="__codelineno-20-168" name="__codelineno-20-168" href="#__codelineno-20-168"></a>                        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Line </span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">line_number</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">target_raw</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-20-169" name="__codelineno-20-169" href="#__codelineno-20-169"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-20-170" name="__codelineno-20-170" href="#__codelineno-20-170"></a>            <span class="c1"># Show all nodes with link counts</span>
+<a id="__codelineno-20-171" name="__codelineno-20-171" href="#__codelineno-20-171"></a>            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-20-172" name="__codelineno-20-172" href="#__codelineno-20-172"></a>                <span class="n">outbound</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">)</span>
+<a id="__codelineno-20-173" name="__codelineno-20-173" href="#__codelineno-20-173"></a>                <span class="n">inbound</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">inbound_link_ids</span><span class="p">)</span>
+<a id="__codelineno-20-174" name="__codelineno-20-174" href="#__codelineno-20-174"></a>                <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+<a id="__codelineno-20-175" name="__codelineno-20-175" href="#__codelineno-20-175"></a>                    <span class="sa">f</span><span class="s2">&quot;📄 </span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">:</span><span class="s2">40</span><span class="si">}</span><span class="s2"> &quot;</span>
+<a id="__codelineno-20-176" name="__codelineno-20-176" href="#__codelineno-20-176"></a>                    <span class="sa">f</span><span class="s2">&quot;→ </span><span class="si">{</span><span class="n">outbound</span><span class="si">:</span><span class="s2">3</span><span class="si">}</span><span class="s2"> out  ← </span><span class="si">{</span><span class="n">inbound</span><span class="si">:</span><span class="s2">3</span><span class="si">}</span><span class="s2"> in&quot;</span>
+<a id="__codelineno-20-177" name="__codelineno-20-177" href="#__codelineno-20-177"></a>                <span class="p">)</span>
+<a id="__codelineno-20-178" name="__codelineno-20-178" href="#__codelineno-20-178"></a>
+<a id="__codelineno-20-179" name="__codelineno-20-179" href="#__codelineno-20-179"></a>                <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">:</span>
+<a id="__codelineno-20-180" name="__codelineno-20-180" href="#__codelineno-20-180"></a>                    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">outbound_links</span><span class="p">:</span>
+<a id="__codelineno-20-181" name="__codelineno-20-181" href="#__codelineno-20-181"></a>                        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✅&quot;</span> <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">is_valid</span> <span class="k">else</span> <span class="s2">&quot;❌&quot;</span>
+<a id="__codelineno-20-182" name="__codelineno-20-182" href="#__codelineno-20-182"></a>                        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+<a id="__codelineno-20-183" name="__codelineno-20-183" href="#__codelineno-20-183"></a>                            <span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">15</span><span class="si">}</span><span class="s2">] &quot;</span>
+<a id="__codelineno-20-184" name="__codelineno-20-184" href="#__codelineno-20-184"></a>                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">target_raw</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">link</span><span class="o">.</span><span class="n">target_resolved</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-20-185" name="__codelineno-20-185" href="#__codelineno-20-185"></a>                        <span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="casos-de-uso">🎮 CASOS DE USO</h2>
+<h3 id="caso-1-deteccao-de-broken-links">Caso 1: Detecção de Broken Links</h3>
+<p><strong>Cenário:</strong> Desenvolvedor renomeou arquivo mas não atualizou referências.</p>
+<p><strong>Entrada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>&lt;!-- docs/knowledge/kno-001.md --&gt;
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>Veja também [[Fase 01]] para mais detalhes.
+</code></pre></div>
+<p><strong>Resultado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>$<span class="w"> </span>cortex<span class="w"> </span>knowledge-graph<span class="w"> </span>--show-broken
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>❌<span class="w"> </span>kno-001
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">   </span>Line<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="o">[[</span>Fase<span class="w"> </span><span class="m">01</span><span class="o">]]</span><span class="w">  </span><span class="o">(</span>target<span class="w"> </span>not<span class="w"> </span>found<span class="o">)</span>
+</code></pre></div>
+<hr />
+<h3 id="caso-2-visualizacao-de-dependencias">Caso 2: Visualização de Dependências</h3>
+<p><strong>Cenário:</strong> Arquiteto quer entender quais documentos dependem de um design específico.</p>
+<p><strong>Entrada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>cortex<span class="w"> </span>knowledge-graph<span class="w"> </span>--export<span class="w"> </span>dot<span class="w"> </span><span class="p">|</span><span class="w"> </span>dot<span class="w"> </span>-Tpng<span class="w"> </span>&gt;<span class="w"> </span>graph.png
+</code></pre></div>
+<p><strong>Saída:</strong> Gráfico visual mostrando:</p>
+<ul>
+<li>Nós = Documentos</li>
+<li>Arestas = Links entre documentos</li>
+<li>Clusters = Grupos por tags</li>
+</ul>
+<hr />
+<h3 id="caso-3-validacao-em-cicd">Caso 3: Validação em CI/CD</h3>
+<p><strong>Cenário:</strong> Pipeline CI deve falhar se houver broken links.</p>
+<p><strong>Entrada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># .github/workflows/docs.yml</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Knowledge Graph</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="no">cortex knowledge-graph --show-broken &gt; broken.txt</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="no">if [ -s broken.txt ]; then</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">      </span><span class="no">cat broken.txt</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">      </span><span class="no">exit 1</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="no">fi</span>
+</code></pre></div>
+<hr />
+<h2 id="criterios-de-aceitacao">✅ CRITÉRIOS DE ACEITAÇÃO</h2>
+<h3 id="fase-31-link-extraction-mvp">Fase 3.1: Link Extraction (MVP)</h3>
+<ul>
+<li>[ ] <code>LinkAnalyzer</code> implementado com 3 regex patterns (Markdown, Wikilink, Code)</li>
+<li>[ ] <code>KnowledgeLink</code> model validado com Pydantic</li>
+<li>[ ] <code>LinkType</code> enum definido</li>
+<li>[ ] Testes unitários para cada tipo de link (100% cobertura de regex)</li>
+<li>[ ] Extração de contexto funcionando (±50 chars)</li>
+</ul>
+<h3 id="fase-32-link-resolution">Fase 3.2: Link Resolution</h3>
+<ul>
+<li>[ ] <code>LinkResolver</code> implementado com 4 estratégias de resolução</li>
+<li>[ ] <code>KnowledgeIndex</code> criado para busca rápida</li>
+<li>[ ] Resolução por ID canônico funciona</li>
+<li>[ ] Resolução por caminho relativo funciona</li>
+<li>[ ] Validação de código integrada com <code>CodeLinkScanner</code></li>
+<li>[ ] Testes de resolução (edge cases: paths com <code>..</code>, case insensitive, etc.)</li>
+</ul>
+<h3 id="fase-33-graph-building">Fase 3.3: Graph Building</h3>
+<ul>
+<li>[ ] Campo <code>outbound_links</code> adicionado a <code>KnowledgeEntry</code></li>
+<li>[ ] Campo <code>inbound_link_ids</code> adicionado a <code>KnowledgeEntry</code></li>
+<li>[ ] Algoritmo de construção de backlinks implementado</li>
+<li>[ ] Testes de grafo bidirecional</li>
+</ul>
+<h3 id="fase-34-cli-integration">Fase 3.4: CLI Integration</h3>
+<ul>
+<li>[ ] Comando <code>cortex knowledge-graph</code> implementado</li>
+<li>[ ] Flag <code>--show-broken</code> funciona</li>
+<li>[ ] Export JSON funciona</li>
+<li>[ ] Export DOT funciona</li>
+<li>[ ] Testes de integração E2E</li>
+</ul>
+<h3 id="fase-35-documentation">Fase 3.5: Documentation</h3>
+<ul>
+<li>[ ] Este design doc finalizado e aprovado</li>
+<li>[ ] Docstrings em todos os componentes</li>
+<li>[ ] Exemplos de uso no <code>KNOWLEDGE_NODE_MANUAL.md</code></li>
+<li>[ ] ADR (Architecture Decision Record) documentando escolha de composição sobre herança</li>
+</ul>
+<hr />
+<h2 id="referencias">📚 REFERÊNCIAS</h2>
+<ul>
+<li><strong>Fase 1:</strong> <a href="../CORTEX_FASE01_DESIGN/">CORTEX_FASE01_DESIGN.md</a></li>
+<li><strong>Fase 2:</strong> <a href="../CORTEX_INDICE/">CORTEX_INDICE.md</a> (seção Knowledge Node)</li>
+<li><strong>Code Link Scanner:</strong> <a href="../../scripts/core/cortex/scanner.py">scanner.py</a></li>
+<li><strong>Obsidian Wikilinks:</strong> <a href="https://help.obsidian.md/Linking+notes+and+files/Internal+links">Obsidian Help - Internal Links</a></li>
+</ul>
+<hr />
+<h2 id="changelog">📝 CHANGELOG</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Autor</th>
+<th>Mudanças</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1.0</td>
+<td>2025-12-14</td>
+<td>Engineering Team</td>
+<td>Design inicial (draft)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Status:</strong> 🔵 Aguardando Aprovação
+<strong>Próximo Passo:</strong> Review do design → Implementação da Fase 3.1 (MVP)
+<strong>Responsável:</strong> Aguardando feedback do Product Owner</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
