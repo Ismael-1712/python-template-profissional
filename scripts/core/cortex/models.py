@@ -53,6 +53,22 @@ class DocStatus(Enum):
     ARCHIVED = "archived"
 
 
+class LinkType(Enum):
+    """Types of semantic links in CORTEX Knowledge Graph.
+
+    Attributes:
+        MARKDOWN: Standard markdown link [label](target)
+        WIKILINK: Simple wikilink [[target]]
+        WIKILINK_ALIASED: Aliased wikilink [[target|alias]]
+        CODE_REFERENCE: Code reference [[code:path]] or [[code:path::Symbol]]
+    """
+
+    MARKDOWN = "markdown"
+    WIKILINK = "wikilink"
+    WIKILINK_ALIASED = "wikilink_aliased"
+    CODE_REFERENCE = "code_reference"
+
+
 @dataclass
 class DocumentMetadata:
     """Structured representation of YAML frontmatter in documentation.
@@ -179,6 +195,44 @@ class KnowledgeSource(BaseModel):
     model_config = ConfigDict(frozen=True)
 
 
+class KnowledgeLink(BaseModel):
+    """Semantic link between Knowledge Nodes.
+
+    Represents a directional link from one Knowledge Node to another,
+    extracted from markdown content using regex patterns.
+
+    Attributes:
+        source_id: ID of the source Knowledge Node
+        target_raw: Raw string extracted from content (before resolution)
+        target_resolved: Resolved target ID or path (None if unresolved)
+        type: Type of link (markdown, wikilink, code reference)
+        line_number: Line number where link was found (1-indexed)
+        context: Snippet of text around the link for context
+        is_valid: True if target was successfully resolved and validated
+
+    Example:
+        >>> link = KnowledgeLink(
+        ...     source_id="kno-001",
+        ...     target_raw="Fase 01",
+        ...     target_resolved="kno-002",
+        ...     type=LinkType.WIKILINK,
+        ...     line_number=42,
+        ...     context="...Veja [[Fase 01]] para mais...",
+        ...     is_valid=True,
+        ... )
+    """
+
+    source_id: str
+    target_raw: str
+    target_resolved: str | None = None
+    type: LinkType
+    line_number: int
+    context: str
+    is_valid: bool = False
+
+    model_config = ConfigDict(frozen=True)
+
+
 class KnowledgeEntry(BaseModel):
     """Knowledge Node entry with rich metadata and external sources.
 
@@ -193,6 +247,7 @@ class KnowledgeEntry(BaseModel):
         golden_paths: Immutable rules or paths for this knowledge
         sources: List of external knowledge sources
         cached_content: Optional cached content from sources
+        links: List of semantic links extracted from cached_content
         file_path: Path to the source .md file (excluded from serialization)
 
     Example:
@@ -214,6 +269,7 @@ class KnowledgeEntry(BaseModel):
     golden_paths: str
     sources: list[KnowledgeSource] = Field(default_factory=list)
     cached_content: str | None = None
+    links: list[KnowledgeLink] = Field(default_factory=list)
     file_path: Path | None = Field(default=None, exclude=True)
 
     model_config = ConfigDict(frozen=True)
