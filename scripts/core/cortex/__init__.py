@@ -17,22 +17,28 @@ __all__ = [
     "DocType",
     "DocumentMetadata",
     "KnowledgeEntry",
+    "KnowledgeLink",
     "KnowledgeScanner",
     "KnowledgeSource",
     "KnowledgeSyncer",
+    "LinkAnalyzer",
     "LinkCheckResult",
+    "LinkType",
     "ValidationResult",
 ]
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
 from scripts.core.cortex.knowledge_sync import KnowledgeSyncer
+from scripts.core.cortex.link_analyzer import LinkAnalyzer
 from scripts.core.cortex.models import (
     DocStatus,
     DocType,
     DocumentMetadata,
     KnowledgeEntry,
+    KnowledgeLink,
     KnowledgeSource,
     LinkCheckResult,
+    LinkType,
     ValidationResult,
 )
 from scripts.core.cortex.scanner import CodeLinkScanner

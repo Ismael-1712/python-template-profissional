@@ -22,6 +22,7 @@ from typing import Any
 import frontmatter
 from pydantic import ValidationError
 
+from scripts.core.cortex.link_analyzer import LinkAnalyzer
 from scripts.core.cortex.models import DocStatus, KnowledgeEntry, KnowledgeSource
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
@@ -60,6 +61,7 @@ class KnowledgeScanner:
         """
         self.workspace_root = workspace_root
         self.fs = fs or RealFileSystem()
+        self.link_analyzer = LinkAnalyzer()
         logger.debug(
             "KnowledgeScanner initialized for workspace: %s",
             workspace_root,
@@ -202,6 +204,16 @@ class KnowledgeScanner:
         # Cache the content body (text after frontmatter)
         cached_content = post.content.strip() if post.content else None
 
+        # Extract semantic links from cached content
+        links = []
+        if cached_content and entry_id:
+            links = self.link_analyzer.extract_links(cached_content, entry_id)
+            logger.debug(
+                "Extracted %d links from %s",
+                len(links),
+                file_path,
+            )
+
         # Construct and validate KnowledgeEntry
         return KnowledgeEntry(
             id=entry_id,
@@ -210,5 +222,6 @@ class KnowledgeScanner:
             golden_paths=golden_paths,
             sources=sources,
             cached_content=cached_content,
+            links=links,
             file_path=file_path,
         )
