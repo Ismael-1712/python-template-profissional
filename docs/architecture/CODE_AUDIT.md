@@ -70,6 +70,210 @@ dev-audit --fail-on MEDIUM
 
 - File operations without proper error handling
 
+## 🔌 Catálogo de Plugins Disponíveis
+
+O sistema de auditoria possui plugins modulares para análises especializadas. Plugins são funções que estendem as capacidades de auditoria sem modificar o core.
+
+### Plugin: `check_mock_coverage`
+
+**Módulo:** `scripts/audit/plugins.py`
+**Função:** Análise de cobertura de mocks em testes
+
+**Propósito:**
+Verifica se arquivos de teste estão mockando corretamente dependências externas (HTTP, subprocess, filesystem, etc.).
+
+**Assinatura:**
+
+```python
+def check_mock_coverage(
+    workspace_root: Path,
+    scan_paths: list[str],
+) -> dict[str, Any]:
+    """Analyze test files for proper mocking of external dependencies."""
+```
+
+**Retorno:**
+
+```python
+{
+    "total_test_files": 42,
+    "files_with_mocks": 35,
+    "files_needing_mocks": [
+        "tests/test_api.py",
+        "tests/integration/test_db.py"
+    ]
+}
+```
+
+**Indicadores de Mock Detectados:**
+
+- `@patch` (unittest.mock)
+- `Mock()` (criação de mocks)
+- `mocker.patch` (pytest-mock)
+- `mock_` (prefixo de variáveis)
+- `pytest-httpx` (mocks HTTP)
+- `httpx_mock` (fixture httpx)
+
+**Indicadores de Dependência Externa:**
+
+- `requests.*` - Chamadas HTTP
+- `httpx.*` - Cliente HTTP assíncrono
+- `subprocess.*` - Execução de comandos
+- `socket.*` - Conexões de rede
+
+**Uso:**
+
+```python
+from scripts.audit.plugins import check_mock_coverage
+
+coverage = check_mock_coverage(
+    workspace_root=Path("/projeto"),
+    scan_paths=["tests/", "src/"]
+)
+
+print(f"Cobertura: {coverage['files_with_mocks']}/{coverage['total_test_files']}")
+```
+
+**Casos de Uso:**
+
+- ✅ Validação de CI/CD (detectar testes instáveis)
+- ✅ Code review automatizado
+- ✅ Análise de qualidade de testes
+- ✅ Migração de testes legados
+
+---
+
+### Plugin: `simulate_ci`
+
+**Módulo:** `scripts/audit/plugins.py`
+**Função:** Simulação de ambiente CI/CD local
+
+**Propósito:**
+Executa testes em ambiente simulado de CI/CD, replicando condições (variáveis de ambiente, timeouts, isolamento) para detectar problemas antes do push.
+
+**Assinatura:**
+
+```python
+def simulate_ci(
+    workspace_root: Path,
+    ci_timeout: int,
+) -> dict[str, Any]:
+    """Simulate CI environment by running critical tests."""
+```
+
+**Retorno:**
+
+```python
+{
+    "exit_code": 0,
+    "passed": True,
+    "stdout": "===== 42 passed in 1.23s =====",
+    "stderr": "",
+    "duration": "within_timeout"
+}
+```
+
+**Variáveis de Ambiente Injetadas:**
+
+```python
+ci_env = {
+    "CI": "true",
+    "PYTEST_TIMEOUT": "60",
+    # Variáveis sensíveis são REMOVIDAS (sanitize_env)
+}
+```
+
+**Flags pytest Usadas:**
+
+```bash
+pytest --tb=short --maxfail=5 --timeout=60 --quiet tests/
+```
+
+**Segurança:**
+
+- ✅ **Sanitização de ambiente:** Credenciais e tokens são removidos via `sanitize_env()`
+- ✅ **Shell injection prevention:** `shell=False` sempre
+- ✅ **Timeout enforcement:** Previne testes infinitos
+- ✅ **Isolamento:** Executa em subprocess separado
+
+**Uso:**
+
+```python
+from scripts.audit.plugins import simulate_ci
+
+result = simulate_ci(
+    workspace_root=Path("/projeto"),
+    ci_timeout=300  # 5 minutos
+)
+
+if not result["passed"]:
+    print(f"❌ CI falhou: {result['stderr']}")
+```
+
+**Casos de Uso:**
+
+- ✅ Pre-commit hook (detectar falhas antes do push)
+- ✅ Validação local de pipelines CI/CD
+- ✅ Debug de testes flaky
+- ✅ Verificação de isolamento de testes
+
+**Códigos de Erro:**
+
+- `0`: Sucesso (todos os testes passaram)
+- `-1`: Timeout (testes excederam limite)
+- `-2`: pytest não instalado
+- `-3`: Erro de execução (OSError)
+
+---
+
+### Desenvolvendo Novos Plugins
+
+**Template de Plugin:**
+
+```python
+# scripts/audit/plugins.py
+
+def meu_plugin(
+    workspace_root: Path,
+    config: dict[str, Any],
+) -> dict[str, Any]:
+    """Descrição do plugin.
+
+    Args:
+        workspace_root: Raiz do projeto
+        config: Configuração do audit_config.yaml
+
+    Returns:
+        Dicionário com resultados da análise
+    """
+    logger.info("Executando meu_plugin...")
+
+    # Implementação
+    results = {"status": "ok"}
+
+    return results
+```
+
+**Integração com CLI:**
+
+```python
+# scripts/cli/audit.py
+from scripts.audit.plugins import meu_plugin
+
+# Executar plugin
+result = meu_plugin(workspace_root, config)
+```
+
+**Best Practices:**
+
+- ✅ Use logging estruturado (`logger.info/warning/error`)
+- ✅ Retorne sempre um dicionário tipado
+- ✅ Documente parâmetros e retorno (docstring)
+- ✅ Trate exceções gracefully (try/except)
+- ✅ Adicione testes em `tests/test_audit_plugins.py`
+
+---
+
 ## ⚙️ Configuration
 
 The auditor uses a YAML configuration file (`audit_config.yaml`) to customize:

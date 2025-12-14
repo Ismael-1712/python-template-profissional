@@ -4,6 +4,24 @@
 
 ### Added
 
+- **CLI: Comando `cortex config`**: Novo comando para visualização e validação de configurações
+  - Flag `--show`: Exibe configuração atual formatada com estatísticas
+  - Flag `--validate`: Valida sintaxe YAML e chaves obrigatórias
+  - Flag `--path`: Permite especificar arquivo de configuração customizado
+  - Leitura segura de YAML com tratamento robusto de erros
+  - Integração completa com `audit_config.yaml`
+- **Docs: Arquitetura Interna do Mock CI**: Documentação completa do pipeline Detector → Checker → Fixer
+  - Diagrama visual do fluxo de execução
+  - Documentação detalhada de cada componente (`detector.py`, `checker.py`, `fixer.py`, `git_ops.py`)
+  - Exemplos de código e casos de uso
+  - Decisões de design e padrões arquiteturais
+  - Adicionado em `docs/guides/MOCK_SYSTEM.md`
+- **Docs: Catálogo de Plugins de Auditoria**: Documentação completa dos plugins disponíveis
+  - Plugin `check_mock_coverage`: Análise de cobertura de mocks em testes
+  - Plugin `simulate_ci`: Simulação de ambiente CI/CD local
+  - Templates para desenvolvimento de novos plugins
+  - Best practices de integração e uso programático
+  - Adicionado em `docs/architecture/CODE_AUDIT.md`
 - **Root Lockdown**: Sistema de proteção da raiz do projeto implementado no CORTEX
   - Valida que apenas arquivos Markdown autorizados residam na raiz
   - Allowlist: `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md`
