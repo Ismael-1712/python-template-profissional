@@ -149,3 +149,4 @@ virtualenv==20.35.4
     #   tox
 wrapt==2.0.1
     # via deprecated
+types-requests
