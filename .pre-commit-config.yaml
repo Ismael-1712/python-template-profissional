@@ -67,3 +67,11 @@ repos:
         pass_filenames: false
         files: ^(scripts/cli/|scripts/core/).*\.py$
         types: [python]
+
+      - id: cortex-neural-sync
+        name: "CORTEX Neural Auto-Sync"
+        entry: python -m scripts.cli.cortex neural index
+        language: system
+        types: [markdown]
+        pass_filenames: false
+        description: "Automatically updates the vector store when documentation changes."
