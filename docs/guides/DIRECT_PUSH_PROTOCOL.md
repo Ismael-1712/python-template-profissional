@@ -50,6 +50,7 @@ git commit -m "sua mensagem"  # Pre-commit rodará automaticamente
 ```
 
 **Resultado Esperado:**
+
 ```
 check for added large files..............................................Passed
 ruff format..............................................................Passed
@@ -67,6 +68,7 @@ git push origin main
 ```
 
 **Resultado Esperado:**
+
 ```
 Enumerating objects: 9, done.
 Counting objects: 100% (9/9), done.
@@ -76,6 +78,7 @@ To github.com:USER/REPO.git
 ```
 
 ⚠️ **Nota**: Se a branch main estiver protegida, você verá:
+
 ```
 remote: Bypassed rule violations for refs/heads/main:
 remote: - Cannot update this protected ref.
@@ -95,16 +98,19 @@ git pull origin main
 ```
 
 **Por quê?**
+
 - GitHub pode ter executado Actions/CI que criaram commits
 - Outros desenvolvedores podem ter feito push simultaneamente
 - Mantém histórico local consistente com remote
 
 **Resultado Esperado:**
+
 ```
 Already up to date.
 ```
 
 OU (se houver novos commits do CI):
+
 ```
 Updating abc1234..def5678
 Fast-forward
@@ -125,10 +131,12 @@ git gc --auto
 ```
 
 **O que isso faz:**
+
 - `--prune`: Remove refs remotas deletadas
 - `--auto`: GC apenas se necessário (heurística do Git)
 
 **Resultado Esperado:**
+
 ```
 From github.com:USER/REPO
    abc1234..def5678  api        -> origin/api
@@ -227,6 +235,7 @@ Após executar o protocolo, verifique:
 **Causa:** Você não tem permissões de bypass.
 
 **Solução:**
+
 1. Crie uma branch de feature
 2. Abra um Pull Request
 3. Siga o [Post-PR Merge Protocol](./POST_PR_MERGE_PROTOCOL.md)
@@ -238,6 +247,7 @@ Após executar o protocolo, verifique:
 **Causa:** Alguém fez push enquanto você commitava.
 
 **Solução:**
+
 ```bash
 git pull --rebase origin main
 git push origin main
@@ -250,12 +260,14 @@ git push origin main
 **Causa:** GitHub Actions criou commits conflitantes.
 
 **Solução:**
+
 ```bash
 git fetch origin
 git reset --hard origin/main  # ⚠️ PERDE mudanças locais!
 ```
 
 OU (preservar mudanças):
+
 ```bash
 git stash
 git pull origin main
@@ -275,6 +287,7 @@ git-sync push --branch main --sync-after
 ```
 
 Isso executaria automaticamente:
+
 1. Validação com auditoria preventiva
 2. Push para main
 3. Sincronização local
@@ -292,14 +305,14 @@ Isso executaria automaticamente:
 
 ## 🎯 Boas Práticas
 
-### ✅ Faça:
+### ✅ Faça
 
 - Sempre execute `make validate` antes do push
 - Sincronize imediatamente após push (`git pull`)
 - Use mensagens de commit semânticas (feat:, fix:, docs:, etc.)
 - Execute `git fetch --prune` regularmente
 
-### ❌ Evite:
+### ❌ Evite
 
 - Push direto de features grandes (use PR)
 - Ignorar falhas nos pre-commit hooks
