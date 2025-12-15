@@ -24,7 +24,12 @@ from enum import Enum
 from pathlib import Path
 
 import frontmatter
-import tomllib
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
