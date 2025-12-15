@@ -132,7 +132,7 @@ class TestKnowledgeEntry:
             id="kno-001",
             status=DocStatus.ACTIVE,
             tags=["api", "authentication"],
-            golden_paths="auth/jwt.py -> docs/auth.md",
+            golden_paths=["auth/jwt.py -> docs/auth.md"],
             sources=[source],
             cached_content="# Authentication Guide\n...",
         )
@@ -141,7 +141,7 @@ class TestKnowledgeEntry:
         assert entry.type == "knowledge"
         assert entry.status == DocStatus.ACTIVE
         assert entry.tags == ["api", "authentication"]
-        assert entry.golden_paths == "auth/jwt.py -> docs/auth.md"
+        assert entry.golden_paths == ["auth/jwt.py -> docs/auth.md"]
         assert len(entry.sources) == 1
         assert entry.cached_content is not None
 
@@ -150,7 +150,7 @@ class TestKnowledgeEntry:
         entry = KnowledgeEntry(
             id="kno-002",
             status=DocStatus.DRAFT,
-            golden_paths="test/path.py",
+            golden_paths=["test/path.py"],
         )
 
         assert entry.id == "kno-002"
@@ -165,7 +165,7 @@ class TestKnowledgeEntry:
         entry = KnowledgeEntry(
             id="kno-test",
             status=DocStatus.ACTIVE,
-            golden_paths="test/path",
+            golden_paths=["test/path"],
         )
 
         assert entry.type == "knowledge"
@@ -176,7 +176,7 @@ class TestKnowledgeEntry:
             entry = KnowledgeEntry(
                 id=f"kno-{status.value}",
                 status=status,
-                golden_paths="test/path",
+                golden_paths=["test/path"],
             )
             assert entry.status == status
 
@@ -186,7 +186,7 @@ class TestKnowledgeEntry:
             id="kno-empty",
             status=DocStatus.ACTIVE,
             tags=[],
-            golden_paths="path",
+            golden_paths=["path"],
             sources=[],
         )
 
@@ -204,7 +204,7 @@ class TestKnowledgeEntry:
         entry = KnowledgeEntry(
             id="kno-multi",
             status=DocStatus.ACTIVE,
-            golden_paths="multi/path",
+            golden_paths=["multi/path"],
             sources=sources,
         )
 
@@ -216,7 +216,7 @@ class TestKnowledgeEntry:
         entry = KnowledgeEntry(
             id="kno-frozen",
             status=DocStatus.ACTIVE,
-            golden_paths="frozen/path",
+            golden_paths=["frozen/path"],
         )
 
         with pytest.raises(ValidationError) as exc_info:
@@ -232,7 +232,7 @@ class TestKnowledgeEntry:
             id="kno-serialize",
             status=DocStatus.ACTIVE,
             tags=["test", "serialization"],
-            golden_paths="test/serialize.py",
+            golden_paths=["test/serialize.py"],
             sources=[source],
         )
 
@@ -254,7 +254,7 @@ class TestKnowledgeEntry:
             id="kno-json",
             status=DocStatus.DEPRECATED,
             tags=["json"],
-            golden_paths="json/path",
+            golden_paths=["json/path"],
             sources=[source],
             cached_content="cached data",
         )
@@ -285,7 +285,7 @@ class TestKnowledgeEntry:
             id="kno-roundtrip",
             status=DocStatus.ACTIVE,
             tags=["roundtrip", "test"],
-            golden_paths="test/roundtrip.py",
+            golden_paths=["test/roundtrip.py"],
             sources=sources,
             cached_content="test content",
         )
@@ -317,7 +317,7 @@ class TestKnowledgeEntry:
             "id": "kno-dict",
             "status": "active",
             "tags": ["dict", "test"],
-            "golden_paths": "dict/path",
+            "golden_paths": ["dict/path"],
             "sources": [
                 {"url": "https://example.com/doc"},
             ],
@@ -337,7 +337,7 @@ class TestKnowledgeEntry:
                 {
                     "id": "kno-invalid",
                     "status": "invalid_status",
-                    "golden_paths": "test/path",
+                    "golden_paths": ["test/path"],
                 },
             )
 
@@ -353,7 +353,7 @@ class TestKnowledgeEntry:
                 {
                     "id": "kno-nested-invalid",
                     "status": "active",
-                    "golden_paths": "test/path",
+                    "golden_paths": ["test/path"],
                     "sources": [
                         {"url": "not-a-valid-url"},
                     ],

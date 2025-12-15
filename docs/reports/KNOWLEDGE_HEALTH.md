@@ -1,21 +1,23 @@
 ---
-id: report-knowledge-health
+id: rep-knowledge-health
 type: reference
-status: draft
-version: 0.1.0
-author: Cortex Validator
+title: Knowledge Graph Health Report
+status: active
+author: CORTEX System
 date: 2025-12-15
+version: 1.0.0
+tags: [report, health, knowledge-graph]
 ---
 
 ---
-generated_at: 2025-12-15T14:09:03.064770+00:00
+generated_at: 2025-12-15T15:45:13.989824+00:00
 health_score: 60.0
 status: critical
 ---
 
 # 📊 Knowledge Graph Health Report
 
-**Generated:** 2025-12-15 14:09:03 UTC
+**Generated:** 2025-12-15 15:45:13 UTC
 **Overall Health Score:** 60.0/100 (🔴 Critical)
 
 ---
