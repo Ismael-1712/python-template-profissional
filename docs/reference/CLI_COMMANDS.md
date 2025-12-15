@@ -4,7 +4,7 @@ type: reference
 status: active
 version: 0.1.0
 author: Auto-Generated (doc_gen.py)
-date: '2025-12-14'
+date: '2025-12-15'
 context_tags: [cli, commands, reference]
 linked_code:
   - scripts/cli/cortex.py
@@ -18,7 +18,7 @@ title: 📚 Referência de Comandos CLI (Auto-Generated)
 **⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE**
 
 Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: **2025-12-14**
+Gerado em: **2025-12-15**
 Fonte: `scripts/core/doc_gen.py`
 
 Este documento contém a referência completa de todos os comandos CLI disponíveis
@@ -63,12 +63,15 @@ Scans Markdown files to verify:
 - Required metadata fields
 - Links to code files exist
 - Links to other docs exist
+- Knowledge Graph connectivity (with --links flag)
 
 Examples:
     cortex audit                    # Audit all docs in docs/
     cortex audit docs/guides/       # Audit specific directory
     cortex audit docs/guide.md      # Audit single file
     cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)
+    cortex audit --links            # Validate Knowledge Graph
+    cortex audit --links --strict   # Fail CI on broken links
 
 
 **Parâmetros:**
@@ -81,6 +84,12 @@ Examples:
 | `path` | `Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]` | ❌ Não | `None` | Path to directory or file to audit (default: docs/) |
 
 | `fail_on_error` | `Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]` | ❌ Não | `False` | Exit with error code if validation fails (useful for CI) |
+
+| `links` | `Annotated[bool, typer.Option('--links', help='Validate Knowledge Graph links and generate health report')]` | ❌ Não | `False` | Validate Knowledge Graph links and generate health report |
+
+| `strict` | `Annotated[bool, typer.Option('--strict', help='Fail on broken links (requires --links)')]` | ❌ Não | `False` | Fail on broken links (requires --links) |
+
+| `output` | `Annotated[Path | None, typer.Option('--output', '-o', help='Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md)')]` | ❌ Não | `None` | Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md) |
 
 
 **Exemplo:**
@@ -569,5 +578,5 @@ python scripts/core/doc_gen.py
 
 ---
 
-**Última Atualização:** 2025-12-14
+**Última Atualização:** 2025-12-15
 **Gerado por:** `scripts/core/doc_gen.py` v1.1.0
