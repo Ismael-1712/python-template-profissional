@@ -3,10 +3,10 @@
 > **The Symbolic Neural Network for Documentation as Code**
 > _Creative Organized Rational Thinking EXecution_
 
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/python-{{ project.python_version }}-blue.svg)](https://www.python.org/downloads/)
 [![Code Quality](https://img.shields.io/badge/ruff-checked-brightgreen.svg)](https://github.com/astral-sh/ruff)
 [![Type Safety](https://img.shields.io/badge/mypy-strict-blue.svg)](https://mypy-lang.org/)
-[![CORTEX Health](https://img.shields.io/badge/cortex%20health-60%2F100-orange.svg)](#-cortex-health-score)
+[![CORTEX Health](https://img.shields.io/badge/cortex%20health-{{ health.score | int }}%2F100-{% if health.score >= 90 %}brightgreen{% elif health.score >= 70 %}green{% elif health.score >= 50 %}orange{% else %}red{% endif %}.svg)](#-cortex-health-score)
 [![Tests](https://img.shields.io/badge/tests-passing-success.svg)](./tests)
 
 ---
@@ -117,20 +117,23 @@ cortex audit --links --strict
 ```markdown
 # 📊 Knowledge Graph Health Report
 
-**Overall Health Score:** 60.0/100 (🔴 Critical)
+**Overall Health Score:** {{ health.score }}/100 ({% if health.status == 'critical' %}🔴 Critical{% elif health.status == 'warning' %}⚠️ Warning{% else %}🟢 Good{% endif %})
 
 ## 📈 Executive Summary
 
 | Metric                  | Value    | Status |
 |-------------------------|----------|--------|
-| Total Nodes             | 0       | -      |
-| Valid Links             | 0      | 🟢     |
-| Broken Links            | 0       | 🟢     |
-| Connectivity Score      | 0.0%    | 🔴     |
-| **Overall Health Score**| **60.0** | 🔴 |
+| Total Nodes             | {{ graph.total_nodes }}       | -      |
+| Valid Links             | {{ graph.valid_links }}      | 🟢     |
+| Broken Links            | {{ graph.broken_links }}       | {% if graph.broken_links > 0 %}🔴{% else %}🟢{% endif %}     |
+| Connectivity Score      | {{ "%.1f" | format(graph.connectivity_score) }}%    | {% if graph.connectivity_score >= 90 %}🟢{% elif graph.connectivity_score >= 70 %}⚠️{% else %}🔴{% endif %}     |
+| **Overall Health Score**| **{{ health.score }}** | {% if health.status == 'critical' %}🔴{% elif health.status == 'warning' %}⚠️{% else %}🟢{% endif %} |
 
 ## 🔴 Critical Issues
 
+{% if graph.broken_links > 0 -%}
+- {{ graph.broken_links }} broken links detected
+{% endif -%}
 ```
 
 ### 🔮 **Fase 4: Neural Interface** 🔵 EM PLANEJAMENTO
@@ -222,13 +225,13 @@ O sistema se auto-diagnostica continuamente. Última análise:
 
 ```json
 {
-  "health_score": 60.0,
-  "status": "critical",
+  "health_score": {{ health.score }},
+  "status": "{{ health.status }}",
   "metrics": {
-    "total_nodes": 0,
-    "connectivity_score": 0.0,
-    "link_health_score": 100.0,
-    "broken_links": 0
+    "total_nodes": {{ graph.total_nodes }},
+    "connectivity_score": {{ "%.1f" | format(graph.connectivity_score) }},
+    "link_health_score": {{ "%.1f" | format(graph.link_health_score) }},
+    "broken_links": {{ graph.broken_links }}
   }
 }
 ```
@@ -303,15 +306,19 @@ python-template-profissional/
 $ cortex audit --links
 
 🔍 Scanning knowledge graph...
-✅ Loaded 0 knowledge nodes
-🔗 Extracted 0 links
+✅ Loaded {{ graph.total_nodes }} knowledge nodes
+🔗 Extracted {{ graph.total_links }} links
 📊 Resolving targets...
 
 📈 Health Metrics:
-  Connectivity Score: 0.0%
-  Link Health Score:  100.0%
-  Overall Health:     60.0/100
+  Connectivity Score: {{ "%.1f" | format(graph.connectivity_score) }}%
+  Link Health Score:  {{ "%.1f" | format(graph.link_health_score) }}%
+  Overall Health:     {{ health.score }}/100
 
+{% if graph.broken_links > 0 -%}
+🔴 Issues Found:
+  - {{ graph.broken_links }} broken links
+{% endif %}
 📄 Report generated: docs/reports/KNOWLEDGE_HEALTH.md
 ```
 
@@ -398,11 +405,11 @@ Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) par
 
 ## 🙏 Agradecimentos
 
-Construído com 🧠 pela Seu Nome.
+Construído com 🧠 pela {{ project.author_name }}.
 
 **Tecnologias Core:**
 
-- [Python 3.10+](https://www.python.org/)
+- [Python {{ project.python_version }}](https://www.python.org/)
 - [Pydantic v2](https://docs.pydantic.dev/)
 - [Typer](https://typer.tiangolo.com/)
 - [Ruff](https://github.com/astral-sh/ruff)
@@ -421,4 +428,4 @@ Construído com 🧠 pela Seu Nome.
 
 ---
 
-_README gerado dinamicamente em 2025-12-15T14:21:48.691023+00:00 por `cortex generate readme`_
+_README gerado dinamicamente em {{ generated_at }} por `cortex generate readme`_

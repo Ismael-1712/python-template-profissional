@@ -30,6 +30,7 @@ introspecção do Typer.
 - **[cortex](#cortex)**
   - [cortex - audit](#cortexaudit)
   - [cortex - config](#cortexconfig)
+  - [cortex - generate](#cortexgenerate)
   - [cortex - guardian-probe](#cortexguardianprobe)
   - [cortex - init](#cortexinit)
   - [cortex - knowledge-scan](#cortexknowledgescan)
@@ -128,6 +129,46 @@ Examples:
 **Exemplo:**
 ```bash
 cortex config
+```
+
+### `cortex generate`
+
+
+Generate dynamic documentation from templates and live data.
+
+Extracts data from:
+- pyproject.toml (project name, version, Python version)
+- .cortex/context.json (knowledge graph statistics)
+- docs/reports/KNOWLEDGE_HEALTH.md (health score)
+- CLI introspection (available commands)
+
+Examples:
+    cortex generate readme              # Generate README.md
+    cortex generate contributing        # Generate CONTRIBUTING.md
+    cortex generate all                 # Generate all documents
+    cortex generate readme --check      # Check if README is in sync (CI)
+    cortex generate --dry-run           # Preview without writing
+
+
+**Parâmetros:**
+
+
+| Nome | Tipo | Obrigatório | Default | Descrição |
+
+|:-----|:-----|:------------|:--------|:----------|
+
+| `target` | `Annotated[str, typer.Argument(help="Document to generate: 'readme', 'contributing', or 'all'")]` | ❌ Não | `"readme"` | Document to generate: 'readme', 'contributing', or 'all' |
+
+| `output` | `Annotated[Path | None, typer.Option('--output', '-o', help='Custom output path (only valid for single target)', dir_okay=False, writable=True, resolve_path=True)]` | ❌ Não | `None` | Custom output path (only valid for single target) |
+
+| `check` | `Annotated[bool, typer.Option('--check', help='Check if document is in sync (for CI/CD drift detection)')]` | ❌ Não | `False` | Check if document is in sync (for CI/CD drift detection) |
+
+| `dry_run` | `Annotated[bool, typer.Option('--dry-run', help='Show what would be generated without writing to file')]` | ❌ Não | `False` | Show what would be generated without writing to file |
+
+
+**Exemplo:**
+```bash
+cortex generate
 ```
 
 ### `cortex guardian-probe`
@@ -552,6 +593,7 @@ Fluxo principal de execução.
 graph TD
   cortex[cortex] --> audit[audit]
   cortex[cortex] --> config[config]
+  cortex[cortex] --> generate[generate]
   cortex[cortex] --> guardianprobe[guardian-probe]
   cortex[cortex] --> init[init]
   cortex[cortex] --> knowledgescan[knowledge-scan]

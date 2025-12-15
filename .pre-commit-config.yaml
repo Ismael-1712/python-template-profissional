@@ -28,6 +28,7 @@ repos:
         args: [--config-file=pyproject.toml, --python-version=3.10]
         additional_dependencies:
           - types-PyYAML==6.0.12.20250915
+          - types-requests==2.32.4.20250913
           - pydantic>=2.0
         pass_filenames: true
         types: [python]
@@ -50,6 +51,7 @@ repos:
         pass_filenames: false
         types_or: [markdown, python]
         files: \.(md|py)$
+        exclude: \.(j2|jinja|jinja2)$
 
       - id: cortex-guardian
         name: "CORTEX Guardian - Bloqueia Shadow Configuration"
