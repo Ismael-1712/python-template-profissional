@@ -18,7 +18,7 @@ from __future__ import annotations
 import sys
 from datetime import date
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 
@@ -36,6 +36,7 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParser,
 )
 from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
+from scripts.core.cortex.models import KnowledgeEntry  # noqa: E402
 from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
 from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
@@ -410,6 +411,31 @@ def audit(
             help="Exit with error code if validation fails (useful for CI)",
         ),
     ] = False,
+    links: Annotated[
+        bool,
+        typer.Option(
+            "--links",
+            help="Validate Knowledge Graph links and generate health report",
+        ),
+    ] = False,
+    strict: Annotated[
+        bool,
+        typer.Option(
+            "--strict",
+            help="Fail on broken links (requires --links)",
+        ),
+    ] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help=(
+                "Output path for health report "
+                "(default: docs/reports/KNOWLEDGE_HEALTH.md)"
+            ),
+        ),
+    ] = None,
 ) -> None:
     """Audit documentation files for metadata and link integrity.
 
@@ -418,14 +444,170 @@ def audit(
     - Required metadata fields
     - Links to code files exist
     - Links to other docs exist
+    - Knowledge Graph connectivity (with --links flag)
 
     Examples:
         cortex audit                    # Audit all docs in docs/
         cortex audit docs/guides/       # Audit specific directory
         cortex audit docs/guide.md      # Audit single file
         cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)
+        cortex audit --links            # Validate Knowledge Graph
+        cortex audit --links --strict   # Fail CI on broken links
     """
     try:
+        # ============================================================
+        # KNOWLEDGE GRAPH VALIDATION (--links flag)
+        # ============================================================
+        if links:
+            from scripts.core.cortex.knowledge_validator import KnowledgeValidator
+            from scripts.core.cortex.link_analyzer import LinkAnalyzer
+            from scripts.core.cortex.link_resolver import LinkResolver
+
+            typer.echo("\n" + "=" * 70)
+            typer.echo("  🧠 CORTEX Knowledge Graph Validator")
+            typer.echo("=" * 70 + "\n")
+
+            workspace_root = Path.cwd()
+
+            # Load Knowledge Entries using KnowledgeScanner
+            typer.echo("📚 Scanning Knowledge Nodes...")
+            scanner = KnowledgeScanner(workspace_root=workspace_root)
+            entries = scanner.scan(knowledge_dir=workspace_root / "docs/knowledge")
+            typer.secho(
+                f"  ✅ Found {len(entries)} Knowledge Entries",
+                fg=typer.colors.GREEN,
+            )
+
+            # Extract links from cached content
+            typer.echo("\n🔍 Extracting semantic links...")
+            analyzer = LinkAnalyzer()
+            entries_with_links: list[KnowledgeEntry] = []
+
+            for entry in entries:
+                if entry.cached_content:
+                    extracted_links: list[Any] = analyzer.extract_links(
+                        entry.cached_content,
+                        entry.id,
+                    )
+                    # Create new entry with links (Pydantic is frozen)
+                    entry_updated = entry.model_copy(update={"links": extracted_links})
+                    entries_with_links.append(entry_updated)
+                else:
+                    entries_with_links.append(entry)
+
+            total_links = sum(len(e.links) for e in entries_with_links)
+            typer.secho(
+                f"  ✅ Extracted {total_links} links",
+                fg=typer.colors.GREEN,
+            )
+
+            # Resolve links
+            typer.echo("\n🔗 Resolving link targets...")
+            resolver = LinkResolver(entries_with_links, workspace_root)
+            resolved_entries = resolver.resolve_all()
+
+            valid_links = sum(
+                sum(1 for link in e.links if link.status.value == "valid")
+                for e in resolved_entries
+            )
+            broken_links_count = sum(
+                sum(1 for link in e.links if link.status.value == "broken")
+                for e in resolved_entries
+            )
+
+            color = (
+                typer.colors.GREEN if broken_links_count == 0 else typer.colors.YELLOW
+            )
+            typer.secho(
+                f"  ✅ Resolved: {valid_links} valid, {broken_links_count} broken",
+                fg=color,
+            )
+
+            # Validate graph and generate report
+            typer.echo("\n📊 Calculating health metrics...")
+            validator = KnowledgeValidator(resolved_entries)
+            report = validator.validate()
+
+            # Display metrics
+            typer.echo("\n" + "=" * 70)
+            typer.echo("  📈 Health Metrics")
+            typer.echo("=" * 70 + "\n")
+
+            m = report.metrics
+            typer.echo(f"Total Nodes:          {m.total_nodes}")
+            typer.echo(f"Total Links:          {m.total_links}")
+            typer.echo(f"Valid Links:          {m.valid_links}")
+            typer.echo(f"Broken Links:         {m.broken_links}")
+            typer.echo(f"Connectivity Score:   {m.connectivity_score:.1f}%")
+            typer.echo(f"Link Health Score:    {m.link_health_score:.1f}%")
+
+            # Color-coded health score
+            health_color = (
+                typer.colors.GREEN
+                if m.health_score >= 80
+                else typer.colors.YELLOW
+                if m.health_score >= 70
+                else typer.colors.RED
+            )
+            typer.secho(
+                f"\n🎯 Overall Health Score: {m.health_score:.1f}/100",
+                fg=health_color,
+                bold=True,
+            )
+
+            # Display anomalies
+            if report.critical_errors:
+                typer.echo("\n" + "=" * 70)
+                typer.echo("  🔴 Critical Issues")
+                typer.echo("=" * 70 + "\n")
+                for error in report.critical_errors:
+                    typer.secho(f"  {error}", fg=typer.colors.RED)
+
+            if report.warnings:
+                typer.echo("\n" + "=" * 70)
+                typer.echo("  ⚠️  Warnings")
+                typer.echo("=" * 70 + "\n")
+                for warning in report.warnings:
+                    typer.secho(f"  {warning}", fg=typer.colors.YELLOW)
+
+            # Save report
+            output_path = output or (
+                workspace_root / "docs/reports/KNOWLEDGE_HEALTH.md"
+            )
+            validator.save_report(report, output_path)
+            typer.secho(
+                f"\n📄 Report saved to: {output_path.relative_to(workspace_root)}",
+                fg=typer.colors.CYAN,
+            )
+
+            # Determine exit code
+            if strict and len(report.anomalies.broken_links) > 0:
+                typer.secho(
+                    "\n❌ Validation FAILED: Broken links detected (--strict mode)",
+                    fg=typer.colors.RED,
+                    bold=True,
+                )
+                raise typer.Exit(code=1)
+
+            if not report.is_healthy:
+                typer.secho(
+                    "\n⚠️  Validation completed with warnings",
+                    fg=typer.colors.YELLOW,
+                )
+                if fail_on_error:
+                    raise typer.Exit(code=1)
+            else:
+                typer.secho(
+                    "\n✅ Validation PASSED",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+
+            return  # Exit after link validation
+
+        # ============================================================
+        # STANDARD METADATA AUDIT (original behavior)
+        # ============================================================
         # Default to docs/ if no path provided
         if path is None:
             path = Path("docs")
@@ -476,13 +658,13 @@ def audit(
 
         # Initialize parser and scanner
         parser = FrontmatterParser()
-        scanner = CodeLinkScanner(workspace_root=workspace_root)
+        code_scanner = CodeLinkScanner(workspace_root=workspace_root)
 
         # ============================================================
         # ROOT LOCKDOWN: Check for unauthorized .md files in root
         # ============================================================
         typer.echo("🔒 Checking Root Lockdown policy...")
-        root_violations = scanner.check_root_markdown_files()
+        root_violations = code_scanner.check_root_markdown_files()
 
         if root_violations:
             typer.secho(
@@ -525,7 +707,7 @@ def audit(
 
             # 2. Check code and documentation links
             if metadata:
-                link_result = scanner.check_all_links(
+                link_result = code_scanner.check_all_links(
                     linked_code=metadata.linked_code or [],
                     related_docs=metadata.related_docs or [],
                     doc_file=md_file,
