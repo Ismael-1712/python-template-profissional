@@ -88,6 +88,8 @@ install-dev:
 		$(VENV)/bin/python $(SCRIPTS_DIR)/cli/install_dev.py && \
 		echo "$$CURRENT_HASH" > "$$HASH_FILE" && \
 		echo "✅ Instalação concluída. Hash armazenado: $${CURRENT_HASH:0:12}..."; \
+		echo "🧠 Initializing CORTEX Neural Memory..."; \
+		$(VENV)/bin/python -m scripts.cli.cortex neural index || echo "⚠️  Warning: Neural index failed (non-critical for install)"; \
 	fi
 
 ## build: Constrói pacote distribuível (wheel + sdist)
