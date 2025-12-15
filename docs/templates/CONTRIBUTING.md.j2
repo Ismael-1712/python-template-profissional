@@ -2,9 +2,9 @@
 
 Bem-vindo ao time de engenharia! Este projeto utiliza ferramentas de automação para garantir qualidade e padronização.
 
-> **Versão do Projeto:** 0.1.0
-> **Python Requerido:** 3.10+
-> **Última Atualização:** 2025-12-15T14:21:48.706738+00:00
+> **Versão do Projeto:** {{ project.version }}
+> **Python Requerido:** {{ project.python_version }}
+> **Última Atualização:** {{ generated_at }}
 
 ---
 
@@ -17,7 +17,7 @@ Bem-vindo ao time de engenharia! Este projeto utiliza ferramentas de automação
 git clone https://github.com/Ismael-1712/python-template-profissional.git
 cd python-template-profissional
 
-# Configure o ambiente (Python 3.10+)
+# Configure o ambiente (Python {{ project.python_version }})
 make setup
 
 # Valide a instalação
@@ -87,8 +87,8 @@ make test-coverage
 
 **Métricas Atuais:**
 
-- Total de Testes: 0 módulos testados
-- Health Score: **60.0/100** (Status: critical)
+- Total de Testes: {{ graph.total_nodes }} módulos testados
+- Health Score: **{{ health.score }}/100** (Status: {{ health.status }})
 
 ### Tipagem e Linting 🔍
 
@@ -159,17 +159,15 @@ make audit
 
 ### Comandos CORTEX Disponíveis
 
+{% if cli_commands %}
 | Comando | Descrição |
 |---------|-----------|
-| `audit` | Utilitário CORTEX |
-| `cortex` | Utilitário CORTEX |
-| `doctor` | Utilitário CORTEX |
-| `git_sync` | Utilitário CORTEX |
-| `install_dev` | Utilitário CORTEX |
-| `mock_ci` | Utilitário CORTEX |
-| `mock_generate` | Utilitário CORTEX |
-| `mock_validate` | Utilitário CORTEX |
-| `upgrade_python` | Utilitário CORTEX |
+{% for cmd in cli_commands -%}
+| `{{ cmd.name }}` | {{ cmd.description or "Utilitário CORTEX" }} |
+{% endfor %}
+{% else %}
+Execute `cortex --help` para ver todos os comandos disponíveis.
+{% endif %}
 
 ### Dashboard Interativo
 
@@ -223,7 +221,7 @@ make i18n-stats
 
 ### Requisitos de Sistema
 
-- **Python:** 3.10+
+- **Python:** {{ project.python_version }}
 - **Sistema Operacional:** Linux, macOS, ou Windows (com WSL2)
 - **Ferramentas:** Git, Make, Pyenv (opcional mas recomendado)
 
@@ -458,8 +456,8 @@ Para evitar regressões e "alucinações" de código, todo desenvolvimento deve 
 
 ## Obrigado por contribuir! 🎉
 
-**meu_projeto_placeholder** v0.1.0 - Construído com 🧠 pela Seu Nome
+**{{ project.name }}** v{{ project.version }} - Construído com 🧠 pela {{ project.author_name }}
 
 ---
 
-_Guia gerado dinamicamente em 2025-12-15T14:21:48.706738+00:00 por `cortex generate contributing`_
+_Guia gerado dinamicamente em {{ generated_at }} por `cortex generate contributing`_

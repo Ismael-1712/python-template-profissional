@@ -39,6 +39,7 @@ dev = [
     # CORTEX - Documentation as Code
     "python-frontmatter>=1.0.0",
     "pyyaml>=6.0",
+    "jinja2>=3.0",
 ]
 
 # Console scripts - comandos globais do sistema

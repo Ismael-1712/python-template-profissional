@@ -20,7 +20,7 @@ import re
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Protocol
 
-import requests  # type: ignore[import-untyped, unused-ignore]
+import requests
 
 if TYPE_CHECKING:
     from pathlib import Path

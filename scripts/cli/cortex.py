@@ -37,6 +37,9 @@ from scripts.core.cortex.metadata import (  # noqa: E402
 )
 from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
 from scripts.core.cortex.models import KnowledgeEntry  # noqa: E402
+from scripts.core.cortex.readme_generator import (  # noqa: E402
+    DocumentGenerator,
+)
 from scripts.core.cortex.scanner import CodeLinkScanner  # noqa: E402
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
 from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
@@ -1644,6 +1647,257 @@ def guardian_check(
 
     except Exception as e:
         logger.error("Error during guardian check: %s", e, exc_info=True)
+        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1) from e
+
+
+@app.command(name="generate")
+def generate_docs(
+    target: Annotated[
+        str,
+        typer.Argument(
+            help="Document to generate: 'readme', 'contributing', or 'all'",
+        ),
+    ] = "readme",
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output",
+            "-o",
+            help="Custom output path (only valid for single target)",
+            dir_okay=False,
+            writable=True,
+            resolve_path=True,
+        ),
+    ] = None,
+    check: Annotated[
+        bool,
+        typer.Option(
+            "--check",
+            help="Check if document is in sync (for CI/CD drift detection)",
+        ),
+    ] = False,
+    dry_run: Annotated[
+        bool,
+        typer.Option(
+            "--dry-run",
+            help="Show what would be generated without writing to file",
+        ),
+    ] = False,
+) -> None:
+    """Generate dynamic documentation from templates and live data.
+
+    Extracts data from:
+    - pyproject.toml (project name, version, Python version)
+    - .cortex/context.json (knowledge graph statistics)
+    - docs/reports/KNOWLEDGE_HEALTH.md (health score)
+    - CLI introspection (available commands)
+
+    Examples:
+        cortex generate readme              # Generate README.md
+        cortex generate contributing        # Generate CONTRIBUTING.md
+        cortex generate all                 # Generate all documents
+        cortex generate readme --check      # Check if README is in sync (CI)
+        cortex generate --dry-run           # Preview without writing
+    """
+    try:
+        with trace_context():
+            # Validate target
+            valid_targets = ["readme", "contributing", "all"]
+            if target not in valid_targets:
+                typer.secho(
+                    f"❌ Invalid target: {target}",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                typer.echo(f"Valid targets: {', '.join(valid_targets)}")
+                raise typer.Exit(code=1)
+
+            # Validate options
+            if output and target == "all":
+                typer.secho(
+                    "❌ Cannot use --output with target 'all'",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(code=1)
+
+            if check and dry_run:
+                typer.secho(
+                    "❌ Cannot use --check with --dry-run",
+                    fg=typer.colors.RED,
+                    err=True,
+                )
+                raise typer.Exit(code=1)
+
+            # Initialize generator
+            generator = DocumentGenerator()
+
+            # Determine which documents to generate
+            targets_to_process = []
+            if target == "all":
+                targets_to_process = [
+                    ("readme", "README.md.j2", generator.project_root / "README.md"),
+                    (
+                        "contributing",
+                        "CONTRIBUTING.md.j2",
+                        generator.project_root / "CONTRIBUTING.md",
+                    ),
+                ]
+            elif target == "readme":
+                output_path = output or generator.project_root / "README.md"
+                targets_to_process = [("readme", "README.md.j2", output_path)]
+            elif target == "contributing":
+                output_path = output or generator.project_root / "CONTRIBUTING.md"
+                targets_to_process = [
+                    ("contributing", "CONTRIBUTING.md.j2", output_path),
+                ]
+
+            # Header
+            typer.echo()
+            mode = "CHECK MODE" if check else "GENERATION MODE"
+            typer.secho(f"🔨 CORTEX Dynamic Document Generator ({mode})", bold=True)
+            typer.echo("=" * 70)
+
+            # Collect data once
+            typer.echo()
+            typer.secho("📊 Collecting data sources...", fg=typer.colors.CYAN)
+            data = generator.collect_all_data()
+
+            # Display collected data
+            typer.echo()
+            typer.secho("✓ Project Metadata:", fg=typer.colors.GREEN)
+            typer.echo(f"  Name: {data.project.name}")
+            typer.echo(f"  Version: {data.project.version}")
+            typer.echo(f"  Python: {data.project.python_version}")
+
+            typer.echo()
+            typer.secho("✓ Knowledge Graph:", fg=typer.colors.GREEN)
+            typer.echo(f"  Nodes: {data.graph.total_nodes}")
+            typer.echo(f"  Links: {data.graph.total_links}")
+            typer.echo(f"  Connectivity: {data.graph.connectivity_score:.1f}%")
+
+            typer.echo()
+            typer.secho("✓ Health Score:", fg=typer.colors.GREEN)
+            health_color = (
+                typer.colors.GREEN
+                if data.health.score >= 70
+                else typer.colors.YELLOW
+                if data.health.score >= 50
+                else typer.colors.RED
+            )
+            typer.secho(f"  Score: {data.health.score}/100", fg=health_color, bold=True)
+            typer.echo(f"  Status: {data.health.status}")
+
+            # Process each target
+            has_drift = False
+            for target_name, template_name, output_path in targets_to_process:
+                typer.echo()
+                typer.secho(
+                    f"{'🔍' if check else '🎨'} Processing {target_name.upper()}...",
+                    fg=typer.colors.CYAN,
+                )
+
+                if check:
+                    # Drift detection mode
+                    result = generator.check_drift(output_path, template_name)
+
+                    if result.has_drift:
+                        has_drift = True
+                        typer.secho(
+                            f"❌ DRIFT DETECTED in {output_path.name}",
+                            fg=typer.colors.RED,
+                            bold=True,
+                        )
+                        typer.echo()
+                        typer.secho("📋 Diff:", fg=typer.colors.YELLOW)
+                        typer.echo(result.diff)
+                        typer.echo()
+                    else:
+                        typer.secho(
+                            f"✅ {output_path.name} is in sync",
+                            fg=typer.colors.GREEN,
+                        )
+                else:
+                    # Generation mode
+                    content = generator.generate_document(
+                        template_name,
+                        output_path=None if dry_run else output_path,
+                    )
+
+                    if dry_run:
+                        typer.echo()
+                        typer.secho(
+                            f"📄 DRY RUN - Preview of {output_path.name} "
+                            f"(first 30 lines):",
+                            bold=True,
+                        )
+                        typer.echo("=" * 70)
+                        preview_lines = content.split("\n")[:30]
+                        for line in preview_lines:
+                            typer.echo(line)
+                        typer.echo("...")
+                        typer.echo("=" * 70)
+                        typer.secho(
+                            f"✅ Would write to: {output_path}",
+                            fg=typer.colors.YELLOW,
+                        )
+                    else:
+                        typer.secho(
+                            f"✅ Generated: {output_path}",
+                            fg=typer.colors.GREEN,
+                        )
+                        typer.echo(f"   Size: {len(content)} bytes")
+
+            # Final summary
+            typer.echo()
+            typer.echo("=" * 70)
+
+            if check:
+                if has_drift:
+                    typer.secho(
+                        "💥 DRIFT DETECTED - Documents are out of sync!",
+                        fg=typer.colors.RED,
+                        bold=True,
+                    )
+                    typer.echo()
+                    typer.echo("💡 To fix, run:")
+                    typer.echo(f"   cortex generate {target}")
+                    typer.echo()
+                    logger.warning("Drift detected in generated documents")
+                    raise typer.Exit(code=1)
+                typer.secho(
+                    "✅ All documents are in sync!",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                logger.info("Drift check passed")
+            elif dry_run:
+                typer.secho("✅ Dry run completed", fg=typer.colors.GREEN)
+            else:
+                typer.secho(
+                    f"✅ SUCCESS - {len(targets_to_process)} document(s) generated!",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                typer.echo(f"📅 Generated at: {data.generated_at}")
+                logger.info(
+                    f"Document generation completed: {len(targets_to_process)} files",
+                )
+
+            typer.echo()
+
+    except FileNotFoundError as e:
+        typer.secho(f"❌ Missing file: {e}", fg=typer.colors.RED, err=True)
+        typer.echo()
+        typer.echo("💡 Tip: Ensure the following files exist:")
+        typer.echo("   • pyproject.toml")
+        typer.echo(f"   • docs/templates/{template_name}")
+        typer.echo("   • .cortex/context.json (run 'cortex map' first)")
+        raise typer.Exit(code=1) from e
+
+    except Exception as e:
+        logger.error(f"Error generating documents: {e}", exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
