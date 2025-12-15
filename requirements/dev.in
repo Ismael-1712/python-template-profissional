@@ -12,7 +12,7 @@ python-semantic-release==10.5.3
 tomli; python_version < '3.11'
 
 # Type Checking
-mypy==1.19.0
+mypy==1.19.1
 types-PyYAML==6.0.12.20250915
 types-requests
 
