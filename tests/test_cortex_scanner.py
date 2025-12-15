@@ -50,7 +50,9 @@ class TestCodeLinkScanner:
     # ===================================================================
 
     def test_check_python_files_all_exist(
-        self, scanner: CodeLinkScanner, workspace_root: Path
+        self,
+        scanner: CodeLinkScanner,
+        workspace_root: Path,
     ) -> None:
         """Test checking Python files when all files exist."""
         # Create test files
@@ -121,7 +123,7 @@ class TestCodeLinkScanner:
 
         # Should have error about not being Python file
         assert len(errors) == 1
-        assert "Not a Python file: README.md" in errors
+        assert "Not a Python or template file: README.md" in errors
 
     def test_check_python_files_empty_list(self, scanner: CodeLinkScanner) -> None:
         """Test checking with empty list of files."""

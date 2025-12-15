@@ -153,11 +153,16 @@ class CodeLinkScanner:
             elif not full_path.is_file():
                 errors.append(f"Path is not a file: {relative_path}")
                 logger.warning("Path is not a file: %s", full_path)
-            elif not relative_path.endswith(".py"):
-                errors.append(f"Not a Python file: {relative_path}")
-                logger.warning("Not a Python file: %s", full_path)
+            elif not (
+                relative_path.endswith(".py")
+                or relative_path.endswith(".j2")
+                or relative_path.endswith(".jinja")
+                or relative_path.endswith(".jinja2")
+            ):
+                errors.append(f"Not a Python or template file: {relative_path}")
+                logger.warning("Not a Python or template file: %s", full_path)
             else:
-                logger.debug("Python file exists: %s", relative_path)
+                logger.debug("Python/template file exists: %s", relative_path)
 
         return errors
 
