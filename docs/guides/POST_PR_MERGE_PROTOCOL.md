@@ -22,6 +22,7 @@ Este documento define o **protocolo padrão** para sincronizar o repositório lo
 ## 🎯 Quando Usar
 
 Execute este protocolo **imediatamente após**:
+
 - ✅ Pull Request aprovado e mergeado (Squash & Merge)
 - ✅ Branch de feature não mais necessária
 - ✅ Necessidade de atualizar branches de desenvolvimento
@@ -39,6 +40,7 @@ git pull origin main
 ```
 
 **Resultado Esperado:**
+
 ```
 Updating abc1234..def5678
 Fast-forward
@@ -58,11 +60,13 @@ git push origin --delete feat/NOME-DA-FEATURE
 ```
 
 **Notas:**
+
 - O GitHub já deleta automaticamente a branch remota no Squash & Merge
 - Se você receber `error: remote ref does not exist`, está **OK** ✅
 - Use `-D` (maiúsculo) apenas se realmente quiser forçar a deleção
 
 **Resultado Esperado:**
+
 ```
 Deleted branch feat/NOME-DA-FEATURE (was abc1234).
 error: unable to delete 'feat/NOME-DA-FEATURE': remote ref does not exist
@@ -90,18 +94,21 @@ git checkout main
 **Estratégias de Merge:**
 
 #### Opção A: Fast-Forward (Preferencial)
+
 ```bash
 git checkout cli
 git merge main --ff-only
 ```
 
 #### Opção B: Rebase (Se houver divergências)
+
 ```bash
 git checkout cli
 git rebase main
 ```
 
 ⚠️ **ATENÇÃO**: Se houver conflitos no rebase, aborte e use `git pull`:
+
 ```bash
 git rebase --abort
 git pull origin cli  # Sincroniza com o remote
@@ -122,11 +129,13 @@ git gc --aggressive --prune=now
 ```
 
 **O que isso faz:**
+
 - `--prune`: Remove objetos não alcançáveis
 - `--aggressive`: Otimização mais profunda (mais lento)
 - `now`: Remove imediatamente (em vez de esperar 2 semanas)
 
 **Resultado Esperado:**
+
 ```
 Enumerating objects: 3769, done.
 Counting objects: 100% (3769/3769), done.
@@ -150,6 +159,7 @@ git status
 ```
 
 **Resultado Esperado:**
+
 ```
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -235,6 +245,7 @@ Após executar o protocolo, verifique:
 ### Problema: "Your branch is behind..."
 
 **Solução:**
+
 ```bash
 git pull origin NOME-DA-BRANCH
 ```
@@ -242,6 +253,7 @@ git pull origin NOME-DA-BRANCH
 ### Problema: Conflitos no rebase
 
 **Solução:**
+
 ```bash
 git rebase --abort
 git pull origin BRANCH-ATUAL  # Sincroniza com remote
@@ -250,6 +262,7 @@ git pull origin BRANCH-ATUAL  # Sincroniza com remote
 ### Problema: Branch local não deleta
 
 **Solução:**
+
 ```bash
 # Forçar deleção (use com cuidado!)
 git branch -D NOME-DA-BRANCH
@@ -258,6 +271,7 @@ git branch -D NOME-DA-BRANCH
 ### Problema: Refs remotas ainda aparecem após prune
 
 **Solução:**
+
 ```bash
 git remote prune origin
 git fetch --prune --prune-tags
