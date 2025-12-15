@@ -934,7 +934,7 @@
 <h1 id="referencia-de-comandos-cli-auto-generated">📚 Referência de Comandos CLI (Auto-Generated)</h1>
 <p><strong>⚠️ ESTE ARQUIVO É GERADO AUTOMATICAMENTE</strong></p>
 <p>Não edite manualmente. Toda alteração será sobrescrita.
-Gerado em: <strong>2025-12-14</strong>
+Gerado em: <strong>2025-12-15</strong>
 Fonte: <code>scripts/core/doc_gen.py</code></p>
 <p>Este documento contém a referência completa de todos os comandos CLI disponíveis
 no projeto. A documentação é extraída automaticamente dos códigos-fonte usando
@@ -970,17 +970,23 @@ using the CORTEX system.</p>
 - Valid YAML frontmatter
 - Required metadata fields
 - Links to code files exist
-- Links to other docs exist</p>
+- Links to other docs exist
+- Knowledge Graph connectivity (with --links flag)</p>
 <p>Examples:
     cortex audit                    # Audit all docs in docs/
     cortex audit docs/guides/       # Audit specific directory
     cortex audit docs/guide.md      # Audit single file
-    cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)</p>
+    cortex audit --fail-on-error    # Exit 1 if errors found (CI mode)
+    cortex audit --links            # Validate Knowledge Graph
+    cortex audit --links --strict   # Fail CI on broken links</p>
 <p><strong>Parâmetros:</strong></p>
 <p>| Nome | Tipo | Obrigatório | Default | Descrição |</p>
 <p>|:-----|:-----|:------------|:--------|:----------|</p>
 <p>| <code>path</code> | <code>Annotated[Path | None, typer.Argument(help='Path to directory or file to audit (default: docs/)', exists=False, resolve_path=True)]</code> | ❌ Não | <code>None</code> | Path to directory or file to audit (default: docs/) |</p>
 <p>| <code>fail_on_error</code> | <code>Annotated[bool, typer.Option('--fail-on-error', help='Exit with error code if validation fails (useful for CI)')]</code> | ❌ Não | <code>False</code> | Exit with error code if validation fails (useful for CI) |</p>
+<p>| <code>links</code> | <code>Annotated[bool, typer.Option('--links', help='Validate Knowledge Graph links and generate health report')]</code> | ❌ Não | <code>False</code> | Validate Knowledge Graph links and generate health report |</p>
+<p>| <code>strict</code> | <code>Annotated[bool, typer.Option('--strict', help='Fail on broken links (requires --links)')]</code> | ❌ Não | <code>False</code> | Fail on broken links (requires --links) |</p>
+<p>| <code>output</code> | <code>Annotated[Path | None, typer.Option('--output', '-o', help='Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md)')]</code> | ❌ Não | <code>None</code> | Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md) |</p>
 <p><strong>Exemplo:</strong>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cortex<span class="w"> </span>audit
 </code></pre></div></p>
@@ -1259,7 +1265,7 @@ mais recentes disponíveis no pyenv, garantindo paridade com o GitHub Actions.</
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>python<span class="w"> </span>scripts/core/doc_gen.py
 </code></pre></div></p>
 <hr />
-<p><strong>Última Atualização:</strong> 2025-12-14
+<p><strong>Última Atualização:</strong> 2025-12-15
 <strong>Gerado por:</strong> <code>scripts/core/doc_gen.py</code> v1.1.0</p>
 
 

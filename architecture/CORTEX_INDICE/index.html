@@ -21,7 +21,7 @@
     
     
       
-        <title>🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02) - Python Template Profissional</title>
+        <title>🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03) - Python Template Profissional</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cortex-indice-da-documentacao-fase-01-fase-02" class="md-skip">
+        <a href="#cortex-indice-da-documentacao-fase-01-fase-02-fase-03" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
+              🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
             
           </span>
         </div>
@@ -564,6 +564,56 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-03-knowledge-graph-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📦 FASE 03: KNOWLEDGE GRAPH &amp; VALIDATION
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📦 FASE 03: KNOWLEDGE GRAPH &amp; VALIDATION">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-documents-link-analysis-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔷 Design Documents (Link Analysis &amp; Validation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modelos-de-dados-adicionais-fase-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔷 Modelos de Dados Adicionais (Fase 03)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentes-implementados-fase-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔷 Componentes Implementados (Fase 03)
+      
+    </span>
+  </a>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#2-resumo-executivo" class="md-nav__link">
     <span class="md-ellipsis">
@@ -747,9 +797,9 @@
 
 
 
-<h1 id="cortex-indice-da-documentacao-fase-01-fase-02">🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)</h1>
-<p><strong>Data:</strong> 07 de Dezembro de 2025
-<strong>Status:</strong> 🟢 Fase 01 Completa + Fase 02 (Knowledge Node) em Andamento</p>
+<h1 id="cortex-indice-da-documentacao-fase-01-fase-02-fase-03">🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)</h1>
+<p><strong>Data:</strong> 14 de Dezembro de 2025
+<strong>Status:</strong> 🟢 Fase 01 Completa + Fase 02 Completa + Fase 03 (Knowledge Validator) em Design</p>
 <hr />
 <h2 id="novidades-fase-02-knowledge-node">📦 NOVIDADES - FASE 02: KNOWLEDGE NODE</h2>
 <h3 id="modelos-de-dados-v2-pydantic">🔷 Modelos de Dados (v2 - Pydantic)</h3>
@@ -800,6 +850,136 @@
 <li>Campo <code>etag</code> (str | None): Cache HTTP ETag</li>
 <li>Campo <code>golden_paths</code> (str): Regras imutáveis de relacionamento</li>
 <li>Campo <code>sources</code> (list[KnowledgeSource]): Fontes externas do conhecimento</li>
+</ul>
+<hr />
+<h2 id="fase-03-knowledge-graph-validation">📦 FASE 03: KNOWLEDGE GRAPH &amp; VALIDATION</h2>
+<h3 id="design-documents-link-analysis-validation">🔷 Design Documents (Link Analysis &amp; Validation)</h3>
+<p><strong>Status:</strong> 🔵 Design Phase</p>
+<table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Tarefa</th>
+<th>Status</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../CORTEX_FASE03_LINK_SCANNER_DESIGN/">CORTEX_FASE03_LINK_SCANNER_DESIGN.md</a></td>
+<td>[007]</td>
+<td>✅ Implementado</td>
+<td>Extração de links semânticos do conteúdo</td>
+</tr>
+<tr>
+<td><a href="../CORTEX_FASE03_LINK_RESOLVER_DESIGN/">CORTEX_FASE03_LINK_RESOLVER_DESIGN.md</a></td>
+<td>[008]</td>
+<td>✅ Implementado</td>
+<td>Resolução e validação de targets</td>
+</tr>
+<tr>
+<td><a href="../CORTEX_FASE03_VALIDATOR_DESIGN/">CORTEX_FASE03_VALIDATOR_DESIGN.md</a></td>
+<td>[009]</td>
+<td>🔵 Design</td>
+<td><strong>Inversão de grafo e health metrics</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="modelos-de-dados-adicionais-fase-03">🔷 Modelos de Dados Adicionais (Fase 03)</h3>
+<p><strong>Arquivo:</strong> <code>scripts/core/cortex/models.py</code></p>
+<p><strong>Enums Adicionados:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Enum</th>
+<th>Propósito</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LinkType</code></td>
+<td>Tipo de link semântico</td>
+<td>MARKDOWN, WIKILINK, WIKILINK_ALIASED, CODE_REFERENCE</td>
+</tr>
+<tr>
+<td><code>LinkStatus</code></td>
+<td>Status de resolução</td>
+<td>UNRESOLVED, VALID, BROKEN, EXTERNAL, AMBIGUOUS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Novos Modelos (Pydantic):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Tipo</th>
+<th>Propósito</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KnowledgeLink</code></td>
+<td>Pydantic BaseModel</td>
+<td>Link semântico entre Knowledge Nodes</td>
+<td>✅ Implementado</td>
+</tr>
+<tr>
+<td><code>HealthMetrics</code></td>
+<td>Dataclass</td>
+<td>Métricas de saúde do grafo</td>
+<td>🔵 Proposto</td>
+</tr>
+<tr>
+<td><code>AnomalyReport</code></td>
+<td>Dataclass</td>
+<td>Agregação de anomalias (órfãos, becos, broken links)</td>
+<td>🔵 Proposto</td>
+</tr>
+<tr>
+<td><code>ValidationReport</code></td>
+<td>Dataclass</td>
+<td>Relatório completo de validação</td>
+<td>🔵 Proposto</td>
+</tr>
+</tbody>
+</table>
+<p><strong>KnowledgeLink Schema:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">KnowledgeLink</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>           <span class="c1"># ID do Knowledge Node de origem</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">target_raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>          <span class="c1"># String bruta extraída ([[Fase 01]])</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">target_resolved</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># Path ou ID resolvido</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">target_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>    <span class="c1"># Knowledge Node ID resolvido</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="nb">type</span><span class="p">:</span> <span class="n">LinkType</span><span class="p">,</span>           <span class="c1"># WIKILINK, MARKDOWN, etc</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">line_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>         <span class="c1"># Linha onde foi encontrado</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>             <span class="c1"># Snippet de contexto</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">status</span><span class="p">:</span> <span class="n">LinkStatus</span><span class="p">,</span>       <span class="c1"># VALID, BROKEN, etc</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">is_valid</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>           <span class="c1"># Deprecated (use status)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="componentes-implementados-fase-03">🔷 Componentes Implementados (Fase 03)</h3>
+<p><strong>Link Analyzer:</strong></p>
+<ul>
+<li>✅ <code>scripts/core/cortex/link_analyzer.py</code></li>
+<li>✅ Extração de links via regex (wikilinks, markdown, code references)</li>
+<li>✅ 15+ testes em <code>tests/test_link_analyzer.py</code></li>
+</ul>
+<p><strong>Link Resolver:</strong></p>
+<ul>
+<li>✅ <code>scripts/core/cortex/link_resolver.py</code></li>
+<li>✅ Múltiplas estratégias de resolução (ID, path, alias, fuzzy)</li>
+<li>✅ Índices reversos para lookup O(1)</li>
+<li>✅ 20+ testes em <code>tests/test_link_resolver.py</code></li>
+</ul>
+<p><strong>Knowledge Validator (PRÓXIMO):</strong></p>
+<ul>
+<li>🔵 <code>scripts/core/cortex/knowledge_validator.py</code> (Proposto)</li>
+<li>🔵 Cálculo de Inbound Links (inversão de grafo)</li>
+<li>🔵 Detecção de anomalias (orphans, dead ends, broken links)</li>
+<li>🔵 Métricas de saúde (Connectivity Score, Link Health Score)</li>
+<li>🔵 Geração de <code>docs/reports/KNOWLEDGE_HEALTH.md</code></li>
 </ul>
 <hr />
 <h3 id="2-resumo-executivo">2. 📄 Resumo Executivo</h3>
@@ -957,6 +1137,11 @@
 </thead>
 <tbody>
 <tr>
+<td>v1.2.0</td>
+<td>2025-12-14</td>
+<td><strong>Fase 03:</strong> Design do Knowledge Validator (inversão de grafo + health metrics)</td>
+</tr>
+<tr>
 <td>v1.1.0</td>
 <td>2025-12-07</td>
 <td><strong>Fase 02:</strong> Adição dos modelos <code>KnowledgeSource</code> e <code>KnowledgeEntry</code> (Pydantic v2)</td>
@@ -968,7 +1153,9 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Status:</strong> 🟢 <strong>APROVADO E PRONTO PARA IMPLEMENTAÇÃO</strong></p>
+<p><strong>Status Fase 01:</strong> 🟢 <strong>APROVADO E IMPLEMENTADO</strong>
+<strong>Status Fase 02:</strong> 🟢 <strong>APROVADO E IMPLEMENTADO</strong>
+<strong>Status Fase 03:</strong> 🔵 <strong>DESIGN EM APROVAÇÃO (Tarefa [009])</strong></p>
 <hr />
 <p><strong>Data de Criação:</strong> 2025-11-30
 <strong>Autor:</strong> Engineering Team

@@ -1,0 +1,2093 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🧠 CORTEX Fase 03 - The Knowledge Validator (Design Técnico) - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-fase-03-the-knowledge-validator-design-tecnico" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🧠 CORTEX Fase 03 - The Knowledge Validator (Design Técnico)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 ÍNDICE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Executive Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problema-e-objetivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Problema e Objetivos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Problema e Objetivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objetivos-tecnicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos Técnicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-do-componente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Arquitetura do Componente
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Arquitetura do Componente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagrama-de-classes-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama de Classes (Mermaid)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principio-de-design-single-responsibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípio de Design: Single Responsibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algoritmo-de-inversao-de-grafo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Algoritmo de Inversão de Grafo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Algoritmo de Inversão de Grafo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algoritmo-indexacao-reversa-de-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algoritmo: Indexação Reversa de Links
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pseudocodigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pseudocódigo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo de Execução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otimizacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otimizações
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-saude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 Métricas de Saúde
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Métricas de Saúde">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#health-score-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Score Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-individuais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas Individuais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas Individuais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-connectivity-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Connectivity Score
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-link-health-score" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Link Health Score
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-hub-analysis-pagerank-simplificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Hub Analysis (PageRank Simplificado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deteccao-de-anomalias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Detecção de Anomalias
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Detecção de Anomalias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-orphan-nodes-documentos-orfaos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Orphan Nodes (Documentos Órfãos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dead-end-nodes-becos-sem-saida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dead End Nodes (Becos sem Saída)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-broken-links-links-quebrados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Broken Links (Links Quebrados)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrutura-do-relatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📄 Estrutura do Relatório
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📄 Estrutura do Relatório">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layout-do-knowledge_healthmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout do KNOWLEDGE_HEALTH.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Fluxo de Dados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Fluxo de Dados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pipeline-completo-scanner-validator-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Completo (Scanner → Validator → Report)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sequencia-de-chamadas-code-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequência de Chamadas (Code Level)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Integração CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Integração CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comando-cortex-audit-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comando: cortex audit --links
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-aceitacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Critérios de Aceitação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Critérios de Aceitação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#funcionalidades-obrigatorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funcionalidades Obrigatórias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testes-obrigatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testes Obrigatórios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-obrigatoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação Obrigatória
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-sucesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Métricas de Sucesso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Métricas de Sucesso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qualidade-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qualidade de Código
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensoes-futuras-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔮 Extensões Futuras (Out of Scope)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔮 Extensões Futuras (Out of Scope)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-04-advanced-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 04 - Advanced Analytics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-ferramentas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com Ferramentas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Referências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#teoria-de-grafos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoria de Grafos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cortex-fase-03-the-knowledge-validator-design-tecnico">🧠 CORTEX Fase 03 - The Knowledge Validator (Design Técnico)</h1>
+<p><strong>Task:</strong> [009] The Knowledge Validator
+<strong>Status:</strong> Design Phase
+<strong>Prerequisite:</strong> [008] The Link Resolver (Completed)
+<strong>Data:</strong> 14 de Dezembro de 2025</p>
+<hr />
+<h2 id="indice">📋 ÍNDICE</h2>
+<ol>
+<li><a href="#executive-summary">Executive Summary</a></li>
+<li><a href="#problema-e-objetivos">Problema e Objetivos</a></li>
+<li><a href="#arquitetura-do-componente">Arquitetura do Componente</a></li>
+<li><a href="#algoritmo-de-inversão-de-grafo">Algoritmo de Inversão de Grafo</a></li>
+<li><a href="#métricas-de-saúde">Métricas de Saúde</a></li>
+<li><a href="#detecção-de-anomalias">Detecção de Anomalias</a></li>
+<li><a href="#estrutura-do-relatório">Estrutura do Relatório</a></li>
+<li><a href="#fluxo-de-dados">Fluxo de Dados</a></li>
+<li><a href="#integração-cli">Integração CLI</a></li>
+<li><a href="#critérios-de-aceitação">Critérios de Aceitação</a></li>
+</ol>
+<hr />
+<h2 id="executive-summary">📊 Executive Summary</h2>
+<p>O <strong>KnowledgeValidator</strong> fecha o ciclo do grafo de conhecimento do CORTEX, transformando links direcionais (outbound) em um grafo bidirecional completo através do cálculo de <strong>Inbound Links</strong> (backlinks/referências inversas). Este componente implementa análise de grafos para detectar anomalias estruturais e gerar diagnósticos de saúde da base de conhecimento.</p>
+<p><strong>Core Value Proposition:</strong></p>
+<ul>
+<li><strong>Inversão de Grafo:</strong> Calcula quais documentos apontam para cada nó (PageRank simplificado)</li>
+<li><strong>Detecção de Anomalias:</strong> Identifica órfãos, becos sem saída e links quebrados</li>
+<li><strong>Health Metrics:</strong> Fornece métricas quantitativas de conectividade e qualidade</li>
+<li><strong>CI Integration:</strong> Falha pipelines se houver violações críticas de integridade</li>
+</ul>
+<p><strong>Relação com Fases Anteriores:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[007] LinkScanner    → Extrai links do conteúdo
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>[008] LinkResolver   → Valida e resolve targets
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>[009] KnowledgeValidator → Inverte grafo + diagnóstico ← VOCÊ ESTÁ AQUI
+</code></pre></div>
+<hr />
+<h2 id="problema-e-objetivos">🎯 Problema e Objetivos</h2>
+<h3 id="problema-atual">Problema Atual</h3>
+<p>Após a implementação do LinkResolver:</p>
+<p>✅ Cada <code>KnowledgeEntry</code> possui <code>links: list[KnowledgeLink]</code> (Outbound Links)
+✅ Sabemos <strong>quem aponta para onde</strong> (A → B, A → C)
+❌ Não sabemos <strong>quem aponta para A</strong> (Inbound Links)
+❌ Não há métricas de qualidade estrutural
+❌ Documentos órfãos ou becos sem saída passam despercebidos</p>
+<p><strong>Consequência:</strong> Base de conhecimento pode degradar silenciosamente (links quebrados, documentação desconectada).</p>
+<h3 id="objetivos-tecnicos">Objetivos Técnicos</h3>
+<ol>
+<li><strong>[P41.1.4] Indexador Reverso de Referências</strong></li>
+<li>Calcular <code>inbound_link_ids: list[str]</code> para cada <code>KnowledgeEntry</code></li>
+<li>
+<p>Complexidade O(N + E) onde N = nós, E = edges</p>
+</li>
+<li>
+<p><strong>Detecção de Anomalias Estruturais</strong></p>
+</li>
+<li><strong>Orphans:</strong> Documentos com 0 inbound links (ninguém aponta para eles)</li>
+<li><strong>Dead Ends:</strong> Documentos com 0 outbound links (não apontam para ninguém)</li>
+<li>
+<p><strong>Broken Links:</strong> Links com <code>status == LinkStatus.BROKEN</code></p>
+</li>
+<li>
+<p><strong>Métricas de Saúde Quantitativas</strong></p>
+</li>
+<li><strong>Connectivity Score:</strong> Percentual de nós conectados</li>
+<li><strong>Link Health Score:</strong> Razão de links válidos/total</li>
+<li>
+<p><strong>Hub Analysis:</strong> Top documentos mais citados</p>
+</li>
+<li>
+<p><strong>Relatório Markdown Automático</strong></p>
+</li>
+<li>Gerar <code>docs/reports/KNOWLEDGE_HEALTH.md</code></li>
+<li>
+<p>Incluir tabelas, alertas e recomendações</p>
+</li>
+<li>
+<p><strong>Integração CI/CD</strong></p>
+</li>
+<li>Comando <code>cortex audit --links</code> deve falhar se houver broken links críticos</li>
+<li>Exit code 1 para falha em pipelines</li>
+</ol>
+<hr />
+<h2 id="arquitetura-do-componente">🏗️ Arquitetura do Componente</h2>
+<h3 id="diagrama-de-classes-mermaid">Diagrama de Classes (Mermaid)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>classDiagram
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    class KnowledgeEntry {
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        +str id
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        +list~KnowledgeLink~ links
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        +list~str~ inbound_link_ids
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    }
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    class KnowledgeValidator {
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        -dict~str, KnowledgeEntry~ _entries_index
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        -dict~str, list[str]~ _inbound_index
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        +__init__(entries)
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        +build_inbound_index() dict
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        +calculate_metrics() HealthMetrics
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        +detect_anomalies() AnomalyReport
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        +validate() ValidationReport
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    }
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    class HealthMetrics {
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        +int total_nodes
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        +int total_links
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        +int valid_links
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>        +int broken_links
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        +float connectivity_score
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        +float link_health_score
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>        +list~NodeRanking~ top_hubs
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>        +datetime generated_at
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    }
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>    class NodeRanking {
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>        +str node_id
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>        +int inbound_count
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>        +int rank
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    }
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    class AnomalyReport {
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>        +list~str~ orphan_nodes
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>        +list~str~ dead_end_nodes
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>        +list~BrokenLinkDetail~ broken_links
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>        +int total_issues
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>    }
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>    class BrokenLinkDetail {
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>        +str source_id
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>        +str target_raw
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>        +int line_number
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>        +str context
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>    }
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>    class ValidationReport {
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>        +HealthMetrics metrics
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>        +AnomalyReport anomalies
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>        +bool is_healthy
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>        +list~str~ critical_errors
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>        +list~str~ warnings
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>    }
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>    class ReportGenerator {
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>        +generate_markdown(report) str
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>        +save_to_file(report, path) None
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>    }
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>    KnowledgeValidator --&gt; HealthMetrics : creates
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>    KnowledgeValidator --&gt; AnomalyReport : creates
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>    KnowledgeValidator --&gt; ValidationReport : creates
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>    ValidationReport --&gt; HealthMetrics : contains
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>    ValidationReport --&gt; AnomalyReport : contains
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>    ReportGenerator ..&gt; ValidationReport : uses
+</code></pre></div>
+<h3 id="principio-de-design-single-responsibility">Princípio de Design: Single Responsibility</h3>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Responsabilidade</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KnowledgeValidator</code></td>
+<td>Análise de grafo e validação</td>
+<td><code>list[KnowledgeEntry]</code></td>
+<td><code>ValidationReport</code></td>
+</tr>
+<tr>
+<td><code>HealthMetrics</code></td>
+<td>Armazenamento de métricas</td>
+<td>-</td>
+<td>Dataclass</td>
+</tr>
+<tr>
+<td><code>AnomalyReport</code></td>
+<td>Agregação de anomalias</td>
+<td>-</td>
+<td>Dataclass</td>
+</tr>
+<tr>
+<td><code>ReportGenerator</code></td>
+<td>Formatação de relatórios</td>
+<td><code>ValidationReport</code></td>
+<td>Markdown string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li><code>KnowledgeValidator</code> não escreve arquivos (delegado ao <code>ReportGenerator</code>)</li>
+<li>Modelos de dados são Pydantic/dataclasses puros (sem lógica)</li>
+<li>Cada classe tem um único motivo para mudar</li>
+</ul>
+<hr />
+<h2 id="algoritmo-de-inversao-de-grafo">🔄 Algoritmo de Inversão de Grafo</h2>
+<h3 id="algoritmo-indexacao-reversa-de-links">Algoritmo: Indexação Reversa de Links</h3>
+<p><strong>Objetivo:</strong> Dado um grafo direcional com outbound links, construir um índice de inbound links.</p>
+<p><strong>Complexidade Temporal:</strong> O(N + E)</p>
+<ul>
+<li>N = número de nós (KnowledgeEntry)</li>
+<li>E = número de edges (KnowledgeLink)</li>
+</ul>
+<p><strong>Complexidade Espacial:</strong> O(N + E)</p>
+<ul>
+<li>Índice reverso: dict[str, list[str]]</li>
+</ul>
+<h3 id="pseudocodigo">Pseudocódigo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_inbound_index</span><span class="p">(</span><span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="sd">    Constrói índice reverso de referências (Inbound Links).</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="sd">    Args:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="sd">        entries: Lista de KnowledgeEntry com outbound links resolvidos</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="sd">        Dicionário mapeando target_id -&gt; [source_id_1, source_id_2, ...]</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="sd">    Complexity:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="sd">        Time: O(N + E) onde N = len(entries), E = sum(len(e.links))</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="sd">        Space: O(N + E) para armazenar o índice</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">inbound_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="c1"># Iterar sobre todas as entradas (O(N))</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="c1"># Iterar sobre todos os links de cada entrada (O(E) no total)</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>            <span class="c1"># Apenas links válidos contribuem para inbound</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">LinkStatus</span><span class="o">.</span><span class="n">VALID</span> <span class="ow">and</span> <span class="n">link</span><span class="o">.</span><span class="n">target_id</span><span class="p">:</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>                <span class="n">inbound_index</span><span class="p">[</span><span class="n">link</span><span class="o">.</span><span class="n">target_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    <span class="c1"># Converter defaultdict para dict normal</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">inbound_index</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="exemplo-de-execucao">Exemplo de Execução</h3>
+<p><strong>Grafo de Entrada (Outbound Links):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>KnowledgeEntry(id=&quot;kno-001&quot;, links=[
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    KnowledgeLink(target_id=&quot;kno-002&quot;, status=VALID),
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    KnowledgeLink(target_id=&quot;kno-003&quot;, status=VALID),
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>])
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>KnowledgeEntry(id=&quot;kno-002&quot;, links=[
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    KnowledgeLink(target_id=&quot;kno-003&quot;, status=VALID),
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>])
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>KnowledgeEntry(id=&quot;kno-003&quot;, links=[])
+</code></pre></div>
+<p><strong>Grafo Resultante (Inbound Links):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">inbound_index</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="s2">&quot;kno-002&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;kno-001&quot;</span><span class="p">],</span>           <span class="c1"># kno-002 é citado por kno-001</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s2">&quot;kno-003&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;kno-001&quot;</span><span class="p">,</span> <span class="s2">&quot;kno-002&quot;</span><span class="p">]</span> <span class="c1"># kno-003 é citado por kno-001 e kno-002</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Observação:</strong> <code>kno-001</code> não aparece no índice (0 inbound links → Orphan candidate)</p>
+<h3 id="otimizacoes">Otimizações</h3>
+<ol>
+<li><strong>Lazy Computation:</strong> Calcular apenas quando necessário (não em <code>__init__</code>)</li>
+<li><strong>Caching:</strong> Armazenar resultado em <code>_inbound_index</code> após primeira computação</li>
+<li><strong>Invalidation:</strong> Recalcular se lista de entries mudar</li>
+</ol>
+<hr />
+<h2 id="metricas-de-saude">📈 Métricas de Saúde</h2>
+<h3 id="health-score-formula">Health Score Formula</h3>
+<p>O <strong>Knowledge Health Score</strong> é uma métrica composta que avalia a qualidade estrutural do grafo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">Health_Score</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.4</span> <span class="err">×</span> <span class="n">Connectivity_Score</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.6</span> <span class="err">×</span> <span class="n">Link_Health_Score</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Pesos justificados:</strong></p>
+<ul>
+<li><strong>60% Link Health:</strong> Links quebrados são falhas críticas</li>
+<li><strong>40% Connectivity:</strong> Documentos desconectados são problemas de UX, não bugs</li>
+</ul>
+<h3 id="metricas-individuais">Métricas Individuais</h3>
+<h4 id="1-connectivity-score">1. Connectivity Score</h4>
+<p><strong>Definição:</strong> Percentual de nós que possuem pelo menos 1 conexão (inbound OU outbound)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_connectivity_score</span><span class="p">(</span><span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="sd">    Connectivity Score = (Nós Conectados / Total de Nós) × 100</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="sd">    Um nó está conectado se:</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="sd">      - len(entry.links) &gt; 0 (tem outbound) OU</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="sd">      - len(inbound_links[entry.id]) &gt; 0 (tem inbound)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="n">total_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="n">connected_nodes</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>        <span class="mi">1</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">inbound_links</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="p">)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">connected_nodes</span> <span class="o">/</span> <span class="n">total_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">if</span> <span class="n">total_nodes</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+</code></pre></div>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><code>100%</code>: Todos os documentos estão conectados (ideal)</li>
+<li><code>&lt; 80%</code>: Há muitos órfãos ou documentos isolados</li>
+<li><code>&lt; 50%</code>: Base de conhecimento fragmentada (crítico)</li>
+</ul>
+<h4 id="2-link-health-score">2. Link Health Score</h4>
+<p><strong>Definição:</strong> Razão de links válidos sobre o total de links</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_link_health_score</span><span class="p">(</span><span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="sd">    Link Health Score = (Links Válidos / Total de Links) × 100</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="sd">    Links válidos: status == LinkStatus.VALID</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">total_links</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">valid_links</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>        <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">links</span> <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">LinkStatus</span><span class="o">.</span><span class="n">VALID</span><span class="p">)</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="p">)</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">valid_links</span> <span class="o">/</span> <span class="n">total_links</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">if</span> <span class="n">total_links</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">100.0</span>
+</code></pre></div>
+<p><strong>Interpretação:</strong></p>
+<ul>
+<li><code>100%</code>: Nenhum link quebrado (ideal)</li>
+<li><code>90-99%</code>: Alguns links quebrados (atenção)</li>
+<li><code>&lt; 90%</code>: Muitos links quebrados (crítico)</li>
+</ul>
+<h4 id="3-hub-analysis-pagerank-simplificado">3. Hub Analysis (PageRank Simplificado)</h4>
+<p><strong>Definição:</strong> Top N documentos mais citados (maior número de inbound links)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">NodeRanking</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">node_id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">inbound_count</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># 1 = mais citado</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_top_hubs</span><span class="p">(</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="n">inbound_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">NodeRanking</span><span class="p">]:</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="sd">    Retorna os top N nós mais citados (hubs).</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="sd">    Hubs são documentos importantes que servem como referência.</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="n">rankings</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>        <span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inbound_list</span><span class="p">))</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>        <span class="k">for</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">inbound_list</span> <span class="ow">in</span> <span class="n">inbound_index</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>    <span class="p">]</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>    <span class="c1"># Ordenar por inbound count (decrescente)</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>    <span class="n">rankings</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>    <span class="k">return</span> <span class="p">[</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>        <span class="n">NodeRanking</span><span class="p">(</span><span class="n">node_id</span><span class="o">=</span><span class="n">node_id</span><span class="p">,</span> <span class="n">inbound_count</span><span class="o">=</span><span class="n">count</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">node_id</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rankings</span><span class="p">[:</span><span class="n">top_n</span><span class="p">])</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>    <span class="p">]</span>
+</code></pre></div>
+<p><strong>Uso:</strong> Identificar documentação crítica que requer manutenção prioritária.</p>
+<hr />
+<h2 id="deteccao-de-anomalias">🔍 Detecção de Anomalias</h2>
+<h3 id="1-orphan-nodes-documentos-orfaos">1. Orphan Nodes (Documentos Órfãos)</h3>
+<p><strong>Definição:</strong> Documentos que <strong>não recebem</strong> nenhum link de outros documentos.</p>
+<p><strong>Detecção:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_orphans</span><span class="p">(</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">],</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">inbound_index</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="sd">    Retorna IDs de documentos órfãos (0 inbound links).</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="sd">    Exceção: Documentos de entrada (entry points) podem ser órfãos intencionais.</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">orphans</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="n">entry</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inbound_index</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">inbound_index</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="p">]</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>    <span class="k">return</span> <span class="n">orphans</span>
+</code></pre></div>
+<p><strong>Severidade:</strong></p>
+<ul>
+<li>⚠️  <strong>Warning</strong> se &lt; 10% dos documentos são órfãos</li>
+<li>🔴 <strong>Critical</strong> se ≥ 30% dos documentos são órfãos</li>
+</ul>
+<p><strong>Recomendação:</strong> Adicionar links de documentos principais ou criar índice de navegação.</p>
+<h3 id="2-dead-end-nodes-becos-sem-saida">2. Dead End Nodes (Becos sem Saída)</h3>
+<p><strong>Definição:</strong> Documentos que <strong>não apontam</strong> para nenhum outro documento.</p>
+<p><strong>Detecção:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_dead_ends</span><span class="p">(</span><span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="sd">    Retorna IDs de documentos becos sem saída (0 outbound links).</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="sd">    Exceção: Documentos conclusivos (e.g., changelogs) podem ser dead ends intencionais.</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="n">dead_ends</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>        <span class="n">entry</span><span class="o">.</span><span class="n">id</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    <span class="p">]</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    <span class="k">return</span> <span class="n">dead_ends</span>
+</code></pre></div>
+<p><strong>Severidade:</strong></p>
+<ul>
+<li>ℹ️  <strong>Info</strong> (não é crítico, mas indica oportunidade de enriquecimento)</li>
+</ul>
+<p><strong>Recomendação:</strong> Adicionar seção "Veja Também" com links relacionados.</p>
+<h3 id="3-broken-links-links-quebrados">3. Broken Links (Links Quebrados)</h3>
+<p><strong>Definição:</strong> Links que não puderam ser resolvidos (target não existe).</p>
+<p><strong>Detecção:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">BrokenLinkDetail</span><span class="p">:</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">target_raw</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">line_number</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_broken_links</span><span class="p">(</span><span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">BrokenLinkDetail</span><span class="p">]:</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="sd">    Retorna lista detalhada de todos os links quebrados.</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="n">broken</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">LinkStatus</span><span class="o">.</span><span class="n">BROKEN</span><span class="p">:</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>                <span class="n">broken</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BrokenLinkDetail</span><span class="p">(</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>                    <span class="n">source_id</span><span class="o">=</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>                    <span class="n">target_raw</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">target_raw</span><span class="p">,</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>                    <span class="n">line_number</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">line_number</span><span class="p">,</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>                    <span class="n">context</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">context</span><span class="p">,</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>                <span class="p">))</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>    <span class="k">return</span> <span class="n">broken</span>
+</code></pre></div>
+<p><strong>Severidade:</strong></p>
+<ul>
+<li>🔴 <strong>Critical</strong> (sempre)</li>
+<li><strong>Ação:</strong> Falhar CI se houver broken links (configurable via <code>--strict</code> flag)</li>
+</ul>
+<hr />
+<h2 id="estrutura-do-relatorio">📄 Estrutura do Relatório</h2>
+<h3 id="layout-do-knowledge_healthmd">Layout do KNOWLEDGE_HEALTH.md</h3>
+<p>O relatório gerado em <code>docs/reports/KNOWLEDGE_HEALTH.md</code> segue este template:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>---
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>generated_at: 2025-12-14T21:45:00Z
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>health_score: 87.5
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="gu">status: healthy  # healthy | warning | critical</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="gu">---</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="gh"># 📊 Knowledge Graph Health Report</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="gs">**Generated:**</span> 2025-12-14 21:45:00 UTC
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="gs">**Overall Health Score:**</span> 87.5/100 (🟢 Healthy)
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>---
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="gu">## 📈 Executive Summary</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>| Metric                  | Value    | Status |
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>|-------------------------|----------|--------|
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>| Total Nodes             | 45       | -      |
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>| Total Links             | 128      | -      |
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>| Valid Links             | 120      | 🟢     |
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>| Broken Links            | 8        | ⚠️      |
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>| Connectivity Score      | 91.1%    | 🟢     |
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>| Link Health Score       | 93.8%    | 🟢     |
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>| <span class="gs">**Overall Health Score**</span>| <span class="gs">**87.5**</span>| 🟢     |
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>---
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a><span class="gu">## 🏆 Top 5 Most Referenced Documents (Hubs)</span>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>| Rank | Document ID | Inbound Links | Status |
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>|------|-------------|---------------|--------|
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>| 1    | kno-002     | 15            | 🟢     |
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>| 2    | kno-007     | 12            | 🟢     |
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>| 3    | kno-001     | 10            | 🟢     |
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>| 4    | kno-015     | 8             | 🟢     |
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>| 5    | kno-023     | 7             | 🟢     |
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a><span class="gs">**Interpretation:**</span> These documents are critical references. Ensure they are well-maintained.
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>---
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a><span class="gu">## 🔴 Critical Issues</span>
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a><span class="gu">### Broken Links (8 total)</span>
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>| Source      | Target       | Line | Context                           |
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>|-------------|--------------|------|-----------------------------------|
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>| kno-003     | <span class="sb">`[[Fase 99]]`</span>| 42   | ...Veja [[Fase 99]] para mais...  |
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>| kno-012     | <span class="sb">`old-doc.md`</span> | 15   | Confira [<span class="nt">aqui</span>](<span class="na">old-doc.md</span>)...     |
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>| ...         | ...          | ...  | ...                               |
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a><span class="gs">**Recommendation:**</span> Fix these links immediately or mark them as external.
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>---
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a><span class="gu">## ⚠️  Warnings</span>
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a><span class="gu">### Orphan Nodes (5 total - 11.1%)</span>
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>Documents with no incoming links:
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a><span class="k">-</span><span class="w"> </span><span class="sb">`kno-018`</span> - &quot;Isolated Tutorial&quot;
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a><span class="k">-</span><span class="w"> </span><span class="sb">`kno-022`</span> - &quot;Draft Proposal&quot;
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a><span class="k">-</span><span class="w"> </span><span class="sb">`kno-034`</span> - &quot;Experimental Feature&quot;
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a><span class="k">-</span><span class="w"> </span>...
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a><span class="gs">**Recommendation:**</span> Add links from main navigation or index documents.
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a><span class="gu">### Dead End Nodes (12 total - 26.7%)</span>
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>Documents with no outgoing links:
+<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a><span class="k">-</span><span class="w"> </span><span class="sb">`kno-008`</span> - &quot;Changelog v1.2&quot;
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a><span class="k">-</span><span class="w"> </span><span class="sb">`kno-019`</span> - &quot;Quick Reference&quot;
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a><span class="k">-</span><span class="w"> </span>...
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a><span class="gs">**Recommendation:**</span> Add &quot;See Also&quot; sections to enrich navigation.
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>---
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a><span class="gu">## 📊 Detailed Statistics</span>
+<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>
+<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a><span class="gu">### Connectivity Distribution</span>
+</code></pre></div>
+<p>Nodes with 0 connections:  4  (8.9%)
+Nodes with 1-3 connections: 18 (40.0%)
+Nodes with 4-9 connections: 20 (44.4%)
+Nodes with 10+ connections: 3  (6.7%)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>### Link Status Breakdown
+</code></pre></div>
+<p>VALID:    120 (93.8%)
+BROKEN:   8   (6.2%)
+EXTERNAL: 0   (0.0%)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>---
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>## 🎯 Action Items
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>### High Priority
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>1. ✅ Fix 8 broken links (see table above)
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>2. ⚠️  Review orphan nodes and add navigation links
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>### Medium Priority
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>3. ℹ️  Add &quot;See Also&quot; sections to dead end nodes
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>4. ℹ️  Update top hubs to ensure accuracy
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>### Low Priority
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>5. 📊 Monitor connectivity score (target: &gt;90%)
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>---
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>## 📚 How to Improve This Score
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>**To reach 95+:**
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a>- Fix all broken links (→ +5 points)
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>- Reduce orphans to &lt;5% (→ +3 points)
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>**Commands:**
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a>```bash
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a># Re-run analysis
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>cortex audit --links
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>
+<a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a># Fix specific broken link
+<a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a>cortex fix-link kno-003 42
+<a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a>
+<a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a># Generate updated report
+<a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a>cortex report --health
+</code></pre></div>
+<hr />
+<p><strong>Report generated by CORTEX Knowledge Validator v0.1.0</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>### Customização do Template
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>O `ReportGenerator` aceita parâmetros de customização:
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>```python
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>class ReportGenerator:
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    def generate_markdown(
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        self,
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>        report: ValidationReport,
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>        include_orphans: bool = True,
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>        include_dead_ends: bool = True,
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>        top_hubs_count: int = 5,
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    ) -&gt; str:
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>        &quot;&quot;&quot;Generate markdown report with configurable sections.&quot;&quot;&quot;
+</code></pre></div>
+<hr />
+<h2 id="fluxo-de-dados">🔄 Fluxo de Dados</h2>
+<h3 id="pipeline-completo-scanner-validator-report">Pipeline Completo (Scanner → Validator → Report)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>graph LR
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    A[Markdown Files] --&gt; B[KnowledgeScanner]
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    B --&gt; C[KnowledgeEntry&lt;br/&gt;cached_content]
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    C --&gt; D[LinkAnalyzer]
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    D --&gt; E[KnowledgeLink&lt;br/&gt;outbound links]
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    E --&gt; F[LinkResolver]
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    F --&gt; G[KnowledgeLink&lt;br/&gt;resolved + validated]
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    G --&gt; H[KnowledgeValidator]
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    H --&gt; I[build_inbound_index]
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    I --&gt; J[calculate_metrics]
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>    J --&gt; K[detect_anomalies]
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>    K --&gt; L[ValidationReport]
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    L --&gt; M[ReportGenerator]
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>    M --&gt; N[KNOWLEDGE_HEALTH.md]
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>    style H fill:#ff9,stroke:#333,stroke-width:4px
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>    style I fill:#9f9,stroke:#333,stroke-width:2px
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>    style J fill:#9f9,stroke:#333,stroke-width:2px
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>    style K fill:#9f9,stroke:#333,stroke-width:2px
+</code></pre></div>
+<h3 id="sequencia-de-chamadas-code-level">Sequência de Chamadas (Code Level)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 1. Scan + Parse</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">scanner</span> <span class="o">=</span> <span class="n">KnowledgeScanner</span><span class="p">(</span><span class="n">docs_path</span><span class="p">)</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">entries</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="n">scan</span><span class="p">()</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1"># 2. Extract Links</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="n">analyzer</span> <span class="o">=</span> <span class="n">LinkAnalyzer</span><span class="p">()</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="n">links</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_links</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">cached_content</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>    <span class="n">entry</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="n">links</span><span class="p">})</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="c1"># 3. Resolve Links</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="n">resolver</span> <span class="o">=</span> <span class="n">LinkResolver</span><span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">)</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="n">resolved_entries</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">.</span><span class="n">resolve_all</span><span class="p">()</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="c1"># 4. Validate + Generate Report (NEW)</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="n">validator</span> <span class="o">=</span> <span class="n">KnowledgeValidator</span><span class="p">(</span><span class="n">resolved_entries</span><span class="p">)</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="n">report</span> <span class="o">=</span> <span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="c1"># 5. Save Report</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="n">generator</span> <span class="o">=</span> <span class="n">ReportGenerator</span><span class="p">()</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="n">markdown</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate_markdown</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="n">generator</span><span class="o">.</span><span class="n">save_to_file</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="s2">&quot;docs/reports/KNOWLEDGE_HEALTH.md&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="integracao-cli">🛠️ Integração CLI</h2>
+<h3 id="comando-cortex-audit-links">Comando: <code>cortex audit --links</code></h3>
+<p><strong>Sintaxe:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cortex<span class="w"> </span>audit<span class="w"> </span>--links<span class="w"> </span><span class="o">[</span>--strict<span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--format<span class="w"> </span><span class="o">{</span>text,json,markdown<span class="o">}]</span>
+</code></pre></div>
+<p><strong>Flags:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Descrição</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--strict</code></td>
+<td>Fail CI if broken links exist (exit code 1)</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td><code>--output PATH</code></td>
+<td>Custom output path for report</td>
+<td><code>docs/reports/KNOWLEDGE_HEALTH.md</code></td>
+</tr>
+<tr>
+<td><code>--format {text,json,markdown}</code></td>
+<td>Output format</td>
+<td><code>markdown</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Comportamento:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">cortex_audit_links</span><span class="p">(</span><span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="sd">    Run knowledge graph validation and generate health report.</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="sd">        0 if validation passed or warnings only</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="sd">        1 if critical errors found (broken links) and --strict is True</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>    <span class="c1"># Run validation pipeline</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    <span class="n">validator</span> <span class="o">=</span> <span class="n">KnowledgeValidator</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>    <span class="n">report</span> <span class="o">=</span> <span class="n">validator</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>    <span class="c1"># Generate report</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>    <span class="n">generator</span> <span class="o">=</span> <span class="n">ReportGenerator</span><span class="p">()</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>    <span class="n">markdown</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate_markdown</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>    <span class="c1"># Save to file</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>    <span class="n">output_path</span> <span class="o">=</span> <span class="n">output</span> <span class="ow">or</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;docs/reports/KNOWLEDGE_HEALTH.md&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>    <span class="n">generator</span><span class="o">.</span><span class="n">save_to_file</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>    <span class="c1"># Print summary to stdout</span>
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Health Score: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">health_score</span><span class="si">}</span><span class="s2">/100&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Broken Links: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">anomalies</span><span class="o">.</span><span class="n">total_broken_links</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a>
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>    <span class="c1"># Determine exit code</span>
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a>    <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">anomalies</span><span class="o">.</span><span class="n">total_broken_links</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ Validation FAILED: Broken links detected (--strict mode)&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a>        <span class="k">return</span> <span class="mi">1</span>
+<a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a>
+<a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">report</span><span class="o">.</span><span class="n">is_healthy</span><span class="p">:</span>
+<a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  Validation completed with warnings&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a>        <span class="k">return</span> <span class="mi">0</span>
+<a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a>
+<a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Validation PASSED&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a>    <span class="k">return</span> <span class="mi">0</span>
+</code></pre></div>
+<p><strong>Integração CI/CD (GitHub Actions):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># .github/workflows/docs-validation.yml</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Documentation Validation</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="nt">validate-knowledge-graph</span><span class="p">:</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Python</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v4</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.11&#39;</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Dependencies</span>
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -e .</span>
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Knowledge Graph</span>
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cortex audit --links --strict</span><span class="w">  </span><span class="c1"># Fail CI on broken links</span>
+</code></pre></div>
+<hr />
+<h2 id="criterios-de-aceitacao">✅ Critérios de Aceitação</h2>
+<h3 id="funcionalidades-obrigatorias">Funcionalidades Obrigatórias</h3>
+<ul>
+<li>[ ] <strong>[P41.1.4] Cálculo de Inbound Links</strong></li>
+<li>[ ] Implementar <code>build_inbound_index()</code> com complexidade O(N+E)</li>
+<li>[ ] Testar com grafos de diferentes tamanhos (10, 100, 1000 nós)</li>
+<li>
+<p>[ ] Validar correção com casos de teste conhecidos</p>
+</li>
+<li>
+<p>[ ] <strong>Detecção de Anomalias</strong></p>
+</li>
+<li>[ ] Detectar Orphan Nodes</li>
+<li>[ ] Detectar Dead End Nodes</li>
+<li>[ ] Detectar Broken Links (já identificados pelo Resolver)</li>
+<li>
+<p>[ ] Classificar severidade (Info/Warning/Critical)</p>
+</li>
+<li>
+<p>[ ] <strong>Métricas de Saúde</strong></p>
+</li>
+<li>[ ] Calcular Connectivity Score</li>
+<li>[ ] Calcular Link Health Score</li>
+<li>[ ] Calcular Overall Health Score (fórmula composta)</li>
+<li>
+<p>[ ] Gerar Top 5 Hubs (documentos mais citados)</p>
+</li>
+<li>
+<p>[ ] <strong>Geração de Relatório</strong></p>
+</li>
+<li>[ ] Implementar <code>ReportGenerator.generate_markdown()</code></li>
+<li>[ ] Salvar em <code>docs/reports/KNOWLEDGE_HEALTH.md</code></li>
+<li>[ ] Incluir todas as seções do template</li>
+<li>
+<p>[ ] Suportar customização (flags opcionais)</p>
+</li>
+<li>
+<p>[ ] <strong>Integração CLI</strong></p>
+</li>
+<li>[ ] Implementar <code>cortex audit --links</code></li>
+<li>[ ] Suportar flag <code>--strict</code> (exit code 1 se broken links)</li>
+<li>[ ] Suportar flag <code>--output</code> (path customizado)</li>
+<li>[ ] Suportar flag <code>--format {text,json,markdown}</code></li>
+</ul>
+<h3 id="testes-obrigatorios">Testes Obrigatórios</h3>
+<ul>
+<li>[ ] <strong>Testes Unitários (scripts/core/cortex/)</strong></li>
+<li>[ ] <code>test_knowledge_validator.py</code> (30+ testes)</li>
+<li>[ ] <code>test_report_generator.py</code> (15+ testes)</li>
+<li>[ ] Testar cada função de detecção isoladamente</li>
+<li>
+<p>[ ] Testar cálculos de métricas com casos extremos</p>
+</li>
+<li>
+<p>[ ] <strong>Testes de Integração</strong></p>
+</li>
+<li>[ ] Pipeline completo (Scanner → Validator → Report)</li>
+<li>[ ] Validar formato Markdown gerado</li>
+<li>
+<p>[ ] Testar CLI com diferentes flags</p>
+</li>
+<li>
+<p>[ ] <strong>Testes de Performance</strong></p>
+</li>
+<li>[ ] Validar O(N+E) para <code>build_inbound_index()</code></li>
+<li>[ ] Benchmark com 1000+ nós</li>
+</ul>
+<h3 id="documentacao-obrigatoria">Documentação Obrigatória</h3>
+<ul>
+<li>[ ] <strong>Docstrings Google Style</strong></li>
+<li>[ ] Todas as classes públicas</li>
+<li>[ ] Todas as funções públicas</li>
+<li>
+<p>[ ] Exemplos de uso em docstrings</p>
+</li>
+<li>
+<p>[ ] <strong>Type Hints Completos</strong></p>
+</li>
+<li>
+<p>[ ] 100% de cobertura em todos os módulos novos</p>
+</li>
+<li>
+<p>[ ] <strong>Guia de Uso</strong></p>
+</li>
+<li>[ ] Atualizar <code>docs/guides/CORTEX_INTROSPECTION_SYSTEM.md</code></li>
+<li>[ ] Adicionar seção sobre auditoria de links</li>
+</ul>
+<hr />
+<h2 id="metricas-de-sucesso">📊 Métricas de Sucesso</h2>
+<h3 id="qualidade-de-codigo">Qualidade de Código</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Target</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type Coverage</td>
+<td>100%</td>
+<td>mypy --strict</td>
+</tr>
+<tr>
+<td>Test Coverage</td>
+<td>≥95%</td>
+<td>pytest-cov</td>
+</tr>
+<tr>
+<td>Cyclomatic Complexity</td>
+<td>&lt;10</td>
+<td>ruff</td>
+</tr>
+<tr>
+<td>Docstring Coverage</td>
+<td>100%</td>
+<td>interrogate</td>
+</tr>
+</tbody>
+</table>
+<h3 id="performance">Performance</h3>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Target</th>
+<th>Medição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 nós, 300 links</td>
+<td>&lt;100ms</td>
+<td>timeit</td>
+</tr>
+<tr>
+<td>1000 nós, 5000 links</td>
+<td>&lt;1s</td>
+<td>timeit</td>
+</tr>
+<tr>
+<td>Geração de relatório</td>
+<td>&lt;500ms</td>
+<td>timeit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cicd">CI/CD</h3>
+<ul>
+<li>✅ Pipeline deve passar em &lt;2min</li>
+<li>✅ Falhar se broken links em <code>--strict</code> mode</li>
+<li>✅ Gerar artefato do relatório</li>
+</ul>
+<hr />
+<h2 id="extensoes-futuras-out-of-scope">🔮 Extensões Futuras (Out of Scope)</h2>
+<h3 id="fase-04-advanced-analytics">Fase 04 - Advanced Analytics</h3>
+<ul>
+<li><strong>Ciclos no Grafo:</strong> Detectar dependências circulares (A → B → C → A)</li>
+<li><strong>Caminho Mais Curto:</strong> Algoritmo de Dijkstra para navegação</li>
+<li><strong>Clustering:</strong> Agrupar documentos por similaridade de conexões</li>
+<li><strong>Temporal Analysis:</strong> Rastrear evolução do grafo ao longo do tempo</li>
+</ul>
+<h3 id="integracao-com-ferramentas">Integração com Ferramentas</h3>
+<ul>
+<li><strong>VS Code Extension:</strong> Visualizar grafo interativamente</li>
+<li><strong>GitHub Bot:</strong> Comentar em PRs com impacto no grafo</li>
+<li><strong>Slack Alerts:</strong> Notificar quando Health Score &lt; 80%</li>
+</ul>
+<hr />
+<h2 id="referencias">📚 Referências</h2>
+<h3 id="teoria-de-grafos">Teoria de Grafos</h3>
+<ul>
+<li><strong>PageRank Algorithm:</strong> Brin, S., &amp; Page, L. (1998). The anatomy of a large-scale hypertextual Web search engine.</li>
+<li><strong>Graph Inversion:</strong> Cormen et al. (2009). Introduction to Algorithms, 3rd Edition. Chapter 22: Elementary Graph Algorithms.</li>
+</ul>
+<h3 id="best-practices">Best Practices</h3>
+<ul>
+<li><strong>Documentation as Code:</strong> Docs-as-Code Movement (writethedocs.org)</li>
+<li><strong>Link Rot Prevention:</strong> Archive Team Best Practices</li>
+<li><strong>Knowledge Management:</strong> Second Brain Methodology (Forte, 2020)</li>
+</ul>
+<hr />
+<p><strong>Status Final:</strong> 🟢 Pronto para Implementação
+<strong>Próximo Passo:</strong> Criar Issue/Branch para Tarefa [009]
+<strong>Responsável:</strong> Aguardando aprovação do design
+<strong>Estimativa:</strong> 2-3 dias de desenvolvimento + 1 dia de testes</p>
+<hr />
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
