@@ -72,7 +72,7 @@ jobs:
       # --- 5. UPLOAD DE ARTEFATOS ---
       - name: "📦 Upload Resultado da Auditoria"
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: audit-report-${{ github.run_number }}
           path: audit_result.json
