@@ -8,7 +8,8 @@ status: active
 tags:
   - example
   - documentation
-golden_paths: scripts/core/cortex/knowledge_scanner.py
+golden_paths:
+  - scripts/core/cortex/knowledge_scanner.py
 sources:
   - url: https://github.com/example/docs
 ---

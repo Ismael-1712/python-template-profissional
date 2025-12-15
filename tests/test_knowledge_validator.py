@@ -45,7 +45,7 @@ def sample_entries() -> list[KnowledgeEntry]:
     entry_a = KnowledgeEntry(
         id="kno-a",
         status=DocStatus.ACTIVE,
-        golden_paths="test",
+        golden_paths=["test"],
         tags=["test"],
         cached_content="Some content with links",
         links=[
@@ -78,7 +78,7 @@ def sample_entries() -> list[KnowledgeEntry]:
     entry_b = KnowledgeEntry(
         id="kno-b",
         status=DocStatus.ACTIVE,
-        golden_paths="test",
+        golden_paths=["test"],
         tags=["test"],
         cached_content="Content with link to C",
         links=[
@@ -100,7 +100,7 @@ def sample_entries() -> list[KnowledgeEntry]:
     entry_c = KnowledgeEntry(
         id="kno-c",
         status=DocStatus.ACTIVE,
-        golden_paths="test",
+        golden_paths=["test"],
         tags=["test"],
         cached_content="Content with broken link",
         links=[
@@ -122,7 +122,7 @@ def sample_entries() -> list[KnowledgeEntry]:
     entry_d = KnowledgeEntry(
         id="kno-d",
         status=DocStatus.ACTIVE,
-        golden_paths="test",
+        golden_paths=["test"],
         tags=["orphan"],
         cached_content="Orphan node - nobody links to this",
         links=[],  # Dead end as well
@@ -132,7 +132,7 @@ def sample_entries() -> list[KnowledgeEntry]:
     entry_e = KnowledgeEntry(
         id="kno-e",
         status=DocStatus.ACTIVE,
-        golden_paths="test",
+        golden_paths=["test"],
         tags=["dead-end"],
         cached_content="Dead end node",
         links=[],  # No outbound links
@@ -269,7 +269,7 @@ class TestKnowledgeValidator:
         entry = KnowledgeEntry(
             id="kno-empty",
             status=DocStatus.ACTIVE,
-            golden_paths="test",
+            golden_paths=["test"],
             tags=[],
             links=[],
             file_path=Path("/fake/empty.md"),
@@ -355,7 +355,7 @@ class TestKnowledgeValidator:
         entry_a = KnowledgeEntry(
             id="kno-a",
             status=DocStatus.ACTIVE,
-            golden_paths="test",
+            golden_paths=["test"],
             tags=[],
             links=[
                 KnowledgeLink(
@@ -375,7 +375,7 @@ class TestKnowledgeValidator:
         entry_b = KnowledgeEntry(
             id="kno-b",
             status=DocStatus.ACTIVE,
-            golden_paths="test",
+            golden_paths=["test"],
             tags=[],
             links=[
                 KnowledgeLink(

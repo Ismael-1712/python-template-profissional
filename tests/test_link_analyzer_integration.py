@@ -32,7 +32,7 @@ def in_memory_fs() -> MemoryFileSystem:
         ---
         id: kno-001
         status: active
-        golden_paths: scripts/core/cortex/
+        golden_paths: ["scripts/core/cortex/"]
         tags:
           - phase3
           - link-analyzer
@@ -60,7 +60,7 @@ def in_memory_fs() -> MemoryFileSystem:
         ---
         id: kno-002
         status: active
-        golden_paths: tests/
+        golden_paths: [\"tests/\"]
         tags:
           - testing
         ---
