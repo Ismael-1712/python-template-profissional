@@ -81,7 +81,7 @@ jobs:
       - name: "Executar Verificação de Formatação"
         run: |
           make format
-          git diff --exit-code -- . ':(exclude)requirements/dev.txt'
+          git diff --exit-code -- . ':(exclude)requirements/dev.txt' ':(exclude)audit_metrics.json'
 
       - name: "Executar Linting"
         run: make lint
