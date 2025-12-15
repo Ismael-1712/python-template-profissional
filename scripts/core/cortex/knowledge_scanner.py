@@ -168,10 +168,12 @@ class KnowledgeScanner:
         try:
             entry_id = metadata["id"]
             status_str = metadata["status"]
-            golden_paths = metadata["golden_paths"]
         except KeyError as e:
             msg = f"Missing required field in frontmatter: {e}"
             raise KeyError(msg) from e
+
+        # Extract optional fields
+        golden_paths = metadata.get("golden_paths", [])
 
         # Convert status string to enum
         try:

@@ -178,7 +178,7 @@ class TestCacheHit:
             id="kno-001",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[
                 KnowledgeSource(
                     url=_url("https://example.com/doc.md"),
@@ -217,7 +217,7 @@ class TestCacheHit:
             id="kno-002",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[
                 KnowledgeSource(
                     url=_url("https://example.com/doc1.md"),
@@ -275,7 +275,7 @@ class TestNewContent:
             id="kno-003",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[
                 KnowledgeSource(
                     url=_url("https://example.com/doc.md"),
@@ -336,7 +336,7 @@ class TestNewContent:
             id="kno-004",
             status=DocStatus.ACTIVE,
             tags=["security"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -401,7 +401,7 @@ class TestGoldenPathPreservation:
             id="kno-005",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -461,7 +461,7 @@ class TestGoldenPathPreservation:
             id="kno-006",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -511,7 +511,7 @@ class TestGoldenPathPreservation:
             id="kno-007",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -547,7 +547,7 @@ class TestResilienceToFailures:
             id="kno-008",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -577,7 +577,7 @@ class TestResilienceToFailures:
             id="kno-009",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -607,7 +607,7 @@ class TestResilienceToFailures:
             id="kno-010",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 
@@ -642,7 +642,7 @@ class TestEdgeCases:
             id="kno-011",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[],  # No sources
         )
 
@@ -668,7 +668,7 @@ class TestEdgeCases:
             id="kno-012",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[
                 KnowledgeSource(
                     url=_url("https://example.com/doc.md"),
@@ -703,7 +703,7 @@ class TestEdgeCases:
             id="kno-013",
             status=DocStatus.ACTIVE,
             tags=["test"],
-            golden_paths="",
+            golden_paths=[],
             sources=[KnowledgeSource(url=_url("https://example.com/doc.md"))],
         )
 

@@ -32,7 +32,7 @@ class TestKnowledgeScannerValid:
             ---
             id: kno-001
             status: active
-            golden_paths: auth/jwt.py -> docs/auth.md
+            golden_paths: ["auth/jwt.py -> docs/auth.md"]
             tags:
               - authentication
               - jwt
@@ -54,7 +54,7 @@ class TestKnowledgeScannerValid:
         entry = entries[0]
         assert entry.id == "kno-001"
         assert entry.status == DocStatus.ACTIVE
-        assert entry.golden_paths == "auth/jwt.py -> docs/auth.md"
+        assert entry.golden_paths == ["auth/jwt.py -> docs/auth.md"]
         assert entry.tags == ["authentication", "jwt"]
         assert len(entry.sources) == 1
         assert str(entry.sources[0].url) == "https://example.com/docs/auth.md"
@@ -72,7 +72,7 @@ class TestKnowledgeScannerValid:
             ---
             id: kno-minimal
             status: active
-            golden_paths: minimal/path
+            golden_paths: ["minimal/path"]
             ---
             """).strip()
         fs.write_text(knowledge_dir / "minimal.md", minimal_file)
@@ -183,7 +183,7 @@ class TestKnowledgeScannerResilience:
             ---
             id: kno-valid
             status: active
-            golden_paths: valid/path
+            golden_paths: ["valid/path"]
             ---
             Valid content
             """).strip()
@@ -191,7 +191,7 @@ class TestKnowledgeScannerResilience:
         invalid_file = textwrap.dedent("""
             ---
             status: active
-            golden_paths: invalid/path
+            golden_paths: ["invalid/path"]
             ---
             Invalid content
             """).strip()
@@ -258,7 +258,7 @@ class TestKnowledgeScannerDependencyInjection:
             ---
             id: kno-inject
             status: active
-            golden_paths: inject/path
+            golden_paths: ["inject/path"]
             ---
             Injected FS test
             """).strip()
