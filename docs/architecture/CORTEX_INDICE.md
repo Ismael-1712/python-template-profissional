@@ -2,18 +2,18 @@
 id: cortex-indice
 type: arch
 status: active
-version: 1.1.0
+version: 1.2.0
 author: Engineering Team
-date: '2025-12-07'
-context_tags: [knowledge-node, models, pydantic]
-linked_code: [scripts/core/cortex/models.py]
-title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
+date: '2025-12-14'
+context_tags: [knowledge-node, models, pydantic, link-validation, graph-analysis]
+linked_code: [scripts/core/cortex/models.py, scripts/core/cortex/link_resolver.py, scripts/core/cortex/knowledge_validator.py]
+title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
 ---
 
-# 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
+# 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
 
-**Data:** 07 de Dezembro de 2025
-**Status:** 🟢 Fase 01 Completa + Fase 02 (Knowledge Node) em Andamento
+**Data:** 14 de Dezembro de 2025
+**Status:** 🟢 Fase 01 Completa + Fase 02 Completa + Fase 03 (Knowledge Validator) em Design
 
 ---
 
@@ -51,6 +51,79 @@ title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
 - Campo `etag` (str | None): Cache HTTP ETag
 - Campo `golden_paths` (str): Regras imutáveis de relacionamento
 - Campo `sources` (list[KnowledgeSource]): Fontes externas do conhecimento
+
+---
+
+## 📦 FASE 03: KNOWLEDGE GRAPH & VALIDATION
+
+### 🔷 Design Documents (Link Analysis & Validation)
+
+**Status:** 🔵 Design Phase
+
+| Documento | Tarefa | Status | Propósito |
+|-----------|--------|--------|-----------|
+| [CORTEX_FASE03_LINK_SCANNER_DESIGN.md](./CORTEX_FASE03_LINK_SCANNER_DESIGN.md) | [007] | ✅ Implementado | Extração de links semânticos do conteúdo |
+| [CORTEX_FASE03_LINK_RESOLVER_DESIGN.md](./CORTEX_FASE03_LINK_RESOLVER_DESIGN.md) | [008] | ✅ Implementado | Resolução e validação de targets |
+| [CORTEX_FASE03_VALIDATOR_DESIGN.md](./CORTEX_FASE03_VALIDATOR_DESIGN.md) | [009] | 🔵 Design | **Inversão de grafo e health metrics** |
+
+### 🔷 Modelos de Dados Adicionais (Fase 03)
+
+**Arquivo:** `scripts/core/cortex/models.py`
+
+**Enums Adicionados:**
+
+| Enum | Propósito | Valores |
+|------|-----------|---------|
+| `LinkType` | Tipo de link semântico | MARKDOWN, WIKILINK, WIKILINK_ALIASED, CODE_REFERENCE |
+| `LinkStatus` | Status de resolução | UNRESOLVED, VALID, BROKEN, EXTERNAL, AMBIGUOUS |
+
+**Novos Modelos (Pydantic):**
+
+| Modelo | Tipo | Propósito | Status |
+|--------|------|-----------|--------|
+| `KnowledgeLink` | Pydantic BaseModel | Link semântico entre Knowledge Nodes | ✅ Implementado |
+| `HealthMetrics` | Dataclass | Métricas de saúde do grafo | 🔵 Proposto |
+| `AnomalyReport` | Dataclass | Agregação de anomalias (órfãos, becos, broken links) | 🔵 Proposto |
+| `ValidationReport` | Dataclass | Relatório completo de validação | 🔵 Proposto |
+
+**KnowledgeLink Schema:**
+
+```python
+KnowledgeLink(
+    source_id: str,           # ID do Knowledge Node de origem
+    target_raw: str,          # String bruta extraída ([[Fase 01]])
+    target_resolved: str | None,  # Path ou ID resolvido
+    target_id: str | None,    # Knowledge Node ID resolvido
+    type: LinkType,           # WIKILINK, MARKDOWN, etc
+    line_number: int,         # Linha onde foi encontrado
+    context: str,             # Snippet de contexto
+    status: LinkStatus,       # VALID, BROKEN, etc
+    is_valid: bool,           # Deprecated (use status)
+)
+```
+
+### 🔷 Componentes Implementados (Fase 03)
+
+**Link Analyzer:**
+
+- ✅ `scripts/core/cortex/link_analyzer.py`
+- ✅ Extração de links via regex (wikilinks, markdown, code references)
+- ✅ 15+ testes em `tests/test_link_analyzer.py`
+
+**Link Resolver:**
+
+- ✅ `scripts/core/cortex/link_resolver.py`
+- ✅ Múltiplas estratégias de resolução (ID, path, alias, fuzzy)
+- ✅ Índices reversos para lookup O(1)
+- ✅ 20+ testes em `tests/test_link_resolver.py`
+
+**Knowledge Validator (PRÓXIMO):**
+
+- 🔵 `scripts/core/cortex/knowledge_validator.py` (Proposto)
+- 🔵 Cálculo de Inbound Links (inversão de grafo)
+- 🔵 Detecção de anomalias (orphans, dead ends, broken links)
+- 🔵 Métricas de saúde (Connectivity Score, Link Health Score)
+- 🔵 Geração de `docs/reports/KNOWLEDGE_HEALTH.md`
 
 ---
 
@@ -215,10 +288,13 @@ title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02)
 
 | Versão | Data | Mudanças |
 |--------|------|----------|
+| v1.2.0 | 2025-12-14 | **Fase 03:** Design do Knowledge Validator (inversão de grafo + health metrics) |
 | v1.1.0 | 2025-12-07 | **Fase 02:** Adição dos modelos `KnowledgeSource` e `KnowledgeEntry` (Pydantic v2) |
 | v1.0.0 | 2025-11-30 | Design inicial completo (Fase 01) |
 
-**Status:** 🟢 **APROVADO E PRONTO PARA IMPLEMENTAÇÃO**
+**Status Fase 01:** 🟢 **APROVADO E IMPLEMENTADO**
+**Status Fase 02:** 🟢 **APROVADO E IMPLEMENTADO**
+**Status Fase 03:** 🔵 **DESIGN EM APROVAÇÃO (Tarefa [009])**
 
 ---
 
