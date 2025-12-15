@@ -294,6 +294,7 @@ class KnowledgeEntry(BaseModel):
     sources: list[KnowledgeSource] = Field(default_factory=list)
     cached_content: str | None = None
     links: list[KnowledgeLink] = Field(default_factory=list)
+    inbound_links: list[str] = Field(default_factory=list)
     file_path: Path | None = Field(default=None, exclude=True)
 
     model_config = ConfigDict(frozen=True)
