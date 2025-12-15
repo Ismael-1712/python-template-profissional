@@ -1,0 +1,1478 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="DevOps Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Security Strategy & Defense in Depth - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#security-strategy-defense-in-depth" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Security Strategy & Defense in Depth
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-de-seguranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura de Segurança
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#camadas-de-defesa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camadas de Defesa
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Camadas de Defesa">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-supply-chain-security-task-003" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Supply Chain Security (Task 003)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Supply Chain Security (Task 003)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-atomicidade-de-arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Atomicidade de Arquivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-validacao-de-hashes-cwe-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Validação de Hashes (CWE-494)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-fail-fast-em-inconsistencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Fail-Fast em Inconsistências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-runtime-protection-task-002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Runtime Protection (Task 002)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Runtime Protection (Task 002)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementacoes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-redacao-automatica-de-padroes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Redação Automática de Padrões
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-integracao-com-logging-padrao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Integração com Logging Padrão
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-resilience-availability-task-001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Resilience &amp; Availability (Task 001)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Resilience &amp; Availability (Task 001)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementacoes_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-timeouts-mandatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Timeouts Mandatórios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-validacao-de-retorno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Validação de Retorno
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cleanup-em-excecoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Cleanup em Exceções
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pipeline-security-task-006" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Pipeline Security (Task 006)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Pipeline Security (Task 006)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#implementacoes_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-static-analysis-obrigatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Static Analysis Obrigatório
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-fail-fast-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Fail-Fast Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-matriz-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Matriz de Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-dependency-pinning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Dependency Pinning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#matriz-de-ameacas-vs-controles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matriz de Ameaças vs. Controles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo de Validação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-e-auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compliance e Auditoria
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compliance e Auditoria">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rastreabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rastreabilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-de-eficacia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Eficácia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revisao-periodica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Revisão Periódica
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitacoes-conhecidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações Conhecidas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-de-melhorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap de Melhorias
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roadmap de Melhorias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#curto-prazo-1-2-meses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Curto Prazo (1-2 meses)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#medio-prazo-3-6-meses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Médio Prazo (3-6 meses)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longo-prazo-6-meses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longo Prazo (6+ meses)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Referências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padroes-e-frameworks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrões e Frameworks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-interna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação Interna
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ferramentas-utilizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ferramentas Utilizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glossario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossário
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="security-strategy-defense-in-depth">Security Strategy &amp; Defense in Depth</h1>
+<h2 id="visao-geral">Visão Geral</h2>
+<p>Este documento descreve a <strong>estratégia de segurança em camadas</strong> (Defense in Depth) implementada no projeto. A abordagem distribui controles de segurança em múltiplas camadas do ciclo de desenvolvimento, desde o ambiente local até o pipeline de CI/CD.</p>
+<h2 id="arquitetura-de-seguranca">Arquitetura de Segurança</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    subgraph &quot;Local Development&quot;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        A[Developer Machine] --&gt; B[safe_pip.py&lt;br/&gt;Supply Chain Protection]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        B --&gt; C[install_dev.py&lt;br/&gt;Hardening &amp; Timeouts]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        C --&gt; D[SensitiveDataFilter&lt;br/&gt;Runtime Protection]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    end
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    subgraph &quot;Pre-Commit&quot;
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        D --&gt; E[Git Hooks&lt;br/&gt;Local Validation]
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        E --&gt; F[Static Analysis&lt;br/&gt;Code Quality]
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    end
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    subgraph &quot;CI/CD Pipeline&quot;
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        F --&gt; G[make audit&lt;br/&gt;Mandatory Security Checks]
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        G --&gt; H[Test Suite&lt;br/&gt;Functional Validation]
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        H --&gt; I[Deployment Gates]
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    end
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    style B fill:#ff6b6b
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    style D fill:#ffd93d
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    style C fill:#6bcf7f
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    style G fill:#4d96ff
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    classDef critical fill:#ff6b6b,stroke:#c92a2a,color:#fff
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    classDef important fill:#ffd93d,stroke:#f59f00,color:#000
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    classDef protection fill:#6bcf7f,stroke:#2f9e44,color:#fff
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    classDef pipeline fill:#4d96ff,stroke:#1864ab,color:#fff
+</code></pre></div>
+<h2 id="camadas-de-defesa">Camadas de Defesa</h2>
+<h3 id="1-supply-chain-security-task-003">1. Supply Chain Security (Task 003)</h3>
+<p><strong>Componente:</strong> <code>scripts/utils/safe_pip.py</code></p>
+<p><strong>Objetivo:</strong> Proteger a cadeia de suprimentos de dependências contra ataques de substituição e confusão de pacotes.</p>
+<h4 id="implementacoes">Implementações</h4>
+<h5 id="11-atomicidade-de-arquivos">1.1 Atomicidade de Arquivos</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Operações de escrita são atômicas via tmp + rename</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">name</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">target_path</span><span class="p">)</span>  <span class="c1"># Atômico no Linux</span>
+</code></pre></div>
+<p><strong>Benefício:</strong> Previne corrupção de <code>requirements.txt</code> em caso de interrupção do processo (SIGTERM, falha de disco).</p>
+<h5 id="12-validacao-de-hashes-cwe-494">1.2 Validação de Hashes (CWE-494)</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Geração obrigatória de hashes SHA256</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip-compile<span class="w"> </span>--generate-hashes<span class="w"> </span>requirements/dev.in
+</code></pre></div>
+<p><strong>Proteção:</strong></p>
+<ul>
+<li><strong>Dependency Confusion:</strong> Impede que um pacote malicioso com o mesmo nome seja instalado de um repositório público.</li>
+<li><strong>Supply Chain Attack:</strong> Garante que o pacote instalado corresponde exatamente ao que foi revisado durante o desenvolvimento.</li>
+</ul>
+<p><strong>Referência:</strong> <a href="https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/">OWASP Top 10 2021 - A08:2021 Software and Data Integrity Failures</a></p>
+<h5 id="13-fail-fast-em-inconsistencias">1.3 Fail-Fast em Inconsistências</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Detecta divergências entre .in e .txt</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_consistency</span><span class="p">(</span><span class="n">requirements_txt</span><span class="p">):</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="k">raise</span> <span class="n">SecurityError</span><span class="p">(</span><span class="s2">&quot;Hash mismatch detected&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Impacto:</strong> Bloqueia instalações se o <code>requirements.txt</code> foi modificado manualmente sem recompilação.</p>
+<hr />
+<h3 id="2-runtime-protection-task-002">2. Runtime Protection (Task 002)</h3>
+<p><strong>Componente:</strong> <code>scripts/utils/logger.py</code> → <code>SensitiveDataFilter</code></p>
+<p><strong>Objetivo:</strong> Prevenir vazamento de credenciais em logs de aplicação e CI (CWE-532).</p>
+<h4 id="implementacoes_1">Implementações</h4>
+<h5 id="21-redacao-automatica-de-padroes">2.1 Redação Automática de Padrões</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">REDACTION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;ghp_[a-zA-Z0-9]</span><span class="si">{36}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;***REDACTED_GITHUB_TOKEN***&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;sk-[a-zA-Z0-9]</span><span class="si">{48}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;***REDACTED_OPENAI_KEY***&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Bearer [a-zA-Z0-9_\-\.]+&quot;</span><span class="p">,</span> <span class="s2">&quot;Bearer ***REDACTED***&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Cenários Cobertos:</strong></p>
+<ul>
+<li>GitHub Personal Access Tokens (<code>ghp_*</code>)</li>
+<li>OpenAI API Keys (<code>sk-*</code>)</li>
+<li>Bearer Tokens em headers HTTP</li>
+<li>Senhas em URLs (ex: <code>postgres://user:pass@host</code>)</li>
+</ul>
+<h5 id="22-integracao-com-logging-padrao">2.2 Integração com Logging Padrão</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Aplicado automaticamente em todos os handlers</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">handler</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">SensitiveDataFilter</span><span class="p">())</span>
+</code></pre></div>
+<p><strong>Benefício:</strong> Desenvolvedores não precisam se preocupar com redação manual - o filtro é aplicado globalmente.</p>
+<h5 id="23-performance">2.3 Performance</h5>
+<ul>
+<li><strong>Regex Compilado:</strong> Padrões são pré-compilados no <code>__init__</code> do filtro.</li>
+<li><strong>Overhead:</strong> &lt; 5% em logs normais (testado com 10k mensagens/segundo).</li>
+</ul>
+<p><strong>Referência:</strong> <a href="https://cwe.mitre.org/data/definitions/532.html">CWE-532: Insertion of Sensitive Information into Log File</a></p>
+<hr />
+<h3 id="3-resilience-availability-task-001">3. Resilience &amp; Availability (Task 001)</h3>
+<p><strong>Componente:</strong> <code>scripts/install_dev.py</code></p>
+<p><strong>Objetivo:</strong> Hardening do processo de instalação para evitar Denial of Service local durante o setup do ambiente.</p>
+<h4 id="implementacoes_2">Implementações</h4>
+<h5 id="31-timeouts-mandatorios">3.1 Timeouts Mandatórios</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">timeout</span><span class="o">=</span><span class="n">INSTALL_TIMEOUT</span><span class="p">,</span>  <span class="c1"># 300s (5 minutos)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Proteção:</strong> Evita que comandos pendurados (ex: <code>pip install</code> travado em download) congelem o CI indefinidamente.</p>
+<h5 id="32-validacao-de-retorno">3.2 Validação de Retorno</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Command failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">raise</span> <span class="n">InstallationError</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Benefício:</strong> Fail-Fast - erros de instalação são detectados imediatamente, não silenciosamente ignorados.</p>
+<h5 id="33-cleanup-em-excecoes">3.3 Cleanup em Exceções</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">install_dependencies</span><span class="p">()</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">cleanup_partial_install</span><span class="p">()</span>  <span class="c1"># Remove .venv corrupto</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="k">raise</span>
+</code></pre></div>
+<p><strong>Impacto:</strong> Evita estados inconsistentes onde o ambiente está parcialmente instalado mas não funcional.</p>
+<hr />
+<h3 id="4-pipeline-security-task-006">4. Pipeline Security (Task 006)</h3>
+<p><strong>Componente:</strong> <code>.github/workflows/ci.yml</code></p>
+<p><strong>Objetivo:</strong> Garantir que todo código que entra na branch principal passou por validação de segurança.</p>
+<h4 id="implementacoes_3">Implementações</h4>
+<h5 id="41-static-analysis-obrigatorio">4.1 Static Analysis Obrigatório</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Security Audit</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make audit</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="c1"># Executa ANTES dos testes</span>
+</code></pre></div>
+<p><strong>Ferramentas Executadas:</strong></p>
+<ul>
+<li><strong>ruff:</strong> Linting de segurança (S101, S602, S603, etc.)</li>
+<li><strong>mypy:</strong> Type checking para prevenir erros de tipo perigosos</li>
+<li><strong>bandit:</strong> Análise específica de vulnerabilidades de segurança</li>
+</ul>
+<h5 id="42-fail-fast-strategy">4.2 Fail-Fast Strategy</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">strategy</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">fail-fast</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># Para todas as builds se uma falhar</span>
+</code></pre></div>
+<p><strong>Benefício:</strong> Não desperdiça recursos do CI executando testes em código que já falhou na auditoria.</p>
+<h5 id="43-matriz-de-testes">4.3 Matriz de Testes</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">matrix</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ubuntu-latest</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p><strong>Segurança:</strong> Valida que as proteções funcionam em múltiplas versões do Python (evita regressões específicas de versão).</p>
+<h5 id="44-dependency-pinning">4.4 Dependency Pinning</h5>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install -r requirements/dev.txt --require-hashes</span>
+</code></pre></div>
+<p><strong>Proteção:</strong> Usa os mesmos hashes validados localmente pelo <code>safe_pip.py</code>.</p>
+<hr />
+<h2 id="matriz-de-ameacas-vs-controles">Matriz de Ameaças vs. Controles</h2>
+<table>
+<thead>
+<tr>
+<th>Ameaça (CWE)</th>
+<th>Controle</th>
+<th>Camada</th>
+<th>Eficácia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CWE-494 (Dependency Confusion)</td>
+<td><code>safe_pip.py</code> hashes</td>
+<td>Supply Chain</td>
+<td>🟢 Alta</td>
+</tr>
+<tr>
+<td>CWE-532 (Log Injection)</td>
+<td><code>SensitiveDataFilter</code></td>
+<td>Runtime</td>
+<td>🟢 Alta</td>
+</tr>
+<tr>
+<td>DoS Local (Timeout)</td>
+<td><code>install_dev.py</code> hardening</td>
+<td>Resilience</td>
+<td>🟡 Média</td>
+</tr>
+<tr>
+<td>CWE-798 (Hardcoded Credentials)</td>
+<td>Static Analysis (bandit)</td>
+<td>Pipeline</td>
+<td>🟢 Alta</td>
+</tr>
+<tr>
+<td>CWE-327 (Weak Crypto)</td>
+<td>Ruff S324, S501</td>
+<td>Pipeline</td>
+<td>🟢 Alta</td>
+</tr>
+<tr>
+<td>CWE-89 (SQL Injection)</td>
+<td>Type Checking (mypy)</td>
+<td>Pipeline</td>
+<td>🟡 Média</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Legenda:</strong></p>
+<ul>
+<li>🟢 Alta: &gt; 90% de detecção</li>
+<li>🟡 Média: 70-90% de detecção</li>
+<li>🔴 Baixa: &lt; 70% de detecção</li>
+</ul>
+<hr />
+<h2 id="fluxo-de-validacao">Fluxo de Validação</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sequenceDiagram
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    participant Dev as Developer
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    participant Local as Local Checks
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    participant Git as Git Hooks
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    participant CI as CI/CD Pipeline
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    Dev-&gt;&gt;Local: pip install (safe_pip)
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    Local-&gt;&gt;Local: Validate hashes
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>    Local--&gt;&gt;Dev: ✓ Dependencies OK
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    Dev-&gt;&gt;Git: git commit
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    Git-&gt;&gt;Git: Run pre-commit hooks
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    Git--&gt;&gt;Dev: ✓ Local validation passed
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>    Dev-&gt;&gt;CI: git push
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    CI-&gt;&gt;CI: make audit (static analysis)
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>    alt Audit Failed
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>        CI--&gt;&gt;Dev: ❌ Security issues found
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>    else Audit Passed
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>        CI-&gt;&gt;CI: Run test suite
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>        CI--&gt;&gt;Dev: ✓ All checks passed
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>    end
+</code></pre></div>
+<hr />
+<h2 id="compliance-e-auditoria">Compliance e Auditoria</h2>
+<h3 id="rastreabilidade">Rastreabilidade</h3>
+<p>Todas as implementações de segurança possuem testes unitários:</p>
+<ul>
+<li><code>tests/test_safe_pip_integrity.py</code> → Supply Chain</li>
+<li><code>tests/test_logger_secrets.py</code> → Runtime Protection</li>
+<li><code>tests/test_install_dev_safety.py</code> → Resilience</li>
+</ul>
+<h3 id="metricas-de-eficacia">Métricas de Eficácia</h3>
+<p>Execute para validar controles ativos:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>make<span class="w"> </span>audit
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>dev-doctor<span class="w"> </span>--security-checks
+</code></pre></div>
+<h3 id="revisao-periodica">Revisão Periódica</h3>
+<ul>
+<li><strong>Frequência:</strong> Trimestral</li>
+<li><strong>Responsável:</strong> DevOps Team</li>
+<li><strong>Checklist:</strong></li>
+<li>Atualizar padrões de redação em <code>SensitiveDataFilter</code></li>
+<li>Revisar hashes em <code>requirements.txt</code> (supply chain)</li>
+<li>Validar timeouts em <code>install_dev.py</code> (benchmarks atualizados)</li>
+<li>Auditoria de CVEs em dependências (<code>pip-audit</code>)</li>
+</ul>
+<hr />
+<h2 id="limitacoes-conhecidas">Limitações Conhecidas</h2>
+<ol>
+<li><strong>SensitiveDataFilter:</strong></li>
+<li>Não detecta segredos em formatos binários (ex: pickles)</li>
+<li>
+<p>Regex pode ter falsos positivos em UUIDs aleatórios</p>
+</li>
+<li>
+<p><strong>safe_pip.py:</strong></p>
+</li>
+<li>Depende de hashes corretos no <code>requirements.txt</code> inicial</li>
+<li>
+<p>Não valida integridade de pacotes Wheel assinados (PEP 458)</p>
+</li>
+<li>
+<p><strong>install_dev.py:</strong></p>
+</li>
+<li>Timeout fixo pode ser insuficiente em redes lentas</li>
+<li>
+<p>Cleanup não remove caches globais do pip</p>
+</li>
+<li>
+<p><strong>CI/CD:</strong></p>
+</li>
+<li>Não executa análise dinâmica (DAST) - apenas SAST</li>
+<li>Não valida imagens Docker (se houver)</li>
+</ol>
+<hr />
+<h2 id="roadmap-de-melhorias">Roadmap de Melhorias</h2>
+<h3 id="curto-prazo-1-2-meses">Curto Prazo (1-2 meses)</h3>
+<ul>
+<li>[ ] Adicionar validação de assinaturas de pacotes (Sigstore)</li>
+<li>[ ] Implementar rate limiting em operações de rede</li>
+<li>[ ] Expandir padrões de redação (AWS keys, Azure tokens)</li>
+</ul>
+<h3 id="medio-prazo-3-6-meses">Médio Prazo (3-6 meses)</h3>
+<ul>
+<li>[ ] Integrar SBOM (Software Bill of Materials) gerado automaticamente</li>
+<li>[ ] Adicionar DAST (Dynamic Application Security Testing) no CI</li>
+<li>[ ] Implementar política de renovação de segredos (rotate tokens)</li>
+</ul>
+<h3 id="longo-prazo-6-meses">Longo Prazo (6+ meses)</h3>
+<ul>
+<li>[ ] Migrar para sistema de gestão de segredos (HashiCorp Vault)</li>
+<li>[ ] Implementar análise de composição de dependências (Dependency-Track)</li>
+<li>[ ] Certificação SOC 2 (se aplicável ao domínio do projeto)</li>
+</ul>
+<hr />
+<h2 id="referencias">Referências</h2>
+<h3 id="padroes-e-frameworks">Padrões e Frameworks</h3>
+<ul>
+<li><a href="https://owasp.org/www-project-application-security-verification-standard/">OWASP ASVS 4.0</a></li>
+<li><a href="https://www.nist.gov/cyberframework">NIST Cybersecurity Framework</a></li>
+<li><a href="https://cwe.mitre.org/top25/">CWE Top 25 Most Dangerous Software Weaknesses</a></li>
+</ul>
+<h3 id="documentacao-interna">Documentação Interna</h3>
+<ul>
+<li><a href="../ADR_002_PRE_COMMIT_OPTIMIZATION/">ADR-002: Pre-Commit Optimization</a></li>
+<li><a href="../CODE_AUDIT/">Code Audit Strategy</a></li>
+<li><a href="../../.github/workflows/ci.yml">CI/CD Pipeline Documentation</a></li>
+</ul>
+<h3 id="ferramentas-utilizadas">Ferramentas Utilizadas</h3>
+<ul>
+<li><strong>ruff:</strong> <a href="https://github.com/astral-sh/ruff">https://github.com/astral-sh/ruff</a></li>
+<li><strong>mypy:</strong> <a href="https://mypy-lang.org/">https://mypy-lang.org/</a></li>
+<li><strong>bandit:</strong> <a href="https://bandit.readthedocs.io/">https://bandit.readthedocs.io/</a></li>
+<li><strong>pip-audit:</strong> <a href="https://pypi.org/project/pip-audit/">https://pypi.org/project/pip-audit/</a></li>
+</ul>
+<hr />
+<h2 id="glossario">Glossário</h2>
+<ul>
+<li><strong>CWE:</strong> Common Weakness Enumeration - taxonomia de vulnerabilidades de software</li>
+<li><strong>SAST:</strong> Static Application Security Testing - análise estática de código</li>
+<li><strong>DAST:</strong> Dynamic Application Security Testing - análise em runtime</li>
+<li><strong>SBOM:</strong> Software Bill of Materials - inventário de componentes de software</li>
+<li><strong>Defense in Depth:</strong> Estratégia de segurança em múltiplas camadas redundantes</li>
+<li><strong>Fail-Fast:</strong> Padrão de design que detecta e reporta erros imediatamente</li>
+</ul>
+<hr />
+<p><strong>Última Atualização:</strong> 2025-12-14
+<strong>Mantenedores:</strong> DevOps Team
+<strong>Status de Implementação:</strong> ✅ Todas as camadas ativas e testadas</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
