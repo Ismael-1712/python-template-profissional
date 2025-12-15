@@ -1502,6 +1502,15 @@ guardian_app = typer.Typer(
 app.add_typer(guardian_app, name="guardian")
 
 
+# ============================================================================
+# Neural Commands - Semantic Search and Vector Indexing
+# ============================================================================
+
+from scripts.cli.neural import app as neural_app  # noqa: E402
+
+app.add_typer(neural_app, name="neural")
+
+
 @guardian_app.command("check")
 def guardian_check(
     path: Annotated[

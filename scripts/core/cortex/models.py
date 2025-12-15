@@ -290,7 +290,7 @@ class KnowledgeEntry(BaseModel):
     type: Literal["knowledge"] = "knowledge"
     status: DocStatus
     tags: list[str] = Field(default_factory=list)
-    golden_paths: str
+    golden_paths: list[str] = Field(default_factory=list)
     sources: list[KnowledgeSource] = Field(default_factory=list)
     cached_content: str | None = None
     links: list[KnowledgeLink] = Field(default_factory=list)
