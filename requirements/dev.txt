@@ -62,7 +62,7 @@ markupsafe==3.0.3
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.19.0
+mypy==1.19.1
     # via -r requirements/dev.in
 mypy-extensions==1.1.0
     # via mypy
