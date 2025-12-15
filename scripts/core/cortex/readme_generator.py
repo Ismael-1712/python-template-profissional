@@ -22,7 +22,6 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import cast
 
 import frontmatter
 import tomllib
@@ -299,9 +298,8 @@ class DocumentGenerator:
         # Load template
         template = env.get_template(template_name)
 
-        # Render
-        content = cast(
-            str,
+        # Render (str() for mypy; Jinja2 types template.render as Any)
+        content = str(
             template.render(
                 project=data.project,
                 graph=data.graph,
