@@ -756,7 +756,7 @@
   <a href="#faca" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ✅ Faça:
+        ✅ Faça
       
     </span>
   </a>
@@ -767,7 +767,7 @@
   <a href="#evite" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ❌ Evite:
+        ❌ Evite
       
     </span>
   </a>
@@ -839,28 +839,28 @@
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>git<span class="w"> </span>add<span class="w"> </span>&lt;arquivos&gt;
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;sua mensagem&quot;</span><span class="w">  </span><span class="c1"># Pre-commit rodará automaticamente</span>
 </code></pre></div>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>check for added large files..............................................Passed
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ruff format..............................................................Passed
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mypy.....................................................................Passed
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>✓ Todos os hooks passaram
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-2-push-para-origin-main">Passo 2: Push para Origin Main</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Enviar para repositório remoto</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Enumerating objects: 9, done.
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Counting objects: 100% (9/9), done.
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Writing objects: 100% (5/5), 643 bytes | 643.00 KiB/s, done.
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>To github.com:USER/REPO.git
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>   abc1234..def5678  main -&gt; main
-</code></pre></div></p>
-<p>⚠️ <strong>Nota</strong>: Se a branch main estiver protegida, você verá:
+</code></pre></div>
+<p>⚠️ <strong>Nota</strong>: Se a branch main estiver protegida, você verá:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>remote: Bypassed rule violations for refs/heads/main:
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>remote: - Cannot update this protected ref.
-</code></pre></div></p>
+</code></pre></div>
 <p>Isso é <strong>ESPERADO</strong> se você tem permissões de bypass.</p>
 <hr />
 <h3 id="passo-3-sincronizar-local-com-remote">Passo 3: Sincronizar Local com Remote</h3>
@@ -868,19 +868,21 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Garantir que local está em sincronia com remote</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
-<p><strong>Por quê?</strong>
-- GitHub pode ter executado Actions/CI que criaram commits
-- Outros desenvolvedores podem ter feito push simultaneamente
-- Mantém histórico local consistente com remote</p>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Por quê?</strong></p>
+<ul>
+<li>GitHub pode ter executado Actions/CI que criaram commits</li>
+<li>Outros desenvolvedores podem ter feito push simultaneamente</li>
+<li>Mantém histórico local consistente com remote</li>
+</ul>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Already up to date.
-</code></pre></div></p>
-<p>OU (se houver novos commits do CI):
+</code></pre></div>
+<p>OU (se houver novos commits do CI):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Updating abc1234..def5678
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Fast-forward
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a> .github/workflows/deploy.yml | 2 +-
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a> 1 file changed, 1 insertion(+), 1 deletion(-)
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-4-limpar-graph-do-git">Passo 4: Limpar Graph do Git</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Remover referências obsoletas</span>
@@ -889,14 +891,16 @@
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Garbage collection automático</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>gc<span class="w"> </span>--auto
 </code></pre></div>
-<p><strong>O que isso faz:</strong>
-- <code>--prune</code>: Remove refs remotas deletadas
-- <code>--auto</code>: GC apenas se necessário (heurística do Git)</p>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>O que isso faz:</strong></p>
+<ul>
+<li><code>--prune</code>: Remove refs remotas deletadas</li>
+<li><code>--auto</code>: GC apenas se necessário (heurística do Git)</li>
+</ul>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>From github.com:USER/REPO
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>   abc1234..def5678  api        -&gt; origin/api
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>   xyz9876..uvw4321  cli        -&gt; origin/cli
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h2 id="fluxo-completo-one-liner">🔁 Fluxo Completo (One-Liner)</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Validar → Push → Sync → Clean</span>
@@ -996,41 +1000,45 @@
 <h2 id="troubleshooting">🛡️ Troubleshooting</h2>
 <h3 id="problema-protected-branch-cannot-be-updated">Problema: "protected branch cannot be updated"</h3>
 <p><strong>Causa:</strong> Você não tem permissões de bypass.</p>
-<p><strong>Solução:</strong>
-1. Crie uma branch de feature
-2. Abra um Pull Request
-3. Siga o <a href="../POST_PR_MERGE_PROTOCOL/">Post-PR Merge Protocol</a></p>
+<p><strong>Solução:</strong></p>
+<ol>
+<li>Crie uma branch de feature</li>
+<li>Abra um Pull Request</li>
+<li>Siga o <a href="../POST_PR_MERGE_PROTOCOL/">Post-PR Merge Protocol</a></li>
+</ol>
 <hr />
 <h3 id="problema-your-branch-is-behind-originmain">Problema: "Your branch is behind 'origin/main'"</h3>
 <p><strong>Causa:</strong> Alguém fez push enquanto você commitava.</p>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span>origin<span class="w"> </span>main
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="problema-conflitos-no-pull-apos-push">Problema: Conflitos no pull após push</h3>
 <p><strong>Causa:</strong> GitHub Actions criou commits conflitantes.</p>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>git<span class="w"> </span>fetch<span class="w"> </span>origin
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/main<span class="w">  </span><span class="c1"># ⚠️ PERDE mudanças locais!</span>
-</code></pre></div></p>
-<p>OU (preservar mudanças):
+</code></pre></div>
+<p>OU (preservar mudanças):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>stash
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
 <a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Resolver conflitos manualmente</span>
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h2 id="integracao-com-smart-git-sync">🔗 Integração com Smart Git Sync</h2>
 <p>Se você usa o <strong>Smart Git Sync</strong>, considere adicionar um subcomando:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Futuro comando proposto</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>git-sync<span class="w"> </span>push<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--sync-after
 </code></pre></div>
-<p>Isso executaria automaticamente:
-1. Validação com auditoria preventiva
-2. Push para main
-3. Sincronização local
-4. Limpeza de graph</p>
+<p>Isso executaria automaticamente:</p>
+<ol>
+<li>Validação com auditoria preventiva</li>
+<li>Push para main</li>
+<li>Sincronização local</li>
+<li>Limpeza de graph</li>
+</ol>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
 <ul>
@@ -1040,14 +1048,14 @@
 </ul>
 <hr />
 <h2 id="boas-praticas">🎯 Boas Práticas</h2>
-<h3 id="faca">✅ Faça:</h3>
+<h3 id="faca">✅ Faça</h3>
 <ul>
 <li>Sempre execute <code>make validate</code> antes do push</li>
 <li>Sincronize imediatamente após push (<code>git pull</code>)</li>
 <li>Use mensagens de commit semânticas (feat:, fix:, docs:, etc.)</li>
 <li>Execute <code>git fetch --prune</code> regularmente</li>
 </ul>
-<h3 id="evite">❌ Evite:</h3>
+<h3 id="evite">❌ Evite</h3>
 <ul>
 <li>Push direto de features grandes (use PR)</li>
 <li>Ignorar falhas nos pre-commit hooks</li>
