@@ -71,6 +71,7 @@ class VectorBridge:
         """
         chunks: list[VectorChunk] = []
         max_chunk_size = 1000
+        global_index = 0  # Índice global para todo o documento
 
         # Split by markdown headers
         sections = re.split(r"(^#{1,6}\s+.*$)", text, flags=re.MULTILINE)
@@ -83,14 +84,14 @@ class VectorBridge:
             if re.match(r"^#{1,6}\s+", section):
                 # Save previous section if exists
                 if current_section.strip():
-                    chunks.extend(
-                        self._create_chunks_from_section(
-                            current_section,
-                            source_id,
-                            current_header,
-                            max_chunk_size,
-                        ),
+                    section_chunks, global_index = self._create_chunks_from_section(
+                        current_section,
+                        source_id,
+                        current_header,
+                        max_chunk_size,
+                        global_index,
                     )
+                    chunks.extend(section_chunks)
                 current_header = section.strip()
                 current_section = section + "\n"
             else:
@@ -98,14 +99,14 @@ class VectorBridge:
 
         # Add last section
         if current_section.strip():
-            chunks.extend(
-                self._create_chunks_from_section(
-                    current_section,
-                    source_id,
-                    current_header,
-                    max_chunk_size,
-                ),
+            section_chunks, global_index = self._create_chunks_from_section(
+                current_section,
+                source_id,
+                current_header,
+                max_chunk_size,
+                global_index,
             )
+            chunks.extend(section_chunks)
 
         return chunks
 
@@ -115,7 +116,8 @@ class VectorBridge:
         source_id: str,
         header: str,
         max_size: int,
-    ) -> list[VectorChunk]:
+        start_index: int,
+    ) -> tuple[list[VectorChunk], int]:
         """Cria chunks de uma seção, subdividindo se necessário.
 
         Args:
@@ -123,34 +125,38 @@ class VectorBridge:
             source_id: ID do documento.
             header: Header da seção.
             max_size: Tamanho máximo do chunk.
+            start_index: Índice inicial global para os chunks.
 
         Returns:
-            Lista de VectorChunk.
+            Tupla contendo (lista de VectorChunk, próximo índice disponível).
         """
         chunks: list[VectorChunk] = []
+        chunk_index = start_index
 
         if len(section) <= max_size:
             # Section is small enough, create single chunk
-            chunk_id = hashlib.sha256(section.encode()).hexdigest()[:16]
+            unique_str = f"{source_id}:{chunk_index}:{section}"
+            chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
             chunks.append(
                 VectorChunk(
                     chunk_id=chunk_id,
                     source_id=source_id,
                     content=section.strip(),
                     vector=[],  # Will be populated during indexing
-                    metadata={"header": header, "chunk_index": 0},
+                    metadata={"header": header, "chunk_index": chunk_index},
                 ),
             )
+            chunk_index += 1
         else:
             # Section is too large, split by paragraphs
             paragraphs = section.split("\n\n")
             current_chunk = ""
-            chunk_index = 0
 
             for para in paragraphs:
                 if len(current_chunk) + len(para) > max_size and current_chunk:
                     # Save current chunk
-                    chunk_id = hashlib.sha256(current_chunk.encode()).hexdigest()[:16]
+                    unique_str = f"{source_id}:{chunk_index}:{current_chunk}"
+                    chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
                     chunks.append(
                         VectorChunk(
                             chunk_id=chunk_id,
@@ -167,7 +173,8 @@ class VectorBridge:
 
             # Add remaining chunk
             if current_chunk.strip():
-                chunk_id = hashlib.sha256(current_chunk.encode()).hexdigest()[:16]
+                unique_str = f"{source_id}:{chunk_index}:{current_chunk}"
+                chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
                 chunks.append(
                     VectorChunk(
                         chunk_id=chunk_id,
@@ -177,8 +184,9 @@ class VectorBridge:
                         metadata={"header": header, "chunk_index": chunk_index},
                     ),
                 )
+                chunk_index += 1
 
-        return chunks
+        return chunks, chunk_index
 
     def index_document(self, entry: Any) -> bool:
         """Index a document into the vector store.
@@ -192,14 +200,14 @@ class VectorBridge:
         self._initialize_resources()
 
         # Extract content from entry
-        if not hasattr(entry, "content") or not entry.content:
+        if not hasattr(entry, "cached_content") or not entry.cached_content:
             logger.warning("Entry has no content, skipping indexing")
             return False
 
         source_id = str(entry.file_path) if hasattr(entry, "file_path") else "unknown"
 
         # Chunk the content
-        chunks = self._chunk_content(entry.content, source_id)
+        chunks = self._chunk_content(entry.cached_content, source_id)
 
         if not chunks:
             logger.warning("No chunks created for %s", source_id)
