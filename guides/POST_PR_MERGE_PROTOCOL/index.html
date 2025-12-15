@@ -803,10 +803,12 @@
 <h2 id="visao-geral">📋 Visão Geral</h2>
 <p>Este documento define o <strong>protocolo padrão</strong> para sincronizar o repositório local após a aprovação e merge de um Pull Request no GitHub. O objetivo é manter o repositório limpo, organizado e sincronizado.</p>
 <h2 id="quando-usar">🎯 Quando Usar</h2>
-<p>Execute este protocolo <strong>imediatamente após</strong>:
-- ✅ Pull Request aprovado e mergeado (Squash &amp; Merge)
-- ✅ Branch de feature não mais necessária
-- ✅ Necessidade de atualizar branches de desenvolvimento</p>
+<p>Execute este protocolo <strong>imediatamente após</strong>:</p>
+<ul>
+<li>✅ Pull Request aprovado e mergeado (Squash &amp; Merge)</li>
+<li>✅ Branch de feature não mais necessária</li>
+<li>✅ Necessidade de atualizar branches de desenvolvimento</li>
+</ul>
 <h2 id="protocolo-padrao-5-passos">🔄 Protocolo Padrão (5 Passos)</h2>
 <h3 id="passo-1-sincronizar-branch-principal">Passo 1: Sincronizar Branch Principal</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Voltar para a main</span>
@@ -815,11 +817,11 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Atualizar com o remote (contém o squash merge)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
 </code></pre></div>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Updating abc1234..def5678
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Fast-forward
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a> 20 files changed, 618 insertions(+), 58 deletions(-)
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-2-deletar-branch-de-feature">Passo 2: Deletar Branch de Feature</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Deletar branch local</span>
@@ -828,14 +830,16 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Deletar branch remota (se ainda existir)</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>feat/NOME-DA-FEATURE
 </code></pre></div>
-<p><strong>Notas:</strong>
-- O GitHub já deleta automaticamente a branch remota no Squash &amp; Merge
-- Se você receber <code>error: remote ref does not exist</code>, está <strong>OK</strong> ✅
-- Use <code>-D</code> (maiúsculo) apenas se realmente quiser forçar a deleção</p>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Notas:</strong></p>
+<ul>
+<li>O GitHub já deleta automaticamente a branch remota no Squash &amp; Merge</li>
+<li>Se você receber <code>error: remote ref does not exist</code>, está <strong>OK</strong> ✅</li>
+<li>Use <code>-D</code> (maiúsculo) apenas se realmente quiser forçar a deleção</li>
+</ul>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Deleted branch feat/NOME-DA-FEATURE (was abc1234).
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>error: unable to delete &#39;feat/NOME-DA-FEATURE&#39;: remote ref does not exist
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-3-atualizar-branches-de-desenvolvimento">Passo 3: Atualizar Branches de Desenvolvimento</h3>
 <p>Se você mantém branches de longa duração (<code>cli</code>, <code>api</code>, <code>dev</code>), sincronize-as:</p>
@@ -859,10 +863,10 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>cli
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>rebase<span class="w"> </span>main
 </code></pre></div>
-<p>⚠️ <strong>ATENÇÃO</strong>: Se houver conflitos no rebase, aborte e use <code>git pull</code>:
+<p>⚠️ <strong>ATENÇÃO</strong>: Se houver conflitos no rebase, aborte e use <code>git pull</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>rebase<span class="w"> </span>--abort
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>cli<span class="w">  </span><span class="c1"># Sincroniza com o remote</span>
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-4-limpar-graph-do-git">Passo 4: Limpar Graph do Git</h3>
 <p>Execute garbage collection e remova referências obsoletas:</p>
@@ -872,16 +876,18 @@
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Garbage collection agressivo</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>gc<span class="w"> </span>--aggressive<span class="w"> </span>--prune<span class="o">=</span>now
 </code></pre></div>
-<p><strong>O que isso faz:</strong>
-- <code>--prune</code>: Remove objetos não alcançáveis
-- <code>--aggressive</code>: Otimização mais profunda (mais lento)
-- <code>now</code>: Remove imediatamente (em vez de esperar 2 semanas)</p>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>O que isso faz:</strong></p>
+<ul>
+<li><code>--prune</code>: Remove objetos não alcançáveis</li>
+<li><code>--aggressive</code>: Otimização mais profunda (mais lento)</li>
+<li><code>now</code>: Remove imediatamente (em vez de esperar 2 semanas)</li>
+</ul>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Enumerating objects: 3769, done.
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Counting objects: 100% (3769/3769), done.
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Compressing objects: 100% (3503/3503), done.
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>Total 3769 (delta 2501), reused 71 (delta 0)
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h3 id="passo-5-validar-estado-do-repositorio">Passo 5: Validar Estado do Repositório</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Verificar que não há branches obsoletas locais</span>
@@ -893,12 +899,12 @@
 <a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># Confirmar estado limpo</span>
 <a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>git<span class="w"> </span>status
 </code></pre></div>
-<p><strong>Resultado Esperado:</strong>
+<p><strong>Resultado Esperado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>On branch main
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>Your branch is up to date with &#39;origin/main&#39;.
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>nothing to commit, working tree clean
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h2 id="script-de-automacao-one-liner">🚀 Script de Automação (One-Liner)</h2>
 <p>Para automatizar todo o processo:</p>
@@ -957,24 +963,24 @@
 <hr />
 <h2 id="troubleshooting">⚠️ Troubleshooting</h2>
 <h3 id="problema-your-branch-is-behind">Problema: "Your branch is behind..."</h3>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>NOME-DA-BRANCH
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="problema-conflitos-no-rebase">Problema: Conflitos no rebase</h3>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git<span class="w"> </span>rebase<span class="w"> </span>--abort
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>BRANCH-ATUAL<span class="w">  </span><span class="c1"># Sincroniza com remote</span>
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="problema-branch-local-nao-deleta">Problema: Branch local não deleta</h3>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Forçar deleção (use com cuidado!)</span>
 <a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>NOME-DA-BRANCH
-</code></pre></div></p>
+</code></pre></div>
 <h3 id="problema-refs-remotas-ainda-aparecem-apos-prune">Problema: Refs remotas ainda aparecem após prune</h3>
-<p><strong>Solução:</strong>
+<p><strong>Solução:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git<span class="w"> </span>remote<span class="w"> </span>prune<span class="w"> </span>origin
 <a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>git<span class="w"> </span>fetch<span class="w"> </span>--prune<span class="w"> </span>--prune-tags
-</code></pre></div></p>
+</code></pre></div>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
 <ul>
