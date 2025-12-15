@@ -50,6 +50,7 @@ repos:
         pass_filenames: false
         types_or: [markdown, python]
         files: \.(md|py)$
+        exclude: \.(j2|jinja|jinja2)$
 
       - id: cortex-guardian
         name: "CORTEX Guardian - Bloqueia Shadow Configuration"
