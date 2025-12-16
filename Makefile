@@ -125,7 +125,7 @@ save: format
 audit: doctor
 	PYTHONPATH=. $(PYTHON) $(SCRIPTS_DIR)/code_audit.py
 
-## test: Executa suite completa de testes com pytest
+## test: Executa suite completa de testes com pytest (paralelo via pytest-xdist)
 test: doctor
 	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
 

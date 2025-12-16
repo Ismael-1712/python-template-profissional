@@ -177,6 +177,7 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--showlocals",
+    "-n", "auto",  # Pytest-xdist: usa todos os núcleos disponíveis
 ]
 markers = [
     "unit: mark a test as a unit test.",
