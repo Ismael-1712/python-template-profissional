@@ -50,6 +50,103 @@ O sistema é construído sobre quatro pilares fundamentais:
 
 ---
 
+## ⚡ Comandos Rápidos (Quick Reference)
+
+### 🎬 Setup Inicial
+
+```bash
+# Clonar e configurar ambiente completo (< 2 minutos)
+git clone https://github.com/Ismael-1712/python-template-profissional.git
+cd python-template-profissional
+make install-dev                    # Cria .venv, instala deps, configura hooks
+source .venv/bin/activate            # Ativar ambiente virtual
+make doctor                          # Verificar saúde do ambiente
+```
+
+### 🔨 Desenvolvimento Diário
+
+```bash
+# Validação completa antes de commit
+make validate                        # Lint + Type Check + Tests (1-2 min)
+
+# Atalhos úteis
+make format                          # Auto-formatar código (ruff)
+make test                            # Rodar testes (436 testes, ~5s)
+make audit                           # Gerar dashboard de qualidade
+
+# Commit inteligente (auto-formatting + hooks)
+make save m="feat: add new feature"
+
+# Commit com amend (auto-stage de arquivos voláteis)
+make commit-amend
+```
+
+### 🧠 CORTEX — Comandos Essenciais
+
+```bash
+# === Knowledge Management ===
+cortex audit docs/                   # Validar docs (frontmatter + links)
+cortex audit --links --strict        # Modo CI (falha em broken links)
+cortex init docs/guides/new-doc.md   # Adicionar frontmatter YAML
+cortex map                           # Gerar .cortex/context.json
+
+# === Guardian (Security) ===
+cortex guardian check .              # Detectar configs hardcoded
+cortex guardian probe                # Probe interativo
+
+# === Neural Search ===
+cortex neural index                  # Indexar docs no ChromaDB
+cortex neural ask "query"            # Busca semântica
+```
+
+### 🐛 Diagnóstico e Troubleshooting
+
+```bash
+make doctor                          # Diagnóstico completo do ambiente
+make clean                           # Limpar cache e artefatos
+rm -rf .venv && make install-dev     # Reinstalação completa
+cortex audit --links                 # Checar integridade de links
+python -m pytest -vv tests/          # Debug de testes
+```
+
+### 📊 Relatórios e Métricas
+
+```bash
+make audit                           # Gerar audit_dashboard.html
+cat docs/reports/KNOWLEDGE_HEALTH.md # Health do knowledge graph
+cat .cortex/context.json             # Mapa completo do projeto
+make test-coverage                   # Cobertura de testes
+```
+
+### 🔄 Git & CI/CD
+
+```bash
+git-sync                             # Sincronizar com remoto (com auditoria)
+git-sync --dry-run                   # Preview de mudanças
+python -m scripts.cli.mock_ci        # Rodar pipeline CI localmente
+make commit MSG="fix: bug"           # Commit com smart hooks
+```
+
+### 🌍 Internacionalização
+
+```bash
+make i18n-extract                    # Extrair strings traduzíveis
+make i18n-init LOCALE=en_US          # Criar novo idioma
+make i18n-update                     # Atualizar catálogos
+make i18n-compile                    # Compilar .po → .mo
+LANGUAGE=en_US cortex --help         # Rodar em inglês
+```
+
+### 📚 Documentação
+
+```bash
+make docs-serve                      # Servidor local (localhost:8000)
+make docs-build                      # Build estático (pasta site/)
+cat docs/architecture/CORTEX_INDICE.md  # Índice completo (115 docs)
+```
+
+---
+
 ## ✨ Features Completas
 
 ### 🧠 **Neural Layer — Semantic Search & Vector Indexing**
@@ -894,6 +991,25 @@ $ cortex audit --links
 📄 Report generated: docs/reports/KNOWLEDGE_HEALTH.md
 ```
 
+**Casos de Uso para `cortex audit`:**
+
+```bash
+# Auditoria completa de documentação (frontmatter, links, órfãos)
+cortex audit docs/
+
+# Auditoria apenas de links (sem validar frontmatter)
+cortex audit --links
+
+# Modo estrito - falha CI se encontrar broken links
+cortex audit --links --strict
+
+# Gerar relatório HTML de saúde
+cortex audit --links --output docs/reports/KNOWLEDGE_HEALTH.md
+
+# Falhar se score < threshold
+cortex audit --links --min-score 80
+```
+
 ### 🕸️ Exemplo 2: Inversão de Grafo (Inbound Links)
 
 **Antes (Outbound):**
@@ -1259,4 +1375,4 @@ Desenvolvido com 🧠 por **Ismael Silva** e a comunidade de contribuidores.
 
 ---
 
-_README gerado em 2025-12-15 | CORTEX v3.0 Neural-Governance Edition_
+_README atualizado em 2025-12-16 | CORTEX v3.1 Professional Edition (Task 013)_
