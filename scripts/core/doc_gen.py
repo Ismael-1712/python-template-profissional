@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import hashlib
 import inspect
+import os
 import sys
 import typing
 from collections.abc import Callable
@@ -660,6 +661,14 @@ python scripts/core/doc_gen.py
         Returns:
             True if file was written, False if skipped (unchanged)
         """
+        # REGRA 1: Smart Governance - Consciência de Contexto
+        # Se estamos no contexto de pre-commit, apenas validar (não escrever)
+        if os.getenv("PRE_COMMIT") == "1":
+            logger.info("PRE_COMMIT context detected - validation mode (no write)")
+            # Apenas gerar para validação, mas não escrever
+            _ = self.generate_documentation()
+            return False
+
         # Generate new documentation
         new_content = self.generate_documentation()
 
@@ -670,7 +679,7 @@ python scripts/core/doc_gen.py
         # Calculate hash for idempotency check (AFTER cleaning)
         new_hash = hashlib.sha256(cleaned_content.encode()).hexdigest()
 
-        # Check if file exists and content is identical
+        # REGRA 2: Idempotência - Check if file exists and content is identical
         if not force and self.output_path.exists():
             old_content = self.output_path.read_text(encoding="utf-8")
             old_hash = hashlib.sha256(old_content.encode()).hexdigest()
