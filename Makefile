@@ -44,7 +44,7 @@ help:
 
 ## doctor: Executa diagnóstico preventivo do ambiente de desenvolvimento
 doctor:
-	@$(PYTHON) $(SCRIPTS_DIR)/doctor.py
+	@$(PYTHON) -m scripts.cli.doctor
 
 ## upgrade-python: Atualiza versões Python para os patches mais recentes (via pyenv)
 upgrade-python:
@@ -225,7 +225,7 @@ done
 ## test-matrix: Run tests across multiple Python versions (requires tox)
 test-matrix:
 	$(PYTHON) -m tox
-## commit: Intelligent commit with auto-staging of volatile files (OPTIONAL)
+## commit: Intelligent commit with Smart Governance (idempotent hooks)
 commit:
 	@if [ -z "$(MSG)" ]; then \
 		echo "❌ Usage: make commit MSG='your commit message'"; \
@@ -234,17 +234,7 @@ commit:
 	fi
 	@echo "🔄 Executing intelligent commit workflow..."
 	@git add -u
-	@MAX_TRIES=2; \
-	for i in $$(seq 1 $$MAX_TRIES); do \
-		echo "🔄 Attempt $$i of $$MAX_TRIES"; \
-		git commit -m "$(MSG)" && break || \
-		if [ $$i -eq $$MAX_TRIES ]; then \
-			echo "❌ Commit failed after validation"; \
-			exit 1; \
-		fi; \
-		echo "⏳ Re-staging files modified by hooks..."; \
-		git add audit_metrics.json docs/reference/CLI_COMMANDS.md 2>/dev/null || true; \
-	done
+	@git commit -m "$(MSG)"
 	@echo "✅ Commit completed successfully!"
 
 ## commit-amend: Amend last commit with auto-staging of volatile files
