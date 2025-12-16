@@ -957,6 +957,9 @@ Fix these issues before committing or add to .guardian-whitelist.yaml
 |-----------|-----------|
 | [KNOWLEDGE_NODE_MANUAL.md](docs/guides/KNOWLEDGE_NODE_MANUAL.md) | Manual completo do sistema de Knowledge Nodes |
 | [CORTEX_AUTO_HOOKS.md](docs/guides/CORTEX_AUTO_HOOKS.md) | Guia de hooks automáticos e governança |
+| [PROTECTED_BRANCH_WORKFLOW.md](docs/guides/PROTECTED_BRANCH_WORKFLOW.md) | Fluxo Git completo com branch protegida e auto-propagação |
+| [TESTING_STRATEGY_MOCKS.md](docs/guides/TESTING_STRATEGY_MOCKS.md) | Estratégia anti-I/O com mocks estritos (SRE Standard) |
+| [REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md) | Protocolo de refatoração segura para LLMs |
 
 ### 🏛️ Documentação Arquitetural
 
@@ -1122,6 +1125,67 @@ docker-compose exec cortex cortex --help
 
 - `Dockerfile` — Imagem base Python 3.10+
 - `docker-compose.yml` — Orquestração de serviços
+
+---
+
+## 🔧 Troubleshooting
+
+### 📚 Documentação de Diagnóstico
+
+Para problemas específicos, consulte os guias detalhados:
+
+#### Ambiente de Desenvolvimento
+
+- **[DEV_ENVIRONMENT_TROUBLESHOOTING.md](docs/guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md)** — Problemas de configuração de ambiente
+- **[OPERATIONAL_TROUBLESHOOTING.md](docs/guides/OPERATIONAL_TROUBLESHOOTING.md)** — Problemas operacionais e runtime
+- **[QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md](docs/guides/QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md)** — Correção de hooks pre-commit
+
+#### Análises e Otimizações
+
+- **[DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md](docs/analysis/DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md)** — Análise de bottlenecks de governança
+- **[EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md](docs/analysis/EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md)** — Sumário executivo de otimizações DX
+
+#### Protocolos e Workflows
+
+- **[ATOMIC_COMMIT_PROTOCOL.md](docs/guides/ATOMIC_COMMIT_PROTOCOL.md)** — Protocolo de commits atômicos
+- **[PROTECTED_BRANCH_WORKFLOW.md](docs/guides/PROTECTED_BRANCH_WORKFLOW.md)** — Workflow de branches protegidas
+- **[POST_PR_MERGE_PROTOCOL.md](docs/guides/POST_PR_MERGE_PROTOCOL.md)** — Protocolo pós-merge de PR
+- **[DIRECT_PUSH_PROTOCOL.md](docs/guides/DIRECT_PUSH_PROTOCOL.md)** — Protocolo de push direto
+
+#### Estratégias e Boas Práticas
+
+- **[FAIL_FAST_PHILOSOPHY.md](docs/guides/FAIL_FAST_PHILOSOPHY.md)** — Filosofia Fail Fast
+- **[REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md)** — Protocolos de refatoração
+- **[SAFE_SCRIPT_TRANSPLANT.md](docs/guides/SAFE_SCRIPT_TRANSPLANT.md)** — Migração segura de scripts
+- **[DEV_PROD_PARITY_STRATEGY.md](docs/guides/DEV_PROD_PARITY_STRATEGY.md)** — Estratégia de paridade dev/prod
+
+#### Histórico e Lições Aprendidas
+
+- **[TRIAD_SYNC_LESSONS_LEARNED.md](docs/guides/TRIAD_SYNC_LESSONS_LEARNED.md)** — Lições aprendidas da sincronização Tríade
+- **[SRE_EVOLUTION_METHODOLOGY.md](docs/history/SRE_EVOLUTION_METHODOLOGY.md)** — Metodologia de evolução SRE
+- **[SRE_TECHNICAL_DEBT_CATALOG.md](docs/history/SRE_TECHNICAL_DEBT_CATALOG.md)** — Catálogo de débitos técnicos
+
+### 🛠️ Diagnóstico Rápido
+
+```bash
+# Diagnóstico completo do ambiente
+make doctor
+
+# Verificar qualidade do código
+make audit
+
+# Validar documentação e links
+cortex audit --links
+
+# Verificar health do Knowledge Graph
+cortex knowledge-graph --show-broken
+```
+
+### 📖 Documentação Completa
+
+Para acesso ao catálogo completo de 104 documentos do projeto, consulte:
+
+- **[CORTEX_INDICE.md](docs/architecture/CORTEX_INDICE.md)** — Índice completo e organizado de toda documentação
 
 ---
 
