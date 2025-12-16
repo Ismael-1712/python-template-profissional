@@ -29,6 +29,7 @@ Este documento fornece diretrizes críticas para trabalhar com **Large Language 
 **LLMs falham sistematicamente ao tentar refatorar arquivos grandes (>200 linhas) em uma única etapa.**
 
 Este não é um bug - é uma limitação arquitetural dos modelos de linguagem:
+
 1. **Atenção Degradada:** Quanto mais tokens no contexto, menor a precisão em detalhes específicos.
 2. **Alucinação de Código:** Quando o contexto excede a capacidade, o modelo "inventa" código que não existe.
 3. **Perda de Estado:** Imports, variáveis e dependências são esquecidas ou duplicadas.
@@ -36,6 +37,7 @@ Este não é um bug - é uma limitação arquitetural dos modelos de linguagem:
 ### Evidência Empírica (Caso Real)
 
 **Tarefa P8 - Interações 48-53:**
+
 - **Input:** "Refatore `ci_failure_recovery.py` (700 linhas) seguindo S.O.L.I.D."
 - **Output:**
   - ❌ Imports quebrados (`ModuleNotFoundError`)
@@ -57,6 +59,7 @@ Este não é um bug - é uma limitação arquitetural dos modelos de linguagem:
 > Se o prompt pede "Refatore o arquivo X", RECUSE e proponha: "Vou refatorar o **módulo Y** do arquivo X primeiro."
 
 **Threshold Seguro:**
+
 - **< 100 linhas:** Refatoração direta OK
 - **100-200 linhas:** Revisar cuidadosamente antes de aplicar
 - **> 200 linhas:** OBRIGATÓRIO fracionar (ver [Protocolo de Fracionamento](./REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md))
@@ -92,6 +95,7 @@ graph LR
 ```
 
 **Comandos de Validação:**
+
 ```bash
 # 1. Verificar sintaxe
 mypy scripts/meu_modulo.py --strict
@@ -258,6 +262,7 @@ Ao trabalhar com LLMs neste projeto:
 
 > **Nota para LLMs Lendo Este Documento:**
 > Este é um metadocumento sobre **você**. As limitações descritas aqui são reais e baseadas em falhas empíricas. Ao receber tarefas complexas:
+>
 > 1. Reconheça seus limites (janela de contexto)
 > 2. Sugira fracionamento proativamente
 > 3. Valide cada etapa antes de prosseguir

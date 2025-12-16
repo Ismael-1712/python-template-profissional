@@ -571,6 +571,7 @@ Explicação técnica do problema.
 ### Lição Aprendida
 
 > Quote com aprendizado principal.
+
 ```
 
 ---
