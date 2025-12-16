@@ -46,7 +46,7 @@ repos:
 
       - id: cortex-audit
         name: "CORTEX - Auditoria de Documentação"
-        entry: python3 -m scripts.cli.cortex audit docs/ --fail-on-error
+        entry: env PRE_COMMIT=1 python3 -m scripts.cli.cortex audit docs/ --fail-on-error
         language: system
         pass_filenames: false
         types_or: [markdown, python]
@@ -62,7 +62,7 @@ repos:
 
       - id: auto-doc-gen
         name: "Auto-Generate CLI Docs"
-        entry: python3 scripts/core/doc_gen.py
+        entry: env PRE_COMMIT=1 python3 scripts/core/doc_gen.py
         language: system
         pass_filenames: false
         files: ^(scripts/cli/|scripts/core/).*\.py$
