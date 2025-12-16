@@ -1128,6 +1128,39 @@ docker-compose exec cortex cortex --help
 
 ---
 
+## 🔧 Troubleshooting
+
+### 📚 Documentação de Diagnóstico
+
+Para problemas específicos, consulte os guias detalhados:
+
+- **[DEV_ENVIRONMENT_TROUBLESHOOTING.md](docs/guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md)** — Problemas de configuração de ambiente
+- **[OPERATIONAL_TROUBLESHOOTING.md](docs/guides/OPERATIONAL_TROUBLESHOOTING.md)** — Problemas operacionais e runtime
+- **[QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md](docs/guides/QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md)** — Correção de hooks pre-commit
+
+### 🔍 Análises e Relatórios
+
+- **[DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md](docs/analysis/DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md)** — Análise de bottlenecks de governança
+- **[EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md](docs/analysis/EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md)** — Sumário executivo de otimizações DX
+
+### 🛠️ Diagnóstico Rápido
+
+```bash
+# Diagnóstico completo do ambiente
+make doctor
+
+# Verificar qualidade do código
+make audit
+
+# Validar documentação e links
+cortex audit --links
+
+# Verificar health do Knowledge Graph
+cortex knowledge-graph --show-broken
+```
+
+---
+
 ## 📜 Licença
 
 Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.

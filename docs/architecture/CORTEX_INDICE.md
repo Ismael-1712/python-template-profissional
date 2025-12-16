@@ -2,18 +2,106 @@
 id: cortex-indice
 type: arch
 status: active
-version: 1.2.0
+version: 1.3.0
 author: Engineering Team
-date: '2025-12-14'
-context_tags: [knowledge-node, models, pydantic, link-validation, graph-analysis]
+date: '2025-12-16'
+context_tags: [knowledge-node, models, pydantic, link-validation, graph-analysis, retrospective, handover]
 linked_code: [scripts/core/cortex/models.py, scripts/core/cortex/link_resolver.py, scripts/core/cortex/knowledge_validator.py]
-title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
+title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03 + Retrospectiva)
 ---
 
-# 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
+# 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03 + Retrospectiva)
 
-**Data:** 14 de Dezembro de 2025
+**Data:** 16 de Dezembro de 2025
 **Status:** 🟢 Fase 01 Completa + Fase 02 Completa + Fase 03 (Knowledge Validator) em Design
+
+---
+
+## 🆕 NOVIDADES - DOCUMENTAÇÃO DE RETROSPECTIVA E HANDOVER
+
+### 📊 Análises de Governança e DX (Developer Experience)
+
+| Documento | Localização | Propósito | Status |
+|-----------|-------------|-----------|--------|
+| **DX Governance Bottleneck Analysis** | [docs/analysis/DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md](../analysis/DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md) | Análise de bottlenecks de governança no fluxo de desenvolvimento | ✅ Completo |
+| **Executive Summary DX Optimization** | [docs/analysis/EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md](../analysis/EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md) | Sumário executivo das otimizações de Developer Experience | ✅ Completo |
+
+**Conteúdo:**
+
+- Identificação de gargalos em hooks pre-commit
+- Análise de impacto no tempo de desenvolvimento
+- Recomendações de otimização
+- Métricas de performance e ROI
+
+---
+
+### 🏗️ ADRs (Architecture Decision Records)
+
+| ADR | Título | Localização | Status |
+|-----|--------|-------------|--------|
+| **ADR-002** | Pre-Commit Hook Optimization | [docs/architecture/ADR_002_PRE_COMMIT_OPTIMIZATION.md](./ADR_002_PRE_COMMIT_OPTIMIZATION.md) | ✅ Aprovado |
+| **ADR-003** | src/.gitkeep Stability Policy | [docs/architecture/ADR_003_SRC_GITKEEP_STABILITY.md](./ADR_003_SRC_GITKEEP_STABILITY.md) | ✅ Aprovado |
+
+**Decisões Documentadas:**
+
+- Estratégias de cache para hooks pre-commit
+- Política de estabilidade para arquivos .gitkeep
+- Impacto em CI/CD e fluxo de desenvolvimento
+
+---
+
+### 🛠️ Guias de Troubleshooting e Operação
+
+| Guia | Localização | Propósito | Status |
+|------|-------------|-----------|--------|
+| **DEV_ENVIRONMENT_TROUBLESHOOTING** | [docs/guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md](../guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md) | Solução de problemas de ambiente | ✅ Completo |
+| **OPERATIONAL_TROUBLESHOOTING** | [docs/guides/OPERATIONAL_TROUBLESHOOTING.md](../guides/OPERATIONAL_TROUBLESHOOTING.md) | Troubleshooting operacional | ✅ Completo |
+| **QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX** | [docs/guides/QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md](../guides/QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md) | Guia rápido de correção de hooks | ✅ Completo |
+
+**Casos Cobertos:**
+
+- Problemas de instalação de dependências
+- Erros de configuração Python
+- Falhas em hooks pre-commit
+- Issues de sincronização Git
+- Problemas de performance
+
+---
+
+### 📖 Guias de Estratégia e Boas Práticas
+
+| Guia | Localização | Área | Status |
+|------|-------------|------|--------|
+| **LLM_ENGINEERING_CONTEXT_AWARENESS** | [docs/guides/LLM_ENGINEERING_CONTEXT_AWARENESS.md](../guides/LLM_ENGINEERING_CONTEXT_AWARENESS.md) | Engenharia de LLM | ✅ Completo |
+| **LLM_TASK_DECOMPOSITION_STRATEGY** | [docs/guides/LLM_TASK_DECOMPOSITION_STRATEGY.md](../guides/LLM_TASK_DECOMPOSITION_STRATEGY.md) | Decomposição de tarefas | ✅ Completo |
+| **REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION** | [docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md) | Protocolos de refatoração | ✅ Completo |
+| **SAFE_SCRIPT_TRANSPLANT** | [docs/guides/SAFE_SCRIPT_TRANSPLANT.md](../guides/SAFE_SCRIPT_TRANSPLANT.md) | Migração segura de scripts | ✅ Completo |
+
+**Tópicos:**
+
+- Estratégias de context awareness para LLMs
+- Decomposição iterativa de tarefas complexas
+- Protocolos de refatoração segura
+- Migração de código entre projetos
+
+---
+
+### 🗂️ Documentação Histórica e Lições Aprendidas
+
+| Documento | Localização | Propósito | Status |
+|-----------|-------------|-----------|--------|
+| **NEWPROJECT_EVOLUTION** | [docs/history/NEWPROJECT_EVOLUTION.md](../history/NEWPROJECT_EVOLUTION.md) | Evolução do sistema newproject | ✅ Completo |
+| **PHASE2_KNOWLEDGE_NODE_POSTMORTEM** | [docs/history/PHASE2_KNOWLEDGE_NODE_POSTMORTEM.md](../history/PHASE2_KNOWLEDGE_NODE_POSTMORTEM.md) | Postmortem da Fase 2 | ✅ Completo |
+| **PHASE3_ROADMAP_HARDENING** | [docs/history/PHASE3_ROADMAP_HARDENING.md](../history/PHASE3_ROADMAP_HARDENING.md) | Hardening do roadmap Fase 3 | ✅ Completo |
+| **SRE_EVOLUTION_METHODOLOGY** | [docs/history/SRE_EVOLUTION_METHODOLOGY.md](../history/SRE_EVOLUTION_METHODOLOGY.md) | Metodologia de evolução SRE | ✅ Completo |
+| **SRE_TECHNICAL_DEBT_CATALOG** | [docs/history/SRE_TECHNICAL_DEBT_CATALOG.md](../history/SRE_TECHNICAL_DEBT_CATALOG.md) | Catálogo de débitos técnicos | ✅ Completo |
+
+**Lições Aprendidas:**
+
+- Evolução incremental de features
+- Postmortems de implementações
+- Catalogação de débitos técnicos
+- Metodologias SRE aplicadas
 
 ---
 
@@ -319,6 +407,7 @@ KnowledgeLink(
 
 | Versão | Data | Mudanças |
 |--------|------|----------|
+| v1.3.0 | 2025-12-16 | **Retrospectiva:** Adicionados 40+ documentos de handover, troubleshooting, ADRs e lições aprendidas |
 | v1.2.0 | 2025-12-14 | **Fase 03:** Design do Knowledge Validator (inversão de grafo + health metrics) |
 | v1.1.0 | 2025-12-07 | **Fase 02:** Adição dos modelos `KnowledgeSource` e `KnowledgeEntry` (Pydantic v2) |
 | v1.0.0 | 2025-11-30 | Design inicial completo (Fase 01) |
@@ -329,6 +418,29 @@ KnowledgeLink(
 
 ---
 
+## 📝 NOTAS DE MANUTENÇÃO
+
+### 🔧 Limpeza Estrutural (2025-12-16)
+
+**Arquivos Realocados:**
+
+- `docs/architecture/CORTEX_FASE03_DIAGRAMS.py` → `scripts/docs/CORTEX_FASE03_DIAGRAMS.py`
+  - **Motivo:** Código executável (ASCII art diagrams) não deve residir em `docs/`
+  - **Execução:** `python scripts/docs/CORTEX_FASE03_DIAGRAMS.py`
+
+**Diretórios Removidos:**
+
+- `tests/tests/` — Diretório de teste aninhado vazio (violação de estrutura)
+
+**Governança Adicionada:**
+
+- `tests/test_structure_policy.py` — Testes automáticos que impedem:
+  - Arquivos `.py` dentro de `docs/`
+  - Diretórios de teste aninhados
+  - Nomenclatura ambígua de diretórios
+
+---
+
 **Data de Criação:** 2025-11-30
 **Autor:** Engineering Team
-**Versão:** 1.0.0
+**Versão:** 1.3.0
