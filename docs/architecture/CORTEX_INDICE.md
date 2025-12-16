@@ -17,6 +17,37 @@ title: 🧠 CORTEX - Índice da Documentação (Fase 01 + Fase 02 + Fase 03)
 
 ---
 
+## 🆕 DOCUMENTAÇÃO ADICIONAL
+
+### 🏗️ Arquitetura de Scaffolding
+
+**Arquivo:** [PROJECT_SCAFFOLDING_ARCHITECTURE.md](./PROJECT_SCAFFOLDING_ARCHITECTURE.md)
+
+**Conteúdo:**
+
+- Sistema "Molde + Fábrica" para criação de projetos
+- Template Repository (python-template-profissional)
+- Função bash `newproject` (automação)
+- Branches especializadas (api, cli)
+- Personalização automática via `sed`
+
+**Status:** ✅ Implementado e em Produção
+
+### 📜 Evolução do Sistema newproject
+
+**Arquivo:** [../history/NEWPROJECT_EVOLUTION.md](../history/NEWPROJECT_EVOLUTION.md)
+
+**Conteúdo:**
+
+- Evolução histórica v1.2 → v1.5
+- Problemas identificados e soluções
+- Comparação de métricas (tempo, confiabilidade)
+- Decisões de design validadas
+
+**Status:** 🔵 Documento Histórico
+
+---
+
 ## 📦 NOVIDADES - FASE 02: KNOWLEDGE NODE
 
 ### 🔷 Modelos de Dados (v2 - Pydantic)
