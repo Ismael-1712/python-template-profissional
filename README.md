@@ -969,6 +969,20 @@ Fix these issues before committing or add to .guardian-whitelist.yaml
 | [CORTEX_RESUMO_EXECUTIVO.md](docs/architecture/CORTEX_RESUMO_EXECUTIVO.md) | Executive Summary da Fase 1 |
 | [CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md](docs/architecture/CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md) | Executive Summary da Fase 3 (Knowledge Validator) |
 | [ARCHITECTURE_TRIAD.md](docs/architecture/ARCHITECTURE_TRIAD.md) | Arquitetura de branches (main/cli/api) |
+| [SECURITY_STRATEGY.md](docs/architecture/SECURITY_STRATEGY.md) | Estratégia de segurança Defense in Depth |
+| [AUDIT_DASHBOARD_INTEGRATION.md](docs/architecture/AUDIT_DASHBOARD_INTEGRATION.md) | Integração do Dashboard de Auditoria com CLI |
+| [DEPENDENCY_DIAGRAM_SNAPSHOT.md](docs/architecture/DEPENDENCY_DIAGRAM_SNAPSHOT.md) | Snapshot de diagramas de dependências |
+| [CORTEX_FASE03_README.md](docs/architecture/CORTEX_FASE03_README.md) | README geral da Fase 03 |
+| [CORTEX_FASE03_EXECUTIVE_SUMMARY.md](docs/architecture/CORTEX_FASE03_EXECUTIVE_SUMMARY.md) | Sumário executivo da Fase 03 |
+| [CORTEX_FASE03_PRODUCTION_SUMMARY.md](docs/architecture/CORTEX_FASE03_PRODUCTION_SUMMARY.md) | Sumário de produção Fase 03 |
+| [CORTEX_FASE04_VECTOR_STORE_DESIGN.md](docs/architecture/CORTEX_FASE04_VECTOR_STORE_DESIGN.md) | Design do Vector Store (Fase 04) |
+| [SECURITY_STRATEGY.md](docs/architecture/SECURITY_STRATEGY.md) | Estratégia de segurança Defense in Depth |
+| [AUDIT_DASHBOARD_INTEGRATION.md](docs/architecture/AUDIT_DASHBOARD_INTEGRATION.md) | Integração do Dashboard de Auditoria com CLI |
+| [DEPENDENCY_DIAGRAM_SNAPSHOT.md](docs/architecture/DEPENDENCY_DIAGRAM_SNAPSHOT.md) | Snapshot de diagramas de dependências |
+| [CORTEX_FASE03_README.md](docs/architecture/CORTEX_FASE03_README.md) | README geral da Fase 03 |
+| [CORTEX_FASE03_EXECUTIVE_SUMMARY.md](docs/architecture/CORTEX_FASE03_EXECUTIVE_SUMMARY.md) | Sumário executivo da Fase 03 |
+| [CORTEX_FASE03_PRODUCTION_SUMMARY.md](docs/architecture/CORTEX_FASE03_PRODUCTION_SUMMARY.md) | Sumário de produção Fase 03 |
+| [CORTEX_FASE04_VECTOR_STORE_DESIGN.md](docs/architecture/CORTEX_FASE04_VECTOR_STORE_DESIGN.md) | Design do Vector Store (Fase 04) |
 
 ### 🔍 Referência Técnica
 
@@ -1139,6 +1153,8 @@ Para problemas específicos, consulte os guias detalhados:
 - **[DEV_ENVIRONMENT_TROUBLESHOOTING.md](docs/guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md)** — Problemas de configuração de ambiente
 - **[OPERATIONAL_TROUBLESHOOTING.md](docs/guides/OPERATIONAL_TROUBLESHOOTING.md)** — Problemas operacionais e runtime
 - **[QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md](docs/guides/QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md)** — Correção de hooks pre-commit
+- **[DEPENDENCY_MAINTENANCE_GUIDE.md](docs/guides/DEPENDENCY_MAINTENANCE_GUIDE.md)** — Guia de manutenção de dependências
+- **[DEPENDENCY_MAINTENANCE_GUIDE.md](docs/guides/DEPENDENCY_MAINTENANCE_GUIDE.md)** — Guia de manutenção de dependências
 
 #### Análises e Otimizações
 
@@ -1179,11 +1195,14 @@ cortex audit --links
 
 # Verificar health do Knowledge Graph
 cortex knowledge-graph --show-broken
+
+# Consultar último relatório de saúde
+cat docs/reports/KNOWLEDGE_HEALTH.md
 ```
 
 ### 📖 Documentação Completa
 
-Para acesso ao catálogo completo de 104 documentos do projeto, consulte:
+Para acesso ao catálogo completo de 115 documentos do projeto, consulte:
 
 - **[CORTEX_INDICE.md](docs/architecture/CORTEX_INDICE.md)** — Índice completo e organizado de toda documentação
 

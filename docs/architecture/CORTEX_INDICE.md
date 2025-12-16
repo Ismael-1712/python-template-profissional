@@ -7,14 +7,14 @@ author: Engineering Team
 date: '2025-12-16'
 context_tags: [knowledge-node, models, pydantic, link-validation, graph-analysis, retrospective, handover, complete-catalog]
 linked_code: [scripts/core/cortex/models.py, scripts/core/cortex/link_resolver.py, scripts/core/cortex/knowledge_validator.py]
-title: 🧠 CORTEX - Índice Completo da Documentação (104 Arquivos Catalogados)
+title: 🧠 CORTEX - Índice Completo da Documentação (115 Arquivos Catalogados)
 ---
 
-# 🧠 CORTEX - Índice Completo da Documentação (104 Arquivos Catalogados)
+# 🧠 CORTEX - Índice Completo da Documentação (115 Arquivos Catalogados)
 
 **Data:** 16 de Dezembro de 2025
 **Status:** 🟢 Fase 01 Completa + Fase 02 Completa + Fase 03 (Knowledge Validator) em Design
-**Cobertura:** 104 arquivos .md (100% do projeto)
+**Cobertura:** 115 arquivos .md (100% do projeto)
 
 ---
 
@@ -212,10 +212,15 @@ title: 🧠 CORTEX - Índice Completo da Documentação (104 Arquivos Catalogado
 **Status:** 🔵 Design Phase
 
 | Documento | Tarefa | Status | Propósito |
-|-----------|--------|--------|-----------|
+|-----------|--------|-----------|-----------|
 | [CORTEX_FASE03_LINK_SCANNER_DESIGN.md](./CORTEX_FASE03_LINK_SCANNER_DESIGN.md) | [007] | ✅ Implementado | Extração de links semânticos do conteúdo |
 | [CORTEX_FASE03_LINK_RESOLVER_DESIGN.md](./CORTEX_FASE03_LINK_RESOLVER_DESIGN.md) | [008] | ✅ Implementado | Resolução e validação de targets |
 | [CORTEX_FASE03_VALIDATOR_DESIGN.md](./CORTEX_FASE03_VALIDATOR_DESIGN.md) | [009] | 🔵 Design | **Inversão de grafo e health metrics** |
+| [CORTEX_FASE03_README.md](./CORTEX_FASE03_README.md) | - | ✅ Completo | README geral da Fase 03 |
+| [CORTEX_FASE03_EXECUTIVE_SUMMARY.md](./CORTEX_FASE03_EXECUTIVE_SUMMARY.md) | - | ✅ Completo | Sumário executivo da Fase 03 |
+| [CORTEX_FASE03_PRODUCTION_SUMMARY.md](./CORTEX_FASE03_PRODUCTION_SUMMARY.md) | - | ✅ Completo | Sumário de produção Fase 03 |
+| [CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md](./CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md) | - | ✅ Completo | Sumário executivo do Validator |
+| [CORTEX_FASE04_VECTOR_STORE_DESIGN.md](./CORTEX_FASE04_VECTOR_STORE_DESIGN.md) | [Future] | 🔵 Design | Design do Vector Store (Fase 04) |
 
 ### 🔷 Modelos de Dados Adicionais (Fase 03)
 
@@ -444,8 +449,10 @@ KnowledgeLink(
 | Documento | Localização | Propósito | Status |
 |-----------|-------------|-----------|--------|
 | **ARCHITECTURE_TRIAD** | [docs/architecture/ARCHITECTURE_TRIAD.md](./ARCHITECTURE_TRIAD.md) | Arquitetura da Tríade (Guardian + Knowledge + Neural) | ✅ Completo |
+| **AUDIT_DASHBOARD_INTEGRATION** | [docs/architecture/AUDIT_DASHBOARD_INTEGRATION.md](./AUDIT_DASHBOARD_INTEGRATION.md) | Integração do Dashboard de Auditoria com CLI | ✅ Completo |
 | **CORTEX_ROOT_LOCKDOWN** | [docs/architecture/CORTEX_ROOT_LOCKDOWN.md](./CORTEX_ROOT_LOCKDOWN.md) | Política de lockdown da raiz do projeto | ✅ Completo |
 | **DATA_MODELS** | [docs/architecture/DATA_MODELS.md](./DATA_MODELS.md) | Documentação de modelos de dados | ✅ Completo |
+| **DEPENDENCY_DIAGRAM_SNAPSHOT** | [docs/architecture/DEPENDENCY_DIAGRAM_SNAPSHOT.md](./DEPENDENCY_DIAGRAM_SNAPSHOT.md) | Snapshot de diagramas de dependências | ✅ Completo |
 | **FORMATTER_PATTERN** | [docs/architecture/FORMATTER_PATTERN.md](./FORMATTER_PATTERN.md) | Padrões de formatação de código | ✅ Completo |
 | **GIT_SYNC_HEARTBEAT_TELEMETRY** | [docs/architecture/GIT_SYNC_HEARTBEAT_TELEMETRY.md](./GIT_SYNC_HEARTBEAT_TELEMETRY.md) | Telemetria do sistema Git Sync | ✅ Completo |
 | **I18N_STRATEGY** | [docs/architecture/I18N_STRATEGY.md](./I18N_STRATEGY.md) | Estratégia de internacionalização | ✅ Completo |
@@ -453,6 +460,7 @@ KnowledgeLink(
 | **OBSERVABILITY** | [docs/architecture/OBSERVABILITY.md](./OBSERVABILITY.md) | Estratégia de observabilidade | ✅ Completo |
 | **PLATFORM_ABSTRACTION** | [docs/architecture/PLATFORM_ABSTRACTION.md](./PLATFORM_ABSTRACTION.md) | Camada de abstração de plataforma | ✅ Completo |
 | **ROADMAP_DELTA_AUDIT** | [docs/architecture/ROADMAP_DELTA_AUDIT.md](./ROADMAP_DELTA_AUDIT.md) | Auditoria de mudanças no roadmap | ✅ Completo |
+| **SECURITY_STRATEGY** | [docs/architecture/SECURITY_STRATEGY.md](./SECURITY_STRATEGY.md) | Estratégia de segurança Defense in Depth | ✅ Completo |
 | **TASK_RUNNER_PATTERN** | [docs/architecture/TASK_RUNNER_PATTERN.md](./TASK_RUNNER_PATTERN.md) | Padrão de Task Runners | ✅ Completo |
 | **TRIAD_GOVERNANCE** | [docs/architecture/TRIAD_GOVERNANCE.md](./TRIAD_GOVERNANCE.md) | Governança da arquitetura Tríade | ✅ Completo |
 | **VISIBILITY_GUARDIAN_DESIGN** | [docs/architecture/VISIBILITY_GUARDIAN_DESIGN.md](./VISIBILITY_GUARDIAN_DESIGN.md) | Design do Visibility Guardian | ✅ Completo |
@@ -466,6 +474,7 @@ KnowledgeLink(
 | **ATOMIC_COMMIT_PROTOCOL** | [docs/guides/ATOMIC_COMMIT_PROTOCOL.md](../guides/ATOMIC_COMMIT_PROTOCOL.md) | Protocolo de commits atômicos | ✅ Completo |
 | **CORTEX_AUTO_HOOKS** | [docs/guides/CORTEX_AUTO_HOOKS.md](../guides/CORTEX_AUTO_HOOKS.md) | Hooks automáticos do CORTEX | ✅ Completo |
 | **CORTEX_INTROSPECTION_SYSTEM** | [docs/guides/CORTEX_INTROSPECTION_SYSTEM.md](../guides/CORTEX_INTROSPECTION_SYSTEM.md) | Sistema de introspecção CORTEX | ✅ Completo |
+| **DEPENDENCY_MAINTENANCE_GUIDE** | [docs/guides/DEPENDENCY_MAINTENANCE_GUIDE.md](../guides/DEPENDENCY_MAINTENANCE_GUIDE.md) | Guia de manutenção de dependências | ✅ Completo |
 | **DEV_PROD_PARITY_STRATEGY** | [docs/guides/DEV_PROD_PARITY_STRATEGY.md](../guides/DEV_PROD_PARITY_STRATEGY.md) | Estratégia de paridade dev/prod | ✅ Completo |
 | **DIRECT_PUSH_PROTOCOL** | [docs/guides/DIRECT_PUSH_PROTOCOL.md](../guides/DIRECT_PUSH_PROTOCOL.md) | Protocolo de push direto | ✅ Completo |
 | **ENGINEERING_STANDARDS** | [docs/guides/ENGINEERING_STANDARDS.md](../guides/ENGINEERING_STANDARDS.md) | Padrões de engenharia | ✅ Completo |
@@ -549,6 +558,7 @@ KnowledgeLink(
 | Documento | Localização | Propósito | Status |
 |-----------|-------------|-----------|--------|
 | **CI_DOCS_VALIDATOR** | [docs/reference/CI_DOCS_VALIDATOR.md](../reference/CI_DOCS_VALIDATOR.md) | Validador de docs no CI | ✅ Completo |
+| **CLI_COMMANDS** | [docs/reference/CLI_COMMANDS.md](../reference/CLI_COMMANDS.md) | Referência completa de comandos CLI (Auto-generated) | ✅ Completo |
 | **DYNAMIC_README** | [docs/reference/DYNAMIC_README.md](../reference/DYNAMIC_README.md) | Sistema de README dinâmico | ✅ Completo |
 | **git_sync** | [docs/reference/git_sync.md](../reference/git_sync.md) | Referência do Git Sync | ✅ Completo |
 
@@ -558,6 +568,7 @@ KnowledgeLink(
 
 | Documento | Localização | Propósito | Status |
 |-----------|-------------|-----------|--------|
+| **KNOWLEDGE_HEALTH** | [docs/reports/KNOWLEDGE_HEALTH.md](../reports/KNOWLEDGE_HEALTH.md) | Relatório de saúde do grafo de conhecimento | ✅ Completo |
 | **STRUCTURE_CLEANUP_REPORT** | [docs/reports/STRUCTURE_CLEANUP_REPORT.md](../reports/STRUCTURE_CLEANUP_REPORT.md) | Relatório de limpeza estrutural | ✅ Completo |
 | **TECHNICAL_ROADMAP_Q1_Q5_2026** | [docs/reports/TECHNICAL_ROADMAP_Q1_Q5_2026.md](../reports/TECHNICAL_ROADMAP_Q1_Q5_2026.md) | Roadmap técnico Q1-Q5 2026 | ✅ Completo |
 
@@ -585,6 +596,7 @@ KnowledgeLink(
 
 | Versão | Data | Mudanças |
 |--------|------|----------|
+| v1.5.0 | 2025-12-16 | **Fase 3 Retroativa:** Integração de 11 arquivos órfãos (SECURITY_STRATEGY, AUDIT_DASHBOARD_INTEGRATION, CLI_COMMANDS, CORTEX_FASE03 docs, KNOWLEDGE_HEALTH, etc) |
 | v1.4.0 | 2025-12-16 | **Catalogação Completa:** Integrados TODOS os 104 arquivos .md do projeto (arquitetura, guias, histórico, referências, relatórios) |
 | v1.3.0 | 2025-12-16 | **Retrospectiva:** Adicionados 40+ documentos de handover, troubleshooting, ADRs e lições aprendidas |
 | v1.2.0 | 2025-12-14 | **Fase 03:** Design do Knowledge Validator (inversão de grafo + health metrics) |
@@ -595,7 +607,7 @@ KnowledgeLink(
 **Status Fase 02:** 🟢 **APROVADO E IMPLEMENTADO**
 **Status Fase 03:** 🔵 **DESIGN EM APROVAÇÃO (Tarefa [009])**
 
-**📊 Cobertura de Documentação:** 104 arquivos .md indexados (100% do projeto)
+**📊 Cobertura de Documentação:** 115 arquivos .md indexados (100% do projeto)
 
 ---
 
@@ -625,4 +637,4 @@ KnowledgeLink(
 **Data de Criação:** 2025-11-30
 **Última Atualização:** 2025-12-16
 **Autor:** Engineering Team
-**Versão:** 1.4.0
+**Versão:** 1.5.0
