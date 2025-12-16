@@ -26,7 +26,7 @@ Enterprise-grade security and quality auditing tool for Python projects. This to
 
 > **Arquitetura:** Sistema modular seguindo princípios S.O.L.I.D., refatorado de monólito de 700+ linhas para pacote com responsabilidades segregadas.
 
-## 🏗️ Arquitetura Modular S.O.L.I.D.
+## 🏗️ Arquitetura Modular S.O.L.I.D
 
 ### Visão Geral da Evolução
 
