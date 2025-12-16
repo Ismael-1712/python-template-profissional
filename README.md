@@ -1,4 +1,4 @@
-# 🧠 CORTEX
+# 🧠 CORTEX — Professional Python Template
 
 > **The Symbolic Neural Network for Documentation as Code**
 > _Creative Organized Rational Thinking EXecution_
@@ -11,214 +11,663 @@
 
 ---
 
-## 🎯 O Que é o CORTEX?
+## 🎯 O Que é Este Template?
 
-**CORTEX** não é apenas um template Python — é um **Knowledge Operating System** que trata documentação como código vivo. Enquanto projetos tradicionais tratam documentação como um artefato secundário, o CORTEX inverte essa equação: **a documentação É a arquitetura**.
+Este não é apenas um template Python — é um **sistema operacional completo para engenharia de software profissional**. Combina princípios de **SRE (Site Reliability Engineering)**, **Documentation as Code** e **Governance Automation** em uma arquitetura extensível e battle-tested.
 
-### 🧬 A Tríade Arquitetural
+### 🧬 Arquitetura em 4 Camadas
 
-O sistema se sustenta em três pilares interconectados:
+O sistema é construído sobre quatro pilares fundamentais:
 
 ```
-┌─────────────────────────────────────────────────┐
-│                   CORTEX                         │
-│                                                  │
-│  🛡️ Governança    🕸️ Conectividade    ✅ Qualidade │
-│  ─────────────    ───────────────    ─────────── │
-│  Pre-commit       Knowledge Graph    100+ Tests  │
-│  Git Hooks        Link Resolver      Mypy Strict │
-│  Auto-sync        Bidirectional      Ruff Linter │
-│  Dev Doctor       Health Metrics     CI/CD Ready │
-└─────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                         CORTEX CORE                           │
+│                                                               │
+│  🧠 Neural Layer      🛡️ Guardian Layer    🔄 Automation     │
+│  ──────────────       ───────────────      ──────────────    │
+│  Vector Search        Config Scanner       Git Sync          │
+│  Semantic Index       Security Blocks      Smart Hooks       │
+│  ChromaDB             Shadow Detection     Auto-Doc Gen      │
+│                                                               │
+│  🕸️ Knowledge Layer   ✅ Quality Layer     🔧 DevTools        │
+│  ─────────────────    ────────────────     ─────────────     │
+│  Link Resolver        100+ Tests          CLI Commands       │
+│  Graph Analysis       Mypy Strict         Dev Doctor         │
+│  Health Metrics       Ruff Linter         Mock CI Runner     │
+│  Bidirectional        Type Safety         Audit Dashboard    │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**O CORTEX resolve problemas reais:**
+**Problemas Resolvidos:**
 
-- 🔗 **Links quebrados?** O sistema detecta automaticamente e falha o CI.
-- 📄 **Documentação órfã?** O grafo de conhecimento identifica e alerta.
-- 🧪 **Código sem testes?** O audit dashboard mostra cobertura em tempo real.
-- 🔄 **Metadados desatualizados?** O validator força consistência via frontmatter YAML.
+- 🔒 **Configurações hardcoded?** Guardian bloqueia commits automáticos.
+- 🔗 **Links quebrados?** Knowledge Graph detecta e falha o CI.
+- 📄 **Documentação órfã?** Health metrics identificam docs isolados.
+- 🧪 **Código sem testes?** Audit dashboard rastreia cobertura em tempo real.
+- 🔄 **Git sync complexo?** Automação inteligente de merge/rebase.
+- 🤖 **Configurar ambiente?** Doctor diagnostica e corrige automaticamente.
+- 🧠 **Buscar na documentação?** Neural search com embeddings semânticos.
 
 ---
 
-## ✨ Features Principais
+## ✨ Features Completas
 
-### 📚 **Fase 1: The Foundation** ✅ COMPLETA
+### 🧠 **Neural Layer — Semantic Search & Vector Indexing**
 
-**Fundamentos de engenharia moderna:**
-
-- 🏗️ Estrutura modular (`scripts/core`, `scripts/cli`, `scripts/utils`)
-- 📊 Logging estruturado com rastreamento de contexto
-- 🎨 CLI interativa com [Typer](https://typer.tiangolo.com/)
-- 🔧 Sistema de introspecção dinâmica (self-awareness)
-- 🛠️ Dev Doctor (diagnóstico de ambiente de desenvolvimento)
-
-```bash
-# Verificar saúde do ambiente
-make doctor
-
-# Gerar mapa de contexto do projeto
-cortex map
-```
-
-### 🧩 **Fase 2: The Knowledge Node** ✅ COMPLETA
-
-**Documentação como entidade de primeira classe:**
-
-- 📝 **Frontmatter YAML obrigatório** em toda documentação
-- 🏷️ Metadados estruturados (Pydantic v2): `id`, `type`, `status`, `version`, `linked_code`
-- 🔄 **Migração semi-automática** de 30+ documentos legados
-- ✅ Validação automática de schema (enums, regex, semver)
-- 🧬 **Knowledge Entries**: Docs com tags, fontes externas e golden paths
-
-**Modelo de Dados (Pydantic):**
-
-```python
-KnowledgeEntry(
-    id="cortex-fase03-design",
-    type="arch",
-    status="active",
-    version="1.2.0",
-    linked_code=["scripts/core/cortex/models.py"],
-    sources=[
-        KnowledgeSource(
-            url="https://example.com/external-ref",
-            last_synced=datetime.now()
-        )
-    ]
-)
-```
-
-### 🕸️ **Fase 3: The Collective Mind** ✅ COMPLETA
-
-**Knowledge Graph e Análise de Conectividade:**
-
-- 🔍 **Link Scanner**: Extrai links semânticos (Markdown, Wikilinks, Code References)
-- 🎯 **Link Resolver**: Valida targets e resolve ambiguidades
-- 📊 **Knowledge Validator**: Inverte grafo para análise bidirecional
-- 🏥 **Health Metrics**: Score automático de qualidade da documentação (0-100)
-- 🚨 **Anomaly Detection**: Identifica docs órfãos, becos sem saída e broken links
+**Busca semântica sobre toda a documentação usando ChromaDB e embeddings.**
 
 **Comandos:**
+
+```bash
+# Indexar documentação no vector store
+cortex neural index
+
+# Buscar semanticamente
+cortex neural ask "Como configurar hooks do git?"
+
+# Re-indexar após mudanças
+cortex neural index --rebuild
+```
+
+**Arquitetura:**
+
+- 📊 **VectorBridge**: Interface com ChromaDB para armazenamento vetorial
+- 🔍 **Semantic Search**: Busca por similaridade usando embeddings
+- 🗂️ **Auto-indexing**: Hook pre-commit sincroniza automaticamente
+
+**Casos de Uso:**
+
+- Encontrar documentação relevante sem conhecer paths exatos
+- Descobrir padrões similares no código
+- RAG (Retrieval-Augmented Generation) para chatbots
+
+---
+
+### 🛡️ **Guardian Layer — Security & Configuration Governance**
+
+**Sistema de governança que bloqueia configurações perigosas e garante conformidade.**
+
+#### 🔍 Guardian Scanner
+
+Detecta configurações hardcoded via análise AST:
+
+```bash
+# Escanear projeto completo
+cortex guardian check .
+
+# Modo CI (falha em findings críticos)
+cortex guardian check . --fail-on-error
+
+# Probe interativo
+cortex guardian probe
+```
+
+**O que detecta:**
+
+- ✅ `os.getenv("SECRET")` sem valor default
+- ✅ `os.environ.get("API_KEY")` em código produção
+- ✅ `os.environ["PASSWORD"]` (subscript direto)
+- ✅ Configurações em `.env` não documentadas
+
+**Whitelist:**
+Adicione exceções em `.guardian-whitelist.yaml`:
+
+```yaml
+whitelist:
+  - HOME
+  - PATH
+  - PYTHONPATH
+```
+
+#### 🧠 Hallucination Probe
+
+Detecta discrepâncias entre documentação e código:
+
+```bash
+# Validar documentação vs implementação
+cortex guardian probe --check-consistency
+```
+
+**Bloqueios Automáticos:**
+
+- ❌ Commit de código com secrets hardcoded
+- ❌ Documentação de features não implementadas
+- ❌ Configuração de hooks sem idempotência
+
+---
+
+### 🕸️ **Knowledge Layer — Documentation Graph & Link Analysis**
+
+**Sistema de grafo de conhecimento com validação bidirecional de links.**
+
+#### 📝 Frontmatter YAML Obrigatório
+
+Todo documento deve ter metadados estruturados:
+
+```yaml
+---
+id: my-document
+type: guide               # guide | arch | reference | history
+status: active            # draft | active | deprecated
+version: 1.0.0
+author: Engineering Team
+date: '2025-12-15'
+context_tags: [python, testing, ci-cd]
+linked_code: [scripts/core/cortex/models.py]
+---
+```
+
+**Comandos:**
+
+```bash
+# Adicionar frontmatter automaticamente
+cortex init docs/guides/my-guide.md
+
+# Forçar sobrescrever frontmatter existente
+cortex init docs/guides/my-guide.md --force
+
+# Migrar documentos legados
+cortex migrate docs/ --interactive
+```
+
+#### 🔍 Link Scanner & Resolver
+
+Extrai e valida todos os links na documentação:
 
 ```bash
 # Auditar integridade de links
 cortex audit --links
 
+# Modo estrito (falha CI em broken links)
+cortex audit --links --strict
+
 # Gerar relatório de saúde
 cortex audit --links --output docs/reports/KNOWLEDGE_HEALTH.md
-
-# Modo CI (falha em links quebrados)
-cortex audit --links --strict
 ```
+
+**Tipos de Links Suportados:**
+
+- `[Markdown](docs/guide.md)` → Markdown links
+- `[[Wikilink]]` → Wiki-style links
+- `[[Alias|Target]]` → Wikilinks com alias
+- `scripts/core/models.py` → Referências a código
 
 **Exemplo de Output:**
 
 ```markdown
 # 📊 Knowledge Graph Health Report
 
-**Overall Health Score:** 60.0/100 (🔴 Critical)
+**Overall Health Score:** 75.0/100 (🟡 Warning)
 
-## 📈 Executive Summary
+## Métricas
 
-| Metric                  | Value    | Status |
-|-------------------------|----------|--------|
-| Total Nodes             | 0       | -      |
-| Valid Links             | 0      | 🟢     |
-| Broken Links            | 0       | 🟢     |
-| Connectivity Score      | 0.0%    | 🔴     |
-| **Overall Health Score**| **60.0** | 🔴 |
+| Metric              | Value    | Status |
+|---------------------|----------|--------|
+| Total Nodes         | 45       | -      |
+| Valid Links         | 120      | 🟢     |
+| Broken Links        | 3        | 🔴     |
+| Orphaned Documents  | 2        | 🟡     |
+| Connectivity Score  | 82.5%    | 🟢     |
 
-## 🔴 Critical Issues
+## 🔴 Broken Links
 
+- `docs/guides/deprecated.md` → `scripts/old/removed.py` (MISSING)
 ```
 
-### 🔮 **Fase 4: Neural Interface** 🔵 EM PLANEJAMENTO
+#### 📊 Health Metrics
 
-**Próximas capacidades:**
+O sistema calcula automaticamente:
 
-- 🤖 RAG (Retrieval-Augmented Generation) sobre grafo de conhecimento
-- 💬 Chatbot de documentação com context-awareness
-- 🧠 Recomendação automática de links relacionados
-- 📈 Análise de tendências e gaps de conhecimento
+- **Connectivity Score**: % de documentos com links bidirecionais
+- **Link Health Score**: % de links válidos vs. quebrados
+- **Overall Health**: Score agregado (0-100)
+
+**Thresholds:**
+
+- 🟢 80-100: Excelente
+- 🟡 60-79: Atenção
+- 🔴 0-59: Crítico
+
+---
+
+### 🔄 **Automation Layer — Smart Tools & Git Sync**
+
+#### 🔄 Git Sync Inteligente
+
+Sincronização automática de branches com auditoria preventiva:
+
+```bash
+# Sincronizar com branch remota
+git-sync
+
+# Dry-run (preview de mudanças)
+git-sync --dry-run
+
+# Configuração customizada
+git-sync --config custom_sync.yaml
+```
+
+**Funcionalidades:**
+
+- ✅ Detecção automática de estratégia (merge vs. rebase)
+- ✅ Auditoria de código antes do push
+- ✅ Rollback automático em caso de conflitos
+- ✅ Relatórios estruturados em JSON
+
+**Configuração (`smart_git_sync_config.yaml`):**
+
+```yaml
+sync:
+  default_strategy: merge  # ou 'rebase'
+  auto_push: false
+  audit_before_push: true
+```
+
+#### 🔧 Smart Governance Hooks
+
+**Idempotência garantida** — Hooks podem rodar múltiplas vezes sem efeitos colaterais.
+
+**Hooks Automáticos:**
+
+1. **code-audit-security**: Auditoria de segurança em arquivos Python alterados
+2. **cortex-audit**: Validação de documentação
+3. **cortex-guardian**: Bloqueio de shadow configuration
+4. **auto-doc-gen**: Geração automática de CLI docs
+5. **cortex-neural-sync**: Sincronização do vector store
+
+**Configuração (`.pre-commit-config.yaml`):**
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: cortex-guardian
+        name: "CORTEX Guardian - Bloqueia Shadow Configuration"
+        entry: python3 -m scripts.cli.cortex guardian check . --fail-on-error
+        language: system
+        types: [python]
+```
+
+---
+
+### ✅ **Quality Layer — Testing & Validation**
+
+#### 🧪 Testing Suite
+
+**100+ testes unitários** cobrindo todos os módulos críticos:
+
+```bash
+# Rodar todos os testes
+make test
+
+# Testes em modo verboso
+make test-verbose
+
+# Testes com cobertura
+make test-coverage
+
+# Matriz de versões Python (tox)
+make test-matrix
+```
+
+**Arquivos de Testes:**
+
+- `test_cortex_*.py` — Testes do Knowledge Layer
+- `test_guardian_*.py` — Testes do Guardian
+- `test_link_*.py` — Testes de resolução de links
+- `test_mock_ci_*.py` — Testes do Mock CI Runner
+
+#### 🔬 Type Safety (Mypy Strict)
+
+Verificação de tipos em modo estrito:
+
+```bash
+# Type checking completo
+make type-check
+
+# Apenas scripts
+mypy scripts/
+
+# Com relatório HTML
+mypy scripts/ --html-report mypy-report/
+```
+
+**Configuração (`pyproject.toml`):**
+
+```toml
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+```
+
+#### 🎨 Code Quality (Ruff)
+
+Linting e formatação automática:
+
+```bash
+# Lint apenas (check)
+make lint
+
+# Formatar código
+make format
+
+# Validação completa (lint + type-check + test)
+make validate
+```
+
+---
+
+### 🔧 **DevTools Layer — CLI & Utilities**
+
+#### 🏥 Dev Doctor — Diagnostic Tool
+
+Diagnóstico completo do ambiente de desenvolvimento:
+
+```bash
+# Executar diagnóstico
+make doctor
+
+# Ou diretamente
+python -m scripts.cli.doctor
+```
+
+**O que verifica:**
+
+- ✅ Versão do Python
+- ✅ Dependências instaladas
+- ✅ Git configurado corretamente
+- ✅ Hooks pre-commit ativos
+- ✅ Permissões de escrita
+- ✅ Variáveis de ambiente necessárias
+
+**Output Exemplo:**
+
+```
+🏥 Dev Doctor - Environment Diagnostic
+
+✅ Python 3.11.5 detected
+✅ Virtual environment active (.venv)
+✅ Git repository initialized
+⚠️  Pre-commit hooks not installed
+❌ Missing environment variable: DATABASE_URL
+
+Recommendations:
+  • Run: pre-commit install
+  • Set DATABASE_URL in .env file
+```
+
+#### 🧪 Mock CI Runner
+
+Simulador de ambiente CI para testes locais:
+
+```bash
+# Rodar mock CI completo
+python -m scripts.cli.mock_ci
+
+# Gerar mocks de configuração
+python -m scripts.cli.mock_generate
+
+# Validar mocks existentes
+python -m scripts.cli.mock_validate
+```
+
+**Casos de Uso:**
+
+- Testar workflows GitHub Actions localmente
+- Validar scripts CI antes do push
+- Debug de falhas em pipelines
+
+#### 📦 Install Dev — Intelligent Dependency Management
+
+Instalação inteligente com cache de hash:
+
+```bash
+# Instalar/atualizar ambiente
+make install-dev
+
+# Forçar reinstalação
+rm -rf .venv && make install-dev
+```
+
+**Funcionalidades:**
+
+- ✅ Hash-based caching (evita reinstalações desnecessárias)
+- ✅ Compilação automática de `requirements/dev.in` → `dev.txt`
+- ✅ Instalação do pacote em modo editable (`pip install -e .`)
+- ✅ Configuração de hooks pre-commit
+- ✅ Indexação neural automática
+
+#### 🔄 Upgrade Python — Version Manager
+
+Atualização automatizada de versões Python:
+
+```bash
+# Verificar patches disponíveis
+python -m scripts.cli.upgrade_python
+
+# Atualizar versões (via pyenv)
+make upgrade-python
+```
+
+**O que faz:**
+
+- 🔍 Detecta versões Python instaladas via pyenv
+- 📊 Verifica patches mais recentes disponíveis
+- 🔄 Atualiza `.python-version` automaticamente
+- ✅ Reinstala ambiente virtual com nova versão
+
+#### 🗺️ CORTEX Mapper
+
+Geração automática de contexto do projeto:
+
+```bash
+# Gerar mapa completo
+cortex map
+
+# Saída: .cortex/context.json
+```
+
+**Conteúdo gerado:**
+
+- 📁 Estrutura de diretórios
+- 🛠️ Comandos CLI disponíveis
+- 📚 Documentos arquiteturais
+- 🔧 Scripts disponíveis
+- 📦 Dependências instaladas
+
+**Uso:** LLMs e ferramentas de introspecção consomem `context.json` para entender o projeto automaticamente.
+
+---
+
+### 📊 **Audit Dashboard — Visual Code Quality Metrics**
+
+Painel interativo HTML com métricas de qualidade:
+
+```bash
+# Gerar dashboard
+make audit
+
+# Saída: audit_dashboard.html
+```
+
+**Métricas Incluídas:**
+
+- 📊 Complexidade ciclomática por função
+- 📏 Linhas de código por módulo
+- 🧪 Cobertura de testes
+- 🔒 Vulnerabilidades de segurança
+- 📈 Tendências ao longo do tempo
+
+**Gráficos:**
+
+- 🔥 Heatmap de complexidade
+- 📉 Evolução de dívida técnica
+- 🎯 Top 10 funções mais complexas
+
+---
+
+### 🌍 **Internationalization (i18n)**
+
+Suporte nativo para múltiplos idiomas:
+
+```bash
+# Extrair strings traduzíveis
+make i18n-extract
+
+# Inicializar novo idioma
+make i18n-init LOCALE=en_US
+
+# Atualizar catálogos existentes
+make i18n-update
+
+# Compilar traduções
+make i18n-compile
+
+# Estatísticas de tradução
+make i18n-stats
+```
+
+**Idiomas Suportados:**
+
+- 🇧🇷 Português (pt_BR) — Padrão
+- 🇺🇸 Inglês (en_US)
+
+**Uso:**
+
+```bash
+# Rodar CLI em inglês
+LANGUAGE=en_US cortex audit
+```
 
 ---
 
 ## 🚀 Quick Start
 
-### Instalação
+### Pré-requisitos
+
+- Python 3.10+ instalado
+- Git configurado
+- (Opcional) pyenv para gerenciamento de versões Python
+
+### Instalação em 3 Passos
 
 ```bash
 # 1. Clone o repositório
 git clone https://github.com/Ismael-1712/python-template-profissional.git
 cd python-template-profissional
 
-# 2. Configure o ambiente (venv + dependências)
-make setup
+# 2. Configure o ambiente completo (cria .venv, instala deps, configura hooks)
+make install-dev
 
 # 3. Ative o ambiente virtual
 source .venv/bin/activate  # Linux/Mac
 # .venv\Scripts\activate   # Windows
+```
 
-# 4. Instale o CORTEX CLI
-pip install -e .
+### Verificação da Instalação
 
-# 5. Valide a instalação
+```bash
+# Verificar saúde do ambiente
+make doctor
+
+# Validar instalação completa
 cortex --help
-make doctor
-```
-
-### Uso da CLI CORTEX
-
-```bash
-# 🗺️ Gerar mapa de contexto do projeto
 cortex map
-# Saída: .cortex/context.json com metadados completos
-
-# 📝 Adicionar frontmatter a um documento
-cortex init docs/guides/meu-guia.md
-
-# 🔍 Auditar documentação
-cortex audit docs/
-
-# 🕸️ Validar grafo de conhecimento
-cortex audit --links
-
-# 🔄 Migrar documentos legados
-cortex migrate docs/ --interactive
-
-# 🛡️ Escanear configurações (Guardian)
-cortex guardian-probe
-
-# 📄 Gerar README dinâmico
-cortex generate readme
 ```
 
-### Comandos de Desenvolvimento
+---
+
+## 🛠️ Comandos CLI Essenciais
+
+### CORTEX (Comando Principal)
 
 ```bash
-# 🏥 Diagnóstico completo do ambiente
-make doctor
+# === Documentation Management ===
+cortex init <file>                        # Adicionar frontmatter YAML
+cortex migrate docs/ --interactive        # Migrar documentos legados
+cortex audit docs/                        # Auditar documentação
+cortex audit --links                      # Validar grafo de conhecimento
+cortex audit --links --strict             # Modo CI (falha em broken links)
 
-# 🧪 Executar testes
-make test
+# === Guardian (Security & Governance) ===
+cortex guardian check .                   # Escanear configurações hardcoded
+cortex guardian check . --fail-on-error   # Modo CI
+cortex guardian probe                     # Probe interativo
 
-# 📊 Gerar dashboard de auditoria
-make audit
-# Saída: audit_dashboard.html
+# === Neural Interface ===
+cortex neural index                       # Indexar documentação
+cortex neural ask "query"                 # Busca semântica
 
-# 🔄 Sincronizar branches (Git Sync)
-git-sync
+# === Utilities ===
+cortex map                                # Gerar mapa de contexto
+cortex generate readme                    # Gerar README dinâmico
+```
 
-# 🔧 Atualizar dependências
-make upgrade
+### Makefile (Automação)
+
+```bash
+# === Ambiente ===
+make setup                     # Alias para install-dev
+make install-dev               # Configurar ambiente completo
+make clean                     # Remover cache e artefatos
+make clean-all                 # Limpeza profunda (remove .venv)
+
+# === Qualidade ===
+make validate                  # Lint + Type Check + Tests
+make lint                      # Ruff check
+make format                    # Ruff format
+make type-check                # Mypy strict
+make test                      # Pytest completo
+make test-verbose              # Testes detalhados
+make test-coverage             # Com relatório de cobertura
+
+# === Diagnóstico ===
+make doctor                    # Diagnóstico de ambiente
+make audit                     # Dashboard de qualidade
+
+# === Desenvolvimento ===
+make save m="message"          # Format + Add + Commit
+make commit MSG="message"      # Commit inteligente com hooks
+make commit-amend              # Amend com auto-staging
+
+# === Internacionalização ===
+make i18n-extract              # Extrair strings traduzíveis
+make i18n-update               # Atualizar catálogos
+make i18n-compile              # Compilar traduções
+
+# === Documentação ===
+make docs-serve                # Servidor local (localhost:8000)
+make docs-build                # Build estático (pasta site/)
+
+# === Utilitários ===
+make version                   # Exibir versões
+make info                      # Info do ambiente
+make upgrade-python            # Atualizar patches Python
+```
+
+### Outros Comandos
+
+```bash
+# Git Sync
+git-sync                       # Sincronizar com remoto
+git-sync --dry-run             # Preview de mudanças
+
+# Mock CI
+python -m scripts.cli.mock_ci          # Rodar CI localmente
+python -m scripts.cli.mock_generate    # Gerar mocks
+python -m scripts.cli.mock_validate    # Validar mocks
+
+# Auditoria Standalone
+python -m scripts.cli.audit --config scripts/audit_config.yaml
 ```
 
 ---
 
 ## 📊 CORTEX Health Score
 
-O sistema se auto-diagnostica continuamente. Última análise:
+O sistema se auto-diagnostica continuamente. Score atual:
 
 ```json
 {
@@ -233,11 +682,18 @@ O sistema se auto-diagnostica continuamente. Última análise:
 }
 ```
 
-**Como Melhorar:**
+**Como Melhorar o Score:**
 
-- ✅ Adicionar links entre documentos (`connectivity_score`)
-- ✅ Corrigir links quebrados (`link_health_score`)
-- ✅ Reduzir documentos órfãos (<5%)
+1. ✅ **Adicionar links bidirecionais** entre documentos (↑ `connectivity_score`)
+2. ✅ **Corrigir links quebrados** com `cortex audit --links` (↑ `link_health_score`)
+3. ✅ **Reduzir documentos órfãos** para <5% do total
+4. ✅ **Adicionar frontmatter** em todos os `.md` files
+
+**Thresholds:**
+
+- 🟢 **80-100**: Excelente — Grafo saudável e bem conectado
+- 🟡 **60-79**: Atenção — Algumas melhorias necessárias
+- 🔴 **0-59**: Crítico — Requer ação imediata
 
 ---
 
@@ -245,53 +701,176 @@ O sistema se auto-diagnostica continuamente. Última análise:
 
 ```
 python-template-profissional/
-├── .cortex/                   # 🧠 Contexto do Knowledge System
-│   └── context.json          # Mapa completo do projeto (auto-gerado)
 │
-├── docs/                      # 📚 Documentação (Documentation as Code)
-│   ├── architecture/         # Decisões arquiteturais (ADRs)
-│   ├── guides/               # Manuais de uso
-│   ├── reference/            # Referência de APIs/CLIs
-│   ├── reports/              # Relatórios de saúde e auditoria
-│   ├── templates/            # 🆕 Templates Jinja2 (README, etc.)
-│   └── history/              # Histórico de sprints
+├── 🧠 .cortex/                      # CORTEX Brain — Sistema de Conhecimento
+│   ├── context.json                # Mapa completo do projeto (auto-gerado)
+│   └── vector_store/               # ChromaDB embeddings (neural search)
 │
-├── scripts/                   # 🛠️ Ferramentas de Engenharia
-│   ├── cli/                  # Comandos de terminal (Typer)
-│   │   ├── cortex.py        # 🧠 CORTEX CLI principal
-│   │   ├── audit.py         # Auditoria de código
-│   │   └── doctor.py        # Diagnóstico de ambiente
-│   ├── core/                 # Bibliotecas core
-│   │   ├── cortex/          # 🧠 Knowledge System
-│   │   │   ├── models.py   # Modelos Pydantic (KnowledgeEntry, KnowledgeLink)
-│   │   │   ├── scanner.py  # Link Scanner
-│   │   │   ├── link_resolver.py  # Link Resolver
-│   │   │   ├── knowledge_validator.py  # Graph Validator
-│   │   │   └── readme_generator.py  # 🆕 Dynamic README Generator
-│   │   └── guardian/        # Sistema de Governança
-│   └── utils/                # Utilitários (logging, segurança)
+├── 📚 docs/                         # Documentation as Code
+│   ├── architecture/               # ADRs e design docs
+│   │   ├── CORTEX_INDICE.md       # Índice master das fases
+│   │   └── *.md                   # Documentos arquiteturais
+│   ├── guides/                     # Manuais de uso
+│   ├── reference/                  # Referência de APIs/CLIs
+│   │   └── CLI_COMMANDS.md        # 🔄 Auto-gerado via hooks
+│   ├── reports/                    # Relatórios de auditoria
+│   ├── templates/                  # 🆕 Templates Jinja2 (README, etc.)
+│   ├── history/                    # Histórico de sprints
+│   └── knowledge/                  # Knowledge base adicional
 │
-├── src/                       # 📦 Código da aplicação
-│   └── main.py               # Entry point
+├── 🛠️ scripts/                      # Ferramentas de Engenharia
+│   ├── cli/                        # 🎯 Comandos de Terminal (Typer)
+│   │   ├── cortex.py              # 🧠 CORTEX CLI principal
+│   │   ├── neural.py              # 🤖 Neural interface & semantic search
+│   │   ├── audit.py               # 🔍 Auditoria de código
+│   │   ├── doctor.py              # 🏥 Diagnóstico de ambiente
+│   │   ├── git_sync.py            # 🔄 Git sync inteligente
+│   │   ├── mock_ci.py             # 🧪 Mock CI runner
+│   │   ├── install_dev.py         # 📦 Dependency manager
+│   │   └── upgrade_python.py      # 🐍 Python version updater
+│   │
+│   ├── core/                       # 🏛️ Bibliotecas Core
+│   │   ├── cortex/                # 🧠 Knowledge System
+│   │   │   ├── models.py          # Pydantic models (KnowledgeEntry, KnowledgeLink)
+│   │   │   ├── scanner.py         # Link scanner (AST + Regex)
+│   │   │   ├── link_resolver.py   # Link resolution & validation
+│   │   │   ├── knowledge_validator.py  # Graph validator
+│   │   │   ├── mapper.py          # Context map generator
+│   │   │   ├── metadata.py        # Frontmatter parser
+│   │   │   ├── migrate.py         # Document migrator
+│   │   │   ├── readme_generator.py # Dynamic README generator
+│   │   │   └── neural/            # 🤖 Neural Layer
+│   │   │       ├── vector_bridge.py   # ChromaDB interface
+│   │   │       └── models.py          # Embedding models
+│   │   │
+│   │   ├── guardian/              # 🛡️ Governance System
+│   │   │   ├── scanner.py         # AST-based config scanner
+│   │   │   ├── matcher.py         # Documentation matcher
+│   │   │   ├── hallucination_probe.py  # Consistency checker
+│   │   │   └── models.py          # Guardian data models
+│   │   │
+│   │   └── doc_gen.py             # Auto-doc generator (CLI reference)
+│   │
+│   ├── utils/                      # 🔧 Utilitários
+│   │   ├── logger.py              # Logging estruturado
+│   │   ├── context.py             # Context managers
+│   │   ├── filesystem.py          # Abstração de I/O
+│   │   └── security.py            # Utilities de segurança
+│   │
+│   ├── audit/                      # 📊 Audit System
+│   │   └── analyzer.py            # Code quality analyzer
+│   │
+│   └── git_sync/                   # 🔄 Git Sync Module
+│       ├── orchestrator.py        # Sync orchestration
+│       └── exceptions.py          # Custom exceptions
 │
-├── tests/                     # ✅ Testes (100+ testes unitários)
-│   ├── test_cortex_*.py     # Testes do CORTEX
-│   └── test_*.py            # Testes gerais
+├── 📦 src/                          # Aplicação Principal
+│   └── main.py                     # Entry point
 │
-├── pyproject.toml            # 📋 Configuração do projeto (PEP 621)
-├── Makefile                  # ⚙️ Comandos de automação
-└── README.md                 # Este arquivo (🆕 GERADO DINAMICAMENTE)
+├── ✅ tests/                        # Test Suite (100+ testes)
+│   ├── test_cortex_*.py           # Testes CORTEX
+│   ├── test_guardian_*.py         # Testes Guardian
+│   ├── test_link_*.py             # Testes Link Resolution
+│   ├── test_neural_*.py           # Testes Neural Layer
+│   └── conftest.py                # Pytest fixtures
+│
+├── 📋 requirements/                 # Gerenciamento de Dependências
+│   ├── dev.in                     # Dependências de desenvolvimento
+│   └── dev.txt                    # 🔒 Lockfile (pip-compile)
+│
+├── ⚙️ Configurações
+│   ├── pyproject.toml             # Configuração central (PEP 621)
+│   ├── Makefile                   # Comandos de automação
+│   ├── .pre-commit-config.yaml    # Hooks de governança
+│   ├── mkdocs.yml                 # Documentação site
+│   ├── tox.ini                    # Test matrix
+│   └── docker-compose.yml         # Containerização
+│
+└── 📄 Documentação Raiz
+    ├── README.md                   # 🆕 Este arquivo (gerado dinamicamente)
+    ├── CONTRIBUTING.md             # Guia de contribuição
+    ├── CHANGELOG.md                # Histórico de versões
+    ├── CODE_OF_CONDUCT.md          # Código de conduta
+    └── SECURITY.md                 # Política de segurança
 ```
 
 ### 🎯 Diretórios Críticos
 
-| Diretório | Propósito | Comandos Relacionados |
-|-----------|-----------|----------------------|
-| `.cortex/` | Metadados do Knowledge System | `cortex map` |
-| `docs/architecture/` | Design docs e ADRs | `cortex audit`, `cortex migrate` |
-| `scripts/core/cortex/` | Implementação do grafo de conhecimento | `cortex audit --links` |
-| `docs/reports/` | Relatórios de saúde | `cortex audit --links --output` |
-| `docs/templates/` | Templates Jinja2 dinâmicos | `cortex generate readme` |
+| Diretório | Propósito | Auto-Gerado? |
+|-----------|-----------|--------------|
+| `.cortex/` | Metadados do Knowledge System | ✅ Sim |
+| `docs/reference/CLI_COMMANDS.md` | Referência de comandos CLI | ✅ Sim (hook) |
+| `audit_dashboard.html` | Dashboard de qualidade | ✅ Sim (`make audit`) |
+| `docs/reports/` | Relatórios de auditoria | ✅ Sim (`cortex audit`) |
+| `.cortex/vector_store/` | Embeddings ChromaDB | ✅ Sim (`cortex neural index`) |
+
+---
+
+## 🎓 Casos de Uso Reais
+
+### 🔍 Caso 1: Onboarding de Novo Desenvolvedor
+
+```bash
+# 1. Clonar e configurar
+git clone <repo> && cd <repo>
+make install-dev
+
+# 2. Entender o projeto
+cortex map
+cat .cortex/context.json
+
+# 3. Explorar documentação semanticamente
+cortex neural ask "Como funciona o sistema de auditoria?"
+
+# 4. Validar ambiente
+make doctor
+```
+
+### 🔒 Caso 2: Detectar Configurações Hardcoded
+
+```bash
+# Escanear projeto completo
+cortex guardian check .
+
+# Output:
+# ❌ HIGH: os.getenv("SECRET_KEY") without default in src/config.py:42
+# ⚠️  MEDIUM: os.environ.get("API_URL") in scripts/deploy.py:15
+```
+
+### 📚 Caso 3: Auditar Documentação Antes do Deploy
+
+```bash
+# Validar links e gerar relatório
+cortex audit --links --output docs/reports/pre-deploy-audit.md
+
+# Falhar CI se score < 80
+cortex audit --links --strict --min-score 80
+```
+
+### 🔄 Caso 4: Sincronizar com Branch Principal
+
+```bash
+# Preview de mudanças
+git-sync --dry-run
+
+# Executar sync com auditoria
+git-sync
+
+# Output:
+# ✅ Audit passed (0 critical issues)
+# ✅ Merged main into feature-branch
+# ✅ Pushed to origin/feature-branch
+```
+
+### 🧪 Caso 5: Testar CI Localmente
+
+```bash
+# Rodar pipeline completo
+python -m scripts.cli.mock_ci
+
+# Validar apenas linting
+python -m scripts.cli.mock_ci --stage lint
+```
 
 ---
 
@@ -303,19 +882,19 @@ python-template-profissional/
 $ cortex audit --links
 
 🔍 Scanning knowledge graph...
-✅ Loaded 0 knowledge nodes
-🔗 Extracted 0 links
+✅ Loaded 45 knowledge nodes
+🔗 Extracted 120 links
 📊 Resolving targets...
 
 📈 Health Metrics:
-  Connectivity Score: 0.0%
-  Link Health Score:  100.0%
-  Overall Health:     60.0/100
+  Connectivity Score: 82.5%
+  Link Health Score:  97.5%
+  Overall Health:     75.0/100
 
 📄 Report generated: docs/reports/KNOWLEDGE_HEALTH.md
 ```
 
-### 🕸️ Exemplo 2: Inversão de Grafo
+### 🕸️ Exemplo 2: Inversão de Grafo (Inbound Links)
 
 **Antes (Outbound):**
 
@@ -327,66 +906,222 @@ CORTEX_INDICE.md → [CORTEX_FASE03_DESIGN.md]
 **Depois (Inbound):**
 
 ```
-models.py ← [CORTEX_FASE03_DESIGN.md, CORTEX_INDICE.md]
+models.py ← [CORTEX_FASE03_DESIGN.md, CORTEX_INDICE.md, GUIDE_MODELS.md]
 link_resolver.py ← [CORTEX_FASE03_DESIGN.md]
 CORTEX_FASE03_DESIGN.md ← [CORTEX_INDICE.md]
 ```
 
-**Insight:** `models.py` é um **Hub Node** (muito citado) → documentação crítica.
+**Insight:** `models.py` é um **Hub Node** (muito citado) → documentação crítica que requer atenção especial.
+
+### 🤖 Exemplo 3: Busca Semântica Neural
+
+```bash
+$ cortex neural ask "Como configurar hooks do git?"
+
+🔍 Searching documentation...
+
+Top 3 Results:
+
+1. docs/guides/CORTEX_AUTO_HOOKS.md (relevance: 95%)
+   "Configure pre-commit hooks for automatic validation..."
+
+2. docs/architecture/SMART_GOVERNANCE.md (relevance: 87%)
+   "Idempotent hooks ensure safe re-execution..."
+
+3. .pre-commit-config.yaml (relevance: 72%)
+   "repos: - repo: local hooks: - id: cortex-audit..."
+```
+
+### 🛡️ Exemplo 4: Guardian Bloqueando Commit
+
+```bash
+$ git commit -m "Add config"
+
+[cortex-guardian] Checking for shadow configuration...
+❌ FAILED: Found 2 HIGH severity configuration issues
+
+Issues:
+  • src/app.py:15 - os.getenv("SECRET_KEY") without default
+  • src/db.py:8 - os.environ["DATABASE_URL"] (subscript access)
+
+Fix these issues before committing or add to .guardian-whitelist.yaml
+```
 
 ---
 
 ## 📚 Documentação Completa
 
+### 📖 Guias de Uso
+
 | Documento | Descrição |
 |-----------|-----------|
-| [CORTEX_INDICE.md](docs/architecture/CORTEX_INDICE.md) | Índice completo das Fases 1-3 |
-| [CORTEX_RESUMO_EXECUTIVO.md](docs/architecture/CORTEX_RESUMO_EXECUTIVO.md) | Resumo executivo da Fase 1 |
-| [CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md](docs/architecture/CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md) | Executive Summary da Fase 3 |
-| [CLI_COMMANDS.md](docs/reference/CLI_COMMANDS.md) | Referência completa de comandos CLI |
-| [KNOWLEDGE_NODE_MANUAL.md](docs/guides/KNOWLEDGE_NODE_MANUAL.md) | Manual de uso do sistema de Knowledge Nodes |
+| [KNOWLEDGE_NODE_MANUAL.md](docs/guides/KNOWLEDGE_NODE_MANUAL.md) | Manual completo do sistema de Knowledge Nodes |
+| [CORTEX_AUTO_HOOKS.md](docs/guides/CORTEX_AUTO_HOOKS.md) | Guia de hooks automáticos e governança |
+
+### 🏛️ Documentação Arquitetural
+
+| Documento | Descrição |
+|-----------|-----------|
+| [CORTEX_INDICE.md](docs/architecture/CORTEX_INDICE.md) | Índice master das Fases 1-3 |
+| [CORTEX_RESUMO_EXECUTIVO.md](docs/architecture/CORTEX_RESUMO_EXECUTIVO.md) | Executive Summary da Fase 1 |
+| [CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md](docs/architecture/CORTEX_FASE03_VALIDATOR_EXECUTIVE_SUMMARY.md) | Executive Summary da Fase 3 (Knowledge Validator) |
 | [ARCHITECTURE_TRIAD.md](docs/architecture/ARCHITECTURE_TRIAD.md) | Arquitetura de branches (main/cli/api) |
 
----
+### 🔍 Referência Técnica
 
-## 🌍 Internationalization (i18n)
-
-Suporte nativo para **Português (pt_BR)** e **Inglês (en_US)**.
-
-```bash
-# Rodar CLI em Inglês
-LANGUAGE=en_US cortex audit
-
-# Configurar permanentemente
-export LANGUAGE=en_US
-```
+| Documento | Descrição |
+|-----------|-----------|
+| [CLI_COMMANDS.md](docs/reference/CLI_COMMANDS.md) | Referência completa de comandos CLI (auto-gerado) |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Guia de contribuição ao projeto |
+| [CHANGELOG.md](CHANGELOG.md) | Histórico de versões e mudanças |
 
 ---
 
 ## 🤝 Contribuindo
 
-Este projeto segue princípios de **SRE (Site Reliability Engineering)**:
+Este projeto segue princípios de **SRE (Site Reliability Engineering)** e **Extreme Automation**.
 
-1. **Automação**: Todo processo repetitivo deve ser automatizado
-2. **Observabilidade**: Logs estruturados e métricas automáticas
-3. **Qualidade**: Mypy strict + Ruff + 100+ testes
-4. **Documentação**: Frontmatter obrigatório + Knowledge Graph
+### 🎯 Princípios
 
-**Antes de contribuir:**
+1. **Automação First**: Todo processo manual deve ser automatizado
+2. **Observabilidade**: Logs estruturados e métricas automáticas em tudo
+3. **Type Safety**: Mypy strict obrigatório, sem `# type: ignore`
+4. **Documentation as Code**: Frontmatter YAML obrigatório em todos os `.md`
+5. **Governance**: Hooks automáticos garantem conformidade antes do commit
+
+### 🔄 Workflow de Contribuição
 
 ```bash
-# 1. Valide seu ambiente
-make doctor
+# 1. Fork o repositório
+git clone https://github.com/<seu-usuario>/python-template-profissional.git
+cd python-template-profissional
 
-# 2. Execute testes
-make test
+# 2. Configure o ambiente
+make install-dev
 
-# 3. Audite a documentação
-cortex audit --links
+# 3. Crie uma branch
+git checkout -b feat/minha-feature
 
-# 4. Gere relatório de qualidade
-make audit
+# 4. Desenvolva (os hooks rodam automaticamente)
+# ... faça suas mudanças ...
+
+# 5. Valide localmente
+make validate              # Lint + Type Check + Tests
+cortex audit --links       # Valida documentação
+make doctor                # Verifica ambiente
+
+# 6. Commit (hooks rodam automaticamente)
+git add .
+git commit -m "feat: adiciona nova funcionalidade"
+
+# 7. Push e abra PR
+git push origin feat/minha-feature
 ```
+
+### ✅ Checklist de Qualidade
+
+Antes de abrir um PR, certifique-se de que:
+
+- [ ] `make validate` passa sem erros
+- [ ] `make test` passa com 100% de sucesso
+- [ ] `make doctor` não reporta problemas críticos
+- [ ] `cortex audit --links` não detecta broken links
+- [ ] Documentação atualizada com frontmatter YAML
+- [ ] Testes adicionados para novas funcionalidades
+- [ ] Type hints em todas as funções novas
+- [ ] Commit messages seguem [Conventional Commits](https://www.conventionalcommits.org/)
+
+### 🚫 O Que NÃO Fazer
+
+- ❌ Adicionar `# type: ignore` sem justificativa sólida
+- ❌ Fazer commit de configurações hardcoded (`os.getenv` sem default)
+- ❌ Criar documentação `.md` sem frontmatter YAML
+- ❌ Pular validação com `git commit --no-verify`
+- ❌ Fazer merge direto na `main` sem PR
+
+### 🛠️ Dicas para Desenvolvimento
+
+**Uso do `make save` para commits rápidos:**
+
+```bash
+# Formata, adiciona e commita em um comando
+make save m="fix: corrige bug no link resolver"
+```
+
+**Amend de commits com arquivos voláteis:**
+
+```bash
+# Auto-staging de arquivos gerados (audit_metrics.json, CLI_COMMANDS.md)
+make commit-amend
+```
+
+**Debug de hooks pre-commit:**
+
+```bash
+# Rodar hook específico manualmente
+PRE_COMMIT=1 python -m scripts.cli.cortex audit docs/
+
+# Desabilitar hooks temporariamente (NÃO recomendado)
+git commit --no-verify -m "WIP: trabalho em progresso"
+```
+
+---
+
+## 🌍 Internationalization (i18n)
+
+O projeto possui suporte nativo para **Português (pt_BR)** e **Inglês (en_US)**.
+
+### Comandos i18n
+
+```bash
+# Extrair strings traduzíveis do código
+make i18n-extract
+
+# Inicializar novo idioma
+make i18n-init LOCALE=fr_FR
+
+# Atualizar catálogos existentes
+make i18n-update
+
+# Compilar traduções (.po → .mo)
+make i18n-compile
+
+# Ver estatísticas de tradução
+make i18n-stats
+```
+
+### Uso em Runtime
+
+```bash
+# Rodar CLI em inglês
+LANGUAGE=en_US cortex audit
+
+# Configurar permanentemente
+export LANGUAGE=en_US
+cortex --help
+```
+
+---
+
+## 🐳 Containerização
+
+O projeto inclui suporte Docker para ambientes isolados:
+
+```bash
+# Build da imagem
+docker build -t cortex:latest .
+
+# Rodar container
+docker-compose up -d
+
+# Executar comandos dentro do container
+docker-compose exec cortex cortex --help
+```
+
+**Arquivos:**
+
+- `Dockerfile` — Imagem base Python 3.10+
+- `docker-compose.yml` — Orquestração de serviços
 
 ---
 
@@ -394,20 +1129,40 @@ make audit
 
 Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
+**TL;DR:**
+
+- ✅ Uso comercial permitido
+- ✅ Modificação e distribuição permitidas
+- ✅ Uso privado permitido
+- ⚠️ Sem garantias ou responsabilidades
+
 ---
 
 ## 🙏 Agradecimentos
 
-Construído com 🧠 pela Seu Nome.
+Desenvolvido com 🧠 por **Ismael Silva** e a comunidade de contribuidores.
 
-**Tecnologias Core:**
+### 🔧 Stack Tecnológica
 
-- [Python 3.10+](https://www.python.org/)
-- [Pydantic v2](https://docs.pydantic.dev/)
-- [Typer](https://typer.tiangolo.com/)
-- [Ruff](https://github.com/astral-sh/ruff)
-- [Mypy](https://mypy-lang.org/)
-- [Jinja2](https://jinja.palletsprojects.com/) (Dynamic README)
+| Tecnologia | Versão | Uso |
+|------------|--------|-----|
+| [Python](https://www.python.org/) | 3.10+ | Linguagem core |
+| [Pydantic](https://docs.pydantic.dev/) | v2 | Validação de dados |
+| [Typer](https://typer.tiangolo.com/) | 0.12+ | CLI framework |
+| [Ruff](https://github.com/astral-sh/ruff) | 0.14+ | Linter e formatter |
+| [Mypy](https://mypy-lang.org/) | 1.19+ | Type checking |
+| [Pytest](https://pytest.org/) | 8.x | Testing framework |
+| [ChromaDB](https://www.trychroma.com/) | 0.5+ | Vector database |
+| [Jinja2](https://jinja.palletsprojects.com/) | 3.x | Template engine |
+| [MkDocs](https://www.mkdocs.org/) | 1.6+ | Documentation site |
+| [Pre-commit](https://pre-commit.com/) | 3.x | Git hooks manager |
+
+### 🌟 Inspirações e Créditos
+
+- **Knowledge Graphs**: Inspirado por sistemas como Obsidian e Roam Research
+- **Documentation as Code**: Philosophia do [Diátaxis Framework](https://diataxis.fr/)
+- **SRE Principles**: Baseado no [Google SRE Book](https://sre.google/books/)
+- **Type Safety**: Influência de linguagens como Rust e TypeScript
 
 ---
 
@@ -415,10 +1170,10 @@ Construído com 🧠 pela Seu Nome.
 
 **CORTEX** — _Where Documentation Meets Intelligence_
 
-[Documentação](docs/) • [Issues](https://github.com/Ismael-1712/python-template-profissional/issues) • [Discussões](https://github.com/Ismael-1712/python-template-profissional/discussions)
+[📚 Documentação](docs/) • [🐛 Issues](https://github.com/Ismael-1712/python-template-profissional/issues) • [💬 Discussões](https://github.com/Ismael-1712/python-template-profissional/discussions)
 
 </div>
 
 ---
 
-_README gerado dinamicamente em 2025-12-15T15:46:22.966951+00:00 por `cortex generate readme`_
+_README gerado em 2025-12-15 | CORTEX v3.0 Neural-Governance Edition_
