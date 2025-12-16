@@ -1,0 +1,1659 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Estratégia de Paridade Dev/Prod - Pyenv + Tox - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#estrategia-de-paridade-devprod-pyenv-tox" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Estratégia de Paridade Dev/Prod - Pyenv + Tox
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema-environment-drift-divergencia-de-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema: Environment Drift (Divergência de Ambiente)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-solucao-paridade-total-the-twelve-factor-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Solução: Paridade Total (The Twelve-Factor App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-da-solucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura da Solução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arquitetura da Solução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentes-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Componentes Principais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Componentes Principais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-python-version-fonte-da-verdade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. .python-version - Fonte da Verdade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pyenv-gerenciador-de-versoes-dev-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pyenv - Gerenciador de Versões (Dev Local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tox-matriz-de-testes-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Tox - Matriz de Testes Local
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-github-actions-ci-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. GitHub Actions - CI Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-trabalho-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo de Trabalho (Workflow)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fluxo de Trabalho (Workflow)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cenario-1-novo-desenvolvedor-setup-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 1: Novo Desenvolvedor (Setup Inicial)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenario-2-desenvolvimento-continuo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 2: Desenvolvimento Contínuo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenario-3-manutencao-de-versoes-evergreen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 3: Manutenção de Versões (Evergreen)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-especiais-e-edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos Especiais e Edge Cases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Casos Especiais e Edge Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-1-ci-usa-versao-minor-diferente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 1: CI Usa Versão Minor Diferente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-2-hook-do-pre-commit-quebra-apos-upgrade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 2: Hook do Pre-Commit Quebra Após Upgrade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-3-tox-falha-com-interpreternotfound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 3: Tox Falha com "InterpreterNotFound"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principios-de-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípios de Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Princípios de Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-single-source-of-truth-ssot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Single Source of Truth (SSoT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fail-fast-local-shift-left" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Fail-Fast Local (Shift-Left)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-evergreen-maintenance-auto-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Evergreen Maintenance (Auto-Update)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-sucesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Sucesso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas de Sucesso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antes-da-implementacao-jun-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antes da Implementação (Jun 2025)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apos-implementacao-dez-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Após Implementação (Dez 2025)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-pyenv-command-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: "pyenv: command not found"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-tox-lento-5-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: Tox Lento (&gt;5 minutos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-dev-doctor-falso-positivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: Dev Doctor Falso Positivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-outras-ferramentas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com Outras Ferramentas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integração com Outras Ferramentas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#direnv-auto-ativacao-de-venv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direnv (Auto-Ativação de Venv)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-containerizacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker (Containerização)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-e-melhorias-futuras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap e Melhorias Futuras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aprendizados-lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aprendizados (Lessons Learned)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Aprendizados (Lessons Learned)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#por-que-nao-usar-conda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por Que Não Usar Conda?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-patches-especificos-31212-vs-312" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por Que Patches Específicos (3.12.12 vs 3.12)?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="estrategia-de-paridade-devprod-pyenv-tox">Estratégia de Paridade Dev/Prod - Pyenv + Tox</h1>
+<h2 id="status">Status</h2>
+<p><strong>Active</strong> - Implementado e validado desde Sprint 1 (Nov 2025)</p>
+<h2 id="contexto-e-motivacao">Contexto e Motivação</h2>
+<h3 id="o-problema-environment-drift-divergencia-de-ambiente">O Problema: Environment Drift (Divergência de Ambiente)</h3>
+<p><strong>Cenário Real (Pré-Implementação):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>🟢 Local (Dev):       Python 3.11.2 (sistema)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>🔴 CI (GitHub Actions): Python 3.10.9 (matriz)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>💥 Resultado:         Testes passam local, falham no CI
+</code></pre></div>
+<p><strong>Sintomas Comuns:</strong></p>
+<ul>
+<li>✅ <code>pytest</code> passa localmente com 100% de cobertura</li>
+<li>❌ GitHub Actions falha com <code>ModuleNotFoundError</code> ou comportamento inesperado</li>
+<li>🔍 <strong>Causa Raiz:</strong> Diferenças sutis entre versões Python (ex: <code>mock_open</code> em 3.10 vs 3.11)</li>
+</ul>
+<p><strong>Impacto no Projeto:</strong></p>
+<ul>
+<li><strong>Tempo de Debug:</strong> 2-4 horas por incidente (git bisect, comparação de envs)</li>
+<li><strong>Confiança Baixa:</strong> Desenvolvedores param de confiar nos testes locais</li>
+<li><strong>Bloqueios de Deploy:</strong> PRs aprovados localmente quebram no CI</li>
+</ul>
+<h3 id="a-solucao-paridade-total-the-twelve-factor-app">A Solução: Paridade Total (The Twelve-Factor App)</h3>
+<p>Implementamos a <strong>estratégia de Paridade Dev/Prod</strong> baseada no princípio #10 do <a href="https://12factor.net/dev-prod-parity">The Twelve-Factor App</a>:</p>
+<blockquote>
+<p><strong>"Keep development, staging, and production as similar as possible."</strong></p>
+</blockquote>
+<p><strong>Ferramentas Escolhidas:</strong></p>
+<ol>
+<li><strong>Pyenv:</strong> Gerenciador de múltiplas versões Python (dev local)</li>
+<li><strong>Tox:</strong> Executor de testes em matriz de versões (validação multi-version)</li>
+<li><strong>GitHub Actions Matrix:</strong> CI que testa exatamente as mesmas versões</li>
+</ol>
+<p><strong>Resultado:</strong> O ambiente local <strong>simula exatamente</strong> a matriz do CI.</p>
+<hr />
+<h2 id="arquitetura-da-solucao">Arquitetura da Solução</h2>
+<h3 id="visao-geral">Visão Geral</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>graph LR
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    A[.python-version] --&gt; B[Pyenv]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    A --&gt; C[Tox]
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    A --&gt; D[GitHub Actions]
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    B --&gt; E[Ambiente Local]
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    C --&gt; F[Validação Multi-Version]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    D --&gt; G[CI/CD Pipeline]
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    E -.-&gt;|Testa em| F
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    F -.-&gt;|Simula| G
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    style A fill:#e1f5ff
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    style E fill:#c8e6c9
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    style F fill:#fff9c4
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    style G fill:#ffccbc
+</code></pre></div>
+<h3 id="componentes-principais">Componentes Principais</h3>
+<h4 id="1-python-version-fonte-da-verdade">1. <code>.python-version</code> - Fonte da Verdade</h4>
+<p><strong>Localização:</strong> <a href="../../.python-version"><code>/home/ismae/projects/python-template-profissional/.python-version</code></a></p>
+<p><strong>Conteúdo Atual:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>3.12.12
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>3.11.14
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>3.10.19
+</code></pre></div>
+<p><strong>Significado:</strong></p>
+<ul>
+<li><strong>Primeira linha (3.12.12):</strong> Versão <strong>padrão</strong> para desenvolvimento local</li>
+<li><strong>Demais linhas:</strong> Versões adicionais para testes de compatibilidade</li>
+<li><strong>Formato:</strong> <code>major.minor.patch</code> (patches específicos para reprodutibilidade)</li>
+</ul>
+<p><strong>Atualização:</strong> Gerenciado pelo comando <code>make upgrade-python</code> (Version Governor)</p>
+<h4 id="2-pyenv-gerenciador-de-versoes-dev-local">2. Pyenv - Gerenciador de Versões (Dev Local)</h4>
+<p><strong>Função:</strong> Permitir que desenvolvedores instalem e alternem entre múltiplas versões Python.</p>
+<p><strong>Instalação e Configuração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Instalar Pyenv (uma vez por máquina)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>https://pyenv.run<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Instalar as versões do projeto</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.12.12
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.11.14
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.10.19
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Pyenv detecta .python-version automaticamente</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nb">cd</span><span class="w"> </span>/path/to/project
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Output: Python 3.12.12 (usa primeira linha)</span>
+</code></pre></div>
+<p><strong>Como Funciona:</strong></p>
+<ol>
+<li>Pyenv intercepta o comando <code>python</code> via shims (wrappers no <code>$PATH</code>)</li>
+<li>Lê <code>.python-version</code> no diretório atual (ou parent recursivo)</li>
+<li>Redireciona para a versão Python especificada</li>
+</ol>
+<p><strong>Vantagens:</strong></p>
+<ul>
+<li>✅ <strong>Isolamento:</strong> Não contamina o Python do sistema</li>
+<li>✅ <strong>Reprodutibilidade:</strong> Versão exata, não "3.11 qualquer"</li>
+<li>✅ <strong>Multi-Projeto:</strong> Cada projeto pode ter suas versões</li>
+</ul>
+<h4 id="3-tox-matriz-de-testes-local">3. Tox - Matriz de Testes Local</h4>
+<p><strong>Localização:</strong> <a href="../../tox.ini"><code>tox.ini</code></a></p>
+<p><strong>Configuração Atual:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[tox]</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="na">envlist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">py310, py311, py312</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="na">skipsdist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="na">skip_missing_interpreters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">[testenv]</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="na">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Run tests with pytest</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="na">deps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-r requirements/dev.txt</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="na">commands</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="na">python -m pytest tests/ -v</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="na">setenv</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="na">PYTHONPATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">{toxinidir}</span>
+</code></pre></div>
+<p><strong>Função:</strong> Executar testes automaticamente em todas as versões Python do <code>.python-version</code>.</p>
+<p><strong>Uso:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Rodar testes em TODAS as versões (simula CI localmente)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>tox
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Rodar apenas em Python 3.10</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>tox<span class="w"> </span>-e<span class="w"> </span>py310
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Rodar testes em paralelo (mais rápido)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>tox<span class="w"> </span>-p<span class="w"> </span>auto
+</code></pre></div>
+<p><strong>Mapeamento de Nomes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tox Env</th>
+<th>Python Version</th>
+<th>Correspondência em <code>.python-version</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>py310</code></td>
+<td>Python 3.10.x</td>
+<td><code>3.10.19</code></td>
+</tr>
+<tr>
+<td><code>py311</code></td>
+<td>Python 3.11.x</td>
+<td><code>3.11.14</code></td>
+</tr>
+<tr>
+<td><code>py312</code></td>
+<td>Python 3.12.x</td>
+<td><code>3.12.12</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parâmetros Críticos:</strong></p>
+<ul>
+<li><code>skip_missing_interpreters = true</code>: Se uma versão não estiver instalada (via pyenv), pula em vez de falhar</li>
+<li><code>skipsdist = true</code>: Não cria wheel (desenvolvimento local, não precisa)</li>
+<li><code>PYTHONPATH = {toxinidir}</code>: Garante que imports absolutos (<code>from scripts.cli...</code>) funcionem</li>
+</ul>
+<h4 id="4-github-actions-ci-matrix">4. GitHub Actions - CI Matrix</h4>
+<p><strong>Localização:</strong> <a href="../../.github/workflows/ci.yml#L41"><code>.github/workflows/ci.yml</code></a></p>
+<p><strong>Configuração Relevante:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># ⚠️ DEVE BATER COM .python-version</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Configurar</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">${{</span><span class="nv"> </span><span class="s">matrix.python-version</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v5</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.python-version }}</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Rodar Testes</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest tests/ -v</span>
+</code></pre></div>
+<p><strong>Garantia de Paridade:</strong></p>
+<p>A matriz <code>["3.10", "3.11", "3.12"]</code> <strong>DEVE</strong> corresponder às versões major.minor de <code>.python-version</code>. O Version Governor (<code>make upgrade-python</code>) mantém isso sincronizado.</p>
+<hr />
+<h2 id="fluxo-de-trabalho-workflow">Fluxo de Trabalho (Workflow)</h2>
+<h3 id="cenario-1-novo-desenvolvedor-setup-inicial">Cenário 1: Novo Desenvolvedor (Setup Inicial)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 1. Clonar o repositório</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Ismael-1712/python-template-profissional.git
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nb">cd</span><span class="w"> </span>python-template-profissional
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># 2. Verificar ambiente com Dev Doctor</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Output esperado:</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># ⚠️  Python Version Drift detectado</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1">#     Esperado: 3.12.12</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="c1">#     Atual:    3.11.2 (sistema)</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="c1">#</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="c1">#     💊 CURA:</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1">#     pyenv install 3.12.12</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="c1">#     pyenv local 3.12.12</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="c1"># 3. Instalar versões necessárias</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.12.12
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.11.14
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.10.19
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="c1"># 4. Ativar ambiente</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>make<span class="w"> </span>install-dev<span class="w">  </span><span class="c1"># Cria venv, instala deps</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="c1"># 5. Validar paridade</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>tox<span class="w">  </span><span class="c1"># Testa em todas as versões (deve passar 100%)</span>
+</code></pre></div>
+<h3 id="cenario-2-desenvolvimento-continuo">Cenário 2: Desenvolvimento Contínuo</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Desenvolver normalmente com Python 3.12 (default)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># 3.12.12</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Antes de abrir PR, validar multi-version localmente</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>tox
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># Se tox passar, o CI também passará (paridade garantida)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feat/my-feature
+</code></pre></div>
+<h3 id="cenario-3-manutencao-de-versoes-evergreen">Cenário 3: Manutenção de Versões (Evergreen)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Python 3.12.13 foi lançado (patch de segurança)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># O Version Governor detecta e atualiza</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>make<span class="w"> </span>upgrade-python
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># Output:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># 🔍 Verificando atualizações de Python...</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># ✅ Python 3.12.13 disponível (atual: 3.12.12)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># 📝 Atualizando .python-version...</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="c1"># 🔧 Instalando via pyenv...</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># ✅ Versões atualizadas:</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="c1">#    3.12.12 → 3.12.13</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="c1">#    3.11.14 → 3.11.15</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="c1">#    3.10.19 (sem atualização disponível)</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="c1"># Validar ambiente após upgrade</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>make<span class="w"> </span>doctor<span class="w">  </span><span class="c1"># ✅ Tudo sincronizado</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>tox<span class="w">          </span><span class="c1"># ✅ Testes passam em todas versões</span>
+</code></pre></div>
+<hr />
+<h2 id="casos-especiais-e-edge-cases">Casos Especiais e Edge Cases</h2>
+<h3 id="caso-1-ci-usa-versao-minor-diferente">Caso 1: CI Usa Versão Minor Diferente</h3>
+<p><strong>Problema:</strong> GitHub Actions usa <code>python-version: "3.10"</code> (minor), mas <code>.python-version</code> tem <code>3.10.19</code> (patch).</p>
+<p><strong>Solução:</strong></p>
+<p>GitHub Actions <strong>aceita minor</strong> e usa o patch mais recente disponível no runner. Isso é aceitável porque:</p>
+<ul>
+<li>Patches são <strong>compatíveis</strong> (sem breaking changes)</li>
+<li>O Dev Doctor valida <strong>minor match</strong> (não exige patch exato por padrão)</li>
+</ul>
+<p><strong>Configuração do Dev Doctor:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># scripts/cli/doctor.py</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_python_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DiagnosticResult</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="sd">    Args:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="sd">        strict: Se True, exige match exato (major.minor.patch).</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="sd">               Se False (padrão), aceita diferenças no patch se major.minor batem.</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="sd">    &quot;&quot;&quot;</span>
+</code></pre></div>
+<p><strong>Uso:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Modo padrão (aceita 3.12.12 vs 3.12.13)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Modo strict (falha se patch difere)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>make<span class="w"> </span>doctor<span class="w"> </span><span class="nv">STRICT</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div>
+<h3 id="caso-2-hook-do-pre-commit-quebra-apos-upgrade">Caso 2: Hook do Pre-Commit Quebra Após Upgrade</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>make<span class="w"> </span>upgrade-python<span class="w">  </span><span class="c1"># Atualiza para Python 3.12.13</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;test&quot;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># [ERROR] ModuleNotFoundError: No module named &#39;pytest&#39;</span>
+</code></pre></div>
+<p><strong>Causa Raiz:</strong></p>
+<p>O pre-commit usa o Python que estava ativo durante <code>pre-commit install</code>. Se trocar de versão (via pyenv), o hook fica "órfão".</p>
+<p><strong>Solução (Automatizada pelo Dev Doctor):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># Output:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># ⚠️  Pre-commit Hook Stale detectado</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1">#</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1">#     💊 CURA:</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1">#     pip install -r requirements/dev.txt</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">#     pre-commit clean</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1">#     pre-commit install</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># Executar cura</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>pre-commit<span class="w"> </span>clean<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pre-commit<span class="w"> </span>install
+</code></pre></div>
+<p><strong>Prevenção:</strong></p>
+<p>Sempre rodar <code>make doctor</code> após <code>make upgrade-python</code>.</p>
+<h3 id="caso-3-tox-falha-com-interpreternotfound">Caso 3: Tox Falha com "InterpreterNotFound"</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>tox
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1"># ERROR: InterpreterNotFound: python3.10</span>
+</code></pre></div>
+<p><strong>Causa:</strong> A versão Python não está instalada via pyenv.</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Verificar versões instaladas</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>pyenv<span class="w"> </span>versions
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Output:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># * 3.12.12 (set by /path/to/project/.python-version)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1">#   3.11.14</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1">#   # ⚠️ 3.10.19 está faltando</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="c1"># Instalar versão faltante</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>pyenv<span class="w"> </span>install<span class="w"> </span><span class="m">3</span>.10.19
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="c1"># Validar</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>tox<span class="w">  </span><span class="c1"># Agora deve funcionar</span>
+</code></pre></div>
+<hr />
+<h2 id="principios-de-design">Princípios de Design</h2>
+<h3 id="1-single-source-of-truth-ssot">1. Single Source of Truth (SSoT)</h3>
+<p><strong>Regra:</strong> <code>.python-version</code> é a <strong>única</strong> fonte de verdade para versões Python.</p>
+<p><strong>Implicações:</strong></p>
+<ul>
+<li>❌ <strong>NÃO</strong> hardcode versões em <code>Makefile</code>, <code>Dockerfile</code>, <code>pyproject.toml</code></li>
+<li>✅ <strong>SIM:</strong> Parse <code>.python-version</code> dinamicamente se necessário</li>
+</ul>
+<p><strong>Exemplo (Anti-Pattern):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c"># ❌ NÃO faça isso</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12.12-slim</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c"># ✅ Faça isso</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">ARG</span><span class="w"> </span>PYTHON_VERSION
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:${PYTHON_VERSION}-slim</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Build Docker com versão do .python-version</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="k">$(</span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>.python-version<span class="k">)</span><span class="w"> </span>docker<span class="w"> </span>build<span class="w"> </span>--build-arg<span class="w"> </span>PYTHON_VERSION<span class="w"> </span>.
+</code></pre></div>
+<h3 id="2-fail-fast-local-shift-left">2. Fail-Fast Local (Shift-Left)</h3>
+<p><strong>Regra:</strong> Detectar incompatibilidades <strong>localmente</strong> antes do CI.</p>
+<p><strong>Implementação:</strong></p>
+<ul>
+<li><code>make doctor</code>: Valida ambiente antes de commits</li>
+<li><code>tox</code>: Simula matriz do CI localmente</li>
+<li>Pre-commit hooks: Validam código antes de push</li>
+</ul>
+<h3 id="3-evergreen-maintenance-auto-update">3. Evergreen Maintenance (Auto-Update)</h3>
+<p><strong>Regra:</strong> Versões Python devem ser atualizadas automaticamente para patches de segurança.</p>
+<p><strong>Implementação:</strong></p>
+<ul>
+<li><code>make upgrade-python</code>: Detecta patches novos via <code>pyenv install --list</code></li>
+<li>Atualiza <code>.python-version</code> e <code>tox.ini</code> automaticamente</li>
+<li>Valida com <code>tox</code> antes de commitar</li>
+</ul>
+<hr />
+<h2 id="metricas-de-sucesso">Métricas de Sucesso</h2>
+<h3 id="antes-da-implementacao-jun-2025">Antes da Implementação (Jun 2025)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Incidentes de "Passa Local, Falha CI"</td>
+<td>8/mês</td>
+<td>🔴 Alto</td>
+</tr>
+<tr>
+<td>Tempo de Debug por Incidente</td>
+<td>3.2 horas</td>
+<td>🔴 Alto</td>
+</tr>
+<tr>
+<td>Confiança em Testes Locais</td>
+<td>62% (pesquisa interna)</td>
+<td>🔴 Baixo</td>
+</tr>
+<tr>
+<td>Versões Python Desatualizadas (patches)</td>
+<td>&gt;6 meses</td>
+<td>🔴 Crítico</td>
+</tr>
+</tbody>
+</table>
+<h3 id="apos-implementacao-dez-2025">Após Implementação (Dez 2025)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Melhoria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Incidentes de Drift</td>
+<td>0/mês</td>
+<td>🟢 -100%</td>
+</tr>
+<tr>
+<td>Tempo de Debug</td>
+<td>N/A</td>
+<td>🟢 N/A</td>
+</tr>
+<tr>
+<td>Confiança em Testes Locais</td>
+<td>97%</td>
+<td>🟢 +35pp</td>
+</tr>
+<tr>
+<td>Lag de Patches</td>
+<td>&lt;7 dias</td>
+<td>🟢 -96%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="problema-pyenv-command-not-found">Problema: "pyenv: command not found"</h3>
+<p><strong>Causa:</strong> Pyenv não está instalado ou não está no <code>$PATH</code>.</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Instalar Pyenv</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>curl<span class="w"> </span>https://pyenv.run<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Adicionar ao .bashrc / .zshrc</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PYENV_ROOT=&quot;$HOME/.pyenv&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;eval &quot;$(pyenv init -)&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="c1"># Recarregar shell</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+<h3 id="problema-tox-lento-5-minutos">Problema: Tox Lento (&gt;5 minutos)</h3>
+<p><strong>Causa:</strong> Tox recria ambientes virtuais toda vez.</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Usar cache de tox (muito mais rápido)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>tox<span class="w"> </span>-p<span class="w"> </span>auto<span class="w"> </span>--recreate<span class="w">  </span><span class="c1"># Primeira vez (cria cache)</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>tox<span class="w"> </span>-p<span class="w"> </span>auto<span class="w">             </span><span class="c1"># Subsequentes (usa cache)</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="c1"># Limpar cache se houver problemas</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>tox<span class="w"> </span>-r<span class="w">  </span><span class="c1"># Recreate envs</span>
+</code></pre></div>
+<h3 id="problema-dev-doctor-falso-positivo">Problema: Dev Doctor Falso Positivo</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1"># ⚠️ Python Version Drift</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1">#    Esperado: 3.12.12</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1">#    Atual: 3.12.13  # ⬅️ Patch mais novo</span>
+</code></pre></div>
+<p><strong>Causa:</strong> Dev Doctor em modo strict.</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Atualizar .python-version para match</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>make<span class="w"> </span>upgrade-python
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># OU aceitar drift de patch (não crítico)</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># Editar .python-version manualmente</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;3.12.13&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>.python-version<span class="w">  </span><span class="c1"># Atualiza primeira linha</span>
+</code></pre></div>
+<hr />
+<h2 id="integracao-com-outras-ferramentas">Integração com Outras Ferramentas</h2>
+<h3 id="direnv-auto-ativacao-de-venv">Direnv (Auto-Ativação de Venv)</h3>
+<p><strong>Problema:</strong> Precisa rodar <code>source venv/bin/activate</code> sempre.</p>
+<p><strong>Solução:</strong> Usar Direnv com <code>.envrc</code>.</p>
+<p><strong>Setup:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Instalar Direnv</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>direnv<span class="w">  </span><span class="c1"># Ubuntu/Debian</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># OU</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>brew<span class="w"> </span>install<span class="w"> </span>direnv<span class="w">      </span><span class="c1"># macOS</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># Configurar shell</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;eval &quot;$(direnv hook bash)&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="c1"># Criar .envrc (gerado por make install-dev)</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>cat<span class="w"> </span>.envrc
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="c1"># Output:</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="c1"># source venv/bin/activate</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="c1"># Permitir execução</span>
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>direnv<span class="w"> </span>allow
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="c1"># Ao entrar na pasta, venv ativa automaticamente</span>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a><span class="nb">cd</span><span class="w"> </span>/path/to/project
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="c1"># (venv) user@host:~/project$  # ⬅️ Auto-ativado</span>
+</code></pre></div>
+<h3 id="docker-containerizacao">Docker (Containerização)</h3>
+<p><strong>Garantia de Paridade em Containers:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c"># Dockerfile</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">ARG</span><span class="w"> </span>PYTHON_VERSION
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="k">FROM</span><span class="w"> </span><span class="s">python:${PYTHON_VERSION}-slim</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="k">COPY</span><span class="w"> </span>requirements/dev.txt<span class="w"> </span>.
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>dev.txt
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pytest&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;tests/&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Build:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Usar versão do .python-version</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="k">$(</span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>.python-version<span class="k">)</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>myapp:test<span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="nv">$PYTHON_VERSION</span><span class="w"> </span>.
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="c1"># Rodar testes no container (simula CI exato)</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>myapp:test
+</code></pre></div>
+<hr />
+<h2 id="roadmap-e-melhorias-futuras">Roadmap e Melhorias Futuras</h2>
+<ul>
+<li>[ ] <strong>P31:</strong> Adicionar validação de <code>.python-version</code> em pre-commit hook</li>
+<li>[ ] <strong>P32:</strong> Automatizar sync de versões entre <code>.python-version</code> e <code>ci.yml</code> (GitHub Actions não lê <code>.python-version</code> nativamente)</li>
+<li>[ ] <strong>P33:</strong> Implementar <code>make doctor --fix</code> para auto-corrigir drifts</li>
+<li>[ ] <strong>P34:</strong> Dashboard de paridade (mostrar diff entre local/CI em tempo real)</li>
+</ul>
+<hr />
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><a href="https://12factor.net/dev-prod-parity">The Twelve-Factor App - Dev/Prod Parity</a></li>
+<li><a href="https://github.com/pyenv/pyenv">Pyenv Documentation</a></li>
+<li><a href="https://tox.wiki/">Tox Documentation</a></li>
+<li><a href="../../reference/CLI_COMMANDS/#doctor">Dev Doctor Architecture</a></li>
+<li><a href="../../scripts/cli/upgrade_python.py">Version Governor Implementation</a></li>
+<li><a href="../DEV_ENVIRONMENT_TROUBLESHOOTING/">Environment Troubleshooting Guide</a></li>
+</ul>
+<hr />
+<h2 id="aprendizados-lessons-learned">Aprendizados (Lessons Learned)</h2>
+<h3 id="por-que-nao-usar-conda">Por Que Não Usar Conda?</h3>
+<p><strong>Pergunta:</strong> Conda também gerencia versões Python. Por que Pyenv?</p>
+<p><strong>Resposta:</strong></p>
+<ul>
+<li>❌ <strong>Conda é pesado:</strong> Cada ambiente tem ~300MB (vs 50MB com venv)</li>
+<li>❌ <strong>Conflitos com Pip:</strong> Conda pode quebrar dependências instaladas via <code>pip</code></li>
+<li>✅ <strong>Pyenv é minimalista:</strong> Apenas gerencia versões, não dependências</li>
+<li>✅ <strong>Compatibilidade:</strong> Pyenv funciona nativamente com <code>venv</code> e <code>pip</code></li>
+</ul>
+<h3 id="por-que-patches-especificos-31212-vs-312">Por Que Patches Específicos (3.12.12 vs 3.12)?</h3>
+<p><strong>Pergunta:</strong> Por que não usar apenas <code>3.12</code> no <code>.python-version</code>?</p>
+<p><strong>Resposta:</strong></p>
+<ul>
+<li><strong>Reprodutibilidade:</strong> <code>3.12</code> pode ser <code>3.12.0</code> hoje e <code>3.12.13</code> amanhã (comportamento muda)</li>
+<li><strong>Segurança:</strong> Patches incluem fixes de segurança — queremos saber <strong>exatamente</strong> qual patch está rodando</li>
+<li><strong>Debugging:</strong> Se um bug aparecer, saber o patch exato facilita buscar issues no Python tracker</li>
+</ul>
+<hr />
+<h2 id="conclusao">Conclusão</h2>
+<p>A estratégia de paridade Pyenv + Tox transformou o ambiente de desenvolvimento de <strong>indeterminístico</strong> para <strong>reproduzível</strong>.</p>
+<p><strong>Impacto Medido:</strong></p>
+<ul>
+<li>🟢 <strong>Zero incidentes</strong> de "passa local, falha CI" em 6 meses</li>
+<li>🟢 <strong>97% de confiança</strong> em testes locais (vs 62% antes)</li>
+<li>🟢 <strong>Patches atualizados</strong> em &lt;7 dias (vs &gt;6 meses antes)</li>
+</ul>
+<p><strong>Lição Final:</strong></p>
+<p><em>"Se o ambiente local não simula exatamente o CI, os testes locais são apenas ruído. Paridade não é opcional — é pré-requisito para Continuous Integration."</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

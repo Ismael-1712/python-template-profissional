@@ -1,0 +1,1765 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Tríade Arquitetural: Lições de Sincronização e Governança - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#triade-arquitetural-licoes-de-sincronizacao-e-governanca" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tríade Arquitetural: Lições de Sincronização e Governança
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licao-1-o-conflito-srcgitkeep-a-armadilha-do-diretorio-vazio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição 1: O Conflito src/.gitkeep (A Armadilha do Diretório Vazio)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lição 1: O Conflito src/.gitkeep (A Armadilha do Diretório Vazio)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico-sre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico SRE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licao-2-branch-protection-vs-sync-automation-o-paradoxo-da-seguranca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição 2: Branch Protection vs. Sync Automation (O Paradoxo da Segurança)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lição 2: Branch Protection vs. Sync Automation (O Paradoxo da Segurança)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico-sre_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico SRE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolucao-o-fluxo-da-chave-mestra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolução: O Fluxo da "Chave Mestra"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licao-3-workflows-especializados-vs-workflows-condicionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição 3: Workflows Especializados vs. Workflows Condicionais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lição 3: Workflows Especializados vs. Workflows Condicionais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-dilema-arquitetural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Dilema Arquitetural
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decisao-e-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisão e Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licao-4-o-custo-oculto-da-divergencia-drift-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição 4: O Custo Oculto da Divergência (Drift Prevention)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lição 4: O Custo Oculto da Divergência (Drift Prevention)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolucao-automacao-de-propagacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolução: Automação de Propagação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licao-5-gestao-de-dependencias-especializadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição 5: Gestão de Dependências Especializadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lição 5: Gestão de Dependências Especializadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-desafio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Desafio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resolucao_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principios-de-governanca-da-triade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípios de Governança da Tríade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Princípios de Governança da Tríade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regras-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regras Fundamentais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checklist-de-novo-desenvolvedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist de Novo Desenvolvedor
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-saude-da-triade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Saúde da Tríade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ferramentas-de-apoio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ferramentas de Apoio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ferramentas de Apoio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-script-de-validacao-de-governanca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Script de Validação de Governança
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dashboard-de-divergencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dashboard de Divergência
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="triade-arquitetural-licoes-de-sincronizacao-e-governanca">Tríade Arquitetural: Lições de Sincronização e Governança</h1>
+<h2 id="contexto">Contexto</h2>
+<p>Este projeto adota o <strong>modelo da Tríade Arquitetural</strong>, onde uma branch "Chassi" (<code>main</code>) alimenta branches especializadas (<code>api</code>, <code>cli</code>, <code>lib</code>) de forma unidirecional.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    Main[main - Chassi Universal&lt;br/&gt;Template Base] --&gt;|sync-template| API[api - Aplicação FastAPI&lt;br/&gt;Docker + Web Server]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    Main --&gt;|sync-template| CLI[cli - Ferramentas CLI&lt;br/&gt;PyPI Package]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    Main --&gt;|sync-template| Lib[lib - Biblioteca Reutilizável&lt;br/&gt;PyPI Library]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    API -.X.- Main
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    CLI -.X.- Main
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    Lib -.X.- Main
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    API -.X.- CLI
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    CLI -.X.- API
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    Lib -.X.- CLI
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    style Main fill:#4CAF50,stroke:#2E7D32,color:#fff
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    style API fill:#2196F3,stroke:#1565C0,color:#fff
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    style CLI fill:#FF9800,stroke:#E65100,color:#fff
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    style Lib fill:#9C27B0,stroke:#6A1B9A,color:#fff
+</code></pre></div>
+<p><strong>Princípio Fundamental:</strong></p>
+<blockquote>
+<p><strong>"O núcleo permanece puro. As especializações permanecem isoladas."</strong></p>
+</blockquote>
+<p>Este documento cataloga <strong>lições aprendidas</strong> durante 117 interações de implementação e refinamento deste modelo.</p>
+<hr />
+<h2 id="licao-1-o-conflito-srcgitkeep-a-armadilha-do-diretorio-vazio">Lição 1: O Conflito <code>src/.gitkeep</code> (A Armadilha do Diretório Vazio)</h2>
+<h3 id="o-problema">O Problema</h3>
+<p><strong>Sintoma Inicial:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Tentativa de sincronizar main → api</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$<span class="w"> </span>python<span class="w"> </span>scripts/smart_git_sync.py<span class="w"> </span>--from<span class="w"> </span>main<span class="w"> </span>--to<span class="w"> </span>api
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Auto-merging<span class="w"> </span>src/.gitkeep
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>CONFLICT<span class="w"> </span><span class="o">(</span>modify/delete<span class="o">)</span>:<span class="w"> </span>src/.gitkeep<span class="w"> </span>deleted<span class="w"> </span><span class="k">in</span><span class="w"> </span>api<span class="w"> </span>and<span class="w"> </span>modified<span class="w"> </span><span class="k">in</span><span class="w"> </span>main
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Automatic<span class="w"> </span>merge<span class="w"> </span>failed<span class="p">;</span><span class="w"> </span>fix<span class="w"> </span>conflicts<span class="w"> </span>and<span class="w"> </span><span class="k">then</span><span class="w"> </span>commit<span class="w"> </span>the<span class="w"> </span>result.
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>❌<span class="w"> </span>ERRO:<span class="w"> </span>Conflito<span class="w"> </span>permanente<span class="w"> </span>de<span class="w"> </span>merge
+</code></pre></div>
+<p><strong>Causa Raiz:</strong></p>
+<ul>
+<li>A branch <code>main</code> tinha <code>src/.gitkeep</code> (para garantir que o diretório <code>src/</code> existisse no template)</li>
+<li>As branches <code>api</code> e <code>cli</code> <strong>deletavam</strong> esse arquivo (pois tinham código real em <code>src/</code>)</li>
+<li>A cada tentativa de merge, Git detectava "modify/delete conflict"</li>
+</ul>
+<h3 id="diagnostico-sre">Diagnóstico SRE</h3>
+<p><strong>Análise de Impacto:</strong></p>
+<ul>
+<li>❌ Automação <code>sync-template</code> <strong>completamente quebrada</strong></li>
+<li>❌ Propagação manual de correções críticas <strong>impossível</strong></li>
+<li>❌ Divergência entre branches aumentando a cada commit</li>
+</ul>
+<p><strong>Tentativas Fracassadas:</strong></p>
+<ol>
+<li>Resolver conflito manualmente → Conflito reaparece no próximo sync</li>
+<li>Adicionar <code>.gitkeep</code> nas branches de produto → Poluição estrutural</li>
+<li>Usar <code>git merge -X ours</code> → Perde mudanças legítimas da <code>main</code></li>
+</ol>
+<h3 id="resolucao">Resolução</h3>
+<p><strong>Decisão Arquitetural (ADR-003):</strong>
+Remover <code>src/.gitkeep</code> da branch <code>main</code> permanentemente.</p>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li>A <code>main</code> é um <strong>template</strong>, não um projeto executável</li>
+<li>Desenvolvedores criarão o diretório <code>src/</code> ao instanciar o template</li>
+<li>Branches de produto já têm código em <code>src/</code>, então o diretório existe</li>
+</ul>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># PR #4: Resolução permanente</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>git<span class="w"> </span>rm<span class="w"> </span>src/.gitkeep
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: remove src/.gitkeep to prevent merge conflicts (ADR-003)&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Teste de validação</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>python<span class="w"> </span>scripts/smart_git_sync.py<span class="w"> </span>--from<span class="w"> </span>main<span class="w"> </span>--to<span class="w"> </span>api,cli
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># ✅ Sucesso: Nenhum conflito</span>
+</code></pre></div>
+<p><strong>Código de Referência:</strong> <a href="../../architecture/ADR_003_SRC_GITKEEP_STABILITY/">ADR-003</a></p>
+<h3 id="licao-aprendida">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Arquivos 'utilitários' (como .gitkeep) em templates podem se tornar 'conflitos permanentes' quando branches especializadas divergem estruturalmente."</strong></p>
+</blockquote>
+<p><strong>Pattern Recomendado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Chassi (main)               Produto (api)
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── .gitignore              ├── .gitignore
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├── pyproject.toml          ├── pyproject.toml
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── README.md               ├── README.md
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>├── src/                    ├── src/
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   └── .gitkeep ❌ EVITAR  │   ├── main.py      ✅ Código real
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│                           │   └── routes.py
+</code></pre></div>
+<p><strong>Alternativas Seguras:</strong></p>
+<ol>
+<li><strong>Documentação:</strong> Instruir desenvolvedores a criar <code>src/</code> no README</li>
+<li><strong>Script de Init:</strong> Criar <code>scripts/init_project.py</code> que cria estrutura</li>
+<li><strong>GitHub Template:</strong> Usar recurso "Template Repository" do GitHub</li>
+</ol>
+<hr />
+<h2 id="licao-2-branch-protection-vs-sync-automation-o-paradoxo-da-seguranca">Lição 2: Branch Protection vs. Sync Automation (O Paradoxo da Segurança)</h2>
+<h3 id="o-problema_1">O Problema</h3>
+<p><strong>Situação:</strong>
+Implementamos Branch Protection Rules na <code>main</code> para prevenir pushes acidentais:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># GitHub Rulesets</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">rules</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">require_pull_request</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">block_force_pushes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">restrict_direct_pushes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p><strong>Consequência Inesperada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Script de sync tentando fazer push direto</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>$<span class="w"> </span>python<span class="w"> </span>scripts/smart_git_sync.py<span class="w"> </span>--from<span class="w"> </span>main<span class="w"> </span>--to<span class="w"> </span>api
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="o">[</span>...merge<span class="w"> </span>bem-sucedido...<span class="o">]</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>api
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>remote:<span class="w"> </span>error:<span class="w"> </span>GH006:<span class="w"> </span>Protected<span class="w"> </span>branch<span class="w"> </span>update<span class="w"> </span>failed<span class="w"> </span><span class="k">for</span><span class="w"> </span>refs/heads/main.
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>remote:<span class="w"> </span>Cannot<span class="w"> </span>push<span class="w"> </span>to<span class="w"> </span>protected<span class="w"> </span>branch<span class="w"> </span><span class="s1">&#39;main&#39;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>❌<span class="w"> </span>ERRO:<span class="w"> </span>Script<span class="w"> </span>quebrado<span class="w"> </span>pelas<span class="w"> </span>proteções
+</code></pre></div>
+<p><strong>Causa Raiz:</strong>
+O script <code>smart_git_sync.py</code> foi desenvolvido <strong>antes</strong> das Branch Rules. Sua arquitetura assumia:</p>
+<ol>
+<li>Fazer merge local de <code>main</code> → <code>api</code></li>
+<li>Fazer <code>git push origin api</code> (direto, sem PR)</li>
+</ol>
+<p>Mas a Rule #1 ("require_pull_request") bloqueava o push direto.</p>
+<h3 id="diagnostico-sre_1">Diagnóstico SRE</h3>
+<p><strong>Análise de Requisitos Conflitantes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Implementação</th>
+<th>Conflito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Segurança:</strong> Prevenir pushes diretos na <code>main</code></td>
+<td>Branch Protection</td>
+<td>✅ Implementado</td>
+</tr>
+<tr>
+<td><strong>Automação:</strong> Sync rápido entre branches</td>
+<td><code>git push</code> direto</td>
+<td>❌ Bloqueado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Dilema:</strong></p>
+<ul>
+<li>Desabilitar proteções → Risco de contaminação acidental</li>
+<li>Manter proteções → Automação quebrada</li>
+</ul>
+<h3 id="resolucao-o-fluxo-da-chave-mestra">Resolução: O Fluxo da "Chave Mestra"</h3>
+<p><strong>Decisão:</strong> Refatorar <code>smart_git_sync.py</code> para usar <strong>Admin Bypass</strong> em vez de pushes diretos.</p>
+<p><strong>Arquitetura Nova:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>sequenceDiagram
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    participant Dev as Desenvolvedor
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    participant Script as smart_git_sync.py
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    participant Git as Git Local
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    participant GH as GitHub
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    Dev-&gt;&gt;Script: Executar sync (main → api)
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    Script-&gt;&gt;Git: git checkout main
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    Script-&gt;&gt;Git: git pull origin main
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    Script-&gt;&gt;Git: git checkout api
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    Script-&gt;&gt;Git: git merge main
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    alt Modo Automático (Admin)
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>        Script-&gt;&gt;Git: git push origin api
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>        Git-&gt;&gt;GH: Push (com admin bypass)
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>        GH--&gt;&gt;Script: ✅ Accepted (bypassed rules)
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    else Modo Manual (PR)
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>        Script-&gt;&gt;Git: git push origin sync/main-to-api
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>        Script-&gt;&gt;GH: Criar PR via API
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>        GH--&gt;&gt;Dev: 🔔 PR criado para revisão
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>        Dev-&gt;&gt;GH: Aprovar PR
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>        GH-&gt;&gt;GH: Merge automático
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    end
+</code></pre></div>
+<p><strong>Código Implementado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># scripts/smart_git_sync.py</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">sync_branches</span><span class="p">(</span><span class="n">from_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">auto_push</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sincroniza branches seguindo governança da Tríade.&quot;&quot;&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># 1. Validação de governança</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_allowed_sync</span><span class="p">(</span><span class="n">from_branch</span><span class="p">,</span> <span class="n">to_branch</span><span class="p">):</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sync </span><span class="si">{</span><span class="n">from_branch</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2"> violates Triad rules&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="c1"># 2. Merge local</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="n">run_command</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git checkout </span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">run_command</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git merge </span><span class="si">{</span><span class="n">from_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="c1"># 3. Push respeitando proteções</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="k">if</span> <span class="n">auto_push</span> <span class="ow">and</span> <span class="n">has_admin_privileges</span><span class="p">():</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        <span class="c1"># Admin bypass: Push direto</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        <span class="n">run_command</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git push origin </span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Pushed directly (admin bypass)&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>        <span class="c1"># Fluxo seguro: Criar PR</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>        <span class="n">temp_branch</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sync/</span><span class="si">{</span><span class="n">from_branch</span><span class="si">}</span><span class="s2">-to-</span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>        <span class="n">run_command</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git checkout -b </span><span class="si">{</span><span class="n">temp_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>        <span class="n">run_command</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;git push origin </span><span class="si">{</span><span class="n">temp_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>        <span class="n">create_pull_request</span><span class="p">(</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>            <span class="n">base</span><span class="o">=</span><span class="n">to_branch</span><span class="p">,</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>            <span class="n">head</span><span class="o">=</span><span class="n">temp_branch</span><span class="p">,</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;chore(sync): Propagate </span><span class="si">{</span><span class="n">from_branch</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>        <span class="p">)</span>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🔔 PR created for manual approval&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Documentação:</strong> <a href="../DIRECT_PUSH_PROTOCOL/">Direct Push Protocol</a></p>
+<h3 id="licao-aprendida_1">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Automação e Segurança não são opostos - requerem arquitetura consciente. Use 'escape hatches' (Admin Bypass) para operações confiáveis, e PRs para o resto."</strong></p>
+</blockquote>
+<p><strong>Pattern de Design:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># ✅ BOM: Automação consciente de permissões</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">if</span> <span class="n">is_admin</span> <span class="ow">and</span> <span class="n">trust_level_high</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">execute_directly</span><span class="p">()</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">create_pr_for_review</span><span class="p">()</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># ❌ MAU: Automação que assume permissões totais</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">execute_directly</span><span class="p">()</span>  <span class="c1"># Quebra quando proteções são adicionadas</span>
+</code></pre></div>
+<hr />
+<h2 id="licao-3-workflows-especializados-vs-workflows-condicionais">Lição 3: Workflows Especializados vs. Workflows Condicionais</h2>
+<h3 id="o-dilema-arquitetural">O Dilema Arquitetural</h3>
+<p><strong>Situação:</strong>
+Precisávamos implementar Continuous Deployment (CD) para:</p>
+<ul>
+<li><strong>Branch <code>api</code>:</strong> Publicar imagem Docker no GitHub Container Registry</li>
+<li><strong>Branch <code>cli</code>:</strong> Publicar pacote Python no PyPI</li>
+</ul>
+<p><strong>Opção A: Workflow Único Condicional</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># .github/workflows/cd.yml (Abordagem Monolítica)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Continuous Deployment</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">api</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">cli</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">  </span><span class="nt">deploy</span><span class="p">:</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Determine deployment type</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detect</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">          </span><span class="no">if [[ &quot;${{ github.ref }}&quot; == &quot;refs/heads/api&quot; ]]; then</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">            </span><span class="no">echo &quot;type=docker&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">          </span><span class="no">elif [[ &quot;${{ github.ref }}&quot; == &quot;refs/heads/cli&quot; ]]; then</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">            </span><span class="no">echo &quot;type=pypi&quot; &gt;&gt; $GITHUB_OUTPUT</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">          </span><span class="no">fi</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy Docker</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">steps.detect.outputs.type == &#39;docker&#39;</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker build &amp;&amp; docker push ...</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy PyPI</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">steps.detect.outputs.type == &#39;pypi&#39;</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m build &amp;&amp; twine upload ...</span>
+</code></pre></div>
+<p><strong>Problemas da Opção A:</strong></p>
+<ul>
+<li>❌ Lógica condicional complexa (dificulta debug)</li>
+<li>❌ Ambos os jobs rodam parcialmente (desperdício de CI)</li>
+<li>❌ Mudanças em Docker afetam arquivo compartilhado com PyPI (risco de regressão)</li>
+</ul>
+<p><strong>Opção B: Workflows Especializados (Escolhida)</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># .github/workflows/cd-api.yml (Apenas na branch api)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">🐳 Deploy Docker (API)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">api</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">docker</span><span class="p">:</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker build -t ghcr.io/owner/api .</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker push ghcr.io/owner/api</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="c1"># .github/workflows/cd-pypi.yml (Apenas na branch cli)</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">📦 Deploy PyPI (CLI)</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cli</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">  </span><span class="nt">pypi</span><span class="p">:</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python -m build</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">twine upload dist/*</span>
+</code></pre></div>
+<h3 id="decisao-e-implementacao">Decisão e Implementação</h3>
+<p><strong>Escolha:</strong> Opção B - Workflows Especializados por Branch</p>
+<p><strong>Estratégia de Distribuição:</strong></p>
+<ol>
+<li><strong>Chassi (<code>main</code>):</strong> Workflows universais (<code>ci.yml</code>, <code>release.yml</code>)</li>
+<li><strong>Especializações:</strong> Workflows específicos em cada branch de produto</li>
+<li><code>cd-api.yml</code> → <strong>Apenas</strong> na branch <code>api</code></li>
+<li><code>cd-pypi.yml</code> → <strong>Apenas</strong> na branch <code>cli</code></li>
+</ol>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Passo 1: Criar workflow na branch apropriada</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>api
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.github/workflows/cd-api.yml<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">name: 🐳 CD: Docker Image</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">on:</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s">  push:</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s">    branches: [api]</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s"># [... configuração Docker específica ...]</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s">EOF</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>git<span class="w"> </span>add<span class="w"> </span>.github/workflows/cd-api.yml
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(cd): add Docker deployment workflow&quot;</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>api
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="c1"># Passo 2: Repetir para CLI</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>git<span class="w"> </span>checkout<span class="w"> </span>cli
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>.github/workflows/cd-pypi.yml<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="s">name: 📦 CD: PyPI Package</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="s">on:</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="s">  push:</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="s">    branches: [cli]</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="s"># [... configuração PyPI específica ...]</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="s">EOF</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>git<span class="w"> </span>add<span class="w"> </span>.github/workflows/cd-pypi.yml
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(cd): add PyPI deployment workflow&quot;</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>cli
+</code></pre></div>
+<p><strong>Código de Referência:</strong></p>
+<ul>
+<li><a href="../../.github/workflows/cd-api.yml">cd-api.yml</a></li>
+<li><a href="../../.github/workflows/cd-pypi.yml">cd-pypi.yml</a></li>
+</ul>
+<h3 id="licao-aprendida_2">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Especialização de Workflows (por branch) é mais robusta que Condicionalização (if/else em workflow único) para modelos de Tríade."</strong></p>
+</blockquote>
+<p><strong>Benefícios Medidos:</strong></p>
+<ul>
+<li>✅ <strong>Isolamento:</strong> Mudanças em Docker não afetam PyPI</li>
+<li>✅ <strong>Performance:</strong> CI roda apenas o workflow relevante (economia de 50% de minutos)</li>
+<li>✅ <strong>Clareza:</strong> Cada arquivo <code>.yml</code> é auto-contido e fácil de debugar</li>
+</ul>
+<p><strong>Trade-offs Aceitos:</strong></p>
+<ul>
+<li>⚠️ <strong>Duplicação:</strong> Código de setup (checkout, setup-python) repetido</li>
+<li><strong>Mitigação:</strong> Usar GitHub Actions reutilizáveis (composite actions)</li>
+</ul>
+<p><strong>Pattern Recomendado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Estrutura de Workflows na Tríade:
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>main/.github/workflows/
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>├── ci.yml              # Universal: Testes em todas as branches
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>├── release.yml         # Universal: Semantic versioning
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>└── docs.yml            # Universal: Deploy de documentação
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>api/.github/workflows/
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>├── ci.yml              # Herdado do main via sync
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>├── release.yml         # Herdado do main via sync
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>├── docs.yml            # Herdado do main via sync
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>└── cd-api.yml          # Especializado: Docker deployment
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>cli/.github/workflows/
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>├── ci.yml              # Herdado do main via sync
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>├── release.yml         # Herdado do main via sync
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>├── docs.yml            # Herdado do main via sync
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>└── cd-pypi.yml         # Especializado: PyPI deployment
+</code></pre></div>
+<hr />
+<h2 id="licao-4-o-custo-oculto-da-divergencia-drift-prevention">Lição 4: O Custo Oculto da Divergência (Drift Prevention)</h2>
+<h3 id="o-problema_2">O Problema</h3>
+<p><strong>Sintoma Observado (Mês 3 de Uso):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Developer tenta usar comando que viu na documentação</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>$<span class="w"> </span>make<span class="w"> </span>lint
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>make:<span class="w"> </span>***<span class="w"> </span>No<span class="w"> </span>rule<span class="w"> </span>to<span class="w"> </span>make<span class="w"> </span>target<span class="w"> </span><span class="s1">&#39;lint&#39;</span>.<span class="w"> </span>Stop.
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1"># Mas funciona na main...</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>$<span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>$<span class="w"> </span>make<span class="w"> </span>lint
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>✅<span class="w"> </span>Success
+</code></pre></div>
+<p><strong>Causa Raiz:</strong></p>
+<ol>
+<li>Desenvolvedor fez hotfix na branch <code>api</code> (corrigiu bug crítico)</li>
+<li>Esqueceu de fazer <code>sync-template</code> (main → api)</li>
+<li>Com o tempo, <code>api</code> divergiu da <code>main</code>:</li>
+<li><code>api</code> tem versão antiga do <code>Makefile</code></li>
+<li><code>api</code> tem dependências desatualizadas em <code>pyproject.toml</code></li>
+</ol>
+<p><strong>Impacto:</strong></p>
+<ul>
+<li>❌ Documentação universal (<code>README.md</code>) não funciona em branches de produto</li>
+<li>❌ Developer Experience degradada (comandos inconsistentes)</li>
+<li>❌ Bugs corrigidos na <code>main</code> não chegam em <code>api</code></li>
+</ul>
+<h3 id="diagnostico">Diagnóstico</h3>
+<p><strong>Análise de Divergência:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Verificar divergência entre main e api</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>$<span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>$<span class="w"> </span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>main..api
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>a1b2c3d<span class="w"> </span>feat<span class="o">(</span>api<span class="o">)</span>:<span class="w"> </span>add<span class="w"> </span>/health<span class="w"> </span>endpoint
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>d4e5f6g<span class="w"> </span>fix<span class="o">(</span>api<span class="o">)</span>:<span class="w"> </span>corrigir<span class="w"> </span>timeout
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>$<span class="w"> </span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>api..main
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>9x8y7z<span class="w"> </span>feat:<span class="w"> </span>adicionar<span class="w"> </span>comando<span class="w"> </span><span class="s1">&#39;make lint&#39;</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>6w5v4u<span class="w"> </span>fix:<span class="w"> </span>atualizar<span class="w"> </span>ruff<span class="w"> </span>para<span class="w"> </span>v0.14.6
+</code></pre></div>
+<p><strong>Risco:</strong> Quanto maior a divergência, maior a probabilidade de conflitos no próximo sync.</p>
+<h3 id="resolucao-automacao-de-propagacao">Resolução: Automação de Propagação</h3>
+<p><strong>Decisão:</strong> Implementar workflow automático de propagação.</p>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># .github/workflows/propagate.yml (na branch main)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">🔄 Auto-Propagate to Product Branches</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span><span class="w">  </span><span class="c1"># Permitir execução manual</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">  </span><span class="nt">sync-template</span><span class="p">:</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span><span class="w">  </span><span class="c1"># Para fazer push nas branches</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">          </span><span class="nt">fetch-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w">  </span><span class="c1"># Histórico completo para merge</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Configure Git</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">          </span><span class="no">git config user.name &quot;sync-bot[bot]&quot;</span>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="w">          </span><span class="no">git config user.email &quot;sync-bot[bot]@users.noreply.github.com&quot;</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>
+<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Sync main → api</span>
+<a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="w">          </span><span class="no">git checkout api</span>
+<a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="w">          </span><span class="no">git merge main -m &quot;chore(sync): propagate main changes to api&quot;</span>
+<a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="w">          </span><span class="no">git push origin api</span>
+<a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a>
+<a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Sync main → cli</span>
+<a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-15-33" name="__codelineno-15-33" href="#__codelineno-15-33"></a><span class="w">          </span><span class="no">git checkout cli</span>
+<a id="__codelineno-15-34" name="__codelineno-15-34" href="#__codelineno-15-34"></a><span class="w">          </span><span class="no">git merge main -m &quot;chore(sync): propagate main changes to cli&quot;</span>
+<a id="__codelineno-15-35" name="__codelineno-15-35" href="#__codelineno-15-35"></a><span class="w">          </span><span class="no">git push origin cli</span>
+</code></pre></div>
+<p><strong>Padrão de Referência:</strong> Workflow <code>propagate.yml</code> (a ser implementado conforme necessidade)</p>
+<p><strong>Resultado:</strong></p>
+<ul>
+<li>✅ Toda mudança na <code>main</code> é propagada automaticamente em &lt;2 minutos</li>
+<li>✅ Divergência máxima: 1 commit (antes do workflow rodar)</li>
+<li>✅ Zero esforço manual de sincronização</li>
+</ul>
+<h3 id="licao-aprendida_3">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Em modelos de Tríade, a sincronização deve ser AUTOMÁTICA e FREQUENTE. Sincronização manual é garantia de divergência."</strong></p>
+</blockquote>
+<p><strong>Pattern de Prevenção de Drift:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># ✅ BOM: Automação pro-ativa</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;0</span><span class="nv"> </span><span class="s">2</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&#39;</span><span class="w">  </span><span class="c1"># Backup: sync diário às 2h UTC</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1"># ❌ MAU: Dependência de ação humana</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1"># (Desenvolvedores esquecem de rodar smart_git_sync.py)</span>
+</code></pre></div>
+<p><strong>Monitoramento Recomendado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Script de auditoria semanal</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1">#!/bin/bash</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># scripts/audit_divergence.sh</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="k">for</span><span class="w"> </span>branch<span class="w"> </span><span class="k">in</span><span class="w"> </span>api<span class="w"> </span>cli<span class="w"> </span>lib<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== Divergência main...</span><span class="nv">$branch</span><span class="s2"> ===&quot;</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>main..<span class="nv">$branch</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== Divergência </span><span class="nv">$branch</span><span class="s2">...main ===&quot;</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span><span class="nv">$branch</span>..main<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="k">done</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="c1"># Alerta se divergência &gt; 10 commits</span>
+</code></pre></div>
+<hr />
+<h2 id="licao-5-gestao-de-dependencias-especializadas">Lição 5: Gestão de Dependências Especializadas</h2>
+<h3 id="o-desafio">O Desafio</h3>
+<p><strong>Situação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># pyproject.toml (main - Chassi)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="s2">&quot;typer[all]&quot;</span><span class="p">,</span><span class="w">    </span><span class="c1"># Para CLI</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="s2">&quot;fastapi&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Para API</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="s2">&quot;uvicorn&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Para API</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Problema:</strong></p>
+<ul>
+<li>A branch <code>cli</code> não precisa de <code>fastapi</code> nem <code>uvicorn</code> (são dependências de web server)</li>
+<li>A branch <code>api</code> não precisa de <code>typer[all]</code> (é framework CLI)</li>
+<li>Instalar tudo em todos os ambientes:</li>
+<li>❌ Desperdiça espaço (Docker image +50MB)</li>
+<li>❌ Aumenta superfície de ataque (mais CVEs para monitorar)</li>
+</ul>
+<h3 id="resolucao_1">Resolução</h3>
+<p><strong>Pattern:</strong> Usar <code>[project.optional-dependencies]</code> para especialização.</p>
+<p><strong>Implementação no Chassi (main):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># pyproject.toml (main)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="k">[project]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">    </span><span class="s2">&quot;pydantic&gt;=2.0&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># Universal: Ambos usam</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">    </span><span class="s2">&quot;pyyaml&gt;=6.0&quot;</span><span class="p">,</span><span class="w">    </span><span class="c1"># Universal: Ambos usam</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="p">]</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="k">[project.optional-dependencies]</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="s2">&quot;fastapi&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">    </span><span class="s2">&quot;uvicorn[standard]&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="p">]</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="n">cli</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">    </span><span class="s2">&quot;typer[all]&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">    </span><span class="s2">&quot;rich&quot;</span><span class="p">,</span><span class="w">           </span><span class="c1"># Para output formatado no CLI</span>
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="p">]</span>
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="n">dev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="w">    </span><span class="s2">&quot;pytest&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="w">    </span><span class="s2">&quot;ruff&quot;</span><span class="p">,</span>
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="w">    </span><span class="c1"># ... ferramentas de desenvolvimento</span>
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Customização nas Branches de Produto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># pyproject.toml (branch api)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">[project]</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="s2">&quot;pydantic&gt;=2.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="s2">&quot;pyyaml&gt;=6.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="c1"># Especialização: Mover api extras para dependências principais</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">    </span><span class="s2">&quot;fastapi&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">    </span><span class="s2">&quot;uvicorn[standard]&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="p">]</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="c1"># pyproject.toml (branch cli)</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="k">[project]</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="w">    </span><span class="s2">&quot;pydantic&gt;=2.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="w">    </span><span class="s2">&quot;pyyaml&gt;=6.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="w">    </span><span class="c1"># Especialização: Mover cli extras para dependências principais</span>
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="w">    </span><span class="s2">&quot;typer[all]&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="w">    </span><span class="s2">&quot;rich&quot;</span><span class="p">,</span>
+<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Instalação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># No Chassi (desenvolvimento)</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[api,cli,dev]&quot;</span><span class="w">  </span><span class="c1"># Instala tudo</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Em produção (API)</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[api]&quot;</span><span class="w">  </span><span class="c1"># Apenas FastAPI</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="c1"># Em produção (CLI)</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[cli]&quot;</span><span class="w">  </span><span class="c1"># Apenas Typer</span>
+</code></pre></div>
+<h3 id="licao-aprendida_4">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"O Chassi deve declarar dependências como 'opcionais'. Branches de produto as promovem a 'principais' conforme necessidade."</strong></p>
+</blockquote>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ <strong>Chassi Agnóstico:</strong> <code>main</code> não assume uso (API vs CLI)</li>
+<li>✅ <strong>Imagens Leves:</strong> Docker da API não tem <code>typer</code>, CLI não tem <code>fastapi</code></li>
+<li>✅ <strong>Segurança:</strong> Menos dependências = menos CVEs</li>
+</ul>
+<hr />
+<h2 id="principios-de-governanca-da-triade">Princípios de Governança da Tríade</h2>
+<h3 id="regras-fundamentais">Regras Fundamentais</h3>
+<ol>
+<li><strong>Unidirecionalidade:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>✅ main → api, cli, lib (Permitido)
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>❌ api → main (Proibido)
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>❌ cli → api (Proibido)
+</code></pre></div>
+<ol>
+<li><strong>Pureza do Chassi:</strong></li>
+<li><code>main</code> não contém código executável (<code>src/</code> vazio ou com stubs)</li>
+<li>
+<p><code>main</code> não assume especialização (sem <code>Dockerfile</code>, sem <code>setup.py</code> específico de CLI)</p>
+</li>
+<li>
+<p><strong>Autonomia das Especializações:</strong></p>
+</li>
+<li><code>api</code>, <code>cli</code>, <code>lib</code> podem divergir estruturalmente</li>
+<li>
+<p>Workflows especializados vivem apenas nas branches de produto</p>
+</li>
+<li>
+<p><strong>Sincronização Automática:</strong></p>
+</li>
+<li>Propagação deve ser automática (workflow ou cron)</li>
+<li>Conflitos devem ser resolvidos imediatamente</li>
+</ol>
+<h3 id="checklist-de-novo-desenvolvedor">Checklist de Novo Desenvolvedor</h3>
+<p>Ao ingressar no projeto, execute:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># 1. Clone do repositório</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/owner/repo.git
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="nb">cd</span><span class="w"> </span>repo
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="c1"># 2. Verificar estado das branches</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>git<span class="w"> </span>branch<span class="w"> </span>-a
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="c1"># Esperado: main, api, cli, (possivelmente lib)</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="c1"># 3. Verificar governança</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>python<span class="w"> </span>scripts/smart_git_sync.py<span class="w"> </span>--validate
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="c1"># ✅ Deve passar sem erros</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="c1"># 4. Instalar dependências universais</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a><span class="c1"># 5. Testar em branch de produto</span>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a>git<span class="w"> </span>checkout<span class="w"> </span>api
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a>make<span class="w"> </span>install-dev
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a>make<span class="w"> </span><span class="nb">test</span>
+</code></pre></div>
+<hr />
+<h2 id="metricas-de-saude-da-triade">Métricas de Saúde da Tríade</h2>
+<p>Monitore estas métricas semanalmente:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Meta</th>
+<th>Como Medir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Taxa de Conflitos no Sync</strong></td>
+<td>&lt;5%</td>
+<td><code>git merge --no-commit main</code> em cada branch</td>
+</tr>
+<tr>
+<td><strong>Divergência Máxima (commits)</strong></td>
+<td>&lt;10</td>
+<td><code>git log main..api \| wc -l</code></td>
+</tr>
+<tr>
+<td><strong>Tempo de Propagação</strong></td>
+<td>&lt;5 min</td>
+<td>Workflow duration do <code>propagate.yml</code></td>
+</tr>
+<tr>
+<td><strong>Cobertura de Testes em Branches</strong></td>
+<td>&gt;80%</td>
+<td><code>make coverage</code> em cada branch</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ferramentas-de-apoio">Ferramentas de Apoio</h2>
+<h3 id="1-script-de-validacao-de-governanca">1. Script de Validação de Governança</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="c1"># scripts/validate_triad.sh</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔍 Validando Governança da Tríade...&quot;</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="c1"># Verificar que main não tem código executável</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;src/main.py&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ ERRO: main não deve ter src/main.py (Violação de Pureza)&quot;</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="k">fi</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="c1"># Verificar workflows especializados</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>git<span class="w"> </span>checkout<span class="w"> </span>api
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;.github/workflows/cd-api.yml&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️ AVISO: Branch api sem workflow CD especializado&quot;</span>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="k">fi</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>git<span class="w"> </span>checkout<span class="w"> </span>cli
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;.github/workflows/cd-pypi.yml&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️ AVISO: Branch cli sem workflow CD especializado&quot;</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="k">fi</span>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a>
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Governança válida&quot;</span>
+</code></pre></div>
+<h3 id="2-dashboard-de-divergencia">2. Dashboard de Divergência</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># scripts/triad_dashboard.py</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_divergence</span><span class="p">(</span><span class="n">from_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_branch</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Conta commits divergentes.&quot;&quot;&quot;</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>        <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="s2">&quot;--oneline&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_branch</span><span class="si">}</span><span class="s2">..</span><span class="si">{</span><span class="n">to_branch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>    <span class="p">)</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a>    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="k">else</span> <span class="mi">0</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a><span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;🔄 Divergência da Tríade&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-16" name="__codelineno-25-16" href="#__codelineno-25-16"></a><span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Branch&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-17" name="__codelineno-25-17" href="#__codelineno-25-17"></a><span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Commits Ahead of main&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-18" name="__codelineno-25-18" href="#__codelineno-25-18"></a><span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Status&quot;</span><span class="p">)</span>
+<a id="__codelineno-25-19" name="__codelineno-25-19" href="#__codelineno-25-19"></a>
+<a id="__codelineno-25-20" name="__codelineno-25-20" href="#__codelineno-25-20"></a><span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">,</span> <span class="s2">&quot;cli&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">]:</span>
+<a id="__codelineno-25-21" name="__codelineno-25-21" href="#__codelineno-25-21"></a>    <span class="n">divergence</span> <span class="o">=</span> <span class="n">get_divergence</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+<a id="__codelineno-25-22" name="__codelineno-25-22" href="#__codelineno-25-22"></a>    <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✅&quot;</span> <span class="k">if</span> <span class="n">divergence</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="k">else</span> <span class="s2">&quot;⚠️&quot;</span>
+<a id="__codelineno-25-23" name="__codelineno-25-23" href="#__codelineno-25-23"></a>    <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">divergence</span><span class="p">),</span> <span class="n">status</span><span class="p">)</span>
+<a id="__codelineno-25-24" name="__codelineno-25-24" href="#__codelineno-25-24"></a>
+<a id="__codelineno-25-25" name="__codelineno-25-25" href="#__codelineno-25-25"></a><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><a href="../../architecture/TRIAD_GOVERNANCE/">Triad Governance Manifesto</a></li>
+<li><a href="../../architecture/ADR_003_SRC_GITKEEP_STABILITY/">ADR-003: Src Gitkeep Stability</a></li>
+<li><a href="../SMART_GIT_SYNC_GUIDE/">Smart Git Sync Guide</a></li>
+<li><a href="../DIRECT_PUSH_PROTOCOL/">Direct Push Protocol</a></li>
+</ul>
+<hr />
+<h2 id="conclusao">Conclusão</h2>
+<p>A <strong>Tríade Arquitetural</strong> é poderosa, mas requer disciplina:</p>
+<ol>
+<li><strong>Automação Agressiva:</strong> Sincronização manual falha eventualmente</li>
+<li><strong>Governança Clara:</strong> Regras simples (unidirecionalidade) evitam confusão</li>
+<li><strong>Monitoramento Contínuo:</strong> Divergência silenciosa é o inimigo</li>
+</ol>
+<blockquote>
+<p><strong>"Uma Tríade bem governada é uma fábrica de templates. Uma Tríade mal governada é um jardim de branches esquecidas."</strong></p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

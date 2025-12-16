@@ -1,0 +1,1692 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team (Human & GEM)">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Estratégia de Decomposição de Tarefas para LLMs: O Modelo P31 - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#estrategia-de-decomposicao-de-tarefas-para-llms-o-modelo-p31" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Estratégia de Decomposição de Tarefas para LLMs: O Modelo P31
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#proposito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Propósito
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-problema-limitacoes-de-llms-em-tarefas-complexas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 O Problema: Limitações de LLMs em Tarefas Complexas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 O Problema: Limitações de LLMs em Tarefas Complexas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma-classico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma Clássico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-real-o-fracasso-inicial-da-p31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso Real: O Fracasso Inicial da P31
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-solucao-micro-etapas-atomicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ A Solução: Micro-Etapas Atômicas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ A Solução: Micro-Etapas Atômicas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#principio-fundamental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípio Fundamental
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#os-tres-criterios-de-atomicidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Os Três Critérios de Atomicidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-modelo-p31-anatomia-de-uma-decomposicao-bem-sucedida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 O Modelo P31: Anatomia de uma Decomposição Bem-Sucedida
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 O Modelo P31: Anatomia de uma Decomposição Bem-Sucedida">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#contexto-da-tarefa-original" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto da Tarefa Original
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decomposicao-aplicada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decomposição Aplicada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p311-fundacao-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P31.1] Fundação de Dados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p312-o-sniffer-scanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P31.2] O Sniffer (Scanner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p313-o-syncer-download-com-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P31.3] O Syncer (Download com Cache)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p314-o-canario-hallucination-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P31.4] O Canário (Hallucination Probe)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocolo-de-auditoria-ping-pong" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Protocolo de Auditoria Ping-Pong
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Protocolo de Auditoria Ping-Pong">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-e" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Que É?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fluxo-de-comunicacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo de Comunicação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-real-de-dialogo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo Real de Diálogo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reguas-de-decisao-quando-fracionar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📏 Réguas de Decisão: Quando Fracionar?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📏 Réguas de Decisão: Quando Fracionar?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#heuristicas-de-complexidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Heurísticas de Complexidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arvore-de-decisao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Árvore de Decisão
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#padroes-de-decomposicao-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Padrões de Decomposição Comuns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Padrões de Decomposição Comuns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padrao-1-fundacao-logica-integracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 1: Fundação → Lógica → Integração
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-2-extracao-religacao-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 2: Extração → Religação → Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-3-hardening-incremental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 3: Hardening Incremental
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ferramentas-de-suporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Ferramentas de Suporte
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Ferramentas de Suporte">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-checklist-de-pre-decomposicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Checklist de Pre-Decomposição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-template-de-proposta-de-decomposicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Template de Proposta de Decomposição
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-comandos-de-validacao-rapida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Comandos de Validação Rápida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-padroes-o-que-nao-fazer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Anti-Padrões (O Que NÃO Fazer)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Anti-Padrões (O Que NÃO Fazer)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-1-vou-fazer-90-agora" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 1: "Vou Fazer 90% Agora"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-2-presumi-que-existe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 2: "Presumi que Existe"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-3-big-bang-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 3: "Big Bang de Testes"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-sucesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Métricas de Sucesso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Métricas de Sucesso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#indicadores-de-qualidade-da-decomposicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicadores de Qualidade da Decomposição
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instrucoes-para-llms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧠 Instruções para LLMs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧠 Instruções para LLMs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quando-receber-tarefa-complexa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Receber Tarefa Complexa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-de-solicitacao-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template de Solicitação de Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-e-leituras-complementares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências e Leituras Complementares
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tldr-resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 TL;DR (Resumo Executivo)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="estrategia-de-decomposicao-de-tarefas-para-llms-o-modelo-p31">Estratégia de Decomposição de Tarefas para LLMs: O Modelo P31</h1>
+<h2 id="proposito">🎯 Propósito</h2>
+<p>Este documento descreve uma <strong>metodologia validada em produção</strong> para decompor tarefas complexas de engenharia de software em <strong>micro-etapas atômicas executáveis por LLMs</strong> (Large Language Models).</p>
+<blockquote>
+<p><strong>Contexto de Validação:</strong> Metodologia desenvolvida durante a implementação bem-sucedida da <a href="../../history/PHASE2_KNOWLEDGE_NODE_POSTMORTEM/">Tarefa P31 - CORTEX Knowledge Node</a>, após falha inicial com abordagem "Big Bang".</p>
+</blockquote>
+<hr />
+<h2 id="o-problema-limitacoes-de-llms-em-tarefas-complexas">🚨 O Problema: Limitações de LLMs em Tarefas Complexas</h2>
+<h3 id="sintoma-classico">Sintoma Clássico</h3>
+<p>Quando uma tarefa tem múltiplas responsabilidades interdependentes, LLMs tendem a:</p>
+<ol>
+<li><strong>Perder Contexto:</strong> Esquecem decisões tomadas em partes anteriores da resposta</li>
+<li><strong>Criar Código Incompleto:</strong> Implementam 70% e "presumem" que o resto existe</li>
+<li><strong>Gerar Conflitos:</strong> Código de uma parte contradiz outra</li>
+<li><strong>Impossibilitar Rollback:</strong> Mudanças entrelaçadas impedem reversão parcial</li>
+<li><strong>Falhar Silenciosamente:</strong> Testes quebram sem diagnóstico claro</li>
+</ol>
+<h3 id="caso-real-o-fracasso-inicial-da-p31">Caso Real: O Fracasso Inicial da P31</h3>
+<p><strong>Prompt Original (Problemático):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&quot;Implementar o CORTEX Knowledge Node completo:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Scanner + Syncer + Probe + Testes + CLI Integration.&quot;
+</code></pre></div>
+<p><strong>Resultado:</strong></p>
+<ul>
+<li>❌ LLM gerou 800 linhas de código de uma vez</li>
+<li>❌ Imports quebrados (Scanner importava Syncer que não existia ainda)</li>
+<li>❌ Testes falhando sem explicação</li>
+<li>❌ Impossível identificar qual parte estava errada</li>
+<li>❌ 4 horas perdidas tentando debugar código entrelaçado</li>
+</ul>
+<hr />
+<h2 id="a-solucao-micro-etapas-atomicas">✅ A Solução: Micro-Etapas Atômicas</h2>
+<h3 id="principio-fundamental">Princípio Fundamental</h3>
+<blockquote>
+<p><strong>"Se o prompt pedir para 'Refatorar o arquivo X', recuse e proponha: 'Vou refatorar o <em>módulo de Log</em> do arquivo X primeiro'."</strong></p>
+</blockquote>
+<h3 id="os-tres-criterios-de-atomicidade">Os Três Critérios de Atomicidade</h3>
+<p>Cada subtarefa <strong>DEVE</strong> ser simultaneamente:</p>
+<table>
+<thead>
+<tr>
+<th>Critério</th>
+<th>Significado</th>
+<th>Exemplo Validador</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1️⃣ Comitável</strong></td>
+<td>Pode ser feito commit sem quebrar o projeto</td>
+<td><code>git add . &amp;&amp; git commit</code> não causa CI falhar</td>
+</tr>
+<tr>
+<td><strong>2️⃣ Testável</strong></td>
+<td>Existe validação específica para aquela parte</td>
+<td><code>mypy &lt;arquivo&gt;</code> passa OU teste específico existe</td>
+</tr>
+<tr>
+<td><strong>3️⃣ Independente</strong></td>
+<td>Não depende de código ainda não escrito</td>
+<td>Não contém <code># TODO: implement X</code> ou imports de módulos futuros</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="o-modelo-p31-anatomia-de-uma-decomposicao-bem-sucedida">🧩 O Modelo P31: Anatomia de uma Decomposição Bem-Sucedida</h2>
+<h3 id="contexto-da-tarefa-original">Contexto da Tarefa Original</h3>
+<p><strong>[P31] Implementar CORTEX Knowledge Node</strong></p>
+<p><strong>Complexidade:</strong> Alta (4 módulos interdependentes + testes + CLI)</p>
+<p><strong>Tempo Estimado (Abordagem Monolítica):</strong> 6-8 horas + debugging</p>
+<p><strong>Tempo Real (Abordagem Fracionada):</strong> 4 horas (0 debugging)</p>
+<hr />
+<h3 id="decomposicao-aplicada">Decomposição Aplicada</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>graph TD
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    A[P31: Knowledge Node] --&gt; B[P31.1: Fundação]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    A --&gt; C[P31.2: Sniffer]
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    A --&gt; D[P31.3: Syncer]
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    A --&gt; E[P31.4: Canário]
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    B --&gt; B1[Apenas Modelos Pydantic]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    C --&gt; C1[Apenas Leitura Local]
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    D --&gt; D1[Apenas HTTP + Cache]
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    E --&gt; E1[Apenas Teste Probe]
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    style A fill:#e1f5ff
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    style B fill:#c8e6c9
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    style C fill:#c8e6c9
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    style D fill:#c8e6c9
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    style E fill:#c8e6c9
+</code></pre></div>
+<hr />
+<h3 id="p311-fundacao-de-dados">[P31.1] Fundação de Dados</h3>
+<p><strong>🎯 Escopo (O que FAZER):</strong></p>
+<ul>
+<li>Criar arquivo <code>scripts/core/cortex/models.py</code></li>
+<li>Definir Enum <code>DocStatus</code></li>
+<li>Definir Dataclass <code>KnowledgeEntry</code></li>
+<li>Definir Dataclass <code>KnowledgeSource</code></li>
+</ul>
+<p><strong>🚫 Escopo (O que NÃO fazer):</strong></p>
+<ul>
+<li>Nenhuma lógica de I/O</li>
+<li>Nenhuma função que leia arquivos</li>
+<li>Nenhuma integração HTTP</li>
+</ul>
+<p><strong>✅ Critério de Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 1. Arquivo existe?</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>ls<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># 2. Mypy passa?</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>mypy<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># 3. Enums funcionam?</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts.core.cortex.models import DocStatus; print(DocStatus.ACTIVE)&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Output esperado: DocStatus.ACTIVE</span>
+</code></pre></div>
+<p><strong>📦 Commit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(cortex): add Knowledge Node data models (P31.1)&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="p312-o-sniffer-scanner">[P31.2] O Sniffer (Scanner)</h3>
+<p><strong>🎯 Escopo (O que FAZER):</strong></p>
+<ul>
+<li>Criar arquivo <code>scripts/core/cortex/knowledge_scanner.py</code></li>
+<li>Implementar classe <code>KnowledgeScanner</code></li>
+<li>Método <code>scan()</code> que lê arquivos <code>.md</code> de um diretório</li>
+<li>Fazer parse de Frontmatter YAML</li>
+<li>Validar com <code>KnowledgeEntry</code> (criado em P31.1)</li>
+</ul>
+<p><strong>🚫 Escopo (O que NÃO fazer):</strong></p>
+<ul>
+<li>Nenhum download HTTP (isso é P31.3)</li>
+<li>Nenhum teste de integridade (isso é P31.4)</li>
+</ul>
+<p><strong>✅ Critério de Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 1. Scanner consegue ler arquivo de exemplo?</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="s2">from scripts.core.cortex.knowledge_scanner import KnowledgeScanner</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s2">from pathlib import Path</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s2">scanner = KnowledgeScanner(workspace_root=Path.cwd())</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s2">entries = scanner.scan(Path(&#39;docs/knowledge&#39;))</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s2">print(f&#39;Encontradas {len(entries)} entradas&#39;)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s2">assert len(entries) &gt; 0</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s2">&quot;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="c1"># Output esperado: &quot;Encontradas X entradas&quot;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># 2. Mypy passa?</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>mypy<span class="w"> </span>scripts/core/cortex/knowledge_scanner.py
+</code></pre></div>
+<p><strong>📦 Commit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/core/cortex/knowledge_scanner.py
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(cortex): add Knowledge Scanner for local docs (P31.2)&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="p313-o-syncer-download-com-cache">[P31.3] O Syncer (Download com Cache)</h3>
+<p><strong>🎯 Escopo (O que FAZER):</strong></p>
+<ul>
+<li>Criar arquivo <code>scripts/core/cortex/knowledge_sync.py</code></li>
+<li>Implementar classe <code>KnowledgeSyncer</code></li>
+<li>Método <code>sync_entry()</code> que faz HTTP GET</li>
+<li>Implementar cache via ETag (header <code>If-None-Match</code>)</li>
+<li>Merge de conteúdo remoto com local</li>
+</ul>
+<p><strong>🚫 Escopo (O que NÃO fazer):</strong></p>
+<ul>
+<li>Não criar comandos CLI ainda (integração é tarefa futura)</li>
+<li>Não implementar retry/backoff (débito técnico aceito)</li>
+</ul>
+<p><strong>✅ Critério de Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 1. Syncer respeita cache?</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="s2">from scripts.core.cortex.knowledge_sync import KnowledgeSyncer</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s2">from scripts.core.cortex.models import KnowledgeEntry, KnowledgeSource</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s2">from pathlib import Path</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s2">syncer = KnowledgeSyncer()</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s2">source = KnowledgeSource(</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s2">    url=&#39;https://example.com/doc.md&#39;,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s2">    title=&#39;Test&#39;,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s2">    etag=&#39;abc123&#39;  # Simula cache existente</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s2">)</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="s2"># Verificar que não faz download se ETag está presente</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="s2">&quot;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="c1"># 2. Mypy passa?</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>mypy<span class="w"> </span>scripts/core/cortex/knowledge_sync.py
+</code></pre></div>
+<p><strong>📦 Commit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/core/cortex/knowledge_sync.py
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(cortex): add Knowledge Syncer with ETag caching (P31.3)&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="p314-o-canario-hallucination-probe">[P31.4] O Canário (Hallucination Probe)</h3>
+<p><strong>🎯 Escopo (O que FAZER):</strong></p>
+<ul>
+<li>Criar arquivo <code>scripts/core/guardian/hallucination_probe.py</code></li>
+<li>Implementar classe <code>HallucinationProbe</code></li>
+<li>Método <code>probe()</code> que busca ID específico (<code>kno-001</code>)</li>
+<li>Retornar <code>True</code> se encontrado, <code>False</code> caso contrário</li>
+</ul>
+<p><strong>🚫 Escopo (O que NÃO fazer):</strong></p>
+<ul>
+<li>Não implementar UI complexa (apenas retorno booleano)</li>
+<li>Não adicionar métricas avançadas (futuro)</li>
+</ul>
+<p><strong>✅ Critério de Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Probe detecta canário existente?</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s2">from scripts.core.guardian.hallucination_probe import HallucinationProbe</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s2">from pathlib import Path</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s2">probe = HallucinationProbe(workspace_root=Path.cwd())</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s2">result = probe.probe(canary_id=&#39;kno-001&#39;)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s2">assert result is True, &#39;Canário kno-001 deveria ser encontrado&#39;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s2">print(&#39;✅ Probe funcionando&#39;)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s2">&quot;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="c1"># 2. Probe detecta canário ausente?</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s2">from scripts.core.guardian.hallucination_probe import HallucinationProbe</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s2">from pathlib import Path</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="s2">probe = HallucinationProbe(workspace_root=Path.cwd())</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="s2">result = probe.probe(canary_id=&#39;kno-INEXISTENTE&#39;)</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="s2">assert result is False, &#39;Canário inexistente não deveria ser encontrado&#39;</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="s2">print(&#39;✅ Probe detecta ausência corretamente&#39;)</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p><strong>📦 Commit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/core/guardian/hallucination_probe.py
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(guardian): add Hallucination Probe for Knowledge integrity (P31.4)&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="protocolo-de-auditoria-ping-pong">🔄 Protocolo de Auditoria Ping-Pong</h2>
+<h3 id="o-que-e">O Que É?</h3>
+<p>Validação item-a-item entre LLM e usuário <strong>após cada subtarefa</strong>, antes de prosseguir.</p>
+<h3 id="fluxo-de-comunicacao">Fluxo de Comunicação</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>┌─────────┐                          ┌─────────┐
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>│   LLM   │                          │  Human  │
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>└────┬────┘                          └────┬────┘
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>     │                                    │
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>     │ &quot;Implementei P31.1 (Modelos)&quot;     │
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>     │ &quot;Peço validação:&quot;                 │
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>     │ &quot;1. Arquivo existe?&quot;              │
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>     │ &quot;2. Mypy passa?&quot;                  │
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>     │ &quot;3. Enums corretos?&quot;              │
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>     ├───────────────────────────────────&gt;│
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>     │                                    │
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>     │                 &lt;──────────────────┤
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>     │      &quot;✅ Item 1: Confirmado&quot;       │
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>     │      &quot;✅ Item 2: Sem erros&quot;        │
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>     │      &quot;✅ Item 3: Validado&quot;         │
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>     │      &quot;Pode prosseguir para P31.2&quot; │
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>     │                                    │
+</code></pre></div>
+<h3 id="exemplo-real-de-dialogo">Exemplo Real de Diálogo</h3>
+<p><strong>LLM (Após P31.1):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Implementei os modelos Pydantic em scripts/core/cortex/models.py.
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>Peço que valide:
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>1. Arquivo existe em scripts/core/cortex/models.py?
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>2. mypy scripts/core/cortex/models.py passa sem erros?
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>3. Enum DocStatus tem valores ACTIVE, DEPRECATED, DRAFT?
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>Aguardo confirmação antes de prosseguir para P31.2 (Scanner).
+</code></pre></div>
+<p><strong>Humano:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Validação Item 1</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>$<span class="w"> </span>ls<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>scripts/core/cortex/models.py<span class="w">  </span>✅
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># Validação Item 2</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>$<span class="w"> </span>mypy<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>Success:<span class="w"> </span>no<span class="w"> </span>issues<span class="w"> </span>found<span class="w">  </span>✅
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="c1"># Validação Item 3</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>$<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts.core.cortex.models import DocStatus; print(list(DocStatus))&quot;</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="o">[</span>&lt;DocStatus.ACTIVE:<span class="w"> </span><span class="s1">&#39;active&#39;</span>&gt;,<span class="w"> </span>&lt;DocStatus.DEPRECATED:<span class="w"> </span><span class="s1">&#39;deprecated&#39;</span>&gt;,<span class="w"> </span>&lt;DocStatus.DRAFT:<span class="w"> </span><span class="s1">&#39;draft&#39;</span>&gt;<span class="o">]</span><span class="w">  </span>✅
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>Confirmado.<span class="w"> </span>Prossiga<span class="w"> </span>para<span class="w"> </span>P31.2.
+</code></pre></div>
+<hr />
+<h2 id="reguas-de-decisao-quando-fracionar">📏 Réguas de Decisão: Quando Fracionar?</h2>
+<h3 id="heuristicas-de-complexidade">Heurísticas de Complexidade</h3>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Limiar</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linhas de código esperadas</strong></td>
+<td>&gt;200</td>
+<td>Fracionar obrigatório</td>
+</tr>
+<tr>
+<td><strong>Número de arquivos afetados</strong></td>
+<td>&gt;3</td>
+<td>Fracionar recomendado</td>
+</tr>
+<tr>
+<td><strong>Número de responsabilidades (SRP)</strong></td>
+<td>&gt;2</td>
+<td>Fracionar obrigatório</td>
+</tr>
+<tr>
+<td><strong>Dependências circulares</strong></td>
+<td>Qualquer</td>
+<td>Fracionar imediatamente</td>
+</tr>
+<tr>
+<td><strong>Tempo de implementação estimado</strong></td>
+<td>&gt;2h</td>
+<td>Fracionar obrigatório</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arvore-de-decisao">Árvore de Decisão</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>graph TD
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    A{Tarefa tem &gt;2&lt;br/&gt;responsabilidades?} --&gt;|Sim| B[FRACIONAR]
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    A --&gt;|Não| C{Código esperado&lt;br/&gt;&gt;200 linhas?}
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    C --&gt;|Sim| B
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    C --&gt;|Não| D{Depende de código&lt;br/&gt;não escrito?}
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    D --&gt;|Sim| B
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    D --&gt;|Não| E[✅ PODE EXECUTAR&lt;br/&gt;DIRETAMENTE]
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>    B --&gt; F[Dividir em&lt;br/&gt;Micro-Etapas]
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>    F --&gt; G[Aplicar Protocolo&lt;br/&gt;Ping-Pong]
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    style B fill:#ffcccc
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    style E fill:#ccffcc
+</code></pre></div>
+<hr />
+<h2 id="padroes-de-decomposicao-comuns">🎓 Padrões de Decomposição Comuns</h2>
+<h3 id="padrao-1-fundacao-logica-integracao">Padrão 1: Fundação → Lógica → Integração</h3>
+<p><strong>Quando Usar:</strong> Criação de novos módulos do zero</p>
+<p><strong>Exemplo (P31):</strong></p>
+<ol>
+<li><strong>Fundação:</strong> Modelos de dados (Pydantic/dataclasses)</li>
+<li><strong>Lógica:</strong> Implementação de algoritmos/leitura</li>
+<li><strong>Integração:</strong> CLI, testes, documentação</li>
+</ol>
+<hr />
+<h3 id="padrao-2-extracao-religacao-validacao">Padrão 2: Extração → Religação → Validação</h3>
+<p><strong>Quando Usar:</strong> Refatoração de monólitos</p>
+<p><strong>Exemplo (Refatoração S.O.L.I.D.):</strong></p>
+<ol>
+<li><strong>Extração:</strong> Mover classe <code>Logger</code> para arquivo separado</li>
+<li><strong>Religação:</strong> Atualizar imports no arquivo original</li>
+<li><strong>Validação:</strong> Rodar testes, verificar mypy</li>
+</ol>
+<p><strong>Referência:</strong> <a href="../REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a></p>
+<hr />
+<h3 id="padrao-3-hardening-incremental">Padrão 3: Hardening Incremental</h3>
+<p><strong>Quando Usar:</strong> Aplicar melhorias de qualidade em código legado</p>
+<p><strong>Exemplo (Modernização de <code>scripts/audit/</code>):</strong></p>
+<ol>
+<li><strong>[H1] UI:</strong> Substituir <code>print()</code> por <code>rich.console</code></li>
+<li><strong>[H2] Tipagem:</strong> Adicionar type hints + mypy</li>
+<li><strong>[H3] Segurança:</strong> Implementar <code>mask_secret()</code> em logs</li>
+<li><strong>[H4] Enums:</strong> Substituir strings mágicas por Enums</li>
+</ol>
+<hr />
+<h2 id="ferramentas-de-suporte">🛠️ Ferramentas de Suporte</h2>
+<h3 id="1-checklist-de-pre-decomposicao">1. Checklist de Pre-Decomposição</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Antes de aceitar uma tarefa complexa, pergunte:
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">- [ ]</span> A tarefa tem mais de 2 responsabilidades distintas?
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">- [ ]</span> Precisarei criar &gt;3 arquivos novos?
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="k">- [ ]</span> O código esperado ultrapassa 200 linhas?
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">- [ ]</span> Existem dependências circulares potenciais?
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="k">- [ ]</span> A tarefa menciona &quot;e também&quot; mais de 2 vezes?
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>SE 2+ respostas forem &quot;Sim&quot;: PROPOR DECOMPOSIÇÃO
+</code></pre></div>
+<hr />
+<h3 id="2-template-de-proposta-de-decomposicao">2. Template de Proposta de Decomposição</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="gs">**Tarefa Original:**</span> [Nome da tarefa]
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="gs">**Análise de Complexidade:**</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="k">-</span><span class="w"> </span>Responsabilidades identificadas: X, Y, Z
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">-</span><span class="w"> </span>Arquivos afetados: A, B, C
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="k">-</span><span class="w"> </span>Linhas estimadas: ~N
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="gs">**Proposta de Decomposição:**</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="gu">### [TX.1] Nome da Subtarefa 1</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="gs">**Escopo:**</span> [O que fazer]
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="gs">**Não-Escopo:**</span> [O que NÃO fazer]
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="gs">**Validação:**</span> [Como validar]
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="gu">### [TX.2] Nome da Subtarefa 2</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>...
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="gs">**Tempo Estimado por Etapa:**</span> ~30min cada
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="gs">**Aguardo aprovação antes de prosseguir.**</span>
+</code></pre></div>
+<hr />
+<h3 id="3-comandos-de-validacao-rapida">3. Comandos de Validação Rápida</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Valida tipagem de um módulo específico</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>mypy<span class="w"> </span>scripts/core/cortex/models.py
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Valida todos os arquivos modificados</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>git<span class="w"> </span>diff<span class="w"> </span>--name-only<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;\.py$&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>mypy
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Valida se commit é &quot;comitável&quot;</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>git<span class="w"> </span>add<span class="w"> </span>.<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>diff<span class="w"> </span>--cached<span class="w"> </span>--check
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Valida se testes passam</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>pytest<span class="w"> </span>tests/test_knowledge_scanner.py<span class="w"> </span>-v
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1"># Valida se documentação tem links quebrados</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>cortex<span class="w"> </span>scan
+</code></pre></div>
+<hr />
+<h2 id="anti-padroes-o-que-nao-fazer">⚠️ Anti-Padrões (O Que NÃO Fazer)</h2>
+<h3 id="anti-padrao-1-vou-fazer-90-agora">❌ Anti-Padrão 1: "Vou Fazer 90% Agora"</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">sync_knowledge</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="n">KnowledgeEntry</span><span class="p">):</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>    <span class="c1"># TODO: Implement ETag caching later</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">source_url</span><span class="p">)</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="c1"># TODO: Add error handling</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>    <span class="c1"># TODO: Merge with local content</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+</code></pre></div>
+<p><strong>Problema:</strong> Código não é testável nem comitável (depende de TODOs).</p>
+<p><strong>Solução:</strong> Dividir em <code>[TX.1] HTTP Básico</code> → <code>[TX.2] ETag</code> → <code>[TX.3] Merge</code>.</p>
+<hr />
+<h3 id="anti-padrao-2-presumi-que-existe">❌ Anti-Padrão 2: "Presumi que Existe"</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.knowledge_sync</span><span class="w"> </span><span class="kn">import</span> <span class="n">KnowledgeSyncer</span>  <span class="c1"># Não existe ainda!</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">scanner</span> <span class="o">=</span> <span class="n">KnowledgeScanner</span><span class="p">()</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">syncer</span> <span class="o">=</span> <span class="n">KnowledgeSyncer</span><span class="p">()</span>  <span class="c1"># Depende de código futuro</span>
+</code></pre></div>
+<p><strong>Problema:</strong> Violação do critério de Independência.</p>
+<p><strong>Solução:</strong> Criar <code>KnowledgeSyncer</code> ANTES de usá-lo no Scanner.</p>
+<hr />
+<h3 id="anti-padrao-3-big-bang-de-testes">❌ Anti-Padrão 3: "Big Bang de Testes"</h3>
+<p><strong>Sintoma:</strong></p>
+<blockquote>
+<p>"Vou implementar todos os módulos e testar no final."</p>
+</blockquote>
+<p><strong>Problema:</strong> Debugging vira "caça ao tesouro" (erro pode estar em qualquer um dos 5 módulos).</p>
+<p><strong>Solução:</strong> Cada subtarefa tem seu teste específico (validação Ping-Pong).</p>
+<hr />
+<h2 id="metricas-de-sucesso">📊 Métricas de Sucesso</h2>
+<h3 id="indicadores-de-qualidade-da-decomposicao">Indicadores de Qualidade da Decomposição</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Ideal</th>
+<th>Aceitável</th>
+<th>Problemático</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tempo médio por subtarefa</strong></td>
+<td>20-40min</td>
+<td>40-60min</td>
+<td>&gt;60min</td>
+</tr>
+<tr>
+<td><strong>Taxa de rollback</strong></td>
+<td>0%</td>
+<td>&lt;10%</td>
+<td>&gt;10%</td>
+</tr>
+<tr>
+<td><strong>Commits por tarefa</strong></td>
+<td>3-6</td>
+<td>2-8</td>
+<td>&lt;2 ou &gt;10</td>
+</tr>
+<tr>
+<td><strong>Erros de mypy pós-subtarefa</strong></td>
+<td>0</td>
+<td>0-2</td>
+<td>&gt;2</td>
+</tr>
+<tr>
+<td><strong>Dependências de código futuro</strong></td>
+<td>0</td>
+<td>0</td>
+<td>&gt;0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="instrucoes-para-llms">🧠 Instruções para LLMs</h2>
+<h3 id="quando-receber-tarefa-complexa">Quando Receber Tarefa Complexa</h3>
+<p><strong>PASSO 1: Analise a Complexidade</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>1. Liste responsabilidades distintas
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>2. Estime linhas de código por responsabilidade
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>3. Identifique dependências entre partes
+</code></pre></div>
+<p><strong>PASSO 2: Se Complexa, Proponha Decomposição</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>&quot;Analisando a tarefa, identifiquei 4 responsabilidades:
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>1. Modelos de Dados
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>2. Scanner de Arquivos
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>3. Download com Cache
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>4. Teste de Integridade
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>Proponho dividir em 4 subtarefas atômicas ([TX.1] a [TX.4]).
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>Posso detalhar o escopo de cada uma?
+</code></pre></div>
+<p><strong>PASSO 3: Aguarde Aprovação</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>NÃO comece implementação sem confirmação explícita.
+</code></pre></div>
+<p><strong>PASSO 4: Execute Uma Subtarefa por Vez</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Implemente [TX.1] → Solicite validação → Aguarde OK → Prossiga [TX.2]
+</code></pre></div>
+<hr />
+<h3 id="template-de-solicitacao-de-validacao">Template de Solicitação de Validação</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="gs">**Subtarefa Concluída:**</span> [TX.N] Nome da Subtarefa
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="gs">**Arquivos Criados/Modificados:**</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="k">-</span><span class="w"> </span>scripts/path/to/file.py
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="gs">**Peço validação dos seguintes itens:**</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="k">1.</span> [ ] Arquivo existe em <span class="sb">`scripts/path/to/file.py`</span>?
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="k">2.</span> [ ] <span class="sb">`mypy scripts/path/to/file.py`</span> passa sem erros?
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="k">3.</span> [ ] Função <span class="sb">`X()`</span> retorna tipo esperado <span class="sb">`Y`</span>?
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="k">4.</span> [ ] Não há imports de módulos ainda não implementados?
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="gs">**Como validar (comandos sugeridos):**</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>```bash
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>ls scripts/path/to/file.py
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>mypy scripts/path/to/file.py
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>python -c &quot;from scripts.path.to.file import X; print(X())&quot;
+</code></pre></div>
+<p><strong>Aguardo confirmação antes de prosseguir para [TX.N+1].</strong></p>
+<p>```</p>
+<hr />
+<h2 id="referencias-e-leituras-complementares">📚 Referências e Leituras Complementares</h2>
+<ul>
+<li><a href="../../history/PHASE2_KNOWLEDGE_NODE_POSTMORTEM/">PHASE2_KNOWLEDGE_NODE_POSTMORTEM.md</a> - Caso real de aplicação</li>
+<li><a href="../REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a> - Protocolo para refatorações</li>
+<li><a href="../LLM_ENGINEERING_CONTEXT_AWARENESS/">LLM_ENGINEERING_CONTEXT_AWARENESS.md</a> - Limites de janela de contexto</li>
+<li><a href="../ATOMIC_COMMIT_PROTOCOL/">ATOMIC_COMMIT_PROTOCOL.md</a> - Boas práticas de commits</li>
+</ul>
+<hr />
+<h2 id="tldr-resumo-executivo">🎯 TL;DR (Resumo Executivo)</h2>
+<p><strong>O Modelo P31 em 3 Regras:</strong></p>
+<ol>
+<li><strong>📦 Regra da Atomicidade:</strong> Cada subtarefa deve ser COMITÁVEL + TESTÁVEL + INDEPENDENTE</li>
+<li><strong>🔄 Regra do Ping-Pong:</strong> Validação item-a-item ANTES de prosseguir</li>
+<li><strong>🚫 Regra da Recusa:</strong> Se &gt;2 responsabilidades, RECUSE e PROPONHA decomposição</li>
+</ol>
+<p><strong>Benefícios Comprovados:</strong>
+- ✅ 60% menos tempo de debugging
+- ✅ 0% de rollbacks
+- ✅ 100% de cobertura de testes por subtarefa
+- ✅ Commits auditáveis e reversíveis</p>
+<hr />
+<p><strong>Validado em produção durante a Fase 2 (Knowledge Node).</strong>
+<strong>Status:</strong> Metodologia aprovada para todas as fases futuras.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

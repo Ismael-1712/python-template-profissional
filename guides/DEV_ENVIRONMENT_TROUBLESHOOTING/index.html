@@ -1,0 +1,1348 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Troubleshooting de Ambiente de Desenvolvimento - Problemas Comuns e Soluções - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#troubleshooting-de-ambiente-de-desenvolvimento" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting de Ambiente de Desenvolvimento - Problemas Comuns e Soluções
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-armadilha-do-hook-obsoleto-stale-hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Armadilha do "Hook Obsoleto" (Stale Hook)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Armadilha do &#34;Hook Obsoleto&#34; (Stale Hook)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-obrigatoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução Obrigatória
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prevenção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-real-interacoes-26-28-sprint-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso Real (Interações 26-28 - Sprint 4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-paradoxo-inception-do-auditor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Paradoxo "Inception" do Auditor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Paradoxo &#34;Inception&#34; do Auditor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-emergencial-curto-prazo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução Emergencial (Curto Prazo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-definitiva-longo-prazo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução Definitiva (Longo Prazo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-real-interacao-61-sprint-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso Real (Interação 61 - Sprint 4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-contaminacao-de-estado-em-repositorios-legados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Contaminação de Estado em Repositórios Legados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Contaminação de Estado em Repositórios Legados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-protocolo-de-commit-atomico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução (Protocolo de Commit Atômico)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limpeza-remover-arquivos-sujos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limpeza (Remover Arquivos Sujos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevencao-gitignore-proativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prevenção (.gitignore Proativo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-real-interacao-60-sprint-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso Real (Interação 60 - Sprint 4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dependencias-ausentes-apos-clone-fresco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dependências Ausentes Após Clone Fresco
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Dependências Ausentes Após Clone Fresco">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-reconstrucao-limpa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução (Reconstrução Limpa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacao-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validação Manual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automacao-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automação (Makefile)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-conflitos-de-formatacao-ruff-vs-ruff-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Conflitos de Formatação (Ruff vs Ruff-Format)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Conflitos de Formatação (Ruff vs Ruff-Format)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevencao_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prevenção
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-troubleshooting-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist de Troubleshooting Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribuindo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contribuindo
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="troubleshooting-de-ambiente-de-desenvolvimento">Troubleshooting de Ambiente de Desenvolvimento</h1>
+<h2 id="status">Status</h2>
+<p><strong>Active</strong> - Baseado em problemas reais diagnosticados durante Sprint 4 (Nov 2025)</p>
+<h2 id="contexto">Contexto</h2>
+<p>Este documento concentra <strong>conhecimento tácito</strong> adquirido durante o desenvolvimento: problemas que não estão nas documentações oficiais das ferramentas, mas que surgem em ambientes reais e causam atrasos significativos.</p>
+<hr />
+<h2 id="1-armadilha-do-hook-obsoleto-stale-hook">1. Armadilha do "Hook Obsoleto" (Stale Hook)</h2>
+<h3 id="sintoma">Sintoma</h3>
+<p>Mesmo após corrigir o <code>.pre-commit-config.yaml</code>, os commits continuam falhando com erros como:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: update config&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="o">[</span>ERROR<span class="o">]</span><span class="w"> </span>File<span class="w"> </span>scripts/old_file.py<span class="w"> </span>não<span class="w"> </span>encontrado
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="o">[</span>ERROR<span class="o">]</span><span class="w"> </span>pre-commit<span class="w"> </span>hook<span class="w"> </span>failed!
+</code></pre></div>
+<p><strong>O arquivo <code>scripts/old_file.py</code> foi deletado há semanas, mas o hook continua procurando por ele.</strong></p>
+<h3 id="causa-raiz">Causa Raiz</h3>
+<p>O <strong><code>pre-commit</code> não se atualiza automaticamente</strong> quando você edita <code>.pre-commit-config.yaml</code>.</p>
+<p><strong>Como funciona o pre-commit:</strong></p>
+<ol>
+<li>Ao rodar <code>pre-commit install</code>, ele cria um binário em <code>.git/hooks/pre-commit</code></li>
+<li>Este binário <strong>copia</strong> a configuração de <code>.pre-commit-config.yaml</code> para um cache interno</li>
+<li>Edições subsequentes no <code>.yaml</code> <strong>não</strong> afetam o binário já instalado</li>
+</ol>
+<p><strong>Analogia:</strong> É como editar o código-fonte de um programa mas continuar executando a versão compilada antiga.</p>
+<h3 id="diagnostico">Diagnóstico</h3>
+<p>Verifique quando o hook foi instalado pela última vez:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Verifica a data de modificação do hook</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ls<span class="w"> </span>-lh<span class="w"> </span>.git/hooks/pre-commit
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># -rwxr-xr-x  1 user  staff   478B Nov  5 14:23 .git/hooks/pre-commit</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#                                    ^^^^^^^^^^^ &lt;- Data de instalação</span>
+</code></pre></div>
+<p>Se esta data é <strong>anterior</strong> à última edição do <code>.pre-commit-config.yaml</code>, você está com hook obsoleto.</p>
+<h3 id="solucao-obrigatoria">Solução Obrigatória</h3>
+<p><strong>Force a reinstalação do hook:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pre-commit<span class="w"> </span>install<span class="w"> </span>-f
+</code></pre></div>
+<p>O flag <code>-f</code> (force) sobrescreve o binário existente.</p>
+<p><strong>Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Teste o hook manualmente (sem fazer commit)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Se passar, tente o commit novamente</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;test: verify hook update&quot;</span>
+</code></pre></div>
+<h3 id="prevencao">Prevenção</h3>
+<p><strong>Sempre</strong> que modificar <code>.pre-commit-config.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Workflow recomendado</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>vim<span class="w"> </span>.pre-commit-config.yaml<span class="w">  </span><span class="c1"># Editar configuração</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>pre-commit<span class="w"> </span>install<span class="w"> </span>-f<span class="w">        </span><span class="c1"># ⚠️  OBRIGATÓRIO: Forçar reinstalação</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files<span class="w">   </span><span class="c1"># Testar antes de commitar</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>git<span class="w"> </span>add<span class="w"> </span>.pre-commit-config.yaml
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;ci: update pre-commit hooks&quot;</span>
+</code></pre></div>
+<h3 id="caso-real-interacoes-26-28-sprint-4">Caso Real (Interações 26-28 - Sprint 4)</h3>
+<p><strong>Timeline:</strong></p>
+<ul>
+<li><strong>26 Nov:</strong> Deletamos <code>scripts/lint_fix.py</code> (script obsoleto)</li>
+<li><strong>26 Nov:</strong> Removemos referência no <code>.pre-commit-config.yaml</code></li>
+<li><strong>26 Nov:</strong> Tentamos commit → <strong>FALHA</strong> (hook procurando arquivo deletado)</li>
+<li><strong>26 Nov:</strong> Diagnosticamos: <code>.git/hooks/pre-commit</code> datava de 15 Nov</li>
+<li><strong>26 Nov:</strong> Rodamos <code>pre-commit install -f</code> → <strong>SUCESSO</strong></li>
+</ul>
+<p><strong>Tempo perdido:</strong> 2 horas de debugging.</p>
+<p><strong>Lição:</strong> Este problema é <strong>invisível</strong> (não há mensagem de erro clara indicando "hook desatualizado").</p>
+<hr />
+<h2 id="2-paradoxo-inception-do-auditor">2. Paradoxo "Inception" do Auditor</h2>
+<h3 id="sintoma_1">Sintoma</h3>
+<p>Ao tentar commitar correções na própria ferramenta de auditoria (<code>code_audit.py</code>), ela <strong>bloqueia o próprio commit</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: update code_audit to ignore comments&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Running<span class="w"> </span>code<span class="w"> </span>audit...
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="o">[</span>ERROR<span class="o">]</span><span class="w"> </span>scripts/code_audit.py:145:<span class="w"> </span>Detected<span class="w"> </span><span class="nv">shell</span><span class="o">=</span>True<span class="w"> </span><span class="o">(</span>SECURITY<span class="w"> </span>RISK<span class="o">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="o">[</span>ERROR<span class="o">]</span><span class="w"> </span>Audit<span class="w"> </span>failed!<span class="w"> </span>Aborting<span class="w"> </span>commit.
+</code></pre></div>
+<p><strong>O problema:</strong> A linha 145 está dentro de um <strong>comentário</strong> ou <strong>docstring</strong> explicando os riscos do <code>shell=True</code>, mas a ferramenta detecta mesmo assim.</p>
+<h3 id="causa-raiz_1">Causa Raiz</h3>
+<p>A ferramenta <code>code_audit.py</code> (versões &lt; v2.0) usa <strong>regex simples</strong> para detectar padrões perigosos:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Exemplo de detecção problemática (ANTES)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_shell_risk</span><span class="p">(</span><span class="n">file_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;shell\s*=\s*True&#39;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">file_content</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>O problema:</strong> Regex não entende contexto de código Python. Ela detecta <code>shell=True</code> em:</p>
+<ul>
+<li>✅ Código executável (correto detectar)</li>
+<li>❌ Comentários (<code># Never use shell=True</code>)</li>
+<li>❌ Docstrings (<code>"""Avoid shell=True"""</code>)</li>
+<li>❌ Strings literais (<code>error_msg = "shell=True is dangerous"</code>)</li>
+</ul>
+<h3 id="solucao-emergencial-curto-prazo">Solução Emergencial (Curto Prazo)</h3>
+<p><strong>Opção 1: Usar supressão explícita (<code># noqa</code>)</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># code_audit.py</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># noqa: subprocess</span>
+</code></pre></div>
+<p>O <code>code_audit.py</code> (v1.5+) respeita a convenção <code># noqa: &lt;regra&gt;</code>.</p>
+<p><strong>Opção 2: Bypass temporário do hook</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># ⚠️  USE COM CUIDADO (apenas para commits que CORRIGEM o auditor)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: code_audit false positives&quot;</span><span class="w"> </span>--no-verify
+</code></pre></div>
+<h3 id="solucao-definitiva-longo-prazo">Solução Definitiva (Longo Prazo)</h3>
+<p><strong>Substituir detecção por Regex por Análise AST (Abstract Syntax Tree):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Exemplo de detecção correta (DEPOIS - Planejado para P12)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">detect_shell_risk_ast</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect shell=True only in EXECUTABLE code (not comments/strings).&quot;&quot;&quot;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>        <span class="n">tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="n">risks</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span><span class="p">):</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>            <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">keywords</span><span class="p">:</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>                <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">arg</span> <span class="o">==</span> <span class="s2">&quot;shell&quot;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>                    <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>                        <span class="n">risks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">)</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>    <span class="k">return</span> <span class="n">risks</span>
+</code></pre></div>
+<p><strong>Vantagens:</strong></p>
+<ul>
+<li>✅ Ignora comentários/docstrings automaticamente</li>
+<li>✅ Detecta apenas código executável</li>
+<li>✅ Mais confiável (usa o parser oficial do Python)</li>
+</ul>
+<p><strong>Status:</strong> Planejado para <strong>Tarefa P12</strong> (Refatoração de <code>code_audit.py</code>) no Roadmap v2.2.</p>
+<h3 id="caso-real-interacao-61-sprint-4">Caso Real (Interação 61 - Sprint 4)</h3>
+<p><strong>Contexto:</strong> Durante a implementação de supressões <code># noqa</code>, o próprio commit de melhoria do <code>code_audit.py</code> foi bloqueado por falso positivo.</p>
+<p><strong>Solução Aplicada:</strong> Commit manual com <code>--no-verify</code> (justificado em code review).</p>
+<hr />
+<h2 id="3-contaminacao-de-estado-em-repositorios-legados">3. Contaminação de Estado em Repositórios Legados</h2>
+<h3 id="sintoma_2">Sintoma</h3>
+<p>Você faz um commit pontual (ex: "fix typo in README"), mas ao rodar <code>git status</code> vê:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>git<span class="w"> </span>status
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>On<span class="w"> </span>branch<span class="w"> </span>main
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>Changes<span class="w"> </span>not<span class="w"> </span>staged<span class="w"> </span><span class="k">for</span><span class="w"> </span>commit:
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>modified:<span class="w">   </span>scripts/old_script.py
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span>modified:<span class="w">   </span>tests/broken_test.py
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>modified:<span class="w">   </span>src/legacy_module.py
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span>...
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">  </span><span class="o">(</span><span class="m">7</span><span class="w"> </span>arquivos<span class="w"> </span>modificados<span class="w"> </span>não<span class="w"> </span>relacionados<span class="o">)</span>
+</code></pre></div>
+<p><strong>Perigo:</strong> Se você usar <code>git add .</code>, todos esses arquivos (possivelmente com erros) serão incluídos no commit.</p>
+<h3 id="causa-raiz_2">Causa Raiz</h3>
+<p>Em repositórios com histórico longo ou mesclagens recentes, arquivos podem ficar "sujos" no working tree por:</p>
+<ul>
+<li>Merges mal resolvidos</li>
+<li>Stashes aplicados parcialmente</li>
+<li>Edições acidentais de ferramentas (IDEs, formatters rodando em background)</li>
+</ul>
+<h3 id="solucao-protocolo-de-commit-atomico">Solução (Protocolo de Commit Atômico)</h3>
+<p><strong>❌ NUNCA use <code>git add .</code> em repositórios legados.</strong></p>
+<p><strong>✅ Use staging explícito:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># 1. Identifique o que VOCÊ modificou intencionalmente</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git<span class="w"> </span>diff<span class="w"> </span>--name-only
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># 2. Adicione APENAS esses arquivos</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>git<span class="w"> </span>add<span class="w"> </span>README.md<span class="w">  </span><span class="c1"># Apenas o arquivo que você quis modificar</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># 3. Verifique o que será commitado</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>git<span class="w"> </span>diff<span class="w"> </span>--cached
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1"># 4. Commit</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: fix typo in README&quot;</span>
+</code></pre></div>
+<h3 id="limpeza-remover-arquivos-sujos">Limpeza (Remover Arquivos Sujos)</h3>
+<p>Se os arquivos modificados são lixo acidental:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># ⚠️  CUIDADO: Isso descarta mudanças não-commitadas</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>git<span class="w"> </span>restore<span class="w"> </span>scripts/old_script.py<span class="w"> </span>tests/broken_test.py
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Ou, para restaurar TUDO (extremo):</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>git<span class="w"> </span>restore<span class="w"> </span>.
+</code></pre></div>
+<h3 id="prevencao-gitignore-proativo">Prevenção (<code>.gitignore</code> Proativo)</h3>
+<p>Adicione padrões de arquivos que nunca devem ser commitados:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># .gitignore (exemplo)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>*.log
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>*.json<span class="w">  </span><span class="c1"># Relatórios de auditoria</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>__pycache__/
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>.venv/
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>.mypy_cache/
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>.ruff_cache/
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>audit_report_*.json
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>sync_report_*.json
+</code></pre></div>
+<p><strong>Status:</strong> Tarefa <strong>P10</strong> (Higiene do <code>.gitignore</code>) está no Roadmap v2.2.</p>
+<h3 id="caso-real-interacao-60-sprint-4">Caso Real (Interação 60 - Sprint 4)</h3>
+<p><strong>Contexto:</strong> Durante refatoração de <code>ci_failure_recovery.py</code>:</p>
+<ul>
+<li>Intenção: Commitar apenas <code>scripts/ci_recovery/models.py</code> + <code>ci_failure_recovery.py</code></li>
+<li>Acidente: <code>git add .</code> arrastou <strong>7 arquivos</strong> com 153 erros de lint acumulados</li>
+<li>Resultado: CI falhou no PR, atrasando o merge em 3 horas</li>
+</ul>
+<p><strong>Solução:</strong> Revertemos o commit (<code>git reset HEAD~1</code>), limpamos o working tree, e adicionamos arquivos manualmente.</p>
+<hr />
+<h2 id="4-dependencias-ausentes-apos-clone-fresco">4. Dependências Ausentes Após Clone Fresco</h2>
+<h3 id="sintoma_3">Sintoma</h3>
+<p>Você clona o repositório, instala dependências, mas ao rodar testes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>ModuleNotFoundError:<span class="w"> </span>No<span class="w"> </span>module<span class="w"> </span>named<span class="w"> </span><span class="s1">&#39;typer&#39;</span>
+</code></pre></div>
+<p><strong>Mas o <code>requirements/dev.txt</code> lista <code>typer</code>!</strong></p>
+<h3 id="causa-raiz_3">Causa Raiz</h3>
+<p>O ambiente virtual (<code>.venv</code>) pode estar:</p>
+<ol>
+<li>Corrompido (instalação interrompida)</li>
+<li>Apontando para Python version errado</li>
+<li>Usando cache pip desatualizado</li>
+</ol>
+<h3 id="solucao-reconstrucao-limpa">Solução (Reconstrução Limpa)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># 1. Deletar ambiente virtual completamente</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.venv
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># 2. Limpar caches Python</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>rm<span class="w"> </span>-rf<span class="w"> </span>__pycache__<span class="w"> </span>.pytest_cache<span class="w"> </span>.ruff_cache<span class="w"> </span>.mypy_cache
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># 3. Reinstalar do zero</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>make<span class="w"> </span>install-dev
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># 4. Validar instalação</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>make<span class="w"> </span>doctor<span class="w">  </span><span class="c1"># Executa diagnóstico do ambiente</span>
+</code></pre></div>
+<h3 id="validacao-manual">Validação Manual</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Confirme que o Python correto está sendo usado</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>which<span class="w"> </span>python
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Saída esperada: /path/to/repo/.venv/bin/python</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># Teste import direto</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import typer; print(typer.__version__)&quot;</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Saída esperada: 0.x.x (não deve dar erro)</span>
+</code></pre></div>
+<h3 id="automacao-makefile">Automação (Makefile)</h3>
+<p>O projeto já possui target <code>make clean-all</code> para isso:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>make<span class="w"> </span>clean-all<span class="w">  </span><span class="c1"># Remove .venv e todos os artefatos</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>make<span class="w"> </span>setup<span class="w">      </span><span class="c1"># Recria ambiente do zero</span>
+</code></pre></div>
+<hr />
+<h2 id="5-conflitos-de-formatacao-ruff-vs-ruff-format">5. Conflitos de Formatação (Ruff vs Ruff-Format)</h2>
+<h3 id="sintoma_4">Sintoma</h3>
+<p>O CI falha com:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="o">[</span>ERROR<span class="o">]</span><span class="w"> </span>Ruff<span class="w"> </span>format<span class="w"> </span>check<span class="w"> </span>failed:
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>File<span class="w"> </span>src/main.py<span class="w"> </span>would<span class="w"> </span>be<span class="w"> </span>reformatted
+</code></pre></div>
+<p><strong>Mas você rodou <code>make format</code> localmente e passou!</strong></p>
+<h3 id="causa-raiz_4">Causa Raiz</h3>
+<p>Versões diferentes de <code>ruff</code> entre local e CI (ou configurações diferentes em <code>pyproject.toml</code>).</p>
+<h3 id="solucao">Solução</h3>
+<p><strong>1. Sincronize versões:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Confirme a versão local</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>ruff<span class="w"> </span>--version
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="c1"># ruff 0.1.9</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="c1"># Compare com requirements/dev.txt</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>grep<span class="w"> </span>ruff<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># ruff==0.1.8  # ⚠️  Versão diferente!</span>
+</code></pre></div>
+<p><strong>2. Force reinstalação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>make<span class="w"> </span>clean-all
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>make<span class="w"> </span>install-dev
+</code></pre></div>
+<p><strong>3. Rode formatação + validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>make<span class="w"> </span>format
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>git<span class="w"> </span>diff<span class="w">  </span><span class="c1"># Se houver mudanças, faça commit</span>
+</code></pre></div>
+<h3 id="prevencao_1">Prevenção</h3>
+<p><strong>Pin exato de versões no <code>requirements/dev.in</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># requirements/dev.in</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="na">ruff</span><span class="o">=</span><span class="s">=0.1.9</span><span class="w">  </span><span class="c1"># ← Versão exata (não ~= ou &gt;=)</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="na">mypy</span><span class="o">=</span><span class="s">=1.7.0</span>
+</code></pre></div>
+<p>Depois compile:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>pip-compile<span class="w"> </span>requirements/dev.in
+</code></pre></div>
+<hr />
+<h2 id="checklist-de-troubleshooting-geral">Checklist de Troubleshooting Geral</h2>
+<p>Quando algo quebrar sem motivo aparente:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">- [ ]</span> <span class="gs">**1. Hook obsoleto:**</span> <span class="sb">`pre-commit install -f`</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="k">- [ ]</span> <span class="gs">**2. Ambiente sujo:**</span> <span class="sb">`make clean-all &amp;&amp; make setup`</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="k">- [ ]</span> <span class="gs">**3. Git working tree:**</span> <span class="sb">`git status`</span> (verificar arquivos não-intencionais)
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="k">- [ ]</span> <span class="gs">**4. Versões sincronizadas:**</span> <span class="sb">`pip list | grep ruff`</span> (local) vs <span class="sb">`requirements/dev.txt`</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="k">- [ ]</span> <span class="gs">**5. Cache corrompido:**</span> <span class="sb">`rm -rf .venv __pycache__ .pytest_cache`</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="k">- [ ]</span> <span class="gs">**6. Diagnóstico automatizado:**</span> <span class="sb">`make doctor`</span>
+</code></pre></div>
+<hr />
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><strong>Ferramenta de Diagnóstico:</strong> <a href="../../scripts/cli/doctor.py"><code>scripts/cli/doctor.py</code></a></li>
+<li><strong>Configuração de Hooks:</strong> <a href="../../.pre-commit-config.yaml"><code>.pre-commit-config.yaml</code></a></li>
+<li><strong>Roadmap:</strong> <a href="../../architecture/ROADMAP_DELTA_AUDIT/">Tarefas P10-P12</a> planejam melhorias nas ferramentas de auditoria</li>
+</ul>
+<hr />
+<h2 id="contribuindo">Contribuindo</h2>
+<p>Se você encontrar um novo problema de ambiente:</p>
+<ol>
+<li>Documente o sintoma, causa e solução neste arquivo</li>
+<li>Considere adicionar um check automatizado no <code>make doctor</code></li>
+<li>Abra PR com tag <code>[dx-improvement]</code></li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

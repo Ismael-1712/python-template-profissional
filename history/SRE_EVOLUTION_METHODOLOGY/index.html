@@ -1,0 +1,1139 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Prof. de TI & SRE Principal">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Metodologia SRE: Evolução de Sistema Instável para Robusto - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#metodologia-sre-evolucao-de-sistema-instavel-para-robusto" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Metodologia SRE: Evolução de Sistema Instável para Robusto
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-historico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto Histórico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principio-orientador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípio Orientador
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-1-diagnostico-e-estabilizacao-v20-v216" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Diagnóstico e Estabilização (v2.0 → v2.1.6)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 1: Diagnóstico e Estabilização (v2.0 → v2.1.6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-auditoria-sre-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Auditoria SRE Inicial
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1. Auditoria SRE Inicial">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#falha-1-contaminacao-de-branch-risco-de-logica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Falha 1: Contaminação de Branch (Risco de Lógica)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#falha-2-poluicao-estrutural-risco-de-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Falha 2: Poluição Estrutural (Risco de Estado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#falha-3-ausencia-de-protecao-arquitetural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Falha 3: Ausência de Proteção Arquitetural
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#falha-4-conflito-de-arquitetura-permanente-srcgitkeep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Falha 4: Conflito de Arquitetura Permanente (src/.gitkeep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#falha-5-ferramental-de-sincronizacao-quebrado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 Falha 5: Ferramental de Sincronização Quebrado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-principios-de-estabilizacao-aplicados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. Princípios de Estabilização Aplicados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-2-implementacao-de-automacao-sre-v217" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Implementação de Automação SRE (v2.1.7)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 2: Implementação de Automação SRE (v2.1.7)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-framework-pre-commit-pr-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Framework Pre-Commit (PR #5)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-semantic-release-pr-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Semantic Release (PR #6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-continuous-deployment-especializado-pr-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Continuous Deployment Especializado (PR #7)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-delta-audit-pr-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Delta Audit (PR #8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-3-auditoria-retroativa-licoes-do-copilot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Auditoria Retroativa (Lições do Copilot)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 3: Auditoria Retroativa (Lições do Copilot)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-descoberta-critica-permissoes-globais-indevidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Descoberta Crítica: Permissões Globais Indevidas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-descoberta-arquitetura-redundante-do-hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Descoberta: Arquitetura Redundante do Hook
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodologia-de-propagacao-sync-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metodologia de Propagação (Sync-Template)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-sre-para-evolucoes-futuras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist SRE para Evoluções Futuras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-evolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Evolução
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências Técnicas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="metodologia-sre-evolucao-de-sistema-instavel-para-robusto">Metodologia SRE: Evolução de Sistema Instável para Robusto</h1>
+<h2 id="contexto-historico">Contexto Histórico</h2>
+<p>Durante as Interações 1-117 da mentoria técnica, este projeto passou por uma <strong>transformação arquitetural SRE</strong> de um ecossistema v2.0 funcional mas fundamentalmente instável para um "Chassi SRE" robusto e confiável (v2.1.7).</p>
+<h2 id="principio-orientador">Princípio Orientador</h2>
+<blockquote>
+<p><strong>"Estabilidade &gt; Arquitetura &gt; Funcionalidades"</strong></p>
+</blockquote>
+<p>Toda decisão técnica foi guiada por este princípio: sem uma base estável, funcionalidades avançadas tornam-se débitos técnicos.</p>
+<h2 id="fase-1-diagnostico-e-estabilizacao-v20-v216">Fase 1: Diagnóstico e Estabilização (v2.0 → v2.1.6)</h2>
+<h3 id="11-auditoria-sre-inicial">1.1. Auditoria SRE Inicial</h3>
+<p>Antes de qualquer implementação, executamos uma <strong>auditoria completa</strong> do estado do repositório, identificando 7 falhas críticas:</p>
+<h4 id="falha-1-contaminacao-de-branch-risco-de-logica">🔴 Falha 1: Contaminação de Branch (Risco de Lógica)</h4>
+<p><strong>Sintoma:</strong> A branch <code>cli</code> estava quebrada e irrecuperável.</p>
+<p><strong>Diagnóstico:</strong> Merges manuais sem proteção causaram conflitos permanentes.</p>
+<p><strong>Resolução:</strong> Substituição cirúrgica da branch:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>cli
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>cli
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Aplicar mudanças específicas da CLI</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>push<span class="w"> </span>-f<span class="w"> </span>origin<span class="w"> </span>cli
+</code></pre></div>
+<p><strong>Lição Aprendida:</strong> Branches sem proteção são vulneráveis a contaminação irreversível.</p>
+<h4 id="falha-2-poluicao-estrutural-risco-de-estado">🔴 Falha 2: Poluição Estrutural (Risco de Estado)</h4>
+<p><strong>Sintoma:</strong> A branch <code>main</code> continha artefatos de outras branches (ex: <code>docker-compose.yml</code>) e lixo de runtime.</p>
+<p><strong>Diagnóstico:</strong> Ausência de <code>.gitignore</code> robusto e merges acidentais.</p>
+<p><strong>Resolução:</strong></p>
+<ol>
+<li>Atualização do <a href="../../.gitignore"><code>.gitignore</code></a> com padrões SRE</li>
+<li>Remoção cirúrgica de artefatos usando <code>git rm --cached</code></li>
+<li>Documentação do "Chassi" limpo em <a href="../../architecture/TRIAD_GOVERNANCE/"><code>TRIAD_GOVERNANCE.md</code></a></li>
+</ol>
+<p><strong>Lição Aprendida:</strong> A <code>main</code> é o "Chassi" - deve conter apenas o que é universal.</p>
+<h4 id="falha-3-ausencia-de-protecao-arquitetural">🔴 Falha 3: Ausência de Proteção Arquitetural</h4>
+<p><strong>Sintoma:</strong> Nenhuma <code>Branch Rule</code> configurada no GitHub.</p>
+<p><strong>Diagnóstico:</strong> Qualquer desenvolvedor (ou erro humano) poderia fazer push direto na <code>main</code>.</p>
+<p><strong>Resolução:</strong></p>
+<ol>
+<li>Implementação de <strong>GitHub Rulesets</strong> para a <code>main</code>:</li>
+<li>Bloquear push direto</li>
+<li>Bloquear deleção da branch</li>
+<li>Exigir aprovação de PR (para equipes)</li>
+<li>Criação do "Fluxo da Chave Mestra" (Admin Bypass) documentado em <a href="../../guides/DIRECT_PUSH_PROTOCOL/"><code>DIRECT_PUSH_PROTOCOL.md</code></a></li>
+</ol>
+<p><strong>Lição Aprendida:</strong> Automação sem governança é caos automatizado.</p>
+<h4 id="falha-4-conflito-de-arquitetura-permanente-srcgitkeep">🔴 Falha 4: Conflito de Arquitetura Permanente (<code>src/.gitkeep</code>)</h4>
+<p><strong>Sintoma:</strong> Merge de <code>main</code> → <code>api</code> ou <code>cli</code> sempre falhava com conflito <code>modify/delete</code>.</p>
+<p><strong>Diagnóstico:</strong> O arquivo <code>src/.gitkeep</code> estava presente na <code>main</code> mas deletado nas branches de produto (que tinham código real em <code>src/</code>).</p>
+<p><strong>Resolução:</strong></p>
+<ol>
+<li>Remoção do <code>src/.gitkeep</code> da <code>main</code> via PR #4</li>
+<li>Criação da ADR-003 (<a href="../../architecture/ADR_003_SRC_GITKEEP_STABILITY/"><code>ADR_003_SRC_GITKEEP_STABILITY.md</code></a>) documentando a decisão</li>
+<li>Teste do <code>sync-template</code> após resolução</li>
+</ol>
+<p><strong>Lição Aprendida:</strong> Conflitos "pequenos" podem quebrar toda a automação downstream.</p>
+<h4 id="falha-5-ferramental-de-sincronizacao-quebrado">🟡 Falha 5: Ferramental de Sincronização Quebrado</h4>
+<p><strong>Sintoma:</strong> O script <code>smart_git_sync.py</code> tentava fazer <code>git push</code> direto na <code>main</code>, mas as Branch Rules bloqueavam.</p>
+<p><strong>Diagnóstico:</strong> O script foi criado antes das proteções, e sua arquitetura (baseada em push direto) era incompatível com governança.</p>
+<p><strong>Resolução:</strong></p>
+<ol>
+<li>Refatoração completa para o "Fluxo da Chave Mestra" (criar PR em vez de push)</li>
+<li>Documentação em <a href="../../guides/SMART_GIT_SYNC_GUIDE/"><code>SMART_GIT_SYNC_GUIDE.md</code></a></li>
+</ol>
+<p><strong>Lição Aprendida:</strong> Scripts legados devem ser auditados quando a arquitetura muda.</p>
+<h3 id="12-principios-de-estabilizacao-aplicados">1.2. Princípios de Estabilização Aplicados</h3>
+<p>Durante a Fase 1, seguimos estes princípios SRE:</p>
+<ol>
+<li><strong>Auditoria Antes de Ação:</strong> Nunca implementar sem entender o estado atual</li>
+<li><strong>Isolamento de Risco:</strong> Cada correção foi feita em branch isolada e testada</li>
+<li><strong>Documentação Sincrônica:</strong> ADRs foram criadas <strong>durante</strong> a implementação, não depois</li>
+<li><strong>Testes de Regressão:</strong> Após cada correção, testar fluxos downstream (<code>sync-template</code>)</li>
+</ol>
+<h2 id="fase-2-implementacao-de-automacao-sre-v217">Fase 2: Implementação de Automação SRE (v2.1.7)</h2>
+<p>Com a fundação estável, implementamos automação <strong>segura</strong>:</p>
+<h3 id="21-framework-pre-commit-pr-5">2.1. Framework Pre-Commit (PR #5)</h3>
+<p><strong>Objetivo:</strong> Porteiro automatizado de qualidade.</p>
+<p><strong>Implementação:</strong></p>
+<ul>
+<li>Arquivo: <a href="../../.pre-commit-config.yaml"><code>.pre-commit-config.yaml</code></a></li>
+<li>Hooks críticos:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff-format</span><span class="w">  </span><span class="c1"># Formatação automática</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruff</span><span class="w">         </span><span class="c1"># Linting</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypy</span><span class="w">         </span><span class="c1"># Type checking</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code-audit-security</span><span class="w">  </span><span class="c1"># Auditoria customizada (Delta)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cortex-audit</span><span class="w"> </span><span class="c1"># Validação de documentação</span>
+</code></pre></div>
+<p><strong>Lição Aprendida:</strong> Hooks devem ser rápidos (&lt;3s) para não serem bypassados com <code>--no-verify</code>.</p>
+<h3 id="22-semantic-release-pr-6">2.2. Semantic Release (PR #6)</h3>
+<p><strong>Objetivo:</strong> Automação de CHANGELOG e versionamento.</p>
+<p><strong>Implementação:</strong></p>
+<ul>
+<li>Arquivo: <a href="../../.github/workflows/release.yml"><code>.github/workflows/release.yml</code></a></li>
+<li>Gatilho: Push na <code>main</code> → Gera release automaticamente</li>
+<li>Permissões: <code>contents: write</code> <strong>apenas</strong> no job de release (Menor Privilégio)</li>
+</ul>
+<p><strong>Código Real:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span><span class="w">  </span><span class="c1"># Apenas no job, não global</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+</code></pre></div>
+<p><strong>Lição Aprendida:</strong> Permissões devem estar no menor escopo possível (job-level, não workflow-level).</p>
+<h3 id="23-continuous-deployment-especializado-pr-7">2.3. Continuous Deployment Especializado (PR #7)</h3>
+<p><strong>Decisão Arquitetural:</strong> Cada branch de produto tem seu próprio workflow CD.</p>
+<p><strong>Razão:</strong> A <code>main</code> é um template - não produz artefato. Apenas <code>api</code> (Docker) e <code>cli</code> (PyPI) produzem.</p>
+<p><strong>Implementação:</strong></p>
+<ul>
+<li><a href="../../.github/workflows/cd-api.yml"><code>cd-api.yml</code></a> → Apenas na branch <code>api</code></li>
+<li><a href="../../.github/workflows/cd-pypi.yml"><code>cd-pypi.yml</code></a> → Apenas na branch <code>cli</code></li>
+</ul>
+<p><strong>Lição Aprendida:</strong> Arquitetura de "Especialização" evita lógica condicional complexa em workflows únicos.</p>
+<h3 id="24-delta-audit-pr-8">2.4. Delta Audit (PR #8)</h3>
+<p><strong>Objetivo:</strong> Auditoria incremental (apenas arquivos modificados) em vez de full scan.</p>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># .pre-commit-config.yaml</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">code-audit-security</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3 scripts/cli/audit.py --config scripts/audit_config.yaml</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">pass_filenames</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># ← A &quot;fiação&quot; nativa do pre-commit</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">python</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p><strong>Código Real em <a href="../../scripts/cli/audit.py#L233"><code>audit.py</code></a>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_audit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_to_audit</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="k">if</span> <span class="n">files_to_audit</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Auditing specific file list (Delta Audit): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files_to_audit</span><span class="p">)</span><span class="si">}</span><span class="s2"> files&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>        <span class="n">python_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files_to_audit</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_exclude</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No specific files provided, scanning paths from config...&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">python_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_python_files</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Resultado:</strong> Redução de <strong>10s → 2s</strong> em commits típicos.</p>
+<p><strong>Lição Aprendida:</strong> Use a infraestrutura nativa (<code>pass_filenames</code>) em vez de criar "porteiros" customizados.</p>
+<h2 id="fase-3-auditoria-retroativa-licoes-do-copilot">Fase 3: Auditoria Retroativa (Lições do Copilot)</h2>
+<p>Após a implementação, pedimos a um <strong>LLM Copilot auditar nosso próprio trabalho</strong> (Interações 109-116).</p>
+<h3 id="31-descoberta-critica-permissoes-globais-indevidas">3.1. Descoberta Crítica: Permissões Globais Indevidas</h3>
+<p><strong>Achado do Copilot:</strong> O workflow <a href="../../.github/workflows/ci.yml"><code>ci.yml</code></a> tinha <code>permissions: contents: write</code> ao nível global, mas os jobs só precisavam de <code>read</code>.</p>
+<p><strong>Análise:</strong> Falso positivo - verificação revelou que o workflow atual já usa:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span><span class="w">  </span><span class="c1"># ✅ Correto</span>
+</code></pre></div>
+<p><strong>Lição Aprendida:</strong> Auditorias automáticas (LLM ou ferramentas) devem ser validadas contra o código real, pois documentação pode estar defasada.</p>
+<h3 id="32-descoberta-arquitetura-redundante-do-hook">3.2. Descoberta: Arquitetura Redundante do Hook</h3>
+<p><strong>Achado do Copilot:</strong> Existência de um <code>pre_commit_audit.py</code> (porteiro) que fazia trabalho que o <code>pre-commit</code> framework já faz nativamente.</p>
+<p><strong>Análise:</strong> Investigação revelou que esse arquivo <strong>não existe mais</strong> - já foi refatorado e o sistema atual usa <code>pass_filenames: true</code> nativo.</p>
+<p><strong>Lição Aprendida:</strong> Débitos técnicos devem ser rastreados (issues/ADRs), senão perdem-se no histórico.</p>
+<h2 id="metodologia-de-propagacao-sync-template">Metodologia de Propagação (Sync-Template)</h2>
+<p>A automação de sincronização entre branches segue o modelo da <strong>Tríade Arquitetural</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>graph LR
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    A[main&lt;br/&gt;Chassi Universal] --&gt;|sync-template| B[api&lt;br/&gt;Aplicação FastAPI]
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    A --&gt;|sync-template| C[cli&lt;br/&gt;Ferramentas Typer]
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    B -.X.- A
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    C -.X.- A
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    B -.X.- C
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    C -.X.- B
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    style A fill:#4CAF50
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    style B fill:#2196F3
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    style C fill:#FF9800
+</code></pre></div>
+<p><strong>Regra de Ouro:</strong> A <code>main</code> pode doar, mas nunca receber de branches especializadas.</p>
+<p><strong>Script:</strong> <a href="../../scripts/smart_git_sync.py"><code>smart_git_sync.py</code></a></p>
+<p><strong>Uso:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Propagar mudanças da main para api e cli</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>python<span class="w"> </span>scripts/smart_git_sync.py<span class="w"> </span>--from<span class="w"> </span>main<span class="w"> </span>--to<span class="w"> </span>api,cli
+</code></pre></div>
+<h2 id="checklist-sre-para-evolucoes-futuras">Checklist SRE para Evoluções Futuras</h2>
+<p>Ao implementar novas funcionalidades neste projeto, siga:</p>
+<ul>
+<li>[ ] <strong>Auditar Antes de Agir:</strong> Executar <code>cortex map</code> e ler <code>.cortex/context.json</code></li>
+<li>[ ] <strong>Princípio do Menor Privilégio:</strong> Permissões no menor escopo (job-level &gt; workflow-level)</li>
+<li>[ ] <strong>Documentação Sincrônica:</strong> Criar ADR <strong>durante</strong> implementação</li>
+<li>[ ] <strong>Testes de Propagação:</strong> Após mudanças na <code>main</code>, executar <code>sync-template</code></li>
+<li>[ ] <strong>Validação de Hooks:</strong> Testar pre-commit localmente antes de push</li>
+<li>[ ] <strong>Auditoria Retroativa:</strong> Pedir revisão de LLM ou colega após implementação</li>
+</ul>
+<h2 id="metricas-de-evolucao">Métricas de Evolução</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>v2.0 (Inicial)</th>
+<th>v2.1.7 (Atual)</th>
+<th>Melhoria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Branches Quebradas</strong></td>
+<td>1 (<code>cli</code>)</td>
+<td>0</td>
+<td>✅ 100%</td>
+</tr>
+<tr>
+<td><strong>Tempo de Commit (Hook)</strong></td>
+<td>10-15s</td>
+<td>2-3s</td>
+<td>✅ 80%</td>
+</tr>
+<tr>
+<td><strong>Conflitos de Sync</strong></td>
+<td>~50% de falha</td>
+<td>&lt;1%</td>
+<td>✅ 98%</td>
+</tr>
+<tr>
+<td><strong>Proteção da Main</strong></td>
+<td>Nenhuma</td>
+<td>Rulesets ativos</td>
+<td>✅ Crítico</td>
+</tr>
+<tr>
+<td><strong>Automação de Release</strong></td>
+<td>Manual</td>
+<td>Automático</td>
+<td>✅ 100%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="referencias-tecnicas">Referências Técnicas</h2>
+<ul>
+<li><a href="../../architecture/ADR_002_PRE_COMMIT_OPTIMIZATION/">ADR-002: Pre-Commit Optimization</a></li>
+<li><a href="../../architecture/ADR_003_SRC_GITKEEP_STABILITY/">ADR-003: Src Gitkeep Stability</a></li>
+<li><a href="../../architecture/TRIAD_GOVERNANCE/">Triad Governance</a></li>
+<li><a href="../../guides/DIRECT_PUSH_PROTOCOL/">Direct Push Protocol</a></li>
+<li><a href="../../guides/SMART_GIT_SYNC_GUIDE/">Smart Git Sync Guide</a></li>
+</ul>
+<h2 id="conclusao">Conclusão</h2>
+<p>A evolução de v2.0 → v2.1.7 demonstra que:</p>
+<ol>
+<li><strong>Estabilidade é Fundação:</strong> Funcionalidades avançadas só são sustentáveis sobre base sólida</li>
+<li><strong>Auditoria é Contínua:</strong> Até auditorias retroativas (LLM) revelam débitos ocultos</li>
+<li><strong>Automação Segura:</strong> Governança (Branch Rules) + Automação (Workflows) = Sistema robusto</li>
+<li><strong>Documentação é Código:</strong> ADRs são tão críticas quanto testes</li>
+</ol>
+<blockquote>
+<p><strong>"Um sistema SRE robusto não é construído em um dia - é cultivado através de auditorias, correções incrementais e documentação obsessiva."</strong></p>
+</blockquote>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

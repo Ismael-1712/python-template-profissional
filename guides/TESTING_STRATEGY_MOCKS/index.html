@@ -1,0 +1,1541 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team & GEM">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Testing Strategy: Anti-I/O com Mocks Estritos (Filosofia SRE) - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#testing-strategy-anti-io-com-mocks-estritos-filosofia-sre" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Testing Strategy: Anti-I/O com Mocks Estritos (Filosofia SRE)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema-testes-frageis-flaky-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema: Testes Frágeis (Flaky Tests)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-solucao-migracao-para-mocks-estritos-p20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Solução: Migração para Mocks Estritos (P20)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principios-da-estrategia-anti-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ Princípios da Estratégia Anti-I/O
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ Princípios da Estratégia Anti-I/O">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regra-de-ouro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regra de Ouro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hierarquia-de-testes-piramide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hierarquia de Testes (Pirâmide)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#biblioteca-de-padroes-de-mock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Biblioteca de Padrões de Mock
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Biblioteca de Padrões de Mock">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#padrao-1-mock-de-subprocessrun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 1: Mock de subprocess.run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-2-mock-de-pathexists-e-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 2: Mock de Path.exists() e Filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-3-mock-de-open-e-leitura-de-arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 3: Mock de open() e Leitura de Arquivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-4-mock-de-tempo-datetime-timesleep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 4: Mock de Tempo (datetime, time.sleep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-5-mock-de-excecoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão 5: Mock de Exceções
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-de-testes-caso-real-p20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Arquitetura de Testes (Caso Real: P20)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Arquitetura de Testes (Caso Real: P20)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antes-monolito-de-teste-fragil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antes: Monólito de Teste (Frágil)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depois-suite-modular-robusto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depois: Suíte Modular (Robusto)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-qualidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Métricas de Qualidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Métricas de Qualidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cobertura-de-codigo-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cobertura de Código (Coverage)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#velocidade-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Velocidade de Execução
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-padroes-e-armadilhas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Anti-Padrões e Armadilhas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 Anti-Padrões e Armadilhas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-1-testar-demais-over-mocking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 1: "Testar Demais" (Over-Mocking)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-2-test-double-smell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 2: "Test Double Smell"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-3-validacao-pos-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 3: "Validação Pós-Merge"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-de-migracao-p20-aplicado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Workflow de Migração (P20 Aplicado)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Workflow de Migração (P20 Aplicado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Auditoria
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-fundacao-mocks-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Fundação (Mocks Base)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-migracao-um-teste-por-vez" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Migração (Um Teste por Vez)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-4-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4: Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-e-recursos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências e Recursos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Referências e Recursos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-relacionada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação Relacionada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigo-exemplar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código Exemplar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recursos-externos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursos Externos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Versionamento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aprendizados-e-proximos-passos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Aprendizados e Próximos Passos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Aprendizados e Próximos Passos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#licao-da-p20-fracionamento-salvou-a-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição da P20: Fracionamento Salvou a Refatoração
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proximos-modulos-roadmap-sre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximos Módulos (Roadmap SRE)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="testing-strategy-anti-io-com-mocks-estritos-filosofia-sre">Testing Strategy: Anti-I/O com Mocks Estritos (Filosofia SRE)</h1>
+<blockquote>
+<p><strong>Manifesto:</strong> Testes devem ser rápidos, isolados e determinísticos. I/O real é banido.</p>
+</blockquote>
+<h2 id="contexto-e-motivacao">📋 Contexto e Motivação</h2>
+<h3 id="o-problema-testes-frageis-flaky-tests">O Problema: Testes Frágeis (Flaky Tests)</h3>
+<p>Durante o Ciclo SRE (Tarefas P15-P23), identificamos uma vulnerabilidade crítica na suíte de testes:</p>
+<p><strong>Caso Real - <code>test_smart_git_sync.py</code> (Antes da P20):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ❌ ANTI-PADRÃO: I/O Real</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_sync_creates_directories</span><span class="p">():</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">mkdtemp</span><span class="p">()</span>  <span class="c1"># ❌ Cria pasta real no disco</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">git_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;.git&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">git_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">()</span>  <span class="c1"># ❌ I/O de sistema de arquivos</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>  <span class="c1"># ❌ Chama Git real</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="n">cwd</span><span class="o">=</span><span class="n">temp_dir</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="p">)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="k">assert</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>  <span class="c1"># ❌ Limpeza manual (pode falhar)</span>
+</code></pre></div>
+<p><strong>Problemas Detectados:</strong></p>
+<ol>
+<li>⏱️ <strong>Lentidão</strong>: Cada teste levava 150-300ms (vs. 5-10ms com mocks)</li>
+<li>💥 <strong>Efeitos Colaterais</strong>: Criava arquivos temporários que poluíam <code>/tmp</code></li>
+<li>🎲 <strong>Não-Determinismo</strong>: Falhava em ambientes CI efêmeros (permissões, espaço em disco)</li>
+<li>🔓 <strong>Insegurança</strong>: Executava comandos shell reais (<code>git</code>, <code>rm</code>)</li>
+<li>🧹 <strong>Cleanup Frágil</strong>: Se o teste falhasse, a pasta <code>/tmp</code> ficava suja</li>
+</ol>
+<h3 id="a-solucao-migracao-para-mocks-estritos-p20">A Solução: Migração para Mocks Estritos (P20)</h3>
+<p><strong>Após a refatoração (24 testes unitários isolados):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ✅ BOM: Mock Estrito</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.subprocess.run&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.Path.exists&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_sync_validates_git_repository</span><span class="p">(</span><span class="n">mock_exists</span><span class="p">,</span> <span class="n">mock_subprocess</span><span class="p">):</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="c1"># Configurar comportamento dos mocks</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">mock_exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;main</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">orchestrator</span> <span class="o">=</span> <span class="n">SyncOrchestrator</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">orchestrator</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="c1"># Validar que o método chamou subprocess CORRETAMENTE</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-current&quot;</span><span class="p">],</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        <span class="n">check</span><span class="o">=</span><span class="kc">False</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="p">)</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;current_branch&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span>
+</code></pre></div>
+<p><strong>Ganhos Mensurados:</strong></p>
+<ul>
+<li>⚡ <strong>Velocidade</strong>: 35ms para rodar 24 testes (vs. 3.6s antes)</li>
+<li>🛡️ <strong>Isolamento</strong>: Zero I/O real, zero efeitos colaterais</li>
+<li>🎯 <strong>Determinismo</strong>: 100% de taxa de sucesso em CI</li>
+<li>🔒 <strong>Segurança</strong>: Nenhum comando shell executado</li>
+</ul>
+<hr />
+<h2 id="principios-da-estrategia-anti-io">🛡️ Princípios da Estratégia Anti-I/O</h2>
+<h3 id="regra-de-ouro">Regra de Ouro</h3>
+<blockquote>
+<p><strong>"Se o teste toca disco, rede ou processos externos, ele NÃO é um teste unitário — é um teste de integração disfarçado."</strong></p>
+</blockquote>
+<h3 id="hierarquia-de-testes-piramide">Hierarquia de Testes (Pirâmide)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>graph TD
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    A[E2E Tests&lt;br/&gt;5%&lt;br/&gt;Lentos, Frágeis]
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    B[Integration Tests&lt;br/&gt;15%&lt;br/&gt;I/O Controlado]
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    C[Unit Tests&lt;br/&gt;80%&lt;br/&gt;Mocks Estritos]
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    A --&gt; B
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    B --&gt; C
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    style A fill:#ff6b6b,stroke:#c92a2a,color:#fff
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    style B fill:#ffd43b,stroke:#fab005
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    style C fill:#51cf66,stroke:#2f9e44
+</code></pre></div>
+<p><strong>Distribuição Recomendada:</strong></p>
+<ul>
+<li><strong>80% Unit Tests</strong>: Mocks estritos, rápidos (&lt;50ms cada)</li>
+<li><strong>15% Integration Tests</strong>: I/O controlado (fixtures, databases in-memory)</li>
+<li><strong>5% E2E Tests</strong>: Fluxos completos (CI only, não bloqueiam dev local)</li>
+</ul>
+<hr />
+<h2 id="biblioteca-de-padroes-de-mock">📚 Biblioteca de Padrões de Mock</h2>
+<h3 id="padrao-1-mock-de-subprocessrun">Padrão 1: Mock de <code>subprocess.run</code></h3>
+<p><strong>Cenário:</strong> Testar código que chama comandos Git/shell.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Código sob teste (scripts/git_sync/sync_logic.py)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_check_git_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;--porcelain&quot;</span><span class="p">],</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="n">check</span><span class="o">=</span><span class="kc">False</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;is_clean&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># ✅ Teste com Mock</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.subprocess.run&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_detects_clean_repository</span><span class="p">(</span><span class="n">mock_subprocess</span><span class="p">):</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="c1"># Simular Git retornando vazio (repo limpo)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># ← Saída vazia = repo limpo</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="p">)</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="n">orchestrator</span> <span class="o">=</span> <span class="n">SyncOrchestrator</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="n">status</span> <span class="o">=</span> <span class="n">orchestrator</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="k">assert</span> <span class="n">status</span><span class="p">[</span><span class="s2">&quot;is_clean&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Variações Comuns:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Simular falha de comando</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span><span class="n">returncode</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;fatal: not a git repository&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Simular saída com mudanças</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span><span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot; M src/file.py</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h3 id="padrao-2-mock-de-pathexists-e-filesystem">Padrão 2: Mock de <code>Path.exists()</code> e Filesystem</h3>
+<p><strong>Cenário:</strong> Código que verifica existência de arquivos/pastas.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Código sob teste</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_git_repository</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">git_dir</span> <span class="o">=</span> <span class="n">repo_path</span> <span class="o">/</span> <span class="s2">&quot;.git&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">return</span> <span class="n">git_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># ✅ Teste com Mock</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.Path.exists&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validates_git_directory_exists</span><span class="p">(</span><span class="n">mock_exists</span><span class="p">):</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">mock_exists</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Simular que .git existe</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">orchestrator</span> <span class="o">=</span> <span class="n">SyncOrchestrator</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">orchestrator</span><span class="o">.</span><span class="n">validate_git_repository</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/fake/repo&quot;</span><span class="p">))</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">mock_exists</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>⚠️ Pegadinha Comum:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># ❌ ERRADO: Mock não está no caminho correto</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;pathlib.Path.exists&quot;</span><span class="p">)</span>  <span class="c1"># ← Isso NÃO funciona!</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_file_exists</span><span class="p">(</span><span class="n">mock_exists</span><span class="p">):</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="c1"># Path é importado DENTRO do módulo, precisa mockar lá</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">pass</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># ✅ CORRETO: Mock no módulo que importou Path</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.Path.exists&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_file_exists</span><span class="p">(</span><span class="n">mock_exists</span><span class="p">):</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="c1"># Agora funciona!</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="k">pass</span>
+</code></pre></div>
+<hr />
+<h3 id="padrao-3-mock-de-open-e-leitura-de-arquivos">Padrão 3: Mock de <code>open()</code> e Leitura de Arquivos</h3>
+<p><strong>Cenário:</strong> Código que lê arquivos de configuração.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Código sob teste (scripts/git_sync/config.py)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>        <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># ✅ Teste com Mock</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;builtins.open&quot;</span><span class="p">,</span> <span class="n">new_callable</span><span class="o">=</span><span class="n">MagicMock</span><span class="p">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.config.yaml.safe_load&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_loads_config_from_file</span><span class="p">(</span><span class="n">mock_yaml_load</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">):</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="c1"># Simular conteúdo YAML</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">mock_yaml_load</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="s2">&quot;audit_enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="mi">300</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="p">}</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/fake/config.yaml&quot;</span><span class="p">))</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="k">assert</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;audit_enabled&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    <span class="k">assert</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;timeout&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">300</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    <span class="c1"># Validar que open() foi chamado corretamente</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>    <span class="n">mock_open</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/fake/config.yaml&quot;</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Técnica Avançada: <code>mock_open()</code></strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">mock_open</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;builtins.open&quot;</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">(</span><span class="n">read_data</span><span class="o">=</span><span class="s2">&quot;audit_enabled: true</span><span class="se">\n</span><span class="s2">timeout: 300&quot;</span><span class="p">))</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.config.yaml.safe_load&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_reads_yaml_content</span><span class="p">(</span><span class="n">mock_yaml_load</span><span class="p">):</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="c1"># mock_open() simula o file handle completo</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="c1"># Útil quando você precisa do read() exato</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="k">pass</span>
+</code></pre></div>
+<hr />
+<h3 id="padrao-4-mock-de-tempo-datetime-timesleep">Padrão 4: Mock de Tempo (<code>datetime</code>, <code>time.sleep</code>)</h3>
+<p><strong>Cenário:</strong> Testar lógica dependente de timestamps.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Código sob teste</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">log_with_timestamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># ✅ Teste com Mock</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">patch</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.module.datetime&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_log_includes_timestamp</span><span class="p">(</span><span class="n">mock_datetime</span><span class="p">):</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="c1"># Fixar o tempo em um valor conhecido</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>    <span class="n">mock_datetime</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">log_with_timestamp</span><span class="p">(</span><span class="s2">&quot;test message&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">&quot;[2025-12-16T14:30:00] test message&quot;</span>
+</code></pre></div>
+<p><strong>Para <code>time.sleep()</code> (evitar delays em testes):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;time.sleep&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_retry_logic</span><span class="p">(</span><span class="n">mock_sleep</span><span class="p">):</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="c1"># Não queremos esperar 5s durante o teste!</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">mock_sleep</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Pula o sleep</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="n">retry_function</span><span class="p">()</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="c1"># Validar que tentou dormir 3 vezes</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="k">assert</span> <span class="n">mock_sleep</span><span class="o">.</span><span class="n">call_count</span> <span class="o">==</span> <span class="mi">3</span>
+</code></pre></div>
+<hr />
+<h3 id="padrao-5-mock-de-excecoes">Padrão 5: Mock de Exceções</h3>
+<p><strong>Cenário:</strong> Testar tratamento de erros.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Código sob teste</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">safe_git_operation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;push&quot;</span><span class="p">],</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Git push failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Push failed&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># ✅ Teste com Mock de Exceção</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.subprocess.run&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_handles_git_push_failure</span><span class="p">(</span><span class="n">mock_subprocess</span><span class="p">):</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="c1"># Simular falha de git push</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">(</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="n">returncode</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;push&quot;</span><span class="p">],</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>        <span class="n">stderr</span><span class="o">=</span><span class="s2">&quot;Permission denied&quot;</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    <span class="p">)</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    <span class="n">orchestrator</span> <span class="o">=</span> <span class="n">SyncOrchestrator</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="p">{})</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">SyncError</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;Push failed&quot;</span><span class="p">):</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>        <span class="n">orchestrator</span><span class="o">.</span><span class="n">safe_git_operation</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="arquitetura-de-testes-caso-real-p20">🏗️ Arquitetura de Testes (Caso Real: P20)</h2>
+<h3 id="antes-monolito-de-teste-fragil">Antes: Monólito de Teste (Frágil)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>tests/
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>└── test_smart_git_sync.py (1 arquivo, 400 linhas)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    ├── I/O real (mkdtemp, subprocess.run, open)
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    ├── Setup complexo (criar repos Git temporários)
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    └── Limpeza manual (shutil.rmtree)
+</code></pre></div>
+<h3 id="depois-suite-modular-robusto">Depois: Suíte Modular (Robusto)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>tests/
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>├── conftest.py                    # ← Fixtures globais
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>├── test_smart_git_sync.py         # ← 24 testes unitários (mocks estritos)
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>├── test_audit_analyzer.py         # ← Mocks para módulo de auditoria
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>└── fixtures/                      # ← Dados de teste estáticos
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    ├── sample_audit.json
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    └── mock_git_log.txt
+</code></pre></div>
+<p><strong>Arquivo <code>conftest.py</code> (Setup Global):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="sd">&quot;&quot;&quot;Pytest configuration and fixtures.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Garantir que &#39;scripts&#39; seja importável</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="n">project_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">project_root</span><span class="p">))</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ol>
+<li>✅ <strong>Importação Garantida</strong>: Todos os testes herdam o <code>sys.path</code> correto</li>
+<li>✅ <strong>Fixtures Reutilizáveis</strong>: Mocks comuns definidos uma vez</li>
+<li>✅ <strong>Isolamento</strong>: Cada arquivo de teste é independente</li>
+</ol>
+<hr />
+<h2 id="metricas-de-qualidade">📊 Métricas de Qualidade</h2>
+<h3 id="cobertura-de-codigo-coverage">Cobertura de Código (Coverage)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Rodar testes com cobertura</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>pytest<span class="w"> </span>tests/<span class="w"> </span>--cov<span class="o">=</span>scripts<span class="w"> </span>--cov-report<span class="o">=</span>html
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Visualizar relatório</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>open<span class="w"> </span>htmlcov/index.html
+</code></pre></div>
+<p><strong>Meta de Cobertura (SRE Standard):</strong></p>
+<ul>
+<li>🟢 <strong>≥ 80%</strong>: Código de produção (scripts/, src/)</li>
+<li>🟡 <strong>≥ 60%</strong>: Código de suporte (CLI, utilitários)</li>
+<li>🔴 <strong>&lt; 60%</strong>: Técnica Debt (priorizar para próxima Sprint)</li>
+</ul>
+<p><strong>⚠️ Nota sobre Coverage Gap (Débito Conhecido):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a># Relatório GitHub (Exemplo)
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Coverage: 45% ← BAIXO GLOBAL
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a># Breakdown por módulo:
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>scripts/git_sync/sync_logic.py:  85% ✅ (P20 refatorou)
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>scripts/audit/analyzer.py:       42% ⚠️ (Próxima tarefa: P24)
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>scripts/audit_dashboard.py:      28% 🔴 (Legado sem testes)
+</code></pre></div>
+<p><strong>Interpretação:</strong> O Coverage <strong>global baixo</strong> não significa que o código é ruim — apenas que <strong>alguns módulos ainda não foram testados</strong>. A estratégia é atacá-los <strong>iterativamente</strong> (Protocolo de Fracionamento).</p>
+<hr />
+<h3 id="velocidade-de-execucao">Velocidade de Execução</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Meta: &lt;100ms para suíte unitária completa</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>pytest<span class="w"> </span>tests/test_smart_git_sync.py<span class="w"> </span>-v<span class="w"> </span>--durations<span class="o">=</span><span class="m">5</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Resultado Esperado (P20):</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1"># ======================== slowest 5 durations ========================</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="c1"># 0.005s test_sync_step_complete</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># 0.004s test_load_config_from_file</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="c1"># 0.003s test_validates_git_directory_exists</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1"># ...</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># ===================== 24 passed in 0.035s =====================</span>
+</code></pre></div>
+<p><strong>Regra de Thumb:</strong></p>
+<ul>
+<li>Unit Test: <strong>&lt; 50ms</strong></li>
+<li>Integration Test: <strong>&lt; 500ms</strong></li>
+<li>E2E Test: <strong>&lt; 5s</strong></li>
+</ul>
+<p>Se um teste unitário leva <strong>&gt; 100ms</strong>, há I/O real escondido.</p>
+<hr />
+<h2 id="anti-padroes-e-armadilhas">🚨 Anti-Padrões e Armadilhas</h2>
+<h3 id="anti-padrao-1-testar-demais-over-mocking">❌ Anti-Padrão 1: "Testar Demais" (Over-Mocking)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># ❌ RUIM: Mock de lógica trivial</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.utils.math.add&quot;</span><span class="p">)</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_calculator</span><span class="p">(</span><span class="n">mock_add</span><span class="p">):</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>    <span class="n">mock_add</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">4</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    <span class="n">result</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span>  <span class="c1"># ← Testando Python built-in?</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">4</span>  <span class="c1"># ← Sem valor</span>
+</code></pre></div>
+<p><strong>Quando NÃO mockar:</strong></p>
+<ul>
+<li>Operações matemáticas puras (<code>int</code>, <code>str</code>, <code>list</code>)</li>
+<li>Métodos built-in do Python (<code>len()</code>, <code>sorted()</code>)</li>
+<li>Lógica de negócio simples (funções puras)</li>
+</ul>
+<p><strong>Quando MOCKAR:</strong></p>
+<ul>
+<li>I/O (disco, rede, processos)</li>
+<li>Dependências externas (APIs, databases)</li>
+<li>Operações caras (processamento pesado)</li>
+</ul>
+<hr />
+<h3 id="anti-padrao-2-test-double-smell">❌ Anti-Padrão 2: "Test Double Smell"</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># ❌ RUIM: Mock retorna outro mock</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>    <span class="n">stdout</span><span class="o">=</span><span class="n">MagicMock</span><span class="p">(</span>  <span class="c1"># ← Mock aninhado!</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>        <span class="n">split</span><span class="o">=</span><span class="n">MagicMock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">])</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="p">)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="p">)</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="c1"># ✅ BOM: Retornar dados reais</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;main</span><span class="se">\n</span><span class="s2">&quot;</span>  <span class="c1"># ← String real</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h3 id="anti-padrao-3-validacao-pos-merge">❌ Anti-Padrão 3: "Validação Pós-Merge"</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># ❌ RUIM: Escrever teste DEPOIS do bug</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_bug_fix_for_issue_42</span><span class="p">():</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    <span class="c1"># Teste criado após descobrir bug em produção</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>    <span class="k">pass</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># ✅ BOM: TDD (Test-Driven Development)</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validates_empty_input</span><span class="p">():</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    <span class="c1"># Teste escrito ANTES da implementação</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>        <span class="n">process_data</span><span class="p">(</span><span class="n">input_data</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="workflow-de-migracao-p20-aplicado">🔄 Workflow de Migração (P20 Aplicado)</h2>
+<h3 id="fase-1-auditoria">Fase 1: Auditoria</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Identificar testes com I/O real</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;mkdtemp\|subprocess.run\|open(&quot;</span><span class="w"> </span>tests/
+</code></pre></div>
+<h3 id="fase-2-fundacao-mocks-base">Fase 2: Fundação (Mocks Base)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Criar fixtures reutilizáveis em conftest.py</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">mock_git_status</span><span class="p">():</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.subprocess.run&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock</span><span class="p">:</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>        <span class="n">mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span><span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>        <span class="k">yield</span> <span class="n">mock</span>
+</code></pre></div>
+<h3 id="fase-3-migracao-um-teste-por-vez">Fase 3: Migração (Um Teste por Vez)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Antes (I/O real)</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_sync_creates_repo</span><span class="p">():</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">mkdtemp</span><span class="p">()</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;init&quot;</span><span class="p">],</span> <span class="n">cwd</span><span class="o">=</span><span class="n">temp_dir</span><span class="p">)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="c1"># Depois (Mock estrito)</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="nd">@patch</span><span class="p">(</span><span class="s2">&quot;scripts.git_sync.sync_logic.subprocess.run&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_sync_validates_repo</span><span class="p">(</span><span class="n">mock_subprocess</span><span class="p">):</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>    <span class="n">mock_subprocess</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">(</span><span class="n">returncode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>    <span class="c1"># ...</span>
+</code></pre></div>
+<h3 id="fase-4-validacao">Fase 4: Validação</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Garantir que nenhum I/O real acontece</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>pytest<span class="w"> </span>tests/<span class="w"> </span>--verbose<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;permission\|tmp\|/dev&quot;</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="c1"># ← Se aparecer algo, ainda há I/O!</span>
+</code></pre></div>
+<hr />
+<h2 id="referencias-e-recursos">📚 Referências e Recursos</h2>
+<h3 id="documentacao-relacionada">Documentação Relacionada</h3>
+<ul>
+<li><a href="../testing/">Guia de Testes (SRE Standard)</a></li>
+<li><a href="../REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">Protocolo de Fracionamento Iterativo</a> - Metodologia aplicada na P20</li>
+</ul>
+<h3 id="codigo-exemplar">Código Exemplar</h3>
+<ul>
+<li><a href="../../tests/test_smart_git_sync.py"><code>tests/test_smart_git_sync.py</code></a> - 24 testes unitários (referência)</li>
+<li><a href="../../tests/conftest.py"><code>tests/conftest.py</code></a> - Configuração global</li>
+</ul>
+<h3 id="recursos-externos">Recursos Externos</h3>
+<ul>
+<li><a href="https://docs.python.org/3/library/unittest.mock.html">unittest.mock Documentation</a></li>
+<li><a href="https://docs.pytest.org/en/stable/how-to/monkeypatch.html">pytest Mocking Guide</a></li>
+<li><a href="https://martinfowler.com/bliki/TestDouble.html">Martin Fowler - Test Doubles</a></li>
+</ul>
+<hr />
+<h2 id="versionamento">🔄 Versionamento</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Autor</th>
+<th>Mudanças</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2025-12-16</td>
+<td>SRE &amp; GEM</td>
+<td>Versão inicial baseada em lições da P20</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="aprendizados-e-proximos-passos">💡 Aprendizados e Próximos Passos</h2>
+<h3 id="licao-da-p20-fracionamento-salvou-a-refatoracao">Lição da P20: Fracionamento Salvou a Refatoração</h3>
+<p>Durante a migração de <code>test_smart_git_sync.py</code>, tentamos refatorar <strong>todos os testes de uma vez</strong> (Interações 48-53). <strong>Resultado: Falha Catastrófica.</strong></p>
+<p><strong>Recuperação:</strong> Aplicamos o <strong>Protocolo de Fracionamento Iterativo</strong>:</p>
+<ol>
+<li><strong>Fase 01 (Auditoria)</strong>: Identificar testes com I/O real (12 testes)</li>
+<li><strong>Fase 02.A (Fundação)</strong>: Criar fixtures de mock em <code>conftest.py</code></li>
+<li><strong>Fase 02.B (Migração)</strong>: Migrar 3 testes por vez, commit atômico</li>
+<li><strong>Fase 02.C (Expansão)</strong>: Adicionar novos testes usando os mocks estáveis</li>
+</ol>
+<p><strong>Tempo Total:</strong> 6 commits, 2 dias. <strong>Taxa de Sucesso:</strong> 100%.</p>
+<h3 id="proximos-modulos-roadmap-sre">Próximos Módulos (Roadmap SRE)</h3>
+<ul>
+<li><strong>P24</strong>: Migrar <code>test_audit_analyzer.py</code> (mesma estratégia)</li>
+<li><strong>P25</strong>: Adicionar type hints + Mypy (garantir contratos)</li>
+<li><strong>P26</strong>: Aumentar cobertura de <code>scripts/audit_dashboard.py</code> para 60%+</li>
+</ul>
+<hr />
+<p><strong>Mantenha este documento atualizado conforme novos padrões de teste emergirem.</strong></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

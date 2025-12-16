@@ -1,0 +1,1216 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Guia de Troubleshooting Operacional - Armadilhas Conhecidas e Soluções - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-de-troubleshooting-operacional-armadilhas-conhecidas-e-solucoes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guia de Troubleshooting Operacional - Armadilhas Conhecidas e Soluções
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#proposito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propósito
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#categoria-1-conflitos-de-merge-na-arquitetura-triade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 CATEGORIA 1: Conflitos de Merge na Arquitetura Tríade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 CATEGORIA 1: Conflitos de Merge na Arquitetura Tríade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-1-perda-de-delta-em-git-reset-hard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Problema #1: Perda de Delta em git reset --hard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-2-conflitos-em-pyprojecttoml-durante-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 Problema #2: Conflitos em pyproject.toml Durante Merge
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#categoria-2-problemas-de-cache-e-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 CATEGORIA 2: Problemas de Cache e CI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 CATEGORIA 2: Problemas de Cache e CI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-3-dependencia-removida-ainda-aparece-no-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟡 Problema #3: Dependência Removida Ainda Aparece no CI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#categoria-3-bugs-conhecidos-e-workarounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 CATEGORIA 3: Bugs Conhecidos e Workarounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 CATEGORIA 3: Bugs Conhecidos e Workarounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bug-1-conflito-de-nome-git-sync-vs-pacote-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Bug #1: Conflito de Nome git-sync vs Pacote Sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bug-2-typeerror-em-cortex-audit-com-campo-source_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🟢 Bug #2: TypeError em CORTEX Audit com Campo source_file
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#categoria-4-alertas-de-seguranca-prioridade-maxima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 CATEGORIA 4: Alertas de Segurança (Prioridade Máxima)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 CATEGORIA 4: Alertas de Segurança (Prioridade Máxima)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#alerta-1-propagacao-de-tokens-em-subprocessos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Alerta #1: Propagação de Tokens em Subprocessos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#categoria-5-ferramentas-de-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ CATEGORIA 5: Ferramentas de Diagnóstico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ CATEGORIA 5: Ferramentas de Diagnóstico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verificacao-rapida-de-saude-do-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verificação Rápida de Saúde do Projeto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limpeza-de-estado-corrompido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limpeza de Estado Corrompido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências Cruzadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Referências Cruzadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-arquitetural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação Arquitetural
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guias-operacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guias Operacionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ferramentas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ferramentas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribuindo-com-novas-descobertas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🤝 Contribuindo com Novas Descobertas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-de-troubleshooting-operacional-armadilhas-conhecidas-e-solucoes">Guia de Troubleshooting Operacional - Armadilhas Conhecidas e Soluções</h1>
+<h2 id="proposito">Propósito</h2>
+<p>Este guia consolida <strong>armadilhas operacionais conhecidas</strong>, <strong>bugs documentados</strong> e <strong>workarounds validados</strong> descobertos durante a evolução do projeto. Use este documento como <strong>primeiro recurso de diagnóstico</strong> quando encontrar comportamentos inesperados.</p>
+<blockquote>
+<p><strong>Filosofia SRE:</strong> "Um erro documentado é um erro resolvido pela próxima geração."</p>
+</blockquote>
+<hr />
+<h2 id="categoria-1-conflitos-de-merge-na-arquitetura-triade">🚨 CATEGORIA 1: Conflitos de Merge na Arquitetura Tríade</h2>
+<h3 id="problema-1-perda-de-delta-em-git-reset-hard">🔴 Problema #1: Perda de Delta em <code>git reset --hard</code></h3>
+<p><strong>Sintoma:</strong></p>
+<ul>
+<li>Você executa <code>git reset --hard main</code> na branch <code>cli</code> ou <code>api</code></li>
+<li>A aplicação desaparece (<code>src/main.py</code> volta ao estado vazio ou inexistente)</li>
+<li>O <code>pyproject.toml</code> perde dependências como <code>typer</code> ou <code>fastapi</code></li>
+</ul>
+<p><strong>Causa Raiz:</strong>
+A Arquitetura Tríade funciona por <strong>herança com personalidade</strong> (Main + Delta). O comando <code>reset --hard</code> <strong>sobrescreve</strong> o Delta, transformando a branch produto em clone da <code>main</code>.</p>
+<p><strong>Diagnóstico:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Verificar se você tem Delta em risco</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>diff<span class="w"> </span>--name-status<span class="w"> </span>main...HEAD
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Saída esperada em branches produto (cli/api):</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># M    pyproject.toml</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># M    src/main.py</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># A    Dockerfile  (apenas API)</span>
+</code></pre></div>
+<p><strong>Solução (Prevenção):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ❌ NUNCA FAÇA ISSO em branches cli/api:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>main
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/main
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># ✅ Use sincronização segura:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>git<span class="w"> </span>merge<span class="w"> </span>main<span class="w">  </span><span class="c1"># Resolve conflitos manualmente</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># OU</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>git-sync<span class="w">        </span><span class="c1"># Usa o script validado</span>
+</code></pre></div>
+<p><strong>Solução (Recuperação se já aconteceu):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 1. Encontrar o commit anterior (antes do reset)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>git<span class="w"> </span>reflog
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Saída exemplo:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># abc1234 HEAD@{1}: reset: moving to main  ← Erro aconteceu aqui</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># def5678 HEAD@{2}: commit: feat: add API endpoint  ← Estado bom</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># 2. Criar branch de resgate</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>recovery-branch<span class="w"> </span>def5678
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># 3. Cherry-pick os arquivos de Delta</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>git<span class="w"> </span>checkout<span class="w"> </span>cli<span class="w">  </span><span class="c1"># Voltar para branch corrompida</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>git<span class="w"> </span>checkout<span class="w"> </span>recovery-branch<span class="w"> </span>--<span class="w"> </span>src/main.py<span class="w"> </span>pyproject.toml
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># 4. Commit a recuperação</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>git<span class="w"> </span>add<span class="w"> </span>src/main.py<span class="w"> </span>pyproject.toml
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: restore product Delta after accidental reset&quot;</span>
+</code></pre></div>
+<p><strong>Referências:</strong></p>
+<ul>
+<li><a href="../../architecture/ARCHITECTURE_TRIAD/#regra-nº-1-o-respeito-ao-delta">ARCHITECTURE_TRIAD.md</a></li>
+<li><a href="../TRIAD_SYNC_LESSONS_LEARNED/">TRIAD_SYNC_LESSONS_LEARNED.md</a></li>
+</ul>
+<hr />
+<h3 id="problema-2-conflitos-em-pyprojecttoml-durante-merge">🟡 Problema #2: Conflitos em <code>pyproject.toml</code> Durante Merge</h3>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>merge<span class="w"> </span>main
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Auto-merging pyproject.toml</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># CONFLICT (content): Merge conflict in pyproject.toml</span>
+</code></pre></div>
+<p><strong>Causa Raiz:</strong>
+O <code>pyproject.toml</code> contém:</p>
+<ul>
+<li><strong>Base (Main):</strong> Ferramentas de desenvolvimento (<code>ruff</code>, <code>mypy</code>, <code>pytest</code>)</li>
+<li><strong>Delta (Produto):</strong> Dependências de runtime (<code>fastapi</code>, <code>typer</code>)</li>
+</ul>
+<p>Quando a <code>main</code> atualiza uma ferramenta de dev E a branch produto adiciona uma dependência de runtime, o Git não sabe como unir.</p>
+<p><strong>Solução (Resolução Manual):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># ❌ ERRADO: Aceitar &quot;theirs&quot; (perde o Delta)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">git</span><span class="w"> </span><span class="n">checkout</span><span class="w"> </span><span class="n">--theirs</span><span class="w"> </span><span class="n">pyproject</span><span class="p">.</span><span class="n">toml</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># ❌ ERRADO: Aceitar &quot;ours&quot; (perde atualizações da Main)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">git</span><span class="w"> </span><span class="n">checkout</span><span class="w"> </span><span class="n">--ours</span><span class="w"> </span><span class="n">pyproject</span><span class="p">.</span><span class="n">toml</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># ✅ CORRETO: Fusão Aditiva Manual</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># Abra o arquivo e mescle ambas as seções</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="k">[project]</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="c1"># Deps da Main (Dev Tools)</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="s2">&quot;ruff&gt;=0.8.4&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="s2">&quot;mypy&gt;=1.14.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="c1"># Deps do Delta (Produto)</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="s2">&quot;fastapi&gt;=0.115.6&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># ← Adicione do Delta</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="s2">&quot;typer[all]&gt;=0.15.1&quot;</span><span class="w"> </span><span class="c1"># ← Se for branch CLI</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Automação (Git-Sync):</strong>
+O comando <code>git-sync</code> tem lógica específica para detectar e alertar sobre conflitos em <code>pyproject.toml</code>. Use-o preferencialmente para propagação de mudanças.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>git-sync<span class="w"> </span>--source<span class="w"> </span>main<span class="w"> </span>--target<span class="w"> </span>cli
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># ⚠️  Conflict detected in pyproject.toml</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Please resolve manually preserving both Main tools AND Product deps</span>
+</code></pre></div>
+<hr />
+<h2 id="categoria-2-problemas-de-cache-e-ci">🚨 CATEGORIA 2: Problemas de Cache e CI</h2>
+<h3 id="problema-3-dependencia-removida-ainda-aparece-no-ci">🟡 Problema #3: Dependência Removida Ainda Aparece no CI</h3>
+<p><strong>Sintoma:</strong></p>
+<ul>
+<li>Você remove <code>deprecated-package</code> do <code>requirements/dev.txt</code></li>
+<li>Localmente funciona (<code>make install-dev</code> passa)</li>
+<li>No CI (GitHub Actions), o pacote ainda é importado e usado</li>
+</ul>
+<p><strong>Causa Raiz:</strong>
+O GitHub Actions usa cache de <code>pip</code> baseado em hash de <code>requirements/*.txt</code>. Se você apenas <strong>remove</strong> uma linha sem modificar outras, o <strong>hash pode não mudar</strong> suficientemente para invalidar o cache.</p>
+<p><strong>Diagnóstico:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># .github/workflows/ci.yml</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cache Python dependencies</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v4</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.cache/pip</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ runner.os }}-pip-${{ hashFiles(&#39;requirements/*.txt&#39;) }}</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="c1">#                             ↑ Cache key baseado em hash</span>
+</code></pre></div>
+<p><strong>Solução (Forçar Invalidação):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Adicione um comentário com timestamp em requirements/dev.txt</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# Cache-bust: </span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: bust CI cache after dependency removal&quot;</span>
+</code></pre></div>
+<p><strong>Solução (Limpeza Manual no CI):</strong>
+No GitHub Actions, adicione step de limpeza antes de instalar:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Clear pip cache (manual)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="no">rm -rf ~/.cache/pip</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="no">pip cache purge</span>
+</code></pre></div>
+<p><strong>Referência:</strong></p>
+<ul>
+<li><a href="../../architecture/ADR_002_PRE_COMMIT_OPTIMIZATION/">ADR_002_PRE_COMMIT_OPTIMIZATION.md</a></li>
+</ul>
+<hr />
+<h2 id="categoria-3-bugs-conhecidos-e-workarounds">🚨 CATEGORIA 3: Bugs Conhecidos e Workarounds</h2>
+<h3 id="bug-1-conflito-de-nome-git-sync-vs-pacote-sistema">🟢 Bug #1: Conflito de Nome <code>git-sync</code> vs Pacote Sistema</h3>
+<p><strong>Status:</strong> ⚠️ DÉBITO TÉCNICO ACEITO (Resolução: v3.0.0)</p>
+<p><strong>Sintoma:</strong></p>
+<ul>
+<li>Em sistemas Linux com pacote <code>git-extras</code> instalado, o comando <code>git-sync</code> pode invocar o binário do sistema ao invés do script do projeto</li>
+<li>Comportamento: Sincronização falha silenciosamente ou executa operação errada</li>
+</ul>
+<p><strong>Causa Raiz:</strong>
+O pacote <code>git-extras</code> (comum em Debian/Ubuntu) instala <code>/usr/bin/git-sync</code>, que tem precedência sobre scripts locais em <code>PATH</code>.</p>
+<p><strong>Diagnóstico:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Verificar qual git-sync está sendo usado</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>which<span class="w"> </span>git-sync
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Se retornar /usr/bin/git-sync → Conflito confirmado</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># Verificar se é o script do projeto</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>git-sync<span class="w"> </span>--version
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Saída esperada do projeto:</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># GIT-SYNC v2.0.0 - Smart Branch Synchronization</span>
+</code></pre></div>
+<p><strong>Workaround (Temporário):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Usar caminho explícito</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>python3<span class="w"> </span>scripts/cli/git_sync.py<span class="w"> </span>--source<span class="w"> </span>main<span class="w"> </span>--target<span class="w"> </span>cli
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># OU via Makefile (preferido)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>make<span class="w"> </span>sync-to-cli
+</code></pre></div>
+<p><strong>Resolução Planejada:</strong></p>
+<ul>
+<li><strong>Versão:</strong> v3.0.0 (Roadmap Sprint 6)</li>
+<li><strong>Ação:</strong> Renomear comando para <code>dev-sync</code> para evitar colisão</li>
+<li><strong>Motivo da Postergação:</strong> Compatibilidade com documentação e scripts existentes</li>
+</ul>
+<p><strong>Referência:</strong></p>
+<ul>
+<li>Issue interna: "Rename git-sync to dev-sync for namespace safety"</li>
+</ul>
+<hr />
+<h3 id="bug-2-typeerror-em-cortex-audit-com-campo-source_file">🟢 Bug #2: <code>TypeError</code> em <code>CORTEX Audit</code> com Campo <code>source_file</code></h3>
+<p><strong>Status:</strong> 🛠️ EM CORREÇÃO (Sprint 5)</p>
+<p><strong>Sintoma:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cortex<span class="w"> </span>audit
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># TypeError: __init__() missing 1 required positional argument: &#39;source_file&#39;</span>
+</code></pre></div>
+<p><strong>Causa Raiz:</strong>
+Durante a refatoração do módulo Guardian (Sprint 5 - Fase 1), adicionamos o campo <code>source_file</code> ao modelo <code>ConfigFinding</code> em <code>scripts/core/guardian/models.py</code>. Nem todos os pontos de instanciação em <code>scripts/core/cortex/scanner.py</code> foram atualizados.</p>
+<p><strong>Código Problemático:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># scripts/core/cortex/scanner.py (ANTIGO)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">finding</span> <span class="o">=</span> <span class="n">ConfigFinding</span><span class="p">(</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">config_type</span><span class="o">=</span><span class="s2">&quot;env_var&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">name</span><span class="o">=</span><span class="n">var_name</span><span class="p">,</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="n">file_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">line_number</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="c1"># ❌ Falta: source_file=str(file_path)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Workaround:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Evitar usar cortex audit temporariamente</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># Usar validação manual de links</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>cortex<span class="w"> </span>map<span class="w">  </span><span class="c1"># Funciona normalmente</span>
+</code></pre></div>
+<p><strong>Correção (Em desenvolvimento):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># scripts/core/cortex/scanner.py (CORRIGIDO - Sprint 5)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">finding</span> <span class="o">=</span> <span class="n">ConfigFinding</span><span class="p">(</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">config_type</span><span class="o">=</span><span class="s2">&quot;env_var&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">name</span><span class="o">=</span><span class="n">var_name</span><span class="p">,</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">file_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">source_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span>  <span class="c1"># ✅ Adicionado</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="n">line_number</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">lineno</span><span class="p">,</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Referência:</strong></p>
+<ul>
+<li><a href="../../architecture/VISIBILITY_GUARDIAN_DESIGN/">VISIBILITY_GUARDIAN_DESIGN.md</a></li>
+<li>PR pendente: "fix(cortex): add missing source_file to all ConfigFinding instantiations"</li>
+</ul>
+<hr />
+<h2 id="categoria-4-alertas-de-seguranca-prioridade-maxima">🚨 CATEGORIA 4: Alertas de Segurança (Prioridade Máxima)</h2>
+<h3 id="alerta-1-propagacao-de-tokens-em-subprocessos">🔴 Alerta #1: Propagação de Tokens em Subprocessos</h3>
+<p><strong>Status:</strong> ⚠️ RISCO LATENTE (Correção: Sprint 5 - Prioridade 1)</p>
+<p><strong>Descrição:</strong>
+O módulo <code>scripts/audit/plugins.py</code> executa subprocessos (ex: <code>subprocess.run(['git', 'status'])</code>) que herdam <strong>TODAS</strong> as variáveis de ambiente do processo pai, incluindo tokens sensíveis como <code>GITHUB_TOKEN</code>.</p>
+<p><strong>Código Vulnerável:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># scripts/audit/plugins.py (EXEMPLO VULNERÁVEL)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_git_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>        <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        <span class="c1"># ❌ PROBLEMA: env não está filtrado</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        <span class="c1"># Processo filho recebe GITHUB_TOKEN, CI_TOKEN, etc.</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="p">)</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+</code></pre></div>
+<p><strong>Vetor de Ataque:</strong></p>
+<ul>
+<li>Plugin malicioso ou comprometido pode exfiltrar tokens via subprocesso</li>
+<li>Logs de debug podem vazar variáveis de ambiente</li>
+</ul>
+<p><strong>Solução (Implementação Pendente):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># scripts/audit/plugins.py (SEGURO)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">SAFE_ENV_VARS</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;HOME&quot;</span><span class="p">,</span> <span class="s2">&quot;USER&quot;</span><span class="p">,</span> <span class="s2">&quot;LANG&quot;</span><span class="p">,</span> <span class="s2">&quot;PWD&quot;</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="p">}</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">sanitize_env</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return environment with sensitive vars removed.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>        <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SAFE_ENV_VARS</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_TOKEN&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="p">}</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_git_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>        <span class="n">cmd</span><span class="p">,</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>        <span class="n">env</span><span class="o">=</span><span class="n">sanitize_env</span><span class="p">(),</span>  <span class="c1"># ✅ Ambiente filtrado</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>    <span class="p">)</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span>
+</code></pre></div>
+<p><strong>Ação Imediata:</strong>
+Até a correção ser implementada, <strong>NÃO USE</strong> plugins de auditoria em ambientes com tokens críticos (produção, CI com permissões de escrita).</p>
+<p><strong>Referência:</strong></p>
+<ul>
+<li><a href="../../SECURITY.md">SECURITY.md</a></li>
+<li>Ticket: "P-SEC-01: Implement subprocess environment sanitization in audit plugins"</li>
+</ul>
+<hr />
+<h2 id="categoria-5-ferramentas-de-diagnostico">🛠️ CATEGORIA 5: Ferramentas de Diagnóstico</h2>
+<h3 id="verificacao-rapida-de-saude-do-projeto">Verificação Rápida de Saúde do Projeto</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 1. Estado do Git (detectar conflitos, arquivos órfãos)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>git<span class="w"> </span>status<span class="w"> </span>--short
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># 2. Saúde do ambiente Python</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>dev-doctor
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># 3. Validade da documentação</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>cortex<span class="w"> </span>map<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cortex<span class="w"> </span>audit
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># 4. Qualidade de código</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>make<span class="w"> </span>validate<span class="w">  </span><span class="c1"># Roda ruff, mypy, pytest</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="c1"># 5. Logs de CI (última execução)</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span>--log<span class="w">  </span><span class="c1"># Requer GitHub CLI</span>
+</code></pre></div>
+<h3 id="limpeza-de-estado-corrompido">Limpeza de Estado Corrompido</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Limpar caches e reconstruir ambiente</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.mypy_cache<span class="w"> </span>.pytest_cache<span class="w"> </span>__pycache__
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.venv<span class="w">  </span><span class="c1"># ⚠️ CUIDADO: Remove ambiente virtual</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>make<span class="w"> </span>install-dev<span class="w">  </span><span class="c1"># Recria do zero</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="c1"># Resetar Git para estado limpo (APENAS se tiver backup)</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>git<span class="w"> </span>clean<span class="w"> </span>-fdx<span class="w">  </span><span class="c1"># Remove TODOS os arquivos não rastreados</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/<span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="k">)</span>
+</code></pre></div>
+<hr />
+<h2 id="referencias-cruzadas">📚 Referências Cruzadas</h2>
+<h3 id="documentacao-arquitetural">Documentação Arquitetural</h3>
+<ul>
+<li><a href="../../architecture/ARCHITECTURE_TRIAD/">ARCHITECTURE_TRIAD.md</a> - Fundamentos da Tríade</li>
+<li><a href="../../architecture/VISIBILITY_GUARDIAN_DESIGN/">VISIBILITY_GUARDIAN_DESIGN.md</a> - Sistema Guardian</li>
+<li><a href="../../history/SRE_TECHNICAL_DEBT_CATALOG/">SRE_TECHNICAL_DEBT_CATALOG.md</a> - Catálogo de Débitos</li>
+</ul>
+<h3 id="guias-operacionais">Guias Operacionais</h3>
+<ul>
+<li><a href="../TRIAD_SYNC_LESSONS_LEARNED/">TRIAD_SYNC_LESSONS_LEARNED.md</a> - Lições de sincronização</li>
+<li><a href="../PROTECTED_BRANCH_WORKFLOW/">PROTECTED_BRANCH_WORKFLOW.md</a> - Workflow de proteção</li>
+<li><a href="../SMART_GIT_SYNC_GUIDE/">SMART_GIT_SYNC_GUIDE.md</a> - Guia do git-sync</li>
+</ul>
+<h3 id="ferramentas">Ferramentas</h3>
+<ul>
+<li><a href="../../scripts/cli/doctor.py">scripts/cli/doctor.py</a> - Diagnóstico de ambiente</li>
+<li><a href="../../scripts/cli/git_sync.py">scripts/cli/git_sync.py</a> - Sincronização de branches</li>
+<li><a href="../../scripts/cli/cortex.py">scripts/cli/cortex.py</a> - Sistema de introspecção</li>
+</ul>
+<hr />
+<h2 id="contribuindo-com-novas-descobertas">🤝 Contribuindo com Novas Descobertas</h2>
+<p>Se você encontrar uma nova armadilha operacional:</p>
+<ol>
+<li><strong>Documente imediatamente:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Adicione à seção apropriada deste arquivo</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1"># Inclua: Sintoma, Causa Raiz, Diagnóstico, Solução</span>
+</code></pre></div>
+<ol>
+<li><strong>Crie um teste de regressão:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Adicione teste em tests/ que previna o problema no futuro</span>
+</code></pre></div>
+<ol>
+<li><strong>Atualize o CORTEX:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cortex<span class="w"> </span>map<span class="w">  </span><span class="c1"># Regenera contexto com novo conhecimento</span>
+</code></pre></div>
+<ol>
+<li><strong>Commit atômico:</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>git<span class="w"> </span>add<span class="w"> </span>docs/guides/OPERATIONAL_TROUBLESHOOTING.md
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs(ops): add troubleshooting for [PROBLEMA]&quot;</span>
+</code></pre></div>
+<hr />
+<p><strong>Última Atualização:</strong> 2025-12-16
+<strong>Manutenedores:</strong> SRE Engineering Team
+<strong>Status:</strong> Documento Vivo (Atualizado continuamente)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

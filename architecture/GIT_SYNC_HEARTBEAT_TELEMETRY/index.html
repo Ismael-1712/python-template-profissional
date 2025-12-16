@@ -1,0 +1,1425 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Git Sync Heartbeat - Sistema de Telemetria e Health Checks - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#git-sync-heartbeat-sistema-de-telemetria-e-health-checks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Git Sync Heartbeat - Sistema de Telemetria e Health Checks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema-cegueira-operacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema: Cegueira Operacional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-solucao-heartbeat-atomico-com-telemetria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Solução: Heartbeat Atômico com Telemetria
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura-do-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura do Sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arquitetura do Sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-do-heartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrutura do Heartbeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#campos-do-heartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Campos do Heartbeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estados-do-heartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estados do Heartbeat
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-atualizacao-do-heartbeat-core-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Atualização do Heartbeat (Core Logic)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-garantia-de-integridade-atomic-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Garantia de Integridade: Atomic Writes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-pontos-de-atualizacao-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Pontos de Atualização (Lifecycle)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso-operacionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Uso Operacionais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Casos de Uso Operacionais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-1-detectar-processo-zumbi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 1: Detectar Processo Zumbi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-2-metricas-de-performance-sli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 2: Métricas de Performance (SLI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-3-auditoria-forense-pos-crash" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 3: Auditoria Forense Pós-Crash
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#principios-de-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípios de Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Princípios de Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-non-intrusive-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Non-Intrusive Telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-atomic-updates-crash-safe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Atomic Updates (Crash-Safe)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-minimal-overhead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Minimal Overhead
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracao-com-ci-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integração com CI (GitHub Actions)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integração com CI (GitHub Actions)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#health-check-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Health Check Step
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manutencao-e-evolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manutenção e Evolução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manutenção e Evolução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitacoes-conhecidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitações Conhecidas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roadmap-futuro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap Futuro
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aprendizados-lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aprendizados (Lessons Learned)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Aprendizados (Lessons Learned)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#por-que-nao-usar-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por Que Não Usar Logs?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-fsynctrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por Que fsync=True?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="git-sync-heartbeat-sistema-de-telemetria-e-health-checks">Git Sync Heartbeat - Sistema de Telemetria e Health Checks</h1>
+<h2 id="status">Status</h2>
+<p><strong>Active</strong> - Implementado em produção desde Sprint 1 (Nov 2025)</p>
+<h2 id="contexto-e-motivacao">Contexto e Motivação</h2>
+<h3 id="o-problema-cegueira-operacional">O Problema: Cegueira Operacional</h3>
+<p>Antes da implementação do sistema de Heartbeat, o processo de sincronização Git (<code>smart_git_sync.py</code>) sofria de <strong>Observabilidade Zero</strong>:</p>
+<p><strong>Sintomas Críticos:</strong></p>
+<ul>
+<li>⚠️ <strong>Processos Zumbis:</strong> Sincronizações travavam sem alerta (ex: conflitos de merge não detectados)</li>
+<li>⚠️ <strong>Timeout Silencioso:</strong> GitHub Actions falhavam após 10min sem diagnóstico útil</li>
+<li>⚠️ <strong>Impossibilidade de Debug:</strong> Não havia telemetria para entender <em>onde</em> o processo estava travando</li>
+<li>⚠️ <strong>Concorrência Não Detectada:</strong> Múltiplas sincronizações simultâneas causavam corrupção sem aviso</li>
+</ul>
+<h3 id="a-solucao-heartbeat-atomico-com-telemetria">A Solução: Heartbeat Atômico com Telemetria</h3>
+<p>Implementamos um <strong>sistema de batimento cardíaco (heartbeat)</strong> que emite sinais periódicos durante a execução da sincronização, permitindo:</p>
+<ol>
+<li><strong>Detecção de Travamento:</strong> Se o heartbeat parar de atualizar, o processo travou</li>
+<li><strong>Métricas de Performance:</strong> Duração, fases completadas, PID para kill se necessário</li>
+<li><strong>Auditoria Forense:</strong> Histórico do último estado conhecido antes de crash</li>
+<li><strong>Health Checks em CI:</strong> GitHub Actions pode verificar o heartbeat para timeout early</li>
+</ol>
+<hr />
+<h2 id="arquitetura-do-sistema">Arquitetura do Sistema</h2>
+<h3 id="estrutura-do-heartbeat">Estrutura do Heartbeat</h3>
+<p>O heartbeat é um arquivo JSON localizado em <code>.git/sync_heartbeat</code> com a seguinte estrutura:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;sync_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;20251216-123045-abc123&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;running&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-12-16T12:30:45.123456+00:00&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">&quot;workspace&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/home/user/project&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">&quot;branch&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">&quot;duration_seconds&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.45</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">&quot;phases_completed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">&quot;pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="campos-do-heartbeat">Campos do Heartbeat</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Descrição</th>
+<th>Uso Operacional</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sync_id</code></td>
+<td>string</td>
+<td>UUID único da sincronização (timestamp + hash)</td>
+<td>Correlacionar logs</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>enum</td>
+<td>Estado atual: <code>running</code>, <code>success</code>, <code>failed</code>, <code>crashed</code></td>
+<td>Health check</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td>ISO 8601</td>
+<td>Timestamp UTC da última atualização</td>
+<td>Detectar timeout</td>
+</tr>
+<tr>
+<td><code>workspace</code></td>
+<td>path</td>
+<td>Caminho absoluto do workspace Git</td>
+<td>Contexto de execução</td>
+</tr>
+<tr>
+<td><code>branch</code></td>
+<td>string</td>
+<td>Branch atual durante sync</td>
+<td>Debug de branch locks</td>
+</tr>
+<tr>
+<td><code>duration_seconds</code></td>
+<td>float</td>
+<td>Tempo decorrido desde início</td>
+<td>Performance SLI</td>
+</tr>
+<tr>
+<td><code>phases_completed</code></td>
+<td>int</td>
+<td>Número de fases concluídas (0-5)</td>
+<td>Progresso granular</td>
+</tr>
+<tr>
+<td><code>pid</code></td>
+<td>int</td>
+<td>Process ID do sync ativo</td>
+<td>Kill em caso de zumbi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estados-do-heartbeat">Estados do Heartbeat</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>stateDiagram-v2
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    [*] --&gt; running: Sync Start
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    running --&gt; success: All Phases OK
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    running --&gt; failed: Known Error (retryable)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    running --&gt; crashed: Unexpected Termination
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    success --&gt; [*]
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    failed --&gt; [*]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    crashed --&gt; [*]
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    note right of running
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        Heartbeat atualizado
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        a cada 5s durante sync
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    end note
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    note right of crashed
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        Detectado por ausência
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>        de atualizações &gt;30s
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    end note
+</code></pre></div>
+<hr />
+<h2 id="implementacao">Implementação</h2>
+<h3 id="1-atualizacao-do-heartbeat-core-logic">1. Atualização do Heartbeat (Core Logic)</h3>
+<p><strong>Localização:</strong> <a href="../../scripts/git_sync/sync_logic.py#L58-L113"><code>scripts/git_sync/sync_logic.py</code></a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_update_heartbeat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Update heartbeat file with current sync state.</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="sd">    Args:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="sd">        status: Current status (&#39;running&#39;, &#39;success&#39;, &#39;failed&#39;, &#39;crashed&#39;)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="sd">    Note:</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="sd">        Failures in heartbeat updates are logged but do not interrupt sync.</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="sd">        The heartbeat is telemetry, not critical business logic.</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        <span class="n">heartbeat_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="s2">&quot;.git&quot;</span> <span class="o">/</span> <span class="s2">&quot;sync_heartbeat&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        <span class="c1"># Calculate duration since sync start</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="n">duration_seconds</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        <span class="c1"># Get current branch (with error handling)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>            <span class="n">branch_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_command</span><span class="p">(</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>                <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-current&quot;</span><span class="p">],</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>                <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>                <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>            <span class="p">)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>            <span class="n">current_branch</span> <span class="o">=</span> <span class="n">branch_result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">if</span> <span class="n">branch_result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        <span class="k">except</span> <span class="n">GitOperationError</span><span class="p">:</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>            <span class="n">current_branch</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        <span class="c1"># Build heartbeat data</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        <span class="n">heartbeat_data</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>            <span class="s2">&quot;sync_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_id</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">current_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>            <span class="s2">&quot;workspace&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">),</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>            <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="n">current_branch</span><span class="p">,</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>            <span class="s2">&quot;duration_seconds&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">duration_seconds</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>            <span class="s2">&quot;phases_completed&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">]),</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>            <span class="s2">&quot;pid&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">(),</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>        <span class="p">}</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>        <span class="c1"># Atomic write with fsync (POSIX compliant - crash safe)</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>        <span class="n">atomic_write_json</span><span class="p">(</span><span class="n">heartbeat_path</span><span class="p">,</span> <span class="n">heartbeat_data</span><span class="p">,</span> <span class="n">fsync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Heartbeat updated: </span><span class="si">%s</span><span class="s2"> (status=</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">heartbeat_path</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>        <span class="c1"># Heartbeat failures are non-critical - log and continue</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to update heartbeat: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="2-garantia-de-integridade-atomic-writes">2. Garantia de Integridade: Atomic Writes</h3>
+<p><strong>Problema:</strong> Se o processo crash durante a escrita do JSON, o arquivo fica corrompido (meio escrito).</p>
+<p><strong>Solução:</strong> Usamos o padrão <strong>Atomic Write</strong> via <a href="../../scripts/utils/atomic.py"><code>scripts/utils/atomic.py</code></a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.atomic</span><span class="w"> </span><span class="kn">import</span> <span class="n">atomic_write_json</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Escreve em temp file + fsync + atomic rename (POSIX)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">atomic_write_json</span><span class="p">(</span><span class="n">heartbeat_path</span><span class="p">,</span> <span class="n">heartbeat_data</span><span class="p">,</span> <span class="n">fsync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Como funciona:</strong></p>
+<ol>
+<li>Escreve JSON em <code>.git/sync_heartbeat.tmp.&lt;PID&gt;</code></li>
+<li>Executa <code>os.fsync()</code> para forçar flush no disco (durabilidade)</li>
+<li>Executa <code>Path.replace()</code> (atômico no POSIX - syscall <code>rename()</code>)</li>
+<li>Se crash durante (1) ou (2), o arquivo original permanece intacto</li>
+<li>Se crash durante (3), o kernel garante atomicidade (ou tudo ou nada)</li>
+</ol>
+<h3 id="3-pontos-de-atualizacao-lifecycle">3. Pontos de Atualização (Lifecycle)</h3>
+<p>O heartbeat é atualizado nos seguintes momentos:</p>
+<table>
+<thead>
+<tr>
+<th>Momento</th>
+<th>Status</th>
+<th>Localização no Código</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Início da Sincronização</strong></td>
+<td><code>running</code></td>
+<td><code>GitSyncEngine.__init__()</code></td>
+</tr>
+<tr>
+<td><strong>Após Cada Fase</strong></td>
+<td><code>running</code></td>
+<td><code>GitSyncEngine._execute_phase()</code></td>
+</tr>
+<tr>
+<td><strong>Sincronização Bem-Sucedida</strong></td>
+<td><code>success</code></td>
+<td><code>GitSyncEngine.run()</code> - bloco <code>try</code></td>
+</tr>
+<tr>
+<td><strong>Erro Conhecido (Retry)</strong></td>
+<td><code>failed</code></td>
+<td><code>GitSyncEngine.run()</code> - bloco <code>except GitOperationError</code></td>
+</tr>
+<tr>
+<td><strong>Erro Desconhecido (Crash)</strong></td>
+<td><code>crashed</code></td>
+<td><code>GitSyncEngine.run()</code> - bloco <code>except Exception</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="casos-de-uso-operacionais">Casos de Uso Operacionais</h2>
+<h3 id="caso-1-detectar-processo-zumbi">Caso 1: Detectar Processo Zumbi</h3>
+<p><strong>Cenário:</strong> Um sync travou há 10 minutos aguardando merge manual.</p>
+<p><strong>Diagnóstico:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Ler o heartbeat</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>cat<span class="w"> </span>.git/sync_heartbeat<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Output:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># {</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">#   &quot;sync_id&quot;: &quot;20251216-123045-abc123&quot;,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">#   &quot;status&quot;: &quot;running&quot;,  # ⚠️ Ainda &quot;running&quot; após 10min</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1">#   &quot;timestamp&quot;: &quot;2025-12-16T12:30:45Z&quot;,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1">#   &quot;pid&quot;: 12345,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1">#   &quot;phases_completed&quot;: 2,  # Travou na fase 3</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1">#   &quot;branch&quot;: &quot;main&quot;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="c1"># }</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="c1"># Matar o processo zumbi</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span><span class="m">12345</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># Verificar qual fase falhou</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>git-sync<span class="w"> </span>--resume<span class="w">  </span><span class="c1"># Feature futura: resume from checkpoint</span>
+</code></pre></div>
+<h3 id="caso-2-metricas-de-performance-sli">Caso 2: Métricas de Performance (SLI)</h3>
+<p><strong>Objetivo:</strong> Monitorar se o tempo de sync está degradando.</p>
+<p><strong>Script de Monitoramento:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_sync_performance</span><span class="p">(</span><span class="n">workspace</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">slo_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">60.0</span><span class="p">):</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if sync performance meets SLO (Service Level Objective).&quot;&quot;&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">heartbeat_path</span> <span class="o">=</span> <span class="n">workspace</span> <span class="o">/</span> <span class="s2">&quot;.git&quot;</span> <span class="o">/</span> <span class="s2">&quot;sync_heartbeat&quot;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">heartbeat_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;no_sync&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;No recent sync detected&quot;</span><span class="p">}</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">heartbeat_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="c1"># Check if sync completed successfully</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="n">duration</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;duration_seconds&quot;</span><span class="p">]</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="k">if</span> <span class="n">duration</span> <span class="o">&gt;</span> <span class="n">slo_seconds</span><span class="p">:</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>            <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;degraded&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>                <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">duration</span><span class="p">,</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>                <span class="s2">&quot;slo&quot;</span><span class="p">:</span> <span class="n">slo_seconds</span><span class="p">,</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Sync took </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">s (SLO: </span><span class="si">{</span><span class="n">slo_seconds</span><span class="si">}</span><span class="s2">s)&quot;</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>            <span class="p">}</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>            <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>                <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>                <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">duration</span><span class="p">,</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Sync completed in </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">s&quot;</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>            <span class="p">}</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>    <span class="c1"># Check for timeout (heartbeat not updated in 30s)</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>    <span class="n">last_update</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>    <span class="n">staleness</span> <span class="o">=</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="n">last_update</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>    <span class="k">if</span> <span class="n">staleness</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>        <span class="k">return</span> <span class="p">{</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;timeout&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>            <span class="s2">&quot;staleness&quot;</span><span class="p">:</span> <span class="n">staleness</span><span class="p">,</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>            <span class="s2">&quot;pid&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;pid&quot;</span><span class="p">],</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Sync PID </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;pid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> appears hung (no heartbeat for </span><span class="si">{</span><span class="n">staleness</span><span class="si">}</span><span class="s2">s)&quot;</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>        <span class="p">}</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;running&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Sync in progress&quot;</span><span class="p">}</span>
+</code></pre></div>
+<h3 id="caso-3-auditoria-forense-pos-crash">Caso 3: Auditoria Forense Pós-Crash</h3>
+<p><strong>Cenário:</strong> O CI falhou com "Sync timeout" às 14:32.</p>
+<p><strong>Investigação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Examinar o último estado conhecido</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>cat<span class="w"> </span>.git/sync_heartbeat<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Exemplo de output:</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># {</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1">#   &quot;sync_id&quot;: &quot;20251216-143200-def456&quot;,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1">#   &quot;status&quot;: &quot;running&quot;,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1">#   &quot;timestamp&quot;: &quot;2025-12-16T14:32:15Z&quot;,  # Travou 15s após início</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1">#   &quot;duration_seconds&quot;: 15.23,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1">#   &quot;phases_completed&quot;: 1,  # Completou apenas &quot;fetch&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1">#   &quot;branch&quot;: &quot;feat/new-feature&quot;,</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="c1">#   &quot;workspace&quot;: &quot;/home/runner/work/project/project&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># }</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="c1"># Diagnóstico: Travou na fase 2 (merge), provavelmente conflito não resolvido</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="c1"># Ação: Verificar logs do git para conflitos na branch &quot;feat/new-feature&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="principios-de-design">Princípios de Design</h2>
+<h3 id="1-non-intrusive-telemetry">1. Non-Intrusive Telemetry</h3>
+<p><strong>Regra:</strong> Falhas no heartbeat <strong>nunca</strong> devem interromper a sincronização.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">atomic_write_json</span><span class="p">(</span><span class="n">heartbeat_path</span><span class="p">,</span> <span class="n">heartbeat_data</span><span class="p">,</span> <span class="n">fsync</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to update heartbeat: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># ⚠️ NÃO fazer raise - telemetria é opcional</span>
+</code></pre></div>
+<p><strong>Justificativa:</strong> O heartbeat é <strong>observabilidade</strong>, não <strong>lógica de negócio</strong>. Preferimos perder telemetria a interromper o sync.</p>
+<h3 id="2-atomic-updates-crash-safe">2. Atomic Updates (Crash-Safe)</h3>
+<p><strong>Regra:</strong> O heartbeat deve ser sempre válido, mesmo após crash do sistema.</p>
+<p><strong>Implementação:</strong> Atomic Write Pattern (ver <a href="../FORMATTER_PATTERN/#atomic-writes"><code>FORMATTER_PATTERN.md</code></a>)</p>
+<h3 id="3-minimal-overhead">3. Minimal Overhead</h3>
+<p><strong>Regra:</strong> O heartbeat não deve degradar performance do sync.</p>
+<p><strong>Benchmark:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Tempo de atualização do heartbeat</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">time</span><span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s2">from scripts.utils.atomic import atomic_write_json</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s2">atomic_write_json(Path(&#39;.git/sync_heartbeat&#39;), {&#39;test&#39;: &#39;data&#39;}, fsync=True)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s2">&quot;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># Output: 0.003s (3ms) - desprezível comparado ao sync (30-60s)</span>
+</code></pre></div>
+<hr />
+<h2 id="integracao-com-ci-github-actions">Integração com CI (GitHub Actions)</h2>
+<h3 id="health-check-step">Health Check Step</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># .github/workflows/ci.yml</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">sync-and-build</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Git Sync</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git-sync --auto</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="nt">timeout-minutes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w">  </span><span class="c1"># Timeout global</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Verify Sync Health</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">failure()</span><span class="w">  </span><span class="c1"># Só roda se sync falhar</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">          </span><span class="no"># Examinar heartbeat para diagnóstico</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">          </span><span class="no">if [ -f .git/sync_heartbeat ]; then</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">            </span><span class="no">echo &quot;::error::Sync failed. Last heartbeat:&quot;</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">            </span><span class="no">cat .git/sync_heartbeat | jq</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">            </span><span class="no"># Extrair PID para logs</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">            </span><span class="no">PID=$(jq -r &#39;.pid&#39; .git/sync_heartbeat)</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">            </span><span class="no">echo &quot;::debug::Sync PID was $PID&quot;</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">          </span><span class="no">else</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">            </span><span class="no">echo &quot;::error::No heartbeat found - sync may have failed to start&quot;</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">          </span><span class="no">fi</span>
+</code></pre></div>
+<hr />
+<h2 id="manutencao-e-evolucao">Manutenção e Evolução</h2>
+<h3 id="limitacoes-conhecidas">Limitações Conhecidas</h3>
+<ol>
+<li><strong>Ausência de Histórico:</strong> O heartbeat sobrescreve o estado anterior. Para auditoria longa, considere append-only log.</li>
+<li><strong>Não Distribuído:</strong> Funciona apenas para sync local (não multi-host).</li>
+<li><strong>Timezone Assumption:</strong> Assume UTC. Se o sistema não tiver TZ configurado, timestamps podem ser incorretos.</li>
+</ol>
+<h3 id="roadmap-futuro">Roadmap Futuro</h3>
+<ul>
+<li>[ ] <strong>P28:</strong> Implementar histórico de heartbeats (<code>sync_heartbeat.log</code> append-only)</li>
+<li>[ ] <strong>P29:</strong> Adicionar métricas de rede (bytes transferidos, latência de fetch)</li>
+<li>[ ] <strong>P30:</strong> Integrar com Prometheus/Grafana para alertas automáticos</li>
+</ul>
+<hr />
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><a href="../FORMATTER_PATTERN/#atomic-writes">Atomic Write Pattern</a></li>
+<li><a href="../../guides/SMART_GIT_SYNC_GUIDE/">Git Sync Architecture</a></li>
+<li><a href="../OBSERVABILITY/">Observability Strategy</a></li>
+<li><a href="../../history/SRE_EVOLUTION_METHODOLOGY/">SRE Evolution Methodology</a></li>
+</ul>
+<hr />
+<h2 id="aprendizados-lessons-learned">Aprendizados (Lessons Learned)</h2>
+<h3 id="por-que-nao-usar-logs">Por Que Não Usar Logs?</h3>
+<p><strong>Pergunta:</strong> Por que criar um arquivo separado em vez de parsear logs do sync?</p>
+<p><strong>Resposta:</strong></p>
+<ul>
+<li>❌ <strong>Logs são verbosos:</strong> Parsing é custoso e frágil (regex quebra se formato mudar)</li>
+<li>❌ <strong>Logs não são estruturados:</strong> JSON é parseable por qualquer ferramenta (jq, Python, CI)</li>
+<li>❌ <strong>Logs podem ser desabilitados:</strong> Em produção, usuários podem rodar <code>git-sync --quiet</code></li>
+<li>✅ <strong>Heartbeat é contrato estável:</strong> Schema JSON é versionado e imutável</li>
+</ul>
+<h3 id="por-que-fsynctrue">Por Que fsync=True?</h3>
+<p><strong>Pergunta:</strong> O <code>fsync()</code> não é caro? Por que não usar <code>fsync=False</code>?</p>
+<p><strong>Resposta:</strong></p>
+<ul>
+<li><strong>Crash Safety:</strong> Se o sistema crashar (power loss, kernel panic), queremos garantir que o último estado conhecido foi persistido no disco.</li>
+<li><strong>Performance Aceitável:</strong> Benchmarks mostram overhead de 3ms por atualização (desprezível em syncs de 30-60s).</li>
+<li><strong>SRE Priority:</strong> Confiabilidade &gt; Performance em sistemas de telemetria.</li>
+</ul>
+<hr />
+<h2 id="conclusao">Conclusão</h2>
+<p>O sistema de Heartbeat transformou o Git Sync de uma <strong>caixa preta não debugável</strong> em uma <strong>operação observável e auditável</strong>.</p>
+<p><strong>Métricas de Sucesso:</strong></p>
+<ul>
+<li>✅ <strong>Zero processos zumbis</strong> desde a implementação (anteriormente: 2-3/semana)</li>
+<li>✅ <strong>Tempo médio de diagnóstico de falha:</strong> 60s → 5s (12x mais rápido)</li>
+<li>✅ <strong>SLI de Sync:</strong> 98% das sincronizações completam em &lt;45s</li>
+</ul>
+<p><strong>Lição Final:</strong> <em>Observabilidade não é opcional em sistemas SRE. Se você não pode medir, você não pode melhorar.</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

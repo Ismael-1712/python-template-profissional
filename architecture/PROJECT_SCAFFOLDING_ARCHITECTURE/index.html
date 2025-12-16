@@ -1,0 +1,1532 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica) - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arquitetura-de-scaffolding-de-projetos-molde-fabrica" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Visão Geral
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Visão Geral">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metafora-arquitetural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metáfora Arquitetural
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#componente-1-o-molde-template-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Componente 1: O Molde (Template Repository)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Componente 1: O Molde (Template Repository)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caracteristicas-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Características Técnicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-de-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrutura de Branches
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Estrutura de Branches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diferencas-entre-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diferenças entre Branches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#componente-2-a-fabrica-funcao-newproject" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏭 Componente 2: A Fábrica (Função newproject)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏭 Componente 2: A Fábrica (Função newproject)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#responsabilidades_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Responsabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#localizacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Localização
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assinatura-do-comando" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assinatura do Comando
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-interno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Interno
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapas-detalhadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapas Detalhadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Etapas Detalhadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-validacao-e-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Validação e Parsing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-clonagem-do-molde" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Clonagem do Molde
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-reset-de-historico-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Reset de Histórico Git
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-personalizacao-automatica-sed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Personalização Automática (sed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-instalacao-de-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Instalação de Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-commit-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Commit Inicial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-abertura-automatica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Abertura Automática
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analise-de-trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Análise de Trade-offs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Análise de Trade-offs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vantagens-da-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vantagens da Arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desvantagens-e-mitigacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desvantagens e Mitigações
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Casos de Uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Casos de Uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-1-desenvolvedor-iniciando-novo-microservico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 1: Desenvolvedor Iniciando Novo Microserviço
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-2-desenvolvedor-criando-cli-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 2: Desenvolvedor Criando CLI Tool
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-3-projeto-generico-data-science-etl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 3: Projeto Genérico (Data Science, ETL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacao-e-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Validação e Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Validação e Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#teste-manual-da-fabrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teste Manual da Fábrica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validacao-de-integridade-do-molde" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validação de Integridade do Molde
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evolucao-futura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Evolução Futura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Evolução Futura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#roadmap-prioridades-do-relatorio-original" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap (Prioridades do Relatório Original)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sugestoes-arquiteturais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sugestões Arquiteturais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sugestões Arquiteturais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-migracao-para-python-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Migração para Python CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-sistema-de-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Sistema de Plugins
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-sincronizacao-bidirecional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sincronização Bidirecional
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="arquitetura-de-scaffolding-de-projetos-molde-fabrica">🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)</h1>
+<p><strong>Data:</strong> 16 de Dezembro de 2025
+<strong>Status:</strong> 🟢 Ativo e em Produção
+<strong>Versão:</strong> 1.0.0</p>
+<hr />
+<h2 id="visao-geral">📋 Visão Geral</h2>
+<p>Este projeto implementa um <strong>sistema de scaffolding automatizado</strong> para criação de novos projetos Python profissionais. A arquitetura é baseada no padrão <strong>"Molde + Fábrica"</strong>, que separa a <strong>definição do template</strong> (molde) da <strong>lógica de instanciação</strong> (fábrica).</p>
+<h3 id="metafora-arquitetural">Metáfora Arquitetural</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    ECOSSISTEMA DE SCAFFOLDING               │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─────────────────────────────────────────────────────────────┤
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                                                             │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  📐 MOLDE (Template Repository)                            │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  ├─ GitHub: Ismael-1712/python-template-profissional       │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  ├─ Marcado como &quot;Template Repository&quot;                     │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  └─ Branches especializadas (main, api, cli)              │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│                                                             │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│                        ⬇️  clone                            │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                                                             │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│  🏭 FÁBRICA (Função Bash)                                  │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│  ├─ Comando: newproject                                    │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  ├─ Localização: ~/.bashrc                                 │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  └─ Workflow: clone → personalize → commit                │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│                                                             │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                        ⬇️  instantiate                      │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                                                             │
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  📦 INSTÂNCIA (Novo Projeto)                               │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│  ├─ Diretório: ~/projects/&lt;nome&gt;                          │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│  ├─ Personalizado com dados do desenvolvedor              │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│  └─ Pronto para desenvolvimento (venv + deps)             │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│                                                             │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="componente-1-o-molde-template-repository">🏗️ Componente 1: O Molde (Template Repository)</h2>
+<h3 id="responsabilidades">Responsabilidades</h3>
+<p>O <strong>molde</strong> é um repositório Git que serve como <strong>planta baixa oficial</strong> para novos projetos. Ele contém:</p>
+<ul>
+<li>✅ Estrutura de diretórios profissional</li>
+<li>✅ Arquivos de configuração pré-preenchidos (<code>pyproject.toml</code>, <code>.gitignore</code>, <code>.pre-commit-config.yaml</code>)</li>
+<li>✅ Documentação inicial (<code>README.md</code>, <code>CONTRIBUTING.md</code>, <code>LICENSE</code>)</li>
+<li>✅ Configuração Docker (<code>Dockerfile</code>, <code>docker-compose.yml</code>)</li>
+<li>✅ Workflows CI/CD (<code>.github/workflows/</code>)</li>
+<li>✅ Scripts utilitários (<code>Makefile</code>, <code>scripts/</code>)</li>
+</ul>
+<h3 id="caracteristicas-tecnicas">Características Técnicas</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Implementação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Repositório</strong></td>
+<td><code>git@github.com:Ismael-1712/python-template-profissional.git</code></td>
+</tr>
+<tr>
+<td><strong>Branch Principal</strong></td>
+<td><code>main</code> (projeto genérico CLI/Script)</td>
+</tr>
+<tr>
+<td><strong>Branches Especializadas</strong></td>
+<td><code>api</code> (FastAPI), <code>cli</code> (Typer)</td>
+</tr>
+<tr>
+<td><strong>Marcação GitHub</strong></td>
+<td>✅ Template Repository (permite "Use this template")</td>
+</tr>
+<tr>
+<td><strong>Placeholders</strong></td>
+<td><code>meu_projeto_placeholder</code>, <code>[ano]</code>, <code>Seu Nome</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="estrutura-de-branches">Estrutura de Branches</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>main          → Projeto genérico (CLI/Script)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── api       → Variante FastAPI (REST API)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── cli       → Variante Typer (CLI Application)
+</code></pre></div>
+<h4 id="diferencas-entre-branches">Diferenças entre Branches</h4>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th><code>main</code></th>
+<th><code>api</code></th>
+<th><code>cli</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dependências</strong></td>
+<td>Básico + dev tools</td>
+<td>+ <code>fastapi</code>, <code>uvicorn</code></td>
+<td>+ <code>typer</code>, <code>rich</code></td>
+</tr>
+<tr>
+<td><strong>Estrutura</strong></td>
+<td><code>src/</code> genérico</td>
+<td><code>src/api/</code> com routes</td>
+<td><code>src/cli/</code> com commands</td>
+</tr>
+<tr>
+<td><strong>Arquivo Inicial</strong></td>
+<td><code>src/main.py</code></td>
+<td><code>src/api/main.py</code></td>
+<td><code>src/cli/app.py</code></td>
+</tr>
+<tr>
+<td><strong>Documentação</strong></td>
+<td>Genérica</td>
+<td>API-specific (OpenAPI)</td>
+<td>CLI-specific (--help)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="componente-2-a-fabrica-funcao-newproject">🏭 Componente 2: A Fábrica (Função <code>newproject</code>)</h2>
+<h3 id="responsabilidades_1">Responsabilidades</h3>
+<p>A <strong>fábrica</strong> é uma função Bash que <strong>instancia</strong> o molde e <strong>personaliza</strong> os arquivos para o desenvolvedor.</p>
+<h3 id="localizacao">Localização</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>~/.bashrc<span class="w">  </span><span class="c1"># ou ~/.zshrc para usuários do Zsh</span>
+</code></pre></div>
+<h3 id="assinatura-do-comando">Assinatura do Comando</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>newproject<span class="w"> </span>&lt;nome&gt;<span class="w"> </span><span class="o">[</span>--tipo<span class="w"> </span>&lt;cli<span class="p">|</span>api<span class="p">|</span>lib&gt;<span class="o">]</span>
+</code></pre></div>
+<p><strong>Exemplos de Uso:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Projeto genérico (branch main)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>newproject<span class="w"> </span>meu-app-legal
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Projeto API REST (branch api)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>newproject<span class="w"> </span>servico-usuarios<span class="w"> </span>--tipo<span class="o">=</span>api
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Projeto CLI (branch cli)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>newproject<span class="w"> </span>ferramenta-backup<span class="w"> </span>--tipo<span class="o">=</span>cli
+</code></pre></div>
+<h3 id="workflow-interno">Workflow Interno</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>graph TD
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    A[Usuário executa: newproject meu-app] --&gt; B{Diretório existe?}
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    B --&gt;|Sim| C[Abre diretório existente]
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    B --&gt;|Não| D[git clone --branch TIPO TEMPLATE_REPO]
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    D --&gt; E[cd PROJECT_DIR]
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    E --&gt; F[rm -rf .git]
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    F --&gt; G[git init -b main]
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    G --&gt; H[Personalização via sed]
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    H --&gt; I[make setup ou python3 -m venv .venv]
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    I --&gt; J[git add . &amp;&amp; git commit]
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    J --&gt; K[Abre projeto no editor: go PROJECT_NAME]
+</code></pre></div>
+<h3 id="etapas-detalhadas">Etapas Detalhadas</h3>
+<h4 id="1-validacao-e-parsing">1. <strong>Validação e Parsing</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Valida argumentos</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Erro: Forneça um nome para o novo projeto.&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">fi</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Verifica se diretório já existe</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  O diretório já existe. Abrindo...&quot;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="k">fi</span>
+</code></pre></div>
+<h4 id="2-clonagem-do-molde">2. <strong>Clonagem do Molde</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Clona o template (branch específica se --tipo fornecido)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BRANCH_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TEMPLATE_REPO</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p><strong>Nota:</strong> <code>$BRANCH_NAME</code> é <code>main</code> por padrão, mas muda para <code>api</code>, <code>cli</code>, etc. se <code>--tipo</code> for fornecido.</p>
+<h4 id="3-reset-de-historico-git">3. <strong>Reset de Histórico Git</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Remove vínculo com o template</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.git
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Cria novo repositório limpo</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>init<span class="w"> </span>-b<span class="w"> </span>main
+</code></pre></div>
+<p><strong>Razão:</strong> Novos projetos não devem herdar o histórico do template.</p>
+<h4 id="4-personalizacao-automatica-sed">4. <strong>Personalização Automática (sed)</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Obtém dados do desenvolvedor</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">AUTHOR_NAME</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="k">)</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">AUTHOR_EMAIL</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="k">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nv">CURRENT_YEAR</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+<span class="s2">&quot;%Y&quot;</span><span class="k">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># Substitui placeholders</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">/</span><span class="nv">$PROJECT_NAME</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">/</span><span class="nv">$AUTHOR_NAME</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">/</span><span class="nv">$AUTHOR_EMAIL</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;\[ano\]&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/\[ano\]/</span><span class="nv">$CURRENT_YEAR</span><span class="s2">/g&quot;</span>
+</code></pre></div>
+<p><strong>Arquivos Afetados:</strong></p>
+<ul>
+<li><code>README.md</code> → Título e badges personalizados</li>
+<li><code>pyproject.toml</code> → Nome do projeto, autor e email</li>
+<li><code>LICENSE</code> → Nome do autor e ano</li>
+<li><code>SECURITY.md</code> → Email de contato</li>
+<li><code>docker-compose.yml</code> → Nome do serviço</li>
+</ul>
+<h4 id="5-instalacao-de-dependencias">5. <strong>Instalação de Dependências</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Prefere Makefile se disponível</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;Makefile&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span>make<span class="w"> </span>setup
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">else</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="c1"># Fallback manual</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="k">fi</span>
+</code></pre></div>
+<p><strong>Nota:</strong> <code>make setup</code> é o padrão do molde e executa:</p>
+<ul>
+<li>Criação do venv</li>
+<li>Instalação de dependências (<code>pip install -e .[dev]</code>)</li>
+<li>Instalação de pre-commit hooks</li>
+</ul>
+<h4 id="6-commit-inicial">6. <strong>Commit Inicial</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: initial project setup from template (</span><span class="nv">$BRANCH_NAME</span><span class="s2">)&quot;</span>
+</code></pre></div>
+<p><strong>Razão:</strong> Garante que o projeto nasce com um histórico limpo e rastreável.</p>
+<h4 id="7-abertura-automatica">7. <strong>Abertura Automática</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p><strong>Nota:</strong> <code>go</code> é um alias/função auxiliar que navega para <code>~/projects/$PROJECT_NAME</code> e abre o VS Code.</p>
+<hr />
+<h2 id="analise-de-trade-offs">📊 Análise de Trade-offs</h2>
+<h3 id="vantagens-da-arquitetura">Vantagens da Arquitetura</h3>
+<table>
+<thead>
+<tr>
+<th>Vantagem</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Velocidade</strong></td>
+<td>Criação de projetos em ~5 segundos (vs. 30+ minutos manual)</td>
+</tr>
+<tr>
+<td><strong>Padronização</strong></td>
+<td>Todos os projetos seguem as "Regras da Casa" automaticamente</td>
+</tr>
+<tr>
+<td><strong>Manutenibilidade</strong></td>
+<td>Mudanças no template propagam para novos projetos automaticamente</td>
+</tr>
+<tr>
+<td><strong>Variedade</strong></td>
+<td>Branches especializadas suportam diferentes tipos de projeto</td>
+</tr>
+<tr>
+<td><strong>Personalização Automática</strong></td>
+<td>Desenvolvedor não precisa editar manualmente <code>pyproject.toml</code>, <code>LICENSE</code>, etc.</td>
+</tr>
+<tr>
+<td><strong>Histórico Limpo</strong></td>
+<td>Novos projetos começam com <code>git log</code> limpo (sem histórico do template)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="desvantagens-e-mitigacoes">Desvantagens e Mitigações</h3>
+<table>
+<thead>
+<tr>
+<th>Desvantagem</th>
+<th>Mitigação Implementada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Propagação de Bugs</strong></td>
+<td>Molde é testado rigorosamente antes de releases</td>
+</tr>
+<tr>
+<td><strong>Personalização Limitada</strong></td>
+<td>Branches especializadas cobrem casos comuns</td>
+</tr>
+<tr>
+<td><strong>Dependência de Bash</strong></td>
+<td>Documentação clara para reimplementação em Python/Rust se necessário</td>
+</tr>
+<tr>
+<td><strong>Atualizações Manuais</strong></td>
+<td>Projetos existentes não recebem updates automáticos (trade-off consciente)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="casos-de-uso">🔄 Casos de Uso</h2>
+<h3 id="caso-1-desenvolvedor-iniciando-novo-microservico">Caso 1: Desenvolvedor Iniciando Novo Microserviço</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 1. Criar projeto API</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>newproject<span class="w"> </span>servico-autenticacao<span class="w"> </span>--tipo<span class="o">=</span>api
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># 2. Sistema executa:</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1">#    - Clone do branch &#39;api&#39;</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1">#    - Personalização (nome, email)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">#    - Setup (venv, deps)</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1">#    - Commit inicial</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1">#    - Abre no VS Code</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># 3. Desenvolvedor já tem:</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="c1">#    - FastAPI configurado</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="c1">#    - Docker pronto</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1">#    - Pre-commit ativo</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="c1">#    - Estrutura src/api/</span>
+</code></pre></div>
+<h3 id="caso-2-desenvolvedor-criando-cli-tool">Caso 2: Desenvolvedor Criando CLI Tool</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>newproject<span class="w"> </span>backup-manager<span class="w"> </span>--tipo<span class="o">=</span>cli
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Sistema cria projeto com:</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># - Typer framework</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># - Comandos de exemplo</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># - Estrutura src/cli/</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># - Testes pré-configurados</span>
+</code></pre></div>
+<h3 id="caso-3-projeto-generico-data-science-etl">Caso 3: Projeto Genérico (Data Science, ETL)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>newproject<span class="w"> </span>analise-vendas
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Sistema cria projeto com:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># - Estrutura básica src/</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># - Jupyter notebooks suportados</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># - pytest configurado</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># - Docker genérico</span>
+</code></pre></div>
+<hr />
+<h2 id="validacao-e-testes">🧪 Validação e Testes</h2>
+<h3 id="teste-manual-da-fabrica">Teste Manual da Fábrica</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># 1. Criar projeto de teste</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>newproject<span class="w"> </span>_test_scaffold_
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># 2. Validações</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nb">cd</span><span class="w"> </span>~/projects/_test_scaffold_
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Verificar personalização</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>grep<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>README.md<span class="w">  </span><span class="c1"># Não deve retornar nada</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>grep<span class="w"> </span><span class="s2">&quot;_test_scaffold_&quot;</span><span class="w"> </span>README.md<span class="w">          </span><span class="c1"># Deve encontrar</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1"># Verificar histórico Git</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">  </span><span class="c1"># Deve ter apenas 1 commit inicial</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="c1"># Verificar ambiente</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>which<span class="w"> </span>python<span class="w">       </span><span class="c1"># Deve apontar para .venv</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1"># 3. Limpeza</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>~/projects/_test_scaffold_
+</code></pre></div>
+<h3 id="validacao-de-integridade-do-molde">Validação de Integridade do Molde</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># No repositório do template</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nb">cd</span><span class="w"> </span>/home/ismae/projects/python-template-profissional
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Validar estrutura</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>tree<span class="w"> </span>-a<span class="w"> </span>-L<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># Validar placeholders</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">=</span>.git
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># Validar branches</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>git<span class="w"> </span>branch<span class="w"> </span>-a<span class="w">  </span><span class="c1"># Deve listar: main, api, cli</span>
+</code></pre></div>
+<hr />
+<h2 id="evolucao-futura">🚀 Evolução Futura</h2>
+<h3 id="roadmap-prioridades-do-relatorio-original">Roadmap (Prioridades do Relatório Original)</h3>
+<table>
+<thead>
+<tr>
+<th>Prioridade</th>
+<th>Tarefa</th>
+<th>Status</th>
+<th>Próximo Passo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 Crítica</td>
+<td>Implementar CI/CD workflows no molde</td>
+<td>🟡 Planejado</td>
+<td>Criar <code>.github/workflows/ci.yml</code></td>
+</tr>
+<tr>
+<td>🟠 Alta</td>
+<td>Adicionar branch <code>data-science</code></td>
+<td>🔵 Design</td>
+<td>Definir deps (pandas, jupyter, scikit-learn)</td>
+</tr>
+<tr>
+<td>🟡 Média</td>
+<td>Transplante de scripts reutilizáveis</td>
+<td>🔵 Avaliação</td>
+<td>Identificar scripts genéricos de projetos antigos</td>
+</tr>
+<tr>
+<td>🟢 Baixa</td>
+<td>Teste automatizado da fábrica</td>
+<td>🔵 Proposto</td>
+<td>Criar <code>~/test_factory.sh</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="sugestoes-arquiteturais">Sugestões Arquiteturais</h3>
+<h4 id="1-migracao-para-python-cli">1. <strong>Migração para Python CLI</strong></h4>
+<p>Reimplementar <code>newproject</code> como comando Python (usando Typer) para:</p>
+<ul>
+<li>Melhor portabilidade (Windows/Linux/Mac)</li>
+<li>Tratamento de erros mais robusto</li>
+<li>Integração com sistema de plugins</li>
+</ul>
+<p><strong>Exemplo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>create<span class="w"> </span>meu-app<span class="w"> </span>--type<span class="o">=</span>api
+</code></pre></div>
+<h4 id="2-sistema-de-plugins">2. <strong>Sistema de Plugins</strong></h4>
+<p>Permitir que desenvolvedores adicionem "recheios" customizados:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>newproject<span class="w"> </span>ecommerce<span class="w"> </span>--tipo<span class="o">=</span>api<span class="w"> </span>--plugins<span class="o">=</span>auth,payments,stripe
+</code></pre></div>
+<h4 id="3-sincronizacao-bidirecional">3. <strong>Sincronização Bidirecional</strong></h4>
+<p>Permitir que projetos existentes "puxem" atualizações do molde:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--preview<span class="w">  </span><span class="c1"># Mostra diff</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--apply<span class="w">    </span><span class="c1"># Aplica patches</span>
+</code></pre></div>
+<hr />
+<h2 id="referencias">📚 Referências</h2>
+<ul>
+<li>Relatório Técnico de Evolução v1.5 (28 de Outubro de 2025)</li>
+<li><a href=".github/copilot-instructions.md">Copilot Instructions</a></li>
+<li><a href="docs/architecture/CORTEX_INDICE.md">Documentação do CORTEX</a></li>
+</ul>
+<hr />
+<p><strong>Autor:</strong> Engineering Team
+<strong>Última Atualização:</strong> 2025-12-16
+<strong>Status:</strong> ✅ Documentação Completa e Validada</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

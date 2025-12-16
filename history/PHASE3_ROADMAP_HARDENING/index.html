@@ -1,0 +1,1629 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Fase 3 Roadmap: Hardening & UX - Deep Cleaning do Código Legado - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fase-3-roadmap-hardening-ux-deep-cleaning-do-codigo-legado" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Fase 3 Roadmap: Hardening & UX - Deep Cleaning do Código Legado
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral-da-fase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Visão Geral da Fase
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estado-atual-vs-estado-desejado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Estado Atual vs. Estado Desejado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mapa-de-prioridades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🗺️ Mapa de Prioridades
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🗺️ Mapa de Prioridades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#legenda-de-severidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legenda de Severidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iniciativas-da-fase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Iniciativas da Fase 3
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Iniciativas da Fase 3">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa-1-p13-revision-hardening-de-seguranca-ux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa 1: [P13-Revision] Hardening de Segurança &amp; UX
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Iniciativa 1: [P13-Revision] Hardening de Segurança &amp; UX">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p131-hardening-de-seguranca-em-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P13.1] 🛡️ Hardening de Segurança em Logs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[P13.1] 🛡️ Hardening de Segurança em Logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etapa-1-criar-utilitario-de-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 1: Criar Utilitário de Masking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-2-aplicar-em-scripts-de-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 2: Aplicar em Scripts de Audit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p132-modernizacao-de-ui-com-rich" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P13.2] 🎨 Modernização de UI com Rich
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[P13.2] 🎨 Modernização de UI com Rich">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etapa-1-criar-formatador-rich" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 1: Criar Formatador Rich
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-2-refatorar-audit-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 2: Refatorar Audit Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p133-aplicar-enums-em-codigo-legado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [P13.3] 📊 Aplicar Enums em Código Legado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa-2-p40-tipagem-estrita-em-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa 2: [P40] Tipagem Estrita em Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Iniciativa 2: [P40] Tipagem Estrita em Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etapas-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapas de Execução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Etapas de Execução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semana-1-testes-de-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 1: Testes de Core
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semana-2-testes-de-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Semana 2: Testes de Audit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa-3-p41-documentacao-de-debitos-tecnicos-conhecidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa 3: [P41] Documentação de Débitos Técnicos Conhecidos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Iniciativa 3: [P41] Documentação de Débitos Técnicos Conhecidos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debito-7-syncer-apenas-anexa-conteudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Débito #7: Syncer Apenas Anexa Conteúdo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debito-8-tipagem-ignorada-em-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Débito #8: Tipagem Ignorada em Requests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debito-9-scripts-de-audit-sem-rich-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Débito #9: Scripts de Audit Sem Rich UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iniciativa-4-p42-indice-de-busca-para-knowledge-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iniciativa 4: [P42] Índice de Busca para Knowledge Node
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cronograma-estimado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📅 Cronograma Estimado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-sucesso-da-fase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Critérios de Sucesso da Fase 3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riscos-e-mitigacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Riscos e Mitigações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Riscos e Mitigações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risco-1-regressao-em-scripts-criticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 1: Regressão em Scripts Críticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-2-scope-creep-adicionar-features-nao-planejadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 2: Scope Creep (Adicionar Features Não Planejadas)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proxima-fase-fase-4-previsao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Próxima Fase (Fase 4 - Previsão)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="fase-3-roadmap-hardening-ux-deep-cleaning-do-codigo-legado">Fase 3 Roadmap: Hardening &amp; UX - Deep Cleaning do Código Legado</h1>
+<h2 id="visao-geral-da-fase">🎯 Visão Geral da Fase</h2>
+<p><strong>Tema:</strong> Refatoração &amp; UX (Deep Cleaning)</p>
+<p><strong>Período Estimado:</strong> Jan-Fev 2026</p>
+<p><strong>Objetivo Estratégico:</strong> Elevar o código legado ao padrão de qualidade estabelecido pelo CORTEX Knowledge Node (Fase 2), focando em <strong>experiência de usuário</strong>, <strong>segurança</strong> e <strong>manutenibilidade</strong>.</p>
+<blockquote>
+<p><strong>Filosofia:</strong> Não criar novas features, mas pagar a dívida técnica para que a fundação suporte crescimento futuro sustentável.</p>
+</blockquote>
+<hr />
+<h2 id="estado-atual-vs-estado-desejado">📊 Estado Atual vs. Estado Desejado</h2>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Estado Atual (Pós-Fase 2)</th>
+<th>Estado Desejado (Pós-Fase 3)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UI de Scripts</strong></td>
+<td><code>print()</code> cru, sem cores</td>
+<td><code>rich.console</code> com tabelas/painéis</td>
+</tr>
+<tr>
+<td><strong>Logging</strong></td>
+<td>Mistura de <code>print()</code> e <code>logging</code></td>
+<td>100% <code>logging</code> estruturado</td>
+</tr>
+<tr>
+<td><strong>Segurança</strong></td>
+<td>Secrets podem aparecer em logs</td>
+<td><code>mask_secret()</code> aplicado globalmente</td>
+</tr>
+<tr>
+<td><strong>Tipagem de Audit</strong></td>
+<td>Strings mágicas (<code>"critical"</code>)</td>
+<td>Enums (<code>SecuritySeverity.CRITICAL</code>)</td>
+</tr>
+<tr>
+<td><strong>Cobertura de Testes (Audit)</strong></td>
+<td>~40%</td>
+<td>&gt;80%</td>
+</tr>
+<tr>
+<td><strong>Conformidade Mypy (Audit)</strong></td>
+<td>~60%</td>
+<td>100% (strict)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mapa-de-prioridades">🗺️ Mapa de Prioridades</h2>
+<h3 id="legenda-de-severidade">Legenda de Severidade</h3>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Severidade</th>
+<th>Critério</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴</td>
+<td><strong>P0 - CRÍTICO</strong></td>
+<td>Impacta segurança ou experiência de usuário crítica</td>
+</tr>
+<tr>
+<td>🟡</td>
+<td><strong>P1 - ALTO</strong></td>
+<td>Impacta DX ou qualidade de código significativamente</td>
+</tr>
+<tr>
+<td>🟢</td>
+<td><strong>P2 - MÉDIO</strong></td>
+<td>Melhoria desejável, não bloqueante</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="iniciativas-da-fase-3">🚀 Iniciativas da Fase 3</h2>
+<h3 id="iniciativa-1-p13-revision-hardening-de-seguranca-ux">Iniciativa 1: [P13-Revision] Hardening de Segurança &amp; UX</h3>
+<p><strong>Prioridade:</strong> 🔴 <strong>P0 - CRÍTICO</strong></p>
+<p><strong>Contexto:</strong> Scripts de auditoria atualmente expõem potencialmente informações sensíveis (API Keys, Tokens) e têm UI primitiva.</p>
+<hr />
+<h4 id="p131-hardening-de-seguranca-em-logs">[P13.1] 🛡️ Hardening de Segurança em Logs</h4>
+<p><strong>Problema Identificado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># scripts/audit/security_analyzer.py (ATUAL - INSEGURO)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">analyze_dependencies</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Analyzing with config: </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># ❌ Pode conter API keys</span>
+</code></pre></div>
+<p><strong>Solução Proposta:</strong></p>
+<h5 id="etapa-1-criar-utilitario-de-masking">Etapa 1: Criar Utilitário de Masking</h5>
+<p><strong>Arquivo:</strong> <code>scripts/utils/security.py</code> (novo ou expandir existente)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Padrões de secrets conhecidos</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">SECRET_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="sa">r</span><span class="s1">&#39;(api[_-]?key\s*[:=]\s*)[&quot;</span><span class="se">\&#39;</span><span class="s1">]?([a-zA-Z0-9_-]+)&#39;</span><span class="p">,</span>  <span class="c1"># API Keys</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="sa">r</span><span class="s1">&#39;(token\s*[:=]\s*)[&quot;</span><span class="se">\&#39;</span><span class="s1">]?([a-zA-Z0-9_-]+)&#39;</span><span class="p">,</span>        <span class="c1"># Tokens</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="sa">r</span><span class="s1">&#39;(password\s*[:=]\s*)[&quot;</span><span class="se">\&#39;</span><span class="s1">]?([^&quot;</span><span class="se">\&#39;</span><span class="s1">]+)&#39;</span><span class="p">,</span>            <span class="c1"># Passwords</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="sa">r</span><span class="s1">&#39;(secret\s*[:=]\s*)[&quot;</span><span class="se">\&#39;</span><span class="s1">]?([a-zA-Z0-9_-]+)&#39;</span><span class="p">,</span>       <span class="c1"># Secrets</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">]</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">mask_secret</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mask_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">visible_chars</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Mascara valores sensíveis em strings.</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="sd">    Args:</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="sd">        text: Texto a ser mascarado</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="sd">        mask_char: Caractere de máscara (default: &#39;*&#39;)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="sd">        visible_chars: Número de caracteres visíveis no final (default: 4)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="sd">        Texto com secrets mascarados</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="sd">    Example:</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="sd">        &gt;&gt;&gt; mask_secret(&quot;api_key: sk_live_abcdef123456&quot;)</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="sd">        &quot;api_key: **************3456&quot;</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    <span class="n">masked_text</span> <span class="o">=</span> <span class="n">text</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">SECRET_PATTERNS</span><span class="p">:</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>        <span class="k">def</span><span class="w"> </span><span class="nf">replacer</span><span class="p">(</span><span class="n">match</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Match</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>            <span class="n">key</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Parte da chave (ex: &quot;api_key=&quot;)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>            <span class="n">value</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Valor secreto</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">visible_chars</span><span class="p">:</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>                <span class="n">masked_value</span> <span class="o">=</span> <span class="n">mask_char</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>            <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>                <span class="n">masked_value</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>                    <span class="n">mask_char</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">-</span> <span class="n">visible_chars</span><span class="p">)</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>                    <span class="o">+</span> <span class="n">value</span><span class="p">[</span><span class="o">-</span><span class="n">visible_chars</span><span class="p">:]</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>                <span class="p">)</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}{</span><span class="n">masked_value</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>        <span class="n">masked_text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">replacer</span><span class="p">,</span> <span class="n">masked_text</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>    <span class="k">return</span> <span class="n">masked_text</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="k">def</span><span class="w"> </span><span class="nf">safe_repr</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Representação segura de objeto (mascara valores sensíveis).</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="sd">    Example:</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="sd">        &gt;&gt;&gt; safe_repr({&quot;api_key&quot;: &quot;secret123&quot;, &quot;name&quot;: &quot;test&quot;})</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="sd">        &quot;{&#39;api_key&#39;: &#39;******123&#39;, &#39;name&#39;: &#39;test&#39;}&quot;</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>    <span class="n">text</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>    <span class="k">return</span> <span class="n">mask_secret</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<h5 id="etapa-2-aplicar-em-scripts-de-audit">Etapa 2: Aplicar em Scripts de Audit</h5>
+<p><strong>Arquivo:</strong> <code>scripts/audit/security_analyzer.py</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.security</span><span class="w"> </span><span class="kn">import</span> <span class="n">safe_repr</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">analyze_dependencies</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="c1"># ✅ SEGURO: Secrets mascarados automaticamente</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Analyzing with config: </span><span class="si">{</span><span class="n">safe_repr</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Critério de Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Teste em test_utils_security.py</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_mask_secret_api_key</span><span class="p">():</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;api_key: sk_live_1234567890abcdef&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">mask_secret</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="k">assert</span> <span class="s2">&quot;sk_live&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">assert</span> <span class="s2">&quot;1234567890ab&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="k">assert</span> <span class="s2">&quot;cdef&quot;</span> <span class="ow">in</span> <span class="n">result</span>  <span class="c1"># Últimos 4 caracteres visíveis</span>
+</code></pre></div>
+<p><strong>Commits Previstos:</strong></p>
+<ol>
+<li><code>feat(security): add mask_secret utility (P13.1.1)</code></li>
+<li><code>fix(audit): apply secret masking to security analyzer (P13.1.2)</code></li>
+<li><code>fix(audit): apply secret masking to dependency analyzer (P13.1.3)</code></li>
+</ol>
+<hr />
+<h4 id="p132-modernizacao-de-ui-com-rich">[P13.2] 🎨 Modernização de UI com Rich</h4>
+<p><strong>Problema Identificado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># scripts/audit/code_audit.py (ATUAL - PRIMITIVO)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Security Audit Report ===&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Issues: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">issues</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">issue</span><span class="p">[</span><span class="s1">&#39;severity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">issue</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output Atual (Primitivo):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>=== Security Audit Report ===
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Total Issues: 5
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>- critical: SQL Injection vulnerability in auth.py
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>- high: Hardcoded credential in config.py
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>- medium: Missing input validation
+</code></pre></div>
+<p><strong>Solução Proposta:</strong></p>
+<h5 id="etapa-1-criar-formatador-rich">Etapa 1: Criar Formatador Rich</h5>
+<p><strong>Arquivo:</strong> <code>scripts/audit/formatters.py</code> (novo)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Panel</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecuritySeverity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Níveis de severidade de segurança.&quot;&quot;&quot;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;critical&quot;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">INFO</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="n">SEVERITY_COLORS</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span> <span class="s2">&quot;red bold&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>    <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">HIGH</span><span class="p">:</span> <span class="s2">&quot;orange_red1&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>    <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">LOW</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>    <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span> <span class="s2">&quot;cyan&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="p">}</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="k">def</span><span class="w"> </span><span class="nf">format_security_report</span><span class="p">(</span><span class="n">issues</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Formata relatório de segurança com Rich.</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="sd">    Args:</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="sd">        issues: Lista de issues com campos &#39;severity&#39;, &#39;message&#39;, &#39;file&#39;</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>    <span class="c1"># Criar tabela</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>    <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;🛡️ Security Audit Report&quot;</span><span class="p">,</span> <span class="n">show_header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>    <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Severity&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>    <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;File&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>    <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Issue&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>    <span class="c1"># Agrupar por severidade</span>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a>    <span class="n">critical_count</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a>    <span class="n">high_count</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a>
+<a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a>    <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">:</span>
+<a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>        <span class="n">severity</span> <span class="o">=</span> <span class="n">SecuritySeverity</span><span class="p">(</span><span class="n">issue</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">])</span>
+<a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a>        <span class="n">color</span> <span class="o">=</span> <span class="n">SEVERITY_COLORS</span><span class="p">[</span><span class="n">severity</span><span class="p">]</span>
+<a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a>
+<a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a>        <span class="k">if</span> <span class="n">severity</span> <span class="o">==</span> <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span>
+<a id="__codelineno-6-45" name="__codelineno-6-45" href="#__codelineno-6-45"></a>            <span class="n">critical_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-6-46" name="__codelineno-6-46" href="#__codelineno-6-46"></a>        <span class="k">elif</span> <span class="n">severity</span> <span class="o">==</span> <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">HIGH</span><span class="p">:</span>
+<a id="__codelineno-6-47" name="__codelineno-6-47" href="#__codelineno-6-47"></a>            <span class="n">high_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-6-48" name="__codelineno-6-48" href="#__codelineno-6-48"></a>
+<a id="__codelineno-6-49" name="__codelineno-6-49" href="#__codelineno-6-49"></a>        <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span>
+<a id="__codelineno-6-50" name="__codelineno-6-50" href="#__codelineno-6-50"></a>            <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">]</span><span class="si">{</span><span class="n">severity</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">[/</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-51" name="__codelineno-6-51" href="#__codelineno-6-51"></a>            <span class="n">issue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">),</span>
+<a id="__codelineno-6-52" name="__codelineno-6-52" href="#__codelineno-6-52"></a>            <span class="n">issue</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">],</span>
+<a id="__codelineno-6-53" name="__codelineno-6-53" href="#__codelineno-6-53"></a>        <span class="p">)</span>
+<a id="__codelineno-6-54" name="__codelineno-6-54" href="#__codelineno-6-54"></a>
+<a id="__codelineno-6-55" name="__codelineno-6-55" href="#__codelineno-6-55"></a>    <span class="c1"># Mostrar tabela</span>
+<a id="__codelineno-6-56" name="__codelineno-6-56" href="#__codelineno-6-56"></a>    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<a id="__codelineno-6-57" name="__codelineno-6-57" href="#__codelineno-6-57"></a>
+<a id="__codelineno-6-58" name="__codelineno-6-58" href="#__codelineno-6-58"></a>    <span class="c1"># Painel de resumo</span>
+<a id="__codelineno-6-59" name="__codelineno-6-59" href="#__codelineno-6-59"></a>    <span class="k">if</span> <span class="n">critical_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-6-60" name="__codelineno-6-60" href="#__codelineno-6-60"></a>        <span class="n">summary_style</span> <span class="o">=</span> <span class="s2">&quot;red bold&quot;</span>
+<a id="__codelineno-6-61" name="__codelineno-6-61" href="#__codelineno-6-61"></a>        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;🔴 CRITICAL ISSUES FOUND&quot;</span>
+<a id="__codelineno-6-62" name="__codelineno-6-62" href="#__codelineno-6-62"></a>    <span class="k">elif</span> <span class="n">high_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-6-63" name="__codelineno-6-63" href="#__codelineno-6-63"></a>        <span class="n">summary_style</span> <span class="o">=</span> <span class="s2">&quot;yellow&quot;</span>
+<a id="__codelineno-6-64" name="__codelineno-6-64" href="#__codelineno-6-64"></a>        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;⚠️  HIGH PRIORITY ISSUES&quot;</span>
+<a id="__codelineno-6-65" name="__codelineno-6-65" href="#__codelineno-6-65"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-6-66" name="__codelineno-6-66" href="#__codelineno-6-66"></a>        <span class="n">summary_style</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+<a id="__codelineno-6-67" name="__codelineno-6-67" href="#__codelineno-6-67"></a>        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✅ NO CRITICAL ISSUES&quot;</span>
+<a id="__codelineno-6-68" name="__codelineno-6-68" href="#__codelineno-6-68"></a>
+<a id="__codelineno-6-69" name="__codelineno-6-69" href="#__codelineno-6-69"></a>    <span class="n">summary</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span>
+<a id="__codelineno-6-70" name="__codelineno-6-70" href="#__codelineno-6-70"></a>        <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">summary_style</span><span class="si">}</span><span class="s2">]</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">[/</span><span class="si">{</span><span class="n">summary_style</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-71" name="__codelineno-6-71" href="#__codelineno-6-71"></a>        <span class="sa">f</span><span class="s2">&quot;Total Issues: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">issues</span><span class="p">)</span><span class="si">}</span><span class="s2"> | Critical: </span><span class="si">{</span><span class="n">critical_count</span><span class="si">}</span><span class="s2"> | High: </span><span class="si">{</span><span class="n">high_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-72" name="__codelineno-6-72" href="#__codelineno-6-72"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Summary&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-73" name="__codelineno-6-73" href="#__codelineno-6-73"></a>        <span class="n">border_style</span><span class="o">=</span><span class="n">summary_style</span><span class="p">,</span>
+<a id="__codelineno-6-74" name="__codelineno-6-74" href="#__codelineno-6-74"></a>    <span class="p">)</span>
+<a id="__codelineno-6-75" name="__codelineno-6-75" href="#__codelineno-6-75"></a>    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+</code></pre></div>
+<h5 id="etapa-2-refatorar-audit-scripts">Etapa 2: Refatorar Audit Scripts</h5>
+<p><strong>Arquivo:</strong> <code>scripts/audit/code_audit.py</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.audit.formatters</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_security_report</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_security_audit</span><span class="p">():</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="c1"># ... lógica de análise ...</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">issues</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="p">{</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>            <span class="s2">&quot;severity&quot;</span><span class="p">:</span> <span class="s2">&quot;critical&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>            <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;src/auth.py&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;SQL Injection vulnerability detected&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="p">},</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="c1"># ... mais issues ...</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="p">]</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="c1"># ✅ UI Moderna</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">format_security_report</span><span class="p">(</span><span class="n">issues</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Output Novo (Rico):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>╭─────────────────── 🛡️ Security Audit Report ───────────────────╮
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│ Severity     │ File              │ Issue                      │
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>├──────────────┼───────────────────┼────────────────────────────┤
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>│ CRITICAL     │ src/auth.py       │ SQL Injection detected     │
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>│ HIGH         │ config.py         │ Hardcoded credential       │
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>│ MEDIUM       │ api/routes.py     │ Missing input validation   │
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>╰─────────────────────────────────────────────────────────────────╯
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>╭─────────────────────── Summary ───────────────────────╮
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>│ 🔴 CRITICAL ISSUES FOUND                              │
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>│ Total Issues: 5 | Critical: 1 | High: 2               │
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>╰───────────────────────────────────────────────────────╯
+</code></pre></div>
+<p><strong>Commits Previstos:</strong></p>
+<ol>
+<li><code>feat(audit): add Rich formatters with severity enums (P13.2.1)</code></li>
+<li><code>refactor(audit): modernize security_analyzer UI (P13.2.2)</code></li>
+<li><code>refactor(audit): modernize dependency_analyzer UI (P13.2.3)</code></li>
+</ol>
+<hr />
+<h4 id="p133-aplicar-enums-em-codigo-legado">[P13.3] 📊 Aplicar Enums em Código Legado</h4>
+<p><strong>Problema Identificado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># ANTES (Strings Mágicas)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">if</span> <span class="n">issue</span><span class="p">[</span><span class="s2">&quot;severity&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;critical&quot;</span><span class="p">:</span>  <span class="c1"># ❌ Typo-prone, sem autocomplete</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">alert_security_team</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># DEPOIS (Enums Tipados)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.audit.formatters</span><span class="w"> </span><span class="kn">import</span> <span class="n">SecuritySeverity</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">severity</span> <span class="o">==</span> <span class="n">SecuritySeverity</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span>  <span class="c1"># ✅ Mypy valida, autocomplete funciona</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">alert_security_team</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Arquivos a Refatorar:</strong></p>
+<ol>
+<li><code>scripts/audit/security_analyzer.py</code></li>
+<li><code>scripts/audit/dependency_analyzer.py</code></li>
+<li><code>scripts/audit/analyzer.py</code></li>
+<li><code>scripts/audit/reporter.py</code></li>
+</ol>
+<p><strong>Enums a Criar:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># scripts/audit/models.py (novo)</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecuritySeverity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">CRITICAL</span> <span class="o">=</span> <span class="s2">&quot;critical&quot;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">HIGH</span> <span class="o">=</span> <span class="s2">&quot;high&quot;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">LOW</span> <span class="o">=</span> <span class="s2">&quot;low&quot;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="n">INFO</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">SecurityCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="n">INJECTION</span> <span class="o">=</span> <span class="s2">&quot;injection&quot;</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="n">AUTH</span> <span class="o">=</span> <span class="s2">&quot;authentication&quot;</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    <span class="n">CRYPTO</span> <span class="o">=</span> <span class="s2">&quot;cryptography&quot;</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>    <span class="n">CONFIG</span> <span class="o">=</span> <span class="s2">&quot;configuration&quot;</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="n">DEPENDENCY</span> <span class="o">=</span> <span class="s2">&quot;dependency&quot;</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="k">class</span><span class="w"> </span><span class="nc">AuditStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    <span class="n">PASS</span> <span class="o">=</span> <span class="s2">&quot;pass&quot;</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>    <span class="n">FAIL</span> <span class="o">=</span> <span class="s2">&quot;fail&quot;</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>    <span class="n">WARNING</span> <span class="o">=</span> <span class="s2">&quot;warning&quot;</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>    <span class="n">SKIPPED</span> <span class="o">=</span> <span class="s2">&quot;skipped&quot;</span>
+</code></pre></div>
+<p><strong>Commits Previstos:</strong></p>
+<ol>
+<li><code>feat(audit): add security and audit enums (P13.3.1)</code></li>
+<li><code>refactor(audit): replace severity strings with enum (P13.3.2)</code></li>
+<li><code>refactor(audit): replace category strings with enum (P13.3.3)</code></li>
+</ol>
+<hr />
+<h3 id="iniciativa-2-p40-tipagem-estrita-em-testes">Iniciativa 2: [P40] Tipagem Estrita em Testes</h3>
+<p><strong>Prioridade:</strong> 🟡 <strong>P1 - ALTO</strong></p>
+<p><strong>Contexto:</strong> Testes atualmente têm muitos <code>Any</code> e falta de type hints, dificultando detecção de bugs.</p>
+<p><strong>Estratégia:</strong> Aplicar <a href="../../guides/LLM_TASK_DECOMPOSITION_STRATEGY/">Protocolo de Fracionamento</a> - 1 arquivo de teste por dia.</p>
+<hr />
+<h4 id="etapas-de-execucao">Etapas de Execução</h4>
+<h5 id="semana-1-testes-de-core">Semana 1: Testes de Core</h5>
+<table>
+<thead>
+<tr>
+<th>Dia</th>
+<th>Arquivo</th>
+<th>Foco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td><code>test_knowledge_scanner.py</code></td>
+<td>✅ Já está tipado (Fase 2)</td>
+</tr>
+<tr>
+<td>D2</td>
+<td><code>test_knowledge_sync.py</code></td>
+<td>✅ Já está tipado (Fase 2)</td>
+</tr>
+<tr>
+<td>D3</td>
+<td><code>test_cortex_metadata.py</code></td>
+<td>Adicionar type hints em fixtures</td>
+</tr>
+<tr>
+<td>D4</td>
+<td><code>test_link_analyzer.py</code></td>
+<td>Tipar retornos de mocks</td>
+</tr>
+<tr>
+<td>D5</td>
+<td><code>test_link_resolver.py</code></td>
+<td>Tipar fixtures complexas</td>
+</tr>
+</tbody>
+</table>
+<h5 id="semana-2-testes-de-audit">Semana 2: Testes de Audit</h5>
+<table>
+<thead>
+<tr>
+<th>Dia</th>
+<th>Arquivo</th>
+<th>Foco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D6</td>
+<td><code>test_audit_analyzer.py</code></td>
+<td>Substituir <code>dict</code> por <code>TypedDict</code></td>
+</tr>
+<tr>
+<td>D7</td>
+<td><code>test_audit_dashboard.py</code></td>
+<td>Tipar callbacks de UI</td>
+</tr>
+<tr>
+<td>D8</td>
+<td><code>test_reporter.py</code></td>
+<td>Adicionar generics em listas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Critério de Validação (Por Arquivo):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Deve passar sem erros</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>mypy<span class="w"> </span>tests/test_&lt;nome&gt;.py<span class="w"> </span>--strict
+</code></pre></div>
+<p><strong>Commits Previstos:</strong> 1 commit por arquivo (8 commits totais)</p>
+<hr />
+<h3 id="iniciativa-3-p41-documentacao-de-debitos-tecnicos-conhecidos">Iniciativa 3: [P41] Documentação de Débitos Técnicos Conhecidos</h3>
+<p><strong>Prioridade:</strong> 🟢 <strong>P2 - MÉDIO</strong></p>
+<p><strong>Objetivo:</strong> Atualizar <a href="../SRE_TECHNICAL_DEBT_CATALOG/">SRE_TECHNICAL_DEBT_CATALOG.md</a> com os débitos identificados na Fase 2.</p>
+<p><strong>Novos Débitos a Documentar:</strong></p>
+<h4 id="debito-7-syncer-apenas-anexa-conteudo">Débito #7: Syncer Apenas Anexa Conteúdo</h4>
+<p><strong>Arquivo:</strong> <code>scripts/core/cortex/knowledge_sync.py</code>
+<strong>Severidade:</strong> 🟡 Média</p>
+<p><strong>Como Resolver:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Implementar marcadores de seção</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="o">&lt;</span><span class="err">!</span><span class="o">--</span> <span class="n">BEGIN_SYNC_SECTION</span> <span class="o">--&gt;</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">Conteúdo</span> <span class="n">sincronizado</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="o">&lt;</span><span class="err">!</span><span class="o">--</span> <span class="n">END_SYNC_SECTION</span> <span class="o">--&gt;</span>
+</code></pre></div>
+<hr />
+<h4 id="debito-8-tipagem-ignorada-em-requests">Débito #8: Tipagem Ignorada em Requests</h4>
+<p><strong>Arquivo:</strong> <code>scripts/core/cortex/knowledge_sync.py</code>
+<strong>Severidade:</strong> 🟢 Baixa</p>
+<p><strong>Como Resolver:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>pip<span class="w"> </span>install<span class="w"> </span>types-requests
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1"># Remover: # type: ignore[import-untyped]</span>
+</code></pre></div>
+<hr />
+<h4 id="debito-9-scripts-de-audit-sem-rich-ui">Débito #9: Scripts de Audit Sem Rich UI</h4>
+<p><strong>Arquivos:</strong> <code>scripts/audit/*.py</code>
+<strong>Severidade:</strong> 🟡 Alta (DX Impact)</p>
+<p><strong>Resolução:</strong> Iniciativa [P13.2] (esta fase)</p>
+<hr />
+<h3 id="iniciativa-4-p42-indice-de-busca-para-knowledge-node">Iniciativa 4: [P42] Índice de Busca para Knowledge Node</h3>
+<p><strong>Prioridade:</strong> 🟢 <strong>P2 - MÉDIO</strong> (Otimização de Performance)</p>
+<p><strong>Problema Atual:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Busca linear em knowledge_scanner.py</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">find_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KnowledgeEntry</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan</span><span class="p">():</span>  <span class="c1"># ❌ O(n) - rescanneia todo o diretório</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">entry_id</span><span class="p">:</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>            <span class="k">return</span> <span class="n">entry</span>
+</code></pre></div>
+<p><strong>Solução Proposta:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># scripts/core/cortex/knowledge_index.py (novo)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeIndex</span><span class="p">:</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Índice em memória para busca rápida de Knowledge Entries.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">cache_file</span> <span class="o">=</span> <span class="n">cache_file</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Constrói índice a partir de lista de entries.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">file_path</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">}</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save</span><span class="p">()</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Busca O(1) por ID.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry_id</span><span class="p">)</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Persiste índice em disco.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">cache_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<p><strong>Commits Previstos:</strong></p>
+<ol>
+<li><code>feat(cortex): add KnowledgeIndex for O(1) lookups (P42.1)</code></li>
+<li><code>refactor(cortex): integrate index in scanner (P42.2)</code></li>
+</ol>
+<hr />
+<h2 id="cronograma-estimado">📅 Cronograma Estimado</h2>
+<table>
+<thead>
+<tr>
+<th>Semana</th>
+<th>Iniciativa</th>
+<th>Deliverables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S1</strong></td>
+<td>[P13.1] Hardening Segurança</td>
+<td><code>mask_secret()</code>, testes, aplicação em 3 scripts</td>
+</tr>
+<tr>
+<td><strong>S2</strong></td>
+<td>[P13.2] Rich UI</td>
+<td>Formatadores, refatoração de 3 audit scripts</td>
+</tr>
+<tr>
+<td><strong>S3</strong></td>
+<td>[P13.3] Enums</td>
+<td>Criar enums, substituir strings em 4 arquivos</td>
+</tr>
+<tr>
+<td><strong>S4-S5</strong></td>
+<td>[P40] Tipagem Testes</td>
+<td>Tipar 8 arquivos de teste (1/dia)</td>
+</tr>
+<tr>
+<td><strong>S6</strong></td>
+<td>[P41] Docs Débitos</td>
+<td>Atualizar catálogo de débitos técnicos</td>
+</tr>
+<tr>
+<td><strong>S7</strong></td>
+<td>[P42] Índice (Opcional)</td>
+<td>Implementar busca O(1) se tempo permitir</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Duração Total:</strong> 6-7 semanas (~1.5 meses)</p>
+<hr />
+<h2 id="criterios-de-sucesso-da-fase-3">🎯 Critérios de Sucesso da Fase 3</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Meta</th>
+<th>Como Medir</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scripts com Rich UI</strong></td>
+<td>100% (audit/)</td>
+<td>Inspeção visual + grep <code>from rich</code></td>
+</tr>
+<tr>
+<td><strong>Secrets Mascarados</strong></td>
+<td>100% (logs)</td>
+<td>Teste automatizado em <code>test_utils_security.py</code></td>
+</tr>
+<tr>
+<td><strong>Enums Aplicados</strong></td>
+<td>100% (audit/)</td>
+<td>Mypy strict passa sem <code># type: ignore</code></td>
+</tr>
+<tr>
+<td><strong>Cobertura Testes (Audit)</strong></td>
+<td>&gt;80%</td>
+<td><code>pytest --cov=scripts/audit</code></td>
+</tr>
+<tr>
+<td><strong>Conformidade Mypy (Strict)</strong></td>
+<td>100%</td>
+<td><code>mypy scripts/audit/ --strict</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="riscos-e-mitigacoes">⚠️ Riscos e Mitigações</h2>
+<h3 id="risco-1-regressao-em-scripts-criticos">Risco 1: Regressão em Scripts Críticos</h3>
+<p><strong>Probabilidade:</strong> Média
+<strong>Impacto:</strong> Alto</p>
+<p><strong>Mitigação:</strong></p>
+<ul>
+<li>Aplicar protocolo de Micro-Etapas (1 arquivo/dia)</li>
+<li>Testes de regressão obrigatórios antes de cada commit</li>
+<li>Manter branch <code>phase3-backup</code> antes de iniciar</li>
+</ul>
+<hr />
+<h3 id="risco-2-scope-creep-adicionar-features-nao-planejadas">Risco 2: Scope Creep (Adicionar Features Não Planejadas)</h3>
+<p><strong>Probabilidade:</strong> Alta (histórico de 30% das fases)
+<strong>Impacto:</strong> Médio</p>
+<p><strong>Mitigação:</strong></p>
+<ul>
+<li>Manter foco em "Deep Cleaning", não em novas features</li>
+<li>Qualquer nova ideia vai para backlog da Fase 4</li>
+<li>Revisão semanal de escopo</li>
+</ul>
+<hr />
+<h2 id="proxima-fase-fase-4-previsao">🔄 Próxima Fase (Fase 4 - Previsão)</h2>
+<p><strong>Tema Provável:</strong> Observabilidade &amp; Métricas</p>
+<p><strong>Iniciativas Candidatas:</strong></p>
+<ul>
+<li>[P50] Integração com Prometheus/Grafana</li>
+<li>[P51] Trace logging distribuído</li>
+<li>[P52] Dashboard de métricas de qualidade em tempo real</li>
+</ul>
+<p><strong>Nota:</strong> Fase 4 será planejada após conclusão da Fase 3.</p>
+<hr />
+<h2 id="referencias">📚 Referências</h2>
+<ul>
+<li><a href="../PHASE2_KNOWLEDGE_NODE_POSTMORTEM/">PHASE2_KNOWLEDGE_NODE_POSTMORTEM.md</a> - Contexto da fase anterior</li>
+<li><a href="../../guides/LLM_TASK_DECOMPOSITION_STRATEGY/">LLM_TASK_DECOMPOSITION_STRATEGY.md</a> - Metodologia de execução</li>
+<li><a href="../SRE_TECHNICAL_DEBT_CATALOG/">SRE_TECHNICAL_DEBT_CATALOG.md</a> - Catálogo de débitos conhecidos</li>
+<li><a href="../../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a> - Protocolo de refatoração</li>
+</ul>
+<hr />
+<p><strong>Status:</strong> 📋 <strong>PLANEJADO</strong> (Aguardando finalização da Fase 2)</p>
+<p><strong>Data de Início Prevista:</strong> Janeiro 2026</p>
+<p><strong>Owner:</strong> Equipe de Engenharia (Human + LLM Agents)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

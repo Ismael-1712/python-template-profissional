@@ -1,0 +1,1324 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GEM & SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Protocolo de Fracionamento Iterativo - Refatoração Segura de Monólitos - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#protocolo-de-fracionamento-iterativo-refatoracao-segura-de-monolitos" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Protocolo de Fracionamento Iterativo - Refatoração Segura de Monólitos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-problema-falhas-catastroficas-em-big-bang-refactors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Problema: Falhas Catastróficas em "Big Bang Refactors"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="O Problema: Falhas Catastróficas em &#34;Big Bang Refactors&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-real-o-fracasso-inicial-interacoes-48-53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso Real: O Fracasso Inicial (Interações 48-53)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-solucao-fracionamento-iterativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Solução: Fracionamento Iterativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#o-algoritmo-de-refatoracao-segura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Algoritmo de Refatoração Segura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="O Algoritmo de Refatoração Segura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regra-de-ouro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regra de Ouro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fases-obrigatorias-iterativas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fases Obrigatórias (Iterativas)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fases Obrigatórias (Iterativas)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-0-mapeamento-auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 0: Mapeamento (Auditoria)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-extracao-criacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Extração (Criação)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-religacao-modificacao-minima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Religação (Modificação Mínima)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-validacao-critica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Validação (CRÍTICA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-4-commit-atomico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4: Commit Atômico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeticao-volte-a-fase-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repetição: Volte à Fase 0
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-padroes-detectados-o-que-nao-fazer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Padrões Detectados (O que NÃO fazer)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-Padrões Detectados (O que NÃO fazer)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-1-big-bang-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 1: "Big Bang Refactor"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-2-contaminacao-de-estado-git-add" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 2: "Contaminação de Estado" (git add .)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-padrao-3-validacao-pos-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Anti-Padrão 3: "Validação Pós-Merge"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caso-de-estudo-ci_failure_recoverypy-700-linhas-pacote-modular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso de Estudo: ci_failure_recovery.py (700 linhas → Pacote Modular)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Caso de Estudo: ci_failure_recovery.py (700 linhas → Pacote Modular)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estado-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estado Inicial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sequencia-de-iteracoes-6-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sequência de Iterações (6 commits)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estado-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estado Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aplicabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aplicabilidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Aplicabilidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quando-usar-este-protocolo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Usar Este Protocolo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptacao-para-humanos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptação para Humanos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist de Execução
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-cruzadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências Cruzadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-revisoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Revisões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="protocolo-de-fracionamento-iterativo-refatoracao-segura-de-monolitos">Protocolo de Fracionamento Iterativo - Refatoração Segura de Monólitos</h1>
+<h2 id="status">Status</h2>
+<p><strong>Active</strong> - Metodologia validada durante Sprint 4 (Nov 2025) na refatoração de <code>ci_failure_recovery.py</code></p>
+<h2 id="contexto-e-motivacao">Contexto e Motivação</h2>
+<h3 id="o-problema-falhas-catastroficas-em-big-bang-refactors">O Problema: Falhas Catastróficas em "Big Bang Refactors"</h3>
+<p>Durante a execução da <strong>Tarefa P8 (Refatoração S.O.L.I.D.)</strong>, a equipe descobriu uma limitação crítica ao trabalhar com LLMs (Large Language Models) em refatorações:</p>
+<p><strong>LLMs falham sistematicamente ao tentar refatorar arquivos grandes (&gt;200 linhas) em uma única etapa.</strong></p>
+<h4 id="caso-real-o-fracasso-inicial-interacoes-48-53">Caso Real: O Fracasso Inicial (Interações 48-53)</h4>
+<p><strong>Prompt Original:</strong> "Refatore <code>ci_failure_recovery.py</code> (700 linhas) seguindo princípios S.O.L.I.D."</p>
+<p><strong>Resultado:</strong></p>
+<ul>
+<li>❌ Código gerado com imports quebrados</li>
+<li>❌ Perda de funcionalidades durante a transição</li>
+<li>❌ Testes falhando sem diagnóstico claro</li>
+<li>❌ Impossibilidade de reverter parcialmente (mudanças entrelaçadas)</li>
+</ul>
+<h3 id="a-solucao-fracionamento-iterativo">A Solução: Fracionamento Iterativo</h3>
+<p>A recuperação e o sucesso subsequente da P8 deveram-se à adoção de um <strong>algoritmo de refatoração incremental e validável</strong> em cada etapa.</p>
+<hr />
+<h2 id="o-algoritmo-de-refatoracao-segura">O Algoritmo de Refatoração Segura</h2>
+<h3 id="regra-de-ouro">Regra de Ouro</h3>
+<blockquote>
+<p><strong>"Se o prompt de implementação pedir para 'Refatorar o arquivo X', você (LLM ou humano) deve recusar e propor: 'Vou refatorar o <em>módulo de Log</em> do arquivo X primeiro'."</strong></p>
+</blockquote>
+<h3 id="fases-obrigatorias-iterativas">Fases Obrigatórias (Iterativas)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TD
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    A[Fase 0: Mapeamento] --&gt; B[Fase 1: Extração]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    B --&gt; C[Fase 2: Religação]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    C --&gt; D[Fase 3: Validação]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    D --&gt; E[Fase 4: Commit Atômico]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    E --&gt; F{Monólito&lt;br/&gt;Esgotado?}
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    F --&gt;|Não| A
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    F --&gt;|Sim| G[✅ Refatoração Completa]
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    style A fill:#e1f5ff
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    style D fill:#fff4e1
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    style E fill:#e8f5e9
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    style G fill:#c8e6c9
+</code></pre></div>
+<h4 id="fase-0-mapeamento-auditoria">Fase 0: Mapeamento (Auditoria)</h4>
+<p><strong>Objetivo:</strong> Identificar <strong>UMA</strong> responsabilidade específica para extrair.</p>
+<p><strong>Ações:</strong></p>
+<ol>
+<li>Leia o monólito completamente</li>
+<li>Identifique violações do <strong>Single Responsibility Principle (SRP)</strong></li>
+<li>Liste as responsabilidades encontradas (ex: "Modelos de Dados", "Executores", "Logs")</li>
+<li>Escolha a responsabilidade com <strong>menor acoplamento</strong> (menos dependências internas)</li>
+</ol>
+<p><strong>Critério de Sucesso:</strong> Consegue nomear a responsabilidade em uma frase objetiva.</p>
+<p><strong>Exemplo (Caso Real - <code>ci_failure_recovery.py</code>):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Responsabilidades identificadas:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># 1. ✅ Modelos de Dados (dataclasses) - MENOR ACOPLAMENTO</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># 2. ⚠️  Executor de Comandos Git (usa subprocess)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># 3. ⚠️  Analisador de Falhas (lê logs do CI)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># 4. ⚠️  Gerador de Relatórios (HTML/JSON)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># 5. ❌ Runner Principal (orquestra tudo) - MAIOR ACOPLAMENTO</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># Decisão: Começar por #1 (Modelos)</span>
+</code></pre></div>
+<hr />
+<h4 id="fase-1-extracao-criacao">Fase 1: Extração (Criação)</h4>
+<p><strong>Objetivo:</strong> Criar o novo módulo isoladamente, <strong>sem tocar</strong> no monólito original.</p>
+<p><strong>Ações:</strong></p>
+<ol>
+<li>Crie um novo arquivo no local apropriado (ex: <code>scripts/ci_recovery/models.py</code>)</li>
+<li>Copie <strong>apenas</strong> o código da responsabilidade escolhida</li>
+<li>Adicione imports mínimos necessários</li>
+<li><strong>NÃO</strong> tente integrar ainda</li>
+</ol>
+<p><strong>Critério de Sucesso:</strong> O novo módulo é importável sem erros (<code>python -c "import scripts.ci_recovery.models"</code>).</p>
+<p><strong>Exemplo (Caso Real):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># scripts/ci_recovery/models.py</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="sd">&quot;&quot;&quot;Data models for CI failure recovery system.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">RecoveryAction</span><span class="p">:</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a single recovery action.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">command</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">critical</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="k">class</span><span class="w"> </span><span class="nc">FailureContext</span><span class="p">:</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Encapsulates failure context from CI logs.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">failure_type</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="n">error_message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="n">suggested_actions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RecoveryAction</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre></div>
+<hr />
+<h4 id="fase-2-religacao-modificacao-minima">Fase 2: Religação (Modificação Mínima)</h4>
+<p><strong>Objetivo:</strong> Fazer o monólito <strong>usar</strong> o novo módulo, alterando <strong>apenas</strong> a parte extraída.</p>
+<p><strong>Ações:</strong></p>
+<ol>
+<li>No monólito, adicione o import do novo módulo</li>
+<li>Substitua a implementação antiga por chamadas ao módulo extraído</li>
+<li><strong>NÃO</strong> refatore outras partes do código nesta etapa</li>
+</ol>
+<p><strong>Critério de Sucesso:</strong> O monólito continua funcionalmente idêntico (mesmas entradas/saídas).</p>
+<p><strong>Exemplo (Caso Real):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># ci_failure_recovery.py (ANTES)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">RecoveryAction</span><span class="p">:</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">command</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="c1"># ... 50 linhas de lógica ...</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># ci_failure_recovery.py (DEPOIS - Fase 2)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.ci_recovery.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecoveryAction</span><span class="p">,</span> <span class="n">FailureContext</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Agora usa as classes importadas</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">analyze_failure</span><span class="p">(</span><span class="n">log_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FailureContext</span><span class="p">:</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="c1"># ... código existente intocado ...</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">return</span> <span class="n">FailureContext</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># Usa classe importada</span>
+</code></pre></div>
+<hr />
+<h4 id="fase-3-validacao-critica">Fase 3: Validação (CRÍTICA)</h4>
+<p><strong>Objetivo:</strong> Garantir que o sistema híbrido (monólito + módulo extraído) funcione <strong>antes</strong> de prosseguir.</p>
+<p><strong>Ações:</strong></p>
+<ol>
+<li>Execute os testes relacionados aos arquivos tocados:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pytest<span class="w"> </span>tests/<span class="w"> </span>-k<span class="w"> </span><span class="s2">&quot;test_ci_recovery or test_failure&quot;</span>
+</code></pre></div>
+<ol>
+<li>Se testes não existirem, execute o script manualmente:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>ci_failure_recovery.py<span class="w"> </span>--dry-run
+</code></pre></div>
+<ol>
+<li>Verifique linters/type checkers:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ruff<span class="w"> </span>check<span class="w"> </span>scripts/ci_recovery/
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>mypy<span class="w"> </span>scripts/ci_recovery/models.py
+</code></pre></div>
+<p><strong>Critério de Sucesso:</strong> Todos os comandos acima passam sem erros.</p>
+<p><strong>⚠️ BLOQUEIO OBRIGATÓRIO:</strong> Se qualquer validação falhar, <strong>NÃO</strong> prossiga para a Fase 4. Reverta as mudanças e diagnostique.</p>
+<hr />
+<h4 id="fase-4-commit-atomico">Fase 4: Commit Atômico</h4>
+<p><strong>Objetivo:</strong> Criar um ponto de restauração confiável.</p>
+<p><strong>Ações:</strong></p>
+<ol>
+<li>Adicione <strong>apenas</strong> os arquivos modificados/criados nesta iteração:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/ci_recovery/models.py
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>add<span class="w"> </span>ci_failure_recovery.py
+</code></pre></div>
+<ol>
+<li>Faça commit com mensagem descritiva:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor(ci-recovery): extract data models to separate module</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="s2">- Created scripts/ci_recovery/models.py</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s2">- Migrated RecoveryAction and FailureContext dataclasses</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s2">- Updated imports in ci_failure_recovery.py</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s2">- All existing tests pass (Phase 3 validation)&quot;</span>
+</code></pre></div>
+<p><strong>⚠️ NUNCA use <code>git add .</code></strong> em refatorações (ver seção "Anti-Padrões" abaixo).</p>
+<hr />
+<h4 id="repeticao-volte-a-fase-0">Repetição: Volte à Fase 0</h4>
+<p>Após o commit, o ciclo recomeça:</p>
+<ol>
+<li>Identifique a próxima responsabilidade (ex: "Executor de Comandos")</li>
+<li>Repita as 5 fases</li>
+</ol>
+<p><strong>Critério de Parada:</strong> O monólito original se torna apenas um "Runner" fino (orquestração pura).</p>
+<hr />
+<h2 id="anti-padroes-detectados-o-que-nao-fazer">Anti-Padrões Detectados (O que NÃO fazer)</h2>
+<h3 id="anti-padrao-1-big-bang-refactor">❌ Anti-Padrão 1: "Big Bang Refactor"</h3>
+<p><strong>Sintoma:</strong> Prompt como <em>"Transforme <code>code_audit.py</code> em um pacote modular"</em>.</p>
+<p><strong>Por que falha:</strong></p>
+<ul>
+<li>LLMs perdem contexto ao gerar múltiplos arquivos simultaneamente</li>
+<li>Impossível validar isoladamente cada mudança</li>
+<li>Rollback é "tudo ou nada"</li>
+</ul>
+<p><strong>Correção:</strong> Use o Protocolo de Fracionamento.</p>
+<hr />
+<h3 id="anti-padrao-2-contaminacao-de-estado-git-add">❌ Anti-Padrão 2: "Contaminação de Estado" (<code>git add .</code>)</h3>
+<p><strong>Sintoma (Caso Real - Interação 60):</strong>
+Um simples <code>git add .</code> arrastou <strong>7 arquivos não relacionados</strong> (cheios de erros de lint) para dentro de um commit de refatoração.</p>
+<p><strong>Por que falha:</strong></p>
+<ul>
+<li>Mistura mudanças de diferentes contextos</li>
+<li>Testes podem passar localmente mas falhar no CI (diferenças de ambiente)</li>
+<li>Histórico Git fica poluído</li>
+</ul>
+<p><strong>Correção (Protocolo de Commit Atômico):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># ✅ BOM: Adiciona apenas o que você modificou nesta iteração</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/ci_recovery/executor.py
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>git<span class="w"> </span>add<span class="w"> </span>ci_failure_recovery.py
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor: extract command executor&quot;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># ❌ RUIM: Adiciona tudo indiscriminadamente</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactoring stuff&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="anti-padrao-3-validacao-pos-merge">❌ Anti-Padrão 3: "Validação Pós-Merge"</h3>
+<p><strong>Sintoma:</strong> Fazer commit sem rodar testes/linters antes.</p>
+<p><strong>Por que falha:</strong></p>
+<ul>
+<li>Quebra o histórico Git (commits que nunca compilaram)</li>
+<li>Desperdiça tempo da equipe em debugging</li>
+</ul>
+<p><strong>Correção:</strong> Fase 3 é <strong>obrigatória</strong> e <strong>bloqueante</strong>.</p>
+<hr />
+<h2 id="caso-de-estudo-ci_failure_recoverypy-700-linhas-pacote-modular">Caso de Estudo: <code>ci_failure_recovery.py</code> (700 linhas → Pacote Modular)</h2>
+<h3 id="estado-inicial">Estado Inicial</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>ci_failure_recovery.py (700 linhas)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>├── Dataclasses (RecoveryAction, FailureContext)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>├── Executor (subprocess calls)
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>├── Analyzer (log parsing)
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>├── Reporter (HTML/JSON generation)
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>└── Runner (main orchestration)
+</code></pre></div>
+<h3 id="sequencia-de-iteracoes-6-commits">Sequência de Iterações (6 commits)</h3>
+<table>
+<thead>
+<tr>
+<th>Iteração</th>
+<th>Responsabilidade Extraída</th>
+<th>Novo Módulo</th>
+<th>Linhas Removidas do Monólito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Modelos de Dados</td>
+<td><code>models.py</code></td>
+<td>80</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Executor de Comandos</td>
+<td><code>executor.py</code></td>
+<td>120</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Analisador de Logs</td>
+<td><code>analyzer.py</code></td>
+<td>150</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gerador de Relatórios</td>
+<td><code>reporter.py</code></td>
+<td>100</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Validadores de Input</td>
+<td><code>validator.py</code></td>
+<td>90</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Runner (orquestração)</td>
+<td><code>main.py</code> + <code>runner.py</code></td>
+<td>160</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estado-final">Estado Final</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>scripts/ci_recovery/
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>├── __init__.py
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>├── models.py (80 linhas)
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>├── executor.py (120 linhas)
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>├── analyzer.py (150 linhas)
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>├── reporter.py (100 linhas)
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>├── validator.py (90 linhas)
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>├── runner.py (100 linhas)
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>└── main.py (60 linhas - entry point)
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a># Monólito original deletado
+</code></pre></div>
+<p><strong>Métricas:</strong></p>
+<ul>
+<li>✅ <strong>100% dos testes continuaram passando</strong> após cada iteração</li>
+<li>✅ <strong>Zero regressões</strong> detectadas em produção</li>
+<li>✅ <strong>Manutenibilidade:</strong> Cada módulo agora pode ser testado/modificado isoladamente</li>
+</ul>
+<hr />
+<h2 id="aplicabilidade">Aplicabilidade</h2>
+<h3 id="quando-usar-este-protocolo">Quando Usar Este Protocolo</h3>
+<p>✅ <strong>Use quando:</strong></p>
+<ul>
+<li>Arquivo tem &gt;200 linhas com múltiplas responsabilidades</li>
+<li>Você está trabalhando com/como uma LLM</li>
+<li>Você precisa de checkpoints de rollback confiáveis</li>
+<li>O código não tem testes (refatoração é arriscada)</li>
+</ul>
+<p>❌ <strong>NÃO use quando:</strong></p>
+<ul>
+<li>Refatoração é trivial (renomear função, extrair constante)</li>
+<li>Você tem &gt;90% de cobertura de testes (refatoração segura via TDD)</li>
+<li>O arquivo já segue SRP (não há monólito)</li>
+</ul>
+<h3 id="adaptacao-para-humanos">Adaptação para Humanos</h3>
+<p>Desenvolvedores humanos podem acelerar o processo fundindo fases:</p>
+<ul>
+<li><strong>Fase 1+2:</strong> Extrair e religiar em uma única edição (IDEs com refactoring tools)</li>
+<li><strong>Fase 3:</strong> Pode ser automatizada via pre-commit hooks</li>
+</ul>
+<p><strong>Mas a Fase 4 (commit atômico) continua obrigatória.</strong></p>
+<hr />
+<h2 id="checklist-de-execucao">Checklist de Execução</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="gu">## Iteração N: Extrair [NOME_DA_RESPONSABILIDADE]</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">- [ ]</span> <span class="gs">**Fase 0:**</span> Responsabilidade escolhida tem baixo acoplamento
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="k">- [ ]</span> <span class="gs">**Fase 1:**</span> Novo módulo criado e importável (<span class="sb">`python -c &quot;import ...&quot;`</span>)
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">- [ ]</span> <span class="gs">**Fase 2:**</span> Monólito atualizado (imports + delegação)
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">- [ ]</span> <span class="gs">**Fase 3.1:**</span> Testes passam (<span class="sb">`pytest tests/ -k ...`</span>)
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="k">- [ ]</span> <span class="gs">**Fase 3.2:**</span> Linter limpo (<span class="sb">`ruff check ...`</span>)
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="k">- [ ]</span> <span class="gs">**Fase 3.3:**</span> Type checker limpo (<span class="sb">`mypy ...`</span>)
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">- [ ]</span> <span class="gs">**Fase 4.1:**</span> Arquivos específicos adicionados (<span class="sb">`git add &lt;arquivos&gt;`</span>)
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="k">- [ ]</span> <span class="gs">**Fase 4.2:**</span> Commit com mensagem descritiva
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="k">- [ ]</span> <span class="gs">**Fase 4.3:**</span> Push para branch remoto
+</code></pre></div>
+<hr />
+<h2 id="referencias-cruzadas">Referências Cruzadas</h2>
+<ul>
+<li><strong>Arquitetura:</strong> <a href="../SAFE_SCRIPT_TRANSPLANT/">SAFE_SCRIPT_TRANSPLANT.md</a> - Contexto da refatoração de scripts legados</li>
+<li><strong>Padrões:</strong> <a href="../ENGINEERING_STANDARDS/">ENGINEERING_STANDARDS.md</a> - Convenções de código</li>
+<li><strong>Código:</strong> <a href="../../scripts/ci_recovery/">scripts/ci_recovery/</a> - Exemplo de refatoração completa</li>
+</ul>
+<hr />
+<h2 id="historico-de-revisoes">Histórico de Revisões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Mudanças</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2025-12-16</td>
+<td>Versão inicial baseada em Sprint 4 learnings</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

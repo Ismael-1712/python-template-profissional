@@ -1,0 +1,1769 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Operational War Diary - Débitos Técnicos e Armadilhas Conhecidas - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#operational-war-diary-debitos-tecnicos-e-armadilhas-conhecidas" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Operational War Diary - Débitos Técnicos e Armadilhas Conhecidas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propósito
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-critico-conflito-do-pre-commit-hook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 🔴 CRÍTICO: Conflito do Pre-Commit Hook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 🔴 CRÍTICO: Conflito do Pre-Commit Hook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-automatizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução (Automatizada)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução (Manual)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prevenção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-alto-mock-de-filesystem-no-ci-python-310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ⚠️ ALTO: Mock de Filesystem no CI (Python 3.10)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. ⚠️ ALTO: Mock de Filesystem no CI (Python 3.10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevencao_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prevenção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-medio-css-no-template-html-chaves-duplas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. ⚠️ MÉDIO: CSS no Template HTML (Chaves Duplas)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. ⚠️ MÉDIO: CSS no Template HTML (Chaves Duplas)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-planejada-p15-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução Planejada (P15 - Roadmap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workaround-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workaround Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#impacto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impacto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-medio-auditoria-de-seguranca-vs-subprocess-maintain_versionspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ⚠️ MÉDIO: Auditoria de Segurança vs subprocess (maintain_versions.py)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. ⚠️ MÉDIO: Auditoria de Segurança vs subprocess (maintain_versions.py)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-planejada-p131-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução Planejada (P13.1 - Roadmap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workaround-atual_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workaround Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-i-baixo-warnings-de-linting-invalid-noqa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ℹ️ BAIXO: Warnings de Linting (Invalid # noqa)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ℹ️ BAIXO: Warnings de Linting (Invalid # noqa)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-i-informativo-pytest-collection-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ℹ️ INFORMATIVO: Pytest Collection Warnings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. ℹ️ INFORMATIVO: Pytest Collection Warnings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sintoma_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sintoma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sumario-de-debitos-scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sumário de Débitos (Scorecard)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#processo-de-manutencao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processo de Manutenção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Processo de Manutenção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#como-adicionar-novo-debito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como Adicionar Novo Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-para-nova-entrada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template para Nova Entrada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Causa Raiz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solução
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-do-debito_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status do Débito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filosofia-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filosofia Final
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="operational-war-diary-debitos-tecnicos-e-armadilhas-conhecidas">Operational War Diary - Débitos Técnicos e Armadilhas Conhecidas</h1>
+<h2 id="status">Status</h2>
+<p><strong>Active</strong> - Catálogo vivo de problemas reais enfrentados e suas soluções</p>
+<h2 id="proposito">Propósito</h2>
+<p>Este documento registra <strong>conhecimento tácito operacional</strong> — problemas que:</p>
+<ul>
+<li><strong>NÃO</strong> aparecem em documentações oficiais de ferramentas</li>
+<li><strong>SIM</strong> causam atrasos reais no desenvolvimento (2-4 horas de debug)</li>
+<li><strong>PODEM</strong> ser evitados se documentados adequadamente</li>
+</ul>
+<p><strong>Filosofia:</strong> <em>"Cada bug é uma lição não documentada esperando para ser encontrada novamente."</em></p>
+<hr />
+<h2 id="1-critico-conflito-do-pre-commit-hook">1. 🔴 CRÍTICO: Conflito do Pre-Commit Hook</h2>
+<h3 id="sintoma">Sintoma</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Cenário: Você atualizou a versão do Python</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>make<span class="w"> </span>upgrade-python<span class="w">  </span><span class="c1"># 3.12.12 → 3.12.13</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Ao commitar, o hook quebra</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: new feature&quot;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># [ERROR] ModuleNotFoundError: No module named &#39;pytest&#39;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># [ERROR] pre-commit hook failed!</span>
+</code></pre></div>
+<h3 id="causa-raiz">Causa Raiz</h3>
+<p><strong>O pre-commit não se auto-atualiza</strong> quando você troca de versão Python (via Pyenv).</p>
+<p><strong>Anatomia do Problema:</strong></p>
+<ol>
+<li><code>pre-commit install</code> cria binário em <code>.git/hooks/pre-commit</code></li>
+<li>Esse binário <strong>hardcode</strong> o caminho do Python ativo no momento da instalação</li>
+<li>Se você mudar de Python (via <code>pyenv local</code> ou <code>.python-version</code>), o hook fica "órfão"</li>
+<li>O hook tenta executar com Python antigo, mas o venv foi recriado com Python novo</li>
+</ol>
+<h3 id="solucao-automatizada">Solução (Automatizada)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># Output:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># ⚠️  Pre-commit Hook Stale detectado</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#     Python do hook: 3.12.12</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">#     Python atual:   3.12.13</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">#</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">#     💊 CURA:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">#     pip install -r requirements/dev.txt</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">#     pre-commit clean</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1">#     pre-commit install</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># Executar cura</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>pre-commit<span class="w"> </span>clean<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pre-commit<span class="w"> </span>install
+</code></pre></div>
+<h3 id="solucao-manual">Solução (Manual)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 1. Reinstalar dependências no novo Python</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># 2. Limpar cache do pre-commit</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>pre-commit<span class="w"> </span>clean
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># 3. Reinstalar hooks</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pre-commit<span class="w"> </span>install
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># 4. Validar</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files<span class="w">  </span><span class="c1"># Deve passar sem erros</span>
+</code></pre></div>
+<h3 id="prevencao">Prevenção</h3>
+<p><strong>Regra:</strong> Sempre rodar <code>make doctor</code> após qualquer mudança de Python.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Workflow seguro para upgrade</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>make<span class="w"> </span>upgrade-python
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>make<span class="w"> </span>doctor<span class="w">  </span><span class="c1"># ⬅️ CRÍTICO: Detecta hooks órfãos</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>make<span class="w"> </span><span class="nb">test</span><span class="w">    </span><span class="c1"># Valida ambiente</span>
+</code></pre></div>
+<h3 id="status-do-debito">Status do Débito</h3>
+<ul>
+<li>✅ <strong>Detectado:</strong> Dev Doctor identifica automaticamente</li>
+<li>⚠️ <strong>Mitigado:</strong> Solução documentada e automatizada</li>
+<li>❌ <strong>Não Resolvido:</strong> Ainda requer intervenção manual (pre-commit limitation)</li>
+</ul>
+<h3 id="referencias">Referências</h3>
+<ul>
+<li><a href="../../guides/DEV_ENVIRONMENT_TROUBLESHOOTING/#armadilha-do-hook-obsoleto">DEV_ENVIRONMENT_TROUBLESHOOTING.md</a></li>
+<li><a href="https://pre-commit.com/#cli">Pre-commit Official Docs</a></li>
+</ul>
+<hr />
+<h2 id="2-alto-mock-de-filesystem-no-ci-python-310">2. ⚠️ ALTO: Mock de Filesystem no CI (Python 3.10)</h2>
+<h3 id="sintoma_1">Sintoma</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Local (Python 3.12): Teste passa</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>pytest<span class="w"> </span>tests/test_audit_dashboard.py::test_export_html<span class="w"> </span>-v
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># ✅ PASSED</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># CI (Python 3.10): Teste falha</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># ❌ FAILED</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># AttributeError: Mock object has no attribute &#39;chmod&#39;</span>
+</code></pre></div>
+<h3 id="causa-raiz_1">Causa Raiz</h3>
+<p><strong>Inconsistência no Mock entre Python 3.10 e 3.11+</strong></p>
+<p><strong>Código Problemático:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># tests/test_audit_dashboard.py</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_export_html</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;builtins.open&quot;</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">())</span> <span class="k">as</span> <span class="n">mock_file</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="n">exporter</span><span class="o">.</span><span class="n">export_html</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;report.html&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="c1"># ⬆️ Funciona em 3.12, falha em 3.10</span>
+</code></pre></div>
+<p><strong>O Que Acontece:</strong></p>
+<ul>
+<li><strong>Python 3.12:</strong> <code>mock_open()</code> mocka também <code>Path.chmod()</code> implicitamente</li>
+<li><strong>Python 3.10:</strong> <code>mock_open()</code> <strong>NÃO</strong> mocka operações de Path</li>
+</ul>
+<p><strong>Código Real que Quebra:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># scripts/audit_dashboard/exporter_html.py</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">export_html</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">))</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">path</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="mo">0o644</span><span class="p">)</span>  <span class="c1"># ⬅️ Falha em testes se não mockar explicitamente</span>
+</code></pre></div>
+<h3 id="solucao">Solução</h3>
+<p><strong>Mockar explicitamente o <code>Path.chmod</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># tests/test_audit_dashboard.py (CORRETO)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">patch</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">,</span> <span class="n">MagicMock</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_export_html</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;builtins.open&quot;</span><span class="p">,</span> <span class="n">mock_open</span><span class="p">())</span> <span class="k">as</span> <span class="n">mock_file</span><span class="p">,</span> \
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>         <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;pathlib.Path.chmod&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mock_chmod</span><span class="p">:</span>  <span class="c1"># ⬅️ Mock explícito</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        <span class="n">exporter</span><span class="o">.</span><span class="n">export_html</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;report.html&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="c1"># Validações</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="n">mock_file</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="n">mock_chmod</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="mo">0o644</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="prevencao_1">Prevenção</h3>
+<p><strong>Regra:</strong> Sempre testar localmente com Tox antes de push.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Validar em todas as versões (simula CI)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>tox
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Se passar em py310, passará no CI</span>
+</code></pre></div>
+<h3 id="status-do-debito_1">Status do Débito</h3>
+<ul>
+<li>✅ <strong>Resolvido:</strong> Todos os testes agora mockam <code>Path.chmod</code> explicitamente</li>
+<li>✅ <strong>Prevenido:</strong> Tox local detecta esse tipo de problema antes do CI</li>
+<li>📝 <strong>Documentado:</strong> Adicionado a <a href="../../guides/TESTING_STRATEGY_MOCKS/">TESTING_STRATEGY_MOCKS.md</a></li>
+</ul>
+<h3 id="licao-aprendida">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Se um método do stdlib interage com filesystem, mocke-o explicitamente. Nunca assuma que <code>mock_open()</code> é suficiente."</strong></p>
+</blockquote>
+<h3 id="referencias_1">Referências</h3>
+<ul>
+<li>Commit: <code>a1b2c3d</code> - Fix: Add explicit chmod mock for Python 3.10 compatibility</li>
+<li><a href="../../guides/TESTING_STRATEGY_MOCKS/#filesystem-operations">TESTING_STRATEGY_MOCKS.md - Filesystem Mocking</a></li>
+</ul>
+<hr />
+<h2 id="3-medio-css-no-template-html-chaves-duplas">3. ⚠️ MÉDIO: CSS no Template HTML (Chaves Duplas)</h2>
+<h3 id="sintoma_2">Sintoma</h3>
+<p><strong>Editor de código (VS Code) marca erro de sintaxe:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="cm">&lt;!-- scripts/audit_dashboard/exporter_html.py --&gt;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nt">body</span><span class="w"> </span><span class="p">{</span><span class="err">{</span><span class="w">  </span><span class="c">/* ⬅️ VS Code: &quot;Syntax Error: Unexpected token&quot; */</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">}</span><span class="err">}</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</code></pre></div>
+<p><strong>Mas o código funciona perfeitamente em runtime.</strong></p>
+<h3 id="causa-raiz_2">Causa Raiz</h3>
+<p><strong>Conflito entre Python f-strings e sintaxe CSS:</strong></p>
+<ul>
+<li><strong>Python:</strong> Usa <code>{var}</code> para interpolação em strings</li>
+<li><strong>CSS:</strong> Usa <code>{ }</code> para blocos de regras</li>
+<li><strong>Escape:</strong> Para incluir literal <code>{</code> em f-string, duplicamos: <code>{{</code></li>
+</ul>
+<p><strong>Código Atual (Workaround Frágil):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># scripts/audit_dashboard/exporter_html.py</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">html_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s2">&lt;style&gt;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s2">body {{  /* Escape para Python não interpretar */</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s2">    font-family: </span><span class="si">{font_family}</span><span class="s2">;  /* Variável Python */</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="s2">}}</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="s2">&lt;/style&gt;</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">output</span> <span class="o">=</span> <span class="n">html_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">font_family</span><span class="o">=</span><span class="s2">&quot;Arial&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Problema:</strong></p>
+<ul>
+<li>✅ <strong>Runtime:</strong> Funciona perfeitamente</li>
+<li>❌ <strong>Editor:</strong> Syntax highlighting quebrado (acha que <code>{{</code> é erro)</li>
+<li>❌ <strong>Manutenibilidade:</strong> Confuso para novos devs</li>
+</ul>
+<h3 id="solucao-planejada-p15-roadmap">Solução Planejada (P15 - Roadmap)</h3>
+<p><strong>Migrar para Jinja2:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># FUTURO: scripts/audit_dashboard/exporter_html.py</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s2">&lt;style&gt;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s2">body {  /* ⬅️ CSS puro, sem escapes */</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s2">    font-family: {{ font_family }};  /* Jinja2 sintaxe */</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s2">}</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s2">&lt;/style&gt;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">output</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">font_family</span><span class="o">=</span><span class="s2">&quot;Arial&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ <strong>Separação de Responsabilidades:</strong> Template em arquivo <code>.html</code> separado</li>
+<li>✅ <strong>Syntax Highlighting:</strong> Editores reconhecem Jinja2 templates</li>
+<li>✅ <strong>Features:</strong> Auto-escape, loops, condicionais nativos</li>
+</ul>
+<h3 id="workaround-atual">Workaround Atual</h3>
+<p>Adicionar comentário ao template explicando o escape:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">html_template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="s2">&lt;!-- ATENÇÃO: {{ e }} são escapes para Python f-string, NÃO erro de sintaxe --&gt;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="s2">&lt;style&gt;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="s2">body {{</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="s2">    font-family: </span><span class="si">{font_family}</span><span class="s2">;</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="s2">}}</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="s2">&lt;/style&gt;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="s2">&quot;&quot;&quot;</span>
+</code></pre></div>
+<h3 id="status-do-debito_2">Status do Débito</h3>
+<ul>
+<li>⚠️ <strong>Conhecido:</strong> Documentado no roadmap</li>
+<li>📅 <strong>Planejado:</strong> [P15] Migração para Jinja2 (Sprint 6)</li>
+<li>🔧 <strong>Workaround:</strong> Funcional, mas confuso</li>
+</ul>
+<h3 id="impacto">Impacto</h3>
+<ul>
+<li><strong>Baixo:</strong> Não afeta funcionalidade</li>
+<li><strong>Médio:</strong> Dificulta onboarding de novos devs (DX ruim)</li>
+</ul>
+<h3 id="referencias_2">Referências</h3>
+<ul>
+<li>Roadmap: <a href="../../architecture/ROADMAP_DELTA_AUDIT/#p15">P15 - Adoção de Jinja2</a></li>
+<li>Código: <a href="../../scripts/audit_dashboard/exporter_html.py">exporter_html.py</a></li>
+</ul>
+<hr />
+<h2 id="4-medio-auditoria-de-seguranca-vs-subprocess-maintain_versionspy">4. ⚠️ MÉDIO: Auditoria de Segurança vs <code>subprocess</code> (maintain_versions.py)</h2>
+<h3 id="sintoma_3">Sintoma</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Rodando auditoria</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>make<span class="w"> </span>audit
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># ⚠️ WARNING: Risky subprocess.run detected in maintain_versions.py</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1">#    Line 145: subprocess.run([&quot;pyenv&quot;, &quot;install&quot;, version])</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1">#    Severity: HIGH</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Para commitar, precisa bypass com --no-verify</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>git<span class="w"> </span>commit<span class="w"> </span>--no-verify<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: update python versions&quot;</span>
+</code></pre></div>
+<h3 id="causa-raiz_3">Causa Raiz</h3>
+<p><strong>O auditor de segurança (<code>code_audit.py</code>) deteta <code>subprocess</code> como risco alto.</strong></p>
+<p><strong>Contexto:</strong></p>
+<ul>
+<li><code>maintain_versions.py</code> executa <code>pyenv install</code> via subprocess (legítimo)</li>
+<li>O auditor <strong>não distingue</strong> uso seguro (lista hardcoded) de uso inseguro (input não sanitizado)</li>
+</ul>
+<p><strong>Código Atual (Seguro, mas Alertado):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># scripts/maintain_versions.py</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">install_python_version</span><span class="p">(</span><span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Install Python version via pyenv.</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="sd">    Args:</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="sd">        version: Version string from .python-version (sanitized)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="c1"># Lista hardcoded, não input do usuário ✅ SEGURO</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>    <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pyenv&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">version</span><span class="p">]</span>  <span class="c1"># ⬅️ Alerta aqui</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="solucao-planejada-p131-roadmap">Solução Planejada (P13.1 - Roadmap)</h3>
+<p><strong>Configurar exceções no auditor:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># audit_config.yaml (FUTURO)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">security_rules</span><span class="p">:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">subprocess_allowlist</span><span class="p">:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scripts/maintain_versions.py</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pyenv</span><span class="nv"> </span><span class="s">automation</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">version</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">.python-version</span><span class="nv"> </span><span class="s">(trusted</span><span class="nv"> </span><span class="s">source)&quot;</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scripts/git_sync/sync_logic.py</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Git</span><span class="nv"> </span><span class="s">commands</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">inputs</span><span class="nv"> </span><span class="s">sanitized</span><span class="nv"> </span><span class="s">via</span><span class="nv"> </span><span class="s">shell=False&quot;</span>
+</code></pre></div>
+<p><strong>Validação em Runtime:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># scripts/cli/upgrade_python.py</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_version_string</span><span class="p">(</span><span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure version is safe for subprocess.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^\d+\.\d+\.\d+$&#39;</span>  <span class="c1"># Apenas: major.minor.patch</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">version</span><span class="p">))</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="c1"># Uso</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">validate_version_string</span><span class="p">(</span><span class="n">version</span><span class="p">):</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid version format: </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="workaround-atual_1">Workaround Atual</h3>
+<p><strong>Usar <code>--no-verify</code> com cautela:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># ⚠️ APENAS para maintain_versions.py e git_sync</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>git<span class="w"> </span>commit<span class="w"> </span>--no-verify<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: python version maintenance&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># ❌ NUNCA use --no-verify para outros commits</span>
+</code></pre></div>
+<h3 id="status-do-debito_3">Status do Débito</h3>
+<ul>
+<li>⚠️ <strong>Conhecido:</strong> Falso positivo do auditor</li>
+<li>📅 <strong>Planejado:</strong> [P13.1] Configurar exceções no auditor</li>
+<li>🔧 <strong>Workaround:</strong> <code>--no-verify</code> documentado</li>
+</ul>
+<h3 id="licao-aprendida_1">Lição Aprendida</h3>
+<blockquote>
+<p><strong>"Segurança não é binária. Ferramentas de auditoria precisam de contexto (allowlists) para distinguir uso legítimo de uso perigoso."</strong></p>
+</blockquote>
+<h3 id="referencias_3">Referências</h3>
+<ul>
+<li>Roadmap: <a href="../../architecture/ROADMAP_DELTA_AUDIT/#p13.1">P13.1 - Regularização da Auditoria</a></li>
+<li><a href="../../architecture/SECURITY_STRATEGY/#subprocess-execution">SECURITY_STRATEGY.md - Subprocess Guidelines</a></li>
+</ul>
+<hr />
+<h2 id="5-i-baixo-warnings-de-linting-invalid-noqa">5. ℹ️ BAIXO: Warnings de Linting (<code>Invalid # noqa</code>)</h2>
+<h3 id="sintoma_4">Sintoma</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>ruff<span class="w"> </span>check<span class="w"> </span>scripts/
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="c1"># ⚠️ F401 [*] `os` imported but unused</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># ⚠️ NOQA102 [*] Invalid # noqa directive: os is not in scope</span>
+</code></pre></div>
+<h3 id="causa-raiz_4">Causa Raiz</h3>
+<p><strong>Comments <code># noqa</code> inválidos deixados de refatorações antigas.</strong></p>
+<p><strong>Exemplo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># ANTES (código antigo)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>  <span class="c1"># noqa: F401  # Usado em versão anterior</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  <span class="c1"># Não usa &#39;os&#39; mais</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="c1"># DEPOIS (código atual)</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="c1"># ⬆️ Refatoramos e removemos uso de &#39;os&#39;, mas esquecemos de remover # noqa</span>
+</code></pre></div>
+<h3 id="solucao_1">Solução</h3>
+<p><strong>Limpeza manual ou automatizada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Remover todos os noqa desnecessários</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>ruff<span class="w"> </span>check<span class="w"> </span>--fix<span class="w"> </span>scripts/
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># OU manualmente: buscar e revisar</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;# noqa&quot;</span><span class="w"> </span>scripts/<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</code></pre></div>
+<h3 id="status-do-debito_4">Status do Débito</h3>
+<ul>
+<li>⚠️ <strong>Em Andamento:</strong> [P13] Saneamento de Linting</li>
+<li>📉 <strong>Baixa Prioridade:</strong> Não afeta funcionalidade</li>
+<li>🔧 <strong>Workaround:</strong> Tolerar warnings (não bloqueia CI)</li>
+</ul>
+<h3 id="referencias_4">Referências</h3>
+<ul>
+<li>Roadmap: <a href="../../architecture/ROADMAP_DELTA_AUDIT/#p13">P13 - Saneamento de Linting</a></li>
+</ul>
+<hr />
+<h2 id="6-i-informativo-pytest-collection-warnings">6. ℹ️ INFORMATIVO: Pytest Collection Warnings</h2>
+<h3 id="sintoma_5">Sintoma</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>pytest<span class="w"> </span>tests/
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="c1"># ============================= warnings summary =============================</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="c1"># PytestCollectionWarning: cannot collect test class &#39;TestConfig&#39;</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># because it has a __init__ constructor</span>
+</code></pre></div>
+<h3 id="causa-raiz_5">Causa Raiz</h3>
+<p><strong>Classes de teste com <code>__init__</code> confundem o pytest collector.</strong></p>
+<p><strong>Exemplo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># tests/test_config.py</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">TestConfig</span><span class="p">:</span>  <span class="c1"># ⬅️ Pytest acha que é test class</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration helper (NOT a test).&quot;&quot;&quot;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="c1"># Solução: Renomear para não começar com &quot;Test&quot;</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="k">class</span><span class="w"> </span><span class="nc">ConfigHelper</span><span class="p">:</span>  <span class="c1"># ✅ CORRETO</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+</code></pre></div>
+<h3 id="solucao_2">Solução</h3>
+<p><strong>Renomear classes auxiliares:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Buscar classes suspeitas</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;class Test&quot;</span><span class="w"> </span>tests/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;def test_&quot;</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Renomear manualmente ou via refactoring</span>
+</code></pre></div>
+<h3 id="status-do-debito_5">Status do Débito</h3>
+<ul>
+<li>ℹ️ <strong>Cosm ético:</strong> Não afeta testes (só warnings)</li>
+<li>📅 <strong>Planejado:</strong> [P13] Saneamento</li>
+<li>🔧 <strong>Workaround:</strong> Ignorar warnings (filtrar via pytest.ini)</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># pytest.ini</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="k">[pytest]</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="na">filterwarnings</span><span class="w"> </span><span class="o">=</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="na">ignore</span><span class="o">:</span><span class="s">:pytest.PytestCollectionWarning</span>
+</code></pre></div>
+<hr />
+<h2 id="sumario-de-debitos-scorecard">Sumário de Débitos (Scorecard)</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Título</th>
+<th>Severidade</th>
+<th>Status</th>
+<th>ETA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Conflito Pre-Commit Hook</td>
+<td>🔴 Crítico</td>
+<td>Detectado + Mitigado</td>
+<td>-</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Mock Filesystem (Py3.10)</td>
+<td>⚠️ Alto</td>
+<td>✅ Resolvido</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CSS Template (Escapes)</td>
+<td>⚠️ Médio</td>
+<td>Planejado</td>
+<td>Sprint 6 (P15)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Auditoria vs Subprocess</td>
+<td>⚠️ Médio</td>
+<td>Planejado</td>
+<td>Sprint 6 (P13.1)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Linting Warnings</td>
+<td>ℹ️ Baixo</td>
+<td>Em Andamento</td>
+<td>Sprint 6 (P13)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Pytest Collection Warnings</td>
+<td>ℹ️ Baixo</td>
+<td>Planejado</td>
+<td>Sprint 6 (P13)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="processo-de-manutencao">Processo de Manutenção</h2>
+<h3 id="como-adicionar-novo-debito">Como Adicionar Novo Débito</h3>
+<ol>
+<li><strong>Identificar:</strong> Problema causou &gt;1 hora de debug?</li>
+<li><strong>Documentar:</strong> Adicionar seção neste documento com template:</li>
+<li>Sintoma (o que o dev vê)</li>
+<li>Causa Raiz (por que acontece)</li>
+<li>Solução (como resolver)</li>
+<li>Status (resolvido/planejado/conhecido)</li>
+<li><strong>Vincular:</strong> Adicionar ao roadmap se requer implementação</li>
+<li><strong>Alertar:</strong> Atualizar <code>make doctor</code> se detectável automaticamente</li>
+</ol>
+<h3 id="template-para-nova-entrada">Template para Nova Entrada</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="gu">## N. 🔴 TÍTULO_DO_DÉBITO</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="gu">### Sintoma</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>```bash
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="gh"># Comando que reproduz o problema</span>
+</code></pre></div>
+<h3 id="causa-raiz_6">Causa Raiz</h3>
+<p>Explicação técnica do problema.</p>
+<h3 id="solucao_3">Solução</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Comandos para resolver</span>
+</code></pre></div>
+<h3 id="status-do-debito_6">Status do Débito</h3>
+<ul>
+<li>Status: (Resolvido/Planejado/Conhecido)</li>
+<li>Prioridade: (Crítico/Alto/Médio/Baixo)</li>
+<li>Referências: (Links para código, docs, issues)</li>
+</ul>
+<h3 id="licao-aprendida_2">Lição Aprendida</h3>
+<blockquote>
+<p>Quote com aprendizado principal.</p>
+</blockquote>
+<p>```</p>
+<hr />
+<h2 id="referencias_5">Referências</h2>
+<ul>
+<li><a href="../../history/SRE_TECHNICAL_DEBT_CATALOG/">SRE Technical Debt Catalog</a></li>
+<li><a href="../../guides/DEV_ENVIRONMENT_TROUBLESHOOTING/">Dev Environment Troubleshooting</a></li>
+<li><a href="../../guides/TESTING_STRATEGY_MOCKS/">Testing Strategy - Known Gotchas</a></li>
+</ul>
+<hr />
+<h2 id="filosofia-final">Filosofia Final</h2>
+<p>Este documento existe porque:</p>
+<blockquote>
+<p><strong>"Bugs não são falhas — são lições. A falha real é encontrar o mesmo bug duas vezes."</strong></p>
+</blockquote>
+<p>Cada entrada aqui representa horas de debug transformadas em <strong>conhecimento reutilizável</strong>.</p>
+<p>Mantenha vivo. Atualize sempre. 🛡️</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

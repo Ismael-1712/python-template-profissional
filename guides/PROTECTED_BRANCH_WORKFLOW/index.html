@@ -1,0 +1,1359 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="SRE Team & GEM">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Protected Branch Workflow: Fluxo Git Completo com Branch Protegida - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#protected-branch-workflow-fluxo-git-completo-com-branch-protegida" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Protected Branch Workflow: Fluxo Git Completo com Branch Protegida
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arquitetura-de-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura de Branches
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocolo-de-entrega-obrigatorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚨 Protocolo de Entrega Obrigatório
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚨 Protocolo de Entrega Obrigatório">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-nao-fazer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⛔ O Que NÃO Fazer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fluxo-correto-5-etapas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Fluxo Correto (5 Etapas)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passo-a-passo-detalhado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 Passo a Passo Detalhado
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Passo a Passo Detalhado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etapa-1-criar-branch-de-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 1: Criar Branch de Feature
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-2-desenvolver-e-commitar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 2: Desenvolver e Commitar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-3-push-e-abertura-de-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 3: Push e Abertura de PR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-4-aguardar-aprovacao-e-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 4: Aguardar Aprovação e Merge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etapa-5-sincronizacao-local-critico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Etapa 5: Sincronização Local (CRÍTICO)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auto-propagacao-robo-p19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🤖 Auto-Propagação (Robô P19)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🤖 Auto-Propagação (Robô P19)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-que-o-robo-faz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        O Que o Robô Faz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflitos-de-merge-caso-raro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Conflitos de Merge (Caso Raro)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Checklist de Validação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protecao-da-main-implementacao-tecnica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ Proteção da Main (Implementação Técnica)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ Proteção da Main (Implementação Técnica)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#github-rulesets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub Rulesets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigo-de-protecao-sync_logicpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código de Proteção (sync_logic.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-especiais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔥 Casos Especiais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔥 Casos Especiais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-1-hotfix-urgente-admin-bypass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 1: Hotfix Urgente (Admin Bypass)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-2-multiplas-branches-de-feature-simultaneas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 2: Múltiplas Branches de Feature Simultâneas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-3-rebase-vs-merge-no-pr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso 3: Rebase vs. Merge no PR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências Técnicas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Referências Técnicas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-relacionada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação Relacionada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigo-implementado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código Implementado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recursos-externos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursos Externos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Versionamento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aprendizados-e-debitos-conhecidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Aprendizados e Débitos Conhecidos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Aprendizados e Débitos Conhecidos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#debito-tecnico-historico-git-sujo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Débito Técnico: Histórico Git "Sujo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#licao-aprendida-fracionamento-de-mudancas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lição Aprendida: Fracionamento de Mudanças
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="protected-branch-workflow-fluxo-git-completo-com-branch-protegida">Protected Branch Workflow: Fluxo Git Completo com Branch Protegida</h1>
+<blockquote>
+<p><strong>Protocolo Obrigatório</strong> para desenvolvimento em repositório com branch <code>main</code> protegida e auto-propagação</p>
+</blockquote>
+<h2 id="contexto-e-motivacao">📋 Contexto e Motivação</h2>
+<p>Este projeto utiliza <strong>Branch Protection Rules</strong> no GitHub para garantir a integridade da branch <code>main</code>. Combinado com o workflow de <strong>Auto-Propagação</strong> (<code>.github/workflows/propagate.yml</code>), isso cria um ambiente resiliente mas com <strong>restrições operacionais específicas</strong>.</p>
+<h3 id="arquitetura-de-branches">Arquitetura de Branches</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph LR
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    A[main&lt;br/&gt;🔒 Protegida] --&gt;|Auto-Propagação| B[api&lt;br/&gt;Variante Docker]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    A --&gt;|Auto-Propagação| C[cli&lt;br/&gt;Variante Typer]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    D[feat/FEATURE&lt;br/&gt;Branch Temporária] --&gt;|PR + Squash Merge| A
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    style A fill:#ff6b6b,stroke:#c92a2a,color:#fff
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    style B fill:#51cf66,stroke:#2f9e44
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    style C fill:#339af0,stroke:#1864ab
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    style D fill:#ffd43b,stroke:#fab005
+</code></pre></div>
+<p><strong>Regras de Governança:</strong></p>
+<ul>
+<li>✅ <code>main → api</code> (auto-propagação permitida)</li>
+<li>✅ <code>main → cli</code> (auto-propagação permitida)</li>
+<li>❌ Push direto na <code>main</code> (bloqueado para não-admins)</li>
+<li>❌ <code>api → main</code> (contaminação reversa proibida)</li>
+<li>❌ <code>cli → main</code> (contaminação reversa proibida)</li>
+</ul>
+<hr />
+<h2 id="protocolo-de-entrega-obrigatorio">🚨 Protocolo de Entrega Obrigatório</h2>
+<h3 id="o-que-nao-fazer">⛔ O Que NÃO Fazer</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ❌ NUNCA faça isso (vai falhar):</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;changes&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w">  </span><span class="c1"># ❌ BLOQUEADO por Branch Protection</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># ❌ NUNCA faça merge local:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>git<span class="w"> </span>merge<span class="w"> </span>feat/my-feature
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w">  </span><span class="c1"># ❌ HISTÓRICO POLUÍDO</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c1"># ❌ NUNCA sincronize branches manualmente:</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>git<span class="w"> </span>checkout<span class="w"> </span>api
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>git<span class="w"> </span>merge<span class="w"> </span>main<span class="w">  </span><span class="c1"># ❌ ROBÔ P19 FARÁ ISSO AUTOMATICAMENTE</span>
+</code></pre></div>
+<h3 id="fluxo-correto-5-etapas">✅ Fluxo Correto (5 Etapas)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sequenceDiagram
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    participant Dev as Desenvolvedor
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    participant Local as Git Local
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    participant GitHub as GitHub Remote
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    participant CI as CI/CD Pipeline
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    participant Robot as Robô P19
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    Dev-&gt;&gt;Local: 1. Criar branch feature
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    Dev-&gt;&gt;Local: 2. Fazer commits
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    Dev-&gt;&gt;GitHub: 3. Push branch + Abrir PR
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    GitHub-&gt;&gt;CI: 4. Executar validações
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    CI--&gt;&gt;GitHub: ✅ Testes passaram
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    Dev-&gt;&gt;GitHub: 5. Squash &amp; Merge (via UI)
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    GitHub-&gt;&gt;Robot: Trigger: push na main
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    Robot-&gt;&gt;GitHub: Auto-propagação main→api,cli
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    Dev-&gt;&gt;Local: 6. Sincronizar local (reset)
+</code></pre></div>
+<hr />
+<h2 id="passo-a-passo-detalhado">📖 Passo a Passo Detalhado</h2>
+<h3 id="etapa-1-criar-branch-de-feature">Etapa 1: Criar Branch de Feature</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Garantir que main está atualizada</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Criar branch com nomenclatura semântica</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feat/P999-descricao-curta
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># ou</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>fix/corrigir-bug-xyz
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># ou</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>docs/atualizar-readme
+</code></pre></div>
+<p><strong>Convenções de Nome:</strong></p>
+<ul>
+<li><code>feat/P###-*</code>: Nova funcionalidade (referencia tarefa P###)</li>
+<li><code>fix/*</code>: Correção de bug</li>
+<li><code>docs/*</code>: Apenas documentação</li>
+<li><code>refactor/*</code>: Refatoração sem mudança funcional</li>
+<li><code>test/*</code>: Apenas testes</li>
+</ul>
+<hr />
+<h3 id="etapa-2-desenvolver-e-commitar">Etapa 2: Desenvolver e Commitar</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Fazer alterações</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>vim<span class="w"> </span>src/my_module.py
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Validar localmente (SEMPRE antes de commitar)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>make<span class="w"> </span>validate
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Staging SELETIVO (nunca use git add .)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>git<span class="w"> </span>add<span class="w"> </span>src/my_module.py
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>git<span class="w"> </span>add<span class="w"> </span>tests/test_my_module.py
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="c1"># Commit com mensagem semântica</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat(module): add validation logic</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s2">- Implement input sanitization</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s2">- Add unit tests with pytest</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s2">- Update module docstrings</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s2">Refs: #42&quot;</span>
+</code></pre></div>
+<p><strong>⚠️ Anti-Padrão Detectado (Relatório P20):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ❌ RUIM: Contamina commit com arquivos não relacionados</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactoring stuff&quot;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># ✅ BOM: Staging atômico</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/ci_recovery/models.py
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>git<span class="w"> </span>add<span class="w"> </span>ci_failure_recovery.py
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor(ci-recovery): extract data models to separate module&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="etapa-3-push-e-abertura-de-pr">Etapa 3: Push e Abertura de PR</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Push da branch de feature</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feat/P999-descricao-curta
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Abrir PR via GitHub UI ou gh CLI</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span>--title<span class="w"> </span><span class="s2">&quot;feat(module): add validation logic&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span>--body<span class="w"> </span><span class="s2">&quot;Closes #42. Implements validation as discussed.&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span>--base<span class="w"> </span>main<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span>--head<span class="w"> </span>feat/P999-descricao-curta
+</code></pre></div>
+<p><strong>O que acontece automaticamente:</strong></p>
+<ol>
+<li>✅ CI/CD roda testes (<code>make validate</code>)</li>
+<li>✅ Pre-commit hooks validam código</li>
+<li>✅ Coverage report é gerado</li>
+<li>✅ Dependabot verifica vulnerabilidades</li>
+</ol>
+<hr />
+<h3 id="etapa-4-aguardar-aprovacao-e-merge">Etapa 4: Aguardar Aprovação e Merge</h3>
+<p><strong>No GitHub UI:</strong></p>
+<ol>
+<li>Aguarde CI passar (badge verde ✅)</li>
+<li>Solicite review (se equipe &gt; 1 pessoa)</li>
+<li>Após aprovação, clique em <strong>"Squash and merge"</strong></li>
+<li><strong>Confirme deleção automática da branch remota</strong> (checkbox habilitado)</li>
+</ol>
+<p><strong>Resultado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>✅ Pull request successfully merged and closed
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>🗑️ feat/P999-descricao-curta deleted
+</code></pre></div>
+<hr />
+<h3 id="etapa-5-sincronizacao-local-critico">Etapa 5: Sincronização Local (CRÍTICO)</h3>
+<p><strong>⚠️ JAMAIS pule esta etapa!</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Voltar para main</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Puxar o squash commit do GitHub</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># RESET HARD para alinhar com remote</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/main
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># Deletar branch local de feature</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>git<span class="w"> </span>branch<span class="w"> </span>-d<span class="w"> </span>feat/P999-descricao-curta
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1"># Limpar referências obsoletas</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>git<span class="w"> </span>fetch<span class="w"> </span>--prune
+</code></pre></div>
+<p><strong>Por que <code>git reset --hard</code>?</strong></p>
+<p>O Squash Merge cria um <strong>novo commit</strong> no GitHub. Seu histórico local tem múltiplos commits na branch. Sem o reset, você terá divergência:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a># Sem reset (❌ ERRADO):
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Local:  A → B → C → D → E (seus 5 commits originais)
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Remote: A → X (1 commit squashed)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a># Com reset (✅ CORRETO):
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>Local:  A → X
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>Remote: A → X
+</code></pre></div>
+<hr />
+<h2 id="auto-propagacao-robo-p19">🤖 Auto-Propagação (Robô P19)</h2>
+<p><strong>Após o merge na <code>main</code>, o workflow <code>propagate.yml</code> é acionado automaticamente.</strong></p>
+<h3 id="o-que-o-robo-faz">O Que o Robô Faz</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># .github/workflows/propagate.yml</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">propagate</span><span class="p">:</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Propagar main → api</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">          </span><span class="no">git checkout api</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">          </span><span class="no">git merge origin/main</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">          </span><span class="no">git push origin api</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Propagar main → cli</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">          </span><span class="no">git checkout cli</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">          </span><span class="no">git merge origin/main</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">          </span><span class="no">git push origin cli</span>
+</code></pre></div>
+<p><strong>Timeline:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>T+0s:   Merge PR na main
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>T+5s:   Robô P19 acorda (GitHub Actions trigger)
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>T+45s:  api e cli atualizadas automaticamente
+</code></pre></div>
+<h3 id="conflitos-de-merge-caso-raro">⚠️ Conflitos de Merge (Caso Raro)</h3>
+<p>Se o robô falhar por conflito:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>❌ FALHA: Merge apresentou conflitos
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>⚠️  Conflitos na branch &#39;api&#39; requerem resolução manual
+</code></pre></div>
+<p><strong>Resolução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 1. Checkout da branch com conflito</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>api
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>api
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># 2. Merge manual</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>git<span class="w"> </span>merge<span class="w"> </span>main
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># 3. Resolver conflitos em editor</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>vim<span class="w"> </span>&lt;arquivos-conflitantes&gt;
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># 4. Finalizar merge</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>git<span class="w"> </span>add<span class="w"> </span>&lt;arquivos-resolvidos&gt;
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(sync): resolve propagation conflicts from main&quot;</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="c1"># 5. Push (robô P19 não fará isso por você)</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>api
+</code></pre></div>
+<hr />
+<h2 id="checklist-de-validacao">📊 Checklist de Validação</h2>
+<p>Após executar o workflow completo, verifique:</p>
+<ul>
+<li>[ ] Branch <code>main</code> local sincronizada com <code>origin/main</code></li>
+<li>[ ] Branch de feature deletada localmente (<code>git branch -vv</code>)</li>
+<li>[ ] Branch de feature deletada remotamente (GitHub UI)</li>
+<li>[ ] Branches <code>api</code> e <code>cli</code> atualizadas automaticamente (GitHub Actions log)</li>
+<li>[ ] <code>git status</code> mostra "nothing to commit, working tree clean"</li>
+<li>[ ] <code>git log --oneline -5</code> mostra o squash commit no topo</li>
+</ul>
+<hr />
+<h2 id="protecao-da-main-implementacao-tecnica">🛡️ Proteção da Main (Implementação Técnica)</h2>
+<h3 id="github-rulesets">GitHub Rulesets</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Configuração em Settings → Branches → Branch protection rules</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">rules</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">require_pull_request</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">require_status_checks_to_pass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">block_force_pushes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">restrict_deletions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bypass_actors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;admin&quot;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># Apenas admins podem bypass</span>
+</code></pre></div>
+<h3 id="codigo-de-protecao-sync_logicpy">Código de Proteção (sync_logic.py)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># scripts/git_sync/sync_logic.py</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">current_branch</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_branch&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">if</span> <span class="n">current_branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        <span class="s2">&quot;Use o &#39;Fluxo de Trabalho (Chave Mestra)&#39;: Crie um branch, &quot;</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        <span class="s2">&quot;abra um PR e solicite um &#39;Bypass&#39; do administrador.&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="p">)</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>    <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Resultado ao tentar push direto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>SyncError: Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.
+</code></pre></div>
+<hr />
+<h2 id="casos-especiais">🔥 Casos Especiais</h2>
+<h3 id="caso-1-hotfix-urgente-admin-bypass">Caso 1: Hotfix Urgente (Admin Bypass)</h3>
+<p>Se você é <strong>administrador</strong> e precisa fazer push direto:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Siga o Direct Push Protocol</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># Ver: docs/guides/DIRECT_PUSH_PROTOCOL.md</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>make<span class="w"> </span>validate
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>git<span class="w"> </span>add<span class="w"> </span>&lt;arquivos&gt;
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;hotfix: critical production bug&quot;</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w">  </span><span class="c1"># Bypass rules</span>
+</code></pre></div>
+<h3 id="caso-2-multiplas-branches-de-feature-simultaneas">Caso 2: Múltiplas Branches de Feature Simultâneas</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Branch A (feature 1)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feat/A
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># ... trabalho ...</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feat/A
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># Abrir PR #1</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># Branch B (feature 2, independente de A)</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feat/B
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="c1"># ... trabalho ...</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feat/B
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="c1"># Abrir PR #2</span>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="c1"># Merge ordem: B → main, depois A → main</span>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="c1"># Robô P19 propagará ambas automaticamente</span>
+</code></pre></div>
+<h3 id="caso-3-rebase-vs-merge-no-pr">Caso 3: Rebase vs. Merge no PR</h3>
+<p><strong>Recomendação:</strong> Use <strong>Squash Merge</strong> sempre.</p>
+<ul>
+<li>✅ <strong>Squash Merge</strong>: Histórico limpo (1 commit por PR)</li>
+<li>⚠️ <strong>Rebase and Merge</strong>: Preserva commits individuais (útil para releases)</li>
+<li>❌ <strong>Merge Commit</strong>: Cria bolhas no grafo (dificulta leitura)</li>
+</ul>
+<hr />
+<h2 id="referencias-tecnicas">📚 Referências Técnicas</h2>
+<h3 id="documentacao-relacionada">Documentação Relacionada</h3>
+<ul>
+<li><a href="../POST_PR_MERGE_PROTOCOL/">Post-PR Merge Protocol</a> - Detalhes de limpeza pós-merge</li>
+<li><a href="../DIRECT_PUSH_PROTOCOL/">Direct Push Protocol</a> - Bypass para admins</li>
+<li><a href="../TRIAD_SYNC_LESSONS_LEARNED/">Triad Sync Lessons Learned</a> - Histórico de evolução</li>
+<li><a href="../REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">Refactoring Protocol</a> - Metodologia de refatoração segura</li>
+</ul>
+<h3 id="codigo-implementado">Código Implementado</h3>
+<ul>
+<li><a href="../../scripts/git_sync/sync_logic.py"><code>scripts/git_sync/sync_logic.py</code></a> - Proteção de branch</li>
+<li><a href="../../.github/workflows/propagate.yml"><code>.github/workflows/propagate.yml</code></a> - Robô P19</li>
+<li><a href="../../scripts/post-pr-cleanup.sh"><code>scripts/post-pr-cleanup.sh</code></a> - Automação de limpeza</li>
+</ul>
+<h3 id="recursos-externos">Recursos Externos</h3>
+<ul>
+<li><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">GitHub Branch Protection</a></li>
+<li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges#squash-and-merge-your-commits">Squash Merge Documentation</a></li>
+</ul>
+<hr />
+<h2 id="versionamento">🔄 Versionamento</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Autor</th>
+<th>Mudanças</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2025-12-16</td>
+<td>SRE &amp; GEM</td>
+<td>Versão inicial consolidando fluxo completo</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="aprendizados-e-debitos-conhecidos">💡 Aprendizados e Débitos Conhecidos</h2>
+<h3 id="debito-tecnico-historico-git-sujo">Débito Técnico: Histórico Git "Sujo"</h3>
+<p><strong>Sintoma:</strong> O grafo do Git mostra linhas de merge ("bolhas") nas branches <code>api</code> e <code>cli</code>.</p>
+<p><strong>Causa:</strong> Estratégia de Merge Recursivo do robô P19 (necessária para suportar divergências).</p>
+<p><strong>Impacto:</strong> ⚠️ <strong>Benigno</strong> - Não afeta funcionalidade, apenas leitura visual do grafo.</p>
+<p><strong>Resolução:</strong> ❌ <strong>Não tente linearizar</strong> (git rebase) branches públicas <code>api</code>/<code>cli</code>, isso quebrará clones existentes.</p>
+<h3 id="licao-aprendida-fracionamento-de-mudancas">Lição Aprendida: Fracionamento de Mudanças</h3>
+<p>Durante a evolução deste sistema (Tarefas P15-P23), descobrimos que <strong>LLMs falham ao refatorar múltiplos componentes simultaneamente</strong>.</p>
+<p><strong>Solução:</strong> Protocolo de Fracionamento Iterativo (ver <a href="../REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/"><code>REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</code></a>).</p>
+<p><strong>Aplicação neste fluxo:</strong> Faça PRs pequenos e atômicos. Evite PRs com 20+ arquivos modificados.</p>
+<hr />
+<p><strong>Mantenha este documento atualizado conforme o workflow evoluir.</strong></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
