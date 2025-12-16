@@ -957,6 +957,9 @@ Fix these issues before committing or add to .guardian-whitelist.yaml
 |-----------|-----------|
 | [KNOWLEDGE_NODE_MANUAL.md](docs/guides/KNOWLEDGE_NODE_MANUAL.md) | Manual completo do sistema de Knowledge Nodes |
 | [CORTEX_AUTO_HOOKS.md](docs/guides/CORTEX_AUTO_HOOKS.md) | Guia de hooks automáticos e governança |
+| [PROTECTED_BRANCH_WORKFLOW.md](docs/guides/PROTECTED_BRANCH_WORKFLOW.md) | Fluxo Git completo com branch protegida e auto-propagação |
+| [TESTING_STRATEGY_MOCKS.md](docs/guides/TESTING_STRATEGY_MOCKS.md) | Estratégia anti-I/O com mocks estritos (SRE Standard) |
+| [REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md) | Protocolo de refatoração segura para LLMs |
 
 ### 🏛️ Documentação Arquitetural
 

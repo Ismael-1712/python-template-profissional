@@ -513,6 +513,164 @@ Use a matriz **Risco vs. Esforço**:
 
 ---
 
+## DÉBITO #8: Histórico Git com Merge Bubbles (api/cli) ⚪
+
+### Identificação
+
+**Descoberto em:** Retrospectiva SRE (Ciclo P15-P23)
+
+**Sintoma:**
+O grafo Git nas branches `api` e `cli` mostra "bolhas" de merge (merge commits) ao invés de histórico linear.
+
+```
+# Visualização do grafo
+git log --graph --oneline --all
+
+* abc1234 (api) chore(sync): propagate main changes to api
+|\
+| * def5678 (main) feat: add new feature
+* | ghi9012 refactor: api-specific changes
+|/
+* jkl3456 Initial commit
+```
+
+**Causa Raiz:**
+O workflow de **Auto-Propagação** (`.github/workflows/propagate.yml`) usa **Merge Recursivo** (`git merge`) ao invés de Rebase ou Fast-Forward.
+
+```yaml
+# .github/workflows/propagate.yml
+- name: Propagar main → api
+  run: |
+    git checkout api
+    git merge origin/main  # ← Cria merge commits
+    git push origin api
+```
+
+### Risco
+
+- **Impacto Visual:** Grafo mais complexo (dificulta leitura do histórico)
+- **Impacto Funcional:** ⚪ **NENHUM** - Não afeta build, deploy ou CI
+
+### Resolução
+
+**Status:** **ACEITO COMO DESIGN DECISION**
+
+**Justificativa:**
+
+1. **Merge Recursivo é intencional:** Permite que `api` e `cli` tenham commits específicos (divergências) enquanto recebem updates da `main`.
+
+2. **Rebase Público é Perigoso:** Fazer `git rebase` em branches públicas (`api`/`cli`) **quebraria clones existentes** de colaboradores.
+
+3. **Trade-off Aceitável:** Preferimos histórico não-linear mas **seguro** ao invés de linear mas **frágil**.
+
+**Código de Referência:** [`.github/workflows/propagate.yml`](../../.github/workflows/propagate.yml#L67)
+
+### Lição Aprendida
+
+> **"Histórico Git bonito é desejável, mas não ao custo de quebrar repositórios públicos clonados."**
+
+**Anti-Pattern Evitado:**
+
+```bash
+# ❌ NUNCA faça isso em branches públicas:
+git checkout api
+git rebase main
+git push --force origin api  # Quebra clones existentes!
+```
+
+**Pattern Recomendado:**
+
+```bash
+# ✅ Merge recursivo preserva segurança:
+git checkout api
+git merge main -m "chore(sync): propagate main changes to api"
+git push origin api  # Sem --force, sem quebras
+```
+
+### Priorização
+
+**Severidade:** ⚪ **BAIXO** (cosmético, sem impacto funcional)
+
+**Decisão:** Manter estratégia atual. Re-avaliar apenas se houver migração para GitLab Flow ou outro modelo.
+
+---
+
+## DÉBITO #9: Coverage Gap em Módulos Legados 🟡
+
+### Identificação
+
+**Descoberto em:** Sprint P20 (Migração de Testes para Mocks)
+
+**Sintoma:**
+O GitHub Actions reporta **coverage global de ~45%**, mas isso mascara a realidade:
+
+```
+# Coverage por Módulo (Breakdown)
+scripts/git_sync/sync_logic.py:    85% ✅ (refatorado na P20)
+scripts/audit/analyzer.py:         42% 🟡 (pendente)
+scripts/audit_dashboard.py:        28% 🔴 (legado)
+scripts/ci_recovery/main.py:       35% 🔴 (legado)
+```
+
+**Causa Raiz:**
+A estratégia de **Fracionamento Iterativo** (P20) focou em refatorar **um módulo por vez**. Módulos não atacados ainda têm testes antigos (ou sem testes).
+
+### Risco
+
+- **DX:** Desenvolvedores podem interpretar "45%" como "projeto sem testes"
+- **Qualidade:** Bugs em `audit_dashboard.py` podem passar despercebidos
+
+### Resolução
+
+**Status:** **EM PROGRESSO** (Roadmap P24-P26)
+
+**Plano de Ação:**
+
+1. **P24:** Migrar `test_audit_analyzer.py` para mocks estritos (meta: 80% coverage)
+2. **P25:** Adicionar type hints + Mypy (força criação de testes para validar tipos)
+3. **P26:** Atacar `audit_dashboard.py` (módulo mais complexo)
+
+**Timeline Estimado:** 3 sprints (6 semanas)
+
+**Estratégia (Protocolo de Fracionamento):**
+
+```mermaid
+graph LR
+    A[Auditoria] --> B[Fundação: Mocks]
+    B --> C[Migração: Testes Antigos]
+    C --> D[Expansão: Novos Testes]
+    D --> E[Commit Atômico]
+    E --> F{Próximo<br/>Módulo?}
+    F -->|Sim| A
+    F -->|Não| G[✅ Coverage Global > 80%]
+```
+
+**Código de Referência:** [`docs/guides/TESTING_STRATEGY_MOCKS.md`](../guides/TESTING_STRATEGY_MOCKS.md)
+
+### Lição Aprendida
+
+> **"Coverage global baixo não significa código ruim - significa que alguns módulos ainda não foram modernizados."**
+
+**Anti-Pattern Evitado:**
+
+Tentar refatorar **todos os testes de uma vez** → Falha catastrófica (experiência da Interação 48-53).
+
+**Pattern Recomendado:**
+
+Atacar módulos **iterativamente** com commits atômicos. Cada PR deve:
+
+1. Aumentar coverage de **um módulo específico**
+2. Ter validação local (`pytest --cov`)
+3. Commit com mensagem descritiva: `test(audit): migrate to strict mocks (coverage: 42% → 80%)`
+
+### Priorização
+
+**Severidade:** 🟡 **ALTO** (impacta qualidade e confiança)
+
+**Próxima Ação:** Iniciar P24 após finalização da P23 (internacionalização).
+
+---
+
 ## Métricas de Saúde de Débitos
 
 Monitore estas métricas no projeto:
@@ -521,7 +679,8 @@ Monitore estas métricas no projeto:
 |---------|------|--------------|
 | **Débitos Críticos Abertos** | 0 | 0 ✅ |
 | **Débitos > 6 meses** | < 3 | 0 ✅ |
-| **Cobertura de Testes** | > 80% | ~75% 🟡 |
+| **Cobertura de Testes (Global)** | > 80% | ~45% 🔴 |
+| **Cobertura de Testes (Módulo Git Sync)** | > 80% | 85% ✅ |
 | **Arquivos > 500 linhas** | < 5 | 2 ✅ |
 | **TODOs sem Tracking** | 0 | A auditar 🟡 |
 
