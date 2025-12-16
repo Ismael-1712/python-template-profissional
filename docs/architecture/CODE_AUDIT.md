@@ -2,19 +2,313 @@
 id: code-audit
 type: arch
 status: active
-version: 1.0.0
+version: 2.0.0
 author: Engineering Team
 date: '2025-12-01'
-last_updated: '2025-12-01'
-context_tags: []
+last_updated: '2025-12-16'
+context_tags: [solid, modular-architecture, sre]
 linked_code:
 - scripts/code_audit.py
+- scripts/audit/models.py
+- scripts/audit/config.py
+- scripts/audit/scanner.py
+- scripts/audit/analyzer.py
+- scripts/audit/reporter.py
+- scripts/audit/plugins.py
 title: Code Security Auditor
 ---
 
 # Code Security Auditor
 
 Enterprise-grade security and quality auditing tool for Python projects. This tool performs static analysis to detect security vulnerabilities, external dependencies, and potential CI/CD issues before code commits.
+
+> **Arquitetura:** Sistema modular seguindo princípios S.O.L.I.D., refatorado de monólito de 700+ linhas para pacote com responsabilidades segregadas.
+
+> **Arquitetura:** Sistema modular seguindo princípios S.O.L.I.D., refatorado de monólito de 700+ linhas para pacote com responsabilidades segregadas.
+
+## 🏗️ Arquitetura Modular S.O.L.I.D.
+
+### Visão Geral da Evolução
+
+O sistema de auditoria foi completamente refatorado (Sprint P12) de um monólito único (`code_audit.py`, 700+ linhas) para uma arquitetura modular seguindo princípios **S.O.L.I.D.**:
+
+```
+scripts/audit/
+├── __init__.py
+├── models.py         # 📦 Data models (Pydantic/Dataclasses)
+├── config.py         # ⚙️  YAML configuration loader
+├── scanner.py        # 🔍 File discovery engine
+├── analyzer.py       # 🧠 Security pattern analyzer
+├── reporter.py       # 📊 Report generation (JSON/YAML)
+└── plugins.py        # 🔌 Extensibility system
+```
+
+### Princípios Aplicados
+
+#### 1. Single Responsibility Principle (SRP)
+
+Cada módulo possui **uma única razão para mudar**:
+
+- **`models.py`**: Representa estruturas de dados (AuditResult, SecurityPattern)
+- **`config.py`**: Carrega e valida configuração YAML
+- **`scanner.py`**: Descobre arquivos Python no workspace
+- **`analyzer.py`**: Detecta padrões de segurança no código
+- **`reporter.py`**: Formata e escreve relatórios
+- **`plugins.py`**: Análises especializadas (mock coverage, CI simulation)
+
+#### 2. Open/Closed Principle (OCP)
+
+O sistema é **aberto para extensão** (via plugins) mas **fechado para modificação** (core estável):
+
+```python
+# Extensão sem modificar o core
+from scripts.audit.plugins import check_mock_coverage
+
+# Novo plugin customizado
+def check_sql_injection(workspace_root: Path) -> dict[str, Any]:
+    # Implementação customizada
+    pass
+```
+
+#### 3. Dependency Inversion Principle (DIP)
+
+Componentes dependem de abstrações (`FileSystemAdapter`), não de implementações concretas:
+
+```python
+# analyzer.py e scanner.py usam abstração
+class CodeAnalyzer:
+    def __init__(self, fs_adapter: FileSystemAdapter | None = None):
+        self.fs = fs_adapter or RealFileSystem()  # DI padrão
+```
+
+Isso permite **testes unitários sem I/O real**:
+
+```python
+# Testes com filesystem mockado
+from scripts.utils.filesystem import InMemoryFileSystem
+
+mock_fs = InMemoryFileSystem({
+    Path("script.py"): "import os\nos.system('rm -rf /')"
+})
+analyzer = CodeAnalyzer(patterns, workspace, fs_adapter=mock_fs)
+```
+
+### Módulos Principais
+
+#### 📦 `models.py` - Camada de Dados
+
+Define estruturas de dados tipadas e validadas:
+
+```python
+from dataclasses import dataclass
+from enum import Enum
+
+class SecuritySeverity(str, Enum):
+    """Severity levels (Enum para type safety)."""
+    LOW = "LOW"
+    MEDIUM = "MEDIUM"
+    HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
+
+@dataclass(frozen=True)
+class SecurityPattern:
+    """Padrão de segurança configurável."""
+    pattern: str
+    severity: SecuritySeverity
+    description: str
+    category: str
+    suggestion: str = ""
+
+@dataclass
+class AuditResult:
+    """Resultado de uma análise."""
+    file: str
+    line: int
+    severity: SecuritySeverity
+    category: str
+    description: str
+    code: str
+    suggestion: str
+```
+
+**Responsabilidade:** Garantir integridade de dados (imutabilidade com `frozen=True`, validação com Enums).
+
+#### ⚙️ `config.py` - Gerenciador de Configuração
+
+Carrega e valida `audit_config.yaml`:
+
+```python
+class AuditConfig:
+    """Carregador robusto de configuração YAML."""
+
+    @staticmethod
+    def load(config_path: Path) -> dict[str, Any]:
+        """Load and validate YAML configuration."""
+        # Validações:
+        # 1. Arquivo existe?
+        # 2. YAML válido?
+        # 3. Campos obrigatórios presentes?
+        # 4. Valores dentro de limites aceitáveis?
+```
+
+**Validações Implementadas:**
+
+- ✅ Existência do arquivo de configuração
+- ✅ Sintaxe YAML válida
+- ✅ Campos obrigatórios (`scan_paths`, `file_patterns`)
+- ✅ Valores padrão seguros (`ci_timeout: 300`, `max_findings_per_file: 50`)
+
+#### 🔍 `scanner.py` - Motor de Descoberta
+
+Varre o workspace para encontrar arquivos Python:
+
+```python
+class FileScanner:
+    """Descobre arquivos Python respeitando regras de exclusão."""
+
+    def scan(self) -> list[Path]:
+        """Retorna lista de arquivos Python encontrados."""
+        # 1. Itera sobre scan_paths (ex: ['src/', 'tests/', 'scripts/'])
+        # 2. Aplica file_patterns (ex: ['*.py'])
+        # 3. Filtra exclude_paths (ex: ['.venv/', '__pycache__/'])
+```
+
+**Pontos de Atenção:**
+
+- **Cobertura Total:** Não ignora `scripts/` ou `.github/` (problema resolvido na P10).
+- **Globbing Recursivo:** Usa `**/*.py` para varrer subdiretórios.
+- **Filtro de Exclusão:** Evita varrer `.venv/`, `__pycache__/`, `.git/`.
+
+**Exemplo de Uso:**
+
+```python
+scanner = FileScanner(
+    workspace_root=Path.cwd(),
+    scan_paths=["src/", "tests/", "scripts/"],
+    file_patterns=["*.py"],
+    exclude_paths=[".venv/", "__pycache__/"]
+)
+files = scanner.scan()  # Retorna: [Path('src/main.py'), Path('tests/test_main.py'), ...]
+```
+
+#### 🧠 `analyzer.py` - Cérebro da Análise
+
+Analisa código Python para detectar padrões de segurança:
+
+```python
+class CodeAnalyzer:
+    """Motor de análise estática de segurança."""
+
+    def analyze_file(self, file_path: Path) -> list[AuditResult]:
+        """Analisa um arquivo e retorna lista de findings."""
+        # 1. Lê conteúdo do arquivo
+        # 2. Valida sintaxe com AST
+        # 3. Busca padrões de segurança linha a linha
+        # 4. Verifica supressões (# noqa: <categoria>)
+        # 5. Evita falsos positivos (comentários, strings literais)
+```
+
+**Inteligência Implementada:**
+
+- **Validação AST:** Garante que o arquivo é Python válido antes de analisar.
+- **Detecção de Supressões:** Respeita `# noqa: S605` para ignorar warnings justificados.
+- **Filtragem de Falso Positivos:**
+  - Ignora linhas de comentário (`# import os`)
+  - Ignora strings literais (`"subprocess.run"`)
+- **Sugestões Contextualizadas:** Gera recomendações específicas para cada padrão.
+
+**Exemplo de Análise:**
+
+```python
+# Arquivo: src/dangerous.py
+import subprocess
+subprocess.run(["ls"], shell=True)  # ❌ DETECTADO: shell=True
+
+# Resultado:
+AuditResult(
+    file="src/dangerous.py",
+    line=2,
+    severity=SecuritySeverity.CRITICAL,
+    category="subprocess",
+    description="Shell injection risk detected",
+    code="subprocess.run(['ls'], shell=True)",
+    suggestion="Use shell=False with list arguments"
+)
+```
+
+#### 📊 `reporter.py` - Formatador de Relatórios
+
+Gera relatórios estruturados em JSON/YAML:
+
+```python
+class ReportGenerator:
+    """Gera relatórios em múltiplos formatos."""
+
+    def generate(
+        self,
+        findings: list[AuditResult],
+        output_format: str = "json"
+    ) -> dict[str, Any]:
+        """Gera relatório estruturado."""
+        # Seções:
+        # - metadata (timestamp, workspace, arquivos varridos)
+        # - findings (lista de vulnerabilidades)
+        # - summary (distribuição por severidade, status)
+```
+
+**Estrutura do Relatório:**
+
+- **Metadata:** Informações contextuais (timestamp, workspace, duração)
+- **Findings:** Lista completa de vulnerabilidades detectadas
+- **Summary:** Estatísticas agregadas e recomendações
+
+#### 🔌 `plugins.py` - Sistema de Extensibilidade
+
+Análises especializadas modulares:
+
+- **`check_mock_coverage()`**: Verifica cobertura de mocks em testes
+- **`simulate_ci()`**: Simula ambiente CI/CD local
+
+**Vantagem da Separação:**
+
+- ✅ Plugins podem ser desabilitados individualmente
+- ✅ Novos plugins não modificam o core (`analyzer.py`)
+- ✅ Testes isolados para cada plugin
+
+### Fluxo de Execução
+
+```mermaid
+graph TB
+    A[CLI: dev-audit] --> B[config.py: Load YAML]
+    B --> C[scanner.py: Discover Files]
+    C --> D[analyzer.py: Analyze Each File]
+    D --> E[reporter.py: Generate Report]
+    E --> F[plugins.py: Optional Extensions]
+    F --> G[Output: JSON/YAML Report]
+
+    style A fill:#e1f5ff
+    style D fill:#fff4e1
+    style G fill:#c8e6c9
+```
+
+### Benefícios da Modularização
+
+| **Antes (Monólito)**                  | **Depois (Modular)**                          |
+|---------------------------------------|-----------------------------------------------|
+| ❌ 700+ linhas em um arquivo          | ✅ 6 módulos com ~100-200 linhas cada         |
+| ❌ Dificuldade para testar isoladamente | ✅ Testes unitários por módulo                |
+| ❌ Mudanças arriscadas (tudo acoplado) | ✅ Mudanças cirúrgicas (SRP)                  |
+| ❌ Extensão requer editar core        | ✅ Extensão via plugins (OCP)                 |
+| ❌ Imports e responsabilidades misturadas | ✅ Separação clara de conceitos            |
+
+### Referências Técnicas
+
+- **Implementação:** [scripts/audit/](../../scripts/audit/)
+- **Testes:** `tests/test_audit_analyzer.py`, `tests/test_audit_memory.py`
+- **Documentação do Processo:** [docs/history/sprint_1_foundation/P12_CODE_AUDIT_REFACTORING_ANALYSIS.md](../history/sprint_1_foundation/P12_CODE_AUDIT_REFACTORING_ANALYSIS.md)
+- **Protocolo de Refatoração:** [docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md)
+
+---
 
 ## 🔍 Features
 
