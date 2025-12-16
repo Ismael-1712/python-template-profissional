@@ -1,15 +1,17 @@
 # ======================================================================
-# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v4.0 - Performance Optimized)
+# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v5.0 - Level 2 Optimization)
 # ======================================================================
 # Este workflow é o "Porteiro de CI" para o python-template-profissional.
 #
-# ARQUITETURA (Task Runner Pattern + Parallel Jobs):
-# - Delega TODAS as tarefas ao Makefile padronizado
-# - Jobs paralelos para maximizar throughput
-# - Cache agressivo de venv, pip e mypy
-# - Testes paralelos com pytest-xdist
+# ARQUITETURA HÍBRIDA (Nível 1 + Nível 2):
+# - Cache agressivo multinível (pip, venv, mypy) por versão Python
+# - Setup com Matrix Strategy (Python 3.10, 3.11, 3.12)
+# - Jobs paralelos otimizados:
+#   * Quality (lint/security): Python 3.12 apenas
+#   * Tests: Matrix completa (3.10, 3.11, 3.12)
+# - Pytest-xdist para paralelismo de testes
 #
-# META DE PERFORMANCE: < 3 minutos (antes: 7-9min)
+# META DE PERFORMANCE: < 2 minutos (antes: 7-9min)
 # ======================================================================
 
 name: "🚀 CI: Teste, Lint e Qualidade"
@@ -30,26 +32,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # --------------------------------------------------------------------
-  # JOB BASE: INSTALA DEPENDÊNCIAS (SHARED CACHE)
-  # --------------------------------------------------------------------
+  # ====================================================================
+  # JOB 1: SETUP ENVIRONMENT (MATRIX: Python 3.10, 3.11, 3.12)
+  # ====================================================================
+  # Instala dependências para cada versão Python com cache inteligente.
+  # Este job é pré-requisito para quality e tests.
+  # ====================================================================
   setup:
-    name: "⚙️ Setup Environment"
+    name: "⚙️ Setup Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
-    outputs:
-      python-version: ${{ steps.setup-python.outputs.python-version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - name: "Checkout do Repositório"
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: "Configurar Python 3.12"
-        id: setup-python
+      - name: "Configurar Python ${{ matrix.python-version }}"
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
-      # Cache do pip (wheels baixados)
+      # Cache compartilhado de pip (wheels baixados)
       - name: "Cache pip downloads"
         uses: actions/cache@v4
         with:
@@ -58,23 +65,56 @@ jobs:
           restore-keys: |
             pip-${{ runner.os }}-
 
-      # Cache do venv completo (MAIOR GANHO DE PERFORMANCE)
+      # Cache do venv específico por versão Python
       - name: "Cache virtual environment"
         id: cache-venv
         uses: actions/cache@v4
         with:
           path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
+          key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
           restore-keys: |
-            venv-${{ runner.os }}-py3.12-
+            venv-${{ runner.os }}-py${{ matrix.python-version }}-
 
-      # Só instala se o cache falhou
+      # Só instala se o cache falhou (primeiro run ou mudança em requirements)
       - name: "Instalar Dependências"
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install-dev
 
-      # Cache do mypy (cache de type checking)
-      - name: "Cache mypy"
+      # Validação básica do ambiente instalado
+      - name: "Validar Instalação"
+        run: |
+          .venv/bin/python --version
+          .venv/bin/pip list | head -20
+
+  # ====================================================================
+  # JOB 2: QUALITY CHECKS (Roda apenas em Python 3.12)
+  # ====================================================================
+  # Lint, format check, type checking e security audit.
+  # Usa a versão mais recente do Python para máxima compatibilidade.
+  # ====================================================================
+  quality:
+    name: "🔍 Quality & Security"
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: "Configurar Python 3.12"
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.12"
+
+      # Restaura cache do venv Python 3.12
+      - name: "Restaurar cache do venv"
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
+          fail-on-cache-miss: true
+
+      # Cache do mypy (type checking incremental)
+      - name: "Restaurar cache do mypy"
         uses: actions/cache@v4
         with:
           path: .mypy_cache
@@ -82,124 +122,63 @@ jobs:
           restore-keys: |
             mypy-${{ runner.os }}-
 
-  # --------------------------------------------------------------------
-  # JOB 1: LINT & FORMAT (PARALELO)
-  # --------------------------------------------------------------------
-  lint:
-    name: "🔍 Lint & Format"
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: "Configurar Python"
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: "3.12"
-
-      # Restaura o venv do cache
-      - name: "Restaurar cache do venv"
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
-          fail-on-cache-miss: true
-
-      - name: "Executar Verificação de Formatação"
+      # Verificação de formatação (ruff format --check)
+      - name: "Verificar Formatação"
         run: |
           make format
           git diff --exit-code -- . ':(exclude)requirements/dev.txt' ':(exclude)audit_metrics.json'
 
+      # Linting (ruff check)
       - name: "Executar Linting"
         run: make lint
 
-  # --------------------------------------------------------------------
-  # JOB 2: TYPE CHECKING (PARALELO)
-  # --------------------------------------------------------------------
-  type-check:
-    name: "🔬 Type Checking"
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: "Configurar Python"
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: "3.12"
-
-      - name: "Restaurar cache do venv"
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
-          fail-on-cache-miss: true
-
-      - name: "Restaurar cache do mypy"
-        uses: actions/cache@v4
-        with:
-          path: .mypy_cache
-          key: mypy-${{ runner.os }}-${{ hashFiles('scripts/**/*.py', 'src/**/*.py', 'tests/**/*.py') }}
-
+      # Type checking (mypy)
       - name: "Executar Type Checking"
         run: make type-check
 
-  # --------------------------------------------------------------------
-  # JOB 3: SECURITY AUDIT (PARALELO)
-  # --------------------------------------------------------------------
-  security:
-    name: "🛡️ Security Audit"
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: "Configurar Python"
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: "3.12"
-
-      - name: "Restaurar cache do venv"
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
-          fail-on-cache-miss: true
-
+      # Security audit (dependências + análise estática)
       - name: "Audit Dependencies"
         run: .venv/bin/python scripts/audit_dependencies.py --ci
 
       - name: "Security Audit (Static Analysis)"
         run: make audit
 
+      # CORTEX Guardian (configurações não documentadas)
       - name: "Check Undocumented Configuration"
         run: .venv/bin/python -m scripts.cli.cortex guardian check . --fail-on-error
 
-  # --------------------------------------------------------------------
-  # JOB 4: TESTS (PARALELO COM PYTEST-XDIST)
-  # --------------------------------------------------------------------
+  # ====================================================================
+  # JOB 3: TESTS (MATRIX: Python 3.10, 3.11, 3.12)
+  # ====================================================================
+  # Executa suite completa de testes em todas as versões Python.
+  # Usa pytest-xdist para paralelismo (múltiplos cores).
+  # ====================================================================
   tests:
-    name: "🧪 Tests (Parallel)"
+    name: "🧪 Tests Python ${{ matrix.python-version }}"
     runs-on: ubuntu-latest
     needs: setup
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: "Configurar Python"
+      - name: "Configurar Python ${{ matrix.python-version }}"
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
+      # Restaura cache do venv específico da versão
       - name: "Restaurar cache do venv"
         uses: actions/cache@v4
         with:
           path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
+          key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
           fail-on-cache-miss: true
 
+      # Executa testes com pytest-xdist (-n auto)
       - name: "Executar Testes (Paralelo)"
         run: make test
