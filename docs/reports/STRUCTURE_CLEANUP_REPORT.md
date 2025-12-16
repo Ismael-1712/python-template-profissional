@@ -13,7 +13,7 @@ title: 📋 Relatório de Limpeza Estrutural e Integração de Documentação
 
 **Data:** 16 de Dezembro de 2025
 **Branch:** `fix/structure-cleanup-and-integration`
-**Pull Request:** https://github.com/Ismael-1712/python-template-profissional/pull/new/fix/structure-cleanup-and-integration
+**Pull Request:** <https://github.com/Ismael-1712/python-template-profissional/pull/new/fix/structure-cleanup-and-integration>
 **Status:** ✅ Completo e Validado
 
 ---
@@ -42,27 +42,32 @@ Este relatório documenta a auditoria estrutural completa do projeto, limpeza de
 ### 1.1 Detecção de Arquivos Python em `docs/`
 
 **Comando Executado:**
+
 ```bash
 find docs/ -name "*.py"
 ```
 
 **Resultado:**
+
 ```
 docs/architecture/CORTEX_FASE03_DIAGRAMS.py
 ```
 
 **Análise:**
+
 - **Tipo:** Arquivo executável contendo diagramas ASCII art em constantes Python
 - **Problema:** Código executável (mesmo que documentação) não deve residir em `docs/`
 - **Decisão:** Mover para `scripts/docs/` (mantém executabilidade mas fora de docs/)
 
 **Ação Tomada:**
+
 ```bash
 mkdir -p scripts/docs/
 mv docs/architecture/CORTEX_FASE03_DIAGRAMS.py scripts/docs/
 ```
 
 **Justificativa:**
+
 - O arquivo contém `if __name__ == "__main__":` e pode ser executado
 - Mantém acessibilidade para desenvolvedores em `scripts/docs/`
 - Preserva histórico Git (movimento rastreado como rename)
@@ -72,11 +77,13 @@ mv docs/architecture/CORTEX_FASE03_DIAGRAMS.py scripts/docs/
 ### 1.2 Limpeza de Diretórios Fantasmas
 
 **Comando Executado:**
+
 ```bash
 ls -la tests/tests/
 ```
 
 **Resultado:**
+
 ```
 total 8
 drwxr-xr-x 2 ismae ismae 4096 Dec 14 11:04 .
@@ -84,16 +91,19 @@ drwxr-xr-x 5 ismae ismae 4096 Dec 15 21:57 ..
 ```
 
 **Análise:**
+
 - **Problema:** Diretório `tests/tests/` vazio (violação de estrutura)
 - **Padrão Correto:** Apenas `tests/` na raiz do projeto
 - **Impacto:** Confusão para desenvolvedores e ferramentas de descoberta de testes
 
 **Ação Tomada:**
+
 ```bash
 rmdir tests/tests/
 ```
 
 **Validação:**
+
 ```bash
 ls tests/tests/ 2>&1
 # Output: ls: cannot access 'tests/tests/': No such file or directory
@@ -116,6 +126,7 @@ ls tests/tests/ 2>&1
 | `test_no_duplicate_test_prefixes()` | Detecta `test_*` fora de `tests/` | ⚠️  Alerta sobre nomenclatura ambígua |
 
 **Exemplo de Falha:**
+
 ```python
 # Se alguém adicionar tests/tests/test_example.py
 pytest.fail(
@@ -127,11 +138,13 @@ pytest.fail(
 ```
 
 **Integração CI/CD:**
+
 - Estes testes rodam automaticamente em `make validate`
 - Bloqueiam commits que violem a estrutura (via pre-commit hooks)
 - Falham o pipeline CI se estrutura incorreta for detectada
 
 **Cobertura:**
+
 ```bash
 pytest tests/test_structure_policy.py -v
 # ===== test session starts =====
@@ -148,6 +161,7 @@ pytest tests/test_structure_policy.py -v
 ### 3.1 Documentos .md Identificados
 
 **Comando Executado:**
+
 ```bash
 git log --all --since="7 days ago" --name-only --pretty=format:"" | grep -E "\.md$" | sort -u
 ```
@@ -157,25 +171,30 @@ git log --all --since="7 days ago" --name-only --pretty=format:"" | grep -E "\.m
 **Categorização:**
 
 #### 📊 Análises (docs/analysis/)
+
 - `DX_GOVERNANCE_BOTTLENECK_ANALYSIS.md` — Análise de bottlenecks de governança
 - `EXECUTIVE_SUMMARY_DX_OPTIMIZATION.md` — Sumário executivo de otimizações DX
 
 #### 🏗️ ADRs (docs/architecture/)
+
 - `ADR_002_PRE_COMMIT_OPTIMIZATION.md` — Otimização de hooks pre-commit
 - `ADR_003_SRC_GITKEEP_STABILITY.md` — Política de estabilidade para .gitkeep
 
 #### 🛠️ Guias de Troubleshooting (docs/guides/)
+
 - `DEV_ENVIRONMENT_TROUBLESHOOTING.md` — Solução de problemas de ambiente
 - `OPERATIONAL_TROUBLESHOOTING.md` — Troubleshooting operacional
 - `QUICK_IMPLEMENTATION_GUIDE_PRE_COMMIT_FIX.md` — Guia rápido de correção
 
 #### 📖 Guias de Estratégia (docs/guides/)
+
 - `LLM_ENGINEERING_CONTEXT_AWARENESS.md` — Engenharia de LLM
 - `LLM_TASK_DECOMPOSITION_STRATEGY.md` — Decomposição de tarefas
 - `REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md` — Protocolos de refatoração
 - `SAFE_SCRIPT_TRANSPLANT.md` — Migração segura de scripts
 
 #### 🗂️ Documentação Histórica (docs/history/)
+
 - `NEWPROJECT_EVOLUTION.md` — Evolução do sistema newproject
 - `PHASE2_KNOWLEDGE_NODE_POSTMORTEM.md` — Postmortem da Fase 2
 - `PHASE3_ROADMAP_HARDENING.md` — Hardening do roadmap Fase 3
@@ -191,6 +210,7 @@ git log --all --since="7 days ago" --name-only --pretty=format:"" | grep -E "\.m
 **Localização:** Após seção "Containerização", antes de "Licença"
 
 **Conteúdo:**
+
 ```markdown
 ## 🔧 Troubleshooting
 
@@ -215,6 +235,7 @@ make audit                           # Qualidade de código
 cortex audit --links                 # Validar documentação
 cortex knowledge-graph --show-broken # Health do grafo
 ```
+
 ```
 
 **Impacto:**
@@ -264,11 +285,13 @@ cortex knowledge-graph --show-broken # Health do grafo
 ### 3.4 Regeneração do Contexto CORTEX
 
 **Comando Executado:**
+
 ```bash
 python -m scripts.cli.cortex map
 ```
 
 **Output:**
+
 ```
 ✓ Context map generated successfully!
 📍 Output: .cortex/context.json
@@ -283,6 +306,7 @@ python -m scripts.cli.cortex map
 ```
 
 **Mudanças:**
+
 - **Documentos:** 60 → 70 (+10 novos mapeados)
 - **Arquitetura:** Mantido em 33 (novos docs em outras categorias)
 - **Context Mapping:** Links bidirecionais atualizados
@@ -296,18 +320,21 @@ python -m scripts.cli.cortex map
 **Componentes Validados:**
 
 1. **Lint (Ruff):**
+
    ```
    ruff check .
    All checks passed!
    ```
 
 2. **Type Check (Mypy):**
+
    ```
    mypy scripts/ src/ tests/
    Success: no issues found in 132 source files
    ```
 
 3. **Environment Health (Doctor):**
+
    ```
    ✓ Platform Strategy
    ✓ Python Version (3.12.12)
@@ -320,6 +347,7 @@ python -m scripts.cli.cortex map
    ```
 
 4. **Tests (Pytest):**
+
    ```
    436 passed in 4.99s
 
@@ -336,6 +364,7 @@ python -m scripts.cli.cortex map
 ### 4.2 Execução de Pre-commit Hooks
 
 **Hooks Executados (Commit):**
+
 ```
 check for added large files..............................................Passed
 check toml...........................................(no files to check)Skipped
@@ -361,11 +390,13 @@ CORTEX Neural Auto-Sync..................................................Passed
 ### 5.1 Criação da Branch
 
 **Comando:**
+
 ```bash
 git checkout -b fix/structure-cleanup-and-integration
 ```
 
 **Output:**
+
 ```
 Switched to a new branch 'fix/structure-cleanup-and-integration'
 🔄 Regenerating CORTEX context map... ✅
@@ -376,6 +407,7 @@ Switched to a new branch 'fix/structure-cleanup-and-integration'
 ### 5.2 Commit
 
 **Mensagem:**
+
 ```
 chore(structure): cleanup docs folder, remove empty tests and integrate new knowledge reports
 
@@ -395,6 +427,7 @@ Make validate: success ✅
 **Hash:** `df9ae33`
 
 **Arquivos Alterados:**
+
 ```
 M  README.md
 M  docs/architecture/CORTEX_INDICE.md
@@ -407,11 +440,13 @@ A  tests/test_structure_policy.py
 ### 5.3 Push para Remoto
 
 **Comando:**
+
 ```bash
 git push -u origin fix/structure-cleanup-and-integration
 ```
 
 **Output:**
+
 ```
 Enumerating objects: 119, done.
 Counting objects: 100% (119/119), done.
@@ -433,17 +468,20 @@ To github.com:Ismael-1712/python-template-profissional.git
 
 ## 📝 Pull Request
 
-### Link para Criar PR:
-https://github.com/Ismael-1712/python-template-profissional/pull/new/fix/structure-cleanup-and-integration
+### Link para Criar PR
 
-### Descrição Sugerida:
+<https://github.com/Ismael-1712/python-template-profissional/pull/new/fix/structure-cleanup-and-integration>
+
+### Descrição Sugerida
 
 **Título:**
+
 ```
 chore(structure): Limpeza estrutural e integração de documentação de retrospectiva
 ```
 
 **Corpo:**
+
 ```markdown
 ## 🎯 Objetivo
 
