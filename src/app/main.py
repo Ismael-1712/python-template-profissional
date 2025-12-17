@@ -1,6 +1,7 @@
 """Módulo principal da aplicação FastAPI."""
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 from src.app.core.config import settings
 
@@ -9,6 +10,12 @@ app = FastAPI(
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    """Redireciona a raiz para a documentação interativa."""
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")
