@@ -262,6 +262,12 @@ class DevDoctor:
     def check_vital_dependencies(self) -> DiagnosticResult:
         """Verifica se dependências vitais estão instaladas."""
         vital_deps = ["yaml", "tox", "pre_commit"]
+
+        # No CI, ferramentas de dev local (tox, pre-commit) não são vitais
+        # pois os testes rodam diretamente via pytest e linters em jobs separados
+        if os.environ.get("CI") or os.environ.get("GITHUB_ACTIONS"):
+            vital_deps = [d for d in vital_deps if d not in ["tox", "pre_commit"]]
+
         missing_deps = []
 
         import_map = {
