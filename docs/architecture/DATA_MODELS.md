@@ -371,6 +371,86 @@ suggestion.severity  # str: "HIGH"
 suggestion.severity_enum  # Severity.HIGH
 ```
 
+## CORTEX & Guardian Migration (Dezembro 2025)
+
+### Unificação para Pydantic v2
+
+Na refatoração de dezembro de 2025, os módulos **CORTEX** e **Guardian** foram migrados de `@dataclass` para Pydantic v2, atingindo **100% de padronização** nos modelos de dados críticos do projeto.
+
+#### CORTEX Core (`scripts/core/cortex/models.py`)
+
+**Classes Migradas:**
+
+1. **`DocumentMetadata`** (11 campos)
+   - Adicionado `model_config = ConfigDict(frozen=True)`
+   - `source_file: Path | None = Field(default=None, exclude=True)` - Excluído da serialização
+   - Campos `default_factory` convertidos para `Field(default_factory=list)`
+
+2. **`ValidationResult`** (3 campos)
+   - Modelo imutável para resultados de validação
+   - Mantém listas de erros e warnings
+
+3. **`LinkCheckResult`** (4 campos)
+   - Modelo imutável para validação de links
+   - Suporta serialização de `Path` automaticamente
+
+**Estado Final:**
+
+- ✅ 6 Enums (mantidos)
+- ✅ 3 Pydantic Models (já existiam: `KnowledgeSource`, `KnowledgeLink`, `KnowledgeEntry`)
+- ✅ 3 Modelos migrados (eram `@dataclass`)
+
+#### Guardian (`scripts/core/guardian/models.py`)
+
+**Classes Migradas:**
+
+1. **`ConfigFinding`** (7 campos)
+   - Adicionado validação: `line_number: int = Field(gt=0)`
+   - Mantido método customizado `__str__()`
+   - Serialização automática de `Path` para string
+   - **Imutável** (`frozen=True`)
+
+2. **`ScanResult`** (4 campos + 5 properties)
+   - Validação de campos numéricos: `files_scanned: int = Field(default=0, ge=0)`
+   - `scan_duration_ms: float = Field(default=0.0, ge=0.0)`
+   - **Properties mantidas** (`@property` funciona nativamente no Pydantic)
+   - Métodos `has_errors()` e `summary()` preservados
+   - **Mutável por design** (scanner atualiza `scan_duration_ms` após criação)
+
+**Estado Final:**
+
+- ✅ 1 Enum (mantido)
+- ✅ 2 Modelos Pydantic (100% do módulo)
+
+### Padrão de Migração Aplicado
+
+```python
+# ANTES (Dataclass)
+from dataclasses import dataclass, field
+
+@dataclass
+class Exemplo:
+    campo: str
+    lista: list[str] = field(default_factory=list)
+
+# DEPOIS (Pydantic v2)
+from pydantic import BaseModel, ConfigDict, Field
+
+class Exemplo(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    campo: str
+    lista: list[str] = Field(default_factory=list)
+```
+
+### Benefícios Imediatos
+
+1. **Type Safety Reforçada**: MyPy valida compatibilidade em toda a codebase
+2. **Serialização Uniforme**: `model_dump()` em vez de mix `asdict()`/métodos customizados
+3. **Validação Automática**: Campos `Path` não-nulos, `line_number > 0`, etc.
+4. **Imutabilidade**: Todos os modelos usam `frozen=True`
+5. **Interoperabilidade**: Guardian e CORTEX agora compatíveis com Mock CI, Audit
+
 ## Boas Práticas
 
 1. **Use Imutabilidade**: Prefira `frozen=True` para modelos que não devem mudar após criação
@@ -378,6 +458,7 @@ suggestion.severity_enum  # Severity.HIGH
 3. **Type Hints Completos**: Sempre anote tipos, inclusive `None` em campos opcionais
 4. **Factory Methods**: Use `@classmethod` para construtores complexos
 5. **Documentação**: Mantenha docstrings atualizadas com `Attributes` seção
+6. **Exclusão de Serialização**: Use `Field(exclude=True)` para campos internos como `Path` que não devem ir para JSON
 
 ## Evolução Futura
 

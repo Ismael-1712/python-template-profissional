@@ -402,7 +402,12 @@ class ProjectMapper:
         """
         self.fs.mkdir(output_path.parent, parents=True, exist_ok=True)
 
-        json_content = json.dumps(asdict(context), indent=2, ensure_ascii=False)
+        json_content = json.dumps(
+            asdict(context),
+            indent=2,
+            ensure_ascii=False,
+            default=str,
+        )
         self.fs.write_text(output_path, json_content)
 
         logger.info(f"Context saved to {output_path}")
