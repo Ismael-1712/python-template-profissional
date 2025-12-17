@@ -111,7 +111,8 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
-          fail-on-cache-miss: true
+          restore-keys: |
+            venv-${{ runner.os }}-py3.12-
 
       # Blindagem: Garantir dependências mesmo com cache parcial/corrompido
       - name: "Instalar Dependências (Idempotente)"
@@ -181,7 +182,8 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
-          fail-on-cache-miss: true
+          restore-keys: |
+            venv-${{ runner.os }}-py${{ matrix.python-version }}-
 
       # Blindagem: Garantir pytest e dependências mesmo com cache parcial/corrompido
       - name: "Instalar Dependências (Idempotente)"
