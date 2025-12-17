@@ -30,6 +30,7 @@ repos:
           - types-PyYAML==6.0.12.20250915
           - types-requests==2.32.4.20250913
           - pydantic>=2.0
+          - pydantic-settings>=2.0
         pass_filenames: true
         types: [python]
         exclude: ^(scripts/audit_dashboard\.py|tests/)
