@@ -58,7 +58,7 @@ jobs:
 
       # Cache compartilhado de pip (wheels baixados)
       - name: "Cache pip downloads"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.in') }}
@@ -68,7 +68,7 @@ jobs:
       # Cache do venv específico por versão Python
       - name: "Cache virtual environment"
         id: cache-venv
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
@@ -107,7 +107,7 @@ jobs:
 
       # Restaura cache do venv Python 3.12
       - name: "Restaurar cache do venv"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
@@ -120,7 +120,7 @@ jobs:
 
       # Cache do mypy (type checking incremental)
       - name: "Restaurar cache do mypy"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .mypy_cache
           key: mypy-${{ runner.os }}-${{ hashFiles('scripts/**/*.py', 'src/**/*.py', 'tests/**/*.py') }}
@@ -178,7 +178,7 @@ jobs:
 
       # Restaura cache do venv específico da versão
       - name: "Restaurar cache do venv"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
