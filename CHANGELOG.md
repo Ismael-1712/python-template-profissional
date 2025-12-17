@@ -4,6 +4,14 @@
 
 ### Added
 
+- **Pydantic v2 Unification**: Migração completa dos modelos CORTEX e Guardian para Pydantic v2
+  - **CORTEX**: Convertidos `DocumentMetadata`, `ValidationResult`, `LinkCheckResult` de `@dataclass` para `BaseModel`
+  - **Guardian**: Convertidos `ConfigFinding`, `ScanResult` de `@dataclass` para `BaseModel`
+  - **100% Padronização**: Todos os modelos de dados críticos agora usam Pydantic v2
+  - Benefícios: Imutabilidade (`frozen=True`), validação automática, serialização uniforme via `model_dump()`
+  - Validações adicionadas: `line_number: int = Field(gt=0)` no Guardian
+  - Campo `source_file` no CORTEX agora usa `Field(exclude=True)` para evitar problemas de serialização
+  - Properties nativas mantidas em `ScanResult` (compatíveis com Pydantic)
 - **CLI: Comando `cortex config`**: Novo comando para visualização e validação de configurações
   - Flag `--show`: Exibe configuração atual formatada com estatísticas
   - Flag `--validate`: Valida sintaxe YAML e chaves obrigatórias

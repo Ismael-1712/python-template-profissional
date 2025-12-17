@@ -10,7 +10,6 @@ License: MIT
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import Enum
 from pathlib import Path
@@ -87,8 +86,7 @@ class LinkStatus(Enum):
     AMBIGUOUS = "ambiguous"
 
 
-@dataclass
-class DocumentMetadata:
+class DocumentMetadata(BaseModel):
     """Structured representation of YAML frontmatter in documentation.
 
     This class represents all metadata extracted from a documentation file's
@@ -121,21 +119,22 @@ class DocumentMetadata:
         ... )
     """
 
+    model_config = ConfigDict(frozen=True)
+
     id: str
     type: DocType
     status: DocStatus
     version: str
     author: str
     date: date
-    context_tags: list[str] = field(default_factory=list)
-    linked_code: list[str] = field(default_factory=list)
+    context_tags: list[str] = Field(default_factory=list)
+    linked_code: list[str] = Field(default_factory=list)
     dependencies: list[str] | None = None
     related_docs: list[str] | None = None
-    source_file: Path | None = None
+    source_file: Path | None = Field(default=None, exclude=True)
 
 
-@dataclass
-class ValidationResult:
+class ValidationResult(BaseModel):
     """Result of frontmatter metadata validation.
 
     Contains the validation status and any errors or warnings found
@@ -154,13 +153,14 @@ class ValidationResult:
         ... )
     """
 
+    model_config = ConfigDict(frozen=True)
+
     is_valid: bool
-    errors: list[str] = field(default_factory=list)
-    warnings: list[str] = field(default_factory=list)
+    errors: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
-@dataclass
-class LinkCheckResult:
+class LinkCheckResult(BaseModel):
     """Result of documentation link validation.
 
     Contains information about broken or missing links between
@@ -181,10 +181,12 @@ class LinkCheckResult:
         ... )
     """
 
+    model_config = ConfigDict(frozen=True)
+
     file: Path
-    broken_code_links: list[str] = field(default_factory=list)
-    broken_doc_links: list[str] = field(default_factory=list)
-    missing_files: list[str] = field(default_factory=list)
+    broken_code_links: list[str] = Field(default_factory=list)
+    broken_doc_links: list[str] = Field(default_factory=list)
+    missing_files: list[str] = Field(default_factory=list)
 
 
 class KnowledgeSource(BaseModel):
