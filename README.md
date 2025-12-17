@@ -674,6 +674,24 @@ cortex --help
 cortex map
 ```
 
+### Executar a Aplicação
+
+```bash
+# Iniciar servidor de desenvolvimento com hot-reload
+make run
+
+# O servidor estará disponível em: http://localhost:8000
+# Documentação interativa: http://localhost:8000/docs
+```
+
+**Arquitetura da Aplicação:**
+
+- ✨ **Estrutura modular** baseada em `src/app/` seguindo princípios de [12-Factor App](https://12factor.net/)
+- ⚙️ **Configurações centralizadas** em `src/app/core/config.py` usando `pydantic-settings`
+- 🔄 **Redirecionamento automático** da raiz `/` para `/docs` (melhor UX)
+- 🌍 **Suporte a variáveis de ambiente** via arquivo `.env`
+- 📊 **Endpoint de metadados** em `/api/v1/meta` para informações do projeto
+
 ---
 
 ## 🛠️ Comandos CLI Essenciais
@@ -862,7 +880,11 @@ python-template-profissional/
 │       └── exceptions.py          # Custom exceptions
 │
 ├── 📦 src/                          # Aplicação Principal
-│   └── main.py                     # Entry point
+│   ├── app/                        # 🆕 Estrutura modular da aplicação
+│   │   ├── main.py                # Entry point FastAPI
+│   │   └── core/                  # Configurações e utilitários core
+│   │       └── config.py          # Settings (pydantic-settings + .env)
+│   └── __init__.py
 │
 ├── ✅ tests/                        # Test Suite (100+ testes)
 │   ├── test_cortex_*.py           # Testes CORTEX
