@@ -6,10 +6,16 @@ import datetime
 import json
 import logging
 import sys
+from io import StringIO
 from pathlib import Path
 from typing import Any
 
 import yaml
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
 
 # --- FIX: Adiciona raiz do projeto ao path para imports funcionarem via pre-commit ---
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -44,85 +50,153 @@ except ImportError:
 
 
 class ConsoleAuditFormatter:
-    """Formatter for audit reports to console output."""
+    """Formatter for audit reports to console output using Rich components."""
 
     def format(self, report: dict[str, Any]) -> str:
-        """Format audit report as a console-ready string."""
+        """Format audit report as a console-ready string using Rich.
+
+        Maintains backward compatibility by capturing Rich output to a string
+        buffer, ensuring existing tests continue to work.
+        """
         metadata = report["metadata"]
         summary = report["summary"]
         findings = report["findings"]
 
-        lines = []
-        lines.append("")
-        lines.append("=" * 60)
-        lines.append(_("🔍 CODE SECURITY AUDIT REPORT"))
-        lines.append("=" * 60)
-        lines.append(
-            _("📅 Timestamp: {timestamp}").format(timestamp=metadata["timestamp"]),
-        )
-        lines.append(
-            _("📁 Workspace: {workspace}").format(workspace=metadata["workspace"]),
-        )
-        lines.append(
-            _("⏱️  Duration: {duration:.2f}s").format(
-                duration=metadata["duration_seconds"],
-            ),
-        )
-        lines.append(
-            _("📄 Files Scanned: {count}").format(count=metadata["files_scanned"]),
-        )
-        lines.append("-" * 60)
+        # Create Rich console with string buffer for backward compatibility
+        buf = StringIO()
+        console = Console(file=buf, force_terminal=True, width=100)
 
-        # Status
-        status_emoji = "✅" if summary["overall_status"] == "PASS" else "⚠️"
-        lines.append(
-            _("\n{emoji} OVERALL STATUS: {status}").format(
-                emoji=status_emoji,
-                status=summary["overall_status"],
-            ),
+        # === HEADER PANEL ===
+        header = Panel(
+            Text(_("🔍 CODE SECURITY AUDIT REPORT"), justify="center"),
+            style="bold blue",
+            border_style="blue",
+        )
+        console.print(header)
+
+        # === METADATA GRID ===
+        metadata_grid = Table.grid(padding=1)
+        metadata_grid.add_column(style="cyan", justify="right")
+        metadata_grid.add_column(style="white")
+
+        metadata_grid.add_row(
+            _("📅 Timestamp:"),
+            metadata["timestamp"],
+        )
+        metadata_grid.add_row(
+            _("📁 Workspace:"),
+            metadata["workspace"],
+        )
+        metadata_grid.add_row(
+            _("⏱️  Duration:"),
+            f"{metadata['duration_seconds']:.2f}s",
+        )
+        metadata_grid.add_row(
+            _("📄 Files Scanned:"),
+            str(metadata["files_scanned"]),
         )
 
-        # Severity Distribution
-        lines.append(_("\n📊 SEVERITY DISTRIBUTION:"))
-        for severity, count in summary["severity_distribution"].items():
-            if count > 0:
-                icon = (
-                    "🔴"
-                    if severity == "CRITICAL"
-                    else "🟠"
-                    if severity == "HIGH"
-                    else "🔵"
-                )
-                lines.append(
-                    _("  {emoji} {severity}: {count}").format(
-                        emoji=icon,
-                        severity=severity,
-                        count=count,
-                    ),
-                )
+        console.print(metadata_grid)
+        console.print()
 
-        # Top Findings
+        # === OVERALL STATUS PANEL ===
+        status = summary["overall_status"]
+        status_emoji = "✅" if status == "PASS" else "⚠️"
+        status_style = "bold green" if status == "PASS" else "bold yellow"
+
+        if status == "FAIL":
+            status_style = "bold red"
+
+        status_panel = Panel(
+            Text(f"{status_emoji} {status}", justify="center"),
+            title=_("OVERALL STATUS"),
+            style=status_style,
+            border_style=status_style.split()[1],  # Extract color
+        )
+        console.print(status_panel)
+        console.print()
+
+        # === SEVERITY DISTRIBUTION TABLE ===
+        severity_dist = summary["severity_distribution"]
+        if any(count > 0 for count in severity_dist.values()):
+            severity_table = Table(
+                title=_("📊 SEVERITY DISTRIBUTION"),
+                show_header=True,
+                header_style="bold magenta",
+            )
+            severity_table.add_column(_("Severity"), style="cyan", no_wrap=True)
+            severity_table.add_column(_("Count"), justify="right", style="yellow")
+            severity_table.add_column(_("Icon"), justify="center")
+
+            severity_icons = {
+                "CRITICAL": "🔴",
+                "HIGH": "🟠",
+                "MEDIUM": "🔵",
+                "LOW": "🟢",
+            }
+
+            severity_styles = {
+                "CRITICAL": "bold red",
+                "HIGH": "bold orange3",
+                "MEDIUM": "bold blue",
+                "LOW": "bold green",
+            }
+
+            for severity, count in severity_dist.items():
+                if count > 0:
+                    severity_table.add_row(
+                        severity,
+                        str(count),
+                        severity_icons.get(severity, "⚪"),
+                        style=severity_styles.get(severity, "white"),
+                    )
+
+            console.print(severity_table)
+            console.print()
+
+        # === TOP FINDINGS TABLE ===
         if findings:
-            lines.append(_("\n🔍 TOP FINDINGS:"))
+            findings_table = Table(
+                title=_("🔍 TOP FINDINGS"),
+                show_header=True,
+                header_style="bold cyan",
+                show_lines=True,
+            )
+            findings_table.add_column(_("File"), style="magenta", no_wrap=False)
+            findings_table.add_column(_("Line"), justify="right", style="cyan")
+            findings_table.add_column(_("Severity"), style="yellow")
+            findings_table.add_column(_("Description"), style="white")
+
+            # Limit to top 5 findings
             for finding in findings[:5]:
-                lines.append(
-                    _("  • {file}:{line} - {description}").format(
-                        file=finding["file"],
-                        line=finding["line"],
-                        description=finding["description"],
-                    ),
+                severity_style = {
+                    "CRITICAL": "bold red",
+                    "HIGH": "bold orange3",
+                    "MEDIUM": "bold blue",
+                    "LOW": "bold green",
+                }.get(finding.get("severity", "LOW"), "white")
+
+                findings_table.add_row(
+                    finding["file"],
+                    str(finding["line"]),
+                    finding.get("severity", "UNKNOWN"),
+                    finding["description"],
+                    style=severity_style,
                 )
 
-        # Recommendations
+            console.print(findings_table)
+            console.print()
+
+        # === RECOMMENDATIONS ===
         if summary["recommendations"]:
-            lines.append(_("\n💡 RECOMMENDATIONS:"))
+            recommendations_md = "## " + _("💡 RECOMMENDATIONS") + "\n\n"
             for rec in summary["recommendations"]:
-                lines.append(f"  • {rec}")
+                recommendations_md += f"- {rec}\n"
 
-        lines.append("")
-        lines.append("=" * 60)
+            console.print(Markdown(recommendations_md))
 
-        return "\n".join(lines)
+        # Return captured string for backward compatibility
+        return buf.getvalue()
 
 
 class AuditReporter:

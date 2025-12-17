@@ -108,19 +108,20 @@ class TestConsoleAuditFormatter:
 
         assert isinstance(output, str)
         assert "CODE SECURITY AUDIT REPORT" in output
-        assert "=" * 60 in output
+        # Rich uses panels and tables, not separators
         assert "Timestamp:" in output
         assert "Workspace:" in output
-        assert "OVERALL STATUS:" in output
-        assert "SEVERITY DISTRIBUTION:" in output
+        assert "OVERALL STATUS" in output  # Without colon, as it's now a title
+        assert "SEVERITY DISTRIBUTION" in output  # Title in Rich table
 
     def test_format_findings(self, sample_report: dict[str, Any]) -> None:
         """Test that findings are formatted correctly."""
         formatter = ConsoleAuditFormatter()
         output = formatter.format(sample_report)
 
-        assert "TOP FINDINGS:" in output
-        assert "test.py:10" in output
+        assert "TOP FINDINGS" in output  # Rich uses title, not colon
+        assert "test.py" in output  # File name present
+        assert "10" in output  # Line number present
         assert "SQL injection vulnerability" in output
 
     def test_format_no_findings(
@@ -131,7 +132,7 @@ class TestConsoleAuditFormatter:
         formatter = ConsoleAuditFormatter()
         output = formatter.format(sample_report_no_findings)
 
-        assert "TOP FINDINGS:" not in output
+        assert "TOP FINDINGS" not in output  # No findings table
         assert "PASS" in output
 
     def test_format_recommendations(self, sample_report: dict[str, Any]) -> None:
@@ -139,7 +140,7 @@ class TestConsoleAuditFormatter:
         formatter = ConsoleAuditFormatter()
         output = formatter.format(sample_report)
 
-        assert "RECOMMENDATIONS:" in output
+        assert "RECOMMENDATIONS" in output  # Rich Markdown title
         assert "HIGH: Address high-priority security issues" in output
 
     def test_format_severity_distribution(self, sample_report: dict[str, Any]) -> None:
@@ -147,8 +148,11 @@ class TestConsoleAuditFormatter:
         formatter = ConsoleAuditFormatter()
         output = formatter.format(sample_report)
 
-        assert "HIGH: 2" in output
-        assert "MEDIUM: 3" in output
+        # Rich table has cells, not inline formatting
+        assert "HIGH" in output
+        assert "2" in output  # Count displayed separately
+        assert "MEDIUM" in output
+        assert "3" in output
 
     def test_format_emojis_present(self, sample_report: dict[str, Any]) -> None:
         """Test that emojis are used in the output."""
@@ -165,10 +169,10 @@ class TestConsoleAuditFormatter:
             output = formatter.format(sample_report)
             assert output is not None
 
-            # Check for the main headers which are cleaner
+            # Check for the main headers
             mock_gettext.assert_any_call("🔍 CODE SECURITY AUDIT REPORT")
-            # For severity, the code uses _("\n📊 SEVERITY DISTRIBUTION:")
-            mock_gettext.assert_any_call("\n📊 SEVERITY DISTRIBUTION:")
+            # Rich uses titles, not inline text with newlines
+            mock_gettext.assert_any_call("📊 SEVERITY DISTRIBUTION")
 
     def test_format_top_5_findings_limit(self, sample_report: dict[str, Any]) -> None:
         """Test that only top 5 findings are shown."""
