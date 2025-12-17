@@ -5,9 +5,10 @@ Define as estruturas para armazenar resultados do scanner AST.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ConfigType(str, Enum):
@@ -18,8 +19,7 @@ class ConfigType(str, Enum):
     FEATURE_FLAG = "feature_flag"
 
 
-@dataclass
-class ConfigFinding:
+class ConfigFinding(BaseModel):
     """Representa uma configuração encontrada no código.
 
     Attributes:
@@ -32,10 +32,12 @@ class ConfigFinding:
         context: Contexto adicional (nome da função, classe, etc)
     """
 
+    model_config = ConfigDict(frozen=True)
+
     key: str
     config_type: ConfigType
     source_file: Path
-    line_number: int
+    line_number: int = Field(gt=0)
     default_value: str | None = None
     required: bool = False
     context: str = ""
@@ -48,8 +50,7 @@ class ConfigFinding:
         return f"{self.key}{required_str}{default_str} @ {location}"
 
 
-@dataclass
-class ScanResult:
+class ScanResult(BaseModel):
     """Resultado completo de um scan.
 
     Attributes:
@@ -59,10 +60,10 @@ class ScanResult:
         scan_duration_ms: Duração do scan em milissegundos
     """
 
-    findings: list[ConfigFinding] = field(default_factory=list)
-    files_scanned: int = 0
-    errors: list[str] = field(default_factory=list)
-    scan_duration_ms: float = 0.0
+    findings: list[ConfigFinding] = Field(default_factory=list)
+    files_scanned: int = Field(default=0, ge=0)
+    errors: list[str] = Field(default_factory=list)
+    scan_duration_ms: float = Field(default=0.0, ge=0.0)
 
     @property
     def total_findings(self) -> int:
