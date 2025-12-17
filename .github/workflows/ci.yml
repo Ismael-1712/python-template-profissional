@@ -113,6 +113,10 @@ jobs:
           key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.in') }}
           fail-on-cache-miss: true
 
+      # Blindagem: Garantir dependências mesmo com cache parcial/corrompido
+      - name: "Instalar Dependências (Idempotente)"
+        run: make install-dev
+
       # Cache do mypy (type checking incremental)
       - name: "Restaurar cache do mypy"
         uses: actions/cache@v4
@@ -178,6 +182,10 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.in') }}
           fail-on-cache-miss: true
+
+      # Blindagem: Garantir pytest e dependências mesmo com cache parcial/corrompido
+      - name: "Instalar Dependências (Idempotente)"
+        run: make install-dev
 
       # Executa testes com pytest-xdist (-n auto)
       - name: "Executar Testes (Paralelo)"

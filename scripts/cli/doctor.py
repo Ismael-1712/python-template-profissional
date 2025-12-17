@@ -261,7 +261,7 @@ class DevDoctor:
 
     def check_vital_dependencies(self) -> DiagnosticResult:
         """Verifica se dependências vitais estão instaladas."""
-        vital_deps = ["yaml", "tox", "pre_commit"]
+        vital_deps = ["yaml", "tox", "pre_commit", "pytest"]
 
         # No CI, ferramentas de dev local (tox, pre-commit) não são vitais
         # pois os testes rodam diretamente via pytest e linters em jobs separados
@@ -274,6 +274,7 @@ class DevDoctor:
             "yaml": "yaml",
             "tox": "tox",
             "pre_commit": "pre_commit",
+            "pytest": "pytest",
         }
 
         for dep in vital_deps:
