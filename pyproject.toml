@@ -27,6 +27,7 @@ dependencies = [
     "typer[all]",
     # Validação de dados robusta e type-safe
     "pydantic>=2.0",
+    "pydantic-settings>=2.0",
     # Vector Store para RAG local
     "chromadb>=0.4.0",
     # Embeddings para busca semântica
@@ -48,7 +49,7 @@ dev = [
 
 # Console scripts - comandos globais do sistema
 [project.scripts]
-meu-projeto = "src.main:app"
+meu-projeto = "src.app.main:app"
 dev-doctor = "scripts.cli.doctor:main"
 dev-audit = "scripts.cli.audit:main"
 git-sync = "scripts.cli.git_sync:main"

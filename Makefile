@@ -42,6 +42,10 @@ help:
 	@echo "📋 Comandos Disponíveis:"
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /' | column -t -s ':'
 
+## run: Inicia servidor local com hot-reload
+run:
+	PYTHONPATH=. $(PYTHON) -m uvicorn src.app.main:app --reload --host 0.0.0.0 --port 8000
+
 ## doctor: Executa diagnóstico preventivo do ambiente de desenvolvimento
 doctor:
 	@$(PYTHON) -m scripts.cli.doctor
