@@ -37,4 +37,4 @@ RUN pip install --no-cache-dir *.whl
 EXPOSE 8000
 
 # Comando para iniciar a aplicação usando o Uvicorn (servidor de produção)
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
