@@ -814,6 +814,84 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#cortex-guardian-migration-dezembro-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CORTEX &amp; Guardian Migration (Dezembro 2025)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CORTEX &amp; Guardian Migration (Dezembro 2025)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unificacao-para-pydantic-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unificação para Pydantic v2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unificação para Pydantic v2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cortex-core-scriptscorecortexmodelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CORTEX Core (scripts/core/cortex/models.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guardian-scriptscoreguardianmodelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guardian (scripts/core/guardian/models.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padrao-de-migracao-aplicado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrão de Migração Aplicado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beneficios-imediatos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benefícios Imediatos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#boas-praticas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1189,6 +1267,87 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">suggestion</span><span class="o">.</span><span class="n">severity</span>  <span class="c1"># str: &quot;HIGH&quot;</span>
 <a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">suggestion</span><span class="o">.</span><span class="n">severity_enum</span>  <span class="c1"># Severity.HIGH</span>
 </code></pre></div>
+<h2 id="cortex-guardian-migration-dezembro-2025">CORTEX &amp; Guardian Migration (Dezembro 2025)</h2>
+<h3 id="unificacao-para-pydantic-v2">Unificação para Pydantic v2</h3>
+<p>Na refatoração de dezembro de 2025, os módulos <strong>CORTEX</strong> e <strong>Guardian</strong> foram migrados de <code>@dataclass</code> para Pydantic v2, atingindo <strong>100% de padronização</strong> nos modelos de dados críticos do projeto.</p>
+<h4 id="cortex-core-scriptscorecortexmodelspy">CORTEX Core (<code>scripts/core/cortex/models.py</code>)</h4>
+<p><strong>Classes Migradas:</strong></p>
+<ol>
+<li><strong><code>DocumentMetadata</code></strong> (11 campos)</li>
+<li>Adicionado <code>model_config = ConfigDict(frozen=True)</code></li>
+<li><code>source_file: Path | None = Field(default=None, exclude=True)</code> - Excluído da serialização</li>
+<li>
+<p>Campos <code>default_factory</code> convertidos para <code>Field(default_factory=list)</code></p>
+</li>
+<li>
+<p><strong><code>ValidationResult</code></strong> (3 campos)</p>
+</li>
+<li>Modelo imutável para resultados de validação</li>
+<li>
+<p>Mantém listas de erros e warnings</p>
+</li>
+<li>
+<p><strong><code>LinkCheckResult</code></strong> (4 campos)</p>
+</li>
+<li>Modelo imutável para validação de links</li>
+<li>Suporta serialização de <code>Path</code> automaticamente</li>
+</ol>
+<p><strong>Estado Final:</strong></p>
+<ul>
+<li>✅ 6 Enums (mantidos)</li>
+<li>✅ 3 Pydantic Models (já existiam: <code>KnowledgeSource</code>, <code>KnowledgeLink</code>, <code>KnowledgeEntry</code>)</li>
+<li>✅ 3 Modelos migrados (eram <code>@dataclass</code>)</li>
+</ul>
+<h4 id="guardian-scriptscoreguardianmodelspy">Guardian (<code>scripts/core/guardian/models.py</code>)</h4>
+<p><strong>Classes Migradas:</strong></p>
+<ol>
+<li><strong><code>ConfigFinding</code></strong> (7 campos)</li>
+<li>Adicionado validação: <code>line_number: int = Field(gt=0)</code></li>
+<li>Mantido método customizado <code>__str__()</code></li>
+<li>Serialização automática de <code>Path</code> para string</li>
+<li>
+<p><strong>Imutável</strong> (<code>frozen=True</code>)</p>
+</li>
+<li>
+<p><strong><code>ScanResult</code></strong> (4 campos + 5 properties)</p>
+</li>
+<li>Validação de campos numéricos: <code>files_scanned: int = Field(default=0, ge=0)</code></li>
+<li><code>scan_duration_ms: float = Field(default=0.0, ge=0.0)</code></li>
+<li><strong>Properties mantidas</strong> (<code>@property</code> funciona nativamente no Pydantic)</li>
+<li>Métodos <code>has_errors()</code> e <code>summary()</code> preservados</li>
+<li><strong>Mutável por design</strong> (scanner atualiza <code>scan_duration_ms</code> após criação)</li>
+</ol>
+<p><strong>Estado Final:</strong></p>
+<ul>
+<li>✅ 1 Enum (mantido)</li>
+<li>✅ 2 Modelos Pydantic (100% do módulo)</li>
+</ul>
+<h3 id="padrao-de-migracao-aplicado">Padrão de Migração Aplicado</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># ANTES (Dataclass)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nd">@dataclass</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Exemplo</span><span class="p">:</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    <span class="n">campo</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="n">lista</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="c1"># DEPOIS (Pydantic v2)</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">Exemplo</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>    <span class="n">campo</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>    <span class="n">lista</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="beneficios-imediatos">Benefícios Imediatos</h3>
+<ol>
+<li><strong>Type Safety Reforçada</strong>: MyPy valida compatibilidade em toda a codebase</li>
+<li><strong>Serialização Uniforme</strong>: <code>model_dump()</code> em vez de mix <code>asdict()</code>/métodos customizados</li>
+<li><strong>Validação Automática</strong>: Campos <code>Path</code> não-nulos, <code>line_number &gt; 0</code>, etc.</li>
+<li><strong>Imutabilidade</strong>: Todos os modelos usam <code>frozen=True</code></li>
+<li><strong>Interoperabilidade</strong>: Guardian e CORTEX agora compatíveis com Mock CI, Audit</li>
+</ol>
 <h2 id="boas-praticas">Boas Práticas</h2>
 <ol>
 <li><strong>Use Imutabilidade</strong>: Prefira <code>frozen=True</code> para modelos que não devem mudar após criação</li>
@@ -1196,6 +1355,7 @@
 <li><strong>Type Hints Completos</strong>: Sempre anote tipos, inclusive <code>None</code> em campos opcionais</li>
 <li><strong>Factory Methods</strong>: Use <code>@classmethod</code> para construtores complexos</li>
 <li><strong>Documentação</strong>: Mantenha docstrings atualizadas com <code>Attributes</code> seção</li>
+<li><strong>Exclusão de Serialização</strong>: Use <code>Field(exclude=True)</code> para campos internos como <code>Path</code> que não devem ir para JSON</li>
 </ol>
 <h2 id="evolucao-futura">Evolução Futura</h2>
 <h3 id="melhorias-planejadas">Melhorias Planejadas</h3>
