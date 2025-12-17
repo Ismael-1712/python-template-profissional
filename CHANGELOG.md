@@ -4,10 +4,16 @@
 
 ### Added
 
-- **Pydantic v2 Unification**: Migração completa dos modelos CORTEX e Guardian para Pydantic v2
+- **Pydantic v2 Unification - Fase 3 (Git Sync)**: Implementado padrão Hybrid DTO para serialização
+  - **Novo**: `SyncStepModel` (Pydantic v2) - DTO imutável para validação de dados de sincronização
+  - **Mantido**: `SyncStep` (classe legacy) - Lógica mutável preservada para workflows imperativos
+  - Método `to_dict()` agora usa `SyncStepModel.model_dump()` para serialização validada
+  - Validação de `status` com `Literal["pending", "running", "success", "failed"]`
+  - Validação de `duration >= 0.0` via Pydantic Field
+  - **100% Cobertura**: CORTEX, Guardian e Git Sync agora padronizados com Pydantic v2
+- **Pydantic v2 Unification - Fase 1 & 2**: Migração completa dos modelos CORTEX e Guardian para Pydantic v2
   - **CORTEX**: Convertidos `DocumentMetadata`, `ValidationResult`, `LinkCheckResult` de `@dataclass` para `BaseModel`
   - **Guardian**: Convertidos `ConfigFinding`, `ScanResult` de `@dataclass` para `BaseModel`
-  - **100% Padronização**: Todos os modelos de dados críticos agora usam Pydantic v2
   - Benefícios: Imutabilidade (`frozen=True`), validação automática, serialização uniforme via `model_dump()`
   - Validações adicionadas: `line_number: int = Field(gt=0)` no Guardian
   - Campo `source_file` no CORTEX agora usa `Field(exclude=True)` para evitar problemas de serialização
