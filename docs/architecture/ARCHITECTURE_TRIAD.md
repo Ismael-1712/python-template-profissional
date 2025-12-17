@@ -7,7 +7,7 @@ author: Engineering Team
 date: '2025-12-01'
 context_tags: []
 linked_code:
-- src/main.py
+- src/app/main.py
 title: 📜 O MANIFESTO DA TRÍADE (V2.0)
 ---
 
@@ -45,7 +45,7 @@ Este repositório não é um projeto único. É uma **Plataforma de Engenharia (
 
 * **Fórmula:** $\text{API} = \text{MAIN} + \Delta_{\text{API}}$
 * **O Delta ($\Delta$):**
-  * `src/main.py`: Aplicação **FastAPI**.
+  * `src/app/main.py`: Aplicação **FastAPI**.
   * Infra: `Dockerfile`, `docker-compose.yml`.
   * `pyproject.toml`: Dependências `fastapi`, `uvicorn`.
 * **Comportamento:** Recebe atualizações da `main`, mas mantém sua personalidade web.
