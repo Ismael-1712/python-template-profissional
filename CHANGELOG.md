@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Performance Benchmark Script**: Created `scripts/benchmark_cortex_perf.py` for measuring KnowledgeScanner performance
+  - Automated benchmarking with 5 iterations per scenario (10, 50, 100, 500 files)
+  - Generates temporary isolated datasets with realistic Markdown + YAML frontmatter
+  - Measures sequential vs parallel processing modes
+  - Outputs markdown-formatted results ready for documentation
+  - **Critical Finding:** Parallel mode shows 34% performance regression (speedup 0.66x)
+  - Reveals that threading overhead + GIL contention exceed I/O gains
+- **Empirical Performance Metrics**: Updated `docs/architecture/PERFORMANCE_NOTES.md` with real benchmark data
+  - Hardware specs: Linux WSL2, 16 cores, Python 3.12.12
+  - Sequential mode consistently outperforms parallel across all dataset sizes
+  - Added root cause analysis: GIL contention + CPU-bound parsing dominates I/O
+  - Documented action items: P0 = disable parallel, P1 = use multiprocessing instead
+  - Added performance regression insights for future optimization (Etapa 3)
+
 ### Fixed
 
 - **Thread-Safety for MemoryFileSystem**: Implemented `threading.RLock` to prevent race conditions

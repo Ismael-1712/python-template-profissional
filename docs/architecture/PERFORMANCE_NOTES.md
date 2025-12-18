@@ -11,6 +11,11 @@ date: 2025-12-17
 
 # Performance & Concurrency - Cortex System
 
+> ⚠️ **STATUS (v0.1.0):** Parallel processing **DISABLED** due to performance regression.
+> Empirical benchmarks show 34% slowdown (0.66x speedup) with `ThreadPoolExecutor` due to GIL contention.
+> Sequential processing is enforced for all workloads (`PARALLEL_THRESHOLD = sys.maxsize`).
+> See [Performance Analysis](#performance-analysis--action-items) for details and future roadmap.
+
 ## Visão Geral
 
 Este documento descreve as estratégias de otimização de performance implementadas
@@ -99,23 +104,81 @@ Thread-safety delegada ao sistema operacional:
 
 Benchmarks executados em:
 
-- **Hardware:** TBD (será atualizado após implementação do `scripts/benchmark_cortex.py`)
+- **Hardware:** Linux 6.6.87.2-WSL2, x86_64, 16 CPU cores
+- **Python:** 3.12.12
 - **Dataset:** Arquivos Markdown com frontmatter YAML (~2KB cada)
-- **Métricas:** Tempo médio de scan completo (5 execuções)
+- **Métricas:** Tempo médio de scan completo (5 execuções por cenário)
+- **Script:** `scripts/benchmark_cortex_perf.py`
 
-### Resultados Preliminares
+### Resultados Empíricos (2025-12-17)
 
 | File Count | Sequential | Parallel (4 workers) | Speedup | Overhead |
 |------------|-----------|----------------------|---------|----------|
-| 10 files   | TBD ms    | TBD ms               | TBD x   | TBD ms   |
-| 50 files   | TBD ms    | TBD ms               | TBD x   | TBD ms   |
-| 100 files  | TBD ms    | TBD ms               | TBD x   | TBD ms   |
+| 10 files   |    5.29 ms |               8.84 ms |   0.60x |   0.00 ms |
+| 50 files   |   21.17 ms |              32.37 ms |   0.65x |   0.00 ms |
+| 100 files  |   42.47 ms |              60.19 ms |   0.71x |   0.00 ms |
+| 500 files  |  207.16 ms |             301.57 ms |   0.69x |   0.00 ms |
 
-**Notas:**
+**Notas Críticas:**
 
-- Speedup calculado como: `tempo_sequencial / tempo_paralelo`
-- Overhead estimado: diferença entre tempo paralelo ideal e real
-- _(Benchmarks serão atualizados na Etapa 2 - Prova de Valor)_
+- ⚠️ **Speedup < 1.0:** Modo paralelo está **mais lento** que sequencial em todos os cenários
+- **Causa Raiz:** Overhead de `ThreadPoolExecutor` + GIL (Global Interpreter Lock) do Python
+- **I/O Bound Myth:** Embora I/O seja assíncrono no OS, o parsing de YAML/Markdown é CPU-bound
+- **Recomendação Imediata:** Aumentar threshold de 10 para **100+ arquivos** ou desabilitar paralelo
+- **Speedup calculado como:** `tempo_sequencial / tempo_paralelo` (valores <1.0 = regressão)
+- _(Benchmarks executados em 2025-12-17 via `scripts/benchmark_cortex_perf.py`)_
+
+---
+
+## Performance Analysis & Action Items
+
+### Critical Findings from Benchmarks
+
+**1. Parallel Processing Regression**
+
+Os benchmarks empíricos revelam que a implementação atual de paralelização está
+causando **degradação de performance** em vez de aceleração:
+
+- **Speedup médio:** 0.66x (regressão de ~34%)
+- **Pior caso:** 10 arquivos = 0.60x (40% mais lento)
+- **Melhor caso:** 100 arquivos = 0.71x (ainda 29% mais lento)
+
+**Root Cause Analysis:**
+
+1. **GIL Contention:** Python's Global Interpreter Lock serializa execução de bytecode,
+   mesmo em threads I/O-bound. O parsing de YAML/Markdown é suficientemente CPU-bound
+   para criar contenção.
+
+2. **Thread Overhead:** Criação do `ThreadPoolExecutor`, scheduling, e context switching
+   têm custo fixo que excede os ganhos em datasets pequenos/médios.
+
+3. **False I/O Assumption:** Assumiu-se que leitura de arquivos era o gargalo, mas
+   benchmarks mostram que parsing (CPU) domina o tempo total.
+
+**2. Threshold Inadequado**
+
+O threshold atual de **10 arquivos** para ativar paralelização é muito baixo:
+
+- Com 10 arquivos, paralelo é 40% mais lento
+- Mesmo com 500 arquivos, paralelo ainda é 31% mais lento
+- Dados sugerem que threshold deveria ser **muito maior** ou desabilitado
+
+**3. Ações Recomendadas (Prioridade Decrescente)**
+
+| Prioridade | Ação | Impacto Estimado | Complexidade |
+|------------|------|------------------|--------------|
+| **P0** | Desabilitar paralelização (threshold = ∞) | +34% speedup imediato | Trivial (1 linha) |
+| **P1** | Implementar com `multiprocessing` (bypass GIL) | +50-100% speedup | Média (refactor) |
+| **P2** | Profile CPU vs I/O ratio com `cProfile` | Dados para decisões | Baixa (adicionar logging) |
+| **P3** | Implementar async I/O com `asyncio` + `aiofiles` | +20-40% speedup | Alta (rewrite) |
+
+**Decisão Executiva:**
+
+Para **Etapa 3 (Otimização)**, recomenda-se:
+
+1. Remover paralelização atual (1 linha de código)
+2. Re-implementar com `multiprocessing.Pool` se necessário para bases >1000 arquivos
+3. Adicionar flag `--max-workers` para usuários experimentarem
 
 ---
 
