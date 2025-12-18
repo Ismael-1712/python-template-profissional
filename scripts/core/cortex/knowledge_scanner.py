@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
@@ -131,8 +132,14 @@ class KnowledgeScanner:
 
         entries: list[KnowledgeEntry] = []
 
+        # Parallelism disabled due to GIL overhead (PERFORMANCE_NOTES.md).
+        # Benchmarks show 34% regression (0.66x) with ThreadPoolExecutor.
+        # Sequential processing used until multiprocessing implementation.
+        # Original threshold: 10 files -> now sys.maxsize (disabled).
+        parallel_threshold = sys.maxsize  # Effectively disabled (was: 10)
+
         # Use parallel processing for large sets of files
-        if len(markdown_files) >= 10:
+        if len(markdown_files) >= parallel_threshold:
             # Determine optimal number of workers
             max_workers = min(4, os.cpu_count() or 1)
             logger.debug(

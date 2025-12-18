@@ -11,6 +11,11 @@ date: 2025-12-17
 
 # Performance & Concurrency - Cortex System
 
+> ⚠️ **STATUS (v0.1.0):** Parallel processing **DISABLED** due to performance regression.
+> Empirical benchmarks show 34% slowdown (0.66x speedup) with `ThreadPoolExecutor` due to GIL contention.
+> Sequential processing is enforced for all workloads (`PARALLEL_THRESHOLD = sys.maxsize`).
+> See [Performance Analysis](#performance-analysis--action-items) for details and future roadmap.
+
 ## Visão Geral
 
 Este documento descreve as estratégias de otimização de performance implementadas
@@ -170,6 +175,7 @@ O threshold atual de **10 arquivos** para ativar paralelização é muito baixo:
 **Decisão Executiva:**
 
 Para **Etapa 3 (Otimização)**, recomenda-se:
+
 1. Remover paralelização atual (1 linha de código)
 2. Re-implementar com `multiprocessing.Pool` se necessário para bases >1000 arquivos
 3. Adicionar flag `--max-workers` para usuários experimentarem

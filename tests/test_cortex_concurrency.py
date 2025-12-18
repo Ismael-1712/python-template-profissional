@@ -217,10 +217,13 @@ class TestKnowledgeScannerConcurrency:
         large_knowledge_base: tuple[MemoryFileSystem, int, Path],
         caplog: pytest.LogCaptureFixture,
     ) -> None:
-        """Validate that files at/above threshold use parallel processing.
+        """Validate that parallel processing is DISABLED (performance fix).
 
-        With 50 files (>= 10), the scanner should log "parallel processing"
-        and use ThreadPoolExecutor.
+        As of v0.1.0, parallel processing is disabled due to GIL overhead
+        causing 34% performance regression. All workloads use sequential mode.
+
+        This test now verifies that even with 50 files (previously >= 10
+        triggered parallel), sequential processing is used.
         """
         fs, expected_count, workspace_root = large_knowledge_base
 
@@ -230,19 +233,20 @@ class TestKnowledgeScannerConcurrency:
         scanner = KnowledgeScanner(workspace_root=workspace_root, fs=fs)
         entries = scanner.scan()
 
-        # Verify parallel processing was used
+        # Verify SEQUENTIAL processing is now used (parallel disabled)
         assert any(
-            "parallel processing" in record.message.lower() for record in caplog.records
-        ), "Expected 'parallel processing' log message for 50 files"
+            "sequential processing" in record.message.lower()
+            for record in caplog.records
+        ), "Expected 'sequential processing' log (parallel disabled in v0.1.0)"
 
-        # Verify worker count is mentioned
-        assert any("workers" in record.message.lower() for record in caplog.records), (
-            "Expected worker count in log messages"
-        )
+        # Verify NO worker count is mentioned (no parallel execution)
+        assert not any(
+            "workers" in record.message.lower() for record in caplog.records
+        ), "Workers should NOT be mentioned (parallel mode disabled)"
 
         # Verify correct count
         assert len(entries) == expected_count, (
-            f"Parallel scan should return {expected_count} entries"
+            f"Sequential scan should return {expected_count} entries"
         )
 
     def test_malformed_files_dont_block_parallel_scan(

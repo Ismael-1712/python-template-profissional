@@ -224,7 +224,7 @@ def run_benchmarks() -> None:
                 sequential_times.append(result_sequential["total_time"])
                 print(
                     f"Parallel: {result_parallel['total_time']:.4f}s, "
-                    f"Sequential: {result_sequential['total_time']:.4f}s"
+                    f"Sequential: {result_sequential['total_time']:.4f}s",
                 )
             else:
                 print(f"Sequential: {result_parallel['total_time']:.4f}s")
@@ -247,7 +247,7 @@ def run_benchmarks() -> None:
                 "parallel_ms": avg_parallel * 1000,
                 "speedup": speedup,
                 "overhead_ms": overhead * 1000,
-            }
+            },
         )
 
         print()
@@ -266,18 +266,19 @@ def run_benchmarks() -> None:
         par_ms = result["parallel_ms"]
         speedup = result["speedup"]
         overhead = result["overhead_ms"]
-
+        # Type narrowing for mypy
+        assert isinstance(count, int)
         if count < 10:
             # Sequential mode only
             print(
                 f"| {count:>10} files | {seq_ms:>7.2f} ms | "
-                f"{'N/A (sequential)':^20} | {'N/A':^7} | {overhead:>6.2f} ms |"
+                f"{'N/A (sequential)':^20} | {'N/A':^7} | {overhead:>6.2f} ms |",
             )
         else:
             # Both modes
             print(
                 f"| {count:>10} files | {seq_ms:>7.2f} ms | {par_ms:>18.2f} ms | "
-                f"{speedup:>6.2f}x | {overhead:>6.2f} ms |"
+                f"{speedup:>6.2f}x | {overhead:>6.2f} ms |",
             )
 
     print()
@@ -287,9 +288,12 @@ def run_benchmarks() -> None:
     print("Notes:")
     print("  - Speedup = Sequential Time / Parallel Time")
     print(
-        "  - Overhead = Additional cost of parallel processing (negative for <10 files)"
+        "  - Overhead = Additional cost of parallel processing "
+        "(negative for <10 files)",
     )
-    print("  - Files < 10 use sequential mode automatically (threshold optimization)")
+    print(
+        "  - Files < 10 use sequential mode automatically (threshold optimization)",
+    )
     print()
     print("📝 Copy the table above to docs/architecture/PERFORMANCE_NOTES.md")
     print("=" * 80)
