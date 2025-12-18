@@ -19,9 +19,10 @@ from __future__ import annotations
 
 import json
 import sys
-from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
+
+from pydantic import BaseModel, Field
 
 # Compatibilidade com Python 3.10 (tomllib disponível apenas em 3.11+)
 try:
@@ -52,8 +53,7 @@ except ImportError:
     logger.debug("Knowledge components not available")
 
 
-@dataclass
-class CLICommand:
+class CLICommand(BaseModel):
     """Represents a CLI command available in the project."""
 
     name: str
@@ -61,8 +61,7 @@ class CLICommand:
     description: str = ""
 
 
-@dataclass
-class Document:
+class Document(BaseModel):
     """Represents a documentation file."""
 
     path: str
@@ -71,20 +70,19 @@ class Document:
     has_frontmatter: bool = False
 
 
-@dataclass
-class ProjectContext:
+class ProjectContext(BaseModel):
     """Complete project context for introspection."""
 
     project_name: str
     version: str
     description: str
     python_version: str
-    cli_commands: list[CLICommand] = field(default_factory=list)
-    documents: list[Document] = field(default_factory=list)
-    architecture_docs: list[Document] = field(default_factory=list)
-    dependencies: list[str] = field(default_factory=list)
-    dev_dependencies: list[str] = field(default_factory=list)
-    scripts_available: dict[str, str] = field(default_factory=dict)
+    cli_commands: list[CLICommand] = Field(default_factory=list)
+    documents: list[Document] = Field(default_factory=list)
+    architecture_docs: list[Document] = Field(default_factory=list)
+    dependencies: list[str] = Field(default_factory=list)
+    dev_dependencies: list[str] = Field(default_factory=list)
+    scripts_available: dict[str, str] = Field(default_factory=dict)
     knowledge_entries_count: int = 0
     knowledge_links_valid: int = 0
     knowledge_links_broken: int = 0
@@ -403,7 +401,7 @@ class ProjectMapper:
         self.fs.mkdir(output_path.parent, parents=True, exist_ok=True)
 
         json_content = json.dumps(
-            asdict(context),
+            context.model_dump(mode="json"),
             indent=2,
             ensure_ascii=False,
             default=str,
