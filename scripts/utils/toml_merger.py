@@ -207,10 +207,10 @@ class TOMLMerger:
         """
         if self.strategy == MergeStrategy.TEMPLATE_PRIORITY:
             return self._merge_template_priority(source, target)
-        elif self.strategy == MergeStrategy.USER_PRIORITY:
+        if self.strategy == MergeStrategy.USER_PRIORITY:
             return self._merge_user_priority(source, target)
-        else:  # SMART
-            return self._merge_smart(source, target)
+        # SMART
+        return self._merge_smart(source, target)
 
     def _merge_template_priority(
         self,
@@ -296,7 +296,8 @@ class TOMLMerger:
                 # New key - always add
                 base[key] = value
             elif isinstance(value, (dict, Table)) and isinstance(
-                base[key], (dict, Table)
+                base[key],
+                (dict, Table),
             ):
                 # Both are dicts - recurse
                 self._deep_update(base[key], value, prioritize_overlay)
@@ -321,12 +322,14 @@ class TOMLMerger:
                 # New key from template - add it
                 base[key] = value
             elif isinstance(value, (dict, Table)) and isinstance(
-                base[key], (dict, Table)
+                base[key],
+                (dict, Table),
             ):
                 # Both are dicts - recurse
                 self._smart_merge_recursive(base[key], value)
             elif isinstance(value, (list, Array)) and isinstance(
-                base[key], (list, Array)
+                base[key],
+                (list, Array),
             ):
                 # Both are lists - union with deduplication
                 base[key] = self._merge_lists(base[key], value)
