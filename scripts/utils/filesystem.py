@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import fnmatch
 import shutil
+import threading
 from pathlib import Path
 from typing import Protocol, runtime_checkable
 
@@ -343,7 +344,7 @@ class RealFileSystem:
 
 
 class MemoryFileSystem:
-    """In-memory filesystem implementation for fast unit testing.
+    r"""In-memory filesystem implementation for fast unit testing.
 
     Stores all files in a dictionary, enabling tests to run without
     touching the disk. This results in:
@@ -356,7 +357,24 @@ class MemoryFileSystem:
         - Does not support binary files (text only)
         - Glob patterns are simplified (basic * and ? wildcards)
         - No filesystem metadata (permissions, timestamps)
-        - Not thread-safe (use separate instances per thread)
+
+    Thread Safety:
+        All operations are protected by an internal RLock, making this
+        class safe for concurrent access from multiple threads. However,
+        callers must still ensure logical consistency (e.g., check-then-act
+        patterns require external synchronization).
+
+        Example (safe):
+            >>> fs = MemoryFileSystem()
+            >>> # Multiple threads can safely read/write
+            >>> with ThreadPoolExecutor(max_workers=4) as executor:
+            ...     futures = [
+            ...         executor.submit(
+            ...             fs.write_text, Path(f\"file{i}.txt\"), \"data\"
+            ...         )
+            ...         for i in range(100)
+            ...     ]
+            ...     [f.result() for f in futures]
 
     Example:
         >>> fs = MemoryFileSystem()
@@ -366,9 +384,10 @@ class MemoryFileSystem:
     """
 
     def __init__(self) -> None:
-        """Initialize empty in-memory filesystem."""
+        """Initialize empty in-memory filesystem with thread-safe lock."""
         self._files: dict[Path, str] = {}
         self._dirs: set[Path] = set()
+        self._lock = threading.RLock()
 
     def read_text(self, path: Path, encoding: str = "utf-8") -> str:
         """Read text content from memory.
@@ -383,9 +402,10 @@ class MemoryFileSystem:
         Raises:
             FileNotFoundError: If the file does not exist in memory
         """
-        if path not in self._files:
-            raise FileNotFoundError(f"File not found: {path}")
-        return self._files[path]
+        with self._lock:
+            if path not in self._files:
+                raise FileNotFoundError(f"File not found: {path}")
+            return self._files[path]
 
     def write_text(
         self,
@@ -402,9 +422,10 @@ class MemoryFileSystem:
             content: Text content to write
             encoding: Ignored (memory storage is already unicode)
         """
-        # Auto-create parent directories
-        self._ensure_parent_dirs(path)
-        self._files[path] = content
+        with self._lock:
+            # Auto-create parent directories
+            self._ensure_parent_dirs(path)
+            self._files[path] = content
 
     def exists(self, path: Path) -> bool:
         """Check if a path exists in memory.
@@ -415,7 +436,8 @@ class MemoryFileSystem:
         Returns:
             True if path exists (as file or directory), False otherwise
         """
-        return path in self._files or path in self._dirs
+        with self._lock:
+            return path in self._files or path in self._dirs
 
     def is_file(self, path: Path) -> bool:
         """Check if path is a file in memory.
@@ -426,7 +448,8 @@ class MemoryFileSystem:
         Returns:
             True if path is a file, False otherwise
         """
-        return path in self._files
+        with self._lock:
+            return path in self._files
 
     def is_dir(self, path: Path) -> bool:
         """Check if path is a directory in memory.
@@ -437,7 +460,8 @@ class MemoryFileSystem:
         Returns:
             True if path is a directory, False otherwise
         """
-        return path in self._dirs
+        with self._lock:
+            return path in self._dirs
 
     def mkdir(
         self,
@@ -455,21 +479,22 @@ class MemoryFileSystem:
         Raises:
             FileExistsError: If exist_ok=False and directory exists
         """
-        if path in self._dirs and not exist_ok:
-            raise FileExistsError(f"Directory already exists: {path}")
+        with self._lock:
+            if path in self._dirs and not exist_ok:
+                raise FileExistsError(f"Directory already exists: {path}")
 
-        if parents:
-            # Create all parent directories
-            current = path
-            dirs_to_create = []
-            while current.parent != current:
-                dirs_to_create.append(current)
-                current = current.parent
-            # Add in reverse order (parent first)
-            for directory in reversed(dirs_to_create):
-                self._dirs.add(directory)
-        else:
-            self._dirs.add(path)
+            if parents:
+                # Create all parent directories
+                current = path
+                dirs_to_create = []
+                while current.parent != current:
+                    dirs_to_create.append(current)
+                    current = current.parent
+                # Add in reverse order (parent first)
+                for directory in reversed(dirs_to_create):
+                    self._dirs.add(directory)
+            else:
+                self._dirs.add(path)
 
     def glob(self, path: Path, pattern: str) -> list[Path]:
         """Find files matching a glob pattern in memory.
@@ -491,31 +516,32 @@ class MemoryFileSystem:
             >>> fs.glob(Path("tests"), "**/*.py")
             [Path("tests/test_foo.py"), Path("tests/subdir/bar.py")]
         """
-        results: list[Path] = []
+        with self._lock:
+            results: list[Path] = []
 
-        # Check if pattern is recursive
-        is_recursive = pattern.startswith("**/")
-        file_pattern = pattern[3:] if is_recursive else pattern
+            # Check if pattern is recursive
+            is_recursive = pattern.startswith("**/")
+            file_pattern = pattern[3:] if is_recursive else pattern
 
-        # Search in files
-        for file_path in self._files:
-            # Check if file is under the search path
-            try:
-                relative = file_path.relative_to(path)
+            # Search in files
+            for file_path in self._files:
+                # Check if file is under the search path
+                try:
+                    relative = file_path.relative_to(path)
 
-                if is_recursive:
-                    # Recursive: match anywhere under path
-                    if fnmatch.fnmatch(file_path.name, file_pattern):
-                        results.append(file_path)
-                # Non-recursive: match only direct children
-                elif "/" not in str(relative) and "\\" not in str(relative):
-                    if fnmatch.fnmatch(file_path.name, file_pattern):
-                        results.append(file_path)
-            except ValueError:
-                # File is not under the search path
-                continue
+                    if is_recursive:
+                        # Recursive: match anywhere under path
+                        if fnmatch.fnmatch(file_path.name, file_pattern):
+                            results.append(file_path)
+                    # Non-recursive: match only direct children
+                    elif "/" not in str(relative) and "\\" not in str(relative):
+                        if fnmatch.fnmatch(file_path.name, file_pattern):
+                            results.append(file_path)
+                except ValueError:
+                    # File is not under the search path
+                    continue
 
-        return sorted(results)
+            return sorted(results)
 
     def rglob(self, path: Path, pattern: str) -> list[Path]:
         """Find files matching a pattern recursively in memory.
@@ -546,12 +572,13 @@ class MemoryFileSystem:
         Raises:
             FileNotFoundError: If source file does not exist
         """
-        if src not in self._files:
-            raise FileNotFoundError(f"Source file not found: {src}")
+        with self._lock:
+            if src not in self._files:
+                raise FileNotFoundError(f"Source file not found: {src}")
 
-        # Auto-create parent directories for destination
-        self._ensure_parent_dirs(dst)
-        self._files[dst] = self._files[src]
+            # Auto-create parent directories for destination
+            self._ensure_parent_dirs(dst)
+            self._files[dst] = self._files[src]
 
     def _ensure_parent_dirs(self, path: Path) -> None:
         """Ensure all parent directories exist in memory.

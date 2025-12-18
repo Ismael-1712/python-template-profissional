@@ -84,6 +84,19 @@ class KnowledgeScanner:
             List of validated KnowledgeEntry objects. Empty list if directory
             doesn't exist or contains no valid files.
 
+        Performance Notes:
+            This method automatically uses parallel processing (ThreadPoolExecutor)
+            when scanning 10 or more files, using up to 4 worker threads.
+            For smaller sets (<10 files), sequential processing is used to
+            avoid thread overhead.
+
+            Thread Safety: This method is thread-safe when using MemoryFileSystem
+            (v1.1.0+) or RealFileSystem. Concurrent calls to scan() on the same
+            scanner instance are safe, but may cause redundant work.
+
+            See docs/architecture/PERFORMANCE_NOTES.md for detailed benchmarks
+            and optimization strategies.
+
         Example:
             >>> scanner = KnowledgeScanner(Path('/project'))
             >>> entries = scanner.scan()
