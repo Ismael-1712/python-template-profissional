@@ -14,6 +14,7 @@ from scripts.core.mock_ci.detector import detect_ci_environment
 from scripts.core.mock_ci.fixer import CIFixer
 from scripts.core.mock_ci.git_ops import GitOperations
 from scripts.core.mock_ci.models import CIReport, FixResult
+from scripts.core.mock_ci.models_pydantic import MockCIConfig
 from scripts.core.mock_ci.reporter import CIReporter
 from scripts.core.mock_generator import TestMockGenerator
 from scripts.core.mock_validator import TestMockValidator
@@ -47,16 +48,21 @@ class MockCIRunner:
 
     """
 
-    def __init__(self, workspace_root: Path, config_file: Path):
+    def __init__(self, workspace_root: Path, config: MockCIConfig):
         """Inicializa o orquestrador CI/CD.
 
         Args:
             workspace_root: Caminho raiz do workspace
-            config_file: Caminho do arquivo de configuração do gerador
+            config: Configuração validada do Mock CI (Pydantic model)
 
         Raises:
-            FileNotFoundError: Se workspace_root ou config_file não existirem
+            FileNotFoundError: Se workspace_root não existir
 
+        Note:
+            **BREAKING CHANGE (Fase 03 - Integração):**
+            - config_file (Path) substituído por config (MockCIConfig)
+            - Validação de YAML movida para CLI (Top-Down Injection)
+            - Instanciação de TestMockGenerator agora recebe MockCIConfig
         """
         self.workspace_root = workspace_root.resolve()
 
@@ -64,12 +70,8 @@ class MockCIRunner:
             msg = f"Workspace não encontrado: {self.workspace_root}"
             raise FileNotFoundError(msg)
 
-        if not config_file.exists():
-            msg = f"Config do gerador não encontrado: {config_file}"
-            raise FileNotFoundError(msg)
-
-        # Componentes base
-        self.generator = TestMockGenerator(self.workspace_root, config_file)
+        # Componentes base - agora recebem config validado
+        self.generator = TestMockGenerator(self.workspace_root, config)
         self.validator = TestMockValidator(self.workspace_root)
         self.git_ops = GitOperations(self.workspace_root)
         self.ci_environment = detect_ci_environment()

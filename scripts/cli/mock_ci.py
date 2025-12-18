@@ -26,12 +26,16 @@ import logging
 import sys
 from pathlib import Path
 
+import yaml
+from pydantic import ValidationError
+
 # Adiciona o diretório raiz do projeto ao sys.path para permitir imports
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.core.mock_ci import MockCIRunner  # noqa: E402
+from scripts.core.mock_ci.models_pydantic import MockCIConfig  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
@@ -117,8 +121,27 @@ Exemplos de uso em CI/CD:
             logger.error("Config do gerador não encontrado: %s", config_file)
             return 2
 
-        # Inicializa runner
-        runner = MockCIRunner(workspace, config_file)
+        # Carrega e valida configuração com Pydantic (Top-Down Injection)
+        try:
+            with config_file.open("r", encoding="utf-8") as f:
+                config_data = yaml.safe_load(f)
+
+            # Validação automática via Pydantic
+            config = MockCIConfig.model_validate(config_data)
+            logger.info("✅ Configuração YAML validada com sucesso")
+
+        except ValidationError as e:
+            logger.error("❌ Erro de validação na configuração YAML:")
+            for error in e.errors():
+                loc = " -> ".join(str(x) for x in error["loc"])
+                logger.error(f"  [{loc}]: {error['msg']}")
+            return 2
+        except Exception as e:
+            logger.error(f"❌ Erro ao carregar configuração: {e}")
+            return 2
+
+        # Inicializa runner com config validado
+        runner = MockCIRunner(workspace, config)
 
         # Código de saída padrão
         exit_code = 0

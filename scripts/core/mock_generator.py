@@ -25,10 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import yaml
-
 if TYPE_CHECKING:
-    from scripts.core.mock_ci.models_pydantic import MockPattern
+    from scripts.core.mock_ci.models_pydantic import MockCIConfig, MockPattern
     from scripts.utils.filesystem import FileSystemAdapter
     from scripts.utils.platform_strategy import PlatformStrategy
 else:
@@ -59,7 +57,7 @@ class TestMockGenerator:
     def __init__(
         self,
         workspace_root: Path,
-        config_path: Path,
+        config: MockCIConfig,
         fs: FileSystemAdapter | None = None,
         platform: PlatformStrategy | None = None,
     ):
@@ -67,7 +65,7 @@ class TestMockGenerator:
 
         Args:
             workspace_root: Caminho raiz do workspace
-            config_path: Caminho para o test_mock_config.yaml
+            config: Configuração validada do Mock CI (Pydantic model)
             fs: FileSystemAdapter para operações de I/O (default: RealFileSystem)
             platform: PlatformStrategy para operações específicas de plataforma
                      (default: detecção automática via get_platform_strategy)
@@ -77,6 +75,10 @@ class TestMockGenerator:
             - Testes unitários com MemoryFileSystem (sem I/O real)
             - Compatibilidade retroativa (defaults mantêm comportamento original)
             - Extensibilidade para mock de operações de plataforma
+
+            **BREAKING CHANGE (Fase 03 - Integração):**
+            - config_path (Path) substituído por config (MockCIConfig)
+            - Validação de YAML movida para CLI (Top-Down Injection)
         """
         # Lazy imports para evitar overhead em tempo de importação
         if fs is None:
@@ -91,12 +93,11 @@ class TestMockGenerator:
         self.fs = fs
         self.platform = platform
         self.workspace_root = workspace_root.resolve()
-        self.config_path = config_path
+        self.config = config  # Agora é MockCIConfig ao invés de dict
         self.backup_dir = self.workspace_root / ".test_mock_backups"
         self.suggestions: list[dict[str, Any]] = []
 
-        # Carrega a configuração
-        self.config = self._load_config()
+        # Parse dos padrões de mock a partir do config validado
         self.MOCK_PATTERNS = self._parse_patterns_from_config()
 
         if not self.MOCK_PATTERNS:
@@ -106,55 +107,30 @@ class TestMockGenerator:
             f"Inicializando TestMockGenerator para workspace: {self.workspace_root}",
         )
 
-    def _load_config(self) -> dict[str, Any]:
-        """Carrega a configuração do arquivo YAML.
+    def _parse_patterns_from_config(self) -> dict[str, MockPattern]:
+        """Converte os padrões do config Pydantic em dicionário de MockPattern.
 
         Note:
-            Refatorado para usar FileSystemAdapter injetado (P10 - Fase 02).
-            Permite testes sem I/O real usando MemoryFileSystem.
+            **BREAKING CHANGE (Fase 03 - Integração):**
+            - Agora usa self.config.mock_patterns (MockPatternsConfig Pydantic model)
+            - Acesso type-safe ao invés de dict[str, Any]
+            - Eliminada lógica de parsing manual - Pydantic já validou
         """
-        if not self.fs.exists(self.config_path):
-            logger.error(f"Arquivo de configuração não encontrado: {self.config_path}")
-            return {}
-
-        try:
-            content = self.fs.read_text(self.config_path, encoding="utf-8")
-            config: dict[str, Any] = yaml.safe_load(content) or {}
-            logger.info(f"Configuração carregada de {self.config_path}")
-            return config
-        except Exception as e:
-            logger.error(f"Erro ao carregar configuração YAML: {e}")
-            return {}
-
-    def _parse_patterns_from_config(self) -> dict[str, MockPattern]:
-        """Converte os padrões do config YAML em objetos MockPattern."""
-        MockPatternClass = _get_mock_pattern_class()  # noqa: N806
         patterns_dict: dict[str, MockPattern] = {}
-        if "mock_patterns" not in self.config:
-            return patterns_dict
 
-        # Itera sobre todos os grupos de padrões (ex: http_patterns, etc.)
-        for _group_name, pattern_list in self.config["mock_patterns"].items():
-            if not isinstance(pattern_list, list):
-                continue
+        # Acesso type-safe aos padrões validados
+        mock_patterns = self.config.mock_patterns
 
-            for p in pattern_list:
-                try:
-                    pattern_key = p.get("pattern")
-                    if not pattern_key:
-                        continue
+        # Coleta todos os padrões de diferentes categorias
+        all_patterns: list[MockPattern] = []
+        all_patterns.extend(mock_patterns.http_patterns)
+        all_patterns.extend(mock_patterns.subprocess_patterns)
+        all_patterns.extend(mock_patterns.filesystem_patterns)
+        all_patterns.extend(mock_patterns.database_patterns)
 
-                    patterns_dict[pattern_key] = MockPatternClass(
-                        pattern=pattern_key,
-                        type=p.get("type", "UNKNOWN"),  # Usa 'type' (alias)
-                        # Usa .get() para mock_template para evitar KeyError
-                        mock_template=p.get("mock_template", "").strip(),
-                        required_imports=p.get("required_imports", []),
-                        description=p.get("description", ""),
-                        severity=p.get("severity", "MEDIUM"),
-                    )
-                except Exception as e:
-                    logger.warning(f"Erro ao carregar padrão {p.get('pattern')}: {e}")
+        # Converte lista em dict usando 'pattern' como chave
+        for pattern_obj in all_patterns:
+            patterns_dict[pattern_obj.pattern] = pattern_obj
 
         logger.debug(f"Carregados {len(patterns_dict)} padrões de mock.")
         return patterns_dict

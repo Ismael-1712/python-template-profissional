@@ -19,6 +19,10 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import yaml
+from pydantic import ValidationError
+
+from scripts.core.mock_ci.models_pydantic import MockCIConfig
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
 if TYPE_CHECKING:
@@ -81,8 +85,17 @@ class TestMockValidator:
             return
 
         try:
-            self.generator = TestMockGenerator(workspace_root, config_path)
+            # Load and validate config with Pydantic
+            content = self.fs.read_text(config_path, encoding="utf-8")
+            config_data = yaml.safe_load(content)
+            config = MockCIConfig.model_validate(config_data)
+
+            self.generator = TestMockGenerator(workspace_root, config)
             logger.debug(f"TestMockValidator inicializado com config: {config_path}")
+        except ValidationError as e:
+            error_msg = f"Erro de validação no config YAML: {e}"
+            logger.warning(error_msg)
+            self._init_error = error_msg
         except Exception as e:
             error_msg = f"Erro ao inicializar gerador de mocks: {e}"
             logger.warning(error_msg)
