@@ -22,6 +22,13 @@ def load_config(config_path: Path | None = None) -> dict[str, Any]:
         "lint_timeout": 180,
         "cleanup_enabled": True,
         "git_timeout": 120,
+        # Deep Clean: Merged Branches Pruning
+        "prune_local_merged": True,
+        "prune_base_branch": "main",
+        "prune_force_delete": False,
+        "prune_delete_remote": False,
+        "protected_branches": ["main", "master", "develop", "staging", "production"],
+        "protect_remote_tracking": True,
     }
 
     if config_path and config_path.exists():

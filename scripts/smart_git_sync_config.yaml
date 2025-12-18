@@ -60,3 +60,26 @@ rollback_on_push_failure: true
 # Performance Settings
 max_files_per_commit: 100
 max_commit_message_length: 72
+
+# ============================================================================
+# Deep Clean: Merged Branches Pruning
+# ============================================================================
+# Automatically removes local branches that have been merged into the base branch.
+# This keeps your workspace clean and reduces clutter.
+
+prune_local_merged: true  # Enable automatic pruning of merged branches
+prune_base_branch: "main"  # Base branch to check merges against (main/master)
+prune_force_delete: false  # Use -D (force) instead of -d (safe) - DANGEROUS!
+prune_delete_remote: false  # Also delete branches from remote - DANGEROUS!
+
+# Protected Branches: These branches will NEVER be deleted
+protected_branches:
+  - "main"
+  - "master"
+  - "develop"
+  - "staging"
+  - "production"
+  # Add your custom protected branches here
+
+# Protect branches that exist on remote (origin/*)
+protect_remote_tracking: true
