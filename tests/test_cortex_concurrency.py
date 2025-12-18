@@ -20,7 +20,7 @@ from pathlib import Path
 import pytest
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
-from scripts.core.cortex.models import DocStatus
+from scripts.core.cortex.models import DocStatus, KnowledgeEntry
 from scripts.utils.filesystem import MemoryFileSystem
 
 
@@ -133,7 +133,7 @@ class TestKnowledgeScannerConcurrency:
         """
         fs, expected_count, workspace_root = large_knowledge_base
 
-        def run_scan() -> list:
+        def run_scan() -> list[KnowledgeEntry]:
             """Execute a single scan and return entries."""
             scanner = KnowledgeScanner(workspace_root=workspace_root, fs=fs)
             return scanner.scan()
