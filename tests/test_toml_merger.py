@@ -17,6 +17,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 from textwrap import dedent
+from typing import Any, cast
 
 import pytest
 
@@ -71,7 +72,7 @@ def sample_source_toml() -> str:
         [tool.ruff.lint]
         select = ["E", "F", "W", "I", "N", "UP"]
         ignore = ["E501"]
-        """
+        """,
     )
 
 
@@ -102,7 +103,7 @@ def sample_target_toml() -> str:
         [tool.mypy]
         # User-specific configuration
         strict = true
-        """
+        """,
     )
 
 
@@ -173,14 +174,15 @@ def test_merge_dependencies_union(
 
     merged = tomlkit.parse(target.read_text())
 
-    dependencies = merged["project"]["dependencies"]
+    project = cast("dict[str, Any]", merged["project"])
+    dependencies = cast("list[Any]", project["dependencies"])
 
     # Should have union of both lists
     assert "requests" in dependencies, "User dependency was lost!"
     assert "uvicorn[standard]" in dependencies, "Template dependency missing!"
 
     # Should deduplicate (fastapi appears in both)
-    fastapi_count = sum(1 for dep in dependencies if dep.startswith("fastapi"))
+    fastapi_count = sum(1 for dep in dependencies if str(dep).startswith("fastapi"))
     assert fastapi_count == 1, "Dependencies were not deduplicated!"
 
 
@@ -195,8 +197,8 @@ def test_merge_dependencies_version_resolution(
             """\
             [project]
             dependencies = ["pydantic>=2.5.0"]
-            """
-        )
+            """,
+        ),
     )
 
     target.write_text(
@@ -204,8 +206,8 @@ def test_merge_dependencies_version_resolution(
             """\
             [project]
             dependencies = ["pydantic>=2.0.0"]
-            """
-        )
+            """,
+        ),
     )
 
     merger = TOMLMerger(strategy=MergeStrategy.SMART)
@@ -216,7 +218,8 @@ def test_merge_dependencies_version_resolution(
     import tomlkit
 
     merged = tomlkit.parse(target.read_text())
-    dependencies = merged["project"]["dependencies"]
+    project = cast("dict[str, Any]", merged["project"])
+    dependencies = cast("list[Any]", project["dependencies"])
 
     # Higher version should win
     assert "pydantic>=2.5.0" in dependencies, "Version conflict resolution failed!"
@@ -247,15 +250,19 @@ def test_recursive_dict_merge(
     merged = tomlkit.parse(target.read_text())
 
     # [tool.ruff.lint] should merge, not replace
-    lint_config = merged["tool"]["ruff"]["lint"]
+    tool = cast("dict[str, Any]", merged["tool"])
+    ruff = cast("dict[str, Any]", tool["ruff"])
+    lint_config = cast("dict[str, Any]", ruff["lint"])
 
     # Should have union of select rules
-    assert "UP" in lint_config["select"], "Template rule missing!"
-    assert "E" in lint_config["select"], "User rule preserved!"
+    select_rules = cast("list[Any]", lint_config["select"])
+    assert "UP" in select_rules, "Template rule missing!"
+    assert "E" in select_rules, "User rule preserved!"
 
     # Ignore lists should also merge
-    assert "D203" in lint_config["ignore"], "User ignore preserved!"
-    assert "E501" in lint_config["ignore"], "Template ignore added!"
+    ignore_rules = cast("list[Any]", lint_config["ignore"])
+    assert "D203" in ignore_rules, "User ignore preserved!"
+    assert "E501" in ignore_rules, "Template ignore added!"
 
 
 def test_preserve_user_only_sections(
@@ -280,8 +287,10 @@ def test_preserve_user_only_sections(
 
     # [tool.mypy] exists only in target - should be preserved
     assert "tool" in merged
-    assert "mypy" in merged["tool"], "User-only section was deleted!"
-    assert merged["tool"]["mypy"]["strict"] is True
+    tool = cast("dict[str, Any]", merged["tool"])
+    assert "mypy" in tool, "User-only section was deleted!"
+    mypy_config = cast("dict[str, Any]", tool["mypy"])
+    assert mypy_config["strict"] is True
 
 
 # ======================================================================
@@ -375,8 +384,8 @@ def test_template_priority_strategy(
             """\
             [tool.ruff]
             line-length = 100
-            """
-        )
+            """,
+        ),
     )
 
     target.write_text(
@@ -384,8 +393,8 @@ def test_template_priority_strategy(
             """\
             [tool.ruff]
             line-length = 88
-            """
-        )
+            """,
+        ),
     )
 
     merger = TOMLMerger(strategy=MergeStrategy.TEMPLATE_PRIORITY)
@@ -398,7 +407,9 @@ def test_template_priority_strategy(
     merged = tomlkit.parse(target.read_text())
 
     # Template value should win
-    assert merged["tool"]["ruff"]["line-length"] == 100
+    tool = cast("dict[str, Any]", merged["tool"])
+    ruff = cast("dict[str, Any]", tool["ruff"])
+    assert ruff["line-length"] == 100
 
 
 def test_user_priority_strategy(
@@ -412,8 +423,8 @@ def test_user_priority_strategy(
             """\
             [tool.ruff]
             line-length = 100
-            """
-        )
+            """,
+        ),
     )
 
     target.write_text(
@@ -421,8 +432,8 @@ def test_user_priority_strategy(
             """\
             [tool.ruff]
             line-length = 88
-            """
-        )
+            """,
+        ),
     )
 
     merger = TOMLMerger(strategy=MergeStrategy.USER_PRIORITY)
@@ -435,7 +446,9 @@ def test_user_priority_strategy(
     merged = tomlkit.parse(target.read_text())
 
     # User value should win
-    assert merged["tool"]["ruff"]["line-length"] == 88
+    tool = cast("dict[str, Any]", merged["tool"])
+    ruff = cast("dict[str, Any]", tool["ruff"])
+    assert ruff["line-length"] == 88
 
 
 # ======================================================================
@@ -523,8 +536,8 @@ def test_preserve_toml_formatting(
             """\
             [project]
             name = "new-name"
-            """
-        )
+            """,
+        ),
     )
 
     # Target with specific formatting
@@ -539,8 +552,8 @@ def test_preserve_toml_formatting(
                 "fastapi",
                 "pydantic",
             ]
-            """
-        )
+            """,
+        ),
     )
 
     merger = TOMLMerger(strategy=MergeStrategy.SMART)
