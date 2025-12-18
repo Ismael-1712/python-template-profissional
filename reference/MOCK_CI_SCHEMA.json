@@ -1,0 +1,216 @@
+{
+  "$defs": {
+    "ExecutionConfig": {
+      "description": "Configura\u00e7\u00e3o de execu\u00e7\u00e3o do Mock CI.\n\nAttributes:\n    test_file_patterns: Padr\u00f5es glob para localizar arquivos de teste\n    exclude_patterns: Padr\u00f5es glob para excluir arquivos\n    min_severity_for_auto_apply: Severidade m\u00ednima para aplica\u00e7\u00e3o autom\u00e1tica\n    create_backups: Se deve criar backups antes de modificar arquivos\n    backup_directory: Diret\u00f3rio para armazenar backups",
+      "properties": {
+        "test_file_patterns": {
+          "description": "Padr\u00f5es glob para localizar arquivos de teste",
+          "items": {
+            "type": "string"
+          },
+          "title": "Test File Patterns",
+          "type": "array"
+        },
+        "exclude_patterns": {
+          "description": "Padr\u00f5es glob para excluir arquivos do processamento",
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclude Patterns",
+          "type": "array"
+        },
+        "min_severity_for_auto_apply": {
+          "default": "HIGH",
+          "description": "Severidade m\u00ednima para aplica\u00e7\u00e3o autom\u00e1tica de corre\u00e7\u00f5es",
+          "pattern": "^(HIGH|MEDIUM|LOW)$",
+          "title": "Min Severity For Auto Apply",
+          "type": "string"
+        },
+        "create_backups": {
+          "default": true,
+          "description": "Criar backups antes de modificar arquivos",
+          "title": "Create Backups",
+          "type": "boolean"
+        },
+        "backup_directory": {
+          "default": ".test_mock_backups",
+          "description": "Diret\u00f3rio para armazenar backups",
+          "title": "Backup Directory",
+          "type": "string"
+        }
+      },
+      "title": "ExecutionConfig",
+      "type": "object"
+    },
+    "LoggingConfig": {
+      "description": "Configura\u00e7\u00e3o de logging.\n\nAttributes:\n    level: N\u00edvel de log (DEBUG, INFO, WARNING, ERROR, CRITICAL)\n    format: Formato da mensagem de log",
+      "properties": {
+        "level": {
+          "default": "INFO",
+          "description": "N\u00edvel de log",
+          "pattern": "^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$",
+          "title": "Level",
+          "type": "string"
+        },
+        "format": {
+          "default": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+          "description": "Formato da mensagem de log",
+          "title": "Format",
+          "type": "string"
+        }
+      },
+      "title": "LoggingConfig",
+      "type": "object"
+    },
+    "MockPattern": {
+      "description": "Representa um padr\u00e3o de c\u00f3digo que precisa de mock.\n\nAtualizado para Pydantic V2 - Sem warnings de deprecation.\n\nAttributes:\n    pattern: Padr\u00e3o de c\u00f3digo a detectar (ex: \"requests.get\")\n    mock_type: Tipo de mock (HTTP_REQUEST, SUBPROCESS, etc)\n    mock_template: Template do c\u00f3digo de mock a aplicar\n    required_imports: Imports necess\u00e1rios para o mock funcionar\n    description: Descri\u00e7\u00e3o leg\u00edvel do que o padr\u00e3o detecta\n    severity: N\u00edvel de severidade (HIGH, MEDIUM, LOW)\n\nExample:\n    >>> pattern = MockPattern(\n    ...     pattern=\"requests.get\",\n    ...     type=\"HTTP_REQUEST\",  # Aceita 'type' do YAML\n    ...     mock_template=\"@patch('requests.get')\",\n    ...     required_imports=[\"from unittest.mock import patch\"],\n    ...     description=\"HTTP request detected\",\n    ...     severity=\"HIGH\"\n    ... )\n    >>> pattern.model_dump()\n    {'pattern': 'requests.get', 'mock_type': 'HTTP_REQUEST', ...}",
+      "properties": {
+        "pattern": {
+          "description": "C\u00f3digo pattern a detectar (ex: 'requests.get')",
+          "minLength": 1,
+          "title": "Pattern",
+          "type": "string"
+        },
+        "type": {
+          "description": "Tipo do mock (HTTP_REQUEST, SUBPROCESS, FILE_IO, etc)",
+          "minLength": 1,
+          "title": "Type",
+          "type": "string"
+        },
+        "mock_template": {
+          "default": "",
+          "description": "Template do c\u00f3digo de mock a aplicar",
+          "title": "Mock Template",
+          "type": "string"
+        },
+        "required_imports": {
+          "description": "Lista de imports necess\u00e1rios para o mock",
+          "items": {
+            "type": "string"
+          },
+          "title": "Required Imports",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "description": "Descri\u00e7\u00e3o leg\u00edvel do padr\u00e3o",
+          "title": "Description",
+          "type": "string"
+        },
+        "severity": {
+          "default": "MEDIUM",
+          "description": "N\u00edvel de severidade (HIGH, MEDIUM, LOW)",
+          "pattern": "^(HIGH|MEDIUM|LOW)$",
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pattern",
+        "type"
+      ],
+      "title": "MockPattern",
+      "type": "object"
+    },
+    "MockPatternsConfig": {
+      "description": "Configura\u00e7\u00e3o de padr\u00f5es de mock organizados por categoria.\n\nAttributes:\n    http_patterns: Padr\u00f5es para requisi\u00e7\u00f5es HTTP\n    subprocess_patterns: Padr\u00f5es para execu\u00e7\u00e3o de processos\n    filesystem_patterns: Padr\u00f5es para opera\u00e7\u00f5es de arquivo\n    database_patterns: Padr\u00f5es para conex\u00f5es de banco de dados",
+      "properties": {
+        "http_patterns": {
+          "description": "Padr\u00f5es para requisi\u00e7\u00f5es HTTP (httpx, requests)",
+          "items": {
+            "$ref": "#/$defs/MockPattern"
+          },
+          "title": "Http Patterns",
+          "type": "array"
+        },
+        "subprocess_patterns": {
+          "description": "Padr\u00f5es para execu\u00e7\u00e3o de processos (subprocess)",
+          "items": {
+            "$ref": "#/$defs/MockPattern"
+          },
+          "title": "Subprocess Patterns",
+          "type": "array"
+        },
+        "filesystem_patterns": {
+          "description": "Padr\u00f5es para opera\u00e7\u00f5es de arquivo (open, pathlib)",
+          "items": {
+            "$ref": "#/$defs/MockPattern"
+          },
+          "title": "Filesystem Patterns",
+          "type": "array"
+        },
+        "database_patterns": {
+          "description": "Padr\u00f5es para conex\u00f5es de banco de dados (sqlite3, etc)",
+          "items": {
+            "$ref": "#/$defs/MockPattern"
+          },
+          "title": "Database Patterns",
+          "type": "array"
+        }
+      },
+      "title": "MockPatternsConfig",
+      "type": "object"
+    },
+    "ReportingConfig": {
+      "description": "Configura\u00e7\u00e3o de relat\u00f3rios.\n\nAttributes:\n    include_low_priority: Incluir sugest\u00f5es de baixa prioridade\n    max_suggestions_display: N\u00famero m\u00e1ximo de sugest\u00f5es a exibir\n    output_format: Formato de sa\u00edda (json, text, markdown)",
+      "properties": {
+        "include_low_priority": {
+          "default": false,
+          "description": "Incluir sugest\u00f5es de baixa prioridade nos relat\u00f3rios",
+          "title": "Include Low Priority",
+          "type": "boolean"
+        },
+        "max_suggestions_display": {
+          "default": 10,
+          "description": "N\u00famero m\u00e1ximo de sugest\u00f5es a exibir",
+          "minimum": 1,
+          "title": "Max Suggestions Display",
+          "type": "integer"
+        },
+        "output_format": {
+          "default": "json",
+          "description": "Formato de sa\u00edda dos relat\u00f3rios",
+          "pattern": "^(json|text|markdown)$",
+          "title": "Output Format",
+          "type": "string"
+        }
+      },
+      "title": "ReportingConfig",
+      "type": "object"
+    }
+  },
+  "description": "Configuration schema for automated test mock generation",
+  "properties": {
+    "version": {
+      "default": "1.0",
+      "description": "Vers\u00e3o da configura\u00e7\u00e3o",
+      "pattern": "^\\d+\\.\\d+$",
+      "title": "Version",
+      "type": "string"
+    },
+    "mock_patterns": {
+      "$ref": "#/$defs/MockPatternsConfig",
+      "description": "Padr\u00f5es de mock organizados por categoria"
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionConfig",
+      "description": "Configura\u00e7\u00f5es de execu\u00e7\u00e3o do Mock CI"
+    },
+    "logging": {
+      "$ref": "#/$defs/LoggingConfig",
+      "description": "Configura\u00e7\u00f5es de logging"
+    },
+    "reporting": {
+      "$ref": "#/$defs/ReportingConfig",
+      "description": "Configura\u00e7\u00f5es de relat\u00f3rio"
+    }
+  },
+  "required": [
+    "mock_patterns",
+    "execution",
+    "logging",
+    "reporting"
+  ],
+  "title": "Mock CI Configuration",
+  "type": "object"
+}

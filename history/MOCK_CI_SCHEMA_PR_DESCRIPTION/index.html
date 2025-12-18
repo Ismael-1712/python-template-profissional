@@ -6,8 +6,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Pull Request description for Mock CI Schema Pydantic V2 implementation">
       
-        <meta name="author" content="Engineering Team">
+      
+        <meta name="author" content="DevOps Engineering Team">
       
       
       
@@ -21,7 +23,7 @@
     
     
       
-        <title>📂 CORTEX - Árvore de Arquivos Proposta - Python Template Profissional</title>
+        <title>feat(mock-ci): Implement Pydantic V2 Config Schema with Full Validation - Python Template Profissional</title>
       
     
     
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cortex-arvore-de-arquivos-proposta" class="md-skip">
+        <a href="#featmock-ci-implement-pydantic-v2-config-schema-with-full-validation" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📂 CORTEX - Árvore de Arquivos Proposta
+              feat(mock-ci): Implement Pydantic V2 Config Schema with Full Validation
             
           </span>
         </div>
@@ -542,66 +544,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#estrutura-completa" class="md-nav__link">
+  <a href="#descricao" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🌳 ESTRUTURA COMPLETA
+        📋 Descrição
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dependencias-entre-arquivos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🎯 DEPENDÊNCIAS ENTRE ARQUIVOS
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="🎯 DEPENDÊNCIAS ENTRE ARQUIVOS">
+    <nav class="md-nav" aria-label="📋 Descrição">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sprint-1-foundation" class="md-nav__link">
+  <a href="#objetivos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sprint 1: Foundation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sprint-2-validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sprint 2: Validation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sprint-3-migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sprint 3: Migration
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sprint-4-automation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sprint 4: Automation
+        🎯 Objetivos
       
     </span>
   </a>
@@ -614,22 +572,34 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ordem-de-criacao-recomendada" class="md-nav__link">
+  <a href="#mudancas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚀 ORDEM DE CRIAÇÃO RECOMENDADA
+        🔄 Mudanças
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🚀 ORDEM DE CRIAÇÃO RECOMENDADA">
+    <nav class="md-nav" aria-label="🔄 Mudanças">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fase-0-setup-30-minutos" class="md-nav__link">
+  <a href="#arquivos-modificados" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 0: Setup (30 minutos)
+        Arquivos Modificados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arquivos Modificados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scriptscoremock_cimodels_pydanticpy-reescrito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ scripts/core/mock_ci/models_pydantic.py (Reescrito)
       
     </span>
   </a>
@@ -637,10 +607,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fase-1-core-6-horas" class="md-nav__link">
+  <a href="#scriptscoremock_generatorpy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 1: Core (6 horas)
+        ✅ scripts/core/mock_generator.py
       
     </span>
   </a>
@@ -648,10 +618,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fase-2-testes-3-horas" class="md-nav__link">
+  <a href="#teststest_mock_config_schemapy-novo-tdd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 2: Testes (3 horas)
+        ✅ tests/test_mock_config_schema.py (Novo - TDD)
       
     </span>
   </a>
@@ -659,43 +629,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fase-3-cli-basica-2-horas" class="md-nav__link">
+  <a href="#docsreferencemock_ci_schemajson-gerado" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 3: CLI Básica (2 horas)
+        ✅ docs/reference/MOCK_CI_SCHEMA.json (Gerado)
       
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#fase-4-scanner-5-horas" class="md-nav__link">
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 4: Scanner (5 horas)
+        🚨 Breaking Changes
       
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="🚨 Breaking Changes">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fase-5-migracao-14-horas" class="md-nav__link">
+  <a href="#campo-mock_type-type" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fase 5: Migração (14 horas)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#fase-6-automacao-3-horas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fase 6: Automação (3 horas)
+        Campo mock_type → type
       
     </span>
   </a>
@@ -708,10 +678,165 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#validacao-final" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ✅ VALIDAÇÃO FINAL
+        ✨ Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✨ Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-hierarquia-de-modelos-pydantic-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Hierarquia de Modelos Pydantic V2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-enums-para-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Enums para Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-validacao-automatica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Validação Automática
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-geracao-de-schema-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Geração de Schema JSON
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Resultados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Resultados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-qualidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Checklist de Qualidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Documentação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-passos-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Próximos Passos (Opcional)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#relacionado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 Relacionado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-testar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Como Testar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pronto-para-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Pronto para Merge
       
     </span>
   </a>
@@ -735,179 +860,193 @@
 
 
 
-<h1 id="cortex-arvore-de-arquivos-proposta">📂 CORTEX - Árvore de Arquivos Proposta</h1>
-<p><strong>Referência:</strong> <a href="../CORTEX_FASE01_DESIGN/">CORTEX_FASE01_DESIGN.md</a>
-<strong>Data:</strong> 2025-11-30</p>
-<h2 id="estrutura-completa">🌳 ESTRUTURA COMPLETA</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python-template-profissional/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── 📝 pyproject.toml                          # Adicionar dependências + entry point
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── 📝 .pre-commit-config.yaml                 # Sprint 4: Adicionar hook cortex-audit
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── .github/
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   └── workflows/
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│       └── 🆕 docs-validation.yml             # Sprint 4: CI/CD para validação
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── scripts/
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── 🆕 cortex_migrate.py                   # Sprint 3: Script de migração standalone
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── cli/
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   │   └── 🆕 cortex.py                       # Sprint 1 &amp; 2 &amp; 4: Interface Typer
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   └── core/
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│       └── 📁 cortex/                         # Módulo Core do CORTEX
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│           ├── 🆕 __init__.py                 # Sprint 1: Módulo marker
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│           ├── 🆕 models.py                   # Sprint 1: Data Classes
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│           ├── 🆕 metadata.py                 # Sprint 1: Parser de Frontmatter
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│           ├── 🆕 scanner.py                  # Sprint 2: Validador de Links
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│           └── 🆕 config.py                   # Sprint 1: Configuração padrão
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├── tests/
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│   ├── 🆕 test_cortex_metadata.py             # Sprint 1: Testes do parser
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│   ├── 🆕 test_cortex_scanner.py              # Sprint 2: Testes do scanner
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│   │
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│   └── fixtures/
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│       └── 📁 sample_docs/                    # Sprint 1: Markdown samples
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│           ├── 🆕 valid_guide.md              # Fixture: Doc válido tipo guide
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│           ├── 🆕 valid_arch.md               # Fixture: Doc válido tipo arch
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│           ├── 🆕 invalid_missing_id.md       # Fixture: Doc sem campo id
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│           ├── 🆕 invalid_bad_semver.md       # Fixture: Doc com version inválida
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│           └── 🆕 no_frontmatter.md           # Fixture: Doc sem Frontmatter
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>└── docs/                                      # Sprint 3: Migrar TODOS os .md
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    ├── 📝 index.md                            # Adicionar Frontmatter
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    ├── 📝 README.md                           # Adicionar Frontmatter
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    ├── 📝 README_test_mock_system.md          # Adicionar Frontmatter
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    │
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    ├── architecture/
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    │   ├── 📝 ARCHITECTURE_TRIAD.md           # Adicionar Frontmatter
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    │   ├── 📝 TRIAD_GOVERNANCE.md             # Adicionar Frontmatter
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    │   ├── 📝 AUDIT_DASHBOARD_INTEGRATION.md  # Adicionar Frontmatter
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    │   ├── 📝 CODE_AUDIT.md                   # Adicionar Frontmatter
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    │   ├── CORTEX_FASE01_DESIGN.md            # JÁ TEM Frontmatter (criado neste PR)
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    │   ├── CORTEX_RESUMO_EXECUTIVO.md         # SEM Frontmatter (criado neste PR)
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    │   ├── CORTEX_CHECKLIST_IMPLEMENTACAO.md  # SEM Frontmatter (criado neste PR)
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    │   └── CORTEX_ARVORE_ARQUIVOS.md          # SEM Frontmatter (este arquivo)
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    │
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    ├── guides/
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    │   ├── 📝 SMART_GIT_SYNC_GUIDE.md         # Adicionar Frontmatter
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    │   └── 📝 testing.md                      # Adicionar Frontmatter
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    │
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    ├── reference/
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    │   └── 📝 git_sync.md                     # Adicionar Frontmatter
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    │
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    └── history/
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>        └── sprint_1_foundation/
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>            ├── 📝 FASE01_DISCOVERY_CEGUEIRA_FERRAMENTA.md
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>            ├── 📝 SPRINT1_README.md
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>            ├── 📝 P26_REFATORACAO_SCRIPTS_FASE01.md
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>            └── ... (20+ arquivos a migrar)
-</code></pre></div>
-<h2 id="dependencias-entre-arquivos">🎯 DEPENDÊNCIAS ENTRE ARQUIVOS</h2>
-<h3 id="sprint-1-foundation">Sprint 1: Foundation</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>models.py (independente)
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    ↓
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>metadata.py (depende de models.py)
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ↓
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>test_cortex_metadata.py (depende de models.py + metadata.py)
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ↓
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>cortex.py (init command) (depende de metadata.py)
-</code></pre></div>
-<h3 id="sprint-2-validation">Sprint 2: Validation</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>scanner.py (depende de models.py)
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    ↓
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>test_cortex_scanner.py (depende de scanner.py)
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    ↓
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>cortex.py (audit command) (depende de metadata.py + scanner.py)
-</code></pre></div>
-<h3 id="sprint-3-migration">Sprint 3: Migration</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cortex_migrate.py (depende de metadata.py + scanner.py)
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    ↓
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Migração manual de docs/ (usa cortex_migrate.py)
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    ↓
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>Validação (usa cortex.py audit)
-</code></pre></div>
-<h3 id="sprint-4-automation">Sprint 4: Automation</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>.pre-commit-config.yaml (usa cortex.py audit)
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>docs-validation.yml (usa cortex.py audit)
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>cortex.py (report command) (depende de scanner.py)
-</code></pre></div>
-<h2 id="ordem-de-criacao-recomendada">🚀 ORDEM DE CRIAÇÃO RECOMENDADA</h2>
-<h3 id="fase-0-setup-30-minutos">Fase 0: Setup (30 minutos)</h3>
-<ol>
-<li>Atualizar <code>pyproject.toml</code></li>
-<li>Executar <code>pip install -e .[dev]</code></li>
-<li>Criar diretórios: <code>scripts/core/cortex/</code>, <code>tests/fixtures/sample_docs/</code></li>
-</ol>
-<h3 id="fase-1-core-6-horas">Fase 1: Core (6 horas)</h3>
-<ol>
-<li>Criar <code>scripts/core/cortex/__init__.py</code></li>
-<li>Criar <code>scripts/core/cortex/models.py</code> ✅ <strong>BASE</strong></li>
-<li>Criar <code>scripts/core/cortex/config.py</code></li>
-<li>Criar <code>scripts/core/cortex/metadata.py</code> ✅ <strong>CRÍTICO</strong></li>
-<li>Criar fixtures em <code>tests/fixtures/sample_docs/</code></li>
-</ol>
-<h3 id="fase-2-testes-3-horas">Fase 2: Testes (3 horas)</h3>
-<ol>
-<li>Criar <code>tests/test_cortex_metadata.py</code> ✅ <strong>VALIDAÇÃO</strong></li>
-<li>Executar testes: <code>pytest tests/test_cortex_metadata.py -v</code></li>
-</ol>
-<h3 id="fase-3-cli-basica-2-horas">Fase 3: CLI Básica (2 horas)</h3>
-<ol>
-<li>Criar <code>scripts/cli/cortex.py</code> (comando <code>init</code> apenas)</li>
-<li>Testar manualmente: <code>cortex init docs/test.md</code></li>
-</ol>
-<h3 id="fase-4-scanner-5-horas">Fase 4: Scanner (5 horas)</h3>
-<ol>
-<li>Criar <code>scripts/core/cortex/scanner.py</code> ✅ <strong>CRÍTICO</strong></li>
-<li>Criar <code>tests/test_cortex_scanner.py</code></li>
-<li>Atualizar <code>scripts/cli/cortex.py</code> (comando <code>audit</code>)</li>
-</ol>
-<h3 id="fase-5-migracao-14-horas">Fase 5: Migração (14 horas)</h3>
-<ol>
-<li>Criar <code>scripts/cortex_migrate.py</code></li>
-<li>Testar em 1-2 arquivos manualmente</li>
-<li>Migrar <code>docs/</code> completo</li>
-<li>Validar com <code>cortex audit docs/</code></li>
-</ol>
-<h3 id="fase-6-automacao-3-horas">Fase 6: Automação (3 horas)</h3>
-<ol>
-<li>Atualizar <code>.pre-commit-config.yaml</code></li>
-<li>Criar <code>.github/workflows/docs-validation.yml</code></li>
-<li>Atualizar <code>scripts/cli/cortex.py</code> (comando <code>report</code>)</li>
-</ol>
-<p>id: example-guide
-type: guide
-status: active
-version: 1.0.0
-author: Test Author
-date: 2025-11-30
-context_tags:</p>
+<h1 id="featmock-ci-implement-pydantic-v2-config-schema-with-full-validation">feat(mock-ci): Implement Pydantic V2 Config Schema with Full Validation</h1>
+<h2 id="descricao">📋 Descrição</h2>
+<p>Implementa Single Source of Truth para configuração do Mock CI usando Pydantic V2, eliminando 16 warnings de deprecation e estabelecendo validação estrita de schema.</p>
+<h3 id="objetivos">🎯 Objetivos</h3>
 <ul>
-<li>testing</li>
-<li>example
-linked_code:</li>
-<li>scripts/cli/cortex.py</li>
+<li>[x] Eliminar warnings de deprecation do Pydantic V2</li>
+<li>[x] Criar hierarquia completa de modelos de configuração</li>
+<li>[x] Validar YAML contra schema estrito</li>
+<li>[x] Gerar JSON Schema para documentação/IDEs</li>
+<li>[x] Manter retrocompatibilidade</li>
 </ul>
-<h2 id="validacao-final">✅ VALIDAÇÃO FINAL</h2>
-<p><strong>Antes de considerar o CORTEX completo, validar:</strong></p>
+<h2 id="mudancas">🔄 Mudanças</h2>
+<h3 id="arquivos-modificados">Arquivos Modificados</h3>
+<h4 id="scriptscoremock_cimodels_pydanticpy-reescrito">✅ <code>scripts/core/mock_ci/models_pydantic.py</code> (Reescrito)</h4>
 <ul>
-<li>[ ] Todos os 15 arquivos novos foram criados</li>
-<li>[ ] <code>pyproject.toml</code> foi atualizado com dependências</li>
-<li>[ ] Todos os 30+ arquivos <code>.md</code> têm Frontmatter</li>
-<li>[ ] <code>pytest tests/test_cortex_*.py -v</code> passa (100% dos testes)</li>
-<li>[ ] <code>ruff check scripts/core/cortex/ scripts/cli/cortex.py</code> passa</li>
-<li>[ ] <code>mypy scripts/core/cortex/ scripts/cli/cortex.py</code> passa</li>
-<li>[ ] <code>mkdocs build --strict</code> passa</li>
-<li>[ ] <code>cortex audit docs/</code> retorna 0 erros</li>
-<li>[ ] Pre-commit hook funciona</li>
-<li>[ ] CI/CD workflow está verde</li>
+<li><strong>Antes:</strong> 1 classe com deprecation warning</li>
+<li><strong>Depois:</strong> 8 classes (5 modelos + 3 enums) sem warnings</li>
+<li>Migração de <code>class Config</code> → <code>model_config = ConfigDict()</code></li>
+<li>Adição de alias <code>type</code> para compatibilidade com YAML</li>
+</ul>
+<h4 id="scriptscoremock_generatorpy">✅ <code>scripts/core/mock_generator.py</code></h4>
+<ul>
+<li>Atualizado para usar alias <code>type</code> ao invés de <code>mock_type</code></li>
+</ul>
+<h4 id="teststest_mock_config_schemapy-novo-tdd">✅ <code>tests/test_mock_config_schema.py</code> (Novo - TDD)</h4>
+<ul>
+<li>Teste RED → GREEN</li>
+<li>Valida que <code>scripts/test_mock_config.yaml</code> é compatível com o schema</li>
+</ul>
+<h4 id="docsreferencemock_ci_schemajson-gerado">✅ <code>docs/reference/MOCK_CI_SCHEMA.json</code> (Gerado)</h4>
+<ul>
+<li>JSON Schema completo (217 linhas)</li>
+<li>Usado para autocomplete em IDEs</li>
+</ul>
+<h2 id="breaking-changes">🚨 Breaking Changes</h2>
+<h3 id="campo-mock_type-type">Campo <code>mock_type</code> → <code>type</code></h3>
+<p><strong>Mitigação Implementada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">mock_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">populate_by_name</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Retrocompatibilidade Garantida:</strong></p>
+<ul>
+<li>✅ Código antigo: <code>MockPattern(mock_type="HTTP")</code> → <strong>FUNCIONA</strong></li>
+<li>✅ Código novo: <code>MockPattern(type="HTTP")</code> → <strong>FUNCIONA</strong></li>
+<li>✅ YAML: <code>type: "HTTP"</code> → <strong>FUNCIONA</strong></li>
+</ul>
+<h2 id="features">✨ Features</h2>
+<h3 id="1-hierarquia-de-modelos-pydantic-v2">1. Hierarquia de Modelos Pydantic V2</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>MockCIConfig (ROOT)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── version: str
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── mock_patterns: MockPatternsConfig
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── http_patterns: List[MockPattern]
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── subprocess_patterns: List[MockPattern]
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── filesystem_patterns: List[MockPattern]
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   └── database_patterns: List[MockPattern]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>├── execution: ExecutionConfig
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>├── logging: LoggingConfig
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>└── reporting: ReportingConfig
+</code></pre></div>
+<h3 id="2-enums-para-validacao">2. Enums para Validação</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">SeverityLevel</span> <span class="p">(</span><span class="n">HIGH</span><span class="p">,</span> <span class="n">MEDIUM</span><span class="p">,</span> <span class="n">LOW</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">LogLevel</span> <span class="p">(</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">INFO</span><span class="p">,</span> <span class="n">WARNING</span><span class="p">,</span> <span class="n">ERROR</span><span class="p">,</span> <span class="n">CRITICAL</span><span class="p">)</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">OutputFormat</span> <span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">markdown</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="3-validacao-automatica">3. Validação Automática</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># ❌ ANTES: Qualquer valor aceito</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;INVALID&quot;</span><span class="p">}</span>  <span class="c1"># Sem erro</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># ✅ DEPOIS: Validação estrita</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;INVALID&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># ValidationError: String should match pattern &#39;^\d+\.\d+$&#39;</span>
+</code></pre></div>
+<h3 id="4-geracao-de-schema-json">4. Geração de Schema JSON</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts.core.mock_ci.models_pydantic import generate_schema_json; print(generate_schema_json())&quot;</span>
+</code></pre></div>
+<h2 id="resultados">📊 Resultados</h2>
+<h3 id="testes">Testes</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>✅<span class="w"> </span>pytest<span class="w"> </span>tests/test_mock_config_schema.py<span class="w"> </span>→<span class="w"> </span>PASSED
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>✅<span class="w"> </span>make<span class="w"> </span>validate<span class="w"> </span>→<span class="w"> </span>ALL<span class="w"> </span>CHECKS<span class="w"> </span>PASSED
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">   </span>•<span class="w"> </span>ruff:<span class="w"> </span><span class="m">0</span><span class="w"> </span>erros
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">   </span>•<span class="w"> </span>mypy:<span class="w"> </span><span class="m">0</span><span class="w"> </span>erros<span class="w"> </span><span class="o">(</span><span class="m">140</span><span class="w"> </span>arquivos<span class="o">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">   </span>•<span class="w"> </span>pytest:<span class="w"> </span><span class="m">455</span>/455<span class="w"> </span>passando
+</code></pre></div>
+<h3 id="metricas">Métricas</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Antes</th>
+<th>Depois</th>
+<th>Melhoria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warnings Pydantic</td>
+<td>16</td>
+<td>0</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Testes Passando</td>
+<td>454/454</td>
+<td>455/455</td>
+<td>+1 teste</td>
+</tr>
+<tr>
+<td>Classes de Config</td>
+<td>1</td>
+<td>8</td>
+<td>+700%</td>
+</tr>
+<tr>
+<td>Validação de YAML</td>
+<td>❌ Nenhuma</td>
+<td>✅ Completa</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checklist-de-qualidade">🔍 Checklist de Qualidade</h2>
+<ul>
+<li>[x] Todos os testes passando (455/455)</li>
+<li>[x] Ruff: 0 erros</li>
+<li>[x] Mypy: 0 erros</li>
+<li>[x] Pre-commit hooks: Todos OK</li>
+<li>[x] CORTEX Audit: PASSED</li>
+<li>[x] Documentação atualizada</li>
+<li>[x] Relatório técnico criado</li>
+</ul>
+<h2 id="documentacao">📚 Documentação</h2>
+<ul>
+<li><a href="docs/reports/MOCK_CI_SCHEMA_IMPLEMENTATION_REPORT.md">Relatório Técnico</a></li>
+<li><a href="docs/reference/MOCK_CI_SCHEMA.json">JSON Schema</a></li>
+<li>Docstrings completas em todos os modelos</li>
+</ul>
+<h2 id="proximos-passos-opcional">🎯 Próximos Passos (Opcional)</h2>
+<ol>
+<li><strong>VSCode YAML Extension:</strong></li>
+<li>Adicionar <code>$schema</code> no YAML</li>
+<li>
+<p>Configurar autocomplete no editor</p>
+</li>
+<li>
+<p><strong>Documentação MkDocs:</strong></p>
+</li>
+<li>
+<p>Auto-gerar docs dos modelos Pydantic</p>
+</li>
+<li>
+<p><strong>Validação em CI:</strong></p>
+</li>
+<li>Adicionar teste de validação do YAML no CI</li>
+</ol>
+<h2 id="relacionado">🔗 Relacionado</h2>
+<ul>
+<li>Fase: <strong>Fase 02 - TDD GREEN</strong></li>
+<li>Issue: <code>#TDD-PHASE-02</code></li>
+<li>Branch: <code>feat/mock-ci-config-schema</code></li>
+<li>Commit: <code>e4c5912</code></li>
+</ul>
+<h2 id="como-testar">🧪 Como Testar</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># 1. Checkout da branch</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>git<span class="w"> </span>checkout<span class="w"> </span>feat/mock-ci-config-schema
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># 2. Rodar teste específico</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>python3<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/test_mock_config_schema.py<span class="w"> </span>-v
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># 3. Validar tudo</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>make<span class="w"> </span>validate
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># 4. Gerar schema JSON</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from scripts.core.mock_ci.models_pydantic import generate_schema_json; print(generate_schema_json())&quot;</span>
+</code></pre></div>
+<h2 id="pronto-para-merge">✅ Pronto para Merge</h2>
+<ul>
+<li>[x] Código implementado</li>
+<li>[x] Testes passando</li>
+<li>[x] Linting OK</li>
+<li>[x] Type checking OK</li>
+<li>[x] Documentação completa</li>
+<li>[x] Relatório técnico gerado</li>
+<li>[x] Retrocompatibilidade garantida</li>
 </ul>
 <hr />
-<p><strong>Última Atualização:</strong> 2025-11-30
-<strong>Referência:</strong> <a href="../CORTEX_FASE01_DESIGN/">CORTEX_FASE01_DESIGN.md</a></p>
+<p><strong>Reviewer:</strong> Aguardando aprovação
+<strong>Status:</strong> ✅ READY TO MERGE</p>
 
 
 
