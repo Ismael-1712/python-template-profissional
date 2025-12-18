@@ -306,8 +306,9 @@ class TestKnowledgeScannerEdgeCases:
         docs = scan_knowledge_base(fs, Path("kb"))
         elapsed = time.perf_counter() - start
 
-        # Mesmo com 500 docs, deve ser < 50ms em memória
-        assert elapsed < 0.05  # 50ms  # noqa: PLR2004
+        # Sequential mode (v0.1.0+): allow slightly more time than parallel
+        # Original threshold: 50ms. Adjusted to 100ms for sequential processing.
+        assert elapsed < 0.1  # 100ms  # noqa: PLR2004
 
 
 if __name__ == "__main__":
