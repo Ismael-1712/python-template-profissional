@@ -19,6 +19,10 @@ import logging
 import sys
 from pathlib import Path
 
+import yaml
+from pydantic import ValidationError
+
+from scripts.core.mock_ci.models_pydantic import MockCIConfig
 from scripts.core.mock_generator import TestMockGenerator
 from scripts.utils.banner import print_startup_banner
 from scripts.utils.context import trace_context
@@ -117,7 +121,26 @@ Examples:
             logger.error("Ensure 'test_mock_config.yaml' is in scripts/ directory")
             return 1
 
-        generator = TestMockGenerator(workspace, config_file)
+        # Load and validate config with Pydantic (Top-Down Injection)
+        try:
+            with config_file.open("r", encoding="utf-8") as f:
+                config_data = yaml.safe_load(f)
+
+            # Automatic validation via Pydantic
+            config = MockCIConfig.model_validate(config_data)
+            logger.info("✅ YAML configuration validated successfully")
+
+        except ValidationError as e:
+            logger.error("❌ Validation error in YAML configuration:")
+            for error in e.errors():
+                loc = " -> ".join(str(x) for x in error["loc"])
+                logger.error(f"  [{loc}]: {error['msg']}")
+            return 1
+        except Exception as e:
+            logger.error(f"❌ Error loading configuration: {e}")
+            return 1
+
+        generator = TestMockGenerator(workspace, config)
 
         # Execute requested actions
         if args.scan:
