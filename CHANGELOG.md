@@ -4,6 +4,29 @@
 
 ### Added
 
+- **TOML Fusion - Intelligent TOML File Merger**: New tool for merging pyproject.toml files while preserving comments and formatting
+  - Implemented `scripts/utils/toml_merger.py` core library using `tomlkit` for style-preserving parsing
+  - Created `scripts/cli/fusion.py` CLI with typer for user-friendly interface
+  - Added new command: `toml-fusion` registered in [project.scripts]
+  - Features:
+    - Smart merge strategy: union lists, recursive dict merge, version conflict resolution
+    - Comment preservation (section, inline, and block comments)
+    - Three merge strategies: `smart` (default), `template`, `user`
+    - Automatic backup creation with timestamp (`.bak.YYYYMMDD_HHMMSS`)
+    - Dry-run mode (`--dry-run`) with colored diff preview
+    - Custom output path support (`--output`)
+  - Comprehensive TDD test suite with 15 test cases covering:
+    - Critical comment preservation
+    - List merging with union + deduplication
+    - Version conflict resolution (e.g., `pydantic>=2.0` vs `>=2.5`)
+    - Recursive dictionary merge
+    - Backup creation and dry-run behavior
+    - Error handling for invalid TOML and missing files
+  - Use cases:
+    - Template updates without losing user customizations
+    - Syncing project configs across teams
+    - Merging dependency lists from multiple sources
+
 - **User Control for Parallel Processing**: Exposed experimental parallel mode via CLI
   - Added `--parallel` / `--experimental-parallel` flag to `cortex knowledge-scan` command
   - Allows users with high-performance hardware to opt-in to parallel processing
