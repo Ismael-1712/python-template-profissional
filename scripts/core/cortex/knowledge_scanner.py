@@ -55,20 +55,26 @@ class KnowledgeScanner:
         self,
         workspace_root: Path,
         fs: FileSystemAdapter | None = None,
+        force_parallel: bool = False,
     ) -> None:
         """Initialize the Knowledge Scanner.
 
         Args:
             workspace_root: Root directory of the workspace
             fs: FileSystemAdapter implementation (defaults to RealFileSystem)
+            force_parallel: Force parallel processing (experimental).
+                           If True, uses parallel processing for 10+ files.
+                           If False (default), uses sequential processing.
         """
         self.workspace_root = workspace_root
         self.fs = fs or RealFileSystem()
+        self.force_parallel = force_parallel
         self.link_analyzer = LinkAnalyzer()
         self.frontmatter_parser = FrontmatterParser(fs=self.fs)
         logger.debug(
-            "KnowledgeScanner initialized for workspace: %s",
+            "KnowledgeScanner initialized for workspace: %s (parallel=%s)",
             workspace_root,
+            force_parallel,
         )
 
     def scan(self, knowledge_dir: Path | None = None) -> list[KnowledgeEntry]:
@@ -132,20 +138,27 @@ class KnowledgeScanner:
 
         entries: list[KnowledgeEntry] = []
 
-        # Parallelism disabled due to GIL overhead (PERFORMANCE_NOTES.md).
+        # Parallelism disabled by default due to GIL overhead (PERFORMANCE_NOTES.md).
         # Benchmarks show 34% regression (0.66x) with ThreadPoolExecutor.
-        # Sequential processing used until multiprocessing implementation.
-        # Original threshold: 10 files -> now sys.maxsize (disabled).
-        parallel_threshold = sys.maxsize  # Effectively disabled (was: 10)
+        # Sequential processing used unless explicitly enabled via force_parallel.
+        # Users can opt-in via CLI flag --parallel for experimental parallel mode.
+        if self.force_parallel:
+            parallel_threshold = 10  # Original threshold: enable for 10+ files
+        else:
+            parallel_threshold = sys.maxsize  # Effectively disabled
 
         # Use parallel processing for large sets of files
         if len(markdown_files) >= parallel_threshold:
             # Determine optimal number of workers
             max_workers = min(4, os.cpu_count() or 1)
-            logger.debug(
-                "Using parallel processing with %d workers for %d files",
+            logger.info(
+                "🚀 Running in EXPERIMENTAL PARALLEL mode (%d workers)",
                 max_workers,
+            )
+            logger.debug(
+                "Processing %d files with %d workers (GIL may impact performance)",
                 len(markdown_files),
+                max_workers,
             )
 
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -180,10 +193,17 @@ class KnowledgeScanner:
                         )
         else:
             # Sequential processing for small sets (avoid thread overhead)
-            logger.debug(
-                "Using sequential processing for %d files",
-                len(markdown_files),
-            )
+            if not self.force_parallel:
+                logger.debug(
+                    "Running in standard sequential mode (%d files) - "
+                    "using sequential processing",
+                    len(markdown_files),
+                )
+            else:
+                logger.debug(
+                    "Using sequential processing for %d files (below threshold)",
+                    len(markdown_files),
+                )
             for file_path in markdown_files:
                 entry = self._parse_knowledge_file_safe(file_path)
                 if entry is not None:

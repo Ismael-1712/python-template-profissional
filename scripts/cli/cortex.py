@@ -897,6 +897,18 @@ def knowledge_scan(
             help="Show detailed information about each entry",
         ),
     ] = False,
+    parallel: Annotated[
+        bool,
+        typer.Option(
+            "--parallel",
+            "--experimental-parallel",
+            help=(
+                "Force parallel processing (EXPERIMENTAL). "
+                "May cause performance regression on some systems due to GIL overhead. "
+                "Use for large datasets or high-performance hardware."
+            ),
+        ),
+    ] = False,
 ) -> None:
     """Scan and validate the Knowledge Base (docs/knowledge).
 
@@ -912,8 +924,9 @@ def knowledge_scan(
     - sources: (optional) External reference URLs
 
     Examples:
-        cortex knowledge-scan              # Scan knowledge base
+        cortex knowledge-scan              # Scan knowledge base (sequential mode)
         cortex knowledge-scan --verbose    # Show detailed info
+        cortex knowledge-scan --parallel   # Use experimental parallel mode
     """
     try:
         workspace_root = Path.cwd()
@@ -923,8 +936,25 @@ def knowledge_scan(
         typer.echo(f"Workspace: {workspace_root}")
         typer.echo("Knowledge Directory: docs/knowledge/\n")
 
+        # Show mode indicator
+        if parallel:
+            typer.secho(
+                "⚡ Mode: EXPERIMENTAL PARALLEL",
+                fg=typer.colors.YELLOW,
+                bold=True,
+            )
+            typer.secho(
+                "   (GIL may impact performance on some systems)\n",
+                fg=typer.colors.YELLOW,
+            )
+        else:
+            typer.echo("📋 Mode: Standard Sequential\n")
+
         # Instantiate scanner and scan
-        scanner = KnowledgeScanner(workspace_root=workspace_root)
+        scanner = KnowledgeScanner(
+            workspace_root=workspace_root,
+            force_parallel=parallel,
+        )
         entries = scanner.scan()
 
         # Display results
