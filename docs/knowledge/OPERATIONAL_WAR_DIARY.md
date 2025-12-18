@@ -7,6 +7,9 @@ author: SRE Team
 date: '2025-12-16'
 tags: [technical-debt, troubleshooting, lessons-learned, operations]
 context_tags: [dx, debugging, known-issues]
+golden_paths:
+  - "scripts/cli/doctor.py -> docs/knowledge/OPERATIONAL_WAR_DIARY.md"
+  - "scripts/maintain_versions.py -> docs/knowledge/OPERATIONAL_WAR_DIARY.md"
 linked_code:
   - scripts/cli/doctor.py
   - scripts/maintain_versions.py
