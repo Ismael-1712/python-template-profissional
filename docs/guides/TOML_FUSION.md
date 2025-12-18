@@ -76,10 +76,12 @@ toml-fusion SOURCE TARGET [OPTIONS]
 ```
 
 **Arguments:**
+
 - `SOURCE`: Template TOML file (to merge from)
 - `TARGET`: Project TOML file (to merge into)
 
 **Options:**
+
 - `--output, -o PATH`: Write to different file (default: overwrites TARGET)
 - `--strategy, -s NAME`: Merge strategy (smart, template, user)
 - `--dry-run, -n`: Preview changes without modifying files
@@ -144,6 +146,7 @@ toml-fusion template/pyproject.toml pyproject.toml -o merged.toml
 ### Smart (Default) - `--strategy=smart`
 
 **Behavior:**
+
 - **Lists**: Union with deduplication + version resolution
 - **Dicts**: Recursive merge
 - **Scalars**: Template value wins
@@ -189,6 +192,7 @@ dependencies = ["pydantic>=2.5.0"]
 ```
 
 **Algorithm:**
+
 1. Extract version numbers using regex
 2. Parse and compare semantic versions
 3. Choose the more restrictive/higher version
@@ -198,6 +202,7 @@ dependencies = ["pydantic>=2.5.0"]
 TOML Fusion uses `tomlkit` to preserve:
 
 ✅ **Section comments:**
+
 ```toml
 # This is my custom configuration
 [tool.mypy]
@@ -205,11 +210,13 @@ strict = true
 ```
 
 ✅ **Inline comments:**
+
 ```toml
 line-length = 88  # Black standard
 ```
 
 ✅ **Array comments:**
+
 ```toml
 ignore = [
     "D203",  # one-blank-line-before-class
@@ -240,6 +247,7 @@ toml-fusion source.toml target.toml --dry-run
 ```
 
 **Output:**
+
 - ✅ Success/failure status
 - 📊 Colored unified diff
 - ⚠️ No file modifications
@@ -247,11 +255,13 @@ toml-fusion source.toml target.toml --dry-run
 ### Error Handling
 
 TOML Fusion validates:
+
 - File existence
 - TOML syntax validity
 - Write permissions
 
 **Errors are reported clearly:**
+
 ```
 ❌ Merge failed!
    • Source file not found: template.toml
@@ -297,11 +307,12 @@ Add to `Makefile`:
 ```makefile
 .PHONY: upgrade-toml
 upgrade-toml:  ## Update pyproject.toml from template
-	@toml-fusion templates/pyproject.toml pyproject.toml --backup
-	@echo "✅ pyproject.toml updated from template"
+ @toml-fusion templates/pyproject.toml pyproject.toml --backup
+ @echo "✅ pyproject.toml updated from template"
 ```
 
 Usage:
+
 ```bash
 make upgrade-toml
 ```
@@ -341,6 +352,7 @@ pytest tests/test_toml_merger.py -v
 **Cause:** Rare edge case with tomlkit serialization.
 
 **Solution:**
+
 1. Check `result.success` before using output
 2. Use `--dry-run` to preview
 3. Report issue with sample TOML files
@@ -352,6 +364,7 @@ pytest tests/test_toml_merger.py -v
 **Cause:** Target file is read-only or insufficient permissions.
 
 **Solution:**
+
 ```bash
 chmod u+w pyproject.toml
 toml-fusion template.toml pyproject.toml
@@ -368,6 +381,7 @@ toml-fusion template.toml pyproject.toml
 Found a bug or have a feature request? Open an issue!
 
 **Areas for improvement:**
+
 - Better version conflict resolution (use `packaging.specifiers`)
 - Interactive merge mode (prompt on conflicts)
 - Configuration file for merge rules
