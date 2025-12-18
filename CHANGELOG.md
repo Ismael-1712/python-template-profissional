@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Integration Tests for CORTEX Pipeline**: Comprehensive end-to-end tests for Scan → Resolve → Context flow
+  - New test suite `tests/test_cortex_integration.py` covering complete pipeline
+  - Tests JSON serialization/deserialization roundtrip with `model_dump()` and `model_validate()`
+  - Tests broken link detection and multi-node cross-referencing
+  - Tests ProjectMapper context generation with knowledge entries statistics
+  - Validates that link resolution correctly identifies VALID vs BROKEN status
+- **Strict Schema Validation for Knowledge Nodes**: Enhanced metadata validation in `scripts/core/cortex/metadata.py`
+  - Knowledge Nodes now MUST have `golden_paths` field (cannot be missing or empty)
+  - Added conditional validation: `if metadata.get("type") == "knowledge"` checks for required field
+  - Error messages: "Knowledge Nodes MUST have 'golden_paths' field" and "non-empty 'golden_paths' list"
+  - Centralizes business rule enforcement at parser level, protecting entire system
+  - Non-knowledge documents (guide, arch, reference) remain unaffected
+
 ### Refactored
 
 - **CORTEX Scanners Unification**: Eliminada duplicação de lógica de parsing e migração completa para Pydantic v2
