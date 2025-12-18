@@ -28,6 +28,7 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 from scripts.utils.toml_merger import (  # noqa: E402
+    ConflictDecision,
     MergeStrategy,
     TOMLMerger,
     merge_toml,
@@ -565,3 +566,180 @@ def test_preserve_toml_formatting(
 
     # Should preserve trailing comma in list
     assert '"pydantic",\n]' in merged_content or "'pydantic',\n]" in merged_content
+
+
+# ======================================================================
+# TEST: INTERACTIVE MODE WITH CALLBACK
+# ======================================================================
+def test_interactive_strategy_with_callback(
+    temp_toml_files: tuple[Path, Path],
+) -> None:
+    """Test INTERACTIVE strategy with callback resolver.
+
+    This test validates the callback pattern:
+    - Core delegates conflict resolution to external callback
+    - Callback can control merge decisions
+    - No UI code pollutes the core logic
+    """
+    source, target = temp_toml_files
+
+    # Source (template) with updated values
+    source.write_text(
+        dedent(
+            """\
+            [tool.ruff]
+            line-length = 100
+
+            [tool.mypy]
+            strict = true
+            """,
+        ),
+    )
+
+    # Target (user) with different values
+    target.write_text(
+        dedent(
+            """\
+            [tool.ruff]
+            line-length = 88  # User preference
+
+            [tool.mypy]
+            strict = false  # User customization
+            """,
+        ),
+    )
+
+    # Mock resolver: always choose template value
+    decisions: list[tuple[str, Any, Any]] = []
+
+    def mock_resolver(
+        key: str,
+        user_value: Any,
+        template_value: Any,
+    ) -> ConflictDecision:
+        """Mock callback that logs decisions and always picks template."""
+        decisions.append((key, user_value, template_value))
+        return "template"
+
+    # Test with INTERACTIVE strategy
+    merger = TOMLMerger(
+        strategy=MergeStrategy.INTERACTIVE,
+        conflict_resolver=mock_resolver,
+    )
+    result = merger.merge(source, target)
+
+    assert result.success, "Merge should succeed with callback"
+
+    # Verify callback was called for conflicts
+    assert len(decisions) > 0, "Callback should be invoked on conflicts"
+
+    # Parse merged result
+    import tomlkit
+
+    merged = tomlkit.parse(target.read_text())
+
+    # Verify template values won (as per mock resolver logic)
+    tool = cast("dict[str, Any]", merged["tool"])
+    ruff = cast("dict[str, Any]", tool["ruff"])
+    mypy = cast("dict[str, Any]", tool["mypy"])
+
+    assert ruff["line-length"] == 100, "Template value should win (callback decision)"
+    assert mypy["strict"] is True, "Template value should win (callback decision)"
+
+
+def test_interactive_strategy_user_decision(
+    temp_toml_files: tuple[Path, Path],
+) -> None:
+    """Test INTERACTIVE with callback choosing user values."""
+    source, target = temp_toml_files
+
+    source.write_text(
+        dedent(
+            """\
+            [project]
+            version = "2.0.0"
+            """,
+        ),
+    )
+
+    target.write_text(
+        dedent(
+            """\
+            [project]
+            version = "1.0.0"
+            """,
+        ),
+    )
+
+    # Mock resolver: always keep user value
+    def user_resolver(
+        key: str,
+        user_value: Any,
+        template_value: Any,
+    ) -> ConflictDecision:
+        return "user"
+
+    merger = TOMLMerger(
+        strategy=MergeStrategy.INTERACTIVE,
+        conflict_resolver=user_resolver,
+    )
+    result = merger.merge(source, target)
+
+    assert result.success
+
+    import tomlkit
+
+    merged = tomlkit.parse(target.read_text())
+    project = cast("dict[str, Any]", merged["project"])
+
+    assert project["version"] == "1.0.0", "User value should be preserved"
+
+
+def test_interactive_strategy_skip_decision(
+    temp_toml_files: tuple[Path, Path],
+) -> None:
+    """Test INTERACTIVE with callback choosing skip."""
+    source, target = temp_toml_files
+
+    source.write_text(
+        dedent(
+            """\
+            [tool.ruff]
+            line-length = 100
+            """,
+        ),
+    )
+
+    target.write_text(
+        dedent(
+            """\
+            [tool.ruff]
+            line-length = 88
+            """,
+        ),
+    )
+
+    # Mock resolver: skip all conflicts
+    def skip_resolver(
+        key: str,
+        user_value: Any,
+        template_value: Any,
+    ) -> ConflictDecision:
+        return "skip"
+
+    merger = TOMLMerger(
+        strategy=MergeStrategy.INTERACTIVE,
+        conflict_resolver=skip_resolver,
+    )
+    result = merger.merge(source, target)
+
+    assert result.success
+
+    import tomlkit
+
+    merged = tomlkit.parse(target.read_text())
+    tool = cast("dict[str, Any]", merged["tool"])
+    ruff = cast("dict[str, Any]", tool["ruff"])
+
+    # Skip means keep original (user) value
+    assert ruff["line-length"] == 88, "Skip should preserve user value"

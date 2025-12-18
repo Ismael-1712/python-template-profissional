@@ -22,15 +22,19 @@ from __future__ import annotations
 
 import re
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import tomlkit
 from tomlkit import TOMLDocument
 from tomlkit.items import Array, Table
+
+# Type alias for conflict resolution decisions
+ConflictDecision = Literal["template", "user", "both", "skip"]
 
 
 # ======================================================================
@@ -43,11 +47,13 @@ class MergeStrategy(Enum):
         TEMPLATE_PRIORITY: Template values overwrite user values
         USER_PRIORITY: User values take precedence over template
         SMART: Intelligent merge (union lists, recursive dicts)
+        INTERACTIVE: Delegate conflict resolution to external callback
     """
 
     TEMPLATE_PRIORITY = "template"
     USER_PRIORITY = "user"
     SMART = "smart"
+    INTERACTIVE = "interactive"
 
 
 @dataclass
@@ -89,13 +95,18 @@ class TOMLMerger:
     def __init__(
         self,
         strategy: MergeStrategy = MergeStrategy.SMART,
+        conflict_resolver: Callable[[str, Any, Any], ConflictDecision] | None = None,
     ) -> None:
         """Initialize TOMLMerger.
 
         Args:
             strategy: Merge strategy to use
+            conflict_resolver: Optional callback for INTERACTIVE mode.
+                Called with (key, user_value, template_value) and should
+                return "template", "user", "both", or "skip".
         """
         self.strategy = strategy
+        self.conflict_resolver = conflict_resolver
 
     def merge(
         self,
@@ -209,6 +220,8 @@ class TOMLMerger:
             return self._merge_template_priority(source, target)
         if self.strategy == MergeStrategy.USER_PRIORITY:
             return self._merge_user_priority(source, target)
+        if self.strategy == MergeStrategy.INTERACTIVE:
+            return self._merge_interactive(source, target)
         # SMART
         return self._merge_smart(source, target)
 
@@ -277,6 +290,73 @@ class TOMLMerger:
         self._smart_merge_recursive(result, source)
 
         return result
+
+    def _merge_interactive(
+        self,
+        source: TOMLDocument,
+        target: TOMLDocument,
+    ) -> TOMLDocument:
+        """Interactive merge with callback-driven conflict resolution.
+
+        Args:
+            source: Template document
+            target: Target document
+
+        Returns:
+            Merged document with conflicts resolved by callback
+        """
+        # Deep copy target to preserve comments
+        result = tomlkit.parse(tomlkit.dumps(target))
+
+        # Interactive recursive merge
+        self._interactive_merge_recursive(result, source)
+
+        return result
+
+    def _interactive_merge_recursive(
+        self,
+        base: dict[str, Any] | Table,
+        overlay: dict[str, Any] | Table,
+    ) -> None:
+        """Recursive merge with callback for conflict resolution.
+
+        Args:
+            base: Base dictionary (modified in place)
+            overlay: Overlay dictionary
+        """
+        for key, value in overlay.items():
+            if key not in base:
+                # New key from template - add it
+                base[key] = value
+            elif isinstance(value, (dict, Table)) and isinstance(
+                base[key],
+                (dict, Table),
+            ):
+                # Both are dicts - recurse
+                self._interactive_merge_recursive(base[key], value)
+            elif isinstance(value, (list, Array)) and isinstance(
+                base[key],
+                (list, Array),
+            ):
+                # Both are lists - use SMART merge (union)
+                # TODO: Could add callback for list conflicts in future
+                base[key] = self._merge_lists(base[key], value)
+            # SCALAR CONFLICT - delegate to callback
+            elif self.conflict_resolver:
+                decision = self.conflict_resolver(key, base[key], value)
+
+                if decision == "template":
+                    base[key] = value
+                elif decision == "user":
+                    # Keep base[key] unchanged
+                    pass
+                elif decision == "both":
+                    # For scalars, "both" falls back to template
+                    base[key] = value
+                # "skip" -> no change
+            else:
+                # No callback provided - fallback to template wins
+                base[key] = value
 
     def _deep_update(
         self,
@@ -521,6 +601,7 @@ def merge_toml(
     strategy: MergeStrategy = MergeStrategy.SMART,
     dry_run: bool = False,
     backup: bool = True,
+    conflict_resolver: Callable[[str, Any, Any], ConflictDecision] | None = None,
 ) -> MergeResult:
     """Standalone helper function for merging TOML files.
 
@@ -533,6 +614,7 @@ def merge_toml(
         strategy: Merge strategy
         dry_run: Preview mode (no writes)
         backup: Create backup before overwrite
+        conflict_resolver: Optional callback for INTERACTIVE mode
 
     Returns:
         MergeResult with operation details
@@ -546,7 +628,7 @@ def merge_toml(
         >>> if result.success:
         ...     print(result.diff)
     """
-    merger = TOMLMerger(strategy=strategy)
+    merger = TOMLMerger(strategy=strategy, conflict_resolver=conflict_resolver)
     return merger.merge(
         source_path=source_path,
         target_path=target_path,
