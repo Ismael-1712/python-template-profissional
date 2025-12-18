@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Refactored
+
+- **CORTEX Scanners Unification**: Eliminada duplicação de lógica de parsing e migração completa para Pydantic v2
+  - **KnowledgeScanner**: Refatorado para usar `FrontmatterParser` central em vez de `frontmatter.loads()` direto
+  - **Mapper Models**: Migrados `CLICommand`, `Document` e `ProjectContext` de `@dataclass` para Pydantic `BaseModel`
+  - Substituído `asdict(context)` por `context.model_dump(mode="json")` no método `save_context`
+  - Benefícios: DRY (Single Source of Truth para parsing YAML), validação consistente, serialização uniforme
+  - **100% Pydantic v2**: Todos os modelos de dados do CORTEX agora utilizam Pydantic v2
+
 ### Added
 
 - **Rich UI for Audit Reports**: Modernized audit report visualization using Rich library
