@@ -452,13 +452,223 @@ class SyncOrchestrator:
 
             raise
 
-    def _cleanup_repository(self) -> None:
-        """Perform repository cleanup operations."""
+    def _prune_merged_local_branches(
+        self,
+        git_status: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Remove local branches that have been merged into base branch.
+
+        This method implements the "Deep Clean" functionality to automatically
+        clean up local branches that have been merged, keeping the workspace tidy.
+
+        Safety Mechanisms:
+        - Current branch is ALWAYS protected
+        - Base branch (main/master) is ALWAYS protected
+        - User-configured protected_branches are ALWAYS protected
+        - Uses -d (safe delete) by default, not -D (force delete)
+        - Branches with unmerged changes will be skipped
+
+        Args:
+            git_status: Git status dictionary containing current_branch
+
+        Returns:
+            Dictionary with cleanup statistics:
+            - status: "disabled", "success", or "failed"
+            - base_branch: Base branch used for merge check
+            - total_merged: Total merged branches found
+            - total_deleted: Number of branches deleted
+            - total_skipped: Number of branches skipped
+            - deleted_branches: List of deleted branch names
+            - skipped_branches: List of skipped branch names
+
+        Raises:
+            GitOperationError: If Git commands fail
+
+        """
+        # 1. Check if feature is enabled
+        if not self.config.get("prune_local_merged", True):
+            logger.info("Branch pruning disabled in configuration")
+            return {"status": "disabled"}
+
+        step = SyncStep(
+            "prune_merged_branches",
+            "Cleaning merged local branches (Deep Clean)",
+        )
+        step.start()
+        self.steps.append(step)
+
+        try:
+            # 2. Get base branch (main by default)
+            base_branch = self.config.get("prune_base_branch", "main")
+            logger.info("Base branch for merge check: %s", base_branch)
+
+            # 3. Get current branch (CRITICAL PROTECTION)
+            current_branch = git_status.get("current_branch", "unknown")
+            if current_branch == "unknown":
+                logger.warning("Could not determine current branch, skipping pruning")
+                step.complete({"status": "skipped", "reason": "unknown_current_branch"})
+                return {"status": "skipped", "reason": "unknown_current_branch"}
+
+            logger.info("Current branch: %s (will be protected)", current_branch)
+
+            # 4. List branches merged into base branch
+            try:
+                merged_result = self._run_command(
+                    [
+                        "git",
+                        "branch",
+                        "--merged",
+                        base_branch,
+                        "--format=%(refname:short)",
+                    ],
+                    timeout=30,
+                    check=True,
+                )
+                merged_branches = [
+                    branch.strip()
+                    for branch in merged_result.stdout.strip().split("\n")
+                    if branch.strip()
+                ]
+            except GitOperationError as e:
+                logger.error("Failed to list merged branches: %s", e)
+                step.fail(str(e))
+                return {"status": "failed", "error": str(e)}
+
+            logger.info("Found %d merged branches", len(merged_branches))
+
+            # 5. Build protection list (CRITICAL SECURITY)
+            protected = set(self.config.get("protected_branches", []))
+            protected.add(current_branch)  # ALWAYS protect current branch
+            protected.add(base_branch)  # ALWAYS protect base branch
+
+            # Log protected branches
+            logger.info("Protected branches: %s", sorted(protected))
+
+            # 6. Filter deletable branches
+            deletable = [
+                branch for branch in merged_branches if branch not in protected
+            ]
+
+            if not deletable:
+                logger.info("No branches to delete (all are protected)")
+                step.complete(
+                    {
+                        "status": "success",
+                        "total_merged": len(merged_branches),
+                        "total_deleted": 0,
+                        "total_skipped": len(merged_branches),
+                    },
+                )
+                return {
+                    "status": "success",
+                    "base_branch": base_branch,
+                    "total_merged": len(merged_branches),
+                    "total_deleted": 0,
+                    "total_skipped": len(merged_branches),
+                    "deleted_branches": [],
+                    "skipped_branches": list(merged_branches),
+                }
+
+            logger.info("Candidates for deletion: %s", deletable)
+
+            # 7. Execute deletion with safety checks
+            deleted: list[str] = []
+            skipped: list[str] = []
+            errors: dict[str, str] = {}
+
+            # Use -d (safe) or -D (force) based on config
+            delete_flag = "-D" if self.config.get("prune_force_delete", False) else "-d"
+
+            if delete_flag == "-D":
+                logger.warning(
+                    "⚠️  DANGER: Using -D (force delete). Unmerged work may be lost!",
+                )
+
+            for branch in deletable:
+                try:
+                    result = self._run_command(
+                        ["git", "branch", delete_flag, branch],
+                        timeout=10,
+                        check=False,  # Don't raise, we'll handle errors
+                    )
+
+                    if result.returncode == 0:
+                        deleted.append(branch)
+                        logger.info("✅ Deleted merged branch: %s", branch)
+                    else:
+                        skipped.append(branch)
+                        error_msg = (
+                            result.stderr.strip() if result.stderr else "Unknown error"
+                        )
+                        errors[branch] = error_msg
+                        logger.warning("⚠️  Skipped branch '%s': %s", branch, error_msg)
+
+                except GitOperationError as e:
+                    skipped.append(branch)
+                    errors[branch] = str(e)
+                    logger.warning("⚠️  Failed to delete branch '%s': %s", branch, e)
+
+            # 8. Log summary
+            logger.info("=" * 60)
+            logger.info("🧹 Deep Clean Summary:")
+            logger.info("  Base branch: %s", base_branch)
+            logger.info("  Merged branches found: %d", len(merged_branches))
+            logger.info("  Branches deleted: %d", len(deleted))
+            logger.info("  Branches skipped: %d", len(skipped) + len(list(protected)))
+            if deleted:
+                logger.info("  Deleted: %s", ", ".join(deleted))
+            logger.info("=" * 60)
+
+            # 9. Build result report
+            result_report = {
+                "status": "success",
+                "base_branch": base_branch,
+                "total_merged": len(merged_branches),
+                "total_deleted": len(deleted),
+                "total_skipped": len(skipped) + len(list(protected)),
+                "deleted_branches": deleted,
+                "skipped_branches": skipped + list(protected),
+            }
+
+            if errors:
+                result_report["errors"] = errors
+
+            step.complete(result_report)
+            return result_report
+
+        except Exception as e:
+            logger.error("Unexpected error during branch pruning: %s", e)
+            step.fail(str(e))
+            return {"status": "failed", "error": str(e)}
+
+    def _cleanup_repository(self, git_status: dict[str, Any]) -> None:
+        """Perform repository cleanup operations.
+
+        Args:
+            git_status: Git status dictionary with current branch info
+
+        """
         cleanup_step = SyncStep("git_cleanup", "Cleaning up repository")
         cleanup_step.start()
         self.steps.append(cleanup_step)
 
         try:
+            # Phase 5a: Deep Clean - Prune merged local branches
+            if self.config.get("prune_local_merged", True):
+                logger.info("🧹 Deep Clean: Pruning merged local branches...")
+                prune_result = self._prune_merged_local_branches(git_status)
+
+                if prune_result.get("status") == "success":
+                    deleted_count = prune_result.get("total_deleted", 0)
+                    if deleted_count > 0:
+                        logger.info(
+                            "✅ Deep Clean: Removed %d merged branch(es)",
+                            deleted_count,
+                        )
+                elif prune_result.get("status") == "disabled":
+                    logger.debug("Deep Clean: Branch pruning is disabled")
+
+            # Phase 5b: Git garbage collection and remote pruning
             cleanup_commands = [
                 ["git", "gc", "--auto"],
                 ["git", "remote", "prune", "origin"],
@@ -583,7 +793,7 @@ class SyncOrchestrator:
             # Phase 5: Cleanup
             if self.config.get("cleanup_enabled", True):
                 logger.info("🧹 PHASE 5: Repository Cleanup")
-                self._cleanup_repository()
+                self._cleanup_repository(git_status)
 
             # Save report and finalize
             self._save_sync_report()
