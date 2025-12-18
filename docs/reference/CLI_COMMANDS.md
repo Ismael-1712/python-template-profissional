@@ -38,6 +38,7 @@ introspecção do Typer.
   - [cortex - map](#cortexmap)
   - [cortex - migrate](#cortexmigrate)
   - [cortex - setup-hooks](#cortexsetuphooks)
+- **[toml-fusion](#toml-fusion)** ⭐ NEW
 - **[audit](#audit)**
 - **[doctor](#doctor)**
 - **[git-sync](#gitsync)**
@@ -47,7 +48,7 @@ introspecção do Typer.
 - **[install-dev](#installdev)**
 - **[upgrade-python](#upgradepython)**
 
-## `cortex` - CORTEX - Documentation as Code CLI.
+## `cortex` - CORTEX - Documentation as Code CLI
 
 **Descrição:** CORTEX - Documentation as Code CLI.
 
@@ -56,10 +57,10 @@ using the CORTEX system.
 
 ### `cortex audit`
 
-
 Audit documentation files for metadata and link integrity.
 
 Scans Markdown files to verify:
+
 - Valid YAML frontmatter
 - Required metadata fields
 - Links to code files exist
@@ -74,9 +75,7 @@ Examples:
     cortex audit --links            # Validate Knowledge Graph
     cortex audit --links --strict   # Fail CI on broken links
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -92,14 +91,13 @@ Examples:
 
 | `output` | `Annotated[Path | None, typer.Option('--output', '-o', help='Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md)')]` | ❌ Não | `None` | Output path for health report (default: docs/reports/KNOWLEDGE_HEALTH.md) |
 
-
 **Exemplo:**
+
 ```bash
 cortex audit
 ```
 
 ### `cortex config`
-
 
 Manage CORTEX and Audit configurations.
 
@@ -111,9 +109,7 @@ Examples:
     cortex config --validate                # Validate YAML syntax
     cortex config --path custom_config.yaml --show
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -125,18 +121,18 @@ Examples:
 
 | `path` | `Annotated[Path, typer.Option('--path', '-p', help='Path to audit configuration file')]` | ❌ Não | `scripts/audit_config.yaml` | Path to audit configuration file |
 
-
 **Exemplo:**
+
 ```bash
 cortex config
 ```
 
 ### `cortex generate`
 
-
 Generate dynamic documentation from templates and live data.
 
 Extracts data from:
+
 - pyproject.toml (project name, version, Python version)
 - .cortex/context.json (knowledge graph statistics)
 - docs/reports/KNOWLEDGE_HEALTH.md (health score)
@@ -149,9 +145,7 @@ Examples:
     cortex generate readme --check      # Check if README is in sync (CI)
     cortex generate --dry-run           # Preview without writing
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -165,14 +159,13 @@ Examples:
 
 | `dry_run` | `Annotated[bool, typer.Option('--dry-run', help='Show what would be generated without writing to file')]` | ❌ Não | `False` | Show what would be generated without writing to file |
 
-
 **Exemplo:**
+
 ```bash
 cortex generate
 ```
 
 ### `cortex guardian-probe`
-
 
 Run the Hallucination Probe to verify Knowledge Node integrity.
 
@@ -189,9 +182,7 @@ Examples:
     cortex guardian-probe --canary-id kno-002  # Test specific entry
     cortex guardian-probe --verbose            # Show detailed validation
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -201,14 +192,13 @@ Examples:
 
 | `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed validation information')]` | ❌ Não | `False` | Show detailed validation information |
 
-
 **Exemplo:**
+
 ```bash
 cortex guardian-probe
 ```
 
 ### `cortex init`
-
 
 Add YAML frontmatter to a Markdown file.
 
@@ -220,9 +210,7 @@ Examples:
     cortex init docs/new-guide.md
     cortex init docs/existing.md --force
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -232,14 +220,13 @@ Examples:
 
 | `force` | `Annotated[bool, typer.Option('--force', '-f', help='Overwrite existing frontmatter if present')]` | ❌ Não | `False` | Overwrite existing frontmatter if present |
 
-
 **Exemplo:**
+
 ```bash
 cortex init <path>
 ```
 
 ### `cortex knowledge-scan`
-
 
 Scan and validate the Knowledge Base (docs/knowledge).
 
@@ -248,6 +235,7 @@ frontmatter representing knowledge entries. Validates the structure
 and displays a summary of found entries.
 
 Knowledge entries should have:
+
 - id: Unique identifier
 - status: Entry status (active, deprecated, draft)
 - golden_paths: Related code paths
@@ -258,9 +246,7 @@ Examples:
     cortex knowledge-scan              # Scan knowledge base
     cortex knowledge-scan --verbose    # Show detailed info
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -268,14 +254,13 @@ Examples:
 
 | `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed information about each entry')]` | ❌ Não | `False` | Show detailed information about each entry |
 
-
 **Exemplo:**
+
 ```bash
 cortex knowledge-scan
 ```
 
 ### `cortex knowledge-sync`
-
 
 Synchronize knowledge entries with external sources.
 
@@ -293,9 +278,7 @@ Examples:
     cortex knowledge-sync --entry-id kno-001 # Sync specific entry
     cortex knowledge-sync --dry-run          # Preview sync operations
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -305,14 +288,13 @@ Examples:
 
 | `dry_run` | `Annotated[bool, typer.Option('--dry-run', help='Preview sync operations without writing to disk')]` | ❌ Não | `False` | Preview sync operations without writing to disk |
 
-
 **Exemplo:**
+
 ```bash
 cortex knowledge-sync
 ```
 
 ### `cortex map`
-
 
 Generate project context map for introspection.
 
@@ -322,14 +304,17 @@ and architecture. This map can be used by LLMs or automation tools.
 
 The output is saved to .cortex/context.json by default.
 
+NEW: Use --update-config to synchronize pyproject.toml from template
+after generating the context map.
+
 Example:
     cortex map                          # Generate context map
     cortex map --verbose               # Show detailed information
     cortex map -o custom/path.json     # Custom output location
-
+    cortex map --update-config         # Map + sync config from template
+    cortex map --update-config --template=custom.toml  # Custom template
 
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -339,18 +324,84 @@ Example:
 
 | `verbose` | `Annotated[bool, typer.Option('--verbose', '-v', help='Show detailed output')]` | ❌ Não | `False` | Show detailed output |
 
+| `update_config` | `Annotated[bool, typer.Option('--update-config', help='Sync pyproject.toml from template after mapping')]` | ❌ Não | `False` | Sync pyproject.toml from template after mapping |
+
+| `template_path` | `Annotated[Path | None, typer.Option('--template', help='Path to template TOML (default: templates/pyproject.toml)')]` | ❌ Não | `None` | Path to template TOML (default: templates/pyproject.toml) |
 
 **Exemplo:**
+
 ```bash
-cortex map
+cortex map --update-config
 ```
 
-### `cortex migrate`
+## `toml-fusion` - TOML Fusion - Intelligent TOML file merger ⭐ NEW
 
+**Descrição:** Merge TOML files intelligently while preserving comments.
+
+This tool merges a source TOML file (template) into a target TOML file
+(project) while preserving:
+
+- Comments (both section and inline)
+- Formatting (indentation, quote styles)
+- User customizations
+
+Merge Strategies:
+
+- smart (default): Union lists, recursive merge dicts
+- template: Template values overwrite user values
+- user: User values take priority (template fills gaps)
+- interactive: Prompt user to resolve conflicts interactively (NEW)
+
+### `toml-fusion main`
+
+Merge TOML files intelligently while preserving comments and formatting.
+
+**Parâmetros:**
+
+| Nome | Tipo | Obrigatório | Default | Descrição |
+|:-----|:-----|:------------|:--------|:----------|
+| `source` | `Path` | ✅ Sim | - | Source TOML file (template to merge from) |
+| `target` | `Path` | ✅ Sim | - | Target TOML file (project file to merge into) |
+| `output` | `Path \| None` | ❌ Não | `None` | Output file path (defaults to target file) |
+| `strategy` | `str` | ❌ Não | `"smart"` | Merge strategy: smart, template, user, interactive |
+| `dry_run` | `bool` | ❌ Não | `False` | Preview changes without modifying files |
+| `no_backup` | `bool` | ❌ Não | `False` | Skip backup creation (not recommended) |
+| `interactive` | `bool` | ❌ Não | `False` | Prompt user to resolve conflicts interactively (requires rich) |
+
+**Exemplos:**
+
+```bash
+# Preview merge (dry run)
+toml-fusion template/pyproject.toml pyproject.toml --dry-run
+
+# Merge with backup
+toml-fusion template/pyproject.toml pyproject.toml
+
+# Force template values
+toml-fusion template/pyproject.toml pyproject.toml --strategy=template
+
+# Interactive mode with rich UI
+toml-fusion template/pyproject.toml pyproject.toml --interactive
+
+# Merge to different output file
+toml-fusion template/pyproject.toml pyproject.toml -o merged.toml
+```
+
+**Integração com Cortex:**
+
+```bash
+# Sync config automatically after mapping
+cortex map --update-config
+```
+
+Para mais detalhes, consulte [TOML_FUSION.md](../guides/TOML_FUSION.md).
+
+## `audit` - Code Quality Audit
 
 Migrate documentation files to CORTEX format.
 
 Intelligently adds YAML frontmatter to Markdown files by:
+
 - Generating kebab-case IDs from filenames
 - Inferring document type from directory structure
 - Extracting title from first heading
@@ -365,9 +416,7 @@ Examples:
     cortex migrate docs/ --apply --force # Overwrite existing frontmatter
     cortex migrate docs/guides/ --apply  # Migrate specific directory
 
-
 **Parâmetros:**
-
 
 | Nome | Tipo | Obrigatório | Default | Descrição |
 
@@ -381,18 +430,18 @@ Examples:
 
 | `recursive` | `Annotated[bool, typer.Option('--recursive/--no-recursive', '-r', help='Process subdirectories recursively')]` | ❌ Não | `True` | Process subdirectories recursively |
 
-
 **Exemplo:**
+
 ```bash
 cortex migrate <path>
 ```
 
 ### `cortex setup-hooks`
 
-
 Install Git hooks to auto-regenerate context map.
 
 Creates Git hooks that automatically run 'cortex map' after:
+
 - git pull / git merge (post-merge hook)
 - git checkout (post-checkout hook)
 - git rebase / git commit --amend (post-rewrite hook)
@@ -402,14 +451,13 @@ This ensures the AI context stays fresh after repository changes.
 Example:
     cortex setup-hooks
 
-
-
 **Exemplo:**
+
 ```bash
 cortex setup-hooks
 ```
 
-## `audit` - Pre-commit Code Security and Quality Auditor.
+## `audit` - Pre-commit Code Security and Quality Auditor
 
 **Descrição:** Pre-commit Code Security and Quality Auditor.
 
@@ -426,7 +474,7 @@ security vulnerabilities, external dependencies, and CI/CD risks before commits.
 
 Main entry point.
 
-## `doctor` - Dev Doctor - Diagnóstico Preventivo de Ambiente de Desenvolvimento.
+## `doctor` - Dev Doctor - Diagnóstico Preventivo de Ambiente de Desenvolvimento
 
 **Descrição:** Dev Doctor - Diagnóstico Preventivo de Ambiente de Desenvolvimento.
 
@@ -449,7 +497,7 @@ Exit Codes:
 
 Função principal.
 
-## `git-sync` - Smart Git Synchronization CLI Wrapper.
+## `git-sync` - Smart Git Synchronization CLI Wrapper
 
 **Descrição:** Smart Git Synchronization CLI Wrapper.
 
@@ -466,7 +514,7 @@ This script delegates all synchronization logic to the git_sync module.
 
 Main entry point for the Smart Git Sync CLI.
 
-## `mock-gen` - Mock Generator CLI - Test mock generation tool.
+## `mock-gen` - Mock Generator CLI - Test mock generation tool
 
 **Descrição:** Mock Generator CLI - Test mock generation tool.
 
@@ -482,7 +530,7 @@ Command-line interface for the TestMockGenerator core engine.
 
 Main CLI entry point with banner injection.
 
-## `mock-check` - Mock Validator CLI - Test mock validation tool.
+## `mock-check` - Mock Validator CLI - Test mock validation tool
 
 **Descrição:** Mock Validator CLI - Test mock validation tool.
 
@@ -498,7 +546,7 @@ Command-line interface for the TestMockValidator core engine.
 
 Main CLI entry point with banner injection.
 
-## `mock-ci` - CI/CD Test Mock Integration - Integração com Pipelines CI/CD.
+## `mock-ci` - CI/CD Test Mock Integration - Integração com Pipelines CI/CD
 
 **Descrição:** CI/CD Test Mock Integration - Integração com Pipelines CI/CD.
 
@@ -532,9 +580,7 @@ Função principal CLI para integração CI/CD.
     Returns:
         Código de saída (0 = sucesso, 1 = warning, 2 = failure)
 
-
-
-## `install-dev` - Development Environment Installation Script.
+## `install-dev` - Development Environment Installation Script
 
 **Descrição:** Development Environment Installation Script.
 
@@ -542,6 +588,7 @@ Performs complete installation of the development environment with dependency
 pinning using pip-tools.
 
 Operation Sequence:
+
 1. Install project in editable mode with dev dependencies
 2. Compile dependencies with pip-compile (with fallback) - ATOMIC WRITES
 3. Install pinned dependencies from requirements/dev.txt
@@ -556,7 +603,7 @@ Operation Sequence:
 
 Main script entrypoint.
 
-## `upgrade-python` - 🔧 Version Governor - Automação de Manutenção de Versões Python.
+## `upgrade-python` - 🔧 Version Governor - Automação de Manutenção de Versões Python
 
 **Descrição:** 🔧 Version Governor - Automação de Manutenção de Versões Python.
 
@@ -586,7 +633,6 @@ Fluxo principal de execução.
     Returns:
         0 se sucesso, 1 se erro
 
-
 ## 🗺️ Diagrama de Comandos
 
 ```mermaid
@@ -614,6 +660,7 @@ Esta documentação é regenerada automaticamente:
 3. **Script:** `scripts/core/doc_gen.py`
 
 **Para forçar regeneração manual:**
+
 ```bash
 python scripts/core/doc_gen.py
 ```

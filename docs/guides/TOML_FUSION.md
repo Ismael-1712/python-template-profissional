@@ -83,7 +83,8 @@ toml-fusion SOURCE TARGET [OPTIONS]
 **Options:**
 
 - `--output, -o PATH`: Write to different file (default: overwrites TARGET)
-- `--strategy, -s NAME`: Merge strategy (smart, template, user)
+- `--strategy, -s NAME`: Merge strategy (smart, template, user, interactive)
+- `--interactive, -i`: Prompt user to resolve conflicts interactively (requires rich)
 - `--dry-run, -n`: Preview changes without modifying files
 - `--no-backup`: Skip backup creation (not recommended)
 
@@ -175,6 +176,45 @@ dependencies = ["fastapi>=0.115.0", "requests", "pydantic>=2.5.0"]
 **Behavior:** User values preserved; template only fills gaps.
 
 **Use when:** Minimal disruption; only add missing keys.
+
+### Interactive Mode - `--interactive` (NEW)
+
+**Behavior:** Prompts user for each conflict with rich UI.
+
+**Use when:** You want fine-grained control over every change.
+
+**Example:**
+
+```bash
+$ toml-fusion template.toml pyproject.toml --interactive
+
+======================================================================
+⚠️  Merge Conflict
+──────────────────────────────────────────────────────────────────────
+Conflict at key: tool.ruff.line-length
+
+📌 User (Current Value):
+88
+
+🆕 Template (New Value):
+100
+
+Choose resolution:
+  [1] Keep User value (preserve current)
+  [2] Use Template value (accept update)
+  [3] Skip this conflict (no change)
+
+Your choice [2]: 1
+
+✓ Decision: user
+```
+
+**Features:**
+
+- 🎨 Rich syntax highlighting for TOML values
+- 🔍 Clear side-by-side comparison
+- ⌨️  Simple numeric choices (1/2/3)
+- 📝 Preserves all comments and formatting
 
 ## 🔍 Version Conflict Resolution
 
@@ -315,6 +355,44 @@ Usage:
 
 ```bash
 make upgrade-toml
+```
+
+## 🧩 Integration with Cortex (NEW)
+
+TOML Fusion is now integrated with the Cortex introspection system. You can automatically sync your configuration from a template after generating the context map:
+
+```bash
+# Generate context map and sync config in one command
+cortex map --update-config
+
+# Use custom template
+cortex map --update-config --template=custom/pyproject.toml
+```
+
+**What it does:**
+
+1. Generates `.cortex/context.json` (standard introspection)
+2. Merges `templates/pyproject.toml` into `pyproject.toml` using SMART strategy
+3. Creates automatic backup with timestamp
+4. Reports success/conflicts
+
+**Example output:**
+
+```
+✓ Context map generated successfully!
+📍 Output: .cortex/context.json
+...
+======================================================================
+🔧 Synchronizing configuration from template...
+
+📄 Template: templates/pyproject.toml
+📄 Target:   pyproject.toml
+🎯 Strategy: smart (union + recursive merge)
+
+✅ Configuration updated successfully!
+   Backup: pyproject.toml.bak.20251218_143022
+
+💡 Tip: Review changes with 'git diff pyproject.toml'
 ```
 
 ## 📊 Testing
