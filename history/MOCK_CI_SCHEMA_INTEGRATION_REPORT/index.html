@@ -1,0 +1,1765 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Relatório técnico de integração do MockCIConfig Pydantic no código consumidor">
+      
+      
+        <meta name="author" content="DevOps Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>RELATÓRIO DE INTEGRAÇÃO: MOCK CI CONFIG - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#relatorio-de-integracao-mock-ci-config" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RELATÓRIO DE INTEGRAÇÃO: MOCK CI CONFIG
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mapeamento-de-fluxo-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. MAPEAMENTO DE FLUXO DE DADOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. MAPEAMENTO DE FLUXO DE DADOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-ponto-de-entrada-carregamento-do-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Ponto de Entrada: Carregamento do YAML
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.1 Ponto de Entrada: Carregamento do YAML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#localizacao-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Localização Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-fluxo-de-propagacao-da-configuracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Fluxo de Propagação da Configuração
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-pontos-de-acesso-ao-dicionario-de-configuracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Pontos de Acesso ao Dicionário de Configuração
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 Pontos de Acesso ao Dicionário de Configuração">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acesso-direto-identificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acesso Direto Identificado:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-plano-de-refatoracao-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. PLANO DE REFATORAÇÃO (DESIGN)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. PLANO DE REFATORAÇÃO (DESIGN)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-estrategia-de-migracao-top-down-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Estratégia de Migração: "Top-Down Injection"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-alteracoes-necessarias-por-arquivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Alterações Necessárias por Arquivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Alterações Necessárias por Arquivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#221-cli-scriptsclimock_cipy-linha-114-117" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.1 CLI (scripts/cli/mock_ci.py) [LINHA 114-117]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-mockcirunner-scriptscoremock_cirunnerpy-linha-50-77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.2 MockCIRunner (scripts/core/mock_ci/runner.py) [LINHA 50-77]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-testmockgenerator-scriptscoremock_generatorpy-linha-67-100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.3 TestMockGenerator (scripts/core/mock_generator.py) [LINHA 67-100]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#224-cichecker-e-cifixer-sem-mudancas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2.4 CIChecker e CIFixer (SEM MUDANÇAS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-retrocompatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Retrocompatibilidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 Retrocompatibilidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cenario-codigo-legado-esperando-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário: Código Legado Esperando Dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analise-de-riscos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. ANÁLISE DE RISCOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. ANÁLISE DE RISCOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-impacto-no-test_mock_generatorpy-legado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Impacto no test_mock_generator.py (Legado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-bugs-ocultos-que-a-tipagem-estrita-pode-revelar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Bugs Ocultos que a Tipagem Estrita Pode Revelar
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Bugs Ocultos que a Tipagem Estrita Pode Revelar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risco-1-campos-opcionais-interpretados-como-obrigatorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 1: Campos Opcionais Interpretados como Obrigatórios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-2-tipos-incorretos-no-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 2: Tipos Incorretos no YAML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risco-3-listas-vazias-vs-ausentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risco 3: Listas Vazias vs. Ausentes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-riscos-de-quebra-de-compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Riscos de Quebra de Compatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-plano-de-implementacao-step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. PLANO DE IMPLEMENTAÇÃO (STEP-BY-STEP)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. PLANO DE IMPLEMENTAÇÃO (STEP-BY-STEP)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-fase-1-preparacao-1-hora" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Fase 1: Preparação (1 hora)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-fase-2-refatoracao-core-2-3-horas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Fase 2: Refatoração Core (2-3 horas)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-fase-3-testes-1-2-horas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Fase 3: Testes (1-2 horas)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-fase-4-documentacao-30-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Fase 4: Documentação (30 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-checklist-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. CHECKLIST DE VALIDAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. CHECKLIST DE VALIDAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-pre-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Pré-Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-durante-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Durante Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-pos-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Pós-Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-exemplo-de-uso-pos-migracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. EXEMPLO DE USO PÓS-MIGRAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. EXEMPLO DE USO PÓS-MIGRAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-uso-programatico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Uso Programático
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-type-safety-em-acao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Type Safety em Ação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. CONCLUSÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. CONCLUSÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-beneficios-esperados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Benefícios Esperados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-estimativa-de-esforco" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Estimativa de Esforço
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-complexidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Complexidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-recomendacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Recomendação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="relatorio-de-integracao-mock-ci-config">RELATÓRIO DE INTEGRAÇÃO: MOCK CI CONFIG</h1>
+<p><strong>Data:</strong> 18 de Dezembro de 2025
+<strong>Fase:</strong> 03 - Integração (Análise Forense)
+<strong>Objetivo:</strong> Mapear fluxo de configuração e planejar migração para <code>MockCIConfig</code>
+<strong>Status:</strong> 🔍 ANÁLISE CONCLUÍDA</p>
+<hr />
+<h2 id="1-mapeamento-de-fluxo-de-dados">1. MAPEAMENTO DE FLUXO DE DADOS</h2>
+<h3 id="11-ponto-de-entrada-carregamento-do-yaml">1.1 Ponto de Entrada: Carregamento do YAML</h3>
+<h4 id="localizacao-atual"><strong>Localização Atual</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Arquivo: scripts/core/mock_generator.py
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Função: TestMockGenerator._load_config() [linha 111-127]
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Objeto: dict[str, Any]
+</code></pre></div>
+<p><strong>Código Atual (Análise):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Carrega a configuração do arquivo YAML.&quot;&quot;&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="p">):</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Arquivo de configuração não encontrado: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="k">return</span> <span class="p">{}</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>  <span class="c1"># ← DICT BRUTO</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Configuração carregada de </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="k">return</span> <span class="n">config</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erro ao carregar configuração YAML: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="k">return</span> <span class="p">{}</span>
+</code></pre></div>
+<p><strong>🔴 PROBLEMA IDENTIFICADO:</strong></p>
+<ul>
+<li>YAML é carregado como <code>dict[str, Any]</code> sem validação</li>
+<li>Nenhuma verificação de campos obrigatórios</li>
+<li>Erros de estrutura só são detectados em runtime (muito tarde)</li>
+</ul>
+<hr />
+<h3 id="12-fluxo-de-propagacao-da-configuracao">1.2 Fluxo de Propagação da Configuração</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│  CLI (scripts/cli/mock_ci.py)                               │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│  - Localiza config_file: workspace / &quot;scripts&quot; /            │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│    &quot;test_mock_config.yaml&quot;                                  │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>└────────────┬────────────────────────────────────────────────┘
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>             │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>             ▼
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│  MockCIRunner (scripts/core/mock_ci/runner.py)              │
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│  __init__(workspace_root, config_file)                      │
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│  - Passa config_file para TestMockGenerator                 │
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>└────────────┬────────────────────────────────────────────────┘
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>             │
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>             ▼
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│  TestMockGenerator (scripts/core/mock_generator.py)         │
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│  __init__(workspace_root, config_path)                      │
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│  - self.config = _load_config()  ← DICT                     │
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│  - self.MOCK_PATTERNS = _parse_patterns_from_config()       │
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>└────────────┬────────────────────────────────────────────────┘
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>             │
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>             ├──────────────────────────────────────────────────┐
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>             │                                                  │
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>             ▼                                                  ▼
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>┌─────────────────────────┐           ┌──────────────────────────┐
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>│  CIChecker              │           │  CIFixer                 │
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│  (recebe generator)     │           │  (recebe generator)      │
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>│  - Acessa via           │           │  - Acessa via            │
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>│    generator.config     │           │    generator.config      │
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>└─────────────────────────┘           └──────────────────────────┘
+</code></pre></div>
+<hr />
+<h3 id="13-pontos-de-acesso-ao-dicionario-de-configuracao">1.3 Pontos de Acesso ao Dicionário de Configuração</h3>
+<h4 id="acesso-direto-identificado"><strong>Acesso Direto Identificado:</strong></h4>
+<p><strong>1. <code>TestMockGenerator._parse_patterns_from_config()</code> [linha 129-159]</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_patterns_from_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">patterns_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="k">if</span> <span class="s2">&quot;mock_patterns&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>  <span class="c1"># ← ACESSO DIRETO</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="k">return</span> <span class="n">patterns_dict</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="c1"># Itera sobre todos os grupos de padrões</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="k">for</span> <span class="n">_group_name</span><span class="p">,</span> <span class="n">pattern_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;mock_patterns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># ← ACESSO DIRETO</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>            <span class="k">continue</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pattern_list</span><span class="p">:</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>            <span class="n">pattern_key</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pattern&quot;</span><span class="p">)</span>  <span class="c1"># ← Dict dentro de dict</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>            <span class="c1"># ...</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>            <span class="n">patterns_dict</span><span class="p">[</span><span class="n">pattern_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">MockPatternClass</span><span class="p">(</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>                <span class="n">pattern</span><span class="o">=</span><span class="n">pattern_key</span><span class="p">,</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>                <span class="nb">type</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">),</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>                <span class="n">mock_template</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mock_template&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>                <span class="n">required_imports</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;required_imports&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>                <span class="n">description</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>                <span class="n">severity</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;severity&quot;</span><span class="p">,</span> <span class="s2">&quot;MEDIUM&quot;</span><span class="p">),</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>            <span class="p">)</span>
+</code></pre></div>
+<p><strong>🔴 PROBLEMAS:</strong></p>
+<ul>
+<li>Acesso manual a chaves do dict sem type safety</li>
+<li><code>.get()</code> com defaults pode mascarar erros de configuração</li>
+<li>Sem validação de tipos (ex: <code>pattern_list</code> pode não ser lista)</li>
+</ul>
+<p><strong>2. Nenhum outro acesso direto encontrado</strong></p>
+<ul>
+<li>✅ <code>CIChecker</code>, <code>CIFixer</code>, <code>CIRunner</code> não acessam <code>self.config</code> diretamente</li>
+<li>✅ Apenas <code>TestMockGenerator</code> manipula a configuração bruta</li>
+</ul>
+<hr />
+<h2 id="2-plano-de-refatoracao-design">2. PLANO DE REFATORAÇÃO (DESIGN)</h2>
+<h3 id="21-estrategia-de-migracao-top-down-injection">2.1 Estratégia de Migração: "Top-Down Injection"</h3>
+<p><strong>Princípio:</strong> Instanciar <code>MockCIConfig</code> o mais cedo possível na cadeia de dependências e injetá-lo para baixo.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>CLI (mock_ci.py)
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  ↓ Carrega YAML + Valida com MockCIConfig
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>MockCIRunner
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  ↓ Injeta MockCIConfig
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>TestMockGenerator (REFATORADO)
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  ↓ Usa MockCIConfig ao invés de dict
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>CIChecker / CIFixer (SEM MUDANÇAS)
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  ↓ Continuam acessando via generator
+</code></pre></div>
+<hr />
+<h3 id="22-alteracoes-necessarias-por-arquivo">2.2 Alterações Necessárias por Arquivo</h3>
+<h4 id="221-cli-scriptsclimock_cipy-linha-114-117"><strong>2.2.1 CLI (<code>scripts/cli/mock_ci.py</code>) [LINHA 114-117]</strong></h4>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Localiza arquivo de configuração</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">config_file</span> <span class="o">=</span> <span class="n">workspace</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span> <span class="o">/</span> <span class="s2">&quot;test_mock_config.yaml&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Config do gerador não encontrado: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="k">return</span> <span class="mi">2</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Inicializa runner</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">runner</span> <span class="o">=</span> <span class="n">MockCIRunner</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Localiza arquivo de configuração</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">config_file</span> <span class="o">=</span> <span class="n">workspace</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span> <span class="o">/</span> <span class="s2">&quot;test_mock_config.yaml&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Config do gerador não encontrado: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">return</span> <span class="mi">2</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># NOVO: Carrega e valida configuração</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✓ Configuração validada via Pydantic&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Configuração YAML inválida: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="k">return</span> <span class="mi">2</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="c1"># Inicializa runner com config validada</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="n">runner</span> <span class="o">=</span> <span class="n">MockCIRunner</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Mudança de Assinatura:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># ANTES: MockCIRunner(workspace_root: Path, config_file: Path)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># DEPOIS: MockCIRunner(workspace_root: Path, config: MockCIConfig)</span>
+</code></pre></div>
+<hr />
+<h4 id="222-mockcirunner-scriptscoremock_cirunnerpy-linha-50-77"><strong>2.2.2 <code>MockCIRunner</code> (<code>scripts/core/mock_ci/runner.py</code>) [LINHA 50-77]</strong></h4>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">config_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">=</span> <span class="n">workspace_root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Workspace não encontrado: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Config do gerador não encontrado: </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="c1"># Componentes base</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">TestMockGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">MockCIConfig</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">=</span> <span class="n">workspace_root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Workspace não encontrado: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="c1"># Componentes base (INJEÇÃO DE CONFIG)</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">TestMockGenerator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>Mudança de Assinatura:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># ANTES: TestMockGenerator(workspace_root: Path, config_path: Path)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># DEPOIS: TestMockGenerator(workspace_root: Path, config: MockCIConfig)</span>
+</code></pre></div>
+<hr />
+<h4 id="223-testmockgenerator-scriptscoremock_generatorpy-linha-67-100"><strong>2.2.3 <code>TestMockGenerator</code> (<code>scripts/core/mock_generator.py</code>) [LINHA 67-100]</strong></h4>
+<p><strong>REFATORAÇÃO COMPLETA:</strong></p>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>  <span class="c1"># ← Path para YAML</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">fs</span><span class="p">:</span> <span class="n">FileSystemAdapter</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">platform</span><span class="p">:</span> <span class="n">PlatformStrategy</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="p">):</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">config_path</span> <span class="o">=</span> <span class="n">config_path</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_config</span><span class="p">()</span>  <span class="c1"># ← Retorna dict</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">MOCK_PATTERNS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_patterns_from_config</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">workspace_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">config</span><span class="p">:</span> <span class="n">MockCIConfig</span><span class="p">,</span>  <span class="c1"># ← Objeto Pydantic validado</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="n">fs</span><span class="p">:</span> <span class="n">FileSystemAdapter</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">platform</span><span class="p">:</span> <span class="n">PlatformStrategy</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="p">):</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>  <span class="c1"># ← Tipado e validado</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">MOCK_PATTERNS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_patterns_from_config</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Métodos a Refatorar:</strong></p>
+<p><strong>1. <code>_load_config()</code> → REMOVER (redundante)</strong></p>
+<ul>
+<li>Carregamento agora é responsabilidade do CLI</li>
+<li>Validação é feita pelo Pydantic</li>
+</ul>
+<p><strong>2. <code>_parse_patterns_from_config()</code> → SIMPLIFICAR</strong></p>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_patterns_from_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]:</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">patterns_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="k">if</span> <span class="s2">&quot;mock_patterns&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>  <span class="c1"># ← Defensivo</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>        <span class="k">return</span> <span class="n">patterns_dict</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="k">for</span> <span class="n">_group_name</span><span class="p">,</span> <span class="n">pattern_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;mock_patterns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># ← Dict</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># ← Defensivo</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>            <span class="k">continue</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pattern_list</span><span class="p">:</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>            <span class="n">pattern_key</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pattern&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>            <span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_parse_patterns_from_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]:</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">patterns_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MockPattern</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="c1"># Type-safe access (self.config é MockCIConfig)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">mock_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mock_patterns</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="c1"># Itera sobre as categorias (http_patterns, subprocess_patterns, etc)</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">mock_patterns</span><span class="o">.</span><span class="n">http_patterns</span><span class="p">:</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>        <span class="n">patterns_dict</span><span class="p">[</span><span class="n">pattern</span><span class="o">.</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">mock_patterns</span><span class="o">.</span><span class="n">subprocess_patterns</span><span class="p">:</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>        <span class="n">patterns_dict</span><span class="p">[</span><span class="n">pattern</span><span class="o">.</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">mock_patterns</span><span class="o">.</span><span class="n">filesystem_patterns</span><span class="p">:</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>        <span class="n">patterns_dict</span><span class="p">[</span><span class="n">pattern</span><span class="o">.</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">mock_patterns</span><span class="o">.</span><span class="n">database_patterns</span><span class="p">:</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>        <span class="n">patterns_dict</span><span class="p">[</span><span class="n">pattern</span><span class="o">.</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Carregados </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">patterns_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> padrões de mock.&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>    <span class="k">return</span> <span class="n">patterns_dict</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ Type-safe (mypy valida)</li>
+<li>✅ Sem <code>.get()</code> defensivo (Pydantic garante estrutura)</li>
+<li>✅ Sem <code>isinstance()</code> checks (Pydantic valida tipos)</li>
+<li>✅ Autocomplete no IDE</li>
+</ul>
+<hr />
+<h4 id="224-cichecker-e-cifixer-sem-mudancas"><strong>2.2.4 <code>CIChecker</code> e <code>CIFixer</code> (SEM MUDANÇAS)</strong></h4>
+<p><strong>Análise:</strong></p>
+<ul>
+<li>✅ Não acessam <code>self.config</code> diretamente</li>
+<li>✅ Apenas recebem <code>generator</code> como dependência</li>
+<li>✅ Se precisarem de config, acessam via <code>generator.config</code></li>
+</ul>
+<p><strong>Conclusão:</strong> Nenhuma mudança necessária nessas classes.</p>
+<hr />
+<h3 id="23-retrocompatibilidade">2.3 Retrocompatibilidade</h3>
+<h4 id="cenario-codigo-legado-esperando-dict"><strong>Cenário: Código Legado Esperando Dict</strong></h4>
+<p><strong>Se algum componente ainda exigir <code>dict</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Conversão de emergência (não recomendado, mas funciona)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">config_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Ou específico para mock_patterns</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">mock_patterns_dict</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="s2">&quot;http_patterns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">mock_patterns</span><span class="o">.</span><span class="n">http_patterns</span><span class="p">],</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="c1"># ...</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>⚠️ EVITAR:</strong> Esta é uma medida de emergência. O ideal é refatorar o código consumidor.</p>
+<hr />
+<h2 id="3-analise-de-riscos">3. ANÁLISE DE RISCOS</h2>
+<h3 id="31-impacto-no-test_mock_generatorpy-legado">3.1 Impacto no <code>test_mock_generator.py</code> (Legado)</h3>
+<p><strong>Análise do Arquivo:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># scripts/test_mock_generator.py [LINHA 1-31]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="sd">&quot;&quot;&quot;[DEPRECATED] Test Mock Generator - Compatibility Wrapper.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># É apenas um wrapper para scripts.cli.mock_generate</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.cli.mock_generate</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+</code></pre></div>
+<p><strong>Conclusão:</strong></p>
+<ul>
+<li>✅ <strong>NENHUM IMPACTO:</strong> É apenas um wrapper deprecado</li>
+<li>✅ Direciona para <code>scripts.cli.mock_generate</code>, que não usa MockCIRunner</li>
+<li>✅ Pode ser ignorado na refatoração</li>
+</ul>
+<hr />
+<h3 id="32-bugs-ocultos-que-a-tipagem-estrita-pode-revelar">3.2 Bugs Ocultos que a Tipagem Estrita Pode Revelar</h3>
+<h4 id="risco-1-campos-opcionais-interpretados-como-obrigatorios"><strong>Risco 1: Campos Opcionais Interpretados como Obrigatórios</strong></h4>
+<p><strong>Cenário:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># YAML malformado (sem &quot;execution&quot; section)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nt">mock_patterns</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">http_patterns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># FALTANDO: execution, logging, reporting</span>
+</code></pre></div>
+<p><strong>Impacto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># ANTES: Funciona (dict vazio)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_string</span><span class="p">)</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;execution&quot;</span><span class="p">,</span> <span class="p">{})</span>  <span class="c1"># → {}</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># DEPOIS: FALHA (Pydantic exige campo)</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="o">**</span><span class="n">yaml_dict</span><span class="p">)</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># ValidationError: Field required: execution</span>
+</code></pre></div>
+<p><strong>Solução:</strong></p>
+<ul>
+<li>Todos os campos em <code>MockCIConfig</code> devem ter <code>default</code> ou <code>default_factory</code></li>
+<li>✅ JÁ IMPLEMENTADO nos modelos Pydantic</li>
+</ul>
+<hr />
+<h4 id="risco-2-tipos-incorretos-no-yaml"><strong>Risco 2: Tipos Incorretos no YAML</strong></h4>
+<p><strong>Cenário:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">execution</span><span class="p">:</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">create_backups</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w">  </span><span class="c1"># ← String ao invés de bool</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">max_suggestions_display</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10&quot;</span><span class="w">  </span><span class="c1"># ← String ao invés de int</span>
+</code></pre></div>
+<p><strong>Impacto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># ANTES: Funciona (Python coerção implícita)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;execution&quot;</span><span class="p">][</span><span class="s2">&quot;create_backups&quot;</span><span class="p">]:</span>  <span class="c1"># &quot;true&quot; é truthy</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># DEPOIS: FALHA (Pydantic valida tipos)</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="o">**</span><span class="n">yaml_dict</span><span class="p">)</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># ValidationError: Input should be a valid boolean</span>
+</code></pre></div>
+<p><strong>Solução:</strong></p>
+<ul>
+<li>✅ Corrigir YAMLs existentes (manual ou script de migração)</li>
+<li>✅ Adicionar documentação de schema</li>
+</ul>
+<hr />
+<h4 id="risco-3-listas-vazias-vs-ausentes"><strong>Risco 3: Listas Vazias vs. Ausentes</strong></h4>
+<p><strong>Cenário:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">mock_patterns</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">http_patterns</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">  </span><span class="c1"># ← Lista vazia</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="c1"># subprocess_patterns: AUSENTE</span>
+</code></pre></div>
+<p><strong>Impacto:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># ANTES: Ambos se comportam igual</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">http</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mock_patterns&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http_patterns&quot;</span><span class="p">,</span> <span class="p">[])</span>  <span class="c1"># []</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">subprocess</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mock_patterns&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subprocess_patterns&quot;</span><span class="p">,</span> <span class="p">[])</span>  <span class="c1"># []</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1"># DEPOIS: Diferença explícita</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">http</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">mock_patterns</span><span class="o">.</span><span class="n">http_patterns</span>  <span class="c1"># []</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="n">subprocess</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">mock_patterns</span><span class="o">.</span><span class="n">subprocess_patterns</span>  <span class="c1"># []</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="c1"># ✅ Mas com default_factory=list, ambos retornam []</span>
+</code></pre></div>
+<p><strong>Solução:</strong></p>
+<ul>
+<li>✅ JÁ IMPLEMENTADO: <code>Field(default_factory=list)</code> em todos os campos de lista</li>
+</ul>
+<hr />
+<h3 id="33-riscos-de-quebra-de-compatibilidade">3.3 Riscos de Quebra de Compatibilidade</h3>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Risco</th>
+<th>Severidade</th>
+<th>Mitigação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CLI (<code>mock_ci.py</code>)</strong></td>
+<td>Assinatura de <code>MockCIRunner</code> muda</td>
+<td>🔴 ALTO</td>
+<td>Atualizar chamada + testes</td>
+</tr>
+<tr>
+<td><strong>MockCIRunner</strong></td>
+<td>Assinatura de <code>__init__</code> muda</td>
+<td>🟡 MÉDIO</td>
+<td>Testes de integração</td>
+</tr>
+<tr>
+<td><strong>TestMockGenerator</strong></td>
+<td>Assinatura de <code>__init__</code> muda</td>
+<td>🟡 MÉDIO</td>
+<td>Testes de unidade</td>
+</tr>
+<tr>
+<td><strong>CIChecker / CIFixer</strong></td>
+<td>Nenhum (indireto via generator)</td>
+<td>🟢 BAIXO</td>
+<td>Nenhuma ação</td>
+</tr>
+<tr>
+<td><strong>test_mock_generator.py</strong></td>
+<td>Wrapper deprecado</td>
+<td>🟢 NENHUM</td>
+<td>Ignorar</td>
+</tr>
+<tr>
+<td><strong>YAMLs existentes</strong></td>
+<td>Validação estrita pode falhar</td>
+<td>🟡 MÉDIO</td>
+<td>Script de validação</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-plano-de-implementacao-step-by-step">4. PLANO DE IMPLEMENTAÇÃO (STEP-BY-STEP)</h2>
+<h3 id="41-fase-1-preparacao-1-hora">4.1 Fase 1: Preparação (1 hora)</h3>
+<p><strong>Tarefa 1.1: Criar Script de Validação de YAML</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># scripts/validate_mock_config.py (NOVO)</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="c1"># Valida test_mock_config.yaml contra MockCIConfig</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="c1"># Detecta problemas antes da migração</span>
+</code></pre></div>
+<p><strong>Tarefa 1.2: Executar Validação</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>python<span class="w"> </span>scripts/validate_mock_config.py<span class="w"> </span>scripts/test_mock_config.yaml
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="c1"># Corrigir qualquer erro encontrado</span>
+</code></pre></div>
+<hr />
+<h3 id="42-fase-2-refatoracao-core-2-3-horas">4.2 Fase 2: Refatoração Core (2-3 horas)</h3>
+<p><strong>Tarefa 2.1: Refatorar <code>TestMockGenerator</code></strong></p>
+<ul>
+<li>Alterar <code>__init__</code> para aceitar <code>MockCIConfig</code></li>
+<li>Remover <code>_load_config()</code></li>
+<li>Simplificar <code>_parse_patterns_from_config()</code></li>
+</ul>
+<p><strong>Tarefa 2.2: Atualizar <code>MockCIRunner</code></strong></p>
+<ul>
+<li>Alterar <code>__init__</code> para aceitar <code>MockCIConfig</code></li>
+<li>Passar <code>config</code> ao invés de <code>config_file</code> para <code>TestMockGenerator</code></li>
+</ul>
+<p><strong>Tarefa 2.3: Atualizar CLI (<code>mock_ci.py</code>)</strong></p>
+<ul>
+<li>Adicionar carregamento + validação de YAML</li>
+<li>Instanciar <code>MockCIConfig</code></li>
+<li>Passar para <code>MockCIRunner</code></li>
+</ul>
+<hr />
+<h3 id="43-fase-3-testes-1-2-horas">4.3 Fase 3: Testes (1-2 horas)</h3>
+<p><strong>Tarefa 3.1: Atualizar Testes de Unidade</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># ANTES</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">generator</span> <span class="o">=</span> <span class="n">TestMockGenerator</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># DEPOIS</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="o">**</span><span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">)))</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="n">generator</span> <span class="o">=</span> <span class="n">TestMockGenerator</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Tarefa 3.2: Testes de Integração</strong></p>
+<ul>
+<li>Executar <code>make validate</code></li>
+<li>Executar suite completa de testes</li>
+<li>Verificar que 455 testes ainda passam</li>
+</ul>
+<p><strong>Tarefa 3.3: Teste Manual</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Verificar que CLI funciona</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--check
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># Verificar que auto-fix funciona</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>python<span class="w"> </span>scripts/cli/mock_ci.py<span class="w"> </span>--auto-fix<span class="w"> </span>--commit
+</code></pre></div>
+<hr />
+<h3 id="44-fase-4-documentacao-30-min">4.4 Fase 4: Documentação (30 min)</h3>
+<p><strong>Tarefa 4.1: Atualizar Docstrings</strong></p>
+<ul>
+<li>Atualizar docstrings de <code>MockCIRunner.__init__</code></li>
+<li>Atualizar docstrings de <code>TestMockGenerator.__init__</code></li>
+</ul>
+<p><strong>Tarefa 4.2: Atualizar README</strong></p>
+<ul>
+<li>Adicionar seção sobre validação de schema</li>
+<li>Documentar novo fluxo de carregamento de configuração</li>
+</ul>
+<hr />
+<h2 id="5-checklist-de-validacao">5. CHECKLIST DE VALIDAÇÃO</h2>
+<h3 id="51-pre-implementacao">5.1 Pré-Implementação</h3>
+<ul>
+<li>[ ] YAML atual é válido contra <code>MockCIConfig.model_json_schema()</code></li>
+<li>[ ] Todos os testes atuais passam (baseline)</li>
+<li>[ ] Branch criada: <code>feat/mock-ci-config-integration</code></li>
+</ul>
+<hr />
+<h3 id="52-durante-implementacao">5.2 Durante Implementação</h3>
+<ul>
+<li>[ ] <code>TestMockGenerator</code> aceita <code>MockCIConfig</code></li>
+<li>[ ] <code>MockCIRunner</code> aceita <code>MockCIConfig</code></li>
+<li>[ ] CLI carrega e valida YAML</li>
+<li>[ ] Type hints atualizados (mypy OK)</li>
+<li>[ ] Docstrings atualizados</li>
+</ul>
+<hr />
+<h3 id="53-pos-implementacao">5.3 Pós-Implementação</h3>
+<ul>
+<li>[ ] 455 testes passando</li>
+<li>[ ] <code>make validate</code> OK (ruff + mypy)</li>
+<li>[ ] CLI funciona: <code>python scripts/cli/mock_ci.py --check</code></li>
+<li>[ ] CLI funciona: <code>python scripts/cli/mock_ci.py --auto-fix</code></li>
+<li>[ ] Documentação atualizada</li>
+</ul>
+<hr />
+<h2 id="6-exemplo-de-uso-pos-migracao">6. EXEMPLO DE USO PÓS-MIGRAÇÃO</h2>
+<h3 id="61-uso-programatico">6.1 Uso Programático</h3>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.mock_ci</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockCIRunner</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="n">workspace</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/project&quot;</span><span class="p">)</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="n">config_file</span> <span class="o">=</span> <span class="n">workspace</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span> <span class="o">/</span> <span class="s2">&quot;test_mock_config.yaml&quot;</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="n">runner</span> <span class="o">=</span> <span class="n">MockCIRunner</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="n">report</span><span class="p">,</span> <span class="n">exit_code</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.mock_ci</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockCIRunner</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.mock_ci.models_pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockCIConfig</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="n">workspace</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/project&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="n">config_file</span> <span class="o">=</span> <span class="n">workspace</span> <span class="o">/</span> <span class="s2">&quot;scripts&quot;</span> <span class="o">/</span> <span class="s2">&quot;test_mock_config.yaml&quot;</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a>
+<a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="c1"># Carrega e valida</span>
+<a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a>        <span class="n">raw_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>
+<a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">MockCIConfig</span><span class="p">(</span><span class="o">**</span><span class="n">raw_config</span><span class="p">)</span>
+<a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Configuração validada&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a><span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Configuração inválida: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a>    <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>
+<a id="__codelineno-28-21" name="__codelineno-28-21" href="#__codelineno-28-21"></a><span class="c1"># Usa configuração validada</span>
+<a id="__codelineno-28-22" name="__codelineno-28-22" href="#__codelineno-28-22"></a><span class="n">runner</span> <span class="o">=</span> <span class="n">MockCIRunner</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<a id="__codelineno-28-23" name="__codelineno-28-23" href="#__codelineno-28-23"></a><span class="n">report</span><span class="p">,</span> <span class="n">exit_code</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h3 id="62-type-safety-em-acao">6.2 Type Safety em Ação</h3>
+<p><strong>ANTES (Sem Type Safety):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># Pode falhar em runtime</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="n">max_suggestions</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;reporting&quot;</span><span class="p">][</span><span class="s2">&quot;max_suggestions_display&quot;</span><span class="p">]</span>  <span class="c1"># Dict access</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="c1"># Mypy: OK (mas pode quebrar em runtime se chave não existir)</span>
+</code></pre></div>
+<p><strong>DEPOIS (Type Safe):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="c1"># Mypy valida em tempo de compilação</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="n">max_suggestions</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">reporting</span><span class="o">.</span><span class="n">max_suggestions_display</span>  <span class="c1"># Typed access</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="c1"># Mypy: OK (e garante que o campo existe)</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="c1"># Autocomplete no IDE:</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="n">config</span><span class="o">.</span><span class="n">reporting</span><span class="o">.</span>  <span class="c1"># ← IDE sugere: include_low_priority, max_suggestions_display, output_format</span>
+</code></pre></div>
+<hr />
+<h2 id="7-conclusao">7. CONCLUSÃO</h2>
+<h3 id="71-beneficios-esperados">7.1 Benefícios Esperados</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Antes</th>
+<th>Depois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Validação</strong></td>
+<td>Em runtime (tardia)</td>
+<td>Em carregamento (cedo)</td>
+</tr>
+<tr>
+<td><strong>Type Safety</strong></td>
+<td><code>dict[str, Any]</code></td>
+<td><code>MockCIConfig</code> (tipado)</td>
+</tr>
+<tr>
+<td><strong>IDE Support</strong></td>
+<td>Nenhum autocomplete</td>
+<td>Autocomplete completo</td>
+</tr>
+<tr>
+<td><strong>Documentação</strong></td>
+<td>Comentários manuais</td>
+<td>Schema JSON auto-gerado</td>
+</tr>
+<tr>
+<td><strong>Manutenibilidade</strong></td>
+<td>Baixa (dict opaco)</td>
+<td>Alta (estrutura clara)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-estimativa-de-esforco">7.2 Estimativa de Esforço</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>Fase 1: Preparação        → 1 hora
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>Fase 2: Refatoração Core  → 2-3 horas
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>Fase 3: Testes            → 1-2 horas
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>Fase 4: Documentação      → 30 min
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>─────────────────────────────────────
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>Total:                    → 4.5-6.5 horas
+</code></pre></div>
+<h3 id="73-complexidade">7.3 Complexidade</h3>
+<ul>
+<li><strong>Técnica:</strong> 🟡 Média (requer conhecimento de Pydantic)</li>
+<li><strong>Risco:</strong> 🟢 Baixo (mudanças localizadas, testes existentes)</li>
+<li><strong>Impacto:</strong> 🔴 Alto (melhora significativa na qualidade do código)</li>
+</ul>
+<h3 id="74-recomendacao">7.4 Recomendação</h3>
+<p>✅ <strong>PROCEDER COM A IMPLEMENTAÇÃO</strong></p>
+<p>A migração é:</p>
+<ul>
+<li>Bem delimitada (3 arquivos principais)</li>
+<li>Baixo risco de quebra (cobertura de testes existente)</li>
+<li>Alto retorno (type safety + validação automática)</li>
+<li>Preparação para futuras extensões (novos campos validados automaticamente)</li>
+</ul>
+<hr />
+<p><strong>STATUS:</strong> 🟢 PRONTO PARA FASE 03 - IMPLEMENTAÇÃO
+<strong>Próxima Ação:</strong> Criar branch <code>feat/mock-ci-config-integration</code> e iniciar Fase 2.1</p>
+<hr />
+<p><em>Relatório gerado automaticamente em 2025-12-18 15:25 UTC</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
