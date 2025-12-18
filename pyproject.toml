@@ -60,6 +60,7 @@ mock-gen = "scripts.cli.mock_generate:main"
 mock-check = "scripts.cli.mock_validate:main"
 mock-ci = "scripts.cli.mock_ci:main"
 cortex = "scripts.cli.cortex:main"
+toml-fusion = "scripts.cli.fusion:main"
 
 # Configuração do setuptools para incluir pacotes
 [tool.setuptools.packages.find]
