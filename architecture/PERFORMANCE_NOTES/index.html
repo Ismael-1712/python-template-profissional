@@ -656,10 +656,38 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#resultados-preliminares" class="md-nav__link">
+  <a href="#resultados-empiricos-2025-12-17" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Resultados Preliminares
+        Resultados Empíricos (2025-12-17)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-analysis-action-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Analysis &amp; Action Items
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Analysis &amp; Action Items">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#critical-findings-from-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical Findings from Benchmarks
       
     </span>
   </a>
@@ -828,6 +856,12 @@
 
 
 <h1 id="performance-concurrency-cortex-system">Performance &amp; Concurrency - Cortex System</h1>
+<blockquote>
+<p>⚠️ <strong>STATUS (v0.1.0):</strong> Parallel processing <strong>DISABLED</strong> due to performance regression.
+Empirical benchmarks show 34% slowdown (0.66x speedup) with <code>ThreadPoolExecutor</code> due to GIL contention.
+Sequential processing is enforced for all workloads (<code>PARALLEL_THRESHOLD = sys.maxsize</code>).
+See <a href="#performance-analysis--action-items">Performance Analysis</a> for details and future roadmap.</p>
+</blockquote>
 <h2 id="visao-geral">Visão Geral</h2>
 <p>Este documento descreve as estratégias de otimização de performance implementadas
 no sistema CORTEX, com foco em paralelização de operações I/O e garantias de
@@ -897,11 +931,13 @@ para otimizar o processamento de grandes bases de conhecimento:</p>
 <h3 id="metodologia">Metodologia</h3>
 <p>Benchmarks executados em:</p>
 <ul>
-<li><strong>Hardware:</strong> TBD (será atualizado após implementação do <code>scripts/benchmark_cortex.py</code>)</li>
+<li><strong>Hardware:</strong> Linux 6.6.87.2-WSL2, x86_64, 16 CPU cores</li>
+<li><strong>Python:</strong> 3.12.12</li>
 <li><strong>Dataset:</strong> Arquivos Markdown com frontmatter YAML (~2KB cada)</li>
-<li><strong>Métricas:</strong> Tempo médio de scan completo (5 execuções)</li>
+<li><strong>Métricas:</strong> Tempo médio de scan completo (5 execuções por cenário)</li>
+<li><strong>Script:</strong> <code>scripts/benchmark_cortex_perf.py</code></li>
 </ul>
-<h3 id="resultados-preliminares">Resultados Preliminares</h3>
+<h3 id="resultados-empiricos-2025-12-17">Resultados Empíricos (2025-12-17)</h3>
 <table>
 <thead>
 <tr>
@@ -915,33 +951,121 @@ para otimizar o processamento de grandes bases de conhecimento:</p>
 <tbody>
 <tr>
 <td>10 files</td>
-<td>TBD ms</td>
-<td>TBD ms</td>
-<td>TBD x</td>
-<td>TBD ms</td>
+<td>5.29 ms</td>
+<td>8.84 ms</td>
+<td>0.60x</td>
+<td>0.00 ms</td>
 </tr>
 <tr>
 <td>50 files</td>
-<td>TBD ms</td>
-<td>TBD ms</td>
-<td>TBD x</td>
-<td>TBD ms</td>
+<td>21.17 ms</td>
+<td>32.37 ms</td>
+<td>0.65x</td>
+<td>0.00 ms</td>
 </tr>
 <tr>
 <td>100 files</td>
-<td>TBD ms</td>
-<td>TBD ms</td>
-<td>TBD x</td>
-<td>TBD ms</td>
+<td>42.47 ms</td>
+<td>60.19 ms</td>
+<td>0.71x</td>
+<td>0.00 ms</td>
+</tr>
+<tr>
+<td>500 files</td>
+<td>207.16 ms</td>
+<td>301.57 ms</td>
+<td>0.69x</td>
+<td>0.00 ms</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Notas:</strong></p>
+<p><strong>Notas Críticas:</strong></p>
 <ul>
-<li>Speedup calculado como: <code>tempo_sequencial / tempo_paralelo</code></li>
-<li>Overhead estimado: diferença entre tempo paralelo ideal e real</li>
-<li><em>(Benchmarks serão atualizados na Etapa 2 - Prova de Valor)</em></li>
+<li>⚠️ <strong>Speedup &lt; 1.0:</strong> Modo paralelo está <strong>mais lento</strong> que sequencial em todos os cenários</li>
+<li><strong>Causa Raiz:</strong> Overhead de <code>ThreadPoolExecutor</code> + GIL (Global Interpreter Lock) do Python</li>
+<li><strong>I/O Bound Myth:</strong> Embora I/O seja assíncrono no OS, o parsing de YAML/Markdown é CPU-bound</li>
+<li><strong>Recomendação Imediata:</strong> Aumentar threshold de 10 para <strong>100+ arquivos</strong> ou desabilitar paralelo</li>
+<li><strong>Speedup calculado como:</strong> <code>tempo_sequencial / tempo_paralelo</code> (valores &lt;1.0 = regressão)</li>
+<li><em>(Benchmarks executados em 2025-12-17 via <code>scripts/benchmark_cortex_perf.py</code>)</em></li>
 </ul>
+<hr />
+<h2 id="performance-analysis-action-items">Performance Analysis &amp; Action Items</h2>
+<h3 id="critical-findings-from-benchmarks">Critical Findings from Benchmarks</h3>
+<p><strong>1. Parallel Processing Regression</strong></p>
+<p>Os benchmarks empíricos revelam que a implementação atual de paralelização está
+causando <strong>degradação de performance</strong> em vez de aceleração:</p>
+<ul>
+<li><strong>Speedup médio:</strong> 0.66x (regressão de ~34%)</li>
+<li><strong>Pior caso:</strong> 10 arquivos = 0.60x (40% mais lento)</li>
+<li><strong>Melhor caso:</strong> 100 arquivos = 0.71x (ainda 29% mais lento)</li>
+</ul>
+<p><strong>Root Cause Analysis:</strong></p>
+<ol>
+<li>
+<p><strong>GIL Contention:</strong> Python's Global Interpreter Lock serializa execução de bytecode,
+   mesmo em threads I/O-bound. O parsing de YAML/Markdown é suficientemente CPU-bound
+   para criar contenção.</p>
+</li>
+<li>
+<p><strong>Thread Overhead:</strong> Criação do <code>ThreadPoolExecutor</code>, scheduling, e context switching
+   têm custo fixo que excede os ganhos em datasets pequenos/médios.</p>
+</li>
+<li>
+<p><strong>False I/O Assumption:</strong> Assumiu-se que leitura de arquivos era o gargalo, mas
+   benchmarks mostram que parsing (CPU) domina o tempo total.</p>
+</li>
+</ol>
+<p><strong>2. Threshold Inadequado</strong></p>
+<p>O threshold atual de <strong>10 arquivos</strong> para ativar paralelização é muito baixo:</p>
+<ul>
+<li>Com 10 arquivos, paralelo é 40% mais lento</li>
+<li>Mesmo com 500 arquivos, paralelo ainda é 31% mais lento</li>
+<li>Dados sugerem que threshold deveria ser <strong>muito maior</strong> ou desabilitado</li>
+</ul>
+<p><strong>3. Ações Recomendadas (Prioridade Decrescente)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Prioridade</th>
+<th>Ação</th>
+<th>Impacto Estimado</th>
+<th>Complexidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P0</strong></td>
+<td>Desabilitar paralelização (threshold = ∞)</td>
+<td>+34% speedup imediato</td>
+<td>Trivial (1 linha)</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>Implementar com <code>multiprocessing</code> (bypass GIL)</td>
+<td>+50-100% speedup</td>
+<td>Média (refactor)</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>Profile CPU vs I/O ratio com <code>cProfile</code></td>
+<td>Dados para decisões</td>
+<td>Baixa (adicionar logging)</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td>Implementar async I/O com <code>asyncio</code> + <code>aiofiles</code></td>
+<td>+20-40% speedup</td>
+<td>Alta (rewrite)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Decisão Executiva:</strong></p>
+<p>Para <strong>Etapa 3 (Otimização)</strong>, recomenda-se:</p>
+<ol>
+<li>Remover paralelização atual (1 linha de código)</li>
+<li>Re-implementar com <code>multiprocessing.Pool</code> se necessário para bases &gt;1000 arquivos</li>
+<li>Adicionar flag <code>--max-workers</code> para usuários experimentarem</li>
+</ol>
 <hr />
 <h2 id="known-limitations">Known Limitations</h2>
 <h3 id="configurabilidade">Configurabilidade</h3>
