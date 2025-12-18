@@ -146,7 +146,7 @@ class TestMockGenerator:
 
                     patterns_dict[pattern_key] = MockPatternClass(
                         pattern=pattern_key,
-                        mock_type=p.get("type", "UNKNOWN"),
+                        type=p.get("type", "UNKNOWN"),  # Usa 'type' (alias)
                         # Usa .get() para mock_template para evitar KeyError
                         mock_template=p.get("mock_template", "").strip(),
                         required_imports=p.get("required_imports", []),
