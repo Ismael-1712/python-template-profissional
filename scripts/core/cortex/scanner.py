@@ -16,6 +16,7 @@ License: MIT
 from __future__ import annotations
 
 import ast
+import functools
 import logging
 from pathlib import Path
 from typing import Any
@@ -66,6 +67,34 @@ class CodeLinkScanner:
         self.fs = fs
         self.workspace_root = workspace_root.resolve()
         logger.debug(f"Initialized CodeLinkScanner with root: {self.workspace_root}")
+
+    @staticmethod
+    @functools.lru_cache(maxsize=128)
+    def _parse_ast_cached(python_file: str, workspace_root_str: str) -> ast.Module:
+        """Parse Python file into AST with caching.
+
+        This static method caches AST parsing results to avoid expensive
+        re-parsing of the same files during a scan session. Uses file path
+        as cache key under the assumption that files don't change during
+        a single command execution.
+
+        Args:
+            python_file: Relative path to Python file
+            workspace_root_str: Workspace root as string (for hashability)
+
+        Returns:
+            Parsed AST Module tree
+
+        Raises:
+            SyntaxError: If Python file has syntax errors
+            OSError: If file cannot be read
+        """
+        full_path = Path(workspace_root_str) / python_file
+        source_code = full_path.read_text(encoding="utf-8")
+        tree = ast.parse(source_code, filename=str(full_path))
+        # ast.parse always returns ast.Module for source code
+        assert isinstance(tree, ast.Module)
+        return tree
 
     def _should_ignore_broken_links(
         self,
@@ -294,10 +323,8 @@ class CodeLinkScanner:
         result["exists"] = True
 
         try:
-            # Parse Python file with AST
-            source_code = self.fs.read_text(full_path)
-
-            tree = ast.parse(source_code, filename=str(full_path))
+            # Parse Python file with AST (using cached method)
+            tree = self._parse_ast_cached(python_file, str(self.workspace_root))
 
             # Extract top-level class and function definitions
             # Only iterate through top-level nodes to avoid counting methods
