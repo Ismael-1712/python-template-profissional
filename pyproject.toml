@@ -32,6 +32,8 @@ dependencies = [
     "chromadb>=0.4.0",
     # Embeddings para busca semântica
     "sentence-transformers>=2.2.0",
+    # TOML parser para Python 3.10 (fallback de tomllib que existe apenas em 3.11+)
+    "tomli>=2.0.1",
 ]
 
 # Dependências de desenvolvimento
