@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### Performance
+
+- **CORTEX Scanners Performance Optimization**: Implemented caching and parallelism for improved scan performance
+  - **AST Caching**: Added `@functools.lru_cache` to `CodeLinkScanner.analyze_python_exports()` to cache Python AST parsing
+    - Cache size: 128 entries (sufficient for typical project scans)
+    - 5-50x speedup expected for repeated analysis of the same files
+    - Static method `_parse_ast_cached()` prevents memory leaks from instance references
+  - **Parallel Knowledge Scanning**: Implemented `ThreadPoolExecutor` in `KnowledgeScanner.scan()`
+    - Automatic threshold: parallel processing activates for ≥10 files (avoids overhead for small scans)
+    - Worker count: `min(4, os.cpu_count())` for optimal I/O-bound performance
+    - Thread-safe wrapper `_parse_knowledge_file_safe()` ensures resilient error handling
+    - Expected speedup: 2-3x for repositories with 50+ knowledge files
+  - Both optimizations maintain backward compatibility and existing error handling behavior
+
 ### Added
 
 - **Integration Tests for CORTEX Pipeline**: Comprehensive end-to-end tests for Scan → Resolve → Context flow

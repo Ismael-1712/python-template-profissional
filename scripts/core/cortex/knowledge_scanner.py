@@ -16,6 +16,8 @@ License: MIT
 from __future__ import annotations
 
 import logging
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -116,19 +118,57 @@ class KnowledgeScanner:
 
         entries: list[KnowledgeEntry] = []
 
-        for file_path in markdown_files:
-            try:
-                entry = self._parse_knowledge_file(file_path)
-                entries.append(entry)
-                logger.debug("Successfully parsed: %s -> %s", file_path, entry.id)
-            except (KeyError, ValueError, ValidationError) as e:
-                # Log error but continue processing other files (resilience)
-                logger.warning(
-                    "Failed to parse knowledge file %s: %s",
-                    file_path,
-                    str(e),
-                    exc_info=True,
-                )
+        # Use parallel processing for large sets of files
+        if len(markdown_files) >= 10:
+            # Determine optimal number of workers
+            max_workers = min(4, os.cpu_count() or 1)
+            logger.debug(
+                "Using parallel processing with %d workers for %d files",
+                max_workers,
+                len(markdown_files),
+            )
+
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Submit all parsing tasks
+                future_to_file = {
+                    executor.submit(
+                        self._parse_knowledge_file_safe,
+                        file_path,
+                    ): file_path
+                    for file_path in markdown_files
+                }
+
+                # Collect results as they complete
+                for future in as_completed(future_to_file):
+                    file_path = future_to_file[future]
+                    try:
+                        entry = future.result()
+                        if entry is not None:
+                            entries.append(entry)
+                            logger.debug(
+                                "Successfully parsed: %s -> %s",
+                                file_path,
+                                entry.id,
+                            )
+                    except Exception as e:
+                        # Errors are caught in _parse_knowledge_file_safe
+                        logger.error(
+                            "Unexpected error processing %s: %s",
+                            file_path,
+                            str(e),
+                            exc_info=True,
+                        )
+        else:
+            # Sequential processing for small sets (avoid thread overhead)
+            logger.debug(
+                "Using sequential processing for %d files",
+                len(markdown_files),
+            )
+            for file_path in markdown_files:
+                entry = self._parse_knowledge_file_safe(file_path)
+                if entry is not None:
+                    entries.append(entry)
+                    logger.debug("Successfully parsed: %s -> %s", file_path, entry.id)
 
         logger.info(
             "Knowledge scan complete: %d/%d files successfully parsed",
@@ -136,6 +176,31 @@ class KnowledgeScanner:
             len(markdown_files),
         )
         return entries
+
+    def _parse_knowledge_file_safe(self, file_path: Path) -> KnowledgeEntry | None:
+        """Thread-safe wrapper for parsing knowledge files with error handling.
+
+        This method wraps _parse_knowledge_file to provide graceful error
+        handling suitable for parallel execution. Individual file failures
+        are logged but don't stop the overall scan process.
+
+        Args:
+            file_path: Path to the Markdown file to parse
+
+        Returns:
+            KnowledgeEntry object if parsing succeeds, None if it fails
+        """
+        try:
+            return self._parse_knowledge_file(file_path)
+        except (KeyError, ValueError, ValidationError) as e:
+            # Log error but continue processing other files (resilience)
+            logger.warning(
+                "Failed to parse knowledge file %s: %s",
+                file_path,
+                str(e),
+                exc_info=True,
+            )
+            return None
 
     def _parse_knowledge_file(self, file_path: Path) -> KnowledgeEntry:
         """Parse a single Knowledge Node Markdown file.
