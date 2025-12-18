@@ -35,4 +35,5 @@ class TestMockCIRunnerStructure:
 
         assert "self" in params
         assert "workspace_root" in params
-        assert "config_file" in params
+        # BREAKING CHANGE: config_file -> config (MockCIConfig)
+        assert "config" in params
