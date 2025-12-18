@@ -89,6 +89,8 @@ cortex audit docs/                   # Validar docs (frontmatter + links)
 cortex audit --links --strict        # Modo CI (falha em broken links)
 cortex init docs/guides/new-doc.md   # Adicionar frontmatter YAML
 cortex map                           # Gerar .cortex/context.json
+cortex knowledge-scan                # Scan knowledge base (sequential mode)
+cortex knowledge-scan --parallel     # Experimental parallel mode (large datasets)
 
 # === Guardian (Security) ===
 cortex guardian check .              # Detectar configs hardcoded
