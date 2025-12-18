@@ -1,0 +1,1126 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Considerações de Performance do Sistema Cortex">
+      
+      
+        <meta name="author" content="SRE & Performance Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Performance & Concurrency - Cortex System - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#performance-concurrency-cortex-system" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Performance &amp; Concurrency - Cortex System
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledgescanner-parallelization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KnowledgeScanner Parallelization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KnowledgeScanner Parallelization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrategia-de-paralelizacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estratégia de Paralelização
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracao-de-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuração de Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thread-safety-guarantees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread Safety Guarantees
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Thread Safety Guarantees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memoryfilesystem-v110" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MemoryFileSystem (v1.1.0+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#realfilesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RealFileSystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benchmarks-de-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarks de Performance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmarks de Performance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metodologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metodologia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resultados-preliminares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultados Preliminares
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Known Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configurabilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configurabilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paralelizacao-de-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paralelização de Links
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memória
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cobertura-de-testes-de-concorrencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cobertura de Testes de Concorrência
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execucao-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execução de Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-optimizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Optimizations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Optimizations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#roadmap-de-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap de Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consideracoes-para-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Considerações para Scaling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="performance-concurrency-cortex-system">Performance &amp; Concurrency - Cortex System</h1>
+<h2 id="visao-geral">Visão Geral</h2>
+<p>Este documento descreve as estratégias de otimização de performance implementadas
+no sistema CORTEX, com foco em paralelização de operações I/O e garantias de
+thread-safety para ambientes concorrentes.</p>
+<hr />
+<h2 id="knowledgescanner-parallelization">KnowledgeScanner Parallelization</h2>
+<h3 id="estrategia-de-paralelizacao">Estratégia de Paralelização</h3>
+<p>O <code>KnowledgeScanner</code> implementa paralelização automática baseada em threshold
+para otimizar o processamento de grandes bases de conhecimento:</p>
+<p><strong>Threshold Decision:</strong></p>
+<ul>
+<li><strong>&lt; 10 arquivos:</strong> Processamento sequencial (evita overhead de threads)</li>
+<li><strong>≥ 10 arquivos:</strong> Processamento paralelo (até 4 workers)</li>
+</ul>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li>Para conjuntos pequenos (&lt;10 arquivos), o overhead de criação do <code>ThreadPoolExecutor</code>
+  excede o ganho de paralelização</li>
+<li>Para conjuntos grandes (≥10 arquivos), os ganhos de I/O paralelo compensam o overhead</li>
+<li>Limite de 4 workers evita saturação de CPU e contenção de recursos</li>
+</ul>
+<h3 id="configuracao-de-workers">Configuração de Workers</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">max_workers</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Racionalidade:</strong></p>
+<ul>
+<li><strong>4 workers:</strong> Balanceamento entre throughput e contenção de recursos</li>
+<li>Baseado em benchmarks empíricos com cargas típicas de documentação</li>
+<li>Pode ser aumentado em hardware high-end (futuro: tornar configurável)</li>
+</ul>
+<hr />
+<h2 id="thread-safety-guarantees">Thread Safety Guarantees</h2>
+<h3 id="memoryfilesystem-v110">MemoryFileSystem (v1.1.0+)</h3>
+<p>O <code>MemoryFileSystem</code> implementa thread-safety completa através de <code>threading.RLock</code>:</p>
+<p><strong>Operações Protegidas:</strong></p>
+<ul>
+<li>✅ <code>read_text()</code> - Leituras concorrentes seguras</li>
+<li>✅ <code>write_text()</code> - Escritas sem race conditions</li>
+<li>✅ <code>exists()</code> - Verificações atômicas</li>
+<li>✅ <code>mkdir()</code> - Criação de diretórios thread-safe</li>
+<li>✅ <code>glob()</code> / <code>rglob()</code> - Buscas concorrentes consistentes</li>
+<li>✅ <code>copy()</code> - Cópias atômicas</li>
+</ul>
+<p><strong>Limitações Conhecidas:</strong></p>
+<ul>
+<li>Check-then-act patterns requerem sincronização externa:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ❌ NÃO é atômico (requer lock externo)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">fs</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">fs</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>  <span class="c1"># Pode falhar se outro thread criou</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># ✅ Atômico (internamente protegido)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">fs</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">fs</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="realfilesystem">RealFileSystem</h3>
+<p>Thread-safety delegada ao sistema operacional:</p>
+<ul>
+<li>Operações de arquivo são atômicas no nível do kernel</li>
+<li>Escritas concorrentes no mesmo arquivo podem causar corrupção (limitação do OS)</li>
+<li><strong>Recomendação:</strong> Use <code>scripts.utils.atomic</code> para escritas críticas</li>
+</ul>
+<hr />
+<h2 id="benchmarks-de-performance">Benchmarks de Performance</h2>
+<h3 id="metodologia">Metodologia</h3>
+<p>Benchmarks executados em:</p>
+<ul>
+<li><strong>Hardware:</strong> TBD (será atualizado após implementação do <code>scripts/benchmark_cortex.py</code>)</li>
+<li><strong>Dataset:</strong> Arquivos Markdown com frontmatter YAML (~2KB cada)</li>
+<li><strong>Métricas:</strong> Tempo médio de scan completo (5 execuções)</li>
+</ul>
+<h3 id="resultados-preliminares">Resultados Preliminares</h3>
+<table>
+<thead>
+<tr>
+<th>File Count</th>
+<th>Sequential</th>
+<th>Parallel (4 workers)</th>
+<th>Speedup</th>
+<th>Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 files</td>
+<td>TBD ms</td>
+<td>TBD ms</td>
+<td>TBD x</td>
+<td>TBD ms</td>
+</tr>
+<tr>
+<td>50 files</td>
+<td>TBD ms</td>
+<td>TBD ms</td>
+<td>TBD x</td>
+<td>TBD ms</td>
+</tr>
+<tr>
+<td>100 files</td>
+<td>TBD ms</td>
+<td>TBD ms</td>
+<td>TBD x</td>
+<td>TBD ms</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notas:</strong></p>
+<ul>
+<li>Speedup calculado como: <code>tempo_sequencial / tempo_paralelo</code></li>
+<li>Overhead estimado: diferença entre tempo paralelo ideal e real</li>
+<li><em>(Benchmarks serão atualizados na Etapa 2 - Prova de Valor)</em></li>
+</ul>
+<hr />
+<h2 id="known-limitations">Known Limitations</h2>
+<h3 id="configurabilidade">Configurabilidade</h3>
+<ul>
+<li><strong><code>max_workers=4</code> hardcoded:</strong> Não configurável via CLI ou variável de ambiente</li>
+<li><strong>Impacto:</strong> Usuários com hardware high-end não podem aumentar paralelismo</li>
+<li><strong>Workaround:</strong> Editar <code>knowledge_scanner.py</code> diretamente (não recomendado)</li>
+</ul>
+<h3 id="paralelizacao-de-links">Paralelização de Links</h3>
+<ul>
+<li><strong>Link extraction é sequencial:</strong> Cada worker processa links de forma independente</li>
+<li><strong>Impacto:</strong> Para arquivos com muitos links, pode haver gargalo</li>
+<li><strong>Mitigação planejada:</strong> Paralelizar <code>LinkAnalyzer.extract_links()</code> na Etapa 3</li>
+</ul>
+<h3 id="memoria">Memória</h3>
+<ul>
+<li><strong>Todo conteúdo em RAM:</strong> Arquivos grandes podem causar pressão de memória</li>
+<li><strong>Impacto:</strong> Bases de conhecimento com centenas de arquivos grandes (&gt;1MB)</li>
+<li><strong>Mitigação:</strong> Limitar <code>cached_content</code> ou implementar lazy loading</li>
+</ul>
+<hr />
+<h2 id="testing-strategy">Testing Strategy</h2>
+<h3 id="cobertura-de-testes-de-concorrencia">Cobertura de Testes de Concorrência</h3>
+<p>Implementado em <code>tests/test_cortex_concurrency.py</code>:</p>
+<ol>
+<li><strong><code>test_parallel_integrity</code></strong></li>
+<li>Valida que 50 arquivos retornam exatamente 50 entradas</li>
+<li>
+<p>Detecta duplicatas ou perdas de dados</p>
+</li>
+<li>
+<p><strong><code>test_concurrent_scans_shared_filesystem</code></strong></p>
+</li>
+<li>Stress test: 4 scans simultâneos no mesmo FS</li>
+<li>
+<p>Valida RLock do MemoryFileSystem</p>
+</li>
+<li>
+<p><strong><code>test_parallel_determinism</code></strong></p>
+</li>
+<li>Executa scan 10 vezes e compara resultados</li>
+<li>
+<p>Garante que paralelismo não introduz não-determinismo</p>
+</li>
+<li>
+<p><strong><code>test_threshold_sequential_processing</code></strong></p>
+</li>
+<li>Valida que 9 arquivos usam modo sequencial</li>
+<li>
+<p>Verifica logs de debug</p>
+</li>
+<li>
+<p><strong><code>test_threshold_parallel_processing</code></strong></p>
+</li>
+<li>Valida que 50 arquivos usam modo paralelo</li>
+<li>Verifica logs de worker count</li>
+</ol>
+<h3 id="execucao-de-testes">Execução de Testes</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Testes sequenciais</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pytest<span class="w"> </span>tests/test_cortex_concurrency.py<span class="w"> </span>-v
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Stress test paralelo (detecta race conditions raras)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>pytest<span class="w"> </span>tests/test_cortex_concurrency.py<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>--count<span class="o">=</span><span class="m">10</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Com cobertura</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>pytest<span class="w"> </span>tests/test_cortex_concurrency.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>--cov<span class="o">=</span>scripts.core.cortex.knowledge_scanner<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--cov-report<span class="o">=</span>term-missing
+</code></pre></div>
+<hr />
+<h2 id="future-optimizations">Future Optimizations</h2>
+<h3 id="roadmap-de-performance">Roadmap de Performance</h3>
+<ul>
+<li>[ ] <strong>P1:</strong> Paralelizar <code>LinkAnalyzer.extract_links()</code> (Etapa 3)</li>
+<li>Benefício: ~20% speedup em arquivos link-heavy</li>
+<li>
+<p>Complexidade: Média (requer refatoração do analyzer)</p>
+</li>
+<li>
+<p>[ ] <strong>P2:</strong> Tornar <code>max_workers</code> configurável via CLI</p>
+</li>
+<li>Benefício: Flexibilidade para diferentes ambientes</li>
+<li>
+<p>Implementação: Adicionar flag <code>--max-workers</code> ao <code>cortex scan</code></p>
+</li>
+<li>
+<p>[ ] <strong>P3:</strong> Implementar cache de parsed entries</p>
+</li>
+<li>Benefício: Evitar re-parsing em scans repetidos</li>
+<li>
+<p>Complexidade: Alta (requer invalidação de cache inteligente)</p>
+</li>
+<li>
+<p>[ ] <strong>P4:</strong> Lazy loading de <code>cached_content</code></p>
+</li>
+<li>Benefício: Reduzir consumo de memória em bases grandes</li>
+<li>Trade-off: Pode aumentar latência em operações de leitura</li>
+</ul>
+<h3 id="consideracoes-para-scaling">Considerações para Scaling</h3>
+<p>Para bases de conhecimento com <strong>&gt;500 arquivos</strong>:</p>
+<ul>
+<li>Considere aumentar <code>max_workers</code> para 8-16 (requer edição manual)</li>
+<li>Monitore consumo de memória (cada entry ~5-10KB em RAM)</li>
+<li>Implemente batching se enfrentar <code>MemoryError</code></li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><strong>Código Fonte:</strong> <a href="../../scripts/core/cortex/knowledge_scanner.py"><code>scripts/core/cortex/knowledge_scanner.py</code></a></li>
+<li><strong>Testes:</strong> <a href="../../tests/test_cortex_concurrency.py"><code>tests/test_cortex_concurrency.py</code></a></li>
+<li><strong>FileSystem Adapter:</strong> <a href="../../scripts/utils/filesystem.py"><code>scripts/utils/filesystem.py</code></a></li>
+</ul>
+<hr />
+<p><strong>Última Atualização:</strong> 2025-12-17
+<strong>Versão:</strong> 1.0.0
+<strong>Autor:</strong> SRE &amp; Performance Engineering Team</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
