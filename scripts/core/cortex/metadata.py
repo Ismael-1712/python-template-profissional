@@ -247,6 +247,16 @@ class FrontmatterParser:
                     f"({MAX_RELATED_DOCS})",
                 )
 
+        # Validate Knowledge Nodes MUST have golden_paths
+        if metadata.get("type") == "knowledge":
+            golden_paths = metadata.get("golden_paths")
+            if not golden_paths:
+                errors.append("Knowledge Nodes MUST have 'golden_paths' field")
+            elif not isinstance(golden_paths, list):
+                errors.append("Field 'golden_paths' must be a list")
+            elif len(golden_paths) == 0:
+                errors.append("Knowledge Nodes MUST have non-empty 'golden_paths' list")
+
         # Check for recommended fields (warnings only)
         for field in RECOMMENDED_FIELDS:
             if field not in metadata or not metadata[field]:
