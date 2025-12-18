@@ -760,6 +760,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#interactive-mode-interactive-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Mode - --interactive (NEW)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -881,6 +892,17 @@
     <span class="md-ellipsis">
       
         🔧 Integration with Makefile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-cortex-new" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 Integration with Cortex (NEW)
       
     </span>
   </a>
@@ -1030,7 +1052,8 @@
 <p><strong>Options:</strong></p>
 <ul>
 <li><code>--output, -o PATH</code>: Write to different file (default: overwrites TARGET)</li>
-<li><code>--strategy, -s NAME</code>: Merge strategy (smart, template, user)</li>
+<li><code>--strategy, -s NAME</code>: Merge strategy (smart, template, user, interactive)</li>
+<li><code>--interactive, -i</code>: Prompt user to resolve conflicts interactively (requires rich)</li>
 <li><code>--dry-run, -n</code>: Preview changes without modifying files</li>
 <li><code>--no-backup</code>: Skip backup creation (not recommended)</li>
 </ul>
@@ -1096,16 +1119,49 @@
 <h3 id="user-priority-strategyuser">User Priority - <code>--strategy=user</code></h3>
 <p><strong>Behavior:</strong> User values preserved; template only fills gaps.</p>
 <p><strong>Use when:</strong> Minimal disruption; only add missing keys.</p>
+<h3 id="interactive-mode-interactive-new">Interactive Mode - <code>--interactive</code> (NEW)</h3>
+<p><strong>Behavior:</strong> Prompts user for each conflict with rich UI.</p>
+<p><strong>Use when:</strong> You want fine-grained control over every change.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>toml-fusion<span class="w"> </span>template.toml<span class="w"> </span>pyproject.toml<span class="w"> </span>--interactive
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="o">======================================================================</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>⚠️<span class="w">  </span>Merge<span class="w"> </span>Conflict
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>──────────────────────────────────────────────────────────────────────
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>Conflict<span class="w"> </span>at<span class="w"> </span>key:<span class="w"> </span>tool.ruff.line-length
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>📌<span class="w"> </span>User<span class="w"> </span><span class="o">(</span>Current<span class="w"> </span>Value<span class="o">)</span>:
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="m">88</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>🆕<span class="w"> </span>Template<span class="w"> </span><span class="o">(</span>New<span class="w"> </span>Value<span class="o">)</span>:
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="m">100</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>Choose<span class="w"> </span>resolution:
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">  </span><span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="w"> </span>Keep<span class="w"> </span>User<span class="w"> </span>value<span class="w"> </span><span class="o">(</span>preserve<span class="w"> </span>current<span class="o">)</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">  </span><span class="o">[</span><span class="m">2</span><span class="o">]</span><span class="w"> </span>Use<span class="w"> </span>Template<span class="w"> </span>value<span class="w"> </span><span class="o">(</span>accept<span class="w"> </span>update<span class="o">)</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">  </span><span class="o">[</span><span class="m">3</span><span class="o">]</span><span class="w"> </span>Skip<span class="w"> </span>this<span class="w"> </span>conflict<span class="w"> </span><span class="o">(</span>no<span class="w"> </span>change<span class="o">)</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>Your<span class="w"> </span>choice<span class="w"> </span><span class="o">[</span><span class="m">2</span><span class="o">]</span>:<span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>✓<span class="w"> </span>Decision:<span class="w"> </span>user
+</code></pre></div>
+<p><strong>Features:</strong></p>
+<ul>
+<li>🎨 Rich syntax highlighting for TOML values</li>
+<li>🔍 Clear side-by-side comparison</li>
+<li>⌨️  Simple numeric choices (1/2/3)</li>
+<li>📝 Preserves all comments and formatting</li>
+</ul>
 <h2 id="version-conflict-resolution">🔍 Version Conflict Resolution</h2>
 <p>When the same package appears in both files with different versions, TOML Fusion resolves conflicts:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Template</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.5.0&quot;</span><span class="p">]</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Project</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.0.0&quot;</span><span class="p">]</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Result (higher version wins)</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.5.0&quot;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Template</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.5.0&quot;</span><span class="p">]</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Project</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.0.0&quot;</span><span class="p">]</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># Result (higher version wins)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;pydantic&gt;=2.5.0&quot;</span><span class="p">]</span>
 </code></pre></div>
 <p><strong>Algorithm:</strong></p>
 <ol>
@@ -1116,29 +1172,29 @@
 <h2 id="comment-preservation">💡 Comment Preservation</h2>
 <p>TOML Fusion uses <code>tomlkit</code> to preserve:</p>
 <p>✅ <strong>Section comments:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># This is my custom configuration</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">[tool.mypy]</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">strict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># This is my custom configuration</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">[tool.mypy]</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">strict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
 <p>✅ <strong>Inline comments:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">88</span><span class="w">  </span><span class="c1"># Black standard</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">88</span><span class="w">  </span><span class="c1"># Black standard</span>
 </code></pre></div>
 <p>✅ <strong>Array comments:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">ignore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="s2">&quot;D203&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># one-blank-line-before-class</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="s2">&quot;E501&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># line-too-long</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">ignore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="s2">&quot;D203&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># one-blank-line-before-class</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="s2">&quot;E501&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># line-too-long</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">]</span>
 </code></pre></div>
 <p>⚠️ <strong>Limitation:</strong> Inline comments in arrays may be lost if list items are sorted. TOML Fusion does NOT sort arrays to maximize comment preservation.</p>
 <h2 id="safety-features">🛡️ Safety Features</h2>
 <h3 id="automatic-backup">Automatic Backup</h3>
 <p>By default, TOML Fusion creates timestamped backups:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>pyproject.toml.bak.20251218_143022
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>pyproject.toml.bak.20251218_143022
 </code></pre></div>
 <p><strong>Disable with:</strong> <code>--no-backup</code> (not recommended)</p>
 <h3 id="dry-run-mode">Dry Run Mode</h3>
 <p>Preview changes before applying:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>toml-fusion<span class="w"> </span>source.toml<span class="w"> </span>target.toml<span class="w"> </span>--dry-run
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>toml-fusion<span class="w"> </span>source.toml<span class="w"> </span>target.toml<span class="w"> </span>--dry-run
 </code></pre></div>
 <p><strong>Output:</strong></p>
 <ul>
@@ -1154,58 +1210,89 @@
 <li>Write permissions</li>
 </ul>
 <p><strong>Errors are reported clearly:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>❌ Merge failed!
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>   • Source file not found: template.toml
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>   • Target contains invalid TOML syntax
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>❌ Merge failed!
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>   • Source file not found: template.toml
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>   • Target contains invalid TOML syntax
 </code></pre></div>
 <h2 id="advanced-usage">📚 Advanced Usage</h2>
 <h3 id="programmatic-api">Programmatic API</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.toml_merger</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_toml</span><span class="p">,</span> <span class="n">MergeStrategy</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">merge_toml</span><span class="p">(</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    <span class="n">source_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;template/pyproject.toml&quot;</span><span class="p">),</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    <span class="n">target_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;pyproject.toml&quot;</span><span class="p">),</span>
-<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    <span class="n">strategy</span><span class="o">=</span><span class="n">MergeStrategy</span><span class="o">.</span><span class="n">SMART</span><span class="p">,</span>
-<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>    <span class="n">backup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="p">)</span>
-<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>
-<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a><span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
-<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Merge successful!&quot;</span><span class="p">)</span>
-<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">diff</span><span class="p">)</span>
-<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Errors:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">conflicts</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.toml_merger</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_toml</span><span class="p">,</span> <span class="n">MergeStrategy</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">merge_toml</span><span class="p">(</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="n">source_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;template/pyproject.toml&quot;</span><span class="p">),</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>    <span class="n">target_path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;pyproject.toml&quot;</span><span class="p">),</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>    <span class="n">strategy</span><span class="o">=</span><span class="n">MergeStrategy</span><span class="o">.</span><span class="n">SMART</span><span class="p">,</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>    <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>    <span class="n">backup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="p">)</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Merge successful!&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">diff</span><span class="p">)</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Errors:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">conflicts</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="class-based-usage">Class-based Usage</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.toml_merger</span><span class="w"> </span><span class="kn">import</span> <span class="n">TOMLMerger</span><span class="p">,</span> <span class="n">MergeStrategy</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">merger</span> <span class="o">=</span> <span class="n">TOMLMerger</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">MergeStrategy</span><span class="o">.</span><span class="n">SMART</span><span class="p">)</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">merger</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">target_path</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.utils.toml_merger</span><span class="w"> </span><span class="kn">import</span> <span class="n">TOMLMerger</span><span class="p">,</span> <span class="n">MergeStrategy</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">merger</span> <span class="o">=</span> <span class="n">TOMLMerger</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="n">MergeStrategy</span><span class="o">.</span><span class="n">SMART</span><span class="p">)</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">merger</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">source_path</span><span class="p">,</span> <span class="n">target_path</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="integration-with-makefile">🔧 Integration with Makefile</h2>
 <p>Add to <code>Makefile</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">upgrade</span>-<span class="n">toml</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nf">upgrade-toml</span><span class="o">:</span><span class="w">  </span><span class="c">## Update pyproject.toml from template</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w"> </span>@toml-fusion<span class="w"> </span>templates/pyproject.toml<span class="w"> </span>pyproject.toml<span class="w"> </span>--backup
-<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ pyproject.toml updated from template&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">upgrade</span>-<span class="n">toml</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nf">upgrade-toml</span><span class="o">:</span><span class="w">  </span><span class="c">## Update pyproject.toml from template</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w"> </span>@toml-fusion<span class="w"> </span>templates/pyproject.toml<span class="w"> </span>pyproject.toml<span class="w"> </span>--backup
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ pyproject.toml updated from template&quot;</span>
 </code></pre></div>
 <p>Usage:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>make<span class="w"> </span>upgrade-toml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>make<span class="w"> </span>upgrade-toml
+</code></pre></div>
+<h2 id="integration-with-cortex-new">🧩 Integration with Cortex (NEW)</h2>
+<p>TOML Fusion is now integrated with the Cortex introspection system. You can automatically sync your configuration from a template after generating the context map:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Generate context map and sync config in one command</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>cortex<span class="w"> </span>map<span class="w"> </span>--update-config
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Use custom template</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>cortex<span class="w"> </span>map<span class="w"> </span>--update-config<span class="w"> </span>--template<span class="o">=</span>custom/pyproject.toml
+</code></pre></div>
+<p><strong>What it does:</strong></p>
+<ol>
+<li>Generates <code>.cortex/context.json</code> (standard introspection)</li>
+<li>Merges <code>templates/pyproject.toml</code> into <code>pyproject.toml</code> using SMART strategy</li>
+<li>Creates automatic backup with timestamp</li>
+<li>Reports success/conflicts</li>
+</ol>
+<p><strong>Example output:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>✓ Context map generated successfully!
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>📍 Output: .cortex/context.json
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>...
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>======================================================================
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>🔧 Synchronizing configuration from template...
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>📄 Template: templates/pyproject.toml
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>📄 Target:   pyproject.toml
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>🎯 Strategy: smart (union + recursive merge)
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>✅ Configuration updated successfully!
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>   Backup: pyproject.toml.bak.20251218_143022
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>💡 Tip: Review changes with &#39;git diff pyproject.toml&#39;
 </code></pre></div>
 <h2 id="testing">📊 Testing</h2>
 <p>TOML Fusion has comprehensive test coverage (15 test cases):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Run tests</span>
-<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>pytest<span class="w"> </span>tests/test_toml_merger.py<span class="w"> </span>-v
-<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
-<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># Test summary</span>
-<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="c1"># ✅ Comment preservation (critical)</span>
-<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># ✅ List merging with deduplication</span>
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="c1"># ✅ Version conflict resolution</span>
-<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="c1"># ✅ Recursive dictionary merge</span>
-<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="c1"># ✅ Backup creation</span>
-<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="c1"># ✅ Dry run behavior</span>
-<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="c1"># ✅ Error handling</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># Run tests</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>pytest<span class="w"> </span>tests/test_toml_merger.py<span class="w"> </span>-v
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># Test summary</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="c1"># ✅ Comment preservation (critical)</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># ✅ List merging with deduplication</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="c1"># ✅ Version conflict resolution</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="c1"># ✅ Recursive dictionary merge</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># ✅ Backup creation</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="c1"># ✅ Dry run behavior</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="c1"># ✅ Error handling</span>
 </code></pre></div>
 <h2 id="troubleshooting">🐛 Troubleshooting</h2>
 <h3 id="issue-comments-lost-in-arrays">Issue: Comments Lost in Arrays</h3>
@@ -1225,8 +1312,8 @@
 <p><strong>Symptom:</strong> <code>Failed to write output: Permission denied</code></p>
 <p><strong>Cause:</strong> Target file is read-only or insufficient permissions.</p>
 <p><strong>Solution:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>chmod<span class="w"> </span>u+w<span class="w"> </span>pyproject.toml
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>toml-fusion<span class="w"> </span>template.toml<span class="w"> </span>pyproject.toml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>chmod<span class="w"> </span>u+w<span class="w"> </span>pyproject.toml
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>toml-fusion<span class="w"> </span>template.toml<span class="w"> </span>pyproject.toml
 </code></pre></div>
 <h2 id="related-documentation">📖 Related Documentation</h2>
 <ul>
