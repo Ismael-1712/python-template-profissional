@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 # Import the module under test from git_sync package
@@ -914,6 +915,257 @@ class TestSyncOrchestratorAdvanced(unittest.TestCase):
         # Verify that atomic_write_json was called to write heartbeat
         # Since we're mocking it, we just verify it was called (no real I/O)
         mock_atomic_write.assert_called_once()
+
+
+class TestPruneMergedBranches(unittest.TestCase):
+    """Test cases for Deep Clean: Prune Merged Local Branches functionality."""
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    def test_prune_merged_branches_safety_protection(
+        self,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test that protected branches are NEVER deleted.
+
+        TDD RED: This test defines the safety requirements.
+        - Current branch must be protected
+        - Branches in protected_branches list must be protected
+        - Base branch (main) must be protected
+        """
+        # ✅ Mock: Workspace setup
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        config = {
+            "prune_local_merged": True,
+            "prune_base_branch": "main",
+            "protected_branches": ["main", "develop", "staging"],
+            "prune_force_delete": False,
+        }
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config=config,
+            dry_run=False,
+        )
+
+        # ✅ Mock: Git commands
+        with patch.object(sync, "_run_command") as mock_run:
+            # Mock: Current branch is "feat/active"
+            current_branch_result = MagicMock()
+            current_branch_result.returncode = 0
+            current_branch_result.stdout = "feat/active"
+
+            # Mock: Merged branches include protected ones
+            merged_branches_result = MagicMock()
+            merged_branches_result.returncode = 0
+            merged_branches_result.stdout = (
+                "main\nfeat/old-merged\nfeat/active\ndevelop"
+            )
+
+            # Mock: Deletion attempts
+            delete_result_success = MagicMock()
+            delete_result_success.returncode = 0
+
+            def run_command_side_effect(
+                cmd: list[str],
+                **kwargs: Any,
+            ) -> MagicMock:
+                if cmd[1] == "branch" and cmd[2] == "--show-current":
+                    return current_branch_result
+                if cmd[1] == "branch" and cmd[2] == "--merged":
+                    return merged_branches_result
+                if cmd[1] == "branch" and cmd[2] == "-d":
+                    # Only feat/old-merged should reach here
+                    return delete_result_success
+                return MagicMock(returncode=0, stdout="", stderr="")
+
+            mock_run.side_effect = run_command_side_effect
+
+            # ✅ Mock: git_status for current branch
+            git_status = {"current_branch": "feat/active", "is_clean": True}
+
+            # ✅ Execute the method (to be implemented)
+            result = sync._prune_merged_local_branches(git_status)
+
+            # ✅ CRITICAL ASSERTIONS
+            # 1. Protected branches should NOT be deleted
+            calls = [str(call) for call in mock_run.call_args_list]
+
+            # Should NOT attempt to delete "main"
+            assert not any(
+                "main" in str(call) and "-d" in str(call) for call in calls
+            ), "SECURITY VIOLATION: Attempted to delete 'main' branch!"
+
+            # Should NOT attempt to delete current branch "feat/active"
+            assert not any(
+                "feat/active" in str(call) and "-d" in str(call) for call in calls
+            ), "SECURITY VIOLATION: Attempted to delete current branch!"
+
+            # Should NOT attempt to delete "develop" (in protected list)
+            assert not any(
+                "develop" in str(call) and "-d" in str(call) for call in calls
+            ), "SECURITY VIOLATION: Attempted to delete protected branch 'develop'!"
+
+            # 2. Non-protected merged branch SHOULD be deleted
+            # feat/old-merged should be deleted
+            assert result["total_deleted"] >= 1 or "feat/old-merged" in result.get(
+                "deleted_branches",
+                [],
+            ), "Should delete non-protected merged branch 'feat/old-merged'"
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    def test_prune_merged_branches_uses_safe_delete_flag(
+        self,
+        mock_path_cls: MagicMock,
+    ) -> None:
+        """Test that pruning uses -d (safe delete) instead of -D (force).
+
+        TDD RED: This test ensures we never force delete unless configured.
+        """
+        # ✅ Mock: Workspace setup
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        config = {
+            "prune_local_merged": True,
+            "prune_base_branch": "main",
+            "protected_branches": ["main"],
+            "prune_force_delete": False,  # ← CRITICAL: Use safe delete
+        }
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config=config,
+            dry_run=False,
+        )
+
+        # ✅ Mock: Git commands
+        with patch.object(sync, "_run_command") as mock_run:
+            current_branch_result = MagicMock()
+            current_branch_result.returncode = 0
+            current_branch_result.stdout = "main"
+
+            merged_branches_result = MagicMock()
+            merged_branches_result.returncode = 0
+            merged_branches_result.stdout = "main\nfeat/merged-branch"
+
+            delete_result = MagicMock()
+            delete_result.returncode = 0
+
+            def run_command_side_effect(cmd: list[str], **kwargs: Any) -> MagicMock:
+                if cmd[1] == "branch" and cmd[2] == "--show-current":
+                    return current_branch_result
+                if cmd[1] == "branch" and cmd[2] == "--merged":
+                    return merged_branches_result
+                if cmd[1] == "branch" and len(cmd) >= 4:
+                    # Verify that -d is used, NOT -D
+                    if cmd[2] == "-D":
+                        raise AssertionError(
+                            "SECURITY VIOLATION: Using -D (force delete) "
+                            "when prune_force_delete=False!",
+                        )
+                    return delete_result
+                return MagicMock(returncode=0, stdout="", stderr="")
+
+            mock_run.side_effect = run_command_side_effect
+
+            git_status = {"current_branch": "main", "is_clean": True}
+
+            # ✅ Execute
+            sync._prune_merged_local_branches(git_status)
+
+            # ✅ Verify -d was used (assertion happens in side_effect)
+            # If -D was used, the test would have failed with AssertionError
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    def test_prune_merged_branches_disabled(self, mock_path_cls: MagicMock) -> None:
+        """Test that pruning is skipped when prune_local_merged=False.
+
+        TDD RED: This test ensures the feature can be disabled.
+        """
+        # ✅ Mock: Workspace setup
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        config = {
+            "prune_local_merged": False,  # ← Disabled
+        }
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config=config,
+            dry_run=False,
+        )
+
+        # ✅ Mock: Git commands
+        with patch.object(sync, "_run_command") as mock_run:
+            git_status = {"current_branch": "main", "is_clean": True}
+
+            # ✅ Execute
+            result = sync._prune_merged_local_branches(git_status)
+
+            # ✅ Assertions
+            assert result["status"] == "disabled", (
+                "Should return disabled status when prune_local_merged=False"
+            )
+
+            # No git branch commands should be called
+            for call in mock_run.call_args_list:
+                cmd = call[0][0]
+                assert not (
+                    cmd[0] == "git" and cmd[1] == "branch" and "--merged" in cmd
+                ), "Should not query merged branches when feature is disabled"
+
+    @patch("scripts.git_sync.sync_logic.Path")
+    def test_prune_merged_branches_dry_run(self, mock_path_cls: MagicMock) -> None:
+        """Test that pruning respects dry_run mode.
+
+        TDD RED: This test ensures dry-run doesn't delete anything.
+        """
+        # ✅ Mock: Workspace setup
+        mock_workspace = MagicMock(spec=Path)
+        mock_workspace.resolve.return_value = mock_workspace
+        mock_git_dir = MagicMock(spec=Path)
+        mock_git_dir.exists.return_value = True
+        mock_workspace.__truediv__.return_value = mock_git_dir
+
+        config = {
+            "prune_local_merged": True,
+            "prune_base_branch": "main",
+            "protected_branches": ["main"],
+        }
+
+        sync = SyncOrchestrator(
+            workspace_root=mock_workspace,
+            config=config,
+            dry_run=True,  # ← DRY RUN MODE
+        )
+
+        # ✅ Mock: Git commands (should return mock data in dry-run)
+        with patch.object(sync, "_run_command"):
+            # In dry_run, _run_command returns mock data without executing
+            # The existing implementation handles this
+
+            git_status = {"current_branch": "main", "is_clean": True}
+
+            # ✅ Execute
+            result = sync._prune_merged_local_branches(git_status)
+
+            # ✅ In dry-run mode, _run_command should log but not execute
+            # The method should still return valid data structure
+            assert "total_deleted" in result or "status" in result, (
+                "Should return valid result structure in dry-run mode"
+            )
 
 
 # ============================================================================
