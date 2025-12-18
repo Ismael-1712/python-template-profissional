@@ -4,6 +4,23 @@
 
 ### Added
 
+- **User Control for Parallel Processing**: Exposed experimental parallel mode via CLI
+  - Added `--parallel` / `--experimental-parallel` flag to `cortex knowledge-scan` command
+  - Allows users with high-performance hardware to opt-in to parallel processing
+  - New `force_parallel` parameter in `KnowledgeScanner.__init__()`
+  - Implements clear UX feedback: shows mode (sequential vs parallel) and worker count
+  - Addresses "Tool Blindness" problem: hidden features now discoverable
+  - Maintains backward compatibility (default: sequential processing)
+
+### Changed
+
+- **Dynamic Parallelism Threshold**: Refactored hardcoded threshold to user-controlled flag
+  - `parallel_threshold` now respects `force_parallel` parameter
+  - If `force_parallel=True`: threshold = 10 files (original behavior)
+  - If `force_parallel=False` (default): threshold = sys.maxsize (sequential)
+  - Enhanced logging with mode indicators and performance warnings
+  - Preserves GIL overhead protection while enabling user autonomy
+
 - **Performance Benchmark Script**: Created `scripts/benchmark_cortex_perf.py` for measuring KnowledgeScanner performance
   - Automated benchmarking with 5 iterations per scenario (10, 50, 100, 500 files)
   - Generates temporary isolated datasets with realistic Markdown + YAML frontmatter
