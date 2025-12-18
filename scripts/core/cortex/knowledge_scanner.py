@@ -19,10 +19,10 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import frontmatter
 from pydantic import ValidationError
 
 from scripts.core.cortex.link_analyzer import LinkAnalyzer
+from scripts.core.cortex.metadata import FrontmatterParser
 from scripts.core.cortex.models import DocStatus, KnowledgeEntry, KnowledgeSource
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
 
@@ -62,6 +62,7 @@ class KnowledgeScanner:
         self.workspace_root = workspace_root
         self.fs = fs or RealFileSystem()
         self.link_analyzer = LinkAnalyzer()
+        self.frontmatter_parser = FrontmatterParser(fs=self.fs)
         logger.debug(
             "KnowledgeScanner initialized for workspace: %s",
             workspace_root,
@@ -139,8 +140,8 @@ class KnowledgeScanner:
     def _parse_knowledge_file(self, file_path: Path) -> KnowledgeEntry:
         """Parse a single Knowledge Node Markdown file.
 
-        Reads the file, extracts YAML frontmatter, and creates a validated
-        KnowledgeEntry object. Raises exceptions for malformed files.
+        Reads the file, extracts YAML frontmatter using the centralized parser,
+        and creates a validated KnowledgeEntry object.
 
         Args:
             file_path: Path to the Markdown file to parse
@@ -153,16 +154,12 @@ class KnowledgeScanner:
             ValidationError: If frontmatter data doesn't match KnowledgeEntry schema
             ValueError: If frontmatter parsing fails
         """
-        # Read file content
-        content = self.fs.read_text(file_path)
+        # Read file content for cached_content extraction
+        import frontmatter
 
-        # Parse frontmatter
-        try:
-            post = frontmatter.loads(content)
-            metadata: dict[str, Any] = post.metadata
-        except Exception as e:
-            msg = f"Failed to parse frontmatter: {e}"
-            raise ValueError(msg) from e
+        content = self.fs.read_text(file_path)
+        post = frontmatter.loads(content)
+        metadata: dict[str, Any] = post.metadata
 
         # Extract required fields
         try:
@@ -172,8 +169,10 @@ class KnowledgeScanner:
             msg = f"Missing required field in frontmatter: {e}"
             raise KeyError(msg) from e
 
-        # Extract optional fields
+        # Extract Knowledge-specific optional fields
         golden_paths = metadata.get("golden_paths", [])
+        tags = metadata.get("tags", [])
+        sources_data = metadata.get("sources", [])
 
         # Convert status string to enum
         try:
@@ -182,10 +181,6 @@ class KnowledgeScanner:
             valid_values = [s.value for s in DocStatus]
             msg = f"Invalid status value '{status_str}'. Must be one of: {valid_values}"
             raise ValueError(msg) from e
-
-        # Extract optional fields
-        tags = metadata.get("tags", [])
-        sources_data = metadata.get("sources", [])
 
         # Parse sources (list of dicts -> list of KnowledgeSource)
         # Note: Individual source validation errors are logged but don't
