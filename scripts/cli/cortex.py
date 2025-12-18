@@ -1464,6 +1464,20 @@ def project_map(
             help="Show detailed output",
         ),
     ] = False,
+    update_config: Annotated[
+        bool,
+        typer.Option(
+            "--update-config",
+            help="Sync pyproject.toml from template after mapping",
+        ),
+    ] = False,
+    template_path: Annotated[
+        Path | None,
+        typer.Option(
+            "--template",
+            help="Path to template TOML (default: templates/pyproject.toml)",
+        ),
+    ] = None,
 ) -> None:
     """Generate project context map for introspection.
 
@@ -1473,10 +1487,15 @@ def project_map(
 
     The output is saved to .cortex/context.json by default.
 
+    NEW: Use --update-config to synchronize pyproject.toml from template
+    after generating the context map.
+
     Example:
         cortex map                          # Generate context map
         cortex map --verbose               # Show detailed information
         cortex map -o custom/path.json     # Custom output location
+        cortex map --update-config         # Map + sync config from template
+        cortex map --update-config --template=custom.toml  # Custom template
     """
     try:
         logger.info("Generating project context map...")
@@ -1514,6 +1533,80 @@ def project_map(
                     typer.echo(f"  • {doc.title} ({doc.path})")
 
         logger.info(f"Context map saved to {output}")
+
+        # ============================================================
+        # TOML CONFIG SYNC (NEW FEATURE)
+        # ============================================================
+        if update_config:
+            from scripts.utils.toml_merger import MergeStrategy, merge_toml
+
+            typer.echo()
+            typer.echo("=" * 70)
+            typer.secho(
+                "🔧 Synchronizing configuration from template...",
+                fg=typer.colors.CYAN,
+                bold=True,
+            )
+            typer.echo()
+
+            # Determine template path
+            template = template_path or (project_root / "templates/pyproject.toml")
+            target = project_root / "pyproject.toml"
+
+            if not template.exists():
+                typer.secho(
+                    f"⚠️  Template not found: {template.relative_to(project_root)}",
+                    fg=typer.colors.YELLOW,
+                )
+                typer.secho(
+                    "   Skipping configuration sync.",
+                    fg=typer.colors.YELLOW,
+                )
+                return
+
+            typer.echo(f"📄 Template: {template.relative_to(project_root)}")
+            typer.echo(f"📄 Target:   {target.relative_to(project_root)}")
+            typer.echo("🎯 Strategy: smart (union + recursive merge)")
+            typer.echo()
+
+            # Perform merge
+            result = merge_toml(
+                source_path=template,
+                target_path=target,
+                strategy=MergeStrategy.SMART,
+                dry_run=False,
+                backup=True,
+            )
+
+            if result.success:
+                typer.secho(
+                    "✅ Configuration updated successfully!",
+                    fg=typer.colors.GREEN,
+                    bold=True,
+                )
+                if result.backup_path:
+                    backup_rel = result.backup_path.relative_to(project_root)
+                    typer.echo(f"   Backup: {backup_rel}")
+
+                typer.echo()
+                typer.secho(
+                    "💡 Tip: Review changes with 'git diff pyproject.toml'",
+                    fg=typer.colors.CYAN,
+                )
+            else:
+                typer.secho(
+                    "❌ Configuration sync failed!",
+                    fg=typer.colors.RED,
+                    bold=True,
+                    err=True,
+                )
+                for conflict in result.conflicts:
+                    typer.secho(f"   • {conflict}", fg=typer.colors.YELLOW, err=True)
+
+                logger.error(
+                    "Config sync failed",
+                    extra={"conflicts": result.conflicts},
+                )
 
     except Exception as e:
         logger.error(f"Error generating context map: {e}", exc_info=True)
