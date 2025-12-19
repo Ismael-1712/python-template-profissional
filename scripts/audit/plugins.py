@@ -95,11 +95,20 @@ def simulate_ci(
 
     # Security: Sanitize environment to prevent leaking sensitive credentials
     # Only safe, whitelisted variables are propagated to pytest subprocess
+    sanitized_env, blocked_vars = sanitize_env(dict(os.environ))
     ci_env = {
-        **sanitize_env(dict(os.environ)),
+        **sanitized_env,
         "CI": "true",
         "PYTEST_TIMEOUT": str(ci_timeout),
     }
+
+    # Emit warning if any sensitive variables were sanitized
+    if blocked_vars:
+        logger.warning(
+            "⚠️  Security: %d environment variable(s) were sanitized "
+            "before subprocess execution. Run with LOG_LEVEL=DEBUG to see details.",
+            len(blocked_vars),
+        )
 
     try:
         # Run pytest with CI-appropriate flags

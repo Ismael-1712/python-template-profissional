@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
+def sanitize_env(original_env: dict[str, str]) -> tuple[dict[str, str], list[str]]:
     """Sanitize environment variables to prevent leaking sensitive data.
 
     Implements a whitelist-based approach with explicit blocklist for secrets.
@@ -21,7 +21,10 @@ def sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
         original_env: Original environment dictionary from os.environ
 
     Returns:
-        Sanitized environment dictionary safe for subprocess execution
+        Tuple (sanitized_env, blocked_vars) where:
+            - sanitized_env: Safe environment dictionary
+            - blocked_vars: List of variable names that were blocked due to
+              sensitive patterns (TOKEN, KEY, SECRET, PASSWORD, CREDENTIAL, API)
 
     Security:
         - Blocks: TOKEN, KEY, SECRET, PASSWORD, CREDENTIAL, API patterns
@@ -31,11 +34,13 @@ def sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
     Examples:
         >>> import os
         >>> env = {"PATH": "/usr/bin", "MY_TOKEN": "secret123"}
-        >>> safe_env = sanitize_env(env)
+        >>> safe_env, blocked = sanitize_env(env)
         >>> "PATH" in safe_env
         True
         >>> "MY_TOKEN" in safe_env
         False
+        >>> "MY_TOKEN" in blocked
+        True
     """
     # Whitelist: Essential system and Python variables
     allowed_keys = {
@@ -66,11 +71,13 @@ def sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
     blocked_patterns = ("TOKEN", "KEY", "SECRET", "PASSWORD", "CREDENTIAL", "API")
 
     sanitized: dict[str, str] = {}
+    blocked: list[str] = []
 
     for key, value in original_env.items():
         # Explicit block: reject any key containing sensitive patterns
         if any(pattern in key.upper() for pattern in blocked_patterns):
             logger.debug("Blocked sensitive environment variable: %s", key)
+            blocked.append(key)
             continue
 
         # Allow whitelisted keys
@@ -91,4 +98,4 @@ def sanitize_env(original_env: dict[str, str]) -> dict[str, str]:
         # Implicitly deny everything else (Least Privilege principle)
         logger.debug("Filtered environment variable: %s", key)
 
-    return sanitized
+    return sanitized, blocked

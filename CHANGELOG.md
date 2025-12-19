@@ -4,6 +4,20 @@
 
 ### Added
 
+- **Security: Visibility for Environment Sanitization (P13 Fix)**: Enhanced UX for subprocess security
+  - `sanitize_env()` now returns tuple `(sanitized_env, blocked_vars)` instead of single dict
+  - Added visible WARNING log when sensitive variables are sanitized during subprocess execution
+  - Resolves "Tool Blindness": users now know when environment variables are blocked
+  - Enhanced logging message: "⚠️ Security: N environment variable(s) were sanitized. Run with LOG_LEVEL=DEBUG to see details."
+  - Instructs users to use `LOG_LEVEL=DEBUG` for detailed list of blocked variables
+  - Implemented in:
+    - `scripts/utils/security.py`: Core function refactoring
+    - `scripts/audit/plugins.py::simulate_ci()`: Consumer implementation with warning emission
+  - Updated test suite: All 18 security tests validate new tuple return and blocked list
+  - Use case: Prevents silent test failures when required environment variables are sanitized
+
+### Changed
+
 - **Mock CI: Comando `init` para Scaffolding de Configuração**: Nova funcionalidade de descoberta
   - Adicionado comando `mock-ci init` que gera arquivo de configuração inicial
   - Arquivo gerado (`test_mock_config.yaml`) contém comentários explicativos sobre todos os campos
@@ -84,6 +98,17 @@
   - Updated docstring to reflect thread-safety guarantees (removed "not thread-safe" limitation)
   - Protects concurrent access in parallel test execution and KnowledgeScanner parallel processing
   - Zero performance impact on sequential operations (~100ns overhead per lock acquisition)
+
+### Breaking Changes
+
+- **`sanitize_env()` Return Type Change**: Function now returns tuple instead of single dict
+  - **Old behavior**: `env = sanitize_env(os.environ)` → returns `dict[str, str]`
+  - **New behavior**: `env, blocked = sanitize_env(os.environ)` → returns `tuple[dict[str, str], list[str]]`
+  - **Migration path**: Use tuple unpacking: `sanitized_env, blocked_vars = sanitize_env(env)`
+  - **Backward compatibility**: Not available - all callers must be updated
+  - **Affected code**: Internal use only in `scripts/audit/plugins.py::simulate_ci()`
+  - **Rationale**: Enables visibility of sanitized variables for better UX and debugging
+  - **Impact**: Low - internal API only, no public consumers identified
 
 ### Added
 
