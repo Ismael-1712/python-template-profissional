@@ -1704,7 +1704,34 @@ and structured logging for production-grade automation.</p>
 <span class="normal"><a href="#__codelineno-0-821">821</a></span>
 <span class="normal"><a href="#__codelineno-0-822">822</a></span>
 <span class="normal"><a href="#__codelineno-0-823">823</a></span>
-<span class="normal"><a href="#__codelineno-0-824">824</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">class</span><span class="w"> </span><span class="nc">SyncOrchestrator</span><span class="p">:</span>
+<span class="normal"><a href="#__codelineno-0-824">824</a></span>
+<span class="normal"><a href="#__codelineno-0-825">825</a></span>
+<span class="normal"><a href="#__codelineno-0-826">826</a></span>
+<span class="normal"><a href="#__codelineno-0-827">827</a></span>
+<span class="normal"><a href="#__codelineno-0-828">828</a></span>
+<span class="normal"><a href="#__codelineno-0-829">829</a></span>
+<span class="normal"><a href="#__codelineno-0-830">830</a></span>
+<span class="normal"><a href="#__codelineno-0-831">831</a></span>
+<span class="normal"><a href="#__codelineno-0-832">832</a></span>
+<span class="normal"><a href="#__codelineno-0-833">833</a></span>
+<span class="normal"><a href="#__codelineno-0-834">834</a></span>
+<span class="normal"><a href="#__codelineno-0-835">835</a></span>
+<span class="normal"><a href="#__codelineno-0-836">836</a></span>
+<span class="normal"><a href="#__codelineno-0-837">837</a></span>
+<span class="normal"><a href="#__codelineno-0-838">838</a></span>
+<span class="normal"><a href="#__codelineno-0-839">839</a></span>
+<span class="normal"><a href="#__codelineno-0-840">840</a></span>
+<span class="normal"><a href="#__codelineno-0-841">841</a></span>
+<span class="normal"><a href="#__codelineno-0-842">842</a></span>
+<span class="normal"><a href="#__codelineno-0-843">843</a></span>
+<span class="normal"><a href="#__codelineno-0-844">844</a></span>
+<span class="normal"><a href="#__codelineno-0-845">845</a></span>
+<span class="normal"><a href="#__codelineno-0-846">846</a></span>
+<span class="normal"><a href="#__codelineno-0-847">847</a></span>
+<span class="normal"><a href="#__codelineno-0-848">848</a></span>
+<span class="normal"><a href="#__codelineno-0-849">849</a></span>
+<span class="normal"><a href="#__codelineno-0-850">850</a></span>
+<span class="normal"><a href="#__codelineno-0-851">851</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">class</span><span class="w"> </span><span class="nc">SyncOrchestrator</span><span class="p">:</span>
 <a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Enterprise-grade Git synchronization with preventive audit capabilities.</span>
 <a id="__codelineno-0-24" name="__codelineno-0-24"></a>
 <a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">    Implements idempotent operations, comprehensive error handling,</span>
@@ -2338,175 +2365,202 @@ and structured logging for production-grade automation.</p>
 <a id="__codelineno-0-653" name="__codelineno-0-653"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cleanup_step</span><span class="p">)</span>
 <a id="__codelineno-0-654" name="__codelineno-0-654"></a>
 <a id="__codelineno-0-655" name="__codelineno-0-655"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-656" name="__codelineno-0-656"></a>            <span class="c1"># Phase 5a: Deep Clean - Prune merged local branches</span>
-<a id="__codelineno-0-657" name="__codelineno-0-657"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prune_local_merged&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
-<a id="__codelineno-0-658" name="__codelineno-0-658"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 Deep Clean: Pruning merged local branches...&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-659" name="__codelineno-0-659"></a>                <span class="n">prune_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prune_merged_local_branches</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
-<a id="__codelineno-0-660" name="__codelineno-0-660"></a>
-<a id="__codelineno-0-661" name="__codelineno-0-661"></a>                <span class="k">if</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-662" name="__codelineno-0-662"></a>                    <span class="n">deleted_count</span> <span class="o">=</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;total_deleted&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-0-663" name="__codelineno-0-663"></a>                    <span class="k">if</span> <span class="n">deleted_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<a id="__codelineno-0-664" name="__codelineno-0-664"></a>                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-<a id="__codelineno-0-665" name="__codelineno-0-665"></a>                            <span class="s2">&quot;✅ Deep Clean: Removed </span><span class="si">%d</span><span class="s2"> merged branch(es)&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-666" name="__codelineno-0-666"></a>                            <span class="n">deleted_count</span><span class="p">,</span>
-<a id="__codelineno-0-667" name="__codelineno-0-667"></a>                        <span class="p">)</span>
-<a id="__codelineno-0-668" name="__codelineno-0-668"></a>                <span class="k">elif</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;disabled&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-669" name="__codelineno-0-669"></a>                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Deep Clean: Branch pruning is disabled&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-670" name="__codelineno-0-670"></a>
-<a id="__codelineno-0-671" name="__codelineno-0-671"></a>            <span class="c1"># Phase 5b: Git garbage collection and remote pruning</span>
-<a id="__codelineno-0-672" name="__codelineno-0-672"></a>            <span class="n">cleanup_commands</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-0-673" name="__codelineno-0-673"></a>                <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;gc&quot;</span><span class="p">,</span> <span class="s2">&quot;--auto&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-674" name="__codelineno-0-674"></a>                <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;remote&quot;</span><span class="p">,</span> <span class="s2">&quot;prune&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-675" name="__codelineno-0-675"></a>            <span class="p">]</span>
-<a id="__codelineno-0-676" name="__codelineno-0-676"></a>
-<a id="__codelineno-0-677" name="__codelineno-0-677"></a>            <span class="n">cleanup_results</span> <span class="o">=</span> <span class="p">[]</span>
-<a id="__codelineno-0-678" name="__codelineno-0-678"></a>            <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">cleanup_commands</span><span class="p">:</span>
-<a id="__codelineno-0-679" name="__codelineno-0-679"></a>                <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-680" name="__codelineno-0-680"></a>                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<a id="__codelineno-0-681" name="__codelineno-0-681"></a>                    <span class="n">cleanup_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<a id="__codelineno-0-682" name="__codelineno-0-682"></a>                        <span class="p">{</span>
-<a id="__codelineno-0-683" name="__codelineno-0-683"></a>                            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span>
-<a id="__codelineno-0-684" name="__codelineno-0-684"></a>                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-0-685" name="__codelineno-0-685"></a>                        <span class="p">},</span>
-<a id="__codelineno-0-686" name="__codelineno-0-686"></a>                    <span class="p">)</span>
-<a id="__codelineno-0-687" name="__codelineno-0-687"></a>                <span class="k">except</span> <span class="n">GitOperationError</span><span class="p">:</span>
-<a id="__codelineno-0-688" name="__codelineno-0-688"></a>                    <span class="n">cleanup_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-<a id="__codelineno-0-689" name="__codelineno-0-689"></a>                        <span class="p">{</span>
-<a id="__codelineno-0-690" name="__codelineno-0-690"></a>                            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span>
-<a id="__codelineno-0-691" name="__codelineno-0-691"></a>                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-<a id="__codelineno-0-692" name="__codelineno-0-692"></a>                        <span class="p">},</span>
-<a id="__codelineno-0-693" name="__codelineno-0-693"></a>                    <span class="p">)</span>
-<a id="__codelineno-0-694" name="__codelineno-0-694"></a>
-<a id="__codelineno-0-695" name="__codelineno-0-695"></a>            <span class="n">cleanup_step</span><span class="o">.</span><span class="n">complete</span><span class="p">({</span><span class="s2">&quot;operations&quot;</span><span class="p">:</span> <span class="n">cleanup_results</span><span class="p">})</span>
-<a id="__codelineno-0-696" name="__codelineno-0-696"></a>
-<a id="__codelineno-0-697" name="__codelineno-0-697"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-698" name="__codelineno-0-698"></a>            <span class="n">cleanup_step</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-<a id="__codelineno-0-699" name="__codelineno-0-699"></a>            <span class="c1"># Don&#39;t raise - cleanup failures are not critical</span>
-<a id="__codelineno-0-700" name="__codelineno-0-700"></a>
-<a id="__codelineno-0-701" name="__codelineno-0-701"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_save_sync_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-<a id="__codelineno-0-702" name="__codelineno-0-702"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save synchronization report to file.&quot;&quot;&quot;</span>
-<a id="__codelineno-0-703" name="__codelineno-0-703"></a>        <span class="n">report</span> <span class="o">=</span> <span class="p">{</span>
-<a id="__codelineno-0-704" name="__codelineno-0-704"></a>            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
-<a id="__codelineno-0-705" name="__codelineno-0-705"></a>                <span class="s2">&quot;sync_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_id</span><span class="p">,</span>
-<a id="__codelineno-0-706" name="__codelineno-0-706"></a>                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
-<a id="__codelineno-0-707" name="__codelineno-0-707"></a>                <span class="s2">&quot;workspace&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">),</span>
-<a id="__codelineno-0-708" name="__codelineno-0-708"></a>                <span class="s2">&quot;dry_run&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span><span class="p">,</span>
-<a id="__codelineno-0-709" name="__codelineno-0-709"></a>                <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-<a id="__codelineno-0-710" name="__codelineno-0-710"></a>            <span class="p">},</span>
-<a id="__codelineno-0-711" name="__codelineno-0-711"></a>            <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">step</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">],</span>
-<a id="__codelineno-0-712" name="__codelineno-0-712"></a>            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="p">{</span>
-<a id="__codelineno-0-713" name="__codelineno-0-713"></a>                <span class="s2">&quot;total_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">),</span>
-<a id="__codelineno-0-714" name="__codelineno-0-714"></a>                <span class="s2">&quot;successful_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span>
-<a id="__codelineno-0-715" name="__codelineno-0-715"></a>                    <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">],</span>
-<a id="__codelineno-0-716" name="__codelineno-0-716"></a>                <span class="p">),</span>
-<a id="__codelineno-0-717" name="__codelineno-0-717"></a>                <span class="s2">&quot;failed_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">]),</span>
-<a id="__codelineno-0-718" name="__codelineno-0-718"></a>                <span class="s2">&quot;total_duration&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">_get_duration</span><span class="p">()</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">),</span>
-<a id="__codelineno-0-719" name="__codelineno-0-719"></a>            <span class="p">},</span>
-<a id="__codelineno-0-720" name="__codelineno-0-720"></a>        <span class="p">}</span>
+<a id="__codelineno-0-656" name="__codelineno-0-656"></a>            <span class="c1"># ================================================================</span>
+<a id="__codelineno-0-657" name="__codelineno-0-657"></a>            <span class="c1"># TELEMETRIA VISUAL: Status de Proteção</span>
+<a id="__codelineno-0-658" name="__codelineno-0-658"></a>            <span class="c1"># ================================================================</span>
+<a id="__codelineno-0-659" name="__codelineno-0-659"></a>            <span class="c1"># Exibe configurações de proteção ANTES de iniciar limpeza</span>
+<a id="__codelineno-0-660" name="__codelineno-0-660"></a>            <span class="c1"># para maior transparência sobre decisões de remoção/proteção</span>
+<a id="__codelineno-0-661" name="__codelineno-0-661"></a>            <span class="n">deep_clean_enabled</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prune_local_merged&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-662" name="__codelineno-0-662"></a>            <span class="n">protected_branches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;protected_branches&quot;</span><span class="p">,</span> <span class="p">[])</span>
+<a id="__codelineno-0-663" name="__codelineno-0-663"></a>            <span class="n">force_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-0-664" name="__codelineno-0-664"></a>
+<a id="__codelineno-0-665" name="__codelineno-0-665"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-666" name="__codelineno-0-666"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔍 STATUS DE PROTEÇÃO - Git Sync Configuration&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-667" name="__codelineno-0-667"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-668" name="__codelineno-0-668"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-669" name="__codelineno-0-669"></a>                <span class="s2">&quot;🧹 Deep Clean: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-670" name="__codelineno-0-670"></a>                <span class="s2">&quot;✅ ENABLED&quot;</span> <span class="k">if</span> <span class="n">deep_clean_enabled</span> <span class="k">else</span> <span class="s2">&quot;❌ DISABLED&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-671" name="__codelineno-0-671"></a>            <span class="p">)</span>
+<a id="__codelineno-0-672" name="__codelineno-0-672"></a>            <span class="n">protected_list</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-0-673" name="__codelineno-0-673"></a>                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">protected_branches</span><span class="p">)</span> <span class="k">if</span> <span class="n">protected_branches</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span>
+<a id="__codelineno-0-674" name="__codelineno-0-674"></a>            <span class="p">)</span>
+<a id="__codelineno-0-675" name="__codelineno-0-675"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🛡️  Protected Branches: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">protected_list</span><span class="p">)</span>
+<a id="__codelineno-0-676" name="__codelineno-0-676"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-677" name="__codelineno-0-677"></a>                <span class="s2">&quot;⚠️  Force Mode: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-678" name="__codelineno-0-678"></a>                <span class="s2">&quot;⚠️ TRUE (caution!)&quot;</span> <span class="k">if</span> <span class="n">force_mode</span> <span class="k">else</span> <span class="s2">&quot;✅ FALSE&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-679" name="__codelineno-0-679"></a>            <span class="p">)</span>
+<a id="__codelineno-0-680" name="__codelineno-0-680"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-681" name="__codelineno-0-681"></a>            <span class="c1"># ================================================================</span>
+<a id="__codelineno-0-682" name="__codelineno-0-682"></a>
+<a id="__codelineno-0-683" name="__codelineno-0-683"></a>            <span class="c1"># Phase 5a: Deep Clean - Prune merged local branches</span>
+<a id="__codelineno-0-684" name="__codelineno-0-684"></a>            <span class="k">if</span> <span class="n">deep_clean_enabled</span><span class="p">:</span>
+<a id="__codelineno-0-685" name="__codelineno-0-685"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 Deep Clean: Pruning merged local branches...&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-686" name="__codelineno-0-686"></a>                <span class="n">prune_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prune_merged_local_branches</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
+<a id="__codelineno-0-687" name="__codelineno-0-687"></a>
+<a id="__codelineno-0-688" name="__codelineno-0-688"></a>                <span class="k">if</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-689" name="__codelineno-0-689"></a>                    <span class="n">deleted_count</span> <span class="o">=</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;total_deleted&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-0-690" name="__codelineno-0-690"></a>                    <span class="k">if</span> <span class="n">deleted_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-0-691" name="__codelineno-0-691"></a>                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-692" name="__codelineno-0-692"></a>                            <span class="s2">&quot;✅ Deep Clean: Removed </span><span class="si">%d</span><span class="s2"> merged branch(es)&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-693" name="__codelineno-0-693"></a>                            <span class="n">deleted_count</span><span class="p">,</span>
+<a id="__codelineno-0-694" name="__codelineno-0-694"></a>                        <span class="p">)</span>
+<a id="__codelineno-0-695" name="__codelineno-0-695"></a>                <span class="k">elif</span> <span class="n">prune_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;disabled&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-696" name="__codelineno-0-696"></a>                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Deep Clean: Branch pruning is disabled&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-697" name="__codelineno-0-697"></a>
+<a id="__codelineno-0-698" name="__codelineno-0-698"></a>            <span class="c1"># Phase 5b: Git garbage collection and remote pruning</span>
+<a id="__codelineno-0-699" name="__codelineno-0-699"></a>            <span class="n">cleanup_commands</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-0-700" name="__codelineno-0-700"></a>                <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;gc&quot;</span><span class="p">,</span> <span class="s2">&quot;--auto&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-701" name="__codelineno-0-701"></a>                <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;remote&quot;</span><span class="p">,</span> <span class="s2">&quot;prune&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-702" name="__codelineno-0-702"></a>            <span class="p">]</span>
+<a id="__codelineno-0-703" name="__codelineno-0-703"></a>
+<a id="__codelineno-0-704" name="__codelineno-0-704"></a>            <span class="n">cleanup_results</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-705" name="__codelineno-0-705"></a>            <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">cleanup_commands</span><span class="p">:</span>
+<a id="__codelineno-0-706" name="__codelineno-0-706"></a>                <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-707" name="__codelineno-0-707"></a>                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-0-708" name="__codelineno-0-708"></a>                    <span class="n">cleanup_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-0-709" name="__codelineno-0-709"></a>                        <span class="p">{</span>
+<a id="__codelineno-0-710" name="__codelineno-0-710"></a>                            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span>
+<a id="__codelineno-0-711" name="__codelineno-0-711"></a>                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-712" name="__codelineno-0-712"></a>                        <span class="p">},</span>
+<a id="__codelineno-0-713" name="__codelineno-0-713"></a>                    <span class="p">)</span>
+<a id="__codelineno-0-714" name="__codelineno-0-714"></a>                <span class="k">except</span> <span class="n">GitOperationError</span><span class="p">:</span>
+<a id="__codelineno-0-715" name="__codelineno-0-715"></a>                    <span class="n">cleanup_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<a id="__codelineno-0-716" name="__codelineno-0-716"></a>                        <span class="p">{</span>
+<a id="__codelineno-0-717" name="__codelineno-0-717"></a>                            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span>
+<a id="__codelineno-0-718" name="__codelineno-0-718"></a>                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-719" name="__codelineno-0-719"></a>                        <span class="p">},</span>
+<a id="__codelineno-0-720" name="__codelineno-0-720"></a>                    <span class="p">)</span>
 <a id="__codelineno-0-721" name="__codelineno-0-721"></a>
-<a id="__codelineno-0-722" name="__codelineno-0-722"></a>        <span class="n">report_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;sync_report_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sync_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+<a id="__codelineno-0-722" name="__codelineno-0-722"></a>            <span class="n">cleanup_step</span><span class="o">.</span><span class="n">complete</span><span class="p">({</span><span class="s2">&quot;operations&quot;</span><span class="p">:</span> <span class="n">cleanup_results</span><span class="p">})</span>
 <a id="__codelineno-0-723" name="__codelineno-0-723"></a>
-<a id="__codelineno-0-724" name="__codelineno-0-724"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-725" name="__codelineno-0-725"></a>            <span class="k">with</span> <span class="n">report_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<a id="__codelineno-0-726" name="__codelineno-0-726"></a>                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-0-724" name="__codelineno-0-724"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-725" name="__codelineno-0-725"></a>            <span class="n">cleanup_step</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<a id="__codelineno-0-726" name="__codelineno-0-726"></a>            <span class="c1"># Don&#39;t raise - cleanup failures are not critical</span>
 <a id="__codelineno-0-727" name="__codelineno-0-727"></a>
-<a id="__codelineno-0-728" name="__codelineno-0-728"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sync report saved: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">report_file</span><span class="p">)</span>
-<a id="__codelineno-0-729" name="__codelineno-0-729"></a>            <span class="k">return</span> <span class="n">report_file</span>
-<a id="__codelineno-0-730" name="__codelineno-0-730"></a>
-<a id="__codelineno-0-731" name="__codelineno-0-731"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-732" name="__codelineno-0-732"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to save sync report: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-<a id="__codelineno-0-733" name="__codelineno-0-733"></a>            <span class="k">raise</span>
-<a id="__codelineno-0-734" name="__codelineno-0-734"></a>
-<a id="__codelineno-0-735" name="__codelineno-0-735"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<a id="__codelineno-0-736" name="__codelineno-0-736"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute complete smart synchronization workflow.</span>
-<a id="__codelineno-0-737" name="__codelineno-0-737"></a>
-<a id="__codelineno-0-738" name="__codelineno-0-738"></a><span class="sd">        Returns:</span>
-<a id="__codelineno-0-739" name="__codelineno-0-739"></a><span class="sd">            True if synchronization completed successfully, False otherwise.</span>
-<a id="__codelineno-0-740" name="__codelineno-0-740"></a>
-<a id="__codelineno-0-741" name="__codelineno-0-741"></a><span class="sd">        &quot;&quot;&quot;</span>
-<a id="__codelineno-0-742" name="__codelineno-0-742"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🚀 Starting Smart Git Synchronization&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-743" name="__codelineno-0-743"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
-<a id="__codelineno-0-744" name="__codelineno-0-744"></a>
-<a id="__codelineno-0-745" name="__codelineno-0-745"></a>        <span class="c1"># Update heartbeat: sync started</span>
-<a id="__codelineno-0-746" name="__codelineno-0-746"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;running&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-747" name="__codelineno-0-747"></a>
-<a id="__codelineno-0-748" name="__codelineno-0-748"></a>        <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-749" name="__codelineno-0-749"></a>            <span class="c1"># Phase 1: Repository Status Check</span>
-<a id="__codelineno-0-750" name="__codelineno-0-750"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📋 PHASE 1: Repository Status Analysis&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-751" name="__codelineno-0-751"></a>            <span class="n">git_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
-<a id="__codelineno-0-752" name="__codelineno-0-752"></a>
-<a id="__codelineno-0-753" name="__codelineno-0-753"></a>            <span class="c1"># Protection: prevent direct push to main</span>
-<a id="__codelineno-0-754" name="__codelineno-0-754"></a>            <span class="n">current_branch</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_branch&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-755" name="__codelineno-0-755"></a>            <span class="k">if</span> <span class="n">current_branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-756" name="__codelineno-0-756"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-757" name="__codelineno-0-757"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-758" name="__codelineno-0-758"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Este script não pode fazer &#39;push&#39; direto na &#39;main&#39;.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-759" name="__codelineno-0-759"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-<a id="__codelineno-0-760" name="__codelineno-0-760"></a>                    <span class="s2">&quot;Use o &#39;Fluxo de Trabalho (Chave Mestra)&#39;: Crie um branch, &quot;</span>
-<a id="__codelineno-0-761" name="__codelineno-0-761"></a>                    <span class="s2">&quot;abra um PR e solicite um &#39;Bypass&#39; do administrador.&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-762" name="__codelineno-0-762"></a>                <span class="p">)</span>
-<a id="__codelineno-0-763" name="__codelineno-0-763"></a>                <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-728" name="__codelineno-0-728"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_save_sync_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<a id="__codelineno-0-729" name="__codelineno-0-729"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save synchronization report to file.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-730" name="__codelineno-0-730"></a>        <span class="n">report</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-731" name="__codelineno-0-731"></a>            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-732" name="__codelineno-0-732"></a>                <span class="s2">&quot;sync_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_id</span><span class="p">,</span>
+<a id="__codelineno-0-733" name="__codelineno-0-733"></a>                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+<a id="__codelineno-0-734" name="__codelineno-0-734"></a>                <span class="s2">&quot;workspace&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span><span class="p">),</span>
+<a id="__codelineno-0-735" name="__codelineno-0-735"></a>                <span class="s2">&quot;dry_run&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span><span class="p">,</span>
+<a id="__codelineno-0-736" name="__codelineno-0-736"></a>                <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+<a id="__codelineno-0-737" name="__codelineno-0-737"></a>            <span class="p">},</span>
+<a id="__codelineno-0-738" name="__codelineno-0-738"></a>            <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">step</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">],</span>
+<a id="__codelineno-0-739" name="__codelineno-0-739"></a>            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-0-740" name="__codelineno-0-740"></a>                <span class="s2">&quot;total_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">),</span>
+<a id="__codelineno-0-741" name="__codelineno-0-741"></a>                <span class="s2">&quot;successful_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span>
+<a id="__codelineno-0-742" name="__codelineno-0-742"></a>                    <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;success&quot;</span><span class="p">],</span>
+<a id="__codelineno-0-743" name="__codelineno-0-743"></a>                <span class="p">),</span>
+<a id="__codelineno-0-744" name="__codelineno-0-744"></a>                <span class="s2">&quot;failed_steps&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">]),</span>
+<a id="__codelineno-0-745" name="__codelineno-0-745"></a>                <span class="s2">&quot;total_duration&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">_get_duration</span><span class="p">()</span> <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">),</span>
+<a id="__codelineno-0-746" name="__codelineno-0-746"></a>            <span class="p">},</span>
+<a id="__codelineno-0-747" name="__codelineno-0-747"></a>        <span class="p">}</span>
+<a id="__codelineno-0-748" name="__codelineno-0-748"></a>
+<a id="__codelineno-0-749" name="__codelineno-0-749"></a>        <span class="n">report_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;sync_report_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sync_id</span><span class="si">}</span><span class="s2">.json&quot;</span>
+<a id="__codelineno-0-750" name="__codelineno-0-750"></a>
+<a id="__codelineno-0-751" name="__codelineno-0-751"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-752" name="__codelineno-0-752"></a>            <span class="k">with</span> <span class="n">report_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-0-753" name="__codelineno-0-753"></a>                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-0-754" name="__codelineno-0-754"></a>
+<a id="__codelineno-0-755" name="__codelineno-0-755"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sync report saved: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">report_file</span><span class="p">)</span>
+<a id="__codelineno-0-756" name="__codelineno-0-756"></a>            <span class="k">return</span> <span class="n">report_file</span>
+<a id="__codelineno-0-757" name="__codelineno-0-757"></a>
+<a id="__codelineno-0-758" name="__codelineno-0-758"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-759" name="__codelineno-0-759"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to save sync report: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-0-760" name="__codelineno-0-760"></a>            <span class="k">raise</span>
+<a id="__codelineno-0-761" name="__codelineno-0-761"></a>
+<a id="__codelineno-0-762" name="__codelineno-0-762"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-763" name="__codelineno-0-763"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute complete smart synchronization workflow.</span>
 <a id="__codelineno-0-764" name="__codelineno-0-764"></a>
-<a id="__codelineno-0-765" name="__codelineno-0-765"></a>            <span class="k">if</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;is_clean&quot;</span><span class="p">]:</span>
-<a id="__codelineno-0-766" name="__codelineno-0-766"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Repository is clean, no changes to sync&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-767" name="__codelineno-0-767"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-768" name="__codelineno-0-768"></a>                <span class="k">return</span> <span class="kc">True</span>
-<a id="__codelineno-0-769" name="__codelineno-0-769"></a>
-<a id="__codelineno-0-770" name="__codelineno-0-770"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> changes to process&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;total_changes&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-765" name="__codelineno-0-765"></a><span class="sd">        Returns:</span>
+<a id="__codelineno-0-766" name="__codelineno-0-766"></a><span class="sd">            True if synchronization completed successfully, False otherwise.</span>
+<a id="__codelineno-0-767" name="__codelineno-0-767"></a>
+<a id="__codelineno-0-768" name="__codelineno-0-768"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-769" name="__codelineno-0-769"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🚀 Starting Smart Git Synchronization&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-770" name="__codelineno-0-770"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
 <a id="__codelineno-0-771" name="__codelineno-0-771"></a>
-<a id="__codelineno-0-772" name="__codelineno-0-772"></a>            <span class="c1"># Phase 2: Code Quality and Security Audit</span>
-<a id="__codelineno-0-773" name="__codelineno-0-773"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔍 PHASE 2: Preventive Code Audit&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-774" name="__codelineno-0-774"></a>            <span class="n">audit_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_code_audit</span><span class="p">()</span>
-<a id="__codelineno-0-775" name="__codelineno-0-775"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_last_audit_result</span> <span class="o">=</span> <span class="n">audit_result</span>  <span class="c1"># Store for commit message</span>
-<a id="__codelineno-0-776" name="__codelineno-0-776"></a>
-<a id="__codelineno-0-777" name="__codelineno-0-777"></a>            <span class="c1"># Phase 3: Automated Fixes (if audit found issues)</span>
-<a id="__codelineno-0-778" name="__codelineno-0-778"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">audit_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;passed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-<a id="__codelineno-0-779" name="__codelineno-0-779"></a>                <span class="s2">&quot;auto_fix_enabled&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-780" name="__codelineno-0-780"></a>                <span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-0-781" name="__codelineno-0-781"></a>            <span class="p">):</span>
-<a id="__codelineno-0-782" name="__codelineno-0-782"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔧 PHASE 3: Automated Lint Fixes&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-783" name="__codelineno-0-783"></a>                <span class="n">fix_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_lint_fixes</span><span class="p">()</span>
-<a id="__codelineno-0-784" name="__codelineno-0-784"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-<a id="__codelineno-0-785" name="__codelineno-0-785"></a>                    <span class="s2">&quot;Applied </span><span class="si">%d</span><span class="s2"> automated fixes&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-786" name="__codelineno-0-786"></a>                    <span class="n">fix_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fixes_applied&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-<a id="__codelineno-0-787" name="__codelineno-0-787"></a>                <span class="p">)</span>
-<a id="__codelineno-0-788" name="__codelineno-0-788"></a>
-<a id="__codelineno-0-789" name="__codelineno-0-789"></a>            <span class="c1"># Phase 4: Git Operations</span>
-<a id="__codelineno-0-790" name="__codelineno-0-790"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📤 PHASE 4: Git Commit and Push&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-791" name="__codelineno-0-791"></a>            <span class="n">git_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit_and_push</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
-<a id="__codelineno-0-792" name="__codelineno-0-792"></a>
-<a id="__codelineno-0-793" name="__codelineno-0-793"></a>            <span class="c1"># Phase 5: Cleanup</span>
-<a id="__codelineno-0-794" name="__codelineno-0-794"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cleanup_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
-<a id="__codelineno-0-795" name="__codelineno-0-795"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 PHASE 5: Repository Cleanup&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-796" name="__codelineno-0-796"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_cleanup_repository</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
-<a id="__codelineno-0-797" name="__codelineno-0-797"></a>
-<a id="__codelineno-0-798" name="__codelineno-0-798"></a>            <span class="c1"># Save report and finalize</span>
-<a id="__codelineno-0-799" name="__codelineno-0-799"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-800" name="__codelineno-0-800"></a>
-<a id="__codelineno-0-801" name="__codelineno-0-801"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
-<a id="__codelineno-0-802" name="__codelineno-0-802"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Smart Git Synchronization completed successfully!&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-772" name="__codelineno-0-772"></a>        <span class="c1"># Update heartbeat: sync started</span>
+<a id="__codelineno-0-773" name="__codelineno-0-773"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;running&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-774" name="__codelineno-0-774"></a>
+<a id="__codelineno-0-775" name="__codelineno-0-775"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-776" name="__codelineno-0-776"></a>            <span class="c1"># Phase 1: Repository Status Check</span>
+<a id="__codelineno-0-777" name="__codelineno-0-777"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📋 PHASE 1: Repository Status Analysis&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-778" name="__codelineno-0-778"></a>            <span class="n">git_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
+<a id="__codelineno-0-779" name="__codelineno-0-779"></a>
+<a id="__codelineno-0-780" name="__codelineno-0-780"></a>            <span class="c1"># Protection: prevent direct push to main</span>
+<a id="__codelineno-0-781" name="__codelineno-0-781"></a>            <span class="n">current_branch</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_branch&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-782" name="__codelineno-0-782"></a>            <span class="k">if</span> <span class="n">current_branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-783" name="__codelineno-0-783"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-784" name="__codelineno-0-784"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-785" name="__codelineno-0-785"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Este script não pode fazer &#39;push&#39; direto na &#39;main&#39;.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-786" name="__codelineno-0-786"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<a id="__codelineno-0-787" name="__codelineno-0-787"></a>                    <span class="s2">&quot;Use o &#39;Fluxo de Trabalho (Chave Mestra)&#39;: Crie um branch, &quot;</span>
+<a id="__codelineno-0-788" name="__codelineno-0-788"></a>                    <span class="s2">&quot;abra um PR e solicite um &#39;Bypass&#39; do administrador.&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-789" name="__codelineno-0-789"></a>                <span class="p">)</span>
+<a id="__codelineno-0-790" name="__codelineno-0-790"></a>                <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-791" name="__codelineno-0-791"></a>
+<a id="__codelineno-0-792" name="__codelineno-0-792"></a>            <span class="k">if</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;is_clean&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-793" name="__codelineno-0-793"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Repository is clean, no changes to sync&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-794" name="__codelineno-0-794"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-795" name="__codelineno-0-795"></a>                <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-796" name="__codelineno-0-796"></a>
+<a id="__codelineno-0-797" name="__codelineno-0-797"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> changes to process&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;total_changes&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-798" name="__codelineno-0-798"></a>
+<a id="__codelineno-0-799" name="__codelineno-0-799"></a>            <span class="c1"># Phase 2: Code Quality and Security Audit</span>
+<a id="__codelineno-0-800" name="__codelineno-0-800"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔍 PHASE 2: Preventive Code Audit&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-801" name="__codelineno-0-801"></a>            <span class="n">audit_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_code_audit</span><span class="p">()</span>
+<a id="__codelineno-0-802" name="__codelineno-0-802"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_last_audit_result</span> <span class="o">=</span> <span class="n">audit_result</span>  <span class="c1"># Store for commit message</span>
 <a id="__codelineno-0-803" name="__codelineno-0-803"></a>
-<a id="__codelineno-0-804" name="__codelineno-0-804"></a>            <span class="k">if</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;committed&quot;</span><span class="p">):</span>
-<a id="__codelineno-0-805" name="__codelineno-0-805"></a>                <span class="n">commit_hash</span> <span class="o">=</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;commit&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hash&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-806" name="__codelineno-0-806"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📦 Commit: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">commit_hash</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
-<a id="__codelineno-0-807" name="__codelineno-0-807"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🌳 Branch: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;current_branch&quot;</span><span class="p">])</span>
-<a id="__codelineno-0-808" name="__codelineno-0-808"></a>
-<a id="__codelineno-0-809" name="__codelineno-0-809"></a>            <span class="c1"># Update heartbeat: sync successful</span>
-<a id="__codelineno-0-810" name="__codelineno-0-810"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-811" name="__codelineno-0-811"></a>
-<a id="__codelineno-0-812" name="__codelineno-0-812"></a>            <span class="k">return</span> <span class="kc">True</span>
-<a id="__codelineno-0-813" name="__codelineno-0-813"></a>
-<a id="__codelineno-0-814" name="__codelineno-0-814"></a>        <span class="k">except</span> <span class="p">(</span><span class="n">SyncError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">,</span> <span class="n">AuditError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-815" name="__codelineno-0-815"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Synchronization failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-<a id="__codelineno-0-816" name="__codelineno-0-816"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;failed&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-817" name="__codelineno-0-817"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-818" name="__codelineno-0-818"></a>            <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-804" name="__codelineno-0-804"></a>            <span class="c1"># Phase 3: Automated Fixes (if audit found issues)</span>
+<a id="__codelineno-0-805" name="__codelineno-0-805"></a>            <span class="k">if</span> <span class="ow">not</span> <span class="n">audit_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;passed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<a id="__codelineno-0-806" name="__codelineno-0-806"></a>                <span class="s2">&quot;auto_fix_enabled&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-807" name="__codelineno-0-807"></a>                <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-808" name="__codelineno-0-808"></a>            <span class="p">):</span>
+<a id="__codelineno-0-809" name="__codelineno-0-809"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔧 PHASE 3: Automated Lint Fixes&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-810" name="__codelineno-0-810"></a>                <span class="n">fix_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_lint_fixes</span><span class="p">()</span>
+<a id="__codelineno-0-811" name="__codelineno-0-811"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-812" name="__codelineno-0-812"></a>                    <span class="s2">&quot;Applied </span><span class="si">%d</span><span class="s2"> automated fixes&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-813" name="__codelineno-0-813"></a>                    <span class="n">fix_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fixes_applied&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<a id="__codelineno-0-814" name="__codelineno-0-814"></a>                <span class="p">)</span>
+<a id="__codelineno-0-815" name="__codelineno-0-815"></a>
+<a id="__codelineno-0-816" name="__codelineno-0-816"></a>            <span class="c1"># Phase 4: Git Operations</span>
+<a id="__codelineno-0-817" name="__codelineno-0-817"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📤 PHASE 4: Git Commit and Push&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-818" name="__codelineno-0-818"></a>            <span class="n">git_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit_and_push</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
 <a id="__codelineno-0-819" name="__codelineno-0-819"></a>
-<a id="__codelineno-0-820" name="__codelineno-0-820"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-821" name="__codelineno-0-821"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-0-822" name="__codelineno-0-822"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;crashed&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-823" name="__codelineno-0-823"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-824" name="__codelineno-0-824"></a>            <span class="k">raise</span>
+<a id="__codelineno-0-820" name="__codelineno-0-820"></a>            <span class="c1"># Phase 5: Cleanup</span>
+<a id="__codelineno-0-821" name="__codelineno-0-821"></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cleanup_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<a id="__codelineno-0-822" name="__codelineno-0-822"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 PHASE 5: Repository Cleanup&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-823" name="__codelineno-0-823"></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_cleanup_repository</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
+<a id="__codelineno-0-824" name="__codelineno-0-824"></a>
+<a id="__codelineno-0-825" name="__codelineno-0-825"></a>            <span class="c1"># Save report and finalize</span>
+<a id="__codelineno-0-826" name="__codelineno-0-826"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-827" name="__codelineno-0-827"></a>
+<a id="__codelineno-0-828" name="__codelineno-0-828"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-829" name="__codelineno-0-829"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Smart Git Synchronization completed successfully!&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-830" name="__codelineno-0-830"></a>
+<a id="__codelineno-0-831" name="__codelineno-0-831"></a>            <span class="k">if</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;committed&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-832" name="__codelineno-0-832"></a>                <span class="n">commit_hash</span> <span class="o">=</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;commit&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hash&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-833" name="__codelineno-0-833"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📦 Commit: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">commit_hash</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<a id="__codelineno-0-834" name="__codelineno-0-834"></a>                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🌳 Branch: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;current_branch&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-835" name="__codelineno-0-835"></a>
+<a id="__codelineno-0-836" name="__codelineno-0-836"></a>            <span class="c1"># Update heartbeat: sync successful</span>
+<a id="__codelineno-0-837" name="__codelineno-0-837"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-838" name="__codelineno-0-838"></a>
+<a id="__codelineno-0-839" name="__codelineno-0-839"></a>            <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-840" name="__codelineno-0-840"></a>
+<a id="__codelineno-0-841" name="__codelineno-0-841"></a>        <span class="k">except</span> <span class="p">(</span><span class="n">SyncError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">,</span> <span class="n">AuditError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-842" name="__codelineno-0-842"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Synchronization failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-0-843" name="__codelineno-0-843"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;failed&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-844" name="__codelineno-0-844"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-845" name="__codelineno-0-845"></a>            <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-846" name="__codelineno-0-846"></a>
+<a id="__codelineno-0-847" name="__codelineno-0-847"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-848" name="__codelineno-0-848"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-849" name="__codelineno-0-849"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;crashed&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-850" name="__codelineno-0-850"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-851" name="__codelineno-0-851"></a>            <span class="k">raise</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -2625,34 +2679,7 @@ and structured logging for production-grade automation.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>scripts/git_sync/sync_logic.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-735">735</a></span>
-<span class="normal"><a href="#__codelineno-0-736">736</a></span>
-<span class="normal"><a href="#__codelineno-0-737">737</a></span>
-<span class="normal"><a href="#__codelineno-0-738">738</a></span>
-<span class="normal"><a href="#__codelineno-0-739">739</a></span>
-<span class="normal"><a href="#__codelineno-0-740">740</a></span>
-<span class="normal"><a href="#__codelineno-0-741">741</a></span>
-<span class="normal"><a href="#__codelineno-0-742">742</a></span>
-<span class="normal"><a href="#__codelineno-0-743">743</a></span>
-<span class="normal"><a href="#__codelineno-0-744">744</a></span>
-<span class="normal"><a href="#__codelineno-0-745">745</a></span>
-<span class="normal"><a href="#__codelineno-0-746">746</a></span>
-<span class="normal"><a href="#__codelineno-0-747">747</a></span>
-<span class="normal"><a href="#__codelineno-0-748">748</a></span>
-<span class="normal"><a href="#__codelineno-0-749">749</a></span>
-<span class="normal"><a href="#__codelineno-0-750">750</a></span>
-<span class="normal"><a href="#__codelineno-0-751">751</a></span>
-<span class="normal"><a href="#__codelineno-0-752">752</a></span>
-<span class="normal"><a href="#__codelineno-0-753">753</a></span>
-<span class="normal"><a href="#__codelineno-0-754">754</a></span>
-<span class="normal"><a href="#__codelineno-0-755">755</a></span>
-<span class="normal"><a href="#__codelineno-0-756">756</a></span>
-<span class="normal"><a href="#__codelineno-0-757">757</a></span>
-<span class="normal"><a href="#__codelineno-0-758">758</a></span>
-<span class="normal"><a href="#__codelineno-0-759">759</a></span>
-<span class="normal"><a href="#__codelineno-0-760">760</a></span>
-<span class="normal"><a href="#__codelineno-0-761">761</a></span>
-<span class="normal"><a href="#__codelineno-0-762">762</a></span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-762">762</a></span>
 <span class="normal"><a href="#__codelineno-0-763">763</a></span>
 <span class="normal"><a href="#__codelineno-0-764">764</a></span>
 <span class="normal"><a href="#__codelineno-0-765">765</a></span>
@@ -2714,96 +2741,123 @@ and structured logging for production-grade automation.</p>
 <span class="normal"><a href="#__codelineno-0-821">821</a></span>
 <span class="normal"><a href="#__codelineno-0-822">822</a></span>
 <span class="normal"><a href="#__codelineno-0-823">823</a></span>
-<span class="normal"><a href="#__codelineno-0-824">824</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-735" name="__codelineno-0-735"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<a id="__codelineno-0-736" name="__codelineno-0-736"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute complete smart synchronization workflow.</span>
-<a id="__codelineno-0-737" name="__codelineno-0-737"></a>
-<a id="__codelineno-0-738" name="__codelineno-0-738"></a><span class="sd">    Returns:</span>
-<a id="__codelineno-0-739" name="__codelineno-0-739"></a><span class="sd">        True if synchronization completed successfully, False otherwise.</span>
-<a id="__codelineno-0-740" name="__codelineno-0-740"></a>
-<a id="__codelineno-0-741" name="__codelineno-0-741"></a><span class="sd">    &quot;&quot;&quot;</span>
-<a id="__codelineno-0-742" name="__codelineno-0-742"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🚀 Starting Smart Git Synchronization&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-743" name="__codelineno-0-743"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
-<a id="__codelineno-0-744" name="__codelineno-0-744"></a>
-<a id="__codelineno-0-745" name="__codelineno-0-745"></a>    <span class="c1"># Update heartbeat: sync started</span>
-<a id="__codelineno-0-746" name="__codelineno-0-746"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;running&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-747" name="__codelineno-0-747"></a>
-<a id="__codelineno-0-748" name="__codelineno-0-748"></a>    <span class="k">try</span><span class="p">:</span>
-<a id="__codelineno-0-749" name="__codelineno-0-749"></a>        <span class="c1"># Phase 1: Repository Status Check</span>
-<a id="__codelineno-0-750" name="__codelineno-0-750"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📋 PHASE 1: Repository Status Analysis&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-751" name="__codelineno-0-751"></a>        <span class="n">git_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
-<a id="__codelineno-0-752" name="__codelineno-0-752"></a>
-<a id="__codelineno-0-753" name="__codelineno-0-753"></a>        <span class="c1"># Protection: prevent direct push to main</span>
-<a id="__codelineno-0-754" name="__codelineno-0-754"></a>        <span class="n">current_branch</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_branch&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-755" name="__codelineno-0-755"></a>        <span class="k">if</span> <span class="n">current_branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
-<a id="__codelineno-0-756" name="__codelineno-0-756"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-757" name="__codelineno-0-757"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-758" name="__codelineno-0-758"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Este script não pode fazer &#39;push&#39; direto na &#39;main&#39;.&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-759" name="__codelineno-0-759"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-<a id="__codelineno-0-760" name="__codelineno-0-760"></a>                <span class="s2">&quot;Use o &#39;Fluxo de Trabalho (Chave Mestra)&#39;: Crie um branch, &quot;</span>
-<a id="__codelineno-0-761" name="__codelineno-0-761"></a>                <span class="s2">&quot;abra um PR e solicite um &#39;Bypass&#39; do administrador.&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-762" name="__codelineno-0-762"></a>            <span class="p">)</span>
-<a id="__codelineno-0-763" name="__codelineno-0-763"></a>            <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.&quot;</span><span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-824">824</a></span>
+<span class="normal"><a href="#__codelineno-0-825">825</a></span>
+<span class="normal"><a href="#__codelineno-0-826">826</a></span>
+<span class="normal"><a href="#__codelineno-0-827">827</a></span>
+<span class="normal"><a href="#__codelineno-0-828">828</a></span>
+<span class="normal"><a href="#__codelineno-0-829">829</a></span>
+<span class="normal"><a href="#__codelineno-0-830">830</a></span>
+<span class="normal"><a href="#__codelineno-0-831">831</a></span>
+<span class="normal"><a href="#__codelineno-0-832">832</a></span>
+<span class="normal"><a href="#__codelineno-0-833">833</a></span>
+<span class="normal"><a href="#__codelineno-0-834">834</a></span>
+<span class="normal"><a href="#__codelineno-0-835">835</a></span>
+<span class="normal"><a href="#__codelineno-0-836">836</a></span>
+<span class="normal"><a href="#__codelineno-0-837">837</a></span>
+<span class="normal"><a href="#__codelineno-0-838">838</a></span>
+<span class="normal"><a href="#__codelineno-0-839">839</a></span>
+<span class="normal"><a href="#__codelineno-0-840">840</a></span>
+<span class="normal"><a href="#__codelineno-0-841">841</a></span>
+<span class="normal"><a href="#__codelineno-0-842">842</a></span>
+<span class="normal"><a href="#__codelineno-0-843">843</a></span>
+<span class="normal"><a href="#__codelineno-0-844">844</a></span>
+<span class="normal"><a href="#__codelineno-0-845">845</a></span>
+<span class="normal"><a href="#__codelineno-0-846">846</a></span>
+<span class="normal"><a href="#__codelineno-0-847">847</a></span>
+<span class="normal"><a href="#__codelineno-0-848">848</a></span>
+<span class="normal"><a href="#__codelineno-0-849">849</a></span>
+<span class="normal"><a href="#__codelineno-0-850">850</a></span>
+<span class="normal"><a href="#__codelineno-0-851">851</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-762" name="__codelineno-0-762"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-763" name="__codelineno-0-763"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute complete smart synchronization workflow.</span>
 <a id="__codelineno-0-764" name="__codelineno-0-764"></a>
-<a id="__codelineno-0-765" name="__codelineno-0-765"></a>        <span class="k">if</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;is_clean&quot;</span><span class="p">]:</span>
-<a id="__codelineno-0-766" name="__codelineno-0-766"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Repository is clean, no changes to sync&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-767" name="__codelineno-0-767"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-768" name="__codelineno-0-768"></a>            <span class="k">return</span> <span class="kc">True</span>
-<a id="__codelineno-0-769" name="__codelineno-0-769"></a>
-<a id="__codelineno-0-770" name="__codelineno-0-770"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> changes to process&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;total_changes&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-765" name="__codelineno-0-765"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-766" name="__codelineno-0-766"></a><span class="sd">        True if synchronization completed successfully, False otherwise.</span>
+<a id="__codelineno-0-767" name="__codelineno-0-767"></a>
+<a id="__codelineno-0-768" name="__codelineno-0-768"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-769" name="__codelineno-0-769"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🚀 Starting Smart Git Synchronization&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-770" name="__codelineno-0-770"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
 <a id="__codelineno-0-771" name="__codelineno-0-771"></a>
-<a id="__codelineno-0-772" name="__codelineno-0-772"></a>        <span class="c1"># Phase 2: Code Quality and Security Audit</span>
-<a id="__codelineno-0-773" name="__codelineno-0-773"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔍 PHASE 2: Preventive Code Audit&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-774" name="__codelineno-0-774"></a>        <span class="n">audit_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_code_audit</span><span class="p">()</span>
-<a id="__codelineno-0-775" name="__codelineno-0-775"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_last_audit_result</span> <span class="o">=</span> <span class="n">audit_result</span>  <span class="c1"># Store for commit message</span>
-<a id="__codelineno-0-776" name="__codelineno-0-776"></a>
-<a id="__codelineno-0-777" name="__codelineno-0-777"></a>        <span class="c1"># Phase 3: Automated Fixes (if audit found issues)</span>
-<a id="__codelineno-0-778" name="__codelineno-0-778"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">audit_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;passed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-<a id="__codelineno-0-779" name="__codelineno-0-779"></a>            <span class="s2">&quot;auto_fix_enabled&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-780" name="__codelineno-0-780"></a>            <span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-0-781" name="__codelineno-0-781"></a>        <span class="p">):</span>
-<a id="__codelineno-0-782" name="__codelineno-0-782"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔧 PHASE 3: Automated Lint Fixes&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-783" name="__codelineno-0-783"></a>            <span class="n">fix_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_lint_fixes</span><span class="p">()</span>
-<a id="__codelineno-0-784" name="__codelineno-0-784"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-<a id="__codelineno-0-785" name="__codelineno-0-785"></a>                <span class="s2">&quot;Applied </span><span class="si">%d</span><span class="s2"> automated fixes&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-786" name="__codelineno-0-786"></a>                <span class="n">fix_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fixes_applied&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-<a id="__codelineno-0-787" name="__codelineno-0-787"></a>            <span class="p">)</span>
-<a id="__codelineno-0-788" name="__codelineno-0-788"></a>
-<a id="__codelineno-0-789" name="__codelineno-0-789"></a>        <span class="c1"># Phase 4: Git Operations</span>
-<a id="__codelineno-0-790" name="__codelineno-0-790"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📤 PHASE 4: Git Commit and Push&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-791" name="__codelineno-0-791"></a>        <span class="n">git_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit_and_push</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
-<a id="__codelineno-0-792" name="__codelineno-0-792"></a>
-<a id="__codelineno-0-793" name="__codelineno-0-793"></a>        <span class="c1"># Phase 5: Cleanup</span>
-<a id="__codelineno-0-794" name="__codelineno-0-794"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cleanup_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
-<a id="__codelineno-0-795" name="__codelineno-0-795"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 PHASE 5: Repository Cleanup&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-796" name="__codelineno-0-796"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_cleanup_repository</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
-<a id="__codelineno-0-797" name="__codelineno-0-797"></a>
-<a id="__codelineno-0-798" name="__codelineno-0-798"></a>        <span class="c1"># Save report and finalize</span>
-<a id="__codelineno-0-799" name="__codelineno-0-799"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-800" name="__codelineno-0-800"></a>
-<a id="__codelineno-0-801" name="__codelineno-0-801"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
-<a id="__codelineno-0-802" name="__codelineno-0-802"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Smart Git Synchronization completed successfully!&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-772" name="__codelineno-0-772"></a>    <span class="c1"># Update heartbeat: sync started</span>
+<a id="__codelineno-0-773" name="__codelineno-0-773"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;running&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-774" name="__codelineno-0-774"></a>
+<a id="__codelineno-0-775" name="__codelineno-0-775"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-776" name="__codelineno-0-776"></a>        <span class="c1"># Phase 1: Repository Status Check</span>
+<a id="__codelineno-0-777" name="__codelineno-0-777"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📋 PHASE 1: Repository Status Analysis&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-778" name="__codelineno-0-778"></a>        <span class="n">git_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_git_status</span><span class="p">()</span>
+<a id="__codelineno-0-779" name="__codelineno-0-779"></a>
+<a id="__codelineno-0-780" name="__codelineno-0-780"></a>        <span class="c1"># Protection: prevent direct push to main</span>
+<a id="__codelineno-0-781" name="__codelineno-0-781"></a>        <span class="n">current_branch</span> <span class="o">=</span> <span class="n">git_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_branch&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-782" name="__codelineno-0-782"></a>        <span class="k">if</span> <span class="n">current_branch</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
+<a id="__codelineno-0-783" name="__codelineno-0-783"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;🛑 OPERAÇÃO PROIBIDA NA &#39;main&#39;&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-784" name="__codelineno-0-784"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;A branch &#39;main&#39; está protegida por regras (&#39;Cofre&#39;).&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-785" name="__codelineno-0-785"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Este script não pode fazer &#39;push&#39; direto na &#39;main&#39;.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-786" name="__codelineno-0-786"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+<a id="__codelineno-0-787" name="__codelineno-0-787"></a>                <span class="s2">&quot;Use o &#39;Fluxo de Trabalho (Chave Mestra)&#39;: Crie um branch, &quot;</span>
+<a id="__codelineno-0-788" name="__codelineno-0-788"></a>                <span class="s2">&quot;abra um PR e solicite um &#39;Bypass&#39; do administrador.&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-789" name="__codelineno-0-789"></a>            <span class="p">)</span>
+<a id="__codelineno-0-790" name="__codelineno-0-790"></a>            <span class="k">raise</span> <span class="n">SyncError</span><span class="p">(</span><span class="s2">&quot;Tentativa de &#39;push&#39; direto na &#39;main&#39; protegida.&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-791" name="__codelineno-0-791"></a>
+<a id="__codelineno-0-792" name="__codelineno-0-792"></a>        <span class="k">if</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;is_clean&quot;</span><span class="p">]:</span>
+<a id="__codelineno-0-793" name="__codelineno-0-793"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Repository is clean, no changes to sync&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-794" name="__codelineno-0-794"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-795" name="__codelineno-0-795"></a>            <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-796" name="__codelineno-0-796"></a>
+<a id="__codelineno-0-797" name="__codelineno-0-797"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found </span><span class="si">%d</span><span class="s2"> changes to process&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;total_changes&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-798" name="__codelineno-0-798"></a>
+<a id="__codelineno-0-799" name="__codelineno-0-799"></a>        <span class="c1"># Phase 2: Code Quality and Security Audit</span>
+<a id="__codelineno-0-800" name="__codelineno-0-800"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔍 PHASE 2: Preventive Code Audit&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-801" name="__codelineno-0-801"></a>        <span class="n">audit_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_code_audit</span><span class="p">()</span>
+<a id="__codelineno-0-802" name="__codelineno-0-802"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_last_audit_result</span> <span class="o">=</span> <span class="n">audit_result</span>  <span class="c1"># Store for commit message</span>
 <a id="__codelineno-0-803" name="__codelineno-0-803"></a>
-<a id="__codelineno-0-804" name="__codelineno-0-804"></a>        <span class="k">if</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;committed&quot;</span><span class="p">):</span>
-<a id="__codelineno-0-805" name="__codelineno-0-805"></a>            <span class="n">commit_hash</span> <span class="o">=</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;commit&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hash&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-806" name="__codelineno-0-806"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📦 Commit: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">commit_hash</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
-<a id="__codelineno-0-807" name="__codelineno-0-807"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🌳 Branch: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;current_branch&quot;</span><span class="p">])</span>
-<a id="__codelineno-0-808" name="__codelineno-0-808"></a>
-<a id="__codelineno-0-809" name="__codelineno-0-809"></a>        <span class="c1"># Update heartbeat: sync successful</span>
-<a id="__codelineno-0-810" name="__codelineno-0-810"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-811" name="__codelineno-0-811"></a>
-<a id="__codelineno-0-812" name="__codelineno-0-812"></a>        <span class="k">return</span> <span class="kc">True</span>
-<a id="__codelineno-0-813" name="__codelineno-0-813"></a>
-<a id="__codelineno-0-814" name="__codelineno-0-814"></a>    <span class="k">except</span> <span class="p">(</span><span class="n">SyncError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">,</span> <span class="n">AuditError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-815" name="__codelineno-0-815"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Synchronization failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-<a id="__codelineno-0-816" name="__codelineno-0-816"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;failed&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-817" name="__codelineno-0-817"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-818" name="__codelineno-0-818"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-804" name="__codelineno-0-804"></a>        <span class="c1"># Phase 3: Automated Fixes (if audit found issues)</span>
+<a id="__codelineno-0-805" name="__codelineno-0-805"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">audit_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;passed&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<a id="__codelineno-0-806" name="__codelineno-0-806"></a>            <span class="s2">&quot;auto_fix_enabled&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-807" name="__codelineno-0-807"></a>            <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-808" name="__codelineno-0-808"></a>        <span class="p">):</span>
+<a id="__codelineno-0-809" name="__codelineno-0-809"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🔧 PHASE 3: Automated Lint Fixes&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-810" name="__codelineno-0-810"></a>            <span class="n">fix_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_lint_fixes</span><span class="p">()</span>
+<a id="__codelineno-0-811" name="__codelineno-0-811"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-812" name="__codelineno-0-812"></a>                <span class="s2">&quot;Applied </span><span class="si">%d</span><span class="s2"> automated fixes&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-813" name="__codelineno-0-813"></a>                <span class="n">fix_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fixes_applied&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<a id="__codelineno-0-814" name="__codelineno-0-814"></a>            <span class="p">)</span>
+<a id="__codelineno-0-815" name="__codelineno-0-815"></a>
+<a id="__codelineno-0-816" name="__codelineno-0-816"></a>        <span class="c1"># Phase 4: Git Operations</span>
+<a id="__codelineno-0-817" name="__codelineno-0-817"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📤 PHASE 4: Git Commit and Push&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-818" name="__codelineno-0-818"></a>        <span class="n">git_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit_and_push</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
 <a id="__codelineno-0-819" name="__codelineno-0-819"></a>
-<a id="__codelineno-0-820" name="__codelineno-0-820"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<a id="__codelineno-0-821" name="__codelineno-0-821"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a id="__codelineno-0-822" name="__codelineno-0-822"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;crashed&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-823" name="__codelineno-0-823"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
-<a id="__codelineno-0-824" name="__codelineno-0-824"></a>        <span class="k">raise</span>
+<a id="__codelineno-0-820" name="__codelineno-0-820"></a>        <span class="c1"># Phase 5: Cleanup</span>
+<a id="__codelineno-0-821" name="__codelineno-0-821"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cleanup_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<a id="__codelineno-0-822" name="__codelineno-0-822"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🧹 PHASE 5: Repository Cleanup&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-823" name="__codelineno-0-823"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_cleanup_repository</span><span class="p">(</span><span class="n">git_status</span><span class="p">)</span>
+<a id="__codelineno-0-824" name="__codelineno-0-824"></a>
+<a id="__codelineno-0-825" name="__codelineno-0-825"></a>        <span class="c1"># Save report and finalize</span>
+<a id="__codelineno-0-826" name="__codelineno-0-826"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-827" name="__codelineno-0-827"></a>
+<a id="__codelineno-0-828" name="__codelineno-0-828"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<a id="__codelineno-0-829" name="__codelineno-0-829"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Smart Git Synchronization completed successfully!&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-830" name="__codelineno-0-830"></a>
+<a id="__codelineno-0-831" name="__codelineno-0-831"></a>        <span class="k">if</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;committed&quot;</span><span class="p">):</span>
+<a id="__codelineno-0-832" name="__codelineno-0-832"></a>            <span class="n">commit_hash</span> <span class="o">=</span> <span class="n">git_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;commit&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hash&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-833" name="__codelineno-0-833"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;📦 Commit: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">commit_hash</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+<a id="__codelineno-0-834" name="__codelineno-0-834"></a>            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;🌳 Branch: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">git_status</span><span class="p">[</span><span class="s2">&quot;current_branch&quot;</span><span class="p">])</span>
+<a id="__codelineno-0-835" name="__codelineno-0-835"></a>
+<a id="__codelineno-0-836" name="__codelineno-0-836"></a>        <span class="c1"># Update heartbeat: sync successful</span>
+<a id="__codelineno-0-837" name="__codelineno-0-837"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-838" name="__codelineno-0-838"></a>
+<a id="__codelineno-0-839" name="__codelineno-0-839"></a>        <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-0-840" name="__codelineno-0-840"></a>
+<a id="__codelineno-0-841" name="__codelineno-0-841"></a>    <span class="k">except</span> <span class="p">(</span><span class="n">SyncError</span><span class="p">,</span> <span class="n">GitOperationError</span><span class="p">,</span> <span class="n">AuditError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-842" name="__codelineno-0-842"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Synchronization failed: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-0-843" name="__codelineno-0-843"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;failed&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-844" name="__codelineno-0-844"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-845" name="__codelineno-0-845"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-846" name="__codelineno-0-846"></a>
+<a id="__codelineno-0-847" name="__codelineno-0-847"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-0-848" name="__codelineno-0-848"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;UNEXPECTED BUG: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-0-849" name="__codelineno-0-849"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_heartbeat</span><span class="p">(</span><span class="s2">&quot;crashed&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-850" name="__codelineno-0-850"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_save_sync_report</span><span class="p">()</span>
+<a id="__codelineno-0-851" name="__codelineno-0-851"></a>        <span class="k">raise</span>
 </code></pre></div></td></tr></table></div>
             </details>
     </div>
