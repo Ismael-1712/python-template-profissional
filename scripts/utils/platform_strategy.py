@@ -33,6 +33,11 @@ from typing import Protocol, runtime_checkable
 
 logger = logging.getLogger(__name__)
 
+# --- Global Alert Guard ---
+# Ensures Windows compatibility alert is emitted only once per Python session
+# to avoid log spam during long-running operations (e.g., cortex map + scan).
+_windows_alert_emitted: bool = False
+
 
 @runtime_checkable
 class PlatformStrategy(Protocol):
@@ -402,11 +407,31 @@ def get_platform_strategy() -> PlatformStrategy:
 
     Thread Safety:
         Safe to call from multiple threads. Returns stateless strategy.
+
+    Windows Compatibility Alert:
+        On first detection of Windows, emits a warning about best-effort
+        mode limitations (fsync, chmod, NTFS caching). This alert is
+        emitted only once per Python session to avoid log spam.
     """
+    global _windows_alert_emitted  # Required to modify module-level guard
+
     platform = sys.platform.lower()
 
     if platform in ("win32", "cygwin"):
         logger.debug("Platform detected: Windows (using WindowsStrategy)")
+
+        # Emit compatibility alert ONCE per session
+        if not _windows_alert_emitted:
+            logger.warning(
+                "⚠️  Windows Platform Detected - Running in BEST-EFFORT MODE:\n"
+                "   • fsync() only flushes OS buffers (not physical disk write)\n"
+                "   • chmod() has limited support (Unix permissions not enforced)\n"
+                "   • NTFS disk controller caching may delay physical writes\n"
+                "   ⚡ Atomic write guarantees are WEAKER than Unix/Linux.\n"
+                "   📖 See: scripts/utils/platform_strategy.py for details.",
+            )
+            _windows_alert_emitted = True
+
         return WindowsStrategy()
 
     # Default to Unix for Linux, macOS, BSD, and other POSIX systems
