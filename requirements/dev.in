@@ -3,7 +3,7 @@
 #
 # Dependências de desenvolvimento migradas do pyproject.toml
 
-ruff==0.14.9
+ruff==0.14.10
 pytest==9.0.2
 pytest-cov==7.0.0
 pytest-xdist==3.8.0
