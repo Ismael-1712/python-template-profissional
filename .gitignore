@@ -41,6 +41,7 @@ htmlcov/
 !.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/launch.json
+!.vscode/tasks.json
 
 # PyCharm
 .idea/
@@ -70,7 +71,6 @@ sync_report_*.json
 
 # --- Lixo de Ferramental e Cache ---
 .ruff_cache/
-.vscode/tasks.json
 project_structure.txt
 
 # Artefatos de build e cache do Python
