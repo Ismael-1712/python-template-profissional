@@ -653,8 +653,35 @@ class SyncOrchestrator:
         self.steps.append(cleanup_step)
 
         try:
+            # ================================================================
+            # TELEMETRIA VISUAL: Status de Proteção
+            # ================================================================
+            # Exibe configurações de proteção ANTES de iniciar limpeza
+            # para maior transparência sobre decisões de remoção/proteção
+            deep_clean_enabled = self.config.get("prune_local_merged", True)
+            protected_branches = self.config.get("protected_branches", [])
+            force_mode = self.config.get("force", False)
+
+            logger.info("=" * 60)
+            logger.info("🔍 STATUS DE PROTEÇÃO - Git Sync Configuration")
+            logger.info("=" * 60)
+            logger.info(
+                "🧹 Deep Clean: %s",
+                "✅ ENABLED" if deep_clean_enabled else "❌ DISABLED",
+            )
+            protected_list = (
+                ", ".join(protected_branches) if protected_branches else "None"
+            )
+            logger.info("🛡️  Protected Branches: %s", protected_list)
+            logger.info(
+                "⚠️  Force Mode: %s",
+                "⚠️ TRUE (caution!)" if force_mode else "✅ FALSE",
+            )
+            logger.info("=" * 60)
+            # ================================================================
+
             # Phase 5a: Deep Clean - Prune merged local branches
-            if self.config.get("prune_local_merged", True):
+            if deep_clean_enabled:
                 logger.info("🧹 Deep Clean: Pruning merged local branches...")
                 prune_result = self._prune_merged_local_branches(git_status)
 

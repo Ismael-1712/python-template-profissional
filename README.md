@@ -502,6 +502,11 @@ Recommendations:
 Simulador de ambiente CI para testes locais:
 
 ```bash
+# Gerar configuração inicial (scaffolding)
+mock-ci init                         # Cria test_mock_config.yaml com comentários
+mock-ci init --force                 # Sobrescreve configuração existente
+mock-ci init --output custom.yaml    # Salva em arquivo customizado
+
 # Rodar mock CI completo
 python -m scripts.cli.mock_ci
 
@@ -514,6 +519,7 @@ python -m scripts.cli.mock_validate
 
 **Casos de Uso:**
 
+- 🆕 **Scaffolding rápido**: `mock-ci init` gera configuração auto-documentada
 - Testar workflows GitHub Actions localmente
 - Validar scripts CI antes do push
 - Debug de falhas em pipelines
