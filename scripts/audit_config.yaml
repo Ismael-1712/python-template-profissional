@@ -21,6 +21,7 @@ exclude_paths:
   - "dist/"
   - "build/"
   - "tests/test_audit_analyzer.py"  # Contém strings de vulnerabilidade intencionais para testes
+  - "tests/test_mock_ci_runner_e2e.py"  # Usa subprocess.run para testes E2E - falso positivo
 
 # CI simulation timeout in seconds
 ci_timeout: 300
