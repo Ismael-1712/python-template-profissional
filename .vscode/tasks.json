@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Git: Direct Push Main",
+            "type": "shell",
+            "command": "./scripts/direct-push-main.sh",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Git: PR Cleanup",
+            "type": "shell",
+            "command": "./scripts/post-pr-cleanup.sh",
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "promptOnClose": false
+        }
+    ]
+}

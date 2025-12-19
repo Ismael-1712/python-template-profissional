@@ -4,6 +4,19 @@
 
 ### Added
 
+- **DX: VS Code Tasks for Git Automation**: Integrated Git automation scripts into VS Code Command Palette
+  - Created `.vscode/tasks.json` with two automation tasks:
+    - `Git: Direct Push Main`: Executes `./scripts/direct-push-main.sh` with validation workflow
+    - `Git: PR Cleanup`: Executes `./scripts/post-pr-cleanup.sh` for post-merge cleanup
+  - Accessible via `Ctrl+Shift+P` → Tasks: Run Task
+  - Resolves "DX Gap": Users can now trigger Git automation without leaving VS Code
+  - Implemented comprehensive test suite in `tests/test_vscode_config.py`:
+    - Validates tasks.json structure and JSON validity
+    - Verifies presence of both automation tasks
+    - Checks correct script paths and executable permissions
+  - Complements existing documentation in `docs/guides/GIT_AUTOMATION_SCRIPTS.md`
+  - Impact: Reduces context switching and improves developer workflow efficiency
+
 - **Security: Visibility for Environment Sanitization (P13 Fix)**: Enhanced UX for subprocess security
   - `sanitize_env()` now returns tuple `(sanitized_env, blocked_vars)` instead of single dict
   - Added visible WARNING log when sensitive variables are sanitized during subprocess execution
