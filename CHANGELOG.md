@@ -48,6 +48,28 @@
     - Automatic backup creation with timestamp (`.bak.YYYYMMDD_HHMMSS`)
     - Dry-run mode (`--dry-run`) with colored diff preview
     - Custom output path support (`--output`)
+
+### Fixed
+
+- **Windows Compatibility Alert (P09)**: Added transparent warning for best-effort mode limitations
+  - Implemented single-emission alert system in `get_platform_strategy()` factory
+  - Alert displays on first Windows detection (win32/cygwin) per Python session
+  - Warning message explains:
+    - `fsync()` only flushes OS buffers (not physical disk writes)
+    - `chmod()` has limited Unix permission support
+    - NTFS disk caching may delay physical writes
+    - Atomic write guarantees are weaker than Unix/Linux
+  - Technical implementation:
+    - Module-level guard flag `_windows_alert_emitted` prevents log spam
+    - Alert emitted before `WindowsStrategy()` instantiation
+    - Thread-safe for single-threaded usage (no locks needed)
+  - Resolves "False Sense of Security": Users now understand durability limitations on Windows
+  - Enhanced documentation in `scripts/utils/platform_strategy.py`
+  - Comprehensive test coverage in `tests/test_platform_strategy.py`:
+    - `test_windows_alert_emitted_once`: Validates single emission
+    - `test_unix_no_alert`: Ensures no false positives
+    - `test_cygwin_alert`: Validates Cygwin detection
+    - `test_alert_reset_capability`: Validates test isolation
   - Comprehensive TDD test suite with 15 test cases covering:
     - Critical comment preservation
     - List merging with union + deduplication
