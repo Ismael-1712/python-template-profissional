@@ -127,7 +127,7 @@ save: format
 
 ## audit: Executa auditoria completa do código (análise estática avançada)
 audit: doctor
-	PYTHONPATH=. $(PYTHON) $(SCRIPTS_DIR)/code_audit.py
+	$(PYTHON) -m scripts.cli.audit
 
 ## test: Executa suite completa de testes com pytest (paralelo via pytest-xdist)
 test: doctor

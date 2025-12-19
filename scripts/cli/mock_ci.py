@@ -43,6 +43,242 @@ from scripts.utils.logger import setup_logging  # noqa: E402
 logger = setup_logging("ci_test_mock_integration", level=logging.INFO)
 
 
+def _generate_config_template() -> str:
+    """Gera template de configuração com comentários explicativos.
+
+    Returns:
+        String YAML com configuração comentada
+
+    """
+    return '''# ====================================================================
+# Mock CI Configuration - Test Mock Generator
+# ====================================================================
+# Este arquivo configura o gerador de mocks para testes CI/CD.
+# Ele detecta padrões de código que precisam de mocks e sugere/aplica
+# correções automaticamente.
+#
+# Documentação completa: docs/guides/mock-ci-setup.md
+# ====================================================================
+
+# Versão da configuração
+version: "1.0"
+
+# ====================================================================
+# PADRÕES DE MOCK DETECTÁVEIS
+# ====================================================================
+# Organize seus padrões por categoria para melhor manutenção.
+# Cada padrão especifica:
+#   - pattern: String a detectar no código (ex: "requests.get(")
+#   - type: Categoria do mock (HTTP_REQUEST, SUBPROCESS, FILE_SYSTEM, DATABASE)
+#   - severity: Prioridade (HIGH, MEDIUM, LOW)
+#   - description: Descrição do que é detectado
+#   - mock_template: Template do código de mock a aplicar
+#   - required_imports: Imports necessários para o mock funcionar
+
+mock_patterns:
+  # ----------------------------------------------------------------
+  # Requisições HTTP
+  # ----------------------------------------------------------------
+  http_patterns:
+    - pattern: "requests.get("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "HTTP GET request - precisa de mock para estabilidade em CI"
+      mock_template: |
+        @patch("requests.get")
+        def {func_name}(self, mock_get, *args, **kwargs):
+            """Test com HTTP GET mockado."""
+            mock_response = Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"result": "mocked"}
+            mock_get.return_value = mock_response
+
+            # Sua lógica de teste aqui
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+    - pattern: "requests.post("
+      type: "HTTP_REQUEST"
+      severity: "HIGH"
+      description: "HTTP POST request - precisa de mock para estabilidade em CI"
+      mock_template: |
+        @patch("requests.post")
+        def {func_name}(self, mock_post, *args, **kwargs):
+            """Test com HTTP POST mockado."""
+            mock_response = Mock()
+            mock_response.status_code = 201
+            mock_response.json.return_value = {"id": "created"}
+            mock_post.return_value = mock_response
+
+            # Sua lógica de teste aqui
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+  # ----------------------------------------------------------------
+  # Execução de Processos
+  # ----------------------------------------------------------------
+  subprocess_patterns:
+    - pattern: "subprocess.run("
+      type: "SUBPROCESS"
+      severity: "HIGH"
+      description: "Execução de subprocess - precisa de mock para portabilidade em CI"
+      mock_template: |
+        @patch("subprocess.run")
+        def {func_name}(self, mock_subprocess_run, *args, **kwargs):
+            """Test com subprocess mockado."""
+            mock_result = Mock()
+            mock_result.returncode = 0
+            mock_result.stdout = "mocked output"
+            mock_result.stderr = ""
+            mock_subprocess_run.return_value = mock_result
+
+            # Sua lógica de teste aqui
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+  # ----------------------------------------------------------------
+  # Sistema de Arquivos
+  # ----------------------------------------------------------------
+  filesystem_patterns:
+    - pattern: "open("
+      type: "FILE_SYSTEM"
+      severity: "MEDIUM"
+      description: "Operação de arquivo - considere mockar para isolamento de teste"
+      mock_template: |
+        @patch("builtins.open", new_callable=mock_open, read_data="mocked file content")
+        def {func_name}(self, mock_file, *args, **kwargs):
+            """Test com operações de arquivo mockadas."""
+            # Sua lógica de teste aqui
+      required_imports:
+        - "from unittest.mock import Mock, patch, mock_open"
+
+  # ----------------------------------------------------------------
+  # Banco de Dados
+  # ----------------------------------------------------------------
+  database_patterns:
+    - pattern: "sqlite3.connect("
+      type: "DATABASE"
+      severity: "HIGH"
+      description: "Conexão SQLite - precisa de mock para isolamento de teste"
+      mock_template: |
+        @patch("sqlite3.connect")
+        def {func_name}(self, mock_connect, *args, **kwargs):
+            """Test com conexão SQLite mockada."""
+            mock_conn = Mock()
+            mock_cursor = Mock()
+            mock_conn.cursor.return_value = mock_cursor
+            mock_cursor.fetchall.return_value = []
+            mock_connect.return_value = mock_conn
+
+            # Sua lógica de teste aqui
+      required_imports:
+        - "from unittest.mock import Mock, patch"
+
+# ====================================================================
+# CONFIGURAÇÕES DE EXECUÇÃO
+# ====================================================================
+execution:
+  # Padrões glob para localizar arquivos de teste
+  test_file_patterns:
+    - "tests/**/*.py"
+    - "test_*.py"
+    - "*_test.py"
+
+  # Padrões glob para EXCLUIR arquivos do processamento
+  exclude_patterns:
+    - "**/__init__.py"
+    - "**/conftest.py"
+    - "**/.venv/**"
+    - "**/venv/**"
+    - "**/.pytest_cache/**"
+
+  # Severidade mínima para aplicar correções automáticas
+  # Valores: HIGH, MEDIUM, LOW
+  min_severity_for_auto_apply: "HIGH"
+
+  # Criar backup antes de modificar arquivos?
+  create_backups: true
+
+  # Diretório para backups
+  backup_directory: ".test_mock_backups"
+
+# ====================================================================
+# CONFIGURAÇÕES DE LOGGING
+# ====================================================================
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+
+# ====================================================================
+# CONFIGURAÇÕES DE RELATÓRIO
+# ====================================================================
+reporting:
+  # Incluir sugestões de baixa prioridade nos relatórios?
+  include_low_priority: false
+
+  # Máximo de sugestões a exibir no console
+  max_suggestions_display: 10
+
+  # Formato de saída: json, text, markdown
+  output_format: "json"
+'''
+
+
+def handle_init_command(args: argparse.Namespace) -> int:
+    """Manipula o comando init para scaffolding de configuração.
+
+    Args:
+        args: Argumentos parseados do CLI
+
+    Returns:
+        Código de saída (0 = sucesso, 1 = warning, 2 = erro)
+
+    """
+    workspace = args.workspace.resolve()
+
+    # Determina caminho do arquivo de saída
+    if args.output:
+        output_path = args.output.resolve()
+    else:
+        output_path = workspace / "test_mock_config.yaml"
+
+    # Verifica se arquivo já existe
+    if output_path.exists() and not args.force:
+        logger.error(
+            "❌ Arquivo já existe: %s\n   Use --force para sobrescrever",
+            output_path,
+        )
+        return 1
+
+    # Gera configuração
+    try:
+        config_content = _generate_config_template()
+
+        # Cria diretório pai se necessário
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Escreve arquivo
+        with output_path.open("w", encoding="utf-8") as f:
+            f.write(config_content)
+
+        logger.info("✅ Configuração gerada com sucesso!")
+        logger.info("📄 Arquivo: %s", output_path)
+        logger.info("")
+        logger.info("Próximos passos:")
+        logger.info("  1. Revise e personalize %s", output_path.name)
+        logger.info("  2. Execute: mock-ci --check")
+        logger.info("  3. Aplique correções: mock-ci --auto-fix")
+
+        return 0
+
+    except OSError as e:
+        logger.error("❌ Erro ao criar arquivo: %s", e)
+        return 2
+    except Exception as e:
+        logger.exception("❌ Erro inesperado: %s", e)
+        return 2
+
+
 def main() -> int:
     """Função principal CLI para integração CI/CD.
 
@@ -106,7 +342,36 @@ Exemplos de uso em CI/CD:
         help="Caminho do workspace (padrão: diretório atual)",
     )
 
+    # Subcomandos para melhor UX
+    subparsers = parser.add_subparsers(dest="command", help="Comandos disponíveis")
+
+    # Comando init
+    init_parser = subparsers.add_parser(
+        "init",
+        help="Gerar arquivo de configuração inicial (test_mock_config.yaml)",
+    )
+    init_parser.add_argument(
+        "--output",
+        type=Path,
+        help="Caminho do arquivo de saída (padrão: test_mock_config.yaml no workspace)",
+    )
+    init_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Sobrescrever arquivo existente",
+    )
+    init_parser.add_argument(
+        "--workspace",
+        type=Path,
+        default=Path.cwd(),
+        help="Caminho do workspace (padrão: diretório atual)",
+    )
+
     args = parser.parse_args()
+
+    # Comando init - scaffolding de configuração
+    if args.command == "init":
+        return handle_init_command(args)
 
     try:
         # Valida workspace

@@ -4,6 +4,25 @@
 
 ### Added
 
+- **Mock CI: Comando `init` para Scaffolding de Configuração**: Nova funcionalidade de descoberta
+  - Adicionado comando `mock-ci init` que gera arquivo de configuração inicial
+  - Arquivo gerado (`test_mock_config.yaml`) contém comentários explicativos sobre todos os campos
+  - Suporte a flag `--force` para sobrescrever configurações existentes
+  - Suporte a `--output` para especificar caminho customizado
+  - Resolve "Tool Blindness": usuários agora sabem como criar configurações Mock CI
+  - Implementado em `scripts/cli/mock_ci.py` com função `handle_init_command()`
+  - Testes E2E completos em `tests/test_mock_ci_runner_e2e.py`
+
+- **Git Sync: Telemetria Visual de Proteção**: Maior transparência em operações de limpeza
+  - Adicionado painel de "Status de Proteção" antes de iniciar deep clean
+  - Exibe explicitamente:
+    - 🧹 Deep Clean: ENABLED/DISABLED
+    - 🛡️ Protected Branches: lista de branches protegidos
+    - ⚠️ Force Mode: TRUE/FALSE com aviso visual
+  - Resolve "Silent Protection": usuários agora entendem *por que* branches não foram deletados
+  - Implementado em `scripts/git_sync/sync_logic.py` no método `_cleanup_repository()`
+  - Melhora observabilidade e reduz confusão em workflows de CI/CD
+
 - **TOML Fusion - Intelligent TOML File Merger**: New tool for merging pyproject.toml files while preserving comments and formatting
   - Implemented `scripts/utils/toml_merger.py` core library using `tomlkit` for style-preserving parsing
   - Created `scripts/cli/fusion.py` CLI with typer for user-friendly interface
