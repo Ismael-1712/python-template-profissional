@@ -4,6 +4,27 @@
 
 ### Added
 
+- **CORTEX Knowledge Models Test Suite (P31.1)**: Implemented comprehensive unit tests for Knowledge Node foundation
+  - Created `tests/test_cortex_models.py` with 23 test cases covering:
+    - `KnowledgeSource`: URL validation (HTTP/HTTPS), optional fields (etag, last_synced), immutability, serialization
+    - `KnowledgeEntry`: Minimal creation, tags, golden paths, sources composition, DocStatus enum validation
+  - All tests validate Pydantic V2 schemas, frozen models, and JSON serialization/deserialization
+  - Test coverage: URL scheme validation, field optionality, default_factory independence, model_dump() behavior
+  - Ensures robust data validation for CORTEX Knowledge Node subsystem
+  - Impact: Provides regression protection for knowledge graph data structures
+
+### Changed
+
+- **Code Style: Standardized Pydantic model_config Position**: Refactored CORTEX models for consistency
+  - Moved `model_config = ConfigDict(frozen=True)` to top of class (after docstring) in:
+    - `KnowledgeSource` (scripts/core/cortex/models.py)
+    - `KnowledgeEntry` (scripts/core/cortex/models.py)
+  - Aligns with project-wide pattern used in `mock_ci/models.py` and `guardian/models.py`
+  - Improves code readability and maintainability by standardizing Pydantic V2 configuration placement
+  - No functional changes, pure refactoring for style consistency
+
+### Added
+
 - **DX: VS Code Tasks for Git Automation**: Integrated Git automation scripts into VS Code Command Palette
   - Created `.vscode/tasks.json` with two automation tasks:
     - `Git: Direct Push Main`: Executes `./scripts/direct-push-main.sh` with validation workflow
