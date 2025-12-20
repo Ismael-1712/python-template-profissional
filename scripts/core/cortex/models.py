@@ -208,11 +208,11 @@ class KnowledgeSource(BaseModel):
         ... )
     """
 
+    model_config = ConfigDict(frozen=True)
+
     url: HttpUrl
     last_synced: datetime | None = None
     etag: str | None = None
-
-    model_config = ConfigDict(frozen=True)
 
 
 class KnowledgeLink(BaseModel):
@@ -288,6 +288,8 @@ class KnowledgeEntry(BaseModel):
         ... )
     """
 
+    model_config = ConfigDict(frozen=True)
+
     id: str
     type: Literal["knowledge"] = "knowledge"
     status: DocStatus
@@ -298,5 +300,3 @@ class KnowledgeEntry(BaseModel):
     links: list[KnowledgeLink] = Field(default_factory=list)
     inbound_links: list[str] = Field(default_factory=list)
     file_path: Path | None = Field(default=None, exclude=True)
-
-    model_config = ConfigDict(frozen=True)
