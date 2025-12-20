@@ -1464,6 +1464,16 @@ def project_map(
             help="Show detailed output",
         ),
     ] = False,
+    include_knowledge: Annotated[
+        bool,
+        typer.Option(
+            "--include-knowledge/--no-knowledge",
+            help=(
+                "Include Project Rules & Golden Paths from Knowledge Node "
+                "(default: True)"
+            ),
+        ),
+    ] = True,
     update_config: Annotated[
         bool,
         typer.Option(
@@ -1487,12 +1497,16 @@ def project_map(
 
     The output is saved to .cortex/context.json by default.
 
+    By default, the map includes Project Rules & Golden Paths from the
+    Knowledge Node (docs/knowledge). Use --no-knowledge to disable this.
+
     NEW: Use --update-config to synchronize pyproject.toml from template
     after generating the context map.
 
     Example:
-        cortex map                          # Generate context map
+        cortex map                          # Generate context map with knowledge
         cortex map --verbose               # Show detailed information
+        cortex map --no-knowledge          # Skip knowledge extraction
         cortex map -o custom/path.json     # Custom output location
         cortex map --update-config         # Map + sync config from template
         cortex map --update-config --template=custom.toml  # Custom template
@@ -1502,10 +1516,16 @@ def project_map(
 
         if verbose:
             typer.echo("🔍 Scanning project structure...")
+            if include_knowledge:
+                typer.echo("🧠 Including Knowledge Node rules...")
 
-        # Generate context map
+        # Generate context map with optional knowledge inclusion
         project_root = _project_root
-        context = generate_context_map(project_root, output)
+        context = generate_context_map(
+            project_root,
+            output,
+            include_knowledge=include_knowledge,
+        )
 
         # Display summary
         typer.secho("✓ Context map generated successfully!", fg=typer.colors.GREEN)
@@ -1519,6 +1539,11 @@ def project_map(
         typer.echo(f"📦 Dependencies: {len(context.dependencies)}")
         typer.echo(f"🛠️  Dev Dependencies: {len(context.dev_dependencies)}")
 
+        # Display knowledge stats if included
+        if include_knowledge and context.golden_paths:
+            typer.echo(f"✨ Golden Paths: {len(context.golden_paths)}")
+            typer.echo("📚 Knowledge Rules: Included")
+
         if verbose:
             typer.echo()
             typer.echo("Available CLI Commands:")
@@ -1531,6 +1556,14 @@ def project_map(
                 typer.echo("Architecture Documents:")
                 for doc in context.architecture_docs:
                     typer.echo(f"  • {doc.title} ({doc.path})")
+
+            if include_knowledge and context.golden_paths:
+                typer.echo()
+                typer.echo("Golden Paths:")
+                for path in context.golden_paths[:5]:  # Show first 5
+                    typer.echo(f"  • {path}")
+                if len(context.golden_paths) > 5:
+                    typer.echo(f"  ... and {len(context.golden_paths) - 5} more")
 
         logger.info(f"Context map saved to {output}")
 

@@ -86,6 +86,14 @@ class ProjectContext(BaseModel):
     knowledge_entries_count: int = 0
     knowledge_links_valid: int = 0
     knowledge_links_broken: int = 0
+    golden_paths: list[str] = Field(
+        default_factory=list,
+        description="Project-specific golden paths extracted from Knowledge Node",
+    )
+    knowledge_rules: str = Field(
+        default="",
+        description="Formatted Markdown with project rules and patterns for LLMs",
+    )
 
 
 class ProjectMapper:
@@ -109,9 +117,14 @@ class ProjectMapper:
         self.pyproject_path = project_root / "pyproject.toml"
         self.docs_path = project_root / "docs"
         self.scripts_cli_path = project_root / "scripts" / "cli"
+        self._knowledge_scanner: KnowledgeScanner | None = None
 
-    def map_project(self) -> ProjectContext:
+    def map_project(self, include_knowledge: bool = True) -> ProjectContext:
         """Generate a complete project context map.
+
+        Args:
+            include_knowledge: Whether to include Knowledge Node rules and golden paths
+                              (default: True for rich LLM context)
 
         Returns:
             ProjectContext with all discovered information
@@ -147,11 +160,19 @@ class ProjectMapper:
         if KNOWLEDGE_AVAILABLE:
             self._process_knowledge_entries(context)
 
+            # Extract golden paths and rules for LLM context
+            if include_knowledge:
+                golden_paths, knowledge_rules = self._extract_knowledge_rules()
+                context.golden_paths = golden_paths
+                context.knowledge_rules = knowledge_rules
+
         logger.info(
             f"Project mapping complete. Found {len(context.cli_commands)} CLI commands",
         )
         logger.info(f"Found {len(context.documents)} documents")
         logger.info(f"Found {len(context.architecture_docs)} architecture documents")
+        if include_knowledge:
+            logger.info(f"Extracted {len(context.golden_paths)} golden paths")
 
         return context
 
@@ -391,6 +412,126 @@ class ProjectMapper:
         except Exception as e:
             logger.error(f"Failed to save knowledge entries: {e}")
 
+    def _extract_knowledge_rules(self) -> tuple[list[str], str]:
+        """Extract golden paths and format rules from Knowledge Node.
+
+        Returns:
+            Tuple of (golden_paths, knowledge_rules_markdown)
+                - golden_paths: List of all golden path strings
+                - knowledge_rules_markdown: Formatted Markdown for LLMs
+        """
+        try:
+            # Initialize scanner if not cached
+            if self._knowledge_scanner is None:
+                self._knowledge_scanner = KnowledgeScanner(
+                    workspace_root=self.project_root,
+                    fs=self.fs,
+                )
+
+            # Scan knowledge entries
+            entries = self._knowledge_scanner.scan()
+
+            if not entries:
+                logger.debug("No knowledge entries found for rule extraction")
+                return [], ""
+
+            # Filter out deprecated entries (keep active and draft)
+            from scripts.core.cortex.models import DocStatus
+
+            active_entries = [
+                entry for entry in entries if entry.status != DocStatus.DEPRECATED
+            ]
+
+            if not active_entries:
+                logger.debug("No active knowledge entries found")
+                return [], ""
+
+            # Extract all golden paths (flatten lists)
+            all_golden_paths: list[str] = []
+            for entry in active_entries:
+                all_golden_paths.extend(entry.golden_paths)
+
+            # Remove duplicates while preserving order
+            unique_paths = list(dict.fromkeys(all_golden_paths))
+
+            # Format as Markdown for LLMs
+            markdown_rules = self._format_knowledge_markdown(active_entries)
+
+            logger.info(
+                f"Extracted {len(unique_paths)} golden paths from "
+                f"{len(active_entries)} knowledge entries",
+            )
+
+            return unique_paths, markdown_rules
+
+        except Exception as e:
+            logger.warning(f"Failed to extract knowledge rules: {e}")
+            return [], ""
+
+    def _format_knowledge_markdown(self, entries: list[KnowledgeEntry]) -> str:
+        """Format knowledge entries as LLM-friendly Markdown.
+
+        Args:
+            entries: List of KnowledgeEntry objects (active/draft only)
+
+        Returns:
+            Formatted Markdown string
+        """
+        if not entries:
+            return ""
+
+        lines = [
+            "# Project Rules & Golden Paths",
+            "",
+            "This section contains project-specific rules, patterns, and golden paths "
+            "extracted from the Knowledge Node.",
+            "",
+            "## Active Rules",
+            "",
+        ]
+
+        for entry in entries:
+            # Rule header with ID and status
+            status_badge = "[DRAFT]" if entry.status.value == "draft" else "[ACTIVE]"
+            lines.append(f"### {entry.id} {status_badge}")
+            lines.append("")
+
+            # Tags
+            if entry.tags:
+                tags_str = ", ".join(f"`{tag}`" for tag in entry.tags)
+                lines.append(f"**Tags:** {tags_str}")
+                lines.append("")
+
+            # Golden Paths
+            if entry.golden_paths:
+                lines.append("**Golden Paths:**")
+                for path in entry.golden_paths:
+                    lines.append(f"- `{path}`")
+                lines.append("")
+
+            # Content excerpt (first 3 lines of cached content)
+            if entry.cached_content:
+                content_lines = entry.cached_content.strip().split("\n")
+                # Skip markdown headings and get first meaningful content
+                content_preview = []
+                for line in content_lines:
+                    stripped = line.strip()
+                    if stripped and not stripped.startswith("#"):
+                        content_preview.append(stripped)
+                    if len(content_preview) >= 2:
+                        break
+
+                if content_preview:
+                    lines.append("**Rule Summary:**")
+                    for preview_line in content_preview:
+                        lines.append(f"> {preview_line}")
+                    lines.append("")
+
+            lines.append("---")
+            lines.append("")
+
+        return "\n".join(lines)
+
     def save_context(self, context: ProjectContext, output_path: Path) -> None:
         """Save context to JSON file.
 
@@ -411,17 +552,22 @@ class ProjectMapper:
         logger.info(f"Context saved to {output_path}")
 
 
-def generate_context_map(project_root: Path, output_path: Path) -> ProjectContext:
+def generate_context_map(
+    project_root: Path,
+    output_path: Path,
+    include_knowledge: bool = True,
+) -> ProjectContext:
     """Generate and save project context map.
 
     Args:
         project_root: Root directory of the project
         output_path: Path to save JSON output
+        include_knowledge: Whether to include Knowledge Node rules (default: True)
 
     Returns:
         Generated ProjectContext
     """
     mapper = ProjectMapper(project_root)
-    context = mapper.map_project()
+    context = mapper.map_project(include_knowledge=include_knowledge)
     mapper.save_context(context, output_path)
     return context
