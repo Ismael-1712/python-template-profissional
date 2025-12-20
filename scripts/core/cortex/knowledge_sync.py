@@ -92,6 +92,55 @@ class KnowledgeSyncer:
     This class handles downloading content from remote URLs, merging with
     local content while preserving Golden Paths, and updating cache metadata.
 
+    Golden Paths are protected sections marked with HTML comments:
+        <!-- GOLDEN_PATH_START -->
+        Local customizations here (preserved during sync)
+        <!-- GOLDEN_PATH_END -->
+
+    Everything OUTSIDE these markers is replaced by remote content during sync.
+    Frontmatter YAML (between --- delimiters) is ALWAYS preserved.
+
+    Visual Example:
+        Local File Before Sync:
+            ---
+            id: kno-001
+            sources:
+              - url: "https://example.com/doc.md"
+            ---
+
+            # Remote Title
+
+            This paragraph will be overwritten.
+
+            <!-- GOLDEN_PATH_START -->
+            ## 🏢 Company-Specific Notes
+            Our internal exception: use Azure AD B2C.
+            <!-- GOLDEN_PATH_END -->
+
+            Another paragraph that will be overwritten.
+
+        Remote Source (https://example.com/doc.md):
+            # Remote Title
+
+            NEW CONTENT from remote source.
+
+        Local File After Sync:
+            ---
+            id: kno-001
+            sources:
+              - url: "https://example.com/doc.md"
+              last_synced: 2025-12-20T10:00:00Z
+            ---
+
+            # Remote Title
+
+            NEW CONTENT from remote source.
+
+            <!-- GOLDEN_PATH_START -->
+            ## 🏢 Company-Specific Notes
+            Our internal exception: use Azure AD B2C.
+            <!-- GOLDEN_PATH_END -->
+
     Attributes:
         fs: Filesystem adapter for I/O operations
         http_client: HTTP client for fetching remote content
@@ -103,13 +152,13 @@ class KnowledgeSyncer:
         ...     id="kno-001",
         ...     status=DocStatus.ACTIVE,
         ...     tags=["security"],
-        ...     golden_paths="## Golden Path\nLocal customization",
         ...     sources=[KnowledgeSource(url="https://example.com/doc.md")],
         ... )
         >>> updated = syncer.sync_entry(entry, Path("docs/knowledge/kno-001.md"))
     """
 
     # Regex patterns for Golden Path blocks
+    # Accepts variations: <!--GOLDEN_PATH_START-->, <!-- GOLDEN_PATH_START -->, etc.
     GOLDEN_START = re.compile(
         r"<!--\s*GOLDEN_PATH_START\s*-->",
         re.IGNORECASE,
@@ -295,12 +344,50 @@ class KnowledgeSyncer:
         3. Replace everything else with remote content
         4. Re-insert Golden Path blocks at their original positions
 
+        CRITICAL: Content OUTSIDE Golden Path markers is OVERWRITTEN!
+
+        Use Golden Path markers to protect local customizations:
+            <!-- GOLDEN_PATH_START -->
+            Local notes, company-specific rules, etc.
+            <!-- GOLDEN_PATH_END -->
+
         Args:
             local_content: Current local file content
             remote_content: New content from remote source
 
         Returns:
             Merged content string
+
+        Visual Example:
+            >>> # Local file has frontmatter + golden path + old content
+            >>> local = '''---
+            ... id: kno-001
+            ... ---
+            ... # Documentation
+            ... Old paragraph to be replaced.
+            ... <!-- GOLDEN_PATH_START -->
+            ... ## My Local Notes
+            ... These notes will be preserved!
+            ... <!-- GOLDEN_PATH_END -->
+            ... Another old paragraph.'''
+            >>>
+            >>> # Remote source has new content
+            >>> remote = "# Documentation\nNew paragraph from remote."
+            >>>
+            >>> # Merge result
+            >>> merged = syncer._merge_content(local, remote)
+            >>> print(merged)
+            ---
+            id: kno-001
+            ---
+
+            # Documentation
+            New paragraph from remote.
+
+            <!-- GOLDEN_PATH_START -->
+            ## My Local Notes
+            These notes will be preserved!
+            <!-- GOLDEN_PATH_END -->
 
         Example:
             >>> local = '''---

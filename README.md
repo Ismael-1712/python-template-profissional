@@ -88,9 +88,11 @@ make commit-amend
 cortex audit docs/                   # Validar docs (frontmatter + links)
 cortex audit --links --strict        # Modo CI (falha em broken links)
 cortex init docs/guides/new-doc.md   # Adicionar frontmatter YAML
-cortex map                           # Gerar .cortex/context.json
-cortex knowledge-scan                # Scan knowledge base (sequential mode)
-cortex knowledge-scan --parallel     # Experimental parallel mode (large datasets)
+cortex map                           # Gerar .cortex/context.json (com knowledge)
+cortex map --no-knowledge            # Gerar contexto sem regras de projeto
+cortex knowledge-scan                # Listar todas as regras de projeto
+cortex knowledge-sync --all          # Sincronizar regras de fontes remotas
+# 📖 Guia completo: docs/guides/KNOWLEDGE_NODE.md
 
 # === Guardian (Security) ===
 cortex guardian check .              # Detectar configs hardcoded
@@ -237,7 +239,63 @@ cortex guardian probe --check-consistency
 
 ### 🕸️ **Knowledge Layer — Documentation Graph & Link Analysis**
 
-**Sistema de grafo de conhecimento com validação bidirecional de links.**
+**Sistema de grafo de conhecimento com validação bidirecional de links e sincronização de regras remotas.**
+
+#### 🧠 Knowledge Node (Novo!)
+
+**Sistema de gerenciamento de regras de projeto com sincronização remota e preservação de customizações locais.**
+
+**O que resolve:**
+
+- 📚 **Regras centralizadas**: Unifica padrões de projeto em `docs/knowledge/`
+- 🔄 **Sync remoto**: Baixa regras de wikis, GitHub, Notion automaticamente
+- 🛡️ **Proteção local**: Preserva customizações com marcadores `<!-- GOLDEN_PATH_START/END -->`
+- 🤖 **LLM Context**: Enriquece `.cortex/context.json` com regras para GitHub Copilot/GPT-4
+
+**Comandos:**
+
+```bash
+# Listar todas as regras de projeto
+cortex knowledge-scan
+
+# Sincronizar regras de fontes remotas
+cortex knowledge-sync --all
+
+# Gerar contexto para LLMs (com regras)
+cortex map --include-knowledge
+
+# Ver o que foi incluído
+cat .cortex/context.json | jq '.knowledge_rules'
+```
+
+**Estrutura de um Knowledge Entry:**
+
+```yaml
+---
+id: kno-auth-001
+status: active
+tags: [authentication, security]
+golden_paths:
+  - "src/app/auth/jwt.py -> docs/guides/auth.md"
+sources:
+  - url: "https://wiki.company.com/auth-standards.md"
+    type: documentation
+---
+
+# Authentication Standards
+
+Conteúdo sincronizado da wiki corporativa...
+
+<!-- GOLDEN_PATH_START -->
+## 🏢 Customizações Internas
+Nossa empresa usa Azure AD B2C.
+Esta seção NÃO será sobrescrita no sync.
+<!-- GOLDEN_PATH_END -->
+```
+
+**📖 Guia Completo**: [docs/guides/KNOWLEDGE_NODE.md](docs/guides/KNOWLEDGE_NODE.md)
+
+---
 
 #### 📝 Frontmatter YAML Obrigatório
 
