@@ -3,7 +3,7 @@
 > **The Symbolic Neural Network for Documentation as Code**
 > _Creative Organized Rational Thinking EXecution_
 
-[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Python](https://img.shields.io/badge/python-{{ python_version }}+-blue.svg)](https://www.python.org/downloads/)
 [![Code Quality](https://img.shields.io/badge/ruff-checked-brightgreen.svg)](https://github.com/astral-sh/ruff)
 [![Type Safety](https://img.shields.io/badge/mypy-strict-blue.svg)](https://mypy-lang.org/)
 [![CORTEX Health](https://img.shields.io/badge/cortex%20health-60%2F100-orange.svg)](#-cortex-health-score)
@@ -56,8 +56,8 @@ O sistema é construído sobre quatro pilares fundamentais:
 
 ```bash
 # Clonar e configurar ambiente completo (< 2 minutos)
-git clone https://github.com/Ismael-1712/python-template-profissional.git
-cd python-template-profissional
+git clone {{ repository_url }}.git
+cd {{ project_slug | replace('_', '-') }}
 make install-dev                    # Cria .venv, instala deps, configura hooks
 source .venv/bin/activate            # Ativar ambiente virtual
 make doctor                          # Verificar saúde do ambiente
@@ -718,8 +718,8 @@ LANGUAGE=en_US cortex audit
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/Ismael-1712/python-template-profissional.git
-cd python-template-profissional
+git clone {{ repository_url }}.git
+cd {{ project_slug | replace('_', '-') }}
 
 # 2. Configure o ambiente completo (cria .venv, instala deps, configura hooks)
 make install-dev
@@ -1435,7 +1435,7 @@ Desenvolvido com 🧠 por **Ismael Silva** e a comunidade de contribuidores.
 
 **CORTEX** — _Where Documentation Meets Intelligence_
 
-[📚 Documentação](docs/) • [🐛 Issues](https://github.com/Ismael-1712/python-template-profissional/issues) • [💬 Discussões](https://github.com/Ismael-1712/python-template-profissional/discussions)
+[📚 Documentação](docs/) • [🐛 Issues]({{ repository_url }}/issues) • [💬 Discussões]({{ repository_url }}/discussions)
 
 </div>
 
