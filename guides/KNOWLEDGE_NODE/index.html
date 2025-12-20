@@ -1,0 +1,1795 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>🧠 CORTEX Knowledge Node - Guia Completo - Python Template Profissional</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-knowledge-node-guia-completo" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Python Template Profissional" class="md-header__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Python Template Profissional
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🧠 CORTEX Knowledge Node - Guia Completo
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Python Template Profissional" class="md-nav__button md-logo" aria-label="Python Template Profissional" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Python Template Profissional
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Visão Geral
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Visão Geral">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-resolvido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔑 Problema Resolvido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conceitos-fundamentais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧩 Conceitos Fundamentais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧩 Conceitos Fundamentais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#knowledge-entry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Knowledge Entry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#golden-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Golden Paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zonas-de-protecao-golden-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ Zonas de Proteção (Golden Paths)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ Zonas de Proteção (Golden Paths)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atencao-leia-esta-secao-com-cuidado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ ATENÇÃO: Leia Esta Seção Com Cuidado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marcadores-de-protecao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 Marcadores de Proteção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚙️ Como Funciona
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-visual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Exemplo Visual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snippet-copy-paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✂️ Snippet Copy &amp; Paste
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-trabalho" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Fluxo de Trabalho
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Fluxo de Trabalho">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagrama-do-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama do Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-tipico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Típico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Típico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cenario-1-projeto-novo-sem-knowledge-remoto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 1: Projeto Novo (Sem Knowledge Remoto)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenario-2-sincronizar-com-wiki-corporativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 2: Sincronizar com Wiki Corporativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenario-3-atualizacao-periodica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário 3: Atualização Periódica
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Comandos CLI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Comandos CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cortex-knowledge-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cortex knowledge-scan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cortex-knowledge-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cortex knowledge-sync
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cortex-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cortex map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exemplos-praticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Exemplos Práticos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Exemplos Práticos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-1-regra-de-naming-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 1: Regra de Naming Convention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-2-security-standards-com-fonte-remota" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 2: Security Standards com Fonte Remota
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-3-api-design-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo 3: API Design Guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#company-standards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏢 Company Standards
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏢 Company Standards">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limiting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response-headers-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Headers (Required)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhook-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhook Delivery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-cortex-knowledge-sync-falha-com-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: cortex knowledge-sync falha com timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-llm-nao-recebe-as-regras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: LLM não recebe as regras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-entry-malformado-nao-aparece" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: Entry malformado não aparece
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-golden-path-nao-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema: Golden Path não funciona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#melhores-praticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Melhores Práticas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Melhores Práticas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-organize-por-dominio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Organize por Domínio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-use-tags-consistentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Use Tags Consistentes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-mantenha-entries-focados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Mantenha Entries Focados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-golden-paths-para-customizacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Golden Paths para Customizações
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-automatize-syncs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Automatize Syncs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contribuindo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🤝 Contribuindo
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cortex-knowledge-node-guia-completo">🧠 CORTEX Knowledge Node - Guia Completo</h1>
+<blockquote>
+<p><strong>Sistema de sincronização e preservação de regras de projeto</strong></p>
+</blockquote>
+<h2 id="indice">📋 Índice</h2>
+<ul>
+<li><a href="#-visão-geral">Visão Geral</a></li>
+<li><a href="#-conceitos-fundamentais">Conceitos Fundamentais</a></li>
+<li><a href="#️-zonas-de-proteção-golden-paths">🛡️ Zonas de Proteção (Golden Paths)</a></li>
+<li><a href="#-fluxo-de-trabalho">Fluxo de Trabalho</a></li>
+<li><a href="#-comandos-cli">Comandos CLI</a></li>
+<li><a href="#-exemplos-práticos">Exemplos Práticos</a></li>
+<li><a href="#-troubleshooting">Troubleshooting</a></li>
+</ul>
+<hr />
+<h2 id="visao-geral">🎯 Visão Geral</h2>
+<p>O <strong>Knowledge Node</strong> é um subsistema do CORTEX que resolve dois problemas críticos:</p>
+<ol>
+<li><strong>Sincronização de Conhecimento Remoto</strong>: Busca regras e padrões de fontes externas (URLs, wikis, GitHub) e mantém cópias locais atualizadas.</li>
+<li><strong>Contexto para LLMs</strong>: Enriquece o contexto do projeto (<code>cortex map</code>) com regras institucionais, permitindo que LLMs entendam não apenas o código, mas também os <strong>padrões e convenções</strong> do projeto.</li>
+</ol>
+<h3 id="problema-resolvido">🔑 Problema Resolvido</h3>
+<p><strong>Antes:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>❌ Regras de projeto espalhadas em wikis, Notion, Google Docs
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>❌ LLMs sugerem código que viola convenções internas
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>❌ Edições locais perdidas quando fonte remota atualiza
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>❌ Onboarding lento (devs não sabem onde estão as regras)
+</code></pre></div>
+<p><strong>Depois:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>✅ Regras centralizadas em docs/knowledge/ (versionadas no Git)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>✅ LLMs recebem regras via cortex map --include-knowledge
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>✅ Edições locais protegidas com marcadores Golden Path
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>✅ Onboarding acelerado (cortex knowledge-scan lista todas as regras)
+</code></pre></div>
+<hr />
+<h2 id="conceitos-fundamentais">🧩 Conceitos Fundamentais</h2>
+<h3 id="knowledge-entry">Knowledge Entry</h3>
+<p>Um <strong>Knowledge Entry</strong> é um arquivo Markdown em <code>docs/knowledge/</code> com frontmatter YAML:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kno-auth-001</span><span class="w">                    </span><span class="c1"># Identificador único</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">active</span><span class="w">                       </span><span class="c1"># active | draft | deprecated</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">authentication</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">security</span><span class="p p-Indicator">]</span><span class="w">     </span><span class="c1"># Tags para categorização</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">golden_paths</span><span class="p">:</span><span class="w">                        </span><span class="c1"># Caminhos de código relacionados</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;src/app/auth/jwt.py</span><span class="nv"> </span><span class="s">-&gt;</span><span class="nv"> </span><span class="s">docs/guides/auth.md&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nt">sources</span><span class="p">:</span><span class="w">                             </span><span class="c1"># Fontes remotas (opcionais)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://wiki.company.com/auth-standards.md&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">documentation</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">etag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;abc123&quot;</span><span class="w">                   </span><span class="c1"># Cache HTTP</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="nt">last_synced</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2025-12-20T10:00:00Z</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nn">---</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Authentication Standards</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="l l-Scalar l-Scalar-Plain">All API authentication MUST use JWT tokens with HS256 algorithm.</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="l l-Scalar l-Scalar-Plain">## Implementation</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="l l-Scalar l-Scalar-Plain">Use the centralized handler in `src/app/auth/jwt.py`.</span>
+</code></pre></div>
+<h3 id="golden-paths">Golden Paths</h3>
+<p><strong>Golden Paths</strong> são caminhos bidirecionais entre código e documentação:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>src/app/auth/jwt.py  ←→  docs/guides/authentication.md
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>LLMs sabem qual código implementa qual documentação</li>
+<li>Devs navegam rapidamente entre código e specs</li>
+<li>CI/CD pode validar se implementação segue o padrão</li>
+</ul>
+<hr />
+<h2 id="zonas-de-protecao-golden-paths">🛡️ Zonas de Proteção (Golden Paths)</h2>
+<h3 id="atencao-leia-esta-secao-com-cuidado">⚠️ ATENÇÃO: Leia Esta Seção Com Cuidado</h3>
+<p>O Knowledge Node suporta <strong>sincronização de fontes remotas</strong> via <code>cortex knowledge-sync</code>.
+Por padrão, <strong>todo o conteúdo local é sobrescrito</strong> pelo conteúdo remoto.</p>
+<p>Para preservar edições locais, você <strong>DEVE</strong> usar os marcadores HTML especiais:</p>
+<h3 id="marcadores-de-protecao">🔒 Marcadores de Proteção</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Tudo nesta seção será PRESERVADO durante o sync remoto.
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Adicione suas notas, customizações e regras específicas do projeto aqui.
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<h3 id="como-funciona">⚙️ Como Funciona</h3>
+<p><strong>Comportamento durante <code>cortex knowledge-sync</code>:</strong></p>
+<ol>
+<li>✅ <strong>Frontmatter YAML</strong>: Sempre preservado (nunca sobrescrito)</li>
+<li>✅ <strong>Blocos entre <code>&lt;!-- GOLDEN_PATH_START/END --&gt;</code></strong>: Preservados</li>
+<li>❌ <strong>Resto do conteúdo</strong>: <strong>SOBRESCRITO</strong> pelo conteúdo remoto</li>
+</ol>
+<h3 id="exemplo-visual">📝 Exemplo Visual</h3>
+<p><strong>Arquivo Local Antes do Sync:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>---
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>id: kno-auth-001
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>sources:
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="gu">  - url: &quot;https://example.com/auth.md&quot;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="gu">---</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="gh"># Authentication Rules</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>Este parágrafo será sobrescrito.
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="gu">## 🏢 Customizações Internas</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>Nossa empresa usa Azure AD B2C, não implementação genérica.
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>Endpoint: https://mycompany.b2clogin.com/
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="gu">### Exceções de Segurança</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="k">-</span><span class="w"> </span>Ambientes de dev/staging: JWT opcional
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="k">-</span><span class="w"> </span>Webhooks internos: API Key permitida
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>Outro parágrafo que será sobrescrito.
+</code></pre></div>
+<p><strong>Fonte Remota (<a href="https://example.com/auth.md">https://example.com/auth.md</a>):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="gh"># Authentication Rules</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>NOVO CONTEÚDO REMOTO: Use OAuth 2.0 com PKCE.
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="gu">## Implementation Guide</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Step 1: Install library...
+</code></pre></div>
+<p><strong>Arquivo Local Depois do Sync:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>---
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>id: kno-auth-001
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>sources:
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>url: &quot;https://example.com/auth.md&quot;
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="gu">    last_synced: 2025-12-20T15:30:00Z</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="gu">---</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="gh"># Authentication Rules</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>NOVO CONTEÚDO REMOTO: Use OAuth 2.0 com PKCE.
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="gu">## Implementation Guide</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>Step 1: Install library...
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="gu">## 🏢 Customizações Internas</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>Nossa empresa usa Azure AD B2C, não implementação genérica.
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>Endpoint: https://mycompany.b2clogin.com/
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="gu">### Exceções de Segurança</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="k">-</span><span class="w"> </span>Ambientes de dev/staging: JWT opcional
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="k">-</span><span class="w"> </span>Webhooks internos: API Key permitida
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<h3 id="snippet-copy-paste">✂️ Snippet Copy &amp; Paste</h3>
+<p>Use este snippet para criar zonas protegidas:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="cm">&lt;!-- GOLDEN_PATH_START --&gt;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Suas customizações locais aqui.
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="cm">&lt;!-- GOLDEN_PATH_END --&gt;</span>
+</code></pre></div>
+<p><strong>Dica:</strong> Crie múltiplos blocos protegidos se necessário:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gh"># Remote Section 1</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Conteúdo sincronizado...
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>Minhas notas sobre Section 1
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="gh"># Remote Section 2</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>Mais conteúdo sincronizado...
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>Minhas notas sobre Section 2
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<hr />
+<h2 id="fluxo-de-trabalho">🔄 Fluxo de Trabalho</h2>
+<h3 id="diagrama-do-pipeline">Diagrama do Pipeline</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>│ 1️⃣ Fonte Remota (Wiki, GitHub, Notion)                          │
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>│    https://wiki.company.com/standards/auth.md                    │
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>└────────────────────────┬─────────────────────────────────────────┘
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>                         │
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>                         │ cortex knowledge-sync
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>                         │ (Baixa via HTTP + ETag caching)
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>                         ▼
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>│ 2️⃣ Arquivo Local (docs/knowledge/authentication.md)             │
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>│    - Frontmatter preservado                                      │
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>│    - Blocos GOLDEN_PATH preservados                              │
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>│    - Resto do conteúdo substituído                               │
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>└────────────────────────┬─────────────────────────────────────────┘
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>                         │
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>                         │ cortex map --include-knowledge
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>                         │ (Extrai golden_paths + formata Markdown)
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>                         ▼
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>│ 3️⃣ Context Map (.cortex/context.json)                           │
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>│    {                                                              │
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>│      &quot;golden_paths&quot;: [                                            │
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>│        &quot;src/app/auth/jwt.py -&gt; docs/guides/auth.md&quot;              │
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>│      ],                                                           │
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>│      &quot;knowledge_rules&quot;: &quot;# Project Rules\n...&quot;                   │
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>│    }                                                              │
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>└────────────────────────┬─────────────────────────────────────────┘
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>                         │
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>                         │ Consumido por LLMs/IDEs
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>                         ▼
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>┌──────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>│ 4️⃣ LLM (GitHub Copilot, GPT-4, etc.)                            │
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>│    - Lê .cortex/context.json                                     │
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>│    - Entende regras do projeto                                   │
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>│    - Gera código alinhado com convenções                         │
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>└──────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="workflow-tipico">Workflow Típico</h3>
+<h4 id="cenario-1-projeto-novo-sem-knowledge-remoto">Cenário 1: Projeto Novo (Sem Knowledge Remoto)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># 1. Criar entrada de conhecimento manualmente</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>docs/knowledge
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>docs/knowledge/architecture.md<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="s">---</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="s">id: kno-arch-001</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="s">status: active</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="s">tags: [architecture, patterns]</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s">golden_paths:</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s">  - &quot;src/app/models/*.py -&gt; docs/architecture/database.md&quot;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s">---</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s"># Architecture Patterns</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="s">## Database Models</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="s">All models MUST inherit from BaseModel and follow naming conventions.</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="s">EOF</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="c1"># 2. Gerar contexto para LLMs</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>cortex<span class="w"> </span>map<span class="w"> </span>--include-knowledge
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="c1"># 3. LLM agora entende as regras do projeto!</span>
+</code></pre></div>
+<h4 id="cenario-2-sincronizar-com-wiki-corporativa">Cenário 2: Sincronizar com Wiki Corporativa</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># 1. Criar entrada com fonte remota</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>docs/knowledge/security.md<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="s">---</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="s">id: kno-sec-001</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="s">status: active</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="s">tags: [security, compliance]</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="s">sources:</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="s">  - url: &quot;https://wiki.company.com/security-standards.md&quot;</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="s">    type: documentation</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="s">    priority: high</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="s">---</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="s">&lt;!-- GOLDEN_PATH_START --&gt;</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="s">## 🏢 Exceções Corporativas</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="s">Nossa empresa permite autenticação via API Key para webhooks internos.</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="s">Endpoint de auditoria: https://audit.company.com/logs</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="s">&lt;!-- GOLDEN_PATH_END --&gt;</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="s">EOF</span>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="c1"># 2. Sincronizar conteúdo remoto</span>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>cortex<span class="w"> </span>knowledge-sync
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a><span class="c1"># 3. Conteúdo remoto é baixado e mesclado</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="c1"># ✅ Bloco GOLDEN_PATH preservado</span>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a><span class="c1"># ✅ Frontmatter preservado</span>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a><span class="c1"># ❌ Resto substituído por conteúdo da wiki</span>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a><span class="c1"># 4. Gerar contexto atualizado</span>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>cortex<span class="w"> </span>map<span class="w"> </span>--include-knowledge
+</code></pre></div>
+<h4 id="cenario-3-atualizacao-periodica">Cenário 3: Atualização Periódica</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Adicionar ao CI/CD ou cron job</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="c1"># Este comando sincroniza todas as entradas com sources definidas</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--all
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Regenerar contexto após sync</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>cortex<span class="w"> </span>map
+</code></pre></div>
+<hr />
+<h2 id="comandos-cli">🛠️ Comandos CLI</h2>
+<h3 id="cortex-knowledge-scan"><code>cortex knowledge-scan</code></h3>
+<p><strong>Propósito</strong>: Listar e validar todas as entradas de conhecimento.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Listar todas as entradas</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>cortex<span class="w"> </span>knowledge-scan
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Output exemplo:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># 🧠 Knowledge Base Scanner</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># Workspace: /project</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Knowledge Directory: docs/knowledge/</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="c1">#</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># ✅ Found 3 knowledge entries</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="c1">#</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="c1"># ✅ kno-auth-001 (active)</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1"># ✅ kno-db-001 (active)</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="c1"># 📝 kno-draft-002 (draft)</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="c1"># Modo verboso (mostra tags, golden paths, sources)</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>cortex<span class="w"> </span>knowledge-scan<span class="w"> </span>--verbose
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="c1"># Modo experimental paralelo (para 100+ entries)</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>cortex<span class="w"> </span>knowledge-scan<span class="w"> </span>--parallel
+</code></pre></div>
+<h3 id="cortex-knowledge-sync"><code>cortex knowledge-sync</code></h3>
+<p><strong>Propósito</strong>: Sincronizar conteúdo de fontes remotas.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Sincronizar uma entrada específica</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--entry<span class="w"> </span>kno-auth-001
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Sincronizar todas as entradas com fontes definidas</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--all
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># Forçar re-download (ignora cache ETag)</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--entry<span class="w"> </span>kno-auth-001<span class="w"> </span>--force
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># Modo dry-run (mostra o que seria feito)</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--all<span class="w"> </span>--dry-run
+</code></pre></div>
+<p><strong>Comportamento de Cache:</strong></p>
+<ul>
+<li>✅ <strong>ETag</strong>: Se servidor retorna HTTP 304 (Not Modified), conteúdo local não é atualizado.</li>
+<li>✅ <strong>Timestamp</strong>: Campo <code>last_synced</code> no frontmatter rastreia última sincronização.</li>
+<li>✅ <strong>Timeout</strong>: Requests têm timeout de 10s (protege contra servidores lentos).</li>
+</ul>
+<h3 id="cortex-map"><code>cortex map</code></h3>
+<p><strong>Propósito</strong>: Gerar contexto do projeto para LLMs.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Gerar contexto COM knowledge (padrão)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>cortex<span class="w"> </span>map
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Gerar contexto SEM knowledge (opt-out)</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>cortex<span class="w"> </span>map<span class="w"> </span>--no-knowledge
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Modo verboso (mostra golden paths)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>cortex<span class="w"> </span>map<span class="w"> </span>--verbose
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Output personalizado</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>cortex<span class="w"> </span>map<span class="w"> </span>-o<span class="w"> </span>custom/context.json
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="c1"># Integração: Map + Sync config</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>cortex<span class="w"> </span>map<span class="w"> </span>--update-config
+</code></pre></div>
+<p><strong>Output JSON (<code>.cortex/context.json</code>):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="nt">&quot;project_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-project&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="nt">&quot;cli_commands&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span><span class="nt">&quot;documents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="err">...</span><span class="p">],</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span><span class="nt">&quot;golden_paths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="s2">&quot;src/app/auth/jwt.py -&gt; docs/guides/authentication.md&quot;</span><span class="p">,</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="s2">&quot;src/app/models/*.py -&gt; docs/guides/database.md&quot;</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">  </span><span class="nt">&quot;knowledge_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;# Project Rules &amp; Golden Paths\n\n## Active Rules\n\n### kno-auth-001 [ACTIVE]\n**Tags:** `authentication`, `security`\n\n**Golden Paths:**\n- `src/app/auth/jwt.py -&gt; docs/guides/authentication.md`\n\n**Rule Summary:**\n&gt; All API authentication MUST use JWT tokens.\n\n---&quot;</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="exemplos-praticos">💡 Exemplos Práticos</h2>
+<h3 id="exemplo-1-regra-de-naming-convention">Exemplo 1: Regra de Naming Convention</h3>
+<p><strong>Arquivo</strong>: <code>docs/knowledge/naming.md</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>---
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>id: kno-naming-001
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>status: active
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>tags: [code-style, naming]
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>golden_paths:
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="gu">  - &quot;src/app/**/*.py -&gt; docs/guides/code-style.md&quot;</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="gu">---</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="gh"># Naming Conventions</span>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="gu">## Python Classes</span>
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Models**</span>: Singular noun, PascalCase (e.g., <span class="sb">`User`</span>, <span class="sb">`Product`</span>)
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Services**</span>: Verb + &quot;Service&quot; (e.g., <span class="sb">`AuthService`</span>, <span class="sb">`EmailService`</span>)
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a><span class="k">-</span><span class="w"> </span><span class="gs">**Utils**</span>: Descriptive noun (e.g., <span class="sb">`StringHelper`</span>, <span class="sb">`DateFormatter`</span>)
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a><span class="gu">## 🏢 Company-Specific Rules</span>
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a><span class="gu">### Database Tables</span>
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a><span class="k">-</span><span class="w"> </span>All table names MUST use schema prefix: <span class="sb">`app_users`</span>, <span class="sb">`app_products`</span>
+<a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a><span class="k">-</span><span class="w"> </span>Never use plurals in table names (use <span class="sb">`app_user`</span>, not <span class="sb">`app_users`</span>)
+<a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>
+<a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a><span class="gu">### API Endpoints</span>
+<a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a><span class="k">-</span><span class="w"> </span>Use kebab-case: <span class="sb">`/api/user-profile`</span>, not <span class="sb">`/api/userProfile`</span>
+<a id="__codelineno-18-26" name="__codelineno-18-26" href="#__codelineno-18-26"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<p><strong>Uso no LLM:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Prompt: &quot;Create a new service to handle email notifications&quot;
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>LLM (com cortex map):
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>✅ Cria EmailService (segue convenção &quot;Verb + Service&quot;)
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>✅ Evita criar email_notification_service (não segue padrão)
+</code></pre></div>
+<h3 id="exemplo-2-security-standards-com-fonte-remota">Exemplo 2: Security Standards com Fonte Remota</h3>
+<p><strong>Arquivo</strong>: <code>docs/knowledge/security.md</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>---
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>id: kno-sec-001
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>status: active
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>tags: [security, owasp, compliance]
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>sources:
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>url: &quot;https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md&quot;
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>    type: documentation
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    priority: high
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    etag: &quot;W/\&quot;abc123\&quot;&quot;
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="gu">    last_synced: 2025-12-19T10:00:00Z</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="gu">---</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a><span class="gh"># Authentication Security Standards</span>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a>(Conteúdo sincronizado do OWASP será inserido aqui)
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="gu">## 🏢 Internal Compliance Requirements</span>
+<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>
+<a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a><span class="gu">### Azure AD Integration</span>
+<a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a><span class="k">-</span><span class="w"> </span>Production: Use managed identity with RBAC
+<a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a><span class="k">-</span><span class="w"> </span>Staging: Service principal with limited scope
+<a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a><span class="k">-</span><span class="w"> </span>Dev: Local emulator allowed
+<a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a>
+<a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a><span class="gu">### Audit Logging</span>
+<a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a>All authentication events MUST be logged to Azure Monitor:
+<a id="__codelineno-20-27" name="__codelineno-20-27" href="#__codelineno-20-27"></a><span class="k">-</span><span class="w"> </span>Endpoint: https://mycompany.monitor.azure.com
+<a id="__codelineno-20-28" name="__codelineno-20-28" href="#__codelineno-20-28"></a><span class="k">-</span><span class="w"> </span>Log Level: INFO (success), WARN (failures)
+<a id="__codelineno-20-29" name="__codelineno-20-29" href="#__codelineno-20-29"></a><span class="k">-</span><span class="w"> </span>Retention: 90 days (compliance requirement)
+<a id="__codelineno-20-30" name="__codelineno-20-30" href="#__codelineno-20-30"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<p><strong>Workflow:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># 1. Sincronizar com OWASP</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--entry<span class="w"> </span>kno-sec-001
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Output:</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># ✅ Fetched: OWASP Authentication Cheat Sheet</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="c1"># ✅ Merged with local customizations</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="c1"># ✅ Updated last_synced timestamp</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="c1"># 2. Gerar contexto</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>cortex<span class="w"> </span>map
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="c1"># 3. LLM agora tem:</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="c1">#    - Padrões OWASP atualizados</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="c1">#    - Customizações internas da empresa</span>
+</code></pre></div>
+<h3 id="exemplo-3-api-design-guidelines">Exemplo 3: API Design Guidelines</h3>
+<p><strong>Arquivo</strong>: <code>docs/knowledge/api-design.md</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>---
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>id: kno-api-001
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>status: active
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>tags: [api, rest, openapi]
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>golden_paths:
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>&quot;src/app/routes/*.py -&gt; docs/architecture/api-spec.md&quot;
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="gu">  - &quot;openapi.yaml -&gt; docs/guides/api-design.md&quot;</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="gu">---</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="gh"># REST API Design Guidelines</span>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="gu">## Versioning</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="k">-</span><span class="w"> </span>Use URL versioning: <span class="sb">`/api/v1/users`</span>, <span class="sb">`/api/v2/users`</span>
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="k">-</span><span class="w"> </span>Never break backward compatibility within same major version
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="gu">## Error Responses</span>
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a>
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>```json
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a>{
+<a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a>  &quot;error&quot;: {
+<a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a>    &quot;code&quot;: &quot;INVALID_INPUT&quot;,
+<a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a>    &quot;message&quot;: &quot;Email format is invalid&quot;,
+<a id="__codelineno-22-24" name="__codelineno-22-24" href="#__codelineno-22-24"></a>    &quot;details&quot;: {&quot;field&quot;: &quot;email&quot;}
+<a id="__codelineno-22-25" name="__codelineno-22-25" href="#__codelineno-22-25"></a>  }
+<a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a>}
+</code></pre></div>
+<!-- GOLDEN_PATH_START -->
+<h2 id="company-standards">🏢 Company Standards</h2>
+<h3 id="rate-limiting">Rate Limiting</h3>
+<ul>
+<li>Free tier: 100 req/min</li>
+<li>Pro tier: 1000 req/min</li>
+<li>Enterprise: Unlimited (with fair use policy)</li>
+</ul>
+<h3 id="response-headers-required">Response Headers (Required)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>X-Request-ID: &lt;uuid&gt;
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>X-RateLimit-Remaining: &lt;int&gt;
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>X-Response-Time: &lt;ms&gt;
+</code></pre></div>
+<h3 id="webhook-delivery">Webhook Delivery</h3>
+<ul>
+<li>Retry policy: Exponential backoff (1s, 2s, 4s, 8s, 16s)</li>
+<li>Timeout: 30s per attempt</li>
+<li>Dead letter queue: Azure Service Bus</li>
+</ul>
+<!-- GOLDEN_PATH_END -->
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>---
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>## 🔧 Troubleshooting
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>### Problema: Sync sobrescreve minhas edições
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>**Causa**: Edições locais fora dos blocos `&lt;!-- GOLDEN_PATH_START/END --&gt;`
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>**Solução**:
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>```markdown
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>❌ ERRADO (será sobrescrito):
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>## Minhas Notas
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>Texto importante aqui
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>✅ CORRETO (será preservado):
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a>&lt;!-- GOLDEN_PATH_START --&gt;
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>## Minhas Notas
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>Texto importante aqui
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>&lt;!-- GOLDEN_PATH_END --&gt;
+</code></pre></div>
+<h3 id="problema-cortex-knowledge-sync-falha-com-timeout">Problema: <code>cortex knowledge-sync</code> falha com timeout</h3>
+<p><strong>Causa</strong>: Fonte remota lenta ou indisponível</p>
+<p><strong>Detalhes</strong>: O sistema tem timeout de 10s. Se o servidor não responder, o erro é logado mas o sync não falha.</p>
+<p><strong>Solução</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># Ver logs detalhados</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>tail<span class="w"> </span>-f<span class="w"> </span>cortex_knowledge_sync.log
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># Output:</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="c1"># WARNING: Timeout fetching https://slow-server.com/doc.md</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># INFO: Local content preserved (no data loss)</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="c1"># Forçar retry depois</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--entry<span class="w"> </span>kno-xxx-001<span class="w"> </span>--force
+</code></pre></div>
+<h3 id="problema-llm-nao-recebe-as-regras">Problema: LLM não recebe as regras</h3>
+<p><strong>Verificação</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># 1. Verificar se knowledge está no context.json</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>cat<span class="w"> </span>.cortex/context.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.knowledge_rules&#39;</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># 2. Garantir que cortex map foi executado</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>cortex<span class="w"> </span>map<span class="w"> </span>--verbose
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="c1"># 3. Verificar se LLM está consumindo o arquivo correto</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="c1"># (Para GitHub Copilot, verificar .copilot-instructions.md)</span>
+</code></pre></div>
+<h3 id="problema-entry-malformado-nao-aparece">Problema: Entry malformado não aparece</h3>
+<p><strong>Causa</strong>: YAML frontmatter inválido ou falta campo <code>id</code></p>
+<p><strong>Solução</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># Escanear e ver erros</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>cortex<span class="w"> </span>knowledge-scan<span class="w"> </span>--verbose
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="c1"># Output mostrará:</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="c1"># ⚠️ Failed to parse docs/knowledge/broken.md: Missing required field &#39;id&#39;</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="c1"># Corrigir o frontmatter:</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>---
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a>id:<span class="w"> </span>kno-fix-001<span class="w">  </span><span class="c1"># ← Adicionar ID obrigatório</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>status:<span class="w"> </span>active
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>tags:<span class="w"> </span><span class="o">[]</span>
+<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>---
+</code></pre></div>
+<h3 id="problema-golden-path-nao-funciona">Problema: Golden Path não funciona</h3>
+<p><strong>Verificação do Regex</strong>:</p>
+<p>Os marcadores devem seguir exatamente este formato (espaços opcionais):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="cm">&lt;!-- GOLDEN_PATH_START --&gt;</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>Conteúdo
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="cm">&lt;!-- GOLDEN_PATH_END --&gt;</span>
+</code></pre></div>
+<p><strong>Variações aceitas:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="cm">&lt;!--GOLDEN_PATH_START--&gt;</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="cm">&lt;!-- GOLDEN_PATH_START--&gt;</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="cm">&lt;!--  GOLDEN_PATH_START  --&gt;</span>
+</code></pre></div>
+<p><strong>NÃO aceitas:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="cm">&lt;!-- GOLDEN PATH START --&gt;</span>  ❌ (espaço no nome)
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="cm">&lt;!-- Golden_Path_Start --&gt;</span>  ❌ (case-sensitive)
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="p">&lt;</span><span class="nt">--</span> <span class="na">GOLDEN_PATH_START</span> <span class="na">--</span><span class="p">&gt;</span>  ❌ (typo)
+</code></pre></div>
+<hr />
+<h2 id="melhores-praticas">🎓 Melhores Práticas</h2>
+<h3 id="1-organize-por-dominio">1. Organize por Domínio</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>docs/knowledge/
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>├── authentication.md    # Auth &amp; Security
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>├── database.md          # Data models
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>├── api-design.md        # REST API standards
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>├── deployment.md        # CI/CD &amp; Infrastructure
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>└── code-style.md        # Naming &amp; formatting
+</code></pre></div>
+<h3 id="2-use-tags-consistentes">2. Use Tags Consistentes</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">authentication</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">security</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">oauth</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># ✅ Lowercase, hyphens</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Auth</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">SECURITY</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">OAuth2</span><span class="p p-Indicator">]</span><span class="w">           </span><span class="c1"># ❌ Inconsistent case</span>
+</code></pre></div>
+<h3 id="3-mantenha-entries-focados">3. Mantenha Entries Focados</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>✅ BOM: Um entry por tópico
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="k">-</span><span class="w"> </span>kno-auth-jwt-001: JWT implementation
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="k">-</span><span class="w"> </span>kno-auth-oauth-001: OAuth flows
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>❌ RUIM: Entry genérico demais
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="k">-</span><span class="w"> </span>kno-auth-everything-001: All auth stuff
+</code></pre></div>
+<h3 id="4-golden-paths-para-customizacoes">4. Golden Paths para Customizações</h3>
+<p>Use Golden Paths para:</p>
+<ul>
+<li>✅ Exceções específicas da empresa</li>
+<li>✅ Configurações de ambiente (URLs, credenciais)</li>
+<li>✅ Notas de troubleshooting local</li>
+<li>✅ Lições aprendidas em produção</li>
+</ul>
+<p>NÃO use para:</p>
+<ul>
+<li>❌ Conteúdo que deveria estar na fonte remota</li>
+<li>❌ Regras gerais (essas devem estar no conteúdo sincronizado)</li>
+</ul>
+<h3 id="5-automatize-syncs">5. Automatize Syncs</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="c1"># Adicionar ao CI/CD (.github/workflows/knowledge-sync.yml)</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>name:<span class="w"> </span>Sync<span class="w"> </span>Knowledge
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>on:
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">  </span>schedule:
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="w">    </span>-<span class="w"> </span>cron:<span class="w"> </span><span class="s1">&#39;0 9 * * 1&#39;</span><span class="w">  </span><span class="c1"># Toda segunda às 9h</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a><span class="w">  </span>workflow_dispatch:
+<a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a>
+<a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a>jobs:
+<a id="__codelineno-34-9" name="__codelineno-34-9" href="#__codelineno-34-9"></a><span class="w">  </span>sync:
+<a id="__codelineno-34-10" name="__codelineno-34-10" href="#__codelineno-34-10"></a><span class="w">    </span>runs-on:<span class="w"> </span>ubuntu-latest
+<a id="__codelineno-34-11" name="__codelineno-34-11" href="#__codelineno-34-11"></a><span class="w">    </span>steps:
+<a id="__codelineno-34-12" name="__codelineno-34-12" href="#__codelineno-34-12"></a><span class="w">      </span>-<span class="w"> </span>uses:<span class="w"> </span>actions/checkout@v3
+<a id="__codelineno-34-13" name="__codelineno-34-13" href="#__codelineno-34-13"></a><span class="w">      </span>-<span class="w"> </span>run:<span class="w"> </span>cortex<span class="w"> </span>knowledge-sync<span class="w"> </span>--all
+<a id="__codelineno-34-14" name="__codelineno-34-14" href="#__codelineno-34-14"></a><span class="w">      </span>-<span class="w"> </span>run:<span class="w"> </span>cortex<span class="w"> </span>map
+<a id="__codelineno-34-15" name="__codelineno-34-15" href="#__codelineno-34-15"></a><span class="w">      </span>-<span class="w"> </span>run:<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;chore: sync knowledge base&quot;</span>
+<a id="__codelineno-34-16" name="__codelineno-34-16" href="#__codelineno-34-16"></a><span class="w">      </span>-<span class="w"> </span>run:<span class="w"> </span>git<span class="w"> </span>push
+</code></pre></div>
+<hr />
+<h2 id="referencias">📚 Referências</h2>
+<ul>
+<li><strong>Código-fonte</strong>:</li>
+<li><a href="../../scripts/core/cortex/knowledge_sync.py"><code>scripts/core/cortex/knowledge_sync.py</code></a></li>
+<li><a href="../../scripts/core/cortex/knowledge_scanner.py"><code>scripts/core/cortex/knowledge_scanner.py</code></a></li>
+<li>
+<p><a href="../../scripts/core/cortex/mapper.py"><code>scripts/core/cortex/mapper.py</code></a></p>
+</li>
+<li>
+<p><strong>Arquitetura</strong>:</p>
+</li>
+<li><a href="../../architecture/CORTEX_INDICE/">CORTEX Architecture</a></li>
+<li>
+<p><a href="../architecture/CORTEX_KNOWLEDGE_MODELS.md">Knowledge Models</a></p>
+</li>
+<li>
+<p><strong>Testes</strong>:</p>
+</li>
+<li><a href="../../tests/test_knowledge_sync.py"><code>tests/test_knowledge_sync.py</code></a></li>
+<li><a href="../../tests/test_cortex_map_knowledge.py"><code>tests/test_cortex_map_knowledge.py</code></a></li>
+</ul>
+<hr />
+<h2 id="contribuindo">🤝 Contribuindo</h2>
+<p>Encontrou um bug ou tem uma sugestão? Abra uma issue ou envie um PR!</p>
+<p><strong>Áreas para melhoria:</strong></p>
+<ul>
+<li>[ ] Suporte a fontes além de HTTP (Git submodules, S3, etc.)</li>
+<li>[ ] UI web para visualizar knowledge graph</li>
+<li>[ ] Validação automática de Golden Paths (verificar se caminhos existem)</li>
+<li>[ ] Metrics: rastrear quais regras são mais consultadas por LLMs</li>
+</ul>
+<hr />
+<p><strong>Última atualização</strong>: 2025-12-20
+<strong>Versão do guia</strong>: 1.0.0
+<strong>Autores</strong>: Engineering Team</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
