@@ -15,6 +15,25 @@
 
 ### Changed
 
+- **CORTEX Knowledge Sync: Robustness Against Network Failures (P31.3)**: Implemented forget-proof error handling
+  - Enhanced `KnowledgeSyncer._fetch_source()` with comprehensive exception handling:
+    - Catches `requests.exceptions.Timeout` (network timeout beyond 10s limit)
+    - Catches `requests.exceptions.ConnectionError` (network unreachable, DNS failures)
+    - Catches `requests.exceptions.HTTPError` (server 4xx/5xx errors)
+    - Catches generic `requests.exceptions.RequestException` (catch-all for other network errors)
+  - All network errors are logged with appropriate severity (warning for transient, error for permanent)
+  - Failed network fetches return `(None, None)` to preserve local content (no data loss)
+  - Added detailed logging to aid debugging: includes URL, error type, and guidance message
+  - System never crashes due to network issues - graceful degradation guaranteed
+  - Implemented comprehensive test suite in `tests/test_knowledge_sync_resilience.py`:
+    - Tests timeout handling with mock network failures
+    - Tests connection error resilience
+    - Tests HTTP error handling (500, 404, etc.)
+    - Integration test: verifies local content preservation on network failure
+    - 7 test cases covering all error scenarios + success path
+  - Impact: CORTEX Knowledge Node now resilient to unstable networks, offline scenarios, and remote server failures
+  - Aligns with SRE principles: observability (logging) + reliability (graceful degradation)
+
 - **Code Style: Standardized Pydantic model_config Position**: Refactored CORTEX models for consistency
   - Moved `model_config = ConfigDict(frozen=True)` to top of class (after docstring) in:
     - `KnowledgeSource` (scripts/core/cortex/models.py)
