@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Protocol
 
 import requests
+import requests.exceptions
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -28,6 +29,10 @@ if TYPE_CHECKING:
     from scripts.core.cortex.models import KnowledgeEntry, KnowledgeSource
 
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+from scripts.utils.logger import setup_logging
+
+# Initialize logger
+logger = setup_logging(__name__)
 
 # HTTP status codes
 HTTP_OK = 200
@@ -200,39 +205,82 @@ class KnowledgeSyncer:
     ) -> tuple[str | None, str | None]:
         """Fetch content from a remote source with ETag caching.
 
+        This method is resilient to network failures and will never crash
+        the application. All network errors are caught, logged, and handled
+        gracefully by returning (None, None) to preserve local content.
+
         Args:
             source: Knowledge source with URL and cache metadata
 
         Returns:
             Tuple of (content, etag) if modified, or (None, None) if not modified
+            or if any network error occurred
 
-        Raises:
-            requests.RequestException: On HTTP errors
+        Network Error Handling:
+            - Timeout: Request exceeded timeout limit (default: 10s)
+            - ConnectionError: Network unreachable, DNS failure, etc.
+            - HTTPError: Server returned 4xx/5xx status code
+            - RequestException: Any other network-related error
+
+        All errors are logged with appropriate severity (warning for transient
+        errors, error for permanent failures) and the method returns (None, None)
+        to signal that the local content should be preserved.
         """
-        headers = {}
-        if source.etag:
-            headers["If-None-Match"] = source.etag
+        try:
+            headers = {}
+            if source.etag:
+                headers["If-None-Match"] = source.etag
 
-        response = self.http_client.get(
-            str(source.url),
-            headers=headers,
-            timeout=10,
-        )
+            response = self.http_client.get(
+                str(source.url),
+                headers=headers,
+                timeout=10,
+            )
 
-        # 304 Not Modified - content hasn't changed
-        if response.status_code == HTTP_NOT_MODIFIED:
+            # 304 Not Modified - content hasn't changed
+            if response.status_code == HTTP_NOT_MODIFIED:
+                return None, None
+
+            # 200 OK - new content available
+            if response.status_code == HTTP_OK:
+                new_etag = response.headers.get("ETag")
+                return response.text, new_etag
+
+            # Other status codes - raise error to be caught below
+            response.raise_for_status()
+
+            # Should not reach here, but return None for safety
             return None, None
 
-        # 200 OK - new content available
-        if response.status_code == HTTP_OK:
-            new_etag = response.headers.get("ETag")
-            return response.text, new_etag
+        except requests.exceptions.Timeout:
+            logger.warning(
+                f"Timeout fetching knowledge source: {source.url} "
+                "(exceeded 10 second limit). Local content will be preserved.",
+            )
+            return None, None
 
-        # Other status codes - raise error
-        response.raise_for_status()
+        except requests.exceptions.ConnectionError as e:
+            logger.warning(
+                f"Connection error fetching knowledge source: {source.url}. "
+                f"Network may be unreachable. Details: {e}. "
+                "Local content will be preserved.",
+            )
+            return None, None
 
-        # Should not reach here, but return None for safety
-        return None, None
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code if e.response else "unknown"
+            logger.error(
+                f"HTTP error {status_code} fetching knowledge source: {source.url}. "
+                f"Details: {e}. Local content will be preserved.",
+            )
+            return None, None
+
+        except requests.exceptions.RequestException as e:
+            logger.error(
+                f"Network error fetching knowledge source: {source.url}. "
+                f"Details: {e}. Local content will be preserved.",
+            )
+            return None, None
 
     def _merge_content(
         self,
