@@ -4,6 +4,27 @@
 
 ### Added
 
+- **CORTEX CLI: Knowledge Integration in `cortex map` (P31.2)**: Enhanced project introspection with Knowledge Node rules
+  - Added `--include-knowledge/--no-knowledge` flag to `cortex map` command (default: enabled)
+  - New fields in `ProjectContext` model:
+    - `golden_paths: list[str]`: Project-specific golden paths extracted from Knowledge Node
+    - `knowledge_rules: str`: Formatted Markdown with project rules and patterns for LLMs
+  - Implemented `ProjectMapper._extract_knowledge_rules()` to scan and extract rules
+  - Implemented `ProjectMapper._format_knowledge_markdown()` for LLM-friendly Markdown output
+  - Automatically filters out deprecated knowledge entries (includes active and draft only)
+  - Graceful degradation: continues working if `docs/knowledge/` is missing or empty
+  - Generated context map (`.cortex/context.json`) now includes:
+    - All golden paths from active knowledge entries
+    - Section "Project Rules & Golden Paths" with rule summaries, tags, and paths
+  - Comprehensive test suite in `tests/test_cortex_map_knowledge.py`:
+    - Tests knowledge inclusion by default
+    - Tests opt-out with `--no-knowledge` flag
+    - Tests resilience to missing/malformed knowledge files
+    - Tests Markdown formatting and deprecated entry filtering
+    - 8 test cases covering all integration scenarios
+  - Impact: LLMs and automation tools now receive rich project-specific rules alongside code structure
+  - Aligns with "Documentation as Code" principle: knowledge is first-class citizen in introspection
+
 - **CORTEX Knowledge Models Test Suite (P31.1)**: Implemented comprehensive unit tests for Knowledge Node foundation
   - Created `tests/test_cortex_models.py` with 23 test cases covering:
     - `KnowledgeSource`: URL validation (HTTP/HTTPS), optional fields (etag, last_synced), immutability, serialization
