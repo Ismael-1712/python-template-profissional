@@ -1,0 +1,1245 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>🔄 CORTEX Modularization - From Monolith to Package - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-modularization-from-monolith-to-package" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🔄 CORTEX Modularization - From Monolith to Package
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tipo-de-mudanca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Tipo de Mudança
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Resumo Executivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Arquitetura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Arquitetura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antes-monolito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ANTES (Monólito)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depois-pacote-modular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEPOIS (Pacote Modular)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mudancas-implementadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔬 Mudanças Implementadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔬 Mudanças Implementadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iteracao-1-extracao-de-helpers-commit-58e1aaa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteração 1: Extração de Helpers (Commit 58e1aaa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iteracao-2-migracao-para-pacote-commit-6879928" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteração 2: Migração para Pacote (Commit 6879928)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-commit-620cd68" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação (Commit 620cd68)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacao-e-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Validação e Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✅ Validação e Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matriz-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matriz de Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-teste-funcionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Teste Funcionais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retrocompatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Retrocompatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocolo-seguido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Protocolo Seguido
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licoes-aprendidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Lições Aprendidas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Lições Aprendidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acertos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Acertos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aprendizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Aprendizados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-passos-opcionais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Próximos Passos (Opcionais)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 Documentação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commits-incluidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Commits Incluídos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-revisao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Checklist de Revisão
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impacto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 Impacto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 Impacto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#para-desenvolvedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para Desenvolvedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#para-o-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Para o Projeto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cortex-modularization-from-monolith-to-package">🔄 CORTEX Modularization - From Monolith to Package</h1>
+<h2 id="tipo-de-mudanca">📋 Tipo de Mudança</h2>
+<ul>
+<li>[x] <strong>Refatoração</strong> (Mudança estrutural sem alterar funcionalidade)</li>
+<li>[ ] Bugfix</li>
+<li>[ ] Feature</li>
+<li>[ ] Breaking Change</li>
+</ul>
+<h2 id="objetivo">🎯 Objetivo</h2>
+<p>Refatorar <code>scripts/cli/cortex.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
+<h2 id="resumo-executivo">📊 Resumo Executivo</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Antes</th>
+<th>Depois</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estrutura</strong></td>
+<td>1 monólito (2113 linhas)</td>
+<td>1 pacote (5 arquivos)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Responsabilidades Extraídas</strong></td>
+<td>0</td>
+<td>1 (frontmatter helpers)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Testes</strong></td>
+<td>546 passed</td>
+<td>546 passed</td>
+<td>✅ Zero regressões</td>
+</tr>
+<tr>
+<td><strong>Retrocompatibilidade</strong></td>
+<td>-</td>
+<td>100% (wrapper criado)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Validação</strong></td>
+<td>Ruff, Mypy</td>
+<td>Ruff, Mypy, Pre-commit</td>
+<td>✅ 13/13 hooks passed</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arquitetura">🏗️ Arquitetura</h2>
+<h3 id="antes-monolito">ANTES (Monólito)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cli/cortex.py (2113 linhas)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Helper Functions (67 linhas) ❌
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Typer Commands (1900+ linhas) ⚠️
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── Entry Point (86 linhas)
+</code></pre></div>
+<h3 id="depois-pacote-modular">DEPOIS (Pacote Modular)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>scripts/cortex/                  # 🆕 Pacote Python
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── __init__.py                 # Metadados
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── __main__.py                 # Entry point (-m invocation)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── cli.py                      # CLI commands (Typer)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>└── core/                       # 🆕 Domínio (Business Logic)
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── __init__.py
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    └── frontmatter_helpers.py  # ✅ Helpers puros
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
+</code></pre></div>
+<h2 id="mudancas-implementadas">🔬 Mudanças Implementadas</h2>
+<h3 id="iteracao-1-extracao-de-helpers-commit-58e1aaa">Iteração 1: Extração de Helpers (Commit <code>58e1aaa</code>)</h3>
+<p><strong>Criado:</strong></p>
+<ul>
+<li><code>scripts/cortex/core/frontmatter_helpers.py</code> (149 linhas, 3 funções)</li>
+<li><code>infer_doc_type()</code> - Inferir tipo de documento</li>
+<li><code>generate_id_from_filename()</code> - Gerar ID kebab-case</li>
+<li><code>generate_default_frontmatter()</code> - Gerar YAML completo</li>
+</ul>
+<p><strong>Modificado:</strong></p>
+<ul>
+<li><code>scripts/cli/cortex.py</code> - Removidas 67 linhas (funções privadas)</li>
+<li>Imports atualizados para usar módulo extraído</li>
+</ul>
+<p><strong>Validação:</strong></p>
+<ul>
+<li>✅ 546 testes passed (93 cortex-specific)</li>
+<li>✅ Ruff clean | Mypy --strict clean</li>
+<li>✅ Comando <code>cortex init</code> testado funcionalmente</li>
+</ul>
+<h3 id="iteracao-2-migracao-para-pacote-commit-6879928">Iteração 2: Migração para Pacote (Commit <code>6879928</code>)</h3>
+<p><strong>Criado:</strong></p>
+<ul>
+<li><code>scripts/cortex/__main__.py</code> - Entry point para <code>python -m scripts.cortex</code></li>
+<li><code>scripts/cortex/cli.py</code> - CLI movido de <code>scripts/cli/cortex.py</code> (2037 linhas)</li>
+<li><code>scripts/cli/cortex.py</code> - Wrapper retrocompatível (18 linhas)</li>
+</ul>
+<p><strong>Modificado:</strong></p>
+<ul>
+<li><code>pyproject.toml</code> - Atualizado <code>console_scripts</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># ANTES</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">cortex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;scripts.cli.cortex:main&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># DEPOIS</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">cortex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;scripts.cortex.cli:main&quot;</span>
+</code></pre></div>
+<p><strong>Validação:</strong></p>
+<ul>
+<li>✅ Ambas invocações funcionam:</li>
+<li><code>python scripts/cli/cortex.py --help</code> (legado)</li>
+<li><code>python -m scripts.cortex --help</code> (moderno)</li>
+<li>✅ 546 testes passed</li>
+<li>✅ Make validate completo</li>
+</ul>
+<h3 id="documentacao-commit-620cd68">Documentação (Commit <code>620cd68</code>)</h3>
+<p><strong>Criado:</strong></p>
+<ul>
+<li><code>docs/architecture/CORTEX_MODULARIZATION_REFACTORING.md</code> (596 linhas)</li>
+<li>Decisões arquiteturais completas</li>
+<li>Métricas e validações</li>
+<li>Lições aprendidas</li>
+<li>Roadmap futuro</li>
+</ul>
+<h2 id="validacao-e-testes">✅ Validação e Testes</h2>
+<h3 id="matriz-de-testes">Matriz de Testes</h3>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Escopo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Unitários</strong></td>
+<td>93 testes cortex-specific</td>
+<td>✅ 93 passed</td>
+</tr>
+<tr>
+<td><strong>Integração</strong></td>
+<td>546 testes totais</td>
+<td>✅ 546 passed (2 skipped TDD)</td>
+</tr>
+<tr>
+<td><strong>Lint</strong></td>
+<td>Ruff</td>
+<td>✅ All checks passed</td>
+</tr>
+<tr>
+<td><strong>Type Check</strong></td>
+<td>Mypy --strict</td>
+<td>✅ Success (155 files)</td>
+</tr>
+<tr>
+<td><strong>Pre-commit</strong></td>
+<td>13 hooks</td>
+<td>✅ 13/13 passed</td>
+</tr>
+<tr>
+<td><strong>Funcional</strong></td>
+<td><code>cortex init</code></td>
+<td>✅ Funcionando</td>
+</tr>
+<tr>
+<td><strong>Retrocompat</strong></td>
+<td><code>scripts/cli/cortex.py</code></td>
+<td>✅ Funcionando</td>
+</tr>
+<tr>
+<td><strong>Moderno</strong></td>
+<td><code>python -m scripts.cortex</code></td>
+<td>✅ Funcionando</td>
+</tr>
+</tbody>
+</table>
+<h3 id="casos-de-teste-funcionais">Casos de Teste Funcionais</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Teste 1: Wrapper retrocompatível</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help<span class="w">  </span><span class="c1"># ✅ OK</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Teste 2: Método moderno (-m)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help<span class="w">      </span><span class="c1"># ✅ OK</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Teste 3: Comando funcional</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# Test&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/test.md
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>init<span class="w"> </span>/tmp/test.md<span class="w">  </span><span class="c1"># ✅ Frontmatter adicionado</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Teste 4: Make validate completo</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>make<span class="w"> </span>validate<span class="w">  </span><span class="c1"># ✅ 546 passed</span>
+</code></pre></div>
+<h2 id="retrocompatibilidade">🔄 Retrocompatibilidade</h2>
+<p><strong>100% GARANTIDA</strong> - Três métodos de invocação suportados:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Método 1 (Legado - via wrapper)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Método 2 (Moderno - via -m)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>audit
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Método 3 (Instalado - via console_scripts)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>cortex<span class="w"> </span>audit
+</code></pre></div>
+<p><strong>Wrapper Criado:</strong> <code>scripts/cli/cortex.py</code> delega para <code>scripts.cortex.cli:main</code></p>
+<h2 id="protocolo-seguido">📚 Protocolo Seguido</h2>
+<p>Refatoração executada conforme <a href="docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md">Protocolo de Fracionamento Iterativo</a>:</p>
+<ul>
+<li>✅ <strong>Fase 0:</strong> Mapeamento de responsabilidades</li>
+<li>✅ <strong>Fase 1:</strong> Extração isolada (sem tocar monólito)</li>
+<li>✅ <strong>Fase 2:</strong> Religação (imports atualizados)</li>
+<li>✅ <strong>Fase 3:</strong> Validação (testes + linters)</li>
+<li>✅ <strong>Fase 4:</strong> Commit atômico</li>
+<li>✅ <strong>Iteração 2:</strong> Migração para pacote</li>
+</ul>
+<h2 id="licoes-aprendidas">🎓 Lições Aprendidas</h2>
+<h3 id="acertos">✅ Acertos</h3>
+<ol>
+<li><strong>Protocolo Iterativo Funciona</strong></li>
+<li>Commits atômicos permitiram validação incremental</li>
+<li>Histórico Git auditável e educacional</li>
+<li>
+<p>Rollback cirúrgico possível</p>
+</li>
+<li>
+<p><strong>Wrapper Retrocompatível Essencial</strong></p>
+</li>
+<li>Zero impacto em workflows existentes</li>
+<li>
+<p>Migração gradual sem pressure</p>
+</li>
+<li>
+<p><strong>Helpers First Strategy</strong></p>
+</li>
+<li>Funções puras são fáceis de testar</li>
+<li>Zero side effects = zero surpresas</li>
+</ol>
+<h3 id="aprendizados">⚠️ Aprendizados</h3>
+<ol>
+<li><strong>Mypy Cache Corruption</strong></li>
+<li><strong>Problema:</strong> <code>KeyError: 'is_bound'</code> ao renomear módulos</li>
+<li>
+<p><strong>Solução:</strong> <code>rm -rf .mypy_cache</code> antes de validação</p>
+</li>
+<li>
+<p><strong>CORTEX Root Lockdown</strong></p>
+</li>
+<li>Arquivos não autorizados no root bloqueiam commit</li>
+<li>Solução: Gerar docs em <code>docs/</code> ou adicionar à whitelist</li>
+</ol>
+<h2 id="proximos-passos-opcionais">🚀 Próximos Passos (Opcionais)</h2>
+<p><strong>Recomendação:</strong> Manter estado atual (God Function eliminado)</p>
+<p><strong>Opções Futuras (se necessário):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>scripts/cortex/core/
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>├── frontmatter_helpers.py  # ✅ FEITO
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>├── validators.py           # 🔮 FUTURO: Validadores de metadados
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>├── formatters.py           # 🔮 FUTURO: Formatação de saída
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>└── reporters.py            # 🔮 FUTURO: Geração de relatórios
+</code></pre></div>
+<p><strong>Condição de Revisão:</strong> Se CLI ultrapassar 3000 linhas</p>
+<h2 id="documentacao">📖 Documentação</h2>
+<ul>
+<li><strong>Arquitetura Completa:</strong> <a href="docs/architecture/CORTEX_MODULARIZATION_REFACTORING.md">CORTEX_MODULARIZATION_REFACTORING.md</a></li>
+<li><strong>Protocolo Aplicado:</strong> <a href="docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a></li>
+<li><strong>Referência:</strong> <a href="docs/history/sprint_1_foundation/P26_REFATORACAO_SCRIPTS_FASE01.md">P26 - Refatoração de Scripts</a></li>
+</ul>
+<h2 id="commits-incluidos">📝 Commits Incluídos</h2>
+<ol>
+<li><strong><code>58e1aaa</code></strong> - refactor(cortex): extract frontmatter helpers (Iteration 1)</li>
+<li><strong><code>6879928</code></strong> - refactor(cortex): migrate CLI to package structure (Iteration 2)</li>
+<li><strong><code>620cd68</code></strong> - docs(arch): add CORTEX modularization refactoring report</li>
+</ol>
+<h2 id="checklist-de-revisao">🔍 Checklist de Revisão</h2>
+<ul>
+<li>[x] Código segue padrões do projeto (Ruff, Mypy)</li>
+<li>[x] Testes passam (546/546)</li>
+<li>[x] Documentação atualizada (CORTEX_MODULARIZATION_REFACTORING.md)</li>
+<li>[x] Retrocompatibilidade mantida (wrapper criado)</li>
+<li>[x] Zero regressões de funcionalidade</li>
+<li>[x] Pre-commit hooks passam (13/13)</li>
+<li>[x] Make validate completo OK</li>
+</ul>
+<h2 id="impacto">💡 Impacto</h2>
+<h3 id="para-desenvolvedores">Para Desenvolvedores</h3>
+<ul>
+<li>✅ Ambos métodos de invocação funcionam (legado + moderno)</li>
+<li>✅ Helpers testáveis isoladamente</li>
+<li>✅ Estrutura modular facilita manutenção</li>
+</ul>
+<h3 id="para-cicd">Para CI/CD</h3>
+<ul>
+<li>✅ Nenhuma mudança necessária (wrapper mantém compatibilidade)</li>
+<li>✅ Validação mais rápida (módulos isolados)</li>
+</ul>
+<h3 id="para-o-projeto">Para o Projeto</h3>
+<ul>
+<li>✅ God Function eliminado</li>
+<li>✅ SOLID aplicado (SRP)</li>
+<li>✅ Base para futuras modularizações</li>
+</ul>
+<hr />
+<p><strong>Related Issues:</strong> P26 Script Refactoring Roadmap
+<strong>Breaking Changes:</strong> Nenhum (100% retrocompatível)
+<strong>Migration Guide:</strong> Não necessário (wrapper ativo)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

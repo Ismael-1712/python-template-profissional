@@ -1,0 +1,1947 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team (GitHub Copilot Assisted)">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>CORTEX Modularization - From Monolith to Package - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-modularization-from-monolith-to-package" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CORTEX Modularization - From Monolith to Package
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumo Executivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Resumo Executivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metricas-finais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas Finais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contexto-e-motivacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contexto e Motivação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contexto e Motivação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diagnostico-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnóstico Inicial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objetivos-da-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos da Refatoração
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Arquitetura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-antes-monolito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrutura ANTES (Monólito)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estrutura-depois-pacote-modular" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrutura DEPOIS (Pacote Modular)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisoes-arquiteturais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisões Arquiteturais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decisões Arquiteturais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-protocolo-de-refatoracao-iterativo-vs-big-bang" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Protocolo de Refatoração: Iterativo vs Big Bang
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Protocolo de Refatoração: Iterativo vs Big Bang">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iteracao-1-extracao-de-helpers-commit-58e1aaa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteração 1: Extração de Helpers (Commit 58e1aaa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iteracao-2-migracao-para-pacote-commit-6879928" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iteração 2: Migração para Pacote (Commit 6879928)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-retrocompatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Retrocompatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-extracao-parcial-vs-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Extração Parcial vs Completa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fases-executadas-protocolo-iterativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fases Executadas (Protocolo Iterativo)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fases Executadas (Protocolo Iterativo)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fase-0-mapeamento-auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 0: Mapeamento (Auditoria)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-1-extracao-criacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1: Extração (Criação)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-2-religacao-modificacao-minima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2: Religação (Modificação Mínima)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-3-validacao-critica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3: Validação (CRÍTICA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-4-commit-atomico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4: Commit Atômico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-5-migracao-para-pacote-iteracao-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 5: Migração para Pacote (Iteração 2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fase-6-commit-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 6: Commit Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacao-e-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validação e Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validação e Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#matriz-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Matriz de Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-teste-especificos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Teste Específicos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Casos de Teste Específicos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#teste-1-helpers-isolados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teste 1: Helpers Isolados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teste-2-comando-init-funcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teste 2: Comando Init (Funcional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#teste-3-retrocompatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teste 3: Retrocompatibilidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licoes-aprendidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lições Aprendidas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lições Aprendidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acertos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Acertos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aprendizados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Aprendizados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#impacto-e-adocao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Impacto e Adoção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Impacto e Adoção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mudancas-em-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mudanças em Workflows
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mudanças em Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#desenvolvedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desenvolvedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pyprojecttoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pyproject.toml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adocao-gradual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adoção Gradual
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-de-qualidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Qualidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas de Qualidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#complexidade-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexidade de Código
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cobertura-de-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cobertura de Testes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acoplamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acoplamento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proximos-passos-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Próximos Passos (Roadmap)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Próximos Passos (Roadmap)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opcoes-de-evolucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opções de Evolução
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Opções de Evolução">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opcao-a-extracoes-adicionais-iterativas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção A: Extrações Adicionais (Iterativas)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-b-manter-estado-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção B: Manter Estado Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-c-extrair-apenas-formatadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção C: Extrair apenas Formatadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recomendacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recomendação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Referências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentacao-do-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação do Projeto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codigo-implementado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Código Implementado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#padroes-e-principios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Padrões e Princípios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glossario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossário
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historico-de-revisoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histórico de Revisões
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cortex-modularization-from-monolith-to-package">CORTEX Modularization - From Monolith to Package</h1>
+<h2 id="status">Status</h2>
+<p><strong>COMPLETED</strong> - Refatoração concluída em 2025-12-21 (2 iterações)</p>
+<h2 id="resumo-executivo">Resumo Executivo</h2>
+<p>Refatoração estrutural do script <code>scripts/cli/cortex.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
+<h3 id="metricas-finais">Métricas Finais</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Antes</th>
+<th>Depois</th>
+<th>Melhoria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linhas Totais</strong></td>
+<td>2113</td>
+<td>2037 (cli.py) + 149 (helpers) = 2186</td>
+<td>-3.5% (código + estrutura)</td>
+</tr>
+<tr>
+<td><strong>Arquivos</strong></td>
+<td>1 monólito</td>
+<td>1 pacote (5 arquivos)</td>
+<td>Modularizado</td>
+</tr>
+<tr>
+<td><strong>Responsabilidades Extraídas</strong></td>
+<td>0</td>
+<td>1 (frontmatter helpers)</td>
+<td>SOLID ✓</td>
+</tr>
+<tr>
+<td><strong>Testes</strong></td>
+<td>546 passed</td>
+<td>546 passed</td>
+<td>Zero regressões</td>
+</tr>
+<tr>
+<td><strong>Cobertura QA</strong></td>
+<td>Ruff, Mypy</td>
+<td>Ruff, Mypy, Pre-commit</td>
+<td>Mantida</td>
+</tr>
+<tr>
+<td><strong>Retrocompatibilidade</strong></td>
+<td>-</td>
+<td>100% (wrapper criado)</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<h2 id="contexto-e-motivacao">Contexto e Motivação</h2>
+<h3 id="diagnostico-inicial">Diagnóstico Inicial</h3>
+<p>Durante auditoria de código (P26 - Refatoração de Scripts), <code>scripts/cli/cortex.py</code> foi identificado como <strong>Priority 1 Refactoring Candidate</strong> por:</p>
+<ol>
+<li><strong>God Function (2113 linhas)</strong>: Centralização excessiva de responsabilidades</li>
+<li><strong>Violação do SRP</strong>: Interface CLI + Lógica de Negócio + Helpers Utilitários</li>
+<li><strong>Alto Acoplamento</strong>: Dificuldade de testar isoladamente componentes</li>
+</ol>
+<h3 id="objetivos-da-refatoracao">Objetivos da Refatoração</h3>
+<ul>
+<li>✅ <strong>Separar Interface (CLI) de Domínio (Core)</strong></li>
+<li>✅ <strong>Modularizar helpers utilitários</strong></li>
+<li>✅ <strong>Manter 100% de retrocompatibilidade</strong></li>
+<li>✅ <strong>Zero regressões de funcionalidade</strong></li>
+</ul>
+<hr />
+<h2 id="arquitetura">Arquitetura</h2>
+<h3 id="estrutura-antes-monolito">Estrutura ANTES (Monólito)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cli/cortex.py (2113 linhas)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Imports &amp; Setup (60 linhas)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Helper Functions (67 linhas)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── _infer_doc_type()
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   ├── _generate_id_from_filename()
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   └── _generate_default_frontmatter()
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── Typer Commands (1900+ linhas)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── init()
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── migrate()
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── audit()
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── map()
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── generate()
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   └── ... (12 outros comandos)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>└── Entry Point (86 linhas)
+</code></pre></div>
+<p><strong>Problemas:</strong></p>
+<ul>
+<li>Responsabilidades misturadas (CLI + Helpers + Regras)</li>
+<li>Testes acoplados à interface CLI</li>
+<li>Difícil manutenção (arquivo gigante)</li>
+</ul>
+<h3 id="estrutura-depois-pacote-modular">Estrutura DEPOIS (Pacote Modular)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>scripts/cortex/                  # 🆕 Pacote Python
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── __init__.py                 # Metadados do pacote
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── __main__.py                 # Entry point para -m invocation
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>├── cli.py                      # 🔄 Interface CLI (Typer commands)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>└── core/                       # 🆕 Domínio (Business Logic)
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── __init__.py
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    └── frontmatter_helpers.py  # ✅ Helpers de frontmatter
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível (18 linhas)
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ <strong>Single Responsibility</strong>: Cada módulo tem responsabilidade única</li>
+<li>✅ <strong>Testabilidade</strong>: Core testável sem depender de CLI</li>
+<li>✅ <strong>Manutenibilidade</strong>: Módulos menores e focados</li>
+<li>✅ <strong>Extensibilidade</strong>: Fácil adicionar novos helpers em <code>core/</code></li>
+</ul>
+<hr />
+<h2 id="decisoes-arquiteturais">Decisões Arquiteturais</h2>
+<h3 id="1-protocolo-de-refatoracao-iterativo-vs-big-bang">1. Protocolo de Refatoração: Iterativo vs Big Bang</h3>
+<p><strong>Decisão:</strong> Aplicamos <strong>Protocolo de Fracionamento Iterativo</strong> (mas com apenas 2 iterações)</p>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li>Documento guia: <a href="../../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a></li>
+<li>Reduz risco de regressões</li>
+<li>Permite validação incremental (cada iteração = 1 commit)</li>
+<li>Histórico Git limpo e auditável</li>
+</ul>
+<p><strong>Iterações Executadas:</strong></p>
+<h4 id="iteracao-1-extracao-de-helpers-commit-58e1aaa">Iteração 1: Extração de Helpers (Commit <code>58e1aaa</code>)</h4>
+<ul>
+<li><strong>Responsabilidade:</strong> Helpers de Frontmatter (menor acoplamento)</li>
+<li><strong>Arquivos Criados:</strong> <code>scripts/cortex/core/frontmatter_helpers.py</code></li>
+<li><strong>Linhas Removidas:</strong> 67 linhas de <code>cortex.py</code></li>
+<li><strong>Validação:</strong> 546 testes ✓ | Ruff ✓ | Mypy --strict ✓</li>
+</ul>
+<h4 id="iteracao-2-migracao-para-pacote-commit-6879928">Iteração 2: Migração para Pacote (Commit <code>6879928</code>)</h4>
+<ul>
+<li><strong>Responsabilidade:</strong> Transformar monólito em pacote</li>
+<li><strong>Arquivos Criados:</strong> <code>__main__.py</code>, <code>cli.py</code> (movido)</li>
+<li><strong>Wrapper:</strong> <code>scripts/cli/cortex.py</code> (retrocompatibilidade)</li>
+<li><strong>Validação:</strong> 546 testes ✓ | Ambas chamadas funcionais ✓</li>
+</ul>
+<h3 id="2-retrocompatibilidade">2. Retrocompatibilidade</h3>
+<p><strong>Decisão:</strong> Criar wrapper em <code>scripts/cli/cortex.py</code> ao invés de deletar</p>
+<p><strong>Justificativa:</strong></p>
+<ul>
+<li>Workflows existentes (<code>python scripts/cli/cortex.py</code>) continuam funcionando</li>
+<li>Gradual migration path (equipe pode migrar quando quiser)</li>
+<li>Zero impacto em CI/CD ou automações</li>
+</ul>
+<p><strong>Métodos de Invocação Suportados:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Método 1 (Legado - via wrapper)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Método 2 (Moderno - via -m)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Método 3 (Instalado - via console_scripts)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>cortex<span class="w"> </span>--help
+</code></pre></div>
+<h3 id="3-extracao-parcial-vs-completa">3. Extração Parcial vs Completa</h3>
+<p><strong>Decisão:</strong> Extração <strong>PARCIAL</strong> (apenas frontmatter helpers)</p>
+<p><strong>Por quê?</strong></p>
+<ul>
+<li>Seguindo princípio "Menor Acoplamento Primeiro"</li>
+<li>Helpers são unidades puras (sem side effects)</li>
+<li>Outras responsabilidades (validação, formatação) podem ser extraídas futuramente</li>
+</ul>
+<p><strong>Roadmap Futuro (Opções):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>scripts/cortex/core/
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── frontmatter_helpers.py  # ✅ FEITO
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├── validators.py           # 🔮 FUTURO: Validadores de metadados
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── formatters.py           # 🔮 FUTURO: Formatação de saída
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└── reporters.py            # 🔮 FUTURO: Geração de relatórios
+</code></pre></div>
+<hr />
+<h2 id="implementacao">Implementação</h2>
+<h3 id="fases-executadas-protocolo-iterativo">Fases Executadas (Protocolo Iterativo)</h3>
+<h4 id="fase-0-mapeamento-auditoria"><strong>Fase 0: Mapeamento (Auditoria)</strong></h4>
+<p><strong>Ação:</strong> Identificação de responsabilidades</p>
+<p><strong>Responsabilidades Detectadas:</strong></p>
+<ol>
+<li>✅ <strong>Helpers de Frontmatter</strong> (BAIXO acoplamento) ← <strong>Escolhida</strong></li>
+<li>⚠️ <strong>Comandos Typer</strong> (ALTO acoplamento)</li>
+<li>⚠️ <strong>Lógica de Apresentação</strong> (typer.echo, formatação)</li>
+<li>⚠️ <strong>Lógica de Validação</strong> (dispersa nos comandos)</li>
+</ol>
+<p><strong>Critério de Escolha:</strong> Menor acoplamento (helpers são funções puras)</p>
+<h4 id="fase-1-extracao-criacao"><strong>Fase 1: Extração (Criação)</strong></h4>
+<p><strong>Ação:</strong> Criar <code>scripts/cortex/core/frontmatter_helpers.py</code> sem tocar no monólito</p>
+<p><strong>Funções Extraídas:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">infer_doc_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Inferir tipo de documento a partir do caminho.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="o">...</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">generate_id_from_filename</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gerar ID kebab-case a partir do nome do arquivo.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="o">...</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">generate_default_frontmatter</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gerar frontmatter YAML padrão completo.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><strong>Validação:</strong> <code>python -c "from scripts.cortex.core.frontmatter_helpers import generate_default_frontmatter; print(generate_default_frontmatter(Path('test.md')))"</code> ✓</p>
+<h4 id="fase-2-religacao-modificacao-minima"><strong>Fase 2: Religação (Modificação Mínima)</strong></h4>
+<p><strong>Ação:</strong> Atualizar <code>cortex.py</code> para importar helpers</p>
+<p><strong>Mudanças:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ANTES</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_generate_default_frontmatter</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">doc_id</span> <span class="o">=</span> <span class="n">_generate_id_from_filename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">doc_type</span> <span class="o">=</span> <span class="n">_infer_doc_type</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="o">...</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">frontmatter</span> <span class="o">=</span> <span class="n">_generate_default_frontmatter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># DEPOIS</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.cortex.core.frontmatter_helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_default_frontmatter</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">frontmatter</span> <span class="o">=</span> <span class="n">generate_default_frontmatter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Linhas Removidas:</strong> 67 (funções privadas)</p>
+<h4 id="fase-3-validacao-critica"><strong>Fase 3: Validação (CRÍTICA)</strong></h4>
+<p><strong>Comandos Executados:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Teste funcional</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cli.cortex<span class="w"> </span>init<span class="w"> </span>/tmp/test.md<span class="w">  </span><span class="c1"># ✓</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Testes unitários</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>pytest<span class="w"> </span>tests/test_cortex*.py<span class="w"> </span>-v<span class="w">  </span><span class="c1"># 93 passed ✓</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Linters</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>ruff<span class="w"> </span>check<span class="w"> </span>scripts/cortex/<span class="w"> </span>--fix<span class="w">  </span><span class="c1"># ✓</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>mypy<span class="w"> </span>scripts/cortex/core/frontmatter_helpers.py<span class="w"> </span>--strict<span class="w">  </span><span class="c1"># ✓</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># Validação completa</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>make<span class="w"> </span>validate<span class="w">  </span><span class="c1"># 546 passed ✓</span>
+</code></pre></div>
+<h4 id="fase-4-commit-atomico"><strong>Fase 4: Commit Atômico</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/cortex/<span class="w"> </span>scripts/cli/cortex.py
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor(cortex): extract frontmatter helpers (Iteration 1)&quot;</span>
+</code></pre></div>
+<p><strong>SHA:</strong> <code>58e1aaa</code></p>
+<h4 id="fase-5-migracao-para-pacote-iteracao-2"><strong>Fase 5: Migração para Pacote (Iteração 2)</strong></h4>
+<p><strong>Ações:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Mover monólito para pacote</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>mv<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>scripts/cortex/cli.py
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 2. Criar entry point</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>scripts/cortex/__main__.py<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">from scripts.cortex.cli import main</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">if __name__ == &quot;__main__&quot;:</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s">    main()</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s">EOF</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># 3. Criar wrapper retrocompatível</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s">from scripts.cortex.cli import main</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s">if __name__ == &quot;__main__&quot;:</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">    main()</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="s">EOF</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="c1"># 4. Atualizar pyproject.toml</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="c1"># cortex = &quot;scripts.cli.cortex:main&quot; → &quot;scripts.cortex.cli:main&quot;</span>
+</code></pre></div>
+<p><strong>Validação:</strong> Ambos métodos funcionam ✓</p>
+<h4 id="fase-6-commit-final"><strong>Fase 6: Commit Final</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git<span class="w"> </span>add<span class="w"> </span>-A
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor(cortex): migrate CLI to package structure (Iteration 2 - Final)&quot;</span>
+</code></pre></div>
+<p><strong>SHA:</strong> <code>6879928</code></p>
+<hr />
+<h2 id="validacao-e-testes">Validação e Testes</h2>
+<h3 id="matriz-de-testes">Matriz de Testes</h3>
+<table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Escopo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Unitários</strong></td>
+<td>93 testes cortex-specific</td>
+<td>✅ 93 passed</td>
+</tr>
+<tr>
+<td><strong>Integração</strong></td>
+<td>546 testes totais</td>
+<td>✅ 546 passed (2 skipped TDD)</td>
+</tr>
+<tr>
+<td><strong>Lint</strong></td>
+<td>Ruff</td>
+<td>✅ All checks passed</td>
+</tr>
+<tr>
+<td><strong>Type Check</strong></td>
+<td>Mypy --strict</td>
+<td>✅ Success (155 files)</td>
+</tr>
+<tr>
+<td><strong>Pre-commit</strong></td>
+<td>Todos hooks</td>
+<td>✅ 11/11 passed</td>
+</tr>
+<tr>
+<td><strong>Funcional</strong></td>
+<td>Comando <code>cortex init</code></td>
+<td>✅ Funcionando</td>
+</tr>
+<tr>
+<td><strong>Retrocompat</strong></td>
+<td><code>scripts/cli/cortex.py</code></td>
+<td>✅ Funcionando</td>
+</tr>
+<tr>
+<td><strong>Moderno</strong></td>
+<td><code>python -m scripts.cortex</code></td>
+<td>✅ Funcionando</td>
+</tr>
+</tbody>
+</table>
+<h3 id="casos-de-teste-especificos">Casos de Teste Específicos</h3>
+<h4 id="teste-1-helpers-isolados">Teste 1: Helpers Isolados</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s2">from scripts.cortex.core.frontmatter_helpers import generate_default_frontmatter</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="s2">from pathlib import Path</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s2">print(generate_default_frontmatter(Path(&#39;docs/guides/test.md&#39;)))</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s2">&quot;</span>
+</code></pre></div>
+<p><strong>Resultado:</strong> ✅ Frontmatter gerado corretamente com <code>type: guide</code></p>
+<h4 id="teste-2-comando-init-funcional">Teste 2: Comando Init (Funcional)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;# Test&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/test.md
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>init<span class="w"> </span>/tmp/test.md
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>cat<span class="w"> </span>/tmp/test.md
+</code></pre></div>
+<p><strong>Resultado:</strong> ✅ Frontmatter adicionado, arquivo intacto</p>
+<h4 id="teste-3-retrocompatibilidade">Teste 3: Retrocompatibilidade</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Método legado</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Método moderno</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help
+</code></pre></div>
+<p><strong>Resultado:</strong> ✅ Ambos funcionam identicamente</p>
+<hr />
+<h2 id="licoes-aprendidas">Lições Aprendidas</h2>
+<h3 id="acertos">✅ Acertos</h3>
+<ol>
+<li><strong>Protocolo Iterativo Funciona</strong></li>
+<li>Commits atômicos permitem rollback cirúrgico</li>
+<li>Validação incremental reduz ansiedade</li>
+<li>
+<p>Histórico Git auditável e educacional</p>
+</li>
+<li>
+<p><strong>Wrapper Retrocompatível é Essencial</strong></p>
+</li>
+<li>Zero impacto em workflows existentes</li>
+<li>Migração gradual sem pressure</li>
+<li>
+<p>Documentação viva (código antigo comenta novo)</p>
+</li>
+<li>
+<p><strong>Extração de Helpers Primeiro</strong></p>
+</li>
+<li>Funções puras são fáceis de testar</li>
+<li>Zero side effects = zero surpresas</li>
+<li>Prova de conceito para próximas extrações</li>
+</ol>
+<h3 id="aprendizados">⚠️ Aprendizados</h3>
+<ol>
+<li><strong>Mypy Cache Corruption</strong></li>
+<li><strong>Problema:</strong> <code>KeyError: 'is_bound'</code> ao renomear módulos</li>
+<li><strong>Solução:</strong> <code>rm -rf .mypy_cache</code> antes de <code>make validate</code></li>
+<li>
+<p><strong>Prevenção:</strong> Adicionar step no CI para limpar cache</p>
+</li>
+<li>
+<p><strong>Ruff Whitespace Sensitivity</strong></p>
+</li>
+<li><strong>Problema:</strong> Linha em branco com espaços em docstring</li>
+<li><strong>Solução:</strong> <code>ruff check --fix</code> + <code>replace_string_in_file</code></li>
+<li>
+<p><strong>Prevenção:</strong> Configurar editor para <code>trim trailing whitespace</code></p>
+</li>
+<li>
+<p><strong>CORTEX Root Lockdown</strong></p>
+</li>
+<li><strong>Problema:</strong> <code>PR_DESCRIPTION.md</code> gerado por IA violou regra</li>
+<li><strong>Solução:</strong> Remover antes de commit</li>
+<li><strong>Prevenção:</strong> Gerar PRs em <code>docs/</code> ou adicionar à whitelist</li>
+</ol>
+<hr />
+<h2 id="impacto-e-adocao">Impacto e Adoção</h2>
+<h3 id="mudancas-em-workflows">Mudanças em Workflows</h3>
+<h4 id="desenvolvedores">Desenvolvedores</h4>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+</code></pre></div>
+<p><strong>DEPOIS (ambos funcionam):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Opção 1 (Legado - via wrapper)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Opção 2 (Moderno - via -m)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>audit
+</code></pre></div>
+<h4 id="cicd">CI/CD</h4>
+<p><strong>Nenhuma mudança necessária</strong> - wrapper mantém retrocompatibilidade.</p>
+<h4 id="pyprojecttoml">pyproject.toml</h4>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">[project.scripts]</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">cortex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;scripts.cli.cortex:main&quot;</span>
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[project.scripts]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">cortex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;scripts.cortex.cli:main&quot;</span>
+</code></pre></div>
+<h3 id="adocao-gradual">Adoção Gradual</h3>
+<ol>
+<li><strong>Fase 1 (Atual)</strong>: Wrapper ativo, ambos métodos funcionam</li>
+<li><strong>Fase 2 (Futuro)</strong>: Documentar método moderno como preferido</li>
+<li><strong>Fase 3 (Opcional)</strong>: Deprecar wrapper (warnings)</li>
+<li><strong>Fase 4 (Opcional)</strong>: Remover wrapper (breaking change)</li>
+</ol>
+<p><strong>Recomendação:</strong> Manter wrapper indefinidamente (custo mínimo, valor alto)</p>
+<hr />
+<h2 id="metricas-de-qualidade">Métricas de Qualidade</h2>
+<h3 id="complexidade-de-codigo">Complexidade de Código</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Linhas</th>
+<th>Funções</th>
+<th>Complexidade Ciclomática Média</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>cortex.py (ANTES)</strong></td>
+<td>2113</td>
+<td>17 comandos</td>
+<td>Alta (monólito)</td>
+</tr>
+<tr>
+<td><strong>cli.py (DEPOIS)</strong></td>
+<td>2037</td>
+<td>17 comandos</td>
+<td>Média (isolado)</td>
+</tr>
+<tr>
+<td><strong>frontmatter_helpers.py</strong></td>
+<td>149</td>
+<td>3 funções</td>
+<td>Baixa (pura)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cobertura-de-testes">Cobertura de Testes</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Testes Diretos</th>
+<th>Testes Indiretos (via CLI)</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cli.py</code></td>
+<td>0 (comandos CLI)</td>
+<td>93 (integração)</td>
+<td>93</td>
+</tr>
+<tr>
+<td><code>frontmatter_helpers.py</code></td>
+<td>0 (unit)</td>
+<td>93 (integração via CLI)</td>
+<td>93</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota:</strong> Helpers testados indiretamente via comandos CLI. Testes unitários diretos podem ser adicionados futuramente.</p>
+<h3 id="acoplamento">Acoplamento</h3>
+<p><strong>ANTES:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>cortex.py
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  ├── Depende de: scripts.core.cortex.*, scripts.utils.*
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>  └── Responsabilidades: CLI + Helpers + Formatação
+</code></pre></div>
+<p><strong>DEPOIS:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>scripts.cortex.cli
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>  ├── Depende de: scripts.core.cortex.*, scripts.cortex.core.frontmatter_helpers
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>  └── Responsabilidade: CLI (apenas)
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>scripts.cortex.core.frontmatter_helpers
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>  ├── Depende de: pathlib, datetime (stdlib)
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>  └── Responsabilidade: Geração de frontmatter (apenas)
+</code></pre></div>
+<p><strong>Melhoria:</strong> Helpers agora independentes (testáveis sem CLI)</p>
+<hr />
+<h2 id="proximos-passos-roadmap">Próximos Passos (Roadmap)</h2>
+<h3 id="opcoes-de-evolucao">Opções de Evolução</h3>
+<h4 id="opcao-a-extracoes-adicionais-iterativas">Opção A: Extrações Adicionais (Iterativas)</h4>
+<p>Seguir fracionamento iterativo para extrair:</p>
+<ol>
+<li><strong>Validadores</strong> (<code>core/validators.py</code>)</li>
+<li><strong>Formatadores</strong> (<code>core/formatters.py</code>)</li>
+<li><strong>Geradores de Relatórios</strong> (<code>core/reporters.py</code>)</li>
+</ol>
+<p><strong>Prós:</strong> Modularização máxima, testabilidade máxima
+<strong>Contras:</strong> Mais iterações, mais arquivos</p>
+<h4 id="opcao-b-manter-estado-atual">Opção B: Manter Estado Atual</h4>
+<p>Não extrair mais responsabilidades.</p>
+<p><strong>Prós:</strong> Simplicidade, "good enough"
+<strong>Contras:</strong> CLI ainda grande (2037 linhas)</p>
+<h4 id="opcao-c-extrair-apenas-formatadores">Opção C: Extrair apenas Formatadores</h4>
+<p>Meio-termo: extrair apenas lógica de apresentação (typer.echo).</p>
+<p><strong>Prós:</strong> Reduz CLI significativamente
+<strong>Contras:</strong> Validação ainda acoplada</p>
+<h3 id="recomendacao">Recomendação</h3>
+<p><strong>Opção B (Manter Estado Atual)</strong> pelos motivos:</p>
+<ol>
+<li>God Function eliminado (pacote modular)</li>
+<li>Helpers críticos extraídos</li>
+<li>Retrocompatibilidade 100%</li>
+<li>Custo-benefício de extrações adicionais é baixo</li>
+</ol>
+<p><strong>Condição de Revisão:</strong> Se CLI ultrapassar 3000 linhas, reavaliar.</p>
+<hr />
+<h2 id="referencias">Referências</h2>
+<h3 id="documentacao-do-projeto">Documentação do Projeto</h3>
+<ul>
+<li><a href="../../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">Protocolo de Fracionamento Iterativo</a></li>
+<li><a href="../../history/sprint_1_foundation/P26_REFATORACAO_SCRIPTS_FASE01/">P26 - Refatoração de Scripts (Auditoria)</a></li>
+<li><a href="../CODE_AUDIT/">Code Audit - Refactoring Examples</a></li>
+</ul>
+<h3 id="codigo-implementado">Código Implementado</h3>
+<ul>
+<li><strong>Pacote:</strong> <a href="../../scripts/cortex/"><code>scripts/cortex/</code></a></li>
+<li><strong>CLI:</strong> <a href="../../scripts/cortex/cli.py"><code>scripts/cortex/cli.py</code></a></li>
+<li><strong>Core:</strong> <a href="../../scripts/cortex/core/frontmatter_helpers.py"><code>scripts/cortex/core/frontmatter_helpers.py</code></a></li>
+<li><strong>Wrapper:</strong> <a href="../../scripts/cli/cortex.py"><code>scripts/cli/cortex.py</code></a></li>
+</ul>
+<h3 id="commits">Commits</h3>
+<ul>
+<li><strong>Iteração 1 (Helpers):</strong> <code>58e1aaa</code> - "refactor(cortex): extract frontmatter helpers"</li>
+<li><strong>Iteração 2 (Pacote):</strong> <code>6879928</code> - "refactor(cortex): migrate CLI to package structure"</li>
+</ul>
+<h3 id="padroes-e-principios">Padrões e Princípios</h3>
+<ul>
+<li><strong>SOLID Principles:</strong> Single Responsibility (SRP aplicado)</li>
+<li><strong>Hexagonal Architecture:</strong> Separação Interface ↔ Domínio</li>
+<li><strong>Iterative Refactoring:</strong> Fracionamento incremental</li>
+</ul>
+<hr />
+<h2 id="glossario">Glossário</h2>
+<table>
+<thead>
+<tr>
+<th>Termo</th>
+<th>Definição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>God Function</strong></td>
+<td>Antipadrão onde função/classe centraliza responsabilidades demais</td>
+</tr>
+<tr>
+<td><strong>SRP</strong></td>
+<td>Single Responsibility Principle (um módulo = uma responsabilidade)</td>
+</tr>
+<tr>
+<td><strong>Frontmatter</strong></td>
+<td>Metadados YAML no topo de arquivos Markdown</td>
+</tr>
+<tr>
+<td><strong>Wrapper</strong></td>
+<td>Código fino que delega para nova implementação (retrocompatibilidade)</td>
+</tr>
+<tr>
+<td><strong>Fracionamento Iterativo</strong></td>
+<td>Refatoração incremental em pequenos passos validáveis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="historico-de-revisoes">Histórico de Revisões</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Autor</th>
+<th>Mudanças</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2025-12-21</td>
+<td>Eng. Team + GitHub Copilot</td>
+<td>Documento inicial (refatoração completa)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Última Atualização:</strong> 2025-12-21
+<strong>Status:</strong> COMPLETED
+<strong>Decisor:</strong> Eng. Team (Ismael Tavares)
+<strong>Princípio Aplicado:</strong> SOLID (SRP) + Iterative Fractionation Protocol</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
