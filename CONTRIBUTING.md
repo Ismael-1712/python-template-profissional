@@ -70,6 +70,69 @@ make save m="feat(audit): adiciona detecção de código duplicado"
 
 ---
 
+## 📦 Gestão de Dependências
+
+Este projeto utiliza um sistema de três camadas para gerenciamento de dependências, garantindo builds determinísticos e segurança.
+
+### 📖 Documentação Completa
+
+Para entender a arquitetura e o fluxo de trabalho completo, consulte:
+
+**[📘 Guia de Gerenciamento de Dependências](docs/guides/DEPENDENCY_MANAGEMENT.md)**
+
+### ⚡ Quick Start: Adicionar Uma Biblioteca
+
+**Dependências de Produção** (adicione em `pyproject.toml`):
+
+```bash
+vim pyproject.toml  # Adicione em [project.dependencies]
+make install-dev
+git add pyproject.toml
+```
+
+**Dependências de Desenvolvimento** (adicione em `requirements/dev.in`):
+
+```bash
+echo "nova-lib==1.0.0" >> requirements/dev.in
+pip-compile --output-file requirements/dev.txt requirements/dev.in
+make install-dev
+git add requirements/dev.in requirements/dev.txt  # AMBOS!
+```
+
+**⚠️ IMPORTANTE:** Sempre commite o `dev.in` E o `dev.txt` juntos, caso contrário o CI falhará!
+
+---
+
+## ⚡ Criando Novos Projetos
+
+Este é um **template Copier** que permite criar novos projetos Python profissionais rapidamente.
+
+### 🆕 Criar Projeto do Zero
+
+```bash
+# 1. Instalar Copier
+pipx install copier
+
+# 2. Criar novo projeto
+copier copy gh:Ismael-1712/python-template-profissional meu-novo-projeto
+cd meu-novo-projeto
+
+# 3. Setup completo
+make install-dev
+make doctor
+```
+
+### 🔄 Atualizar Projeto Existente
+
+```bash
+cd meu-projeto-existente
+copier update  # Atualiza do template preservando suas customizações
+```
+
+Para mais detalhes sobre o sistema Copier, consulte a seção "Como Usar Este Template" no [README.md](README.md#-como-usar-este-template).
+
+---
+
 ## 🧪 Testes e Qualidade
 
 ### Suite Completa de Testes

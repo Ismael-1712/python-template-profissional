@@ -4,6 +4,32 @@
 
 ### Added
 
+- **Dependency Management Documentation and Workflow Visibility**: Criada documentação abrangente do sistema de CI Pinning
+  - Criado `docs/guides/DEPENDENCY_MANAGEMENT.md` (200+ linhas):
+    - 🎯 Explicação da arquitetura de três camadas (pyproject.toml, dev.in, dev.txt)
+    - ✅ Fluxo de trabalho "Caminho Feliz" para adicionar bibliotecas
+    - 🚨 Explicação de por que o CI falha se lockfile estiver desatualizado
+    - 🛠️ Comandos úteis (pip-compile, pip-sync, etc.)
+    - 🔍 Seção de troubleshooting com soluções práticas
+    - 📊 Tabela de benefícios do sistema (determinismo, segurança, visibilidade)
+  - Atualizado `CONTRIBUTING.md`:
+    - Adicionada seção "📦 Gestão de Dependências" com link para guia completo
+    - Quick start com exemplos práticos de como adicionar libs
+    - Avisos sobre necessidade de commitar dev.in E dev.txt juntos
+    - Adicionada seção "⚡ Criando Novos Projetos" com comandos Copier
+  - Atualizado `docs/index.md`:
+    - Reorganizada navegação com nova seção "📚 Guias e Tutoriais"
+    - Link direto para guia de gerenciamento de dependências
+  - Atualizado `README.md`:
+    - Adicionada seção "📦 Gerenciamento de Dependências" em comandos rápidos
+    - Exemplos práticos de pip-compile e workflow
+    - Link para documentação completa
+  - **Benefícios**:
+    - Reduz frustração de desenvolvedores com CI failures
+    - Documenta explicitamente o "Publicity Filter" (o que faltava)
+    - Ensina o fluxo correto sem necessidade de tentativa e erro
+  - **Objetivo**: Garantir que todos entendam o sistema de hardening sem precisar adivinhar
+
 - **Copier Template Engine with Smart Update Support**: Transformou o repositório em template reutilizável
   - Criado `copier.yml` com 15+ variáveis configuráveis:
     - Metadados do projeto (nome, descrição, versão inicial)
