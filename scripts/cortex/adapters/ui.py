@@ -327,3 +327,61 @@ class UIPresenter:
             f"  ✅ Resolved: {valid_links} valid, {broken_links} broken",
             fg=color,
         )
+
+    @staticmethod
+    def display_project_info(
+        name: str,
+        version: str,
+        python_version: str,
+    ) -> None:
+        """Display project metadata.
+
+        Args:
+            name: Project name
+            version: Project version
+            python_version: Python version requirement
+        """
+        typer.echo()
+        typer.secho("✓ Project Metadata:", fg=typer.colors.GREEN)
+        typer.echo(f"  Name: {name}")
+        typer.echo(f"  Version: {version}")
+        typer.echo(f"  Python: {python_version}")
+
+    @staticmethod
+    def display_graph_stats(
+        total_nodes: int,
+        total_links: int,
+        connectivity_score: float,
+    ) -> None:
+        """Display knowledge graph statistics.
+
+        Args:
+            total_nodes: Total number of nodes in graph
+            total_links: Total number of links in graph
+            connectivity_score: Connectivity percentage
+        """
+        typer.echo()
+        typer.secho("✓ Knowledge Graph:", fg=typer.colors.GREEN)
+        typer.echo(f"  Nodes: {total_nodes}")
+        typer.echo(f"  Links: {total_links}")
+        typer.echo(f"  Connectivity: {connectivity_score:.1f}%")
+
+    @staticmethod
+    def display_health_score(score: float, status: str) -> None:
+        """Display health score with color coding.
+
+        Args:
+            score: Health score (0-100)
+            status: Health status description
+        """
+        typer.echo()
+        typer.secho("✓ Health Score:", fg=typer.colors.GREEN)
+        health_color = (
+            typer.colors.GREEN
+            if score >= 70
+            else typer.colors.YELLOW
+            if score >= 50
+            else typer.colors.RED
+        )
+        typer.secho(f"  Score: {score}/100", fg=health_color, bold=True)
+        typer.echo(f"  Status: {status}")

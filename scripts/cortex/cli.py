@@ -33,14 +33,10 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
-from scripts.core.cortex.migrate import DocumentMigrator  # noqa: E402
 from scripts.core.cortex.readme_generator import (  # noqa: E402
     DocumentGenerator,
 )
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
-from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
-from scripts.core.guardian.models import ScanResult  # noqa: E402
-from scripts.core.guardian.scanner import ConfigScanner  # noqa: E402
 from scripts.cortex.core.frontmatter_helpers import (  # noqa: E402
     generate_default_frontmatter,
 )
@@ -134,7 +130,7 @@ def init(
             # Show first few lines of existing frontmatter
             lines = content.split("\n")
             if lines[0].strip() == "---":
-                for _i, line in enumerate(lines[1:], 1):
+                for line in lines[1:]:
                     if line.strip() == "---":
                         break
                     typer.echo(f"  {line}")
@@ -184,7 +180,6 @@ def init(
         logger.info(f"Successfully added frontmatter to {path}")
 
     except typer.Abort:
-        # User cancelled, exit gracefully
         raise
 
     except Exception as e:
@@ -248,6 +243,8 @@ def migrate(
         cortex migrate docs/guides/ --apply  # Migrate specific directory
     """
     try:
+        from scripts.core.cortex.migrations.document_migrator import DocumentMigrator
+
         workspace_root = Path.cwd()
         dry_run = not apply
 
@@ -1391,82 +1388,65 @@ def guardian_check(
         cortex guardian check . --docs custom_docs/
     """
     try:
+        from scripts.cortex.core.guardian_orchestrator import GuardianOrchestrator
+
         typer.secho("\n🔍 Visibility Guardian - Orphan Detection", bold=True)
         typer.echo(f"Scanning: {path}")
         typer.echo(f"Documentation: {docs_path}\n")
 
-        # Step 1: Scan código
-        typer.echo("📝 Step 1: Scanning code for configurations...")
-        # Passa project_root para carregar whitelist
-        project_root = Path.cwd()
-        scanner = ConfigScanner(project_root=project_root)
+        # Execute orphan detection
+        orchestrator = GuardianOrchestrator()
+        result = orchestrator.check_orphans(scan_path=path, docs_path=docs_path)
 
-        # Determina se é arquivo ou diretório
-        if path.is_file():
-            # Scan de arquivo único
-            try:
-                findings = scanner.scan_file(path)
-                scan_result = ScanResult(
-                    findings=findings,
-                    files_scanned=1,
-                )
-            except Exception as e:
-                typer.secho(
-                    f"❌ Error scanning file: {e}",
-                    fg=typer.colors.RED,
-                )
-                raise typer.Exit(code=1) from e
-        else:
-            # Scan de diretório
-            scan_result = scanner.scan_project(path)
-
-        if scan_result.has_errors():
+        # Display scan errors if any
+        if result.scan_errors:
             typer.secho(
                 "⚠️  Some files had errors during scanning:",
                 fg=typer.colors.YELLOW,
             )
-            for error in scan_result.errors:
+            for error in result.scan_errors:
                 typer.echo(f"   • {error}")
 
+        # Display findings
         findings_msg = (
-            f"   Found {scan_result.total_findings} configurations in "
-            f"{scan_result.files_scanned} files"
+            f"   Found {result.total_findings} configurations in "
+            f"{result.files_scanned} files"
         )
         typer.echo(findings_msg)
 
-        if scan_result.total_findings == 0:
+        if result.total_findings == 0:
             typer.secho(
                 "✅ No configurations found - nothing to check!",
                 fg=typer.colors.GREEN,
             )
             return
 
-        # Step 2: Match com documentação
-        typer.echo("\n📚 Step 2: Checking documentation...")
-        matcher = DocumentationMatcher(docs_path)
-        orphans, documented = matcher.find_orphans(scan_result.findings)
-
-        # Step 3: Report
+        # Display results
         typer.echo("\n" + "=" * 70)
         typer.secho("📊 RESULTS", bold=True)
         typer.echo("=" * 70)
 
-        if not orphans:
+        if not result.has_orphans:
             typer.secho(
                 "\n✅ SUCCESS: All configurations are documented!",
                 fg=typer.colors.GREEN,
                 bold=True,
             )
-            typer.echo(f"   {len(documented)} configurations found in documentation")
+            msg = f"   {len(result.documented)} configurations found in documentation"
+            typer.echo(msg)
         else:
+            orphan_msg = (
+                f"\n❌ ORPHANS DETECTED: {len(result.orphans)} "
+                "undocumented configurations"
+            )
             typer.secho(
-                f"\n❌ ORPHANS DETECTED: {len(orphans)} undocumented configurations",
+                orphan_msg,
                 fg=typer.colors.RED,
                 bold=True,
             )
             typer.echo()
 
-            for orphan in orphans:
+            for orphan in result.orphans:
                 typer.secho(f"  • {orphan.key}", fg=typer.colors.RED, bold=True)
                 typer.echo(f"    Location: {orphan.source_file}:{orphan.line_number}")
                 if orphan.context:
@@ -1475,9 +1455,10 @@ def guardian_check(
                     typer.echo(f"    Default: {orphan.default_value}")
                 typer.echo()
 
-            if documented:
-                typer.echo(f"✅ {len(documented)} configurations ARE documented:")
-                for key, files in documented.items():
+            if result.documented:
+                doc_msg = f"✅ {len(result.documented)} configurations ARE documented:"
+                typer.echo(doc_msg)
+                for key, files in result.documented.items():
                     typer.echo(f"   • {key} → {', '.join(str(f.name) for f in files)}")
 
             if fail_on_error:
@@ -1737,7 +1718,7 @@ def generate_docs(
         typer.echo()
         typer.echo("💡 Tip: Ensure the following files exist:")
         typer.echo("   • pyproject.toml")
-        typer.echo(f"   • docs/templates/{template_name}")
+        typer.echo("   • docs/templates/[template_name].jinja")
         typer.echo("   • .cortex/context.json (run 'cortex map' first)")
         raise typer.Exit(code=1) from e
 
