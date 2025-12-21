@@ -386,6 +386,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="⚡ Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-novo-projeto-a-partir-deste-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🆕 Criar Novo Projeto (A Partir Deste Template)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desenvolver-o-template-contribuidores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Desenvolver o Template (Contribuidores)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -669,6 +697,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="⚡ Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#criar-novo-projeto-a-partir-deste-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🆕 Criar Novo Projeto (A Partir Deste Template)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desenvolver-o-template-contribuidores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 Desenvolver o Template (Contribuidores)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -745,33 +801,42 @@
 <p><a href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-blue.svg" /></a>
 <a href=""><img alt="Code Quality" src="https://img.shields.io/badge/code%20quality-enforced-brightgreen.svg" /></a></p>
 <h2 id="quick-start">⚡ Quick Start</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 1. Clone o repositório</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/usuario/meu_projeto_placeholder.git
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>meu_projeto_placeholder
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># 2. Configure o ambiente (cria venv + instala dependências)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>make<span class="w"> </span>setup
+<h3 id="criar-novo-projeto-a-partir-deste-template">🆕 Criar Novo Projeto (A Partir Deste Template)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># 1. Instalar Copier</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pipx<span class="w"> </span>install<span class="w"> </span>copier
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 2. Criar projeto a partir do template</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>copier<span class="w"> </span>copy<span class="w"> </span>gh:Ismael-1712/python-template-profissional<span class="w"> </span>meu-projeto
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">cd</span><span class="w"> </span>meu-projeto
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># 3. Ative o ambiente virtual</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># 3. Configure o ambiente (cria venv + instala dependências)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>make<span class="w"> </span>install-dev
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># 4. Valide a instalação</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>make<span class="w"> </span><span class="nb">test</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>make<span class="w"> </span>doctor
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>make<span class="w"> </span><span class="nb">test</span>
 </code></pre></div>
-<p><strong>Pronto!</strong> Você está preparado para desenvolver. 🎉</p>
+<p><strong>Pronto!</strong> Você tem um projeto profissional completo. 🎉</p>
+<h3 id="desenvolver-o-template-contribuidores">🔧 Desenvolver o Template (Contribuidores)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Clone o template para desenvolvimento direto</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Ismael-1712/python-template-profissional.git
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">cd</span><span class="w"> </span>python-template-profissional
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>make<span class="w"> </span>install-dev
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>make<span class="w"> </span>doctor
+</code></pre></div>
 <h2 id="comandos-mais-usados">🎯 Comandos Mais Usados</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Desenvolvimento do dia a dia</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>make<span class="w"> </span>format<span class="w">        </span><span class="c1"># Formatar código</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>make<span class="w"> </span><span class="nb">test</span><span class="w">          </span><span class="c1"># Rodar testes</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>make<span class="w"> </span>check<span class="w">         </span><span class="c1"># Validação completa antes do commit</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Pipeline de Qualidade Completo</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>make<span class="w"> </span>audit<span class="w">         </span><span class="c1"># Análise profunda de segurança</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>make<span class="w"> </span>test-coverage<span class="w"> </span><span class="c1"># Verificar cobertura de testes</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Documentação</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>make<span class="w"> </span>docs-serve<span class="w">    </span><span class="c1"># Visualizar docs localmente</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>make<span class="w"> </span>docs-build<span class="w">    </span><span class="c1"># Gerar site estático</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Desenvolvimento do dia a dia</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>make<span class="w"> </span>format<span class="w">        </span><span class="c1"># Formatar código</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>make<span class="w"> </span><span class="nb">test</span><span class="w">          </span><span class="c1"># Rodar testes</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>make<span class="w"> </span>check<span class="w">         </span><span class="c1"># Validação completa antes do commit</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Pipeline de Qualidade Completo</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>make<span class="w"> </span>audit<span class="w">         </span><span class="c1"># Análise profunda de segurança</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>make<span class="w"> </span>test-coverage<span class="w"> </span><span class="c1"># Verificar cobertura de testes</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Documentação</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>make<span class="w"> </span>docs-serve<span class="w">    </span><span class="c1"># Visualizar docs localmente</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>make<span class="w"> </span>docs-build<span class="w">    </span><span class="c1"># Gerar site estático</span>
 </code></pre></div>
 <h2 id="navegacao-da-documentacao">📖 Navegação da Documentação</h2>
 <h3 id="documentacao-tecnica">Documentação Técnica</h3>

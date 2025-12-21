@@ -21,7 +21,7 @@
     
     
       
-        <title>🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica) - {{ project_name }}</title>
+        <title>🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica) - LEGADO - {{ project_name }}</title>
       
     
     
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)
+              🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica) - LEGADO
             
           </span>
         </div>
@@ -542,15 +542,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#visao-geral" class="md-nav__link">
+  <a href="#aviso-evolucao-arquitetural" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📋 Visão Geral
+        ⚠️ AVISO: Evolução Arquitetural
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="📋 Visão Geral">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral-sistema-legado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Visão Geral (Sistema Legado)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Visão Geral (Sistema Legado)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1027,36 +1038,51 @@
 
 <h1 id="arquitetura-de-scaffolding-de-projetos-molde-fabrica">🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)</h1>
 <p><strong>Data:</strong> 16 de Dezembro de 2025
-<strong>Status:</strong> 🟢 Ativo e em Produção
+<strong>Status:</strong> 🔴 DOCUMENTO HISTÓRICO (Sistema Legado v1.x)
 <strong>Versão:</strong> 1.0.0</p>
 <hr />
-<h2 id="visao-geral">📋 Visão Geral</h2>
+<h2 id="aviso-evolucao-arquitetural">⚠️ AVISO: Evolução Arquitetural</h2>
+<p><strong>Sistema Atual (v2.0 — Dezembro 2025):</strong> Este projeto agora usa <strong>Copier</strong> para scaffolding.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ✅ Método Atual (Recomendado)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>copier<span class="w"> </span>copy<span class="w"> </span>gh:Ismael-1712/python-template-profissional<span class="w"> </span>meu-projeto
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>copier<span class="w"> </span>update<span class="w">  </span><span class="c1"># Para atualizar projetos existentes</span>
+</code></pre></div>
+<p><strong>Sistema Legado (v1.0-1.5):</strong> Função Bash <code>newproject</code> (git clone + sed)</p>
+<p><strong>Este documento descreve o sistema legado</strong> para contexto histórico e compreensão de decisões arquiteturais.</p>
+<p>Para documentação do sistema atual:</p>
+<ul>
+<li><strong>README.md</strong> — Seção "Como Usar Este Template"</li>
+<li><strong>docs/guides/TOML_FUSION.md</strong> — Sistema de merge inteligente</li>
+<li><strong>docs/guides/KNOWLEDGE_NODE.md</strong> — Sincronização de conhecimento</li>
+</ul>
+<hr />
+<h2 id="visao-geral-sistema-legado">📋 Visão Geral (Sistema Legado)</h2>
 <p>Este projeto implementa um <strong>sistema de scaffolding automatizado</strong> para criação de novos projetos Python profissionais. A arquitetura é baseada no padrão <strong>"Molde + Fábrica"</strong>, que separa a <strong>definição do template</strong> (molde) da <strong>lógica de instanciação</strong> (fábrica).</p>
 <h3 id="metafora-arquitetural">Metáfora Arquitetural</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    ECOSSISTEMA DE SCAFFOLDING               │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├─────────────────────────────────────────────────────────────┤
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                                                             │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  📐 MOLDE (Template Repository)                            │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  ├─ GitHub: Ismael-1712/python-template-profissional       │
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  ├─ Marcado como &quot;Template Repository&quot;                     │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  └─ Branches especializadas (main, api, cli)              │
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│                                                             │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│                        ⬇️  clone                            │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                                                             │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│  🏭 FÁBRICA (Função Bash)                                  │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│  ├─ Comando: newproject                                    │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  ├─ Localização: ~/.bashrc                                 │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  └─ Workflow: clone → personalize → commit                │
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│                                                             │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                        ⬇️  instantiate                      │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                                                             │
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  📦 INSTÂNCIA (Novo Projeto)                               │
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│  ├─ Diretório: ~/projects/&lt;nome&gt;                          │
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│  ├─ Personalizado com dados do desenvolvedor              │
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│  └─ Pronto para desenvolvimento (venv + deps)             │
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│                                                             │
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>└─────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│                    ECOSSISTEMA DE SCAFFOLDING               │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├─────────────────────────────────────────────────────────────┤
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│                                                             │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  📐 MOLDE (Template Repository)                            │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  ├─ GitHub: Ismael-1712/python-template-profissional       │
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  ├─ Marcado como &quot;Template Repository&quot;                     │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│  └─ Branches especializadas (main, api, cli)              │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│                                                             │
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│                        ⬇️  clone                            │
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│                                                             │
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  🏭 FÁBRICA (Função Bash)                                  │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│  ├─ Comando: newproject                                    │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  ├─ Localização: ~/.bashrc                                 │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  └─ Workflow: clone → personalize → commit                │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│                                                             │
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│                        ⬇️  instantiate                      │
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                                                             │
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│  📦 INSTÂNCIA (Novo Projeto)                               │
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│  ├─ Diretório: ~/projects/&lt;nome&gt;                          │
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│  ├─ Personalizado com dados do desenvolvedor              │
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│  └─ Pronto para desenvolvimento (venv + deps)             │
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│                                                             │
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>└─────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <hr />
 <h2 id="componente-1-o-molde-template-repository">🏗️ Componente 1: O Molde (Template Repository)</h2>
@@ -1102,9 +1128,9 @@
 </tbody>
 </table>
 <h3 id="estrutura-de-branches">Estrutura de Branches</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>main          → Projeto genérico (CLI/Script)
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── api       → Variante FastAPI (REST API)
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── cli       → Variante Typer (CLI Application)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>main          → Projeto genérico (CLI/Script)
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── api       → Variante FastAPI (REST API)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>└── cli       → Variante Typer (CLI Application)
 </code></pre></div>
 <h4 id="diferencas-entre-branches">Diferenças entre Branches</h4>
 <table>
@@ -1148,80 +1174,80 @@
 <h3 id="responsabilidades_1">Responsabilidades</h3>
 <p>A <strong>fábrica</strong> é uma função Bash que <strong>instancia</strong> o molde e <strong>personaliza</strong> os arquivos para o desenvolvedor.</p>
 <h3 id="localizacao">Localização</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>~/.bashrc<span class="w">  </span><span class="c1"># ou ~/.zshrc para usuários do Zsh</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>~/.bashrc<span class="w">  </span><span class="c1"># ou ~/.zshrc para usuários do Zsh</span>
 </code></pre></div>
 <h3 id="assinatura-do-comando">Assinatura do Comando</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>newproject<span class="w"> </span>&lt;nome&gt;<span class="w"> </span><span class="o">[</span>--tipo<span class="w"> </span>&lt;cli<span class="p">|</span>api<span class="p">|</span>lib&gt;<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>newproject<span class="w"> </span>&lt;nome&gt;<span class="w"> </span><span class="o">[</span>--tipo<span class="w"> </span>&lt;cli<span class="p">|</span>api<span class="p">|</span>lib&gt;<span class="o">]</span>
 </code></pre></div>
 <p><strong>Exemplos de Uso:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Projeto genérico (branch main)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>newproject<span class="w"> </span>meu-app-legal
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Projeto API REST (branch api)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>newproject<span class="w"> </span>servico-usuarios<span class="w"> </span>--tipo<span class="o">=</span>api
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Projeto CLI (branch cli)</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>newproject<span class="w"> </span>ferramenta-backup<span class="w"> </span>--tipo<span class="o">=</span>cli
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Projeto genérico (branch main)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>newproject<span class="w"> </span>meu-app-legal
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Projeto API REST (branch api)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>newproject<span class="w"> </span>servico-usuarios<span class="w"> </span>--tipo<span class="o">=</span>api
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Projeto CLI (branch cli)</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>newproject<span class="w"> </span>ferramenta-backup<span class="w"> </span>--tipo<span class="o">=</span>cli
 </code></pre></div>
 <h3 id="workflow-interno">Workflow Interno</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>graph TD
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    A[Usuário executa: newproject meu-app] --&gt; B{Diretório existe?}
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    B --&gt;|Sim| C[Abre diretório existente]
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    B --&gt;|Não| D[git clone --branch TIPO TEMPLATE_REPO]
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    D --&gt; E[cd PROJECT_DIR]
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    E --&gt; F[rm -rf .git]
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    F --&gt; G[git init -b main]
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    G --&gt; H[Personalização via sed]
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    H --&gt; I[make setup ou python3 -m venv .venv]
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    I --&gt; J[git add . &amp;&amp; git commit]
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    J --&gt; K[Abre projeto no editor: go PROJECT_NAME]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>graph TD
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    A[Usuário executa: newproject meu-app] --&gt; B{Diretório existe?}
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    B --&gt;|Sim| C[Abre diretório existente]
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    B --&gt;|Não| D[git clone --branch TIPO TEMPLATE_REPO]
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    D --&gt; E[cd PROJECT_DIR]
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    E --&gt; F[rm -rf .git]
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    F --&gt; G[git init -b main]
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    G --&gt; H[Personalização via sed]
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    H --&gt; I[make setup ou python3 -m venv .venv]
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    I --&gt; J[git add . &amp;&amp; git commit]
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    J --&gt; K[Abre projeto no editor: go PROJECT_NAME]
 </code></pre></div>
 <h3 id="etapas-detalhadas">Etapas Detalhadas</h3>
 <h4 id="1-validacao-e-parsing">1. <strong>Validação e Parsing</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Valida argumentos</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Erro: Forneça um nome para o novo projeto.&quot;</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="k">fi</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Verifica se diretório já existe</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  O diretório já existe. Abrindo...&quot;</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="k">fi</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Valida argumentos</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Erro: Forneça um nome para o novo projeto.&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">fi</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Verifica se diretório já existe</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  O diretório já existe. Abrindo...&quot;</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="k">fi</span>
 </code></pre></div>
 <h4 id="2-clonagem-do-molde">2. <strong>Clonagem do Molde</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Clona o template (branch específica se --tipo fornecido)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BRANCH_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TEMPLATE_REPO</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Clona o template (branch específica se --tipo fornecido)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BRANCH_NAME</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TEMPLATE_REPO</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_DIR</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p><strong>Nota:</strong> <code>$BRANCH_NAME</code> é <code>main</code> por padrão, mas muda para <code>api</code>, <code>cli</code>, etc. se <code>--tipo</code> for fornecido.</p>
 <h4 id="3-reset-de-historico-git">3. <strong>Reset de Histórico Git</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Remove vínculo com o template</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.git
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># Cria novo repositório limpo</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>git<span class="w"> </span>init<span class="w"> </span>-b<span class="w"> </span>main
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Remove vínculo com o template</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.git
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Cria novo repositório limpo</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>git<span class="w"> </span>init<span class="w"> </span>-b<span class="w"> </span>main
 </code></pre></div>
 <p><strong>Razão:</strong> Novos projetos não devem herdar o histórico do template.</p>
 <h4 id="4-personalizacao-automatica-sed">4. <strong>Personalização Automática (sed)</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Obtém dados do desenvolvedor</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">AUTHOR_NAME</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="k">)</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">AUTHOR_EMAIL</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="k">)</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nv">CURRENT_YEAR</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+<span class="s2">&quot;%Y&quot;</span><span class="k">)</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># Substitui placeholders</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">/</span><span class="nv">$PROJECT_NAME</span><span class="s2">/g&quot;</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">/</span><span class="nv">$AUTHOR_NAME</span><span class="s2">/g&quot;</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">/</span><span class="nv">$AUTHOR_EMAIL</span><span class="s2">/g&quot;</span>
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;\[ano\]&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/\[ano\]/</span><span class="nv">$CURRENT_YEAR</span><span class="s2">/g&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Obtém dados do desenvolvedor</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">AUTHOR_NAME</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="k">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nv">AUTHOR_EMAIL</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="k">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nv">CURRENT_YEAR</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+<span class="s2">&quot;%Y&quot;</span><span class="k">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># Substitui placeholders</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_NAME</span><span class="s2">/</span><span class="nv">$PROJECT_NAME</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_AUTHOR</span><span class="s2">/</span><span class="nv">$AUTHOR_NAME</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/</span><span class="nv">$PLACEHOLDER_EMAIL</span><span class="s2">/</span><span class="nv">$AUTHOR_EMAIL</span><span class="s2">/g&quot;</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>grep<span class="w"> </span>-rl<span class="w"> </span><span class="s2">&quot;\[ano\]&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">={</span>.git,.venv<span class="o">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span>xargs<span class="w"> </span>-r<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/\[ano\]/</span><span class="nv">$CURRENT_YEAR</span><span class="s2">/g&quot;</span>
 </code></pre></div>
 <p><strong>Arquivos Afetados:</strong></p>
 <ul>
@@ -1232,15 +1258,15 @@
 <li><code>docker-compose.yml</code> → Nome do serviço</li>
 </ul>
 <h4 id="5-instalacao-de-dependencias">5. <strong>Instalação de Dependências</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Prefere Makefile se disponível</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;Makefile&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span>make<span class="w"> </span>setup
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">else</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="c1"># Fallback manual</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="k">fi</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Prefere Makefile se disponível</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;Makefile&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span>make<span class="w"> </span>setup
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">else</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="c1"># Fallback manual</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>dev<span class="o">]</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="k">fi</span>
 </code></pre></div>
 <p><strong>Nota:</strong> <code>make setup</code> é o padrão do molde e executa:</p>
 <ul>
@@ -1249,12 +1275,12 @@
 <li>Instalação de pre-commit hooks</li>
 </ul>
 <h4 id="6-commit-inicial">6. <strong>Commit Inicial</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>git<span class="w"> </span>add<span class="w"> </span>.
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: initial project setup from template (</span><span class="nv">$BRANCH_NAME</span><span class="s2">)&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>git<span class="w"> </span>add<span class="w"> </span>.
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: initial project setup from template (</span><span class="nv">$BRANCH_NAME</span><span class="s2">)&quot;</span>
 </code></pre></div>
 <p><strong>Razão:</strong> Garante que o projeto nasce com um histórico limpo e rastreável.</p>
 <h4 id="7-abertura-automatica">7. <strong>Abertura Automática</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>go<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_NAME</span><span class="s2">&quot;</span>
 </code></pre></div>
 <p><strong>Nota:</strong> <code>go</code> é um alias/função auxiliar que navega para <code>~/projects/$PROJECT_NAME</code> e abre o VS Code.</p>
 <hr />
@@ -1324,75 +1350,75 @@
 <hr />
 <h2 id="casos-de-uso">🔄 Casos de Uso</h2>
 <h3 id="caso-1-desenvolvedor-iniciando-novo-microservico">Caso 1: Desenvolvedor Iniciando Novo Microserviço</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 1. Criar projeto API</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>newproject<span class="w"> </span>servico-autenticacao<span class="w"> </span>--tipo<span class="o">=</span>api
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># 2. Sistema executa:</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1">#    - Clone do branch &#39;api&#39;</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="c1">#    - Personalização (nome, email)</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1">#    - Setup (venv, deps)</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1">#    - Commit inicial</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1">#    - Abre no VS Code</span>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># 3. Desenvolvedor já tem:</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="c1">#    - FastAPI configurado</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="c1">#    - Docker pronto</span>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1">#    - Pre-commit ativo</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="c1">#    - Estrutura src/api/</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 1. Criar projeto API</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>newproject<span class="w"> </span>servico-autenticacao<span class="w"> </span>--tipo<span class="o">=</span>api
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># 2. Sistema executa:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">#    - Clone do branch &#39;api&#39;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1">#    - Personalização (nome, email)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1">#    - Setup (venv, deps)</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="c1">#    - Commit inicial</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1">#    - Abre no VS Code</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="c1"># 3. Desenvolvedor já tem:</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1">#    - FastAPI configurado</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="c1">#    - Docker pronto</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="c1">#    - Pre-commit ativo</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="c1">#    - Estrutura src/api/</span>
 </code></pre></div>
 <h3 id="caso-2-desenvolvedor-criando-cli-tool">Caso 2: Desenvolvedor Criando CLI Tool</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>newproject<span class="w"> </span>backup-manager<span class="w"> </span>--tipo<span class="o">=</span>cli
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Sistema cria projeto com:</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># - Typer framework</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># - Comandos de exemplo</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># - Estrutura src/cli/</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># - Testes pré-configurados</span>
-</code></pre></div>
-<h3 id="caso-3-projeto-generico-data-science-etl">Caso 3: Projeto Genérico (Data Science, ETL)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>newproject<span class="w"> </span>analise-vendas
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>newproject<span class="w"> </span>backup-manager<span class="w"> </span>--tipo<span class="o">=</span>cli
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Sistema cria projeto com:</span>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># - Estrutura básica src/</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># - Jupyter notebooks suportados</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># - pytest configurado</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># - Docker genérico</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># - Typer framework</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># - Comandos de exemplo</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># - Estrutura src/cli/</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># - Testes pré-configurados</span>
+</code></pre></div>
+<h3 id="caso-3-projeto-generico-data-science-etl">Caso 3: Projeto Genérico (Data Science, ETL)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>newproject<span class="w"> </span>analise-vendas
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Sistema cria projeto com:</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># - Estrutura básica src/</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="c1"># - Jupyter notebooks suportados</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># - pytest configurado</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># - Docker genérico</span>
 </code></pre></div>
 <hr />
 <h2 id="validacao-e-testes">🧪 Validação e Testes</h2>
 <h3 id="teste-manual-da-fabrica">Teste Manual da Fábrica</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># 1. Criar projeto de teste</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>newproject<span class="w"> </span>_test_scaffold_
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># 2. Validações</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nb">cd</span><span class="w"> </span>~/projects/_test_scaffold_
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Verificar personalização</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>grep<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>README.md<span class="w">  </span><span class="c1"># Não deve retornar nada</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>grep<span class="w"> </span><span class="s2">&quot;_test_scaffold_&quot;</span><span class="w"> </span>README.md<span class="w">          </span><span class="c1"># Deve encontrar</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="c1"># Verificar histórico Git</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">  </span><span class="c1"># Deve ter apenas 1 commit inicial</span>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="c1"># Verificar ambiente</span>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>which<span class="w"> </span>python<span class="w">       </span><span class="c1"># Deve apontar para .venv</span>
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1"># 3. Limpeza</span>
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>~/projects/_test_scaffold_
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 1. Criar projeto de teste</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>newproject<span class="w"> </span>_test_scaffold_
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># 2. Validações</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nb">cd</span><span class="w"> </span>~/projects/_test_scaffold_
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># Verificar personalização</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>grep<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>README.md<span class="w">  </span><span class="c1"># Não deve retornar nada</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>grep<span class="w"> </span><span class="s2">&quot;_test_scaffold_&quot;</span><span class="w"> </span>README.md<span class="w">          </span><span class="c1"># Deve encontrar</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="c1"># Verificar histórico Git</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w">  </span><span class="c1"># Deve ter apenas 1 commit inicial</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="c1"># Verificar ambiente</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>which<span class="w"> </span>python<span class="w">       </span><span class="c1"># Deve apontar para .venv</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="c1"># 3. Limpeza</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="nb">cd</span><span class="w"> </span>~<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>~/projects/_test_scaffold_
 </code></pre></div>
 <h3 id="validacao-de-integridade-do-molde">Validação de Integridade do Molde</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># No repositório do template</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="nb">cd</span><span class="w"> </span>/home/ismae/projects/python-template-profissional
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Validar estrutura</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>tree<span class="w"> </span>-a<span class="w"> </span>-L<span class="w"> </span><span class="m">2</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># Validar placeholders</span>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">=</span>.git
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="c1"># Validar branches</span>
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>git<span class="w"> </span>branch<span class="w"> </span>-a<span class="w">  </span><span class="c1"># Deve listar: main, api, cli</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># No repositório do template</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">cd</span><span class="w"> </span>/home/ismae/projects/python-template-profissional
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Validar estrutura</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>tree<span class="w"> </span>-a<span class="w"> </span>-L<span class="w"> </span><span class="m">2</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># Validar placeholders</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;meu_projeto_placeholder&quot;</span><span class="w"> </span>.<span class="w"> </span>--exclude-dir<span class="o">=</span>.git
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="c1"># Validar branches</span>
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>git<span class="w"> </span>branch<span class="w"> </span>-a<span class="w">  </span><span class="c1"># Deve listar: main, api, cli</span>
 </code></pre></div>
 <hr />
 <h2 id="evolucao-futura">🚀 Evolução Futura</h2>
@@ -1442,16 +1468,16 @@
 <li>Integração com sistema de plugins</li>
 </ul>
 <p><strong>Exemplo:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>create<span class="w"> </span>meu-app<span class="w"> </span>--type<span class="o">=</span>api
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>create<span class="w"> </span>meu-app<span class="w"> </span>--type<span class="o">=</span>api
 </code></pre></div>
 <h4 id="2-sistema-de-plugins">2. <strong>Sistema de Plugins</strong></h4>
 <p>Permitir que desenvolvedores adicionem "recheios" customizados:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>newproject<span class="w"> </span>ecommerce<span class="w"> </span>--tipo<span class="o">=</span>api<span class="w"> </span>--plugins<span class="o">=</span>auth,payments,stripe
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>newproject<span class="w"> </span>ecommerce<span class="w"> </span>--tipo<span class="o">=</span>api<span class="w"> </span>--plugins<span class="o">=</span>auth,payments,stripe
 </code></pre></div>
 <h4 id="3-sincronizacao-bidirecional">3. <strong>Sincronização Bidirecional</strong></h4>
 <p>Permitir que projetos existentes "puxem" atualizações do molde:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--preview<span class="w">  </span><span class="c1"># Mostra diff</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--apply<span class="w">    </span><span class="c1"># Aplica patches</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--preview<span class="w">  </span><span class="c1"># Mostra diff</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>cortex<span class="w"> </span>scaffold<span class="w"> </span>sync<span class="w"> </span>--apply<span class="w">    </span><span class="c1"># Aplica patches</span>
 </code></pre></div>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
