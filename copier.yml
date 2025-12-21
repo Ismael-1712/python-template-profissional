@@ -1,0 +1,288 @@
+# ======================================================================
+# COPIER TEMPLATE CONFIGURATION
+# ======================================================================
+# Professional Python Template with Smart Update Support
+# Preserves user customizations during template updates via toml-fusion
+#
+# Documentation: https://copier.readthedocs.io/
+# ======================================================================
+
+# Minimum Copier version required
+_min_copier_version: "9.0.0"
+
+# Template metadata
+_templates_suffix: .jinja
+
+# ======================================================================
+# SEÇÃO 1: METADADOS DO PROJETO
+# ======================================================================
+project_name:
+  type: str
+  help: "Nome legível do projeto (ex: 'Meu Projeto Incrível')"
+  default: "My Awesome Project"
+
+project_slug:
+  type: str
+  help: "Slug do projeto para pacote Python (snake_case)"
+  default: "{{ project_name | lower | replace(' ', '_') | replace('-', '_') }}"
+  validator: "^[a-z][a-z0-9_]*$"
+
+project_description:
+  type: str
+  help: "Breve descrição do projeto (máx 200 caracteres)"
+  default: "A professional Python project built with CORTEX architecture"
+  validator: "^.{10,200}$"
+
+# ======================================================================
+# SEÇÃO 2: AUTORIA E REPOSITÓRIO
+# ======================================================================
+author_name:
+  type: str
+  help: "Nome completo do autor ou organização"
+  default: "Your Name"
+
+author_email:
+  type: str
+  help: "Email de contato do autor"
+  default: "your-email@example.com"
+  validator: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+
+github_username:
+  type: str
+  help: "Seu username do GitHub (para construir repository_url)"
+  default: "yourusername"
+  validator: "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,37}[a-zA-Z0-9])?$"
+
+repository_url:
+  type: str
+  help: "URL completa do repositório GitHub"
+  default: "https://github.com/{{ github_username }}/{{ project_slug | replace('_', '-') }}"
+  validator: "^https://github\\.com/.+/.+$"
+
+# ======================================================================
+# SEÇÃO 3: CONFIGURAÇÃO TÉCNICA
+# ======================================================================
+python_version:
+  type: str
+  help: "Versão mínima do Python (formato: '3.10', '3.11', etc.)"
+  default: "3.10"
+  choices:
+    - "3.10"
+    - "3.11"
+    - "3.12"
+    - "3.13"
+
+initial_version:
+  type: str
+  help: "Versão inicial do projeto (SemVer: X.Y.Z)"
+  default: "0.1.0"
+  validator: "^\\d+\\.\\d+\\.\\d+$"
+
+# ======================================================================
+# SEÇÃO 4: FEATURES OPCIONAIS
+# ======================================================================
+enable_docker:
+  type: bool
+  help: "Incluir Dockerfile e docker-compose.yml?"
+  default: true
+
+enable_mkdocs:
+  type: bool
+  help: "Incluir documentação MkDocs Material?"
+  default: true
+
+enable_cortex_neural:
+  type: bool
+  help: "Incluir CORTEX Neural (Vector Search com ChromaDB)?"
+  default: false
+
+default_reviewers:
+  type: str
+  help: "GitHub handles para CODEOWNERS (separados por vírgula, ex: '@team1,@user2') - deixe vazio para não configurar"
+  default: ""
+
+# ======================================================================
+# SEÇÃO 5: VARIÁVEIS AUTOMÁTICAS (OCULTAS)
+# ======================================================================
+copyright_year:
+  type: str
+  help: "Ano do copyright (calculado automaticamente)"
+  default: "{% now 'utc', '%Y' %}"
+  when: false  # Ocultar da UI
+
+copyright_holder:
+  type: str
+  help: "Titular do copyright (default: author_name)"
+  default: "{{ author_name }}"
+  when: false
+
+project_cli_name:
+  type: str
+  help: "Nome do comando CLI (kebab-case)"
+  default: "{{ project_slug | replace('_', '-') }}"
+  when: false
+
+python_target_version:
+  type: str
+  help: "Python version para Ruff e Mypy (formato: py310)"
+  default: "py{{ python_version | replace('.', '') }}"
+  when: false
+
+# ======================================================================
+# ARQUIVOS E PASTAS A EXCLUIR
+# ======================================================================
+_exclude:
+  # Configurações do usuário (nunca sobrescrever)
+  - .env
+  - .env.*
+  - "!.env.example"
+
+  # Contexto dinâmico gerado (runtime)
+  - .cortex/
+  - audit_report_*.json
+  - sync_report_*.json
+  - audit_dashboard.html
+  - audit_metrics.json
+
+  # Build artifacts e cache
+  - .venv/
+  - __pycache__/
+  - "*.egg-info/"
+  - build/
+  - dist/
+  - "*.pyc"
+
+  # Configurações do Copier (gerenciadas automaticamente)
+  - .copier-answers.yml
+
+  # Git (óbvio, mas por segurança)
+  - .git/
+
+  # Logs e cache de ferramentas
+  - "*.log"
+  - .ruff_cache/
+  - .mypy_cache/
+  - .pytest_cache/
+  - .tox/
+
+  # Arquivos temporários e backups
+  - "*.bak"
+  - "*.bak.*"
+  - "*.backup"
+  - README.md.backup
+  - project_structure.txt
+
+  # Relatórios históricos (não devem ser sobrescritos)
+  - docs/reports/**
+  - SPRINT4_MYPY_SUMARIO.txt
+
+# ======================================================================
+# ARQUIVOS QUE NÃO DEVEM SER SOBRESCRITOS SE JÁ EXISTIREM
+# ======================================================================
+_skip_if_exists:
+  # Documentação customizada pelo usuário
+  - docs/guides/**
+  - docs/knowledge/**
+
+  # Scripts customizados
+  - scripts/cli/custom_*.py
+
+  # Testes customizados
+  - tests/custom_*.py
+
+  # GitHub workflows customizados
+  - .github/workflows/custom_*.yml
+
+# ======================================================================
+# TAREFAS PÓS-GERAÇÃO/ATUALIZAÇÃO
+# ======================================================================
+_tasks:
+  # Task 1: Executar toml-fusion em updates para preservar customizações
+  - task: |
+      {% if _copier_conf.is_update %}
+      echo "🔄 Executando Smart Update via toml-fusion..."
+      if command -v toml-fusion &> /dev/null; then
+        toml-fusion {{ _copier_conf.src_path }}/pyproject.toml.jinja pyproject.toml --strategy=smart || echo "⚠️  Aviso: toml-fusion falhou. Revise manualmente."
+      else
+        echo "⚠️  toml-fusion não encontrado. Instale dependências: pip install -e ."
+      fi
+      {% else %}
+      echo "✅ Primeira geração - toml-fusion não necessário"
+      {% endif %}
+    when: "{{ _copier_conf.is_update or false }}"
+
+  # Task 2: Instalar dependências de desenvolvimento (opcional)
+  - task: |
+      {% if not _copier_conf.is_update %}
+      echo ""
+      echo "📦 Próximos passos:"
+      echo "  1. cd {{ _copier_conf.dst_path | basename }}"
+      echo "  2. make setup          # Criar venv e instalar deps"
+      echo "  3. make doctor         # Validar ambiente"
+      echo "  4. git init && git add . && git commit -m 'Initial commit from CORTEX template'"
+      echo ""
+      {% endif %}
+    when: "{{ not _copier_conf.is_update }}"
+
+# ======================================================================
+# MENSAGENS DE AJUDA
+# ======================================================================
+_message_before_copy: |
+  🧠 CORTEX — Professional Python Template
+  ========================================
+
+  Você está prestes a criar um projeto Python com:
+  - ✅ Type Safety (mypy strict)
+  - ✅ Code Quality (ruff, pytest)
+  - ✅ Documentation as Code (CORTEX)
+  - ✅ SRE Automation (dev-doctor, git-sync)
+  - ✅ Smart Update (preserva suas customizações)
+
+  Responda as perguntas abaixo:
+
+_message_after_copy: |
+  🎉 Projeto criado com sucesso!
+
+  📁 Estrutura gerada em: {{ _copier_conf.dst_path }}
+
+  🚀 Próximos comandos:
+    cd {{ _copier_conf.dst_path | basename }}
+    make setup      # Configura ambiente virtual
+    make doctor     # Valida instalação
+    make test       # Executa testes
+
+  📚 Documentação completa:
+    make help       # Lista todos os comandos
+    cat README.md   # Leia a arquitetura CORTEX
+
+  🔄 Para atualizar o template no futuro:
+    copier update
+
+  Bom trabalho! 🧠
+
+_message_before_update: |
+  🔄 Atualizando template CORTEX...
+
+  ⚠️  IMPORTANTE:
+  - Suas configurações em pyproject.toml serão preservadas via toml-fusion
+  - Arquivos em .env, .cortex/, docs/knowledge/ NÃO serão sobrescritos
+  - Um backup será criado antes de qualquer mudança
+
+  Pronto para continuar?
+
+_message_after_update: |
+  ✅ Template atualizado com sucesso!
+
+  🔍 Revise as mudanças:
+    git diff pyproject.toml  # Verificar merge do TOML
+    git status               # Ver todos os arquivos modificados
+
+  🧪 Valide a atualização:
+    make validate            # Lint + Type Check + Tests
+    make doctor              # Diagnóstico completo
+
+  📝 Se algo deu errado:
+    git checkout pyproject.toml.bak.*  # Restaurar backup
+    git reset --hard HEAD              # Reverter tudo
+
+  Smart Update concluído! 🚀

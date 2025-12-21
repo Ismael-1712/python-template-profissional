@@ -5,6 +5,10 @@
 # Ignora arquivos que não devem ir para o controle de versão.
 # Baseado nos padrões da comunidade Python e GitHub.
 
+### Copier Template (pyproject.toml é gerado do .jinja) ###
+# O arquivo real é pyproject.toml.jinja - pyproject.toml é gerado localmente
+pyproject.toml
+
 ### Ambientes Virtuais ###
 # Ignora o ambiente virtual padrão
 .venv/
