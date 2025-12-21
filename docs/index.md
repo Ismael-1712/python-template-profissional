@@ -68,12 +68,16 @@ make docs-build    # Gerar site estático
 
 ## 📖 Navegação da Documentação
 
+### 📚 Guias e Tutoriais
+
+- **[Guia de Gerenciamento de Dependências](guides/DEPENDENCY_MANAGEMENT.md)** - Como adicionar e manter dependências
+- **[Guia Smart Git Sync](SMART_GIT_SYNC_GUIDE.md)** - Sincronização inteligente de branches
+- **[Contributing Guide](../CONTRIBUTING.md)** - Como contribuir para o projeto
+
 ### Documentação Técnica
 
 - **[Referência da API](reference/git_sync.md)** - Documentação automática do código
-- **[Guias e Tutoriais](SMART_GIT_SYNC_GUIDE.md)** - Documentação técnica detalhada
 - **[Code Audit](CODE_AUDIT.md)** - Sistema de auditoria de código
-- **[Contributing](../CONTRIBUTING.md)** - Como contribuir para o projeto
 
 ### 📊 Sprint 1 - Refatoração de Logging e Ambiente
 
