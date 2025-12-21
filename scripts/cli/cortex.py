@@ -16,7 +16,6 @@ License: MIT
 from __future__ import annotations
 
 import sys
-from datetime import date
 from pathlib import Path
 from typing import Annotated, Any
 
@@ -45,6 +44,9 @@ from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa
 from scripts.core.guardian.matcher import DocumentationMatcher  # noqa: E402
 from scripts.core.guardian.models import ScanResult  # noqa: E402
 from scripts.core.guardian.scanner import ConfigScanner  # noqa: E402
+from scripts.cortex.core.frontmatter_helpers import (  # noqa: E402
+    generate_default_frontmatter,
+)
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
@@ -58,88 +60,6 @@ app = typer.Typer(
     help="CORTEX - Documentation as Code Manager",
     add_completion=False,
 )
-
-
-def _infer_doc_type(file_path: Path) -> str:
-    """Infer document type from file path.
-
-    Args:
-        file_path: Path to the markdown file
-
-    Returns:
-        Inferred document type (guide, arch, reference, or history)
-    """
-    path_str = str(file_path).lower()
-
-    if "architecture" in path_str or "arch" in path_str:
-        return "arch"
-    if "guide" in path_str or "tutorial" in path_str:
-        return "guide"
-    if "reference" in path_str or "api" in path_str or "ref" in path_str:
-        return "reference"
-    if "history" in path_str or "changelog" in path_str:
-        return "history"
-    # Default to guide for general documentation
-    return "guide"
-
-
-def _generate_id_from_filename(file_path: Path) -> str:
-    """Generate a kebab-case ID from filename.
-
-    Args:
-        file_path: Path to the markdown file
-
-    Returns:
-        Kebab-case ID string
-    """
-    # Get filename without extension
-    name = file_path.stem
-
-    # Convert to lowercase
-    name = name.lower()
-
-    # Replace underscores and spaces with hyphens
-    name = name.replace("_", "-").replace(" ", "-")
-
-    # Remove any characters that aren't alphanumeric or hyphens
-    name = "".join(c for c in name if c.isalnum() or c == "-")
-
-    # Remove consecutive hyphens
-    while "--" in name:
-        name = name.replace("--", "-")
-
-    # Remove leading/trailing hyphens
-    name = name.strip("-")
-
-    return name
-
-
-def _generate_default_frontmatter(file_path: Path) -> str:
-    """Generate default YAML frontmatter for a file.
-
-    Args:
-        file_path: Path to the markdown file
-
-    Returns:
-        YAML frontmatter string (including --- delimiters)
-    """
-    doc_id = _generate_id_from_filename(file_path)
-    doc_type = _infer_doc_type(file_path)
-    today = date.today().strftime("%Y-%m-%d")
-
-    frontmatter = f"""---
-id: {doc_id}
-type: {doc_type}
-status: draft
-version: 1.0.0
-author: Engineering Team
-date: {today}
-context_tags: []
-linked_code: []
----
-
-"""
-    return frontmatter
 
 
 @app.command()
@@ -233,7 +153,7 @@ def init(
             logger.info("User confirmed overwrite")
 
         # Generate frontmatter
-        frontmatter = _generate_default_frontmatter(path)
+        frontmatter = generate_default_frontmatter(path)
 
         # Remove existing frontmatter if present
         new_content = content
