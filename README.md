@@ -50,9 +50,59 @@ O sistema é construído sobre quatro pilares fundamentais:
 
 ---
 
+## 🚀 Como Usar Este Template
+
+Este projeto é um **template Copier** que permite criar novos projetos Python profissionais com toda a infraestrutura já configurada.
+
+### 📦 Instalação do Copier
+
+```bash
+# Instalar Copier (recomendado via pipx para isolamento)
+pipx install copier
+
+# Ou via pip
+pip install copier
+```
+
+### 🆕 Criar Novo Projeto
+
+```bash
+# Criar novo projeto a partir deste template
+copier copy gh:Ismael-1712/python-template-profissional meu-novo-projeto
+
+# Responder às perguntas interativas:
+# - Nome do projeto
+# - Autor
+# - Versão do Python
+# - Habilitar Docker/MkDocs, etc.
+
+cd meu-novo-projeto
+make install-dev                    # Configurar ambiente
+```
+
+### 🔄 Atualizar Projeto Existente
+
+```bash
+# Atualizar projeto criado a partir deste template
+cd meu-projeto
+copier update
+
+# O sistema de toml-fusion preservará suas customizações
+# enquanto aplica as melhorias do template
+```
+
+**Benefícios:**
+
+- ✅ Setup completo em < 2 minutos
+- ✅ Todas as ferramentas pré-configuradas (Ruff, Mypy, pre-commit)
+- ✅ Infraestrutura SRE pronta para produção
+- ✅ Updates inteligentes que preservam suas modificações
+
+---
+
 ## ⚡ Comandos Rápidos (Quick Reference)
 
-### 🎬 Setup Inicial
+### 🎬 Setup Inicial (Desenvolvimento do Template)
 
 ```bash
 # Clonar e configurar ambiente completo (< 2 minutos)
