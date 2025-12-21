@@ -20,3 +20,6 @@ types-requests
 # Internationalization (i18n)
 Babel==2.17.0
 tox
+
+# Frontmatter parsing
+python-frontmatter
