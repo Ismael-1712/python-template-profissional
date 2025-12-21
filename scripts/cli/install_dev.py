@@ -205,79 +205,86 @@ def install_dev_environment(workspace_root: Path) -> int:
             logger.warning("pip install warnings:\n%s", result1.stderr.strip())
 
         # ========== STEP 2: Compile dependencies (ATOMIC) ==========
-        logger.info("Step 2/3: Compiling dependencies with pip-compile...")
-
-        # Create backup before compilation
-        backup_file = _create_backup(requirements_file)
-
-        # Try to find pip-compile in PATH
-        pip_compile_path = shutil.which("pip-compile")
-
-        if not pip_compile_path:
-            # Fallback: execute pip-compile via Python module with validation
-            logger.warning(
-                "pip-compile not found in PATH. Using module fallback.",
+        # Skip compilation in CI mode - use pre-compiled dev.txt
+        if os.environ.get("CI"):
+            logger.info(
+                "⏭️  Running in CI mode: Skipping dependency compilation. "
+                "Using pre-compiled requirements/dev.txt",
             )
-            pip_compile_cmd = [
-                sys.executable,
-                "-m",
-                "piptools",
-                "compile",
-            ]
-
-            # Use AtomicFileWriter for consistent validation
-            tmp_output = requirements_file.with_suffix(f".tmp.{os.getpid()}.txt")
-            try:
-                result2 = subprocess.run(  # nosec # noqa: subprocess
-                    pip_compile_cmd
-                    + [
-                        "--output-file",
-                        str(tmp_output),
-                        str(workspace_root / "requirements" / "dev.in"),
-                    ],
-                    cwd=workspace_root,
-                    shell=False,  # Security: prevent shell injection
-                    capture_output=True,
-                    text=True,
-                    check=True,
-                )
-
-                # Validate output (consistent with safe_pip_compile)
-                if not tmp_output.exists():
-                    msg = f"pip-compile did not create output: {tmp_output}"
-                    raise RuntimeError(msg)
-
-                if tmp_output.stat().st_size == 0:
-                    msg = f"pip-compile produced empty output: {tmp_output}"
-                    raise RuntimeError(msg)
-
-                # Validate header
-                first_line = tmp_output.read_text(encoding="utf-8").split("\n")[0]
-                if not first_line.startswith("#"):
-                    msg = f"Unexpected format (expected comment): {first_line[:50]}"
-                    raise RuntimeError(msg)
-
-                # Atomic replace
-                tmp_output.replace(requirements_file)
-                logger.debug("Fallback compilation successful")
-
-            except Exception as e:
-                logger.error("pip-compile fallback failed: %s", e)
-                # Cleanup temp file
-                if tmp_output.exists():
-                    with contextlib.suppress(OSError):
-                        tmp_output.unlink()
-                raise
         else:
-            # Use pip-compile from PATH with atomic writes
-            logger.debug("Using pip-compile: %s", pip_compile_path)
-            result2 = safe_pip_compile(
-                input_file=workspace_root / "requirements" / "dev.in",
-                output_file=workspace_root / "requirements" / "dev.txt",
-                pip_compile_path=pip_compile_path,
-                workspace_root=workspace_root,
-            )
-        logger.debug("Output pip-compile: %s", result2.stdout.strip())
+            logger.info("Step 2/3: Compiling dependencies with pip-compile...")
+
+            # Create backup before compilation
+            backup_file = _create_backup(requirements_file)
+
+            # Try to find pip-compile in PATH
+            pip_compile_path = shutil.which("pip-compile")
+
+            if not pip_compile_path:
+                # Fallback: execute pip-compile via Python module with validation
+                logger.warning(
+                    "pip-compile not found in PATH. Using module fallback.",
+                )
+                pip_compile_cmd = [
+                    sys.executable,
+                    "-m",
+                    "piptools",
+                    "compile",
+                ]
+
+                # Use AtomicFileWriter for consistent validation
+                tmp_output = requirements_file.with_suffix(f".tmp.{os.getpid()}.txt")
+                try:
+                    result2 = subprocess.run(  # nosec # noqa: subprocess
+                        pip_compile_cmd
+                        + [
+                            "--output-file",
+                            str(tmp_output),
+                            str(workspace_root / "requirements" / "dev.in"),
+                        ],
+                        cwd=workspace_root,
+                        shell=False,  # Security: prevent shell injection
+                        capture_output=True,
+                        text=True,
+                        check=True,
+                    )
+
+                    # Validate output (consistent with safe_pip_compile)
+                    if not tmp_output.exists():
+                        msg = f"pip-compile did not create output: {tmp_output}"
+                        raise RuntimeError(msg)
+
+                    if tmp_output.stat().st_size == 0:
+                        msg = f"pip-compile produced empty output: {tmp_output}"
+                        raise RuntimeError(msg)
+
+                    # Validate header
+                    first_line = tmp_output.read_text(encoding="utf-8").split("\n")[0]
+                    if not first_line.startswith("#"):
+                        msg = f"Unexpected format (expected comment): {first_line[:50]}"
+                        raise RuntimeError(msg)
+
+                    # Atomic replace
+                    tmp_output.replace(requirements_file)
+                    logger.debug("Fallback compilation successful")
+
+                except Exception as e:
+                    logger.error("pip-compile fallback failed: %s", e)
+                    # Cleanup temp file
+                    if tmp_output.exists():
+                        with contextlib.suppress(OSError):
+                            tmp_output.unlink()
+                    raise
+            else:
+                # Use pip-compile from PATH with atomic writes
+                logger.debug("Using pip-compile: %s", pip_compile_path)
+                result2 = safe_pip_compile(
+                    input_file=workspace_root / "requirements" / "dev.in",
+                    output_file=workspace_root / "requirements" / "dev.txt",
+                    pip_compile_path=pip_compile_path,
+                    workspace_root=workspace_root,
+                )
+            logger.debug("Output pip-compile: %s", result2.stdout.strip())
 
         # ========== STEP 3: Install pinned dependencies (WITH ROLLBACK) ==========
         logger.info("Step 3/3: Installing pinned dependencies...")
