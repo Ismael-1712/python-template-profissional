@@ -29,7 +29,6 @@ if str(_project_root) not in sys.path:
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
 from scripts.core.cortex.knowledge_sync import KnowledgeSyncer  # noqa: E402
-from scripts.core.cortex.mapper import generate_context_map  # noqa: E402
 from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
@@ -380,20 +379,21 @@ def audit(
         # KNOWLEDGE GRAPH VALIDATION (--links flag)
         # ============================================================
         if links:
-            from scripts.cortex.core.knowledge_auditor import KnowledgeAuditor
+            from scripts.cortex.adapters.ui import UIPresenter
+            from scripts.cortex.core.knowledge_auditor import (
+                KnowledgeAuditor,
+                ValidationReport,
+            )
 
-            typer.echo("\n" + "=" * 70)
-            typer.echo("  🧠 CORTEX Knowledge Graph Validator")
-            typer.echo("=" * 70 + "\n")
+            ui = UIPresenter()
+            ui.display_knowledge_graph_header()
 
             workspace_root = Path.cwd()
 
             # ============================================================
             # RUN AUDITOR (Business Logic Extracted to Core)
             # ============================================================
-            from scripts.cortex.core.knowledge_auditor import ValidationReport
-
-            typer.echo("📚 Scanning Knowledge Nodes...")
+            ui.show_info("📚 Scanning Knowledge Nodes...")
             auditor = KnowledgeAuditor(
                 workspace_root=workspace_root,
                 knowledge_dir=workspace_root / "docs/knowledge",
@@ -401,7 +401,7 @@ def audit(
             validation_report: ValidationReport
             validation_report, resolved_entries = auditor.validate()
 
-            # Count nodes and links
+            # Count and display progress
             num_entries = len(resolved_entries)
             total_links = sum(len(e.links) for e in resolved_entries)
             valid_links = sum(
@@ -413,65 +413,11 @@ def audit(
                 for e in resolved_entries
             )
 
-            typer.secho(
-                f"  ✅ Found {num_entries} Knowledge Entries",
-                fg=typer.colors.GREEN,
-            )
+            ui.display_knowledge_scan_progress(num_entries, total_links)
+            ui.display_link_resolution(valid_links, broken_links_count)
 
-            typer.echo(f"\n🔍 Extracted {total_links} semantic links...")
-
-            color = (
-                typer.colors.GREEN if broken_links_count == 0 else typer.colors.YELLOW
-            )
-            typer.secho(
-                f"  ✅ Resolved: {valid_links} valid, {broken_links_count} broken",
-                fg=color,
-            )
-
-            # ============================================================
-            # DISPLAY RESULTS (Interface Layer)
-            # ============================================================
             # Display metrics
-            typer.echo("\n" + "=" * 70)
-            typer.echo("  📈 Health Metrics")
-            typer.echo("=" * 70 + "\n")
-
-            m = validation_report.metrics
-            typer.echo(f"Total Nodes:          {m.total_nodes}")
-            typer.echo(f"Total Links:          {m.total_links}")
-            typer.echo(f"Valid Links:          {m.valid_links}")
-            typer.echo(f"Broken Links:         {m.broken_links}")
-            typer.echo(f"Connectivity Score:   {m.connectivity_score:.1f}%")
-            typer.echo(f"Link Health Score:    {m.link_health_score:.1f}%")
-
-            # Color-coded health score
-            health_color = (
-                typer.colors.GREEN
-                if m.health_score >= 80
-                else typer.colors.YELLOW
-                if m.health_score >= 70
-                else typer.colors.RED
-            )
-            typer.secho(
-                f"\n🎯 Overall Health Score: {m.health_score:.1f}/100",
-                fg=health_color,
-                bold=True,
-            )
-
-            # Display anomalies
-            if validation_report.critical_errors:
-                typer.echo("\n" + "=" * 70)
-                typer.echo("  🔴 Critical Issues")
-                typer.echo("=" * 70 + "\n")
-                for error in validation_report.critical_errors:
-                    typer.secho(f"  {error}", fg=typer.colors.RED)
-
-            if validation_report.warnings:
-                typer.echo("\n" + "=" * 70)
-                typer.echo("  ⚠️  Warnings")
-                typer.echo("=" * 70 + "\n")
-                for warning in validation_report.warnings:
-                    typer.secho(f"  {warning}", fg=typer.colors.YELLOW)
+            ui.display_knowledge_metrics(validation_report)
 
             # Save report
             output_path = output or (
@@ -485,26 +431,18 @@ def audit(
 
             # Determine exit code
             if strict and len(validation_report.anomalies.broken_links) > 0:
-                typer.secho(
-                    "\n❌ Validation FAILED: Broken links detected (--strict mode)",
-                    fg=typer.colors.RED,
+                ui.show_error(
+                    "Validation FAILED: Broken links detected (--strict mode)",
                     bold=True,
                 )
                 raise typer.Exit(code=1)
 
             if not validation_report.is_healthy:
-                typer.secho(
-                    "\n⚠️  Validation completed with warnings",
-                    fg=typer.colors.YELLOW,
-                )
+                ui.show_warning("Validation completed with warnings")
                 if fail_on_error:
                     raise typer.Exit(code=1)
             else:
-                typer.secho(
-                    "\n✅ Validation PASSED",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
+                ui.show_success("Validation PASSED", bold=True)
 
             return  # Exit after link validation
 
@@ -564,79 +502,17 @@ def audit(
         # ============================================================
         # RUN AUDITOR (Business Logic Extracted to Core)
         # ============================================================
+        from scripts.cortex.adapters.ui import UIPresenter
         from scripts.cortex.core.metadata_auditor import AuditReport
 
+        ui = UIPresenter()
         metadata_auditor = MetadataAuditor(workspace_root=workspace_root)
         report: AuditReport = metadata_auditor.audit(md_files)
 
         # ============================================================
         # DISPLAY RESULTS (Interface Layer)
         # ============================================================
-        # Root Lockdown results
-        typer.echo("🔒 Checking Root Lockdown policy...")
-        if report.root_violations:
-            typer.secho(
-                f"  ❌ {len(report.root_violations)} violation(s):",
-                fg=typer.colors.RED,
-            )
-            for violation in report.root_violations:
-                typer.secho(f"     • {violation}", fg=typer.colors.RED)
-            typer.echo()
-        else:
-            typer.secho("  ✅ Root Lockdown: OK", fg=typer.colors.GREEN)
-            typer.echo()
-
-        # Individual file results
-        for result in report.file_results:
-            typer.echo(f"🔍 Auditing {result.file_path}...")
-
-            if result.errors:
-                typer.secho(f"  ❌ {len(result.errors)} error(s):", fg=typer.colors.RED)
-                for error in result.errors:
-                    typer.secho(f"     • {error}", fg=typer.colors.RED)
-
-            if result.warnings:
-                typer.secho(
-                    f"  ⚠️  {len(result.warnings)} warning(s):",
-                    fg=typer.colors.YELLOW,
-                )
-                for warning in result.warnings:
-                    typer.secho(f"     • {warning}", fg=typer.colors.YELLOW)
-
-            if result.is_clean:
-                typer.secho("  ✅ No issues found", fg=typer.colors.GREEN)
-
-            typer.echo()  # Blank line between files
-
-        # Print summary
-        typer.echo("=" * 70)
-        typer.echo("\n📊 Audit Summary\n")
-        typer.echo(f"Files scanned: {report.files_scanned}")
-
-        if report.total_errors > 0:
-            error_msg = (
-                f"Total errors: {report.total_errors} "
-                f"(in {len(report.files_with_errors)} file(s))"
-            )
-            typer.secho(error_msg, fg=typer.colors.RED)
-
-        if report.total_warnings > 0:
-            warning_msg = f"Total warnings: {report.total_warnings}"
-            typer.secho(warning_msg, fg=typer.colors.YELLOW)
-
-        if report.total_errors == 0 and report.total_warnings == 0:
-            typer.secho("\n✅ All checks passed!", fg=typer.colors.GREEN, bold=True)
-        elif report.total_errors == 0:
-            typer.secho(
-                "\n✅ No errors found (only warnings)",
-                fg=typer.colors.GREEN,
-            )
-        else:
-            msg = (
-                f"\n❌ Found {report.total_errors} error(s) in "
-                f"{len(report.files_with_errors)} file(s)"
-            )
-            typer.secho(msg, fg=typer.colors.RED, bold=True)
+        ui.display_audit_results(report)
 
         logger.info(
             f"Audit complete: {report.total_errors} errors, "
@@ -1378,134 +1254,72 @@ def project_map(
         cortex map --update-config --template=custom.toml  # Custom template
     """
     try:
+        from scripts.cortex.adapters.ui import UIPresenter
+        from scripts.cortex.core.context_mapper import ContextMapper
+
         logger.info("Generating project context map...")
+        ui = UIPresenter()
 
         if verbose:
-            typer.echo("🔍 Scanning project structure...")
+            ui.show_info("🔍 Scanning project structure...")
             if include_knowledge:
-                typer.echo("🧠 Including Knowledge Node rules...")
+                ui.show_info("🧠 Including Knowledge Node rules...")
 
-        # Generate context map with optional knowledge inclusion
-        project_root = _project_root
-        context = generate_context_map(
-            project_root,
-            output,
-            include_knowledge=include_knowledge,
-        )
+        # Generate context map
+        mapper = ContextMapper(project_root=_project_root)
 
-        # Display summary
-        typer.secho("✓ Context map generated successfully!", fg=typer.colors.GREEN)
-        typer.echo(f"📍 Output: {output}")
-        typer.echo()
-        typer.echo(f"📦 Project: {context.project_name} v{context.version}")
-        typer.echo(f"🐍 Python: {context.python_version}")
-        typer.echo(f"🔧 CLI Commands: {len(context.cli_commands)}")
-        typer.echo(f"📄 Documents: {len(context.documents)}")
-        typer.echo(f"🏗️  Architecture Docs: {len(context.architecture_docs)}")
-        typer.echo(f"📦 Dependencies: {len(context.dependencies)}")
-        typer.echo(f"🛠️  Dev Dependencies: {len(context.dev_dependencies)}")
-
-        # Display knowledge stats if included
-        if include_knowledge and context.golden_paths:
-            typer.echo(f"✨ Golden Paths: {len(context.golden_paths)}")
-            typer.echo("📚 Knowledge Rules: Included")
-
-        if verbose:
-            typer.echo()
-            typer.echo("Available CLI Commands:")
-            for cmd in context.cli_commands:
-                desc = f" - {cmd.description}" if cmd.description else ""
-                typer.echo(f"  • {cmd.name}{desc}")
-
-            if context.architecture_docs:
-                typer.echo()
-                typer.echo("Architecture Documents:")
-                for doc in context.architecture_docs:
-                    typer.echo(f"  • {doc.title} ({doc.path})")
-
-            if include_knowledge and context.golden_paths:
-                typer.echo()
-                typer.echo("Golden Paths:")
-                for path in context.golden_paths[:5]:  # Show first 5
-                    typer.echo(f"  • {path}")
-                if len(context.golden_paths) > 5:
-                    typer.echo(f"  ... and {len(context.golden_paths) - 5} more")
-
-        logger.info(f"Context map saved to {output}")
-
-        # ============================================================
-        # TOML CONFIG SYNC (NEW FEATURE)
-        # ============================================================
         if update_config:
-            from scripts.utils.toml_merger import MergeStrategy, merge_toml
-
-            typer.echo()
-            typer.echo("=" * 70)
-            typer.secho(
-                "🔧 Synchronizing configuration from template...",
-                fg=typer.colors.CYAN,
-                bold=True,
+            # Map + Config Sync
+            result = mapper.map_and_sync_config(
+                output=output,
+                include_knowledge=include_knowledge,
+                template_path=template_path,
             )
-            typer.echo()
 
-            # Determine template path
-            template = template_path or (project_root / "templates/pyproject.toml")
-            target = project_root / "pyproject.toml"
+            # Display context summary
+            ui.display_context_summary(result.context, output, include_knowledge)
 
-            if not template.exists():
-                typer.secho(
-                    f"⚠️  Template not found: {template.relative_to(project_root)}",
-                    fg=typer.colors.YELLOW,
+            if verbose:
+                ui.display_context_verbose(result.context, include_knowledge)
+
+            logger.info(f"Context map saved to {output}")
+
+            # Display config sync results
+            if result.config_sync_result is None:
+                # Template not found
+                ui.display_config_sync_header()
+                template = mapper.get_template_path(template_path)
+                ui.show_warning(
+                    f"Template not found: {template.relative_to(_project_root)}",
                 )
-                typer.secho(
-                    "   Skipping configuration sync.",
-                    fg=typer.colors.YELLOW,
-                )
+                ui.show_info("   Skipping configuration sync.")
                 return
 
-            typer.echo(f"📄 Template: {template.relative_to(project_root)}")
-            typer.echo(f"📄 Target:   {target.relative_to(project_root)}")
-            typer.echo("🎯 Strategy: smart (union + recursive merge)")
-            typer.echo()
+            ui.display_config_sync_header()
+            template = mapper.get_template_path(template_path)
+            target = _project_root / "pyproject.toml"
+            ui.display_config_sync_template_info(template, target, _project_root)
 
-            # Perform merge
-            result = merge_toml(
-                source_path=template,
-                target_path=target,
-                strategy=MergeStrategy.SMART,
-                dry_run=False,
-                backup=True,
-            )
+            ui.display_config_sync_result(result.config_sync_result, _project_root)
 
-            if result.success:
-                typer.secho(
-                    "✅ Configuration updated successfully!",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
-                if result.backup_path:
-                    backup_rel = result.backup_path.relative_to(project_root)
-                    typer.echo(f"   Backup: {backup_rel}")
-
-                typer.echo()
-                typer.secho(
-                    "💡 Tip: Review changes with 'git diff pyproject.toml'",
-                    fg=typer.colors.CYAN,
-                )
-            else:
-                typer.secho(
-                    "❌ Configuration sync failed!",
-                    fg=typer.colors.RED,
-                    bold=True,
-                    err=True,
-                )
-                for conflict in result.conflicts:
-                    typer.secho(f"   • {conflict}", fg=typer.colors.YELLOW, err=True)
-
+            if not result.config_sync_result.success:
                 logger.error(
                     "Config sync failed",
-                    extra={"conflicts": result.conflicts},
+                    extra={"conflicts": result.config_sync_result.conflicts},
                 )
+        else:
+            # Map only
+            result = mapper.map_project(
+                output=output,
+                include_knowledge=include_knowledge,
+            )
+
+            ui.display_context_summary(result.context, output, include_knowledge)
+
+            if verbose:
+                ui.display_context_verbose(result.context, include_knowledge)
+
+            logger.info(f"Context map saved to {output}")
 
     except Exception as e:
         logger.error(f"Error generating context map: {e}", exc_info=True)
