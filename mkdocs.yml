@@ -1,4 +1,4 @@
-site_name: "Python Template Profissional"
+site_name: "{{ project_name }}"
 
 theme:
   name: material
