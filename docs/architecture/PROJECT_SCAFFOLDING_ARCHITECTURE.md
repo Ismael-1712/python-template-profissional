@@ -1,24 +1,47 @@
 ---
 id: project-scaffolding-architecture
 type: arch
-status: active
+status: archived
 version: 1.0.0
 author: Engineering Team
 date: '2025-12-16'
-context_tags: [scaffolding, template, automation, bash, git]
+context_tags: [scaffolding, template, automation, bash, git, legacy]
 linked_code: []
-title: 🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)
+title: 🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica) - LEGADO
+superseded_by: README.md (Seção Copier)
 ---
 
 # 🏗️ Arquitetura de Scaffolding de Projetos (Molde + Fábrica)
 
 **Data:** 16 de Dezembro de 2025
-**Status:** 🟢 Ativo e em Produção
+**Status:** 🔴 DOCUMENTO HISTÓRICO (Sistema Legado v1.x)
 **Versão:** 1.0.0
 
 ---
 
-## 📋 Visão Geral
+## ⚠️ AVISO: Evolução Arquitetural
+
+**Sistema Atual (v2.0 — Dezembro 2025):** Este projeto agora usa **Copier** para scaffolding.
+
+```bash
+# ✅ Método Atual (Recomendado)
+copier copy gh:Ismael-1712/python-template-profissional meu-projeto
+copier update  # Para atualizar projetos existentes
+```
+
+**Sistema Legado (v1.0-1.5):** Função Bash `newproject` (git clone + sed)
+
+**Este documento descreve o sistema legado** para contexto histórico e compreensão de decisões arquiteturais.
+
+Para documentação do sistema atual:
+
+- **README.md** — Seção "Como Usar Este Template"
+- **docs/guides/TOML_FUSION.md** — Sistema de merge inteligente
+- **docs/guides/KNOWLEDGE_NODE.md** — Sincronização de conhecimento
+
+---
+
+## 📋 Visão Geral (Sistema Legado)
 
 Este projeto implementa um **sistema de scaffolding automatizado** para criação de novos projetos Python profissionais. A arquitetura é baseada no padrão **"Molde + Fábrica"**, que separa a **definição do template** (molde) da **lógica de instanciação** (fábrica).
 
