@@ -131,6 +131,23 @@ make save m="feat: add new feature"
 make commit-amend
 ```
 
+### 📦 Gerenciamento de Dependências
+
+```bash
+# Adicionar dependência de desenvolvimento
+echo "black==24.1.0" >> requirements/dev.in
+pip-compile --output-file requirements/dev.txt requirements/dev.in
+make install-dev
+
+# Atualizar todas as dependências
+pip-compile --upgrade --output-file requirements/dev.txt requirements/dev.in
+
+# ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
+git add requirements/dev.in requirements/dev.txt
+
+# 📖 Guia completo: docs/guides/DEPENDENCY_MANAGEMENT.md
+```
+
 ### 🧠 CORTEX — Comandos Essenciais
 
 ```bash
