@@ -13,12 +13,19 @@
 # ----------------------------------------------------------------------
 # Estes módulos são a base de toda a infraestrutura do projeto.
 # Mudanças aqui impactam múltiplos sistemas e requerem revisão rigorosa.
-
+{% if default_reviewers %}
 # Logger: Sistema de logging centralizado com proteção de secrets
-scripts/utils/logger.py      @sre-team
+scripts/utils/logger.py      {{ default_reviewers }}
 
 # Filesystem: Operações atômicas de arquivo e integridade de dados
-scripts/utils/filesystem.py  @sre-team
+scripts/utils/filesystem.py  {{ default_reviewers }}
+{% else %}
+# Logger: Sistema de logging centralizado com proteção de secrets
+# scripts/utils/logger.py      @your-team  # Configure seu time aqui
+
+# Filesystem: Operações atômicas de arquivo e integridade de dados
+# scripts/utils/filesystem.py  @your-team  # Configure seu time aqui
+{% endif %}
 
 # ----------------------------------------------------------------------
 # CONFIGURAÇÃO FUTURA

@@ -5,28 +5,34 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 # Metadados do Projeto (PEP 621)
-# ESTE ARQUIVO É GERADO PELO TEMPLATE COPIER
-# Para modificar: edite pyproject.toml.jinja
+# Valores gerados pelo template Copier - personalize conforme necessário
 [project]
-name = "python_template_profissional"
-version = "0.1.0"
-description = "Professional Python Template with CORTEX architecture"
+name = "{{ project_slug }}"
+version = "{{ initial_version }}"
+description = "{{ project_description }}"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">={{ python_version }}"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Template Development Team", email = "dev@example.com" }
+    { name = "{{ author_name }}", email = "{{ author_email }}" }
 ]
 
 # Dependências do projeto (API + CLI)
 dependencies = [
+    # O framework web moderno e rápido
     "fastapi",
+    # O servidor ASGI (necessário para rodar o FastAPI)
     "uvicorn[standard]",
+    # CLI framework para scripts de desenvolvimento
     "typer[all]",
+    # Validação de dados robusta e type-safe
     "pydantic>=2.0",
     "pydantic-settings>=2.0",
+    # Vector Store para RAG local
     "chromadb>=0.4.0",
+    # Embeddings para busca semântica
     "sentence-transformers>=2.2.0",
+    # TOML parser para Python 3.10 (fallback de tomllib que existe apenas em 3.11+)
     "tomli>=2.0.1",
 ]
 
@@ -36,6 +42,8 @@ dev = [
     "pip-tools~=7.4",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.25",
+
+    # CORTEX - Documentation as Code
     "python-frontmatter>=1.0.0",
     "pyyaml>=6.0",
     "jinja2>=3.0",
@@ -43,7 +51,7 @@ dev = [
 
 # Console scripts - comandos globais do sistema
 [project.scripts]
-python-template = "src.app.main:app"
+{{ project_cli_name }} = "src.app.main:app"
 dev-doctor = "scripts.cli.doctor:main"
 dev-audit = "scripts.cli.audit:main"
 git-sync = "scripts.cli.git_sync:main"
@@ -63,52 +71,90 @@ include = ["scripts*"]
 
 # Configuração do Ruff (Linter e Formatador)
 [tool.ruff]
+# Define o comprimento máximo da linha (padrão 'black')
 line-length = 88
-target-version = "py310"
+
+# Define o versão mínima do Python para compatibilidade de regras
+target-version = "{{ python_target_version }}"
 
 # Configuração do Linter do Ruff
 [tool.ruff.lint]
+# Seleciona um conjunto robusto de regras para fiscalizar
+# E = Pycodestyle Erros
+# F = Pyflakes (erros de lógica)
+# W = Pycodestyle Warnings
+# I = isort (ordenação de imports)
+# N = Pep8-naming (nomes de variáveis/funções)
+# UP = pyupgrade (sugestões de modernização)
+# B = flake8-bugbear (possíveis bugs)
+# D = pydocstyle (validação de docstrings)
 select = ["E", "F", "W", "I", "N", "UP", "B", "D"]
+
+# Ignora regras específicas para evitar conflitos
+# D203: one-blank-line-before-class (conflita com D211)
+# D213: multi-line-summary-second-line (conflita com D212, preferimos estilo Google)
 ignore = ["D203", "D213"]
 
 # Configuração do pydocstyle (D-Rules)
 [tool.ruff.lint.pydocstyle]
+# Usa a convenção Google para docstrings
 convention = "google"
 
-# Configuração do Formatador do Ruff
+# Configuração do Formatador do Ruff (substituto do 'black')
 [tool.ruff.format]
+# Usa aspas duplas " " em vez de simples ' '
 quote-style = "double"
+# Não adiciona vírgula no final (skip-magic-trailing-comma controla isso)
 skip-magic-trailing-comma = false
 
 # Configuração do Semantic Release
 [tool.semantic_release]
+# Define onde a variável de versão está
 version_variable = "pyproject.toml:project.version"
+
+# Não faça o upload para o PyPI automaticamente.
+# O pipeline de CD (Prioridade 3) fará isso.
 upload_to_pypi = false
+
+# O arquivo de "RELEASES" que você pediu
 changelog_file = "CHANGELOG.md"
+
+# Quais tipos de commit causam um 'bump' de versão
 build_command = "python3 -m build"
 minor_on_default_scope = true
 major_on_breaking_change = true
 
 [tool.semantic_release.changelog]
+# Seções do changelog
 categories = ["feat", "fix", "docs", "refactor", "perf"]
 
-# Configuração do Mypy (Type Checking)
+# Configuração do Mypy (Type Checking) - Nível 1: State of the Art
 [tool.mypy]
-python_version = "3.10"
+python_version = "{{ python_version }}"
+
+# === RIGOR DE TIPAGEM ===
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_any_generics = true
 disallow_subclassing_any = true
+
+# === WARNINGS ===
 warn_return_any = true
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
+
+# === CONTROLE DE NONE ===
 no_implicit_optional = true
 strict_optional = true
-ignore_missing_imports = true
+
+# === IMPORTS ===
+ignore_missing_imports = true  # Temporário até instalarmos todos os stubs
 follow_imports = "normal"
+
+# === MISC ===
 strict_equality = true
 
 exclude = [
@@ -116,9 +162,10 @@ exclude = [
     ".venv/",
     "build/",
     "dist/",
-    "scripts/audit_dashboard.py"
+    "scripts/audit_dashboard.py"  # Wrapper deprecado - conflita com package
 ]
 
+# Override para bibliotecas sem stubs de tipagem
 [[tool.mypy.overrides]]
 module = "frontmatter"
 ignore_missing_imports = true
@@ -134,7 +181,7 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--showlocals",
-    "-n", "auto",
+    "-n", "auto",  # Pytest-xdist: usa todos os núcleos disponíveis
 ]
 markers = [
     "unit: mark a test as a unit test.",

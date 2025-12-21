@@ -5,7 +5,7 @@ services:
     # Constrói a imagem usando o Dockerfile neste diretório
     build: .
     # Nome do contêiner para facilitar a identificação
-    container_name: meu_projeto_placeholder
+    container_name: {{ project_slug }}
     # Monta o diretório atual (local) dentro do contêiner
     # Mudanças no seu código local refletirão *ao vivo* no contêiner
     volumes:

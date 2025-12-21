@@ -14,8 +14,8 @@ Bem-vindo ao time de engenharia! Este projeto utiliza ferramentas de automação
 
 ```bash
 # Clone o repositório
-git clone https://github.com/Ismael-1712/python-template-profissional.git
-cd python-template-profissional
+git clone {{ repository_url }}.git
+cd {{ project_slug | replace('_', '-') }}
 
 # Configure o ambiente (Python 3.10+)
 make setup
@@ -302,14 +302,14 @@ Este projeto usa **Auto-Propagação**:
 git checkout -b feat/minha-feature
 ```
 
-2. **Desenvolver e testar localmente**
+1. **Desenvolver e testar localmente**
 
 ```bash
 make format    # Formatar código
 make validate  # Lint + Testes
 ```
 
-3. **Commit com mensagem semântica**
+1. **Commit com mensagem semântica**
 
 ```bash
 make save m="feat(escopo): descrição clara"
@@ -325,7 +325,7 @@ make save m="feat(escopo): descrição clara"
 - `test`: Adiciona/corrige testes
 - `chore`: Tarefas de manutenção
 
-4. **Push e Pull Request**
+1. **Push e Pull Request**
 
 ```bash
 git push origin feat/minha-feature
