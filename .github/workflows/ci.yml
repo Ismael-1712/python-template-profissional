@@ -82,14 +82,14 @@ jobs:
       - name: "Check Lockfile Consistency"
         run: |
           python -m pip install pip-tools
-          pip-compile --output-file=requirements/dev.tmp requirements/dev.in
-          if ! diff -q requirements/dev.txt requirements/dev.tmp > /dev/null 2>&1; then
+          # Gera o arquivo exatamente como seria gerado localmente
+          pip-compile requirements/dev.in
+          # Verifica se houve mudança no arquivo git-tracked (ignora metadados)
+          if ! git diff --exit-code requirements/dev.txt; then
             echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
             echo "Run 'make install-dev' locally and commit the updated dev.txt"
-            diff requirements/dev.txt requirements/dev.tmp || true
             exit 1
           fi
-          rm requirements/dev.tmp
           echo "✅ Lockfile is consistent"
 
       # Só instala se o cache falhou (primeiro run ou mudança em requirements)
