@@ -90,6 +90,22 @@
 
 ### Changed
 
+- **CI/CD: Dependency Lock Enforcement for Deterministic Builds**: Implemented hardening to prevent non-deterministic dependency compilation in CI
+  - Modified `scripts/cli/install_dev.py` to skip `pip-compile` when `CI` environment variable is set
+  - Added explicit logging: "Running in CI mode: Skipping dependency compilation. Using pre-compiled requirements/dev.txt"
+  - CI now uses the pre-compiled `requirements/dev.txt` lockfile exclusively, ensuring reproducibility
+  - Updated `.github/workflows/ci.yml` to validate lockfile consistency before installation:
+    - Changed all cache keys from `hashFiles('requirements/dev.in')` to `hashFiles('requirements/dev.txt')` (setup, quality, tests jobs)
+    - Added new step "Check Lockfile Consistency" in setup job that runs `pip-compile --output-file=requirements/dev.tmp` and diffs against committed `dev.txt`
+    - CI fails early if lockfile is out of sync with dev.in (before installing dependencies)
+  - Added `CI: true` environment variable to all workflow jobs (setup, quality, tests)
+  - Comprehensive test suite in `tests/test_install_dev_ci.py`:
+    - Test A: Verifies pip-compile runs in normal mode (no CI env)
+    - Test B: Verifies pip-compile is skipped in CI mode (CI=true)
+    - Test C: Validates CI mode works with various truthy values (CI=1, CI=true)
+  - Impact: Eliminates non-deterministic builds caused by dependency recompilation during CI runs
+  - Aligns with pip-tools best practices: lockfile is source of truth in CI, compilation happens only in dev
+
 - **CORTEX Knowledge Sync: Robustness Against Network Failures (P31.3)**: Implemented forget-proof error handling
   - Enhanced `KnowledgeSyncer._fetch_source()` with comprehensive exception handling:
     - Catches `requests.exceptions.Timeout` (network timeout beyond 10s limit)
