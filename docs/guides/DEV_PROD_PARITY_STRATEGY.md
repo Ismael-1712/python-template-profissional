@@ -219,8 +219,11 @@ A matriz `["3.10", "3.11", "3.12"]` **DEVE** corresponder às versões major.min
 
 ### Cenário 1: Novo Desenvolvedor (Setup Inicial)
 
+> **Nota:** Este exemplo mostra o setup para **desenvolver o próprio template**.
+> Para criar um novo projeto a partir do template, use `copier copy` (veja [README.md](../../README.md)).
+
 ```bash
-# 1. Clonar o repositório
+# 1. Clonar o template para desenvolvimento
 git clone https://github.com/Ismael-1712/python-template-profissional.git
 cd python-template-profissional
 

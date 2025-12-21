@@ -29,6 +29,11 @@ Este projeto inclui **dois scripts de automação** que implementam os protocolo
 
 ## 🔧 Instalação e Configuração
 
+> **Nota de Contexto:**
+>
+> - **Para projetos criados com Copier:** Os scripts já estão inclusos. Basta executá-los (`./scripts/*.sh`).
+> - **Para desenvolver o template:** Clone o repositório diretamente (`git clone ...`).
+
 ### Verificar Permissões
 
 Os scripts já vêm com permissões de execução configuradas:
@@ -38,6 +43,7 @@ ls -lh scripts/*.sh
 ```
 
 **Resultado esperado:**
+
 ```
 -rwxr-xr-x 1 user user 3.5K Dec 15 20:15 scripts/post-pr-cleanup.sh
 -rwxr-xr-x 1 user user 3.3K Dec 15 20:16 scripts/direct-push-main.sh
@@ -61,6 +67,7 @@ Automatiza a limpeza do repositório após um Pull Request ser aprovado e mergea
 ### Quando Usar
 
 ✅ **Use quando:**
+
 - PR foi aprovado e mergeado no GitHub
 - Branch de feature não é mais necessária
 - Precisa sincronizar branches de desenvolvimento
@@ -169,6 +176,7 @@ Automatiza o workflow completo de push direto na branch main, incluindo validaç
 ### Quando Usar
 
 ✅ **Use quando:**
+
 - Fez commits diretos na main (sem PR)
 - Precisa validar antes de push
 - Quer garantir sincronização pós-push
@@ -323,11 +331,13 @@ git commit -m "docs: corrige typo no guia"
 ### Problema: Script não executa
 
 **Sintomas:**
+
 ```bash
 bash: ./scripts/direct-push-main.sh: Permission denied
 ```
 
 **Solução:**
+
 ```bash
 chmod +x scripts/direct-push-main.sh
 chmod +x scripts/post-pr-cleanup.sh
@@ -338,11 +348,13 @@ chmod +x scripts/post-pr-cleanup.sh
 ### Problema: Validação falha no direct-push-main.sh
 
 **Sintomas:**
+
 ```
 ❌ ERROR: Validation failed. Fix errors and try again.
 ```
 
 **Solução:**
+
 ```bash
 # Ver detalhes dos erros
 make validate
@@ -361,6 +373,7 @@ git commit --amend  # ou novo commit
 ### Problema: Branch não deleta no post-pr-cleanup.sh
 
 **Sintomas:**
+
 ```
 ⚠️  WARNING: Could not delete local branch
 ```
@@ -368,11 +381,13 @@ git commit --amend  # ou novo commit
 **Soluções:**
 
 **Opção 1: Forçar deleção**
+
 ```bash
 git branch -D feat/branch-name
 ```
 
 **Opção 2: Verificar se branch está mergeada**
+
 ```bash
 git branch --merged main
 ```
@@ -382,11 +397,13 @@ git branch --merged main
 ### Problema: Conflitos após pull
 
 **Sintomas:**
+
 ```
 ❌ ERROR: Pull failed. There might be conflicts.
 ```
 
 **Solução:**
+
 ```bash
 # Verificar conflitos
 git status
@@ -426,14 +443,14 @@ git pull origin main
 
 ## ✅ Boas Práticas
 
-### ✓ Faça:
+### ✓ Faça
 
 - Execute os scripts do diretório raiz do projeto
 - Revise a saída do script para detectar warnings
 - Use `post-pr-cleanup.sh` imediatamente após merge
 - Confie na validação automática do `direct-push-main.sh`
 
-### ✗ Evite:
+### ✗ Evite
 
 - Modificar os scripts sem testar
 - Ignorar warnings do script
@@ -461,6 +478,7 @@ git push origin feat/search-optimization
 ```
 
 **Resultado:**
+
 ```
 ✅ Main atualizada com feature
 ✅ Branch local deletada
@@ -483,6 +501,7 @@ git commit -m "fix: corrige vazamento de memória crítico"
 ```
 
 **Resultado:**
+
 ```
 ✅ Código validado (ruff, mypy, pytest)
 ✅ Push para main realizado
@@ -521,6 +540,7 @@ alias push-main='./scripts/direct-push-main.sh'
 ```
 
 **Uso:**
+
 ```bash
 pr-cleanup feat/my-branch
 push-main

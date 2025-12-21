@@ -19,22 +19,35 @@ title: meu_projeto_placeholder
 
 ## ⚡ Quick Start
 
+### 🆕 Criar Novo Projeto (A Partir Deste Template)
+
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/usuario/meu_projeto_placeholder.git
-cd meu_projeto_placeholder
+# 1. Instalar Copier
+pipx install copier
 
-# 2. Configure o ambiente (cria venv + instala dependências)
-make setup
+# 2. Criar projeto a partir do template
+copier copy gh:Ismael-1712/python-template-profissional meu-projeto
+cd meu-projeto
 
-# 3. Ative o ambiente virtual
-source .venv/bin/activate
+# 3. Configure o ambiente (cria venv + instala dependências)
+make install-dev
 
 # 4. Valide a instalação
+make doctor
 make test
 ```
 
-**Pronto!** Você está preparado para desenvolver. 🎉
+**Pronto!** Você tem um projeto profissional completo. 🎉
+
+### 🔧 Desenvolver o Template (Contribuidores)
+
+```bash
+# Clone o template para desenvolvimento direto
+git clone https://github.com/Ismael-1712/python-template-profissional.git
+cd python-template-profissional
+make install-dev
+make doctor
+```
 
 ## 🎯 Comandos Mais Usados
 
