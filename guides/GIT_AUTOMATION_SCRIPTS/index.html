@@ -1163,15 +1163,15 @@
 </blockquote>
 <h3 id="verificar-permissoes">Verificar Permissões</h3>
 <p>Os scripts já vêm com permissões de execução configuradas:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ls<span class="w"> </span>-lh<span class="w"> </span>scripts/*.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ls<span class="w"> </span>-lh<span class="w"> </span>scripts/git/*.sh
 </code></pre></div>
 <p><strong>Resultado esperado:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>-rwxr-xr-x 1 user user 3.5K Dec 15 20:15 scripts/post-pr-cleanup.sh
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>-rwxr-xr-x 1 user user 3.3K Dec 15 20:16 scripts/direct-push-main.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>-rwxr-xr-x 1 user user 3.5K Dec 15 20:15 scripts/git/post-pr-cleanup.sh
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>-rwxr-xr-x 1 user user 3.3K Dec 15 20:16 scripts/git/direct-push-main.sh
 </code></pre></div>
 <h3 id="se-necessario-configure-permissoes">Se Necessário, Configure Permissões</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/post-pr-cleanup.sh
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/direct-push-main.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/git/post-pr-cleanup.sh
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/git/direct-push-main.sh
 </code></pre></div>
 <hr />
 <h2 id="script-1-post-pr-cleanupsh">📘 Script 1: post-pr-cleanup.sh</h2>
@@ -1185,7 +1185,7 @@
 <li>Precisa sincronizar branches de desenvolvimento</li>
 </ul>
 <h3 id="sintaxe">Sintaxe</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/post-pr-cleanup.sh<span class="w"> </span>&lt;branch-name&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/git/post-pr-cleanup.sh<span class="w"> </span>&lt;branch-name&gt;
 </code></pre></div>
 <h3 id="parametros">Parâmetros</h3>
 <table>
@@ -1208,7 +1208,7 @@
 </table>
 <h3 id="exemplo-de-uso">Exemplo de Uso</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Após PR #169 ser mergeado</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/post-pr-cleanup.sh<span class="w"> </span>feat/P010-vector-bridge
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>./scripts/git/post-pr-cleanup.sh<span class="w"> </span>feat/P010-vector-bridge
 </code></pre></div>
 <h3 id="o-que-o-script-faz">O Que o Script Faz</h3>
 <ol>
@@ -1286,7 +1286,7 @@
 <tr>
 <td><code>Branch name required</code></td>
 <td>Não passou nome da branch</td>
-<td>Execute: <code>./scripts/post-pr-cleanup.sh &lt;branch&gt;</code></td>
+<td>Execute: <code>./scripts/git/post-pr-cleanup.sh &lt;branch&gt;</code></td>
 </tr>
 <tr>
 <td><code>Failed to checkout main</code></td>
@@ -1312,7 +1312,7 @@
 <li>Quer garantir sincronização pós-push</li>
 </ul>
 <h3 id="sintaxe_1">Sintaxe</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/direct-push-main.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./scripts/git/direct-push-main.sh
 </code></pre></div>
 <h3 id="parametros_1">Parâmetros</h3>
 <p>❌ <strong>Nenhum parâmetro necessário</strong></p>
@@ -1329,7 +1329,7 @@
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: Adiciona novo guia&quot;</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
 <a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Execute o script</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>./scripts/direct-push-main.sh
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>./scripts/git/direct-push-main.sh
 </code></pre></div>
 <h3 id="o-que-o-script-faz_1">O Que o Script Faz</h3>
 <ol>
@@ -1447,7 +1447,7 @@
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feat/nova-funcionalidade
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
 <a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="c1"># 4. Após aprovação e merge no GitHub</span>
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>./scripts/post-pr-cleanup.sh<span class="w"> </span>feat/nova-funcionalidade
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>./scripts/git/post-pr-cleanup.sh<span class="w"> </span>feat/nova-funcionalidade
 </code></pre></div>
 <h3 id="workflow-2-correcoes-diretas-na-main">Workflow 2: Correções Diretas na Main</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 1. Fazer mudanças</span>
@@ -1455,17 +1455,17 @@
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs: corrige typo no guia&quot;</span>
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># 2. Usar script automatizado</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>./scripts/direct-push-main.sh
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>./scripts/git/direct-push-main.sh
 </code></pre></div>
 <hr />
 <h2 id="troubleshooting">🔍 Troubleshooting</h2>
 <h3 id="problema-script-nao-executa">Problema: Script não executa</h3>
 <p><strong>Sintomas:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>bash:<span class="w"> </span>./scripts/direct-push-main.sh:<span class="w"> </span>Permission<span class="w"> </span>denied
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>bash:<span class="w"> </span>./scripts/git/direct-push-main.sh:<span class="w"> </span>Permission<span class="w"> </span>denied
 </code></pre></div>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/direct-push-main.sh
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/post-pr-cleanup.sh
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/git/direct-push-main.sh
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>chmod<span class="w"> </span>+x<span class="w"> </span>scripts/git/post-pr-cleanup.sh
 </code></pre></div>
 <hr />
 <h3 id="problema-validacao-falha-no-direct-push-mainsh">Problema: Validação falha no direct-push-main.sh</h3>
@@ -1482,7 +1482,7 @@
 <a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w">  </span><span class="c1"># ou novo commit</span>
 <a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
 <a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># Executar novamente</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>./scripts/direct-push-main.sh
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>./scripts/git/direct-push-main.sh
 </code></pre></div>
 <hr />
 <h3 id="problema-branch-nao-deleta-no-post-pr-cleanupsh">Problema: Branch não deleta no post-pr-cleanup.sh</h3>
@@ -1608,7 +1608,7 @@
 <a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="c1"># GitHub: Criar PR, passar CI, obter aprovação, Squash &amp; Merge</span>
 <a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>
 <a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="c1"># Dia 2: Limpar após merge</span>
-<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>./scripts/post-pr-cleanup.sh<span class="w"> </span>feat/search-optimization
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>./scripts/git/post-pr-cleanup.sh<span class="w"> </span>feat/search-optimization
 </code></pre></div>
 <p><strong>Resultado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>✅ Main atualizada com feature
@@ -1624,7 +1624,7 @@
 <a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix: corrige vazamento de memória crítico&quot;</span>
 <a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
 <a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="c1"># Push automatizado com validação</span>
-<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>./scripts/direct-push-main.sh
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>./scripts/git/direct-push-main.sh
 </code></pre></div>
 <p><strong>Resultado:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>✅ Código validado (ruff, mypy, pytest)
@@ -1664,8 +1664,8 @@
 <h3 id="criar-aliases-no-shell">Criar Aliases no Shell</h3>
 <p>Adicione ao seu <code>.bashrc</code> ou <code>.zshrc</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Aliases Git Automation</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">alias</span><span class="w"> </span>pr-cleanup<span class="o">=</span><span class="s1">&#39;./scripts/post-pr-cleanup.sh&#39;</span>
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nb">alias</span><span class="w"> </span>push-main<span class="o">=</span><span class="s1">&#39;./scripts/direct-push-main.sh&#39;</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="nb">alias</span><span class="w"> </span>pr-cleanup<span class="o">=</span><span class="s1">&#39;./scripts/git/post-pr-cleanup.sh&#39;</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="nb">alias</span><span class="w"> </span>push-main<span class="o">=</span><span class="s1">&#39;./scripts/git/direct-push-main.sh&#39;</span>
 </code></pre></div>
 <p><strong>Uso:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>pr-cleanup<span class="w"> </span>feat/my-branch
@@ -1680,7 +1680,7 @@
 <a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">    </span><span class="p">{</span>
 <a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">      </span><span class="nt">&quot;label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Git: Direct Push Main&quot;</span><span class="p">,</span>
 <a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span>
-<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./scripts/direct-push-main.sh&quot;</span><span class="p">,</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./scripts/git/direct-push-main.sh&quot;</span><span class="p">,</span>
 <a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">      </span><span class="nt">&quot;group&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;build&quot;</span><span class="p">,</span>
 <a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">      </span><span class="nt">&quot;presentation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="w">        </span><span class="nt">&quot;reveal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;always&quot;</span><span class="p">,</span>
