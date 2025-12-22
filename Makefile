@@ -66,7 +66,7 @@ requirements:
 		exit 1; \
 	fi
 	@python$(PYTHON_BASELINE) -m pip install pip-tools --quiet
-	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in --output-file requirements/dev.txt
+	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in
 	@echo "✅ Lockfile gerado com Python $(PYTHON_BASELINE) (compatível com CI)"
 
 ## setup: Alias para install-dev (configura ambiente completo)
