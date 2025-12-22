@@ -67,12 +67,12 @@ jobs:
       # --- 3. AUDITORIA CORTEX ---
       - name: "🔍 Executar CORTEX Audit"
         run: |
-          python -m scripts.cli.cortex audit docs/ --fail-on-error
+          python -m scripts.cortex audit docs/ --fail-on-error
 
       # --- 4. RELATÓRIO (se falhar) ---
       - name: "📊 Resumo de Erros"
         if: failure()
         run: |
           echo "::error::CORTEX encontrou erros na documentação!"
-          echo "Execute localmente: python -m scripts.cli.cortex audit docs/"
+          echo "Execute localmente: python -m scripts.cortex audit docs/"
           echo "Para mais detalhes, veja os logs acima."

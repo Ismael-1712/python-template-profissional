@@ -135,8 +135,8 @@ class TestVSCodeConfiguration:
         project_root = Path(__file__).parent.parent
 
         scripts = [
-            project_root / "scripts" / "direct-push-main.sh",
-            project_root / "scripts" / "post-pr-cleanup.sh",
+            project_root / "scripts" / "git" / "direct-push-main.sh",
+            project_root / "scripts" / "git" / "post-pr-cleanup.sh",
         ]
 
         for script in scripts:
@@ -148,8 +148,8 @@ class TestVSCodeConfiguration:
         project_root = Path(__file__).parent.parent
 
         scripts = [
-            project_root / "scripts" / "direct-push-main.sh",
-            project_root / "scripts" / "post-pr-cleanup.sh",
+            project_root / "scripts" / "git" / "direct-push-main.sh",
+            project_root / "scripts" / "git" / "post-pr-cleanup.sh",
         ]
 
         for script in scripts:
