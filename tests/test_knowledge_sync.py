@@ -32,6 +32,8 @@ from scripts.core.cortex.knowledge_sync import (
     HTTP_NOT_MODIFIED,
     HTTP_OK,
     KnowledgeSyncer,
+    SyncResult,
+    SyncStatus,
 )
 from scripts.core.cortex.models import (
     DocStatus,
@@ -191,15 +193,19 @@ class TestCacheHit:
         mock_http.configure(status_code=HTTP_NOT_MODIFIED)
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert isinstance(result, SyncResult)
+        assert result.status == SyncStatus.NOT_MODIFIED
+        assert result.error_message is None
+
         # File content should remain unchanged
         assert memory_fs.read_text(file_path) == original_content
 
         # Source metadata should remain unchanged (no new etag or last_synced)
-        assert updated_entry.sources[0].etag == '"abc123"'
-        assert updated_entry.sources[0].last_synced is None
+        assert result.entry.sources[0].etag == '"abc123"'
+        assert result.entry.sources[0].last_synced is None
 
     def test_cache_hit_with_multiple_sources(
         self,
@@ -234,11 +240,12 @@ class TestCacheHit:
         mock_http.configure(status_code=HTTP_NOT_MODIFIED)
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.NOT_MODIFIED
         assert memory_fs.read_text(file_path) == original_content
-        assert len(updated_entry.sources) == 2
+        assert len(result.entry.sources) == 2
 
 
 class TestNewContent:
@@ -292,20 +299,23 @@ class TestNewContent:
         )
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
+        assert result.error_message is None
+
         # File should contain new remote content
         actual_content = memory_fs.read_text(file_path)
         assert "New Remote Content" in actual_content
         assert "This is the updated version from the source." in actual_content
 
         # ETag should be updated
-        assert updated_entry.sources[0].etag == '"new-etag"'
+        assert result.entry.sources[0].etag == '"new-etag"'
 
         # last_synced should be updated
-        assert updated_entry.sources[0].last_synced is not None
-        assert isinstance(updated_entry.sources[0].last_synced, datetime)
+        assert result.entry.sources[0].last_synced is not None
+        assert isinstance(result.entry.sources[0].last_synced, datetime)
 
     def test_new_content_preserves_frontmatter(
         self,
@@ -347,9 +357,10 @@ class TestNewContent:
         )
 
         # Act
-        _ = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         actual_content = memory_fs.read_text(file_path)
 
         # Frontmatter should be preserved
@@ -412,9 +423,10 @@ class TestGoldenPathPreservation:
         )
 
         # Act
-        syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         actual_content = memory_fs.read_text(file_path)
 
         # Golden Path content should be preserved
@@ -468,9 +480,10 @@ class TestGoldenPathPreservation:
         mock_http.configure(status_code=HTTP_OK, text=new_remote_content)
 
         # Act
-        syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         actual_content = memory_fs.read_text(file_path)
 
         # Both golden paths should be preserved
@@ -518,9 +531,10 @@ class TestGoldenPathPreservation:
         mock_http.configure(status_code=HTTP_OK, text=new_remote_content)
 
         # Act
-        syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         actual_content = memory_fs.read_text(file_path)
 
         # Both variations should be preserved
@@ -614,9 +628,10 @@ class TestResilienceToFailures:
         mock_http.configure(status_code=HTTP_OK, text=new_content)
 
         # Act
-        syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         # File should be created with remote content
         assert memory_fs.exists(file_path)
         actual_content = memory_fs.read_text(file_path)
@@ -647,10 +662,11 @@ class TestEdgeCases:
         )
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
-        assert updated_entry == entry
+        assert result.status == SyncStatus.NOT_MODIFIED
+        assert result.entry == entry
         assert memory_fs.read_text(file_path) == original_content
 
     def test_source_without_etag(
@@ -681,12 +697,13 @@ class TestEdgeCases:
         mock_http.configure(status_code=HTTP_OK, text=new_content)
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         actual_content = memory_fs.read_text(file_path)
         assert "New Content" in actual_content
-        assert updated_entry.sources[0].last_synced is not None
+        assert result.entry.sources[0].last_synced is not None
 
     def test_response_without_etag_header(
         self,
@@ -715,10 +732,11 @@ class TestEdgeCases:
         )
 
         # Act
-        updated_entry = syncer.sync_entry(entry, file_path)
+        result = syncer.sync_entry(entry, file_path)
 
         # Assert
+        assert result.status == SyncStatus.UPDATED
         # Should succeed even without ETag
-        assert updated_entry.sources[0].etag is None
+        assert result.entry.sources[0].etag is None
         actual_content = memory_fs.read_text(file_path)
         assert "New Content" in actual_content
