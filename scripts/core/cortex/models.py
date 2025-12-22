@@ -13,7 +13,7 @@ from __future__ import annotations
 from datetime import date, datetime
 from enum import Enum
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
@@ -300,3 +300,68 @@ class KnowledgeEntry(BaseModel):
     links: list[KnowledgeLink] = Field(default_factory=list)
     inbound_links: list[str] = Field(default_factory=list)
     file_path: Path | None = Field(default=None, exclude=True)
+
+
+class InitResult(BaseModel):
+    """Result of a single file initialization operation.
+
+    Represents the outcome of adding CORTEX frontmatter to a single file,
+    including the resulting metadata and status.
+
+    Attributes:
+        path: Path to the initialized file
+        status: Outcome status (success/skipped/error)
+        old_frontmatter: Original frontmatter dict before initialization (None if new)
+        new_frontmatter: Resulting frontmatter dict after initialization
+        error: Optional error message if status is 'error'
+
+    Example:
+        >>> result = InitResult(
+        ...     path=Path("docs/guide.md"),
+        ...     status="success",
+        ...     old_frontmatter=None,
+        ...     new_frontmatter={"id": "guide", "type": "guide"},
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    path: Path
+    status: str  # "success", "skipped", "error"
+    old_frontmatter: dict[str, Any] | None = None
+    new_frontmatter: dict[str, Any]
+    error: str | None = None
+
+
+class MigrationSummary(BaseModel):
+    """Aggregate summary of a project migration operation.
+
+    Represents the combined results of migrating multiple files,
+    with statistics and detailed results for each file.
+
+    Attributes:
+        total: Total number of files processed
+        created: Number of files with newly created frontmatter
+        updated: Number of files with updated frontmatter
+        errors: Number of files that failed to migrate
+        results: Detailed list of MigrationResult for each file
+
+    Example:
+        >>> from scripts.core.cortex.migrate import MigrationResult
+        >>> summary = MigrationSummary(
+        ...     total=10,
+        ...     created=7,
+        ...     updated=2,
+        ...     errors=1,
+        ...     results=[],
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    total: int
+    created: int
+    updated: int
+    errors: int
+    # list[MigrationResult] - avoiding circular import
+    results: list[Any] = Field(default_factory=list)
