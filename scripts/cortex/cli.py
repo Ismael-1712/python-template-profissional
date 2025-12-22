@@ -34,13 +34,13 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
+from scripts.core.cortex.project_orchestrator import (  # noqa: E402
+    ProjectOrchestrator,
+)
 from scripts.core.cortex.readme_generator import (  # noqa: E402
     DocumentGenerator,
 )
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
-from scripts.cortex.core.frontmatter_helpers import (  # noqa: E402
-    generate_default_frontmatter,
-)
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
@@ -100,85 +100,90 @@ def init(
             if not typer.confirm("Continue anyway?"):
                 raise typer.Abort()
 
-        # Read existing file content
-        with open(path, encoding="utf-8") as f:
-            content = f.read()
+        # Initialize orchestrator
+        workspace_root = Path.cwd()
+        orchestrator = ProjectOrchestrator(workspace_root=workspace_root)
 
-        # Check if frontmatter already exists
-        parser = FrontmatterParser()
-        has_frontmatter = False
+        # Handle interactive confirmation for existing frontmatter
+        if not force:
+            # Check if file already has frontmatter
+            parser = FrontmatterParser()
+            try:
+                parser.parse_file(path)
+                # File has frontmatter, prompt user
+                typer.secho(
+                    f"⚠️  File {path.name} already has YAML frontmatter.",
+                    fg=typer.colors.YELLOW,
+                )
 
-        try:
-            # Try to parse existing frontmatter
-            parser.parse_file(path)
-            has_frontmatter = True
-            logger.info("File already has frontmatter")
+                # Show existing frontmatter preview
+                with open(path, encoding="utf-8") as f:
+                    content = f.read()
+                lines = content.split("\n")
+                if lines[0].strip() == "---":
+                    typer.echo("Current frontmatter:")
+                    typer.echo("---")
+                    for line in lines[1:]:
+                        if line.strip() == "---":
+                            break
+                        typer.echo(f"  {line}")
+                    typer.echo("---")
 
-        except FrontmatterParseError:
-            # No frontmatter found, this is expected
-            logger.info("No existing frontmatter found")
-            has_frontmatter = False
+                if not typer.confirm(
+                    "\nDo you want to overwrite it? (Use --force to skip this prompt)",
+                ):
+                    typer.secho(
+                        "✋ Aborted. No changes made.",
+                        fg=typer.colors.BLUE,
+                    )
+                    logger.info("User aborted overwrite")
+                    raise typer.Abort()
 
-        # Handle existing frontmatter
-        if has_frontmatter and not force:
+                # User confirmed, set force=True for orchestrator
+                force = True
+                logger.info("User confirmed overwrite")
+
+            except FrontmatterParseError:
+                # No frontmatter found, proceed normally
+                logger.info("No existing frontmatter found")
+
+        # Delegate to orchestrator
+        result = orchestrator.initialize_file(path=path, force=force)
+
+        # Handle result based on status
+        if result.status == "success":
             typer.secho(
-                f"⚠️  File {path.name} already has YAML frontmatter.",
+                f"✅ Success! Added frontmatter to {path}",
+                fg=typer.colors.GREEN,
+            )
+            typer.echo()
+            typer.echo("Generated frontmatter:")
+            # Show the new frontmatter from result
+            import yaml
+
+            frontmatter_yaml = yaml.dump(
+                result.new_frontmatter,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False,
+            )
+            typer.echo("---")
+            typer.echo(frontmatter_yaml.rstrip())
+            typer.echo("---")
+            logger.info(f"Successfully added frontmatter to {path}")
+
+        elif result.status == "skipped":
+            typer.secho(
+                f"⚠️  File {path.name} already has frontmatter. "
+                "Use --force to overwrite.",
                 fg=typer.colors.YELLOW,
             )
-            typer.echo("Current frontmatter:")
-            typer.echo("---")
+            logger.info(f"Skipped {path} (already has frontmatter)")
 
-            # Show first few lines of existing frontmatter
-            lines = content.split("\n")
-            if lines[0].strip() == "---":
-                for line in lines[1:]:
-                    if line.strip() == "---":
-                        break
-                    typer.echo(f"  {line}")
-            typer.echo("---")
-
-            if not typer.confirm(
-                "\nDo you want to overwrite it? (Use --force to skip this prompt)",
-            ):
-                typer.secho("✋ Aborted. No changes made.", fg=typer.colors.BLUE)
-                logger.info("User aborted overwrite")
-                raise typer.Abort()
-
-            logger.info("User confirmed overwrite")
-
-        # Generate frontmatter
-        frontmatter = generate_default_frontmatter(path)
-
-        # Remove existing frontmatter if present
-        new_content = content
-        if content.strip().startswith("---"):
-            lines = content.split("\n")
-            # Find the closing ---
-            end_idx = None
-            for i, line in enumerate(lines[1:], 1):
-                if line.strip() == "---":
-                    end_idx = i
-                    break
-
-            if end_idx is not None:
-                # Remove old frontmatter (including both --- lines)
-                new_content = "\n".join(lines[end_idx + 1 :])
-                # Remove leading blank lines
-                new_content = new_content.lstrip("\n")
-
-        # Add new frontmatter
-        final_content = frontmatter + new_content
-
-        # Write back to file
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(final_content)
-
-        typer.secho(f"✅ Success! Added frontmatter to {path}", fg=typer.colors.GREEN)
-        typer.echo()
-        typer.echo("Generated frontmatter:")
-        typer.echo(frontmatter.rstrip())
-
-        logger.info(f"Successfully added frontmatter to {path}")
+        elif result.status == "error":
+            typer.secho(f"❌ Error: {result.error}", fg=typer.colors.RED, err=True)
+            logger.error(f"Error initializing {path}: {result.error}")
+            raise typer.Exit(code=1)
 
     except typer.Abort:
         raise
@@ -244,8 +249,6 @@ def migrate(
         cortex migrate docs/guides/ --apply  # Migrate specific directory
     """
     try:
-        from scripts.core.cortex.migrations.document_migrator import DocumentMigrator
-
         workspace_root = Path.cwd()
         dry_run = not apply
 
@@ -264,29 +267,63 @@ def migrate(
                 bold=True,
             )
 
-        # Initialize migrator
-        migrator = DocumentMigrator(workspace_root=workspace_root)
+        # Initialize orchestrator
+        orchestrator = ProjectOrchestrator(workspace_root=workspace_root)
 
         # Perform migration
         typer.echo(f"📂 Scanning {path} for Markdown files...\n")
 
-        results = migrator.migrate_directory(
+        summary = orchestrator.migrate_project(
             directory=path,
             dry_run=dry_run,
             force=force,
             recursive=recursive,
         )
 
-        # Print summary
-        migrator.print_summary(results, dry_run=dry_run)
+        # Print detailed results
+        if summary.total > 0:
+            typer.echo("\n" + "=" * 70)
+            typer.secho("\n📊 Migration Summary:", fg=typer.colors.CYAN, bold=True)
+            typer.echo("=" * 70)
+            typer.echo(f"Total files processed: {summary.total}")
+            typer.secho(
+                f"  ✅ Created: {summary.created}",
+                fg=typer.colors.GREEN,
+            )
+            typer.secho(
+                f"  🔄 Updated: {summary.updated}",
+                fg=typer.colors.YELLOW,
+            )
+            if summary.errors > 0:
+                typer.secho(
+                    f"  ❌ Errors:  {summary.errors}",
+                    fg=typer.colors.RED,
+                )
+            typer.echo("=" * 70)
 
-        # Count results
-        created = sum(1 for r in results if r.action == "created")
-        updated = sum(1 for r in results if r.action == "updated")
-        errors = sum(1 for r in results if r.action == "error")
+            # Show sample of results
+            if len(summary.results) > 0:
+                typer.echo("\nSample results:")
+                for result in summary.results[:5]:
+                    status_icon = {
+                        "created": "✅",
+                        "updated": "🔄",
+                        "skipped": "⏭️ ",
+                        "error": "❌",
+                    }.get(result.action, "❓")
+                    file_info = f"{result.file_path.name}: {result.message}"
+                    typer.echo(f"  {status_icon} {file_info}")
+
+                if len(summary.results) > 5:
+                    typer.echo(f"  ... and {len(summary.results) - 5} more files")
+        else:
+            typer.secho(
+                "\n⚠️  No Markdown files found in the specified directory.",
+                fg=typer.colors.YELLOW,
+            )
 
         # Provide next steps
-        if dry_run and (created + updated > 0):
+        if dry_run and (summary.created + summary.updated > 0):
             typer.echo("\n" + "=" * 70)
             typer.secho(
                 "\n💡 To apply these changes, run:\n",
@@ -296,8 +333,8 @@ def migrate(
             typer.secho(f"   cortex migrate {path} --apply", fg=typer.colors.WHITE)
             typer.echo()
 
-        if errors > 0:
-            logger.warning("Migration completed with %d error(s)", errors)
+        if summary.errors > 0:
+            logger.warning("Migration completed with %d error(s)", summary.errors)
             raise typer.Exit(code=1)
 
         logger.info("Migration completed successfully")
