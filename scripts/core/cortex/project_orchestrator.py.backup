@@ -1,0 +1,172 @@
+"""CORTEX Project Orchestrator.
+
+Facade for project lifecycle operations including file initialization and
+batch migration. Provides a high-level interface for managing CORTEX
+documentation across entire projects.
+
+Features:
+- Single file initialization with frontmatter injection
+- Batch project migration with aggregated reporting
+- Force mode for overwriting existing frontmatter
+- Dry-run mode for safe previewing
+- Integration with DocumentMigrator for delegation
+
+Usage:
+    from scripts.core.cortex.project_orchestrator import ProjectOrchestrator
+
+    orchestrator = ProjectOrchestrator(workspace_root=Path("/project"))
+
+    # Initialize single file
+    result = orchestrator.initialize_file(Path("docs/guide.md"))
+
+    # Migrate entire directory
+    summary = orchestrator.migrate_project(
+        directory=Path("docs/"),
+        dry_run=False,
+        force=False,
+        recursive=True
+    )
+
+Author: Engineering Team
+License: MIT
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+
+from scripts.core.cortex.migrate import DocumentMigrator
+from scripts.core.cortex.models import InitResult, MigrationSummary
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+
+logger = logging.getLogger(__name__)
+
+
+class ProjectOrchestrator:
+    """Orchestrates CORTEX project lifecycle operations.
+
+    Provides a unified interface for initializing individual files and
+    migrating entire projects to CORTEX format. Acts as a Facade over
+    DocumentMigrator and other core components.
+
+    Attributes:
+        workspace_root: Root directory of the workspace
+        migrator: DocumentMigrator instance for delegation
+        fs: FileSystemAdapter for I/O operations
+    """
+
+    def __init__(
+        self,
+        workspace_root: Path,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
+        """Initialize the orchestrator.
+
+        Args:
+            workspace_root: Root directory of the workspace
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
+        """
+        if fs is None:
+            fs = RealFileSystem()
+
+        self.workspace_root = workspace_root.resolve()
+        self.fs = fs
+        self.migrator = DocumentMigrator(workspace_root=workspace_root, fs=fs)
+
+        logger.debug(
+            "Initialized ProjectOrchestrator with root: %s",
+            self.workspace_root,
+        )
+
+    def initialize_file(
+        self,
+        path: Path,
+        force: bool = False,
+    ) -> InitResult:
+        """Initialize a single file with CORTEX frontmatter.
+
+        Adds YAML frontmatter to a markdown file with intelligent metadata
+        inference. If the file already has frontmatter, returns status 'skipped'
+        unless force=True.
+
+        Args:
+            path: Path to the markdown file to initialize
+            force: If True, overwrite existing frontmatter (default: False)
+
+        Returns:
+            InitResult containing operation status and metadata
+
+        Example:
+            >>> orchestrator = ProjectOrchestrator(Path("/project"))
+            >>> result = orchestrator.initialize_file(Path("docs/guide.md"))
+            >>> assert result.status in ["success", "skipped", "error"]
+        """
+        logger.info("Initializing file: %s (force=%s)", path, force)
+
+        # TODO: Implement frontmatter detection logic
+        # TODO: Delegate to migrator.migrate_file() with dry_run=False
+        # TODO: Convert MigrationResult to InitResult
+        # TODO: Handle existing frontmatter detection and force flag
+
+        # SKELETON: Return placeholder result
+        return InitResult(
+            path=path,
+            status="error",
+            old_frontmatter=None,
+            new_frontmatter={},
+            error="Not implemented",
+        )
+
+    def migrate_project(
+        self,
+        directory: Path,
+        dry_run: bool = True,
+        force: bool = False,
+        recursive: bool = True,
+    ) -> MigrationSummary:
+        """Migrate an entire project directory to CORTEX format.
+
+        Processes all markdown files in the given directory, adding CORTEX
+        frontmatter with intelligent metadata inference. Aggregates results
+        into a summary report.
+
+        Args:
+            directory: Directory containing markdown files to migrate
+            dry_run: If True, preview changes without writing (default: True)
+            force: If True, overwrite existing frontmatter (default: False)
+            recursive: If True, process subdirectories (default: True)
+
+        Returns:
+            MigrationSummary with aggregated statistics and detailed results
+
+        Example:
+            >>> orchestrator = ProjectOrchestrator(Path("/project"))
+            >>> summary = orchestrator.migrate_project(
+            ...     directory=Path("docs/"),
+            ...     dry_run=True,
+            ...     recursive=True,
+            ... )
+            >>> assert summary.total >= 0
+        """
+        logger.info(
+            "Migrating project: %s (dry_run=%s, force=%s, recursive=%s)",
+            directory,
+            dry_run,
+            force,
+            recursive,
+        )
+
+        # TODO: Delegate to migrator.migrate_directory()
+        # TODO: Aggregate MigrationResult list into MigrationSummary
+        # TODO: Calculate total, created, updated, errors from results
+        # TODO: Handle recursive directory traversal
+
+        # SKELETON: Return placeholder summary
+        return MigrationSummary(
+            total=0,
+            created=0,
+            updated=0,
+            errors=0,
+            results=[],
+        )

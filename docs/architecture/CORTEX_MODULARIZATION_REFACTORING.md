@@ -590,7 +590,24 @@ Meio-termo: extrair apenas lógica de apresentação (typer.echo).
 
 ---
 
-**Última Atualização:** 2025-12-21
-**Status:** COMPLETED
+**Última Atualização:** 2025-12-22
+**Status:** COMPLETED → FINALIZED (wrapper removido em 2025-12-22)
 **Decisor:** Eng. Team (Ismael Tavares)
 **Princípio Aplicado:** SOLID (SRP) + Iterative Fractionation Protocol
+
+---
+
+## ⚠️ UPDATE (2025-12-22): Sunset do Wrapper
+
+**Decisão:** Wrapper `scripts/cli/cortex.py` foi **REMOVIDO** após validação completa.
+
+**Motivo:** A unificação estrutural conforme ARCHITECTURE_TRIAD.md elimina a ambiguidade de caminhos.
+
+**Método de Invocação Único (Pós-Sunset):**
+
+```bash
+cortex --help              # Via entry point instalado (pyproject.toml)
+python -m scripts.cortex   # Via module invocation
+```
+
+**Impacto:** Documentação histórica neste arquivo preserva o caminho antigo para referência histórica, mas todos os exemplos operacionais devem usar o novo método.

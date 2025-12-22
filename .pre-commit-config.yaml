@@ -47,7 +47,7 @@ repos:
 
       - id: cortex-audit
         name: "CORTEX - Auditoria de Documentação"
-        entry: env PRE_COMMIT=1 python3 -m scripts.cli.cortex audit docs/ --fail-on-error
+        entry: env PRE_COMMIT=1 python3 -m scripts.core.cortex.project_orchestrator audit docs/ --fail-on-error
         language: system
         pass_filenames: false
         types_or: [markdown, python]
@@ -56,7 +56,7 @@ repos:
 
       - id: cortex-guardian
         name: "CORTEX Guardian - Bloqueia Shadow Configuration"
-        entry: python3 -m scripts.cli.cortex guardian check . --fail-on-error
+        entry: python3 -m scripts.core.cortex.project_orchestrator guardian check . --fail-on-error
         language: system
         pass_filenames: false
         types: [python]
@@ -71,7 +71,7 @@ repos:
 
       - id: cortex-neural-sync
         name: "CORTEX Neural Auto-Sync"
-        entry: python -m scripts.cli.cortex neural index
+        entry: python -m scripts.core.cortex.project_orchestrator neural index
         language: system
         types: [markdown]
         pass_filenames: false
