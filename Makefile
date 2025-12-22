@@ -112,7 +112,12 @@ install-dev: validate-python
 	fi; \
 	if [ "$$NEEDS_INSTALL" = "true" ]; then \
 		echo "🚀 Iniciando instalação/atualização do ambiente..."; \
-		rm -rf $(VENV); \
+		if [ -z "$$GITHUB_ACTIONS" ]; then \
+			echo "🗑️  Removendo venv antigo (local mode)..."; \
+			rm -rf $(VENV); \
+		else \
+			echo "♻️  CI mode: Reusing cached venv if available..."; \
+		fi; \
 		$(SYSTEM_PYTHON) -m venv $(VENV); \
 		echo "📥 Instalando dependências via install_dev.py..."; \
 		$(VENV)/bin/python $(SCRIPTS_DIR)/cli/install_dev.py && \
@@ -157,6 +162,10 @@ audit: doctor
 
 ## test: Executa suite completa de testes com pytest (paralelo via pytest-xdist)
 test: doctor
+	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
+
+## test-ci: Executa testes sem doctor (otimizado para CI)
+test-ci:
 	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
 
 ## test-verbose: Executa testes em modo verboso
