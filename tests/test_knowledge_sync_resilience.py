@@ -64,7 +64,6 @@ class MockFileSystem(FileSystemAdapter):
 
     def mkdir(self, path: Path, parents: bool = False, exist_ok: bool = False) -> None:
         """Mock mkdir - no-op for tests."""
-        pass
 
     def glob(self, path: Path, pattern: str) -> list[Path]:
         """Mock glob - returns empty list."""
@@ -310,11 +309,11 @@ Local customization
         syncer = KnowledgeSyncer(fs=mock_fs, http_client=mock_http)
 
         # Act
-        updated_entry = syncer.sync_entry(sample_entry, file_path)
+        result = syncer.sync_entry(sample_entry, file_path)
 
         # Assert
         # Local file should NOT be modified
         assert mock_fs.files[file_path] == original_content
         # Entry should be returned unchanged (no new sync timestamp)
-        assert updated_entry.sources[0].last_synced is None
-        assert updated_entry.sources[0].etag is None
+        assert result.entry.sources[0].last_synced is None
+        assert result.entry.sources[0].etag is None

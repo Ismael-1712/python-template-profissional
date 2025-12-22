@@ -28,7 +28,10 @@ if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
-from scripts.core.cortex.knowledge_sync import KnowledgeSyncer  # noqa: E402
+from scripts.core.cortex.knowledge_sync import (  # noqa: E402
+    KnowledgeSyncer,
+    SyncStatus,
+)
 from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
@@ -869,22 +872,22 @@ def knowledge_sync(
             else:
                 # Real sync mode
                 try:
-                    updated_entry = syncer.sync_entry(entry, entry.file_path)
-                    # Check if any source was updated
-                    was_updated = any(
-                        new.last_synced != old.last_synced
-                        for old, new in zip(
-                            entry.sources,
-                            updated_entry.sources,
-                            strict=True,
-                        )
-                    )
-                    if was_updated:
+                    result = syncer.sync_entry(entry, entry.file_path)
+
+                    # Use explicit status from Core (moved from CLI logic)
+                    if result.status == SyncStatus.UPDATED:
                         typer.secho("   ✅ Synchronized", fg=typer.colors.GREEN)
                         sync_count += 1
-                    else:
+                    elif result.status == SyncStatus.NOT_MODIFIED:
                         typer.echo("   ℹ️  No changes (304 Not Modified)")
                         sync_count += 1
+                    else:  # ERROR
+                        typer.secho(
+                            f"   ❌ Failed: {result.error_message}",
+                            fg=typer.colors.RED,
+                        )
+                        error_count += 1
+
                 except Exception as e:
                     typer.secho(
                         f"   ❌ Failed: {e}",
