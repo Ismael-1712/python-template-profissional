@@ -50,10 +50,10 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: "Configurar Python 3.12"
+      - name: "Configurar Python 3.10 (baseline)"
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: "3.12"
+          python-version: "3.10"
           cache: 'pip'
           cache-dependency-path: 'requirements/dev.txt'
 
@@ -66,15 +66,15 @@ jobs:
           restore-keys: |
             pip-${{ runner.os }}-
 
-      # Cache do venv específico Python 3.12
+      # Cache do venv específico Python 3.10 (baseline)
       - name: "Cache virtual environment"
         id: cache-venv
         uses: actions/cache@v5
         with:
           path: .venv
-          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.txt') }}
+          key: venv-${{ runner.os }}-py3.10-${{ hashFiles('requirements/dev.txt') }}
           restore-keys: |
-            venv-${{ runner.os }}-py3.12-
+            venv-${{ runner.os }}-py3.10-
 
       # Verificar consistência do lockfile (Python 3.10 baseline)
       - name: "Check Lockfile Consistency"
