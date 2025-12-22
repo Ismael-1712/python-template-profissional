@@ -17,7 +17,9 @@ License: MIT
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from enum import Enum
 from typing import TYPE_CHECKING, Protocol
 
 import requests
@@ -37,6 +39,45 @@ logger = setup_logging(__name__)
 # HTTP status codes
 HTTP_OK = 200
 HTTP_NOT_MODIFIED = 304
+
+
+class SyncStatus(Enum):
+    """Status of knowledge entry synchronization operation.
+
+    Attributes:
+        UPDATED: Content was fetched and merged successfully
+        NOT_MODIFIED: Remote content unchanged (HTTP 304)
+        ERROR: Synchronization failed due to network or other error
+    """
+
+    UPDATED = "updated"
+    NOT_MODIFIED = "not_modified"
+    ERROR = "error"
+
+
+@dataclass
+class SyncResult:
+    """Result of synchronizing a knowledge entry.
+
+    This dataclass encapsulates the outcome of a sync operation,
+    providing explicit status information and error details.
+
+    Attributes:
+        entry: The knowledge entry (updated if sync succeeded)
+        status: Synchronization status
+        error_message: Error details if status is ERROR, None otherwise
+
+    Example:
+        >>> result = SyncResult(
+        ...     entry=knowledge_entry,
+        ...     status=SyncStatus.UPDATED,
+        ...     error_message=None
+        ... )
+    """
+
+    entry: KnowledgeEntry
+    status: SyncStatus
+    error_message: str | None = None
 
 
 class HttpClient(Protocol):
@@ -186,29 +227,35 @@ class KnowledgeSyncer:
         self,
         entry: KnowledgeEntry,
         file_path: Path,
-    ) -> KnowledgeEntry:
+    ) -> SyncResult:
         """Synchronize a knowledge entry with its external sources.
 
         Downloads content from all sources, merges with local content
         (preserving Golden Paths), and updates cache metadata.
+
+        This method now returns a SyncResult that includes:
+        - The updated entry (or original if no changes)
+        - Explicit status (UPDATED, NOT_MODIFIED, or ERROR)
+        - Error message if sync failed
 
         Args:
             entry: Knowledge entry to synchronize
             file_path: Path to the local knowledge file
 
         Returns:
-            Updated KnowledgeEntry with new last_synced and etag values
-
-        Raises:
-            FileNotFoundError: If file_path does not exist
-            requests.RequestException: On HTTP errors
+            SyncResult containing updated entry, status, and optional error
 
         Example:
-            >>> entry = syncer.sync_entry(entry, Path("docs/knowledge/kno-001.md"))
-            >>> print(f"Synced at: {entry.sources[0].last_synced}")
+            >>> result = syncer.sync_entry(entry, Path("docs/knowledge/kno-001.md"))
+            >>> if result.status == SyncStatus.UPDATED:
+            ...     print(f"Synced at: {result.entry.sources[0].last_synced}")
         """
         if not entry.sources:
-            return entry  # No sources to sync
+            return SyncResult(
+                entry=entry,
+                status=SyncStatus.NOT_MODIFIED,
+                error_message=None,
+            )
 
         # Read current local content
         local_content = ""
@@ -217,6 +264,7 @@ class KnowledgeSyncer:
 
         updated_sources: list[KnowledgeSource] = []
         merged_content = local_content
+        content_changed = False
 
         for source in entry.sources:
             # Fetch remote content with cache validation
@@ -237,6 +285,7 @@ class KnowledgeSyncer:
                     },
                 )
                 updated_sources.append(updated_source)
+                content_changed = True
             else:
                 # No changes (304 Not Modified)
                 updated_sources.append(source)
@@ -245,8 +294,22 @@ class KnowledgeSyncer:
         if merged_content != local_content:
             self.fs.write_text(file_path, merged_content)
 
-        # Return updated entry with new source metadata
-        return entry.model_copy(update={"sources": updated_sources})
+        # Create updated entry with new source metadata
+        updated_entry = entry.model_copy(update={"sources": updated_sources})
+
+        # Determine sync status based on whether content was actually updated
+        # This logic was previously in the CLI (knowledge_sync command)
+        # Now it's properly encapsulated in the Core business logic
+        if content_changed:
+            status = SyncStatus.UPDATED
+        else:
+            status = SyncStatus.NOT_MODIFIED
+
+        return SyncResult(
+            entry=updated_entry,
+            status=status,
+            error_message=None,
+        )
 
     def _fetch_source(
         self,
