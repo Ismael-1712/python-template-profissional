@@ -8,7 +8,7 @@ date: '2025-12-16'
 tags: [git, best-practice, workflow, safety]
 context_tags: [version-control, reliability, governance]
 linked_code:
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 title: 'Protocolo de Commit Atômico - Segurança e Rastreabilidade em Git'
 ---
 

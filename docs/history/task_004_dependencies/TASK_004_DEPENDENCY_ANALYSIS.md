@@ -310,7 +310,7 @@ except ImportError:
 
 ```bash
 # Adicionar ao CI/CD:
-scripts/cli/cortex.py dependency-check
+scripts/cortex/cli.py dependency-check
 ```
 
 #### 2. **Documentação de Contratos**

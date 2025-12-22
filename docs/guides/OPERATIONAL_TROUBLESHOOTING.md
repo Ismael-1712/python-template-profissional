@@ -417,7 +417,7 @@ git reset --hard origin/$(git branch --show-current)
 
 - [scripts/cli/doctor.py](../../scripts/cli/doctor.py) - Diagnóstico de ambiente
 - [scripts/cli/git_sync.py](../../scripts/cli/git_sync.py) - Sincronização de branches
-- [scripts/cli/cortex.py](../../scripts/cli/cortex.py) - Sistema de introspecção
+- [scripts/cortex/cli.py](../../scripts/cortex/cli.py) - Sistema de introspecção
 
 ---
 

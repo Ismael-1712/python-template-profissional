@@ -8,7 +8,7 @@ date: '2025-12-01'
 context_tags: [cortex, introspection, sprint-2]
 linked_code:
 - scripts/core/cortex/mapper.py
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 title: Sistema de Introspecção Dinâmica - Implementação Completa
 ---
 
@@ -39,7 +39,7 @@ Regras universais de SRE que **não assumem nada** sobre a arquitetura:
 **Arquivos**:
 
 - `scripts/core/cortex/mapper.py` - Motor de introspecção
-- `scripts/cli/cortex.py` - Comando CLI `map`
+- `scripts/cortex/cli.py` - Comando CLI `map`
 
 **Capacidades**:
 

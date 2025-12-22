@@ -15,7 +15,7 @@ linked_code: []
 
 ### 1. Comando `cortex setup-hooks`
 
-**Localização**: `scripts/cli/cortex.py`
+**Localização**: `scripts/cortex/cli.py`
 
 **Funcionalidade**:
 

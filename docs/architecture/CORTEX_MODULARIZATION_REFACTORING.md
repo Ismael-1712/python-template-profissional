@@ -10,7 +10,7 @@ context_tags: [architecture, modularity, god-function-elimination]
 linked_code:
   - scripts/cortex/cli.py
   - scripts/cortex/core/frontmatter_helpers.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 related_docs:
   - docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md
   - docs/architecture/CODE_AUDIT.md
@@ -26,7 +26,7 @@ title: 'CORTEX Modularization - From Monolith to Package'
 
 ## Resumo Executivo
 
-Refatoração estrutural do script `scripts/cli/cortex.py` (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão **God Function** e seguindo princípios SOLID.
+Refatoração estrutural do script `scripts/cortex/cli.py` (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão **God Function** e seguindo princípios SOLID.
 
 ### Métricas Finais
 
@@ -43,7 +43,7 @@ Refatoração estrutural do script `scripts/cli/cortex.py` (2113 linhas) para ar
 
 ### Diagnóstico Inicial
 
-Durante auditoria de código (P26 - Refatoração de Scripts), `scripts/cli/cortex.py` foi identificado como **Priority 1 Refactoring Candidate** por:
+Durante auditoria de código (P26 - Refatoração de Scripts), `scripts/cortex/cli.py` foi identificado como **Priority 1 Refactoring Candidate** por:
 
 1. **God Function (2113 linhas)**: Centralização excessiva de responsabilidades
 2. **Violação do SRP**: Interface CLI + Lógica de Negócio + Helpers Utilitários
@@ -63,7 +63,7 @@ Durante auditoria de código (P26 - Refatoração de Scripts), `scripts/cli/cort
 ### Estrutura ANTES (Monólito)
 
 ```
-scripts/cli/cortex.py (2113 linhas)
+scripts/cortex/cli.py (2113 linhas)
 ├── Imports & Setup (60 linhas)
 ├── Helper Functions (67 linhas)
 │   ├── _infer_doc_type()
@@ -96,7 +96,7 @@ scripts/cortex/                  # 🆕 Pacote Python
     ├── __init__.py
     └── frontmatter_helpers.py  # ✅ Helpers de frontmatter
 
-scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível (18 linhas)
+scripts/cortex/cli.py           # 🔄 Wrapper retrocompatível (18 linhas)
 ```
 
 **Benefícios:**
@@ -134,16 +134,16 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível (18 linhas)
 
 - **Responsabilidade:** Transformar monólito em pacote
 - **Arquivos Criados:** `__main__.py`, `cli.py` (movido)
-- **Wrapper:** `scripts/cli/cortex.py` (retrocompatibilidade)
+- **Wrapper:** `scripts/cortex/cli.py` (retrocompatibilidade)
 - **Validação:** 546 testes ✓ | Ambas chamadas funcionais ✓
 
 ### 2. Retrocompatibilidade
 
-**Decisão:** Criar wrapper em `scripts/cli/cortex.py` ao invés de deletar
+**Decisão:** Criar wrapper em `scripts/cortex/cli.py` ao invés de deletar
 
 **Justificativa:**
 
-- Workflows existentes (`python scripts/cli/cortex.py`) continuam funcionando
+- Workflows existentes (`python scripts/cortex/cli.py`) continuam funcionando
 - Gradual migration path (equipe pode migrar quando quiser)
 - Zero impacto em CI/CD ou automações
 
@@ -151,7 +151,7 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível (18 linhas)
 
 ```bash
 # Método 1 (Legado - via wrapper)
-python scripts/cli/cortex.py --help
+python scripts/cortex/cli.py --help
 
 # Método 2 (Moderno - via -m)
 python -m scripts.cortex --help
@@ -266,7 +266,7 @@ make validate  # 546 passed ✓
 #### **Fase 4: Commit Atômico**
 
 ```bash
-git add scripts/cortex/ scripts/cli/cortex.py
+git add scripts/cortex/ scripts/cortex/cli.py
 git commit -m "refactor(cortex): extract frontmatter helpers (Iteration 1)"
 ```
 
@@ -278,7 +278,7 @@ git commit -m "refactor(cortex): extract frontmatter helpers (Iteration 1)"
 
 ```bash
 # 1. Mover monólito para pacote
-mv scripts/cli/cortex.py scripts/cortex/cli.py
+mv scripts/cortex/cli.py scripts/cortex/cli.py
 
 # 2. Criar entry point
 cat > scripts/cortex/__main__.py <<EOF
@@ -288,7 +288,7 @@ if __name__ == "__main__":
 EOF
 
 # 3. Criar wrapper retrocompatível
-cat > scripts/cli/cortex.py <<EOF
+cat > scripts/cortex/cli.py <<EOF
 from scripts.cortex.cli import main
 if __name__ == "__main__":
     main()
@@ -323,7 +323,7 @@ git commit -m "refactor(cortex): migrate CLI to package structure (Iteration 2 -
 | **Type Check** | Mypy --strict | ✅ Success (155 files) |
 | **Pre-commit** | Todos hooks | ✅ 11/11 passed |
 | **Funcional** | Comando `cortex init` | ✅ Funcionando |
-| **Retrocompat** | `scripts/cli/cortex.py` | ✅ Funcionando |
+| **Retrocompat** | `scripts/cortex/cli.py` | ✅ Funcionando |
 | **Moderno** | `python -m scripts.cortex` | ✅ Funcionando |
 
 ### Casos de Teste Específicos
@@ -354,7 +354,7 @@ cat /tmp/test.md
 
 ```bash
 # Método legado
-python scripts/cli/cortex.py --help
+python scripts/cortex/cli.py --help
 
 # Método moderno
 python -m scripts.cortex --help
@@ -411,14 +411,14 @@ python -m scripts.cortex --help
 **ANTES:**
 
 ```bash
-python scripts/cli/cortex.py audit
+python scripts/cortex/cli.py audit
 ```
 
 **DEPOIS (ambos funcionam):**
 
 ```bash
 # Opção 1 (Legado - via wrapper)
-python scripts/cli/cortex.py audit
+python scripts/cortex/cli.py audit
 
 # Opção 2 (Moderno - via -m)
 python -m scripts.cortex audit
@@ -555,7 +555,7 @@ Meio-termo: extrair apenas lógica de apresentação (typer.echo).
 - **Pacote:** [`scripts/cortex/`](../../scripts/cortex/)
 - **CLI:** [`scripts/cortex/cli.py`](../../scripts/cortex/cli.py)
 - **Core:** [`scripts/cortex/core/frontmatter_helpers.py`](../../scripts/cortex/core/frontmatter_helpers.py)
-- **Wrapper:** [`scripts/cli/cortex.py`](../../scripts/cli/cortex.py)
+- **Wrapper:** [`scripts/cortex/cli.py`](../../scripts/cortex/cli.py)
 
 ### Commits
 
@@ -599,7 +599,7 @@ Meio-termo: extrair apenas lógica de apresentação (typer.echo).
 
 ## ⚠️ UPDATE (2025-12-22): Sunset do Wrapper
 
-**Decisão:** Wrapper `scripts/cli/cortex.py` foi **REMOVIDO** após validação completa.
+**Decisão:** Wrapper `scripts/cortex/cli.py` foi **REMOVIDO** após validação completa.
 
 **Motivo:** A unificação estrutural conforme ARCHITECTURE_TRIAD.md elimina a ambiguidade de caminhos.
 

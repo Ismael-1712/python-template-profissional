@@ -7,7 +7,7 @@ author: Auto-Generated (doc_gen.py)
 date: '2025-12-15'
 context_tags: [cli, commands, reference]
 linked_code:
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
   - scripts/cli/audit.py
   - scripts/core/doc_gen.py
 title: 📚 Referência de Comandos CLI (Auto-Generated)

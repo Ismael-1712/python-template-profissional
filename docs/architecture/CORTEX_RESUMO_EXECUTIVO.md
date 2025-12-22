@@ -7,7 +7,7 @@ author: Engineering Team
 date: '2025-12-01'
 context_tags: []
 linked_code:
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 - scripts/core/cortex/models.py
 - scripts/core/cortex/metadata.py
 - tests/test_cortex_metadata.py

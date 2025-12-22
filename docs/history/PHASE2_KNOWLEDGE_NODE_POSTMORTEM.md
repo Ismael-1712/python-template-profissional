@@ -11,7 +11,7 @@ linked_code:
   - scripts/core/cortex/knowledge_scanner.py
   - scripts/core/cortex/knowledge_sync.py
   - scripts/core/guardian/hallucination_probe.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 related_docs:
   - ../guides/KNOWLEDGE_NODE_MANUAL.md
   - ../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md

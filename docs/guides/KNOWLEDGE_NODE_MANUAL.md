@@ -14,7 +14,7 @@ linked_code:
   - scripts/core/cortex/knowledge_scanner.py
   - scripts/core/cortex/knowledge_sync.py
   - scripts/core/guardian/hallucination_probe.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 ---
 
 # 📚 Knowledge Node Manual
@@ -481,7 +481,7 @@ class KnowledgeEntry:
 - [scripts/core/cortex/knowledge_scanner.py](../../scripts/core/cortex/knowledge_scanner.py)
 - [scripts/core/cortex/knowledge_sync.py](../../scripts/core/cortex/knowledge_sync.py)
 - [scripts/core/guardian/hallucination_probe.py](../../scripts/core/guardian/hallucination_probe.py)
-- [scripts/cli/cortex.py](../../scripts/cli/cortex.py)
+- [scripts/cortex/cli.py](../../scripts/cortex/cli.py)
 
 ### Testes
 

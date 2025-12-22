@@ -7,7 +7,7 @@ author: Engineering Team
 date: 2025-12-01
 context_tags: [cortex, git-hooks, automation, introspection]
 linked_code:
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 ---
 
 # CORTEX Auto-Hooks: Contexto Sempre Atualizado
