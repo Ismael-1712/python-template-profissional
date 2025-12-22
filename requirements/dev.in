@@ -15,7 +15,10 @@ tomli; python_version < '3.11'
 # Type Checking
 mypy==1.19.1
 types-PyYAML==6.0.12.20250915
-types-requests
+types-requests==2.32.4.20250913
+
+# CLI Framework
+typer==0.15.3
 
 # Internationalization (i18n)
 Babel==2.17.0
