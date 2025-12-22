@@ -4,7 +4,7 @@
         {
             "label": "Git: Direct Push Main",
             "type": "shell",
-            "command": "./scripts/direct-push-main.sh",
+            "command": "./scripts/git/direct-push-main.sh",
             "group": "build",
             "presentation": {
                 "reveal": "always",
@@ -15,7 +15,7 @@
         {
             "label": "Git: PR Cleanup",
             "type": "shell",
-            "command": "./scripts/post-pr-cleanup.sh",
+            "command": "./scripts/git/post-pr-cleanup.sh",
             "group": "build",
             "presentation": {
                 "reveal": "always",

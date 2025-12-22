@@ -160,11 +160,11 @@ git gc --auto
 
 ## 🚀 Script de Automação
 
-Salve como `scripts/direct-push-main.sh`:
+Salve como `scripts/git/direct-push-main.sh`:
 
 ```bash
 #!/bin/bash
-# scripts/direct-push-main.sh
+# scripts/git/direct-push-main.sh
 # Protocolo automatizado para push direto na main
 
 set -e  # Exit on error
@@ -195,10 +195,10 @@ git log --oneline -3
 **Uso:**
 
 ```bash
-chmod +x scripts/direct-push-main.sh
+chmod +x scripts/git/direct-push-main.sh
 
 # Após fazer commit localmente
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 ---

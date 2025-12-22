@@ -415,7 +415,7 @@ git push origin feat/B
 
 - [`scripts/git_sync/sync_logic.py`](../../scripts/git_sync/sync_logic.py) - Proteção de branch
 - [`.github/workflows/propagate.yml`](../../.github/workflows/propagate.yml) - Robô P19
-- [`scripts/post-pr-cleanup.sh`](../../scripts/post-pr-cleanup.sh) - Automação de limpeza
+- [`scripts/git/post-pr-cleanup.sh`](../../scripts/git/post-pr-cleanup.sh) - Automação de limpeza
 
 ### Recursos Externos
 
