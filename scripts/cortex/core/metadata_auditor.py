@@ -132,7 +132,7 @@ class MetadataAuditor:
         Returns:
             FileAuditResult containing errors, warnings, and metadata.
         """
-        relative_path = md_file.relative_to(self.workspace_root)
+        relative_path = md_file.resolve().relative_to(self.workspace_root.resolve())
         errors: list[str] = []
         warnings: list[str] = []
         metadata: DocumentMetadata | None = None
