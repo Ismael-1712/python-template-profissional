@@ -9,7 +9,7 @@ created: 2025-12-15
 updated: 2025-12-15
 linked_code:
   - scripts/core/cortex/readme_generator.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
   - docs/templates/README.md.j2
 tags:
   - cortex

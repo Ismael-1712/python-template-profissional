@@ -13,7 +13,7 @@ linked_code:
 - scripts/cli/mock_ci.py
 - scripts/core/cortex/migrate.py
 - scripts/audit_dashboard/storage.py
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 title: 📊 Sprint 4 - Relatório de Auditoria de Tipagem Mypy
 ---
 
@@ -119,7 +119,7 @@ exclude = ["tests/", "venv/", ".venv/"]
    - `scripts/audit_dashboard/storage.py`: Anotar retorno corretamente
    - `scripts/core/mock_generator.py`: Adicionar anotações de variáveis
    - `scripts/core/cortex/mapper.py`: Anotar listas vazias
-   - `scripts/cli/cortex.py`: Anotar file_warnings
+   - `scripts/cortex/cli.py`: Anotar file_warnings
 
 3. **Atualizar pyproject.toml para Nível 1**
 

@@ -1,3 +1,14 @@
+---
+id: ci-performance-audit-report-old
+title: "Auditoria de Performance CI/CD - Relatório de Gargalos (OLD)"
+type: history
+author: GEM
+date: '2025-12-22'
+version: 1.0.0
+status: archived
+tags: [ci-cd, performance, infrastructure, sre]
+---
+
 # 🔍 AUDITORIA DE PERFORMANCE CI/CD - RELATÓRIO DE GARGALOS
 
 **Data:** 22/12/2025

@@ -36,7 +36,7 @@ do Visibility Guardian.
 - Matching contra documentação: ~10-20ms
 - Total end-to-end: <50ms
 
-### 2. Integração CLI (`scripts/cli/cortex.py`)
+### 2. Integração CLI (`scripts/cortex/cli.py`)
 
 **Comando**: `cortex guardian check <path>`
 

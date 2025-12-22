@@ -8,7 +8,7 @@ date: '2025-12-01'
 context_tags: [cortex, governance, documentation]
 linked_code:
 - scripts/core/cortex/scanner.py
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 related_docs:
 - docs/architecture/CORTEX_INDICE.md
 - docs/guides/CORTEX_INTROSPECTION_SYSTEM.md
@@ -79,7 +79,7 @@ O método:
 
 ### 3. Integração com `cortex audit`
 
-**Arquivo**: `scripts/cli/cortex.py`
+**Arquivo**: `scripts/cortex/cli.py`
 **Comando**: `cortex audit`
 
 A validação é executada automaticamente no início de toda auditoria:

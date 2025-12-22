@@ -1,6 +1,6 @@
 ---
 id: cortex-cli-config-hooks-mapping
-type: report
+type: history
 status: active
 version: 1.0.0
 author: GEM & SRE Team
@@ -10,8 +10,6 @@ context_tags: [architecture, modularization, technical-audit]
 linked_code:
   - scripts/cortex/cli.py
   - scripts/core/cortex/config.py
-  - scripts/git/direct-push-main.sh
-  - scripts/git/post-pr-cleanup.sh
 related_docs:
   - docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md
 title: 'Mapeamento Técnico - Configuração e Hooks do CORTEX CLI (Etapa 01/04)'

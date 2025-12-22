@@ -10,7 +10,7 @@ linked_code:
 - scripts/core/cortex/models.py
 - scripts/core/cortex/metadata.py
 - scripts/core/cortex/scanner.py
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 - scripts/core/cortex/migrate.py
 - tests/test_cortex_metadata.py
 - tests/test_cortex_scanner.py
@@ -159,14 +159,14 @@ cortex.py (report command) (depende de scanner.py)
 
 ### Fase 3: CLI Básica (2 horas)
 
-11. Criar `scripts/cli/cortex.py` (comando `init` apenas)
+11. Criar `scripts/cortex/cli.py` (comando `init` apenas)
 12. Testar manualmente: `cortex init docs/test.md`
 
 ### Fase 4: Scanner (5 horas)
 
 13. Criar `scripts/core/cortex/scanner.py` ✅ **CRÍTICO**
 14. Criar `tests/test_cortex_scanner.py`
-15. Atualizar `scripts/cli/cortex.py` (comando `audit`)
+15. Atualizar `scripts/cortex/cli.py` (comando `audit`)
 
 ### Fase 5: Migração (14 horas)
 
@@ -179,7 +179,7 @@ cortex.py (report command) (depende de scanner.py)
 
 20. Atualizar `.pre-commit-config.yaml`
 21. Criar `.github/workflows/docs-validation.yml`
-22. Atualizar `scripts/cli/cortex.py` (comando `report`)
+22. Atualizar `scripts/cortex/cli.py` (comando `report`)
 
 id: example-guide
 type: guide
@@ -192,7 +192,7 @@ context_tags:
 - testing
 - example
 linked_code:
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 
 ## ✅ VALIDAÇÃO FINAL
 
@@ -202,8 +202,8 @@ linked_code:
 - [ ] `pyproject.toml` foi atualizado com dependências
 - [ ] Todos os 30+ arquivos `.md` têm Frontmatter
 - [ ] `pytest tests/test_cortex_*.py -v` passa (100% dos testes)
-- [ ] `ruff check scripts/core/cortex/ scripts/cli/cortex.py` passa
-- [ ] `mypy scripts/core/cortex/ scripts/cli/cortex.py` passa
+- [ ] `ruff check scripts/core/cortex/ scripts/cortex/cli.py` passa
+- [ ] `mypy scripts/core/cortex/ scripts/cortex/cli.py` passa
 - [ ] `mkdocs build --strict` passa
 - [ ] `cortex audit docs/` retorna 0 erros
 - [ ] Pre-commit hook funciona

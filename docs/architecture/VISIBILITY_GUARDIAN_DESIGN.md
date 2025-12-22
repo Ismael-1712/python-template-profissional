@@ -74,7 +74,7 @@ scripts/core/guardian/
 ```
 
 ```text
-scripts/cli/cortex.py
+scripts/cortex/cli.py
 └── guardian            # Novo grupo de comandos
     ├── check           # cortex guardian check
     └── report          # cortex guardian report --format=json|table

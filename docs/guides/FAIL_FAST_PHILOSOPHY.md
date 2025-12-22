@@ -10,7 +10,7 @@ context_tags: [engineering-philosophy, observability, ci-cd]
 linked_code:
   - scripts/cli/git_sync.py
   - scripts/cli/doctor.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
   - scripts/ci_recovery/main.py
   - scripts/ci/check_docs.py
 title: 'Fail Fast Philosophy - Exit Codes & Error Handling Strategy'
@@ -338,7 +338,7 @@ if __name__ == "__main__":
 **Typer usa `typer.Exit(code=X)` em vez de `sys.exit(X)`:**
 
 ```python
-# scripts/cli/cortex.py
+# scripts/cortex/cli.py
 @app.command()
 def audit(...) -> None:
     """Run metadata audit."""
@@ -630,7 +630,7 @@ Ao revisar código, verifique:
 
 - [scripts/cli/git_sync.py](../../scripts/cli/git_sync.py#L110-L118) - Hierarquia de exceções
 - [scripts/cli/doctor.py](../../scripts/cli/doctor.py#L416-L430) - Exit codes em diagnóstico
-- [scripts/cli/cortex.py](../../scripts/cli/cortex.py#L582-L600) - Typer exit codes
+- [scripts/cortex/cli.py](../../scripts/cortex/cli.py#L582-L600) - Typer exit codes
 - [scripts/ci_recovery/main.py](../../scripts/ci_recovery/main.py#L291-L303) - Recovery system
 - [scripts/maintain_versions.py](../../scripts/maintain_versions.py#L37-L46) - KeyboardInterrupt handling
 
