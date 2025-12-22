@@ -11,7 +11,7 @@ SYSTEM_PYTHON := python3
 
 # Lógica de Detecção:
 # Se o binário do python existir dentro do .venv, usa ele.
-# Caso contrário, usa o do sistema (mas a maioria dos targets falhará ou criará o venv).
+# Caso contrário, usa o do sistema.
 ifneq ($(wildcard $(VENV)/bin/python),)
 	PYTHON := $(VENV)/bin/python
 else
@@ -58,6 +58,9 @@ doctor:
 upgrade-python:
 	@$(PYTHON) $(SCRIPTS_DIR)/maintain_versions.py
 
+## setup: Alias para install-dev (configura ambiente completo)
+setup: install-dev
+
 ## requirements: Recompila requirements/dev.txt usando a versão baseline (CI-compatible)
 requirements:
 	@echo "🔄 Compilando requirements com Python $(PYTHON_BASELINE) (CI-compatible)..."
@@ -69,13 +72,10 @@ requirements:
 	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in
 	@echo "✅ Lockfile gerado com Python $(PYTHON_BASELINE) (compatível com CI)"
 
-## setup: Alias para install-dev (configura ambiente completo)
-setup: install-dev
-
 ## validate-python: Valida se a versão do Python é compatível com a baseline do CI
 validate-python:
 	@if [ "$(CURRENT_PYTHON_VERSION)" != "$(PYTHON_BASELINE)" ]; then \
-		echo "⚠️  \033[1;33mAVISO:\033[0m Python $(CURRENT_PYTHON_VERSION) detectado, mas a baseline do CI é $(PYTHON_BASELINE)"; \
+		echo -e "⚠️  \033[1;33mAVISO:\033[0m Python $(CURRENT_PYTHON_VERSION) detectado, mas a baseline do CI é $(PYTHON_BASELINE)"; \
 		echo "    O lockfile gerado pode ser incompatível com o CI."; \
 		echo "    Considere usar: pyenv local $(PYTHON_BASELINE) && make install-dev"; \
 		echo "    Ou execute: make requirements (para forçar Python $(PYTHON_BASELINE))"; \
@@ -232,7 +232,7 @@ i18n-init:
 ## i18n-update: Update existing language catalogs with new strings
 i18n-update:
 	@echo "🌍 Updating existing catalogs..."
-	@$(VENV)/bin/pybabel update -i $(POT_FILE) -d $(LOCALES_DIR)
+	@$(VENV)/bin/pybabel update -i $(POT_FILE) -d $(LOCALES_DIR) -l $(LOCALE)
 	@echo "✅ Catalogs updated"
 
 ## i18n-compile: Compile .po files to .mo binary format
@@ -243,7 +243,7 @@ i18n-compile:
 
 ## i18n-stats: Show translation statistics
 i18n-stats:
-	@echo "🌍 Translation Statistics:"
+	@echo "�� Translation Statistics:"
 	@for po_file in $(LOCALES_DIR)/*/LC_MESSAGES/*.po; do \
 		if [ -f "$$po_file" ]; then \
 		echo ""; \
@@ -255,6 +255,7 @@ done
 ## test-matrix: Run tests across multiple Python versions (requires tox)
 test-matrix:
 	$(PYTHON) -m tox
+
 ## commit: Intelligent commit with Smart Governance (idempotent hooks)
 commit:
 	@if [ -z "$(MSG)" ]; then \
