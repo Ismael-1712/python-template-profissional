@@ -1,17 +1,19 @@
 # ======================================================================
-# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v5.0 - Level 2 Optimization)
+# 🚀 PISTOLÃO DE QUALIDADE - PYTHON (v6.0 - Topology Optimized)
 # ======================================================================
 # Este workflow é o "Porteiro de CI" para o python-template-profissional.
 #
-# ARQUITETURA HÍBRIDA (Nível 1 + Nível 2):
-# - Cache agressivo multinível (pip, venv, mypy) por versão Python
-# - Setup com Matrix Strategy (Python 3.10, 3.11, 3.12)
+# ARQUITETURA OTIMIZADA (Nível 3 - Waterfall Fix):
+# - Cache agressivo multinível (pip, venv, mypy, pytest) por versão Python
+# - Jobs DESACOPLADOS: cada versão Python roda independentemente
+# - Eliminação do Waterfall Bottleneck (setup não bloqueia todos os testes)
 # - Jobs paralelos otimizados:
 #   * Quality (lint/security): Python 3.12 apenas
-#   * Tests: Matrix completa (3.10, 3.11, 3.12)
+#   * Tests: 3 jobs independentes (3.10, 3.11, 3.12)
 # - Pytest-xdist para paralelismo de testes
 #
-# META DE PERFORMANCE: < 2 minutos (antes: 7-9min)
+# META DE PERFORMANCE: < 5 minutos (antes: 13min)
+# OTIMIZAÇÕES: Topologia pipeline + cache L2 (pytest)
 # ======================================================================
 
 name: "🚀 CI: Teste, Lint e Qualidade"
@@ -33,90 +35,14 @@ concurrency:
 
 jobs:
   # ====================================================================
-  # JOB 1: SETUP ENVIRONMENT (MATRIX: Python 3.10, 3.11, 3.12)
-  # ====================================================================
-  # Instala dependências para cada versão Python com cache inteligente.
-  # Este job é pré-requisito para quality e tests.
-  # ====================================================================
-  setup:
-    name: "⚙️ Setup Python ${{ matrix.python-version }}"
-    runs-on: ubuntu-latest
-
-    env:
-      CI: true
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.10", "3.11", "3.12"]
-
-    steps:
-      - name: "Checkout do Repositório"
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: "Configurar Python ${{ matrix.python-version }}"
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: 'requirements/dev.txt'
-
-      # Cache compartilhado de pip (wheels baixados)
-      - name: "Cache pip downloads"
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/pip
-          key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.txt') }}
-          restore-keys: |
-            pip-${{ runner.os }}-
-
-      # Cache do venv específico por versão Python
-      - name: "Cache virtual environment"
-        id: cache-venv
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.txt') }}
-          restore-keys: |
-            venv-${{ runner.os }}-py${{ matrix.python-version }}-
-
-      # Verificar consistência do lockfile ANTES de instalar
-      # Roda apenas no Python 3.10 (baseline) pois lockfiles são version-specific
-      - name: "Check Lockfile Consistency"
-        if: matrix.python-version == '3.10'
-        run: |
-          python -m pip install pip-tools
-          # Gera o arquivo exatamente como seria gerado localmente
-          pip-compile requirements/dev.in
-          # Verifica se houve mudança no arquivo git-tracked (ignora metadados)
-          if ! git diff --exit-code requirements/dev.txt; then
-            echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
-            echo "Run 'make install-dev' locally and commit the updated dev.txt"
-            exit 1
-          fi
-          echo "✅ Lockfile is consistent"
-
-      # Só instala se o cache falhou (primeiro run ou mudança em requirements)
-      - name: "Instalar Dependências"
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: make install-dev
-
-      # Validação básica do ambiente instalado
-      - name: "Validar Instalação"
-        run: |
-          .venv/bin/python --version
-          .venv/bin/pip list | head -20
-
-  # ====================================================================
-  # JOB 2: QUALITY CHECKS (Roda apenas em Python 3.12)
+  # JOB 1: QUALITY CHECKS (Python 3.12 com setup inline)
   # ====================================================================
   # Lint, format check, type checking e security audit.
-  # Usa a versão mais recente do Python para máxima compatibilidade.
+  # Setup inline para eliminar dependência de job separado.
   # ====================================================================
   quality:
     name: "🔍 Quality & Security"
     runs-on: ubuntu-latest
-    needs: setup
 
     env:
       CI: true
@@ -131,8 +57,18 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'requirements/dev.txt'
 
-      # Restaura cache do venv Python 3.12
-      - name: "Restaurar cache do venv"
+      # Cache compartilhado de pip (wheels baixados)
+      - name: "Cache pip downloads"
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      # Cache do venv específico Python 3.12
+      - name: "Cache virtual environment"
+        id: cache-venv
         uses: actions/cache@v5
         with:
           path: .venv
@@ -140,8 +76,21 @@ jobs:
           restore-keys: |
             venv-${{ runner.os }}-py3.12-
 
-      # Blindagem: Garantir dependências mesmo com cache parcial/corrompido
-      - name: "Instalar Dependências (Idempotente)"
+      # Verificar consistência do lockfile (Python 3.10 baseline)
+      - name: "Check Lockfile Consistency"
+        run: |
+          python -m pip install pip-tools
+          pip-compile requirements/dev.in
+          if ! git diff --exit-code requirements/dev.txt; then
+            echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
+            echo "Run 'make install-dev' locally and commit the updated dev.txt"
+            exit 1
+          fi
+          echo "✅ Lockfile is consistent"
+
+      # Só instala se o cache falhou
+      - name: "Instalar Dependências"
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install-dev
 
       # Cache do mypy (type checking incremental)
@@ -179,45 +128,172 @@ jobs:
         run: .venv/bin/python -m scripts.cli.cortex guardian check . --fail-on-error
 
   # ====================================================================
-  # JOB 3: TESTS (MATRIX: Python 3.10, 3.11, 3.12)
+  # JOB 2: TESTS Python 3.10 (INDEPENDENTE)
   # ====================================================================
-  # Executa suite completa de testes em todas as versões Python.
-  # Usa pytest-xdist para paralelismo (múltiplos cores).
+  # Setup inline + testes. Não aguarda outros jobs.
   # ====================================================================
-  tests:
-    name: "🧪 Tests Python ${{ matrix.python-version }}"
+  tests-py310:
+    name: "🧪 Tests Python 3.10"
     runs-on: ubuntu-latest
-    needs: setup
 
     env:
       CI: true
 
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: "Configurar Python 3.10"
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.10"
+          cache: 'pip'
+          cache-dependency-path: 'requirements/dev.txt'
+
+      # Cache compartilhado de pip
+      - name: "Cache pip downloads"
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      # Cache do venv Python 3.10
+      - name: "Cache virtual environment"
+        id: cache-venv
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-py3.10-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            venv-${{ runner.os }}-py3.10-
+
+      # Cache do pytest (L2)
+      - name: "Cache pytest"
+        uses: actions/cache@v5
+        with:
+          path: .pytest_cache
+          key: pytest-${{ runner.os }}-py3.10-${{ hashFiles('tests/**/*.py') }}
+          restore-keys: |
+            pytest-${{ runner.os }}-py3.10-
+
+      # Só instala se o cache falhou
+      - name: "Instalar Dependências"
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: make install-dev
+
+      # Executa testes com pytest-xdist (-n auto)
+      - name: "Executar Testes (Paralelo)"
+        run: make test-ci
+
+  # ====================================================================
+  # JOB 3: TESTS Python 3.11 (INDEPENDENTE)
+  # ====================================================================
+  tests-py311:
+    name: "🧪 Tests Python 3.11"
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: "Configurar Python ${{ matrix.python-version }}"
+      - name: "Configurar Python 3.11"
         uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.11"
           cache: 'pip'
           cache-dependency-path: 'requirements/dev.txt'
 
-      # Restaura cache do venv específico da versão
-      - name: "Restaurar cache do venv"
+      # Cache compartilhado de pip
+      - name: "Cache pip downloads"
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      # Cache do venv Python 3.11
+      - name: "Cache virtual environment"
+        id: cache-venv
         uses: actions/cache@v5
         with:
           path: .venv
-          key: venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('requirements/dev.txt') }}
+          key: venv-${{ runner.os }}-py3.11-${{ hashFiles('requirements/dev.txt') }}
           restore-keys: |
-            venv-${{ runner.os }}-py${{ matrix.python-version }}-
+            venv-${{ runner.os }}-py3.11-
 
-      # Blindagem: Garantir pytest e dependências mesmo com cache parcial/corrompido
-      - name: "Instalar Dependências (Idempotente)"
+      # Cache do pytest (L2)
+      - name: "Cache pytest"
+        uses: actions/cache@v5
+        with:
+          path: .pytest_cache
+          key: pytest-${{ runner.os }}-py3.11-${{ hashFiles('tests/**/*.py') }}
+          restore-keys: |
+            pytest-${{ runner.os }}-py3.11-
+
+      # Só instala se o cache falhou
+      - name: "Instalar Dependências"
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: make install-dev
+
+      # Executa testes com pytest-xdist (-n auto)
+      - name: "Executar Testes (Paralelo)"
+        run: make test-ci
+
+  # ====================================================================
+  # JOB 4: TESTS Python 3.12 (INDEPENDENTE)
+  # ====================================================================
+  tests-py312:
+    name: "🧪 Tests Python 3.12"
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: "Configurar Python 3.12"
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+          cache-dependency-path: 'requirements/dev.txt'
+
+      # Cache compartilhado de pip
+      - name: "Cache pip downloads"
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      # Cache do venv Python 3.12
+      - name: "Cache virtual environment"
+        id: cache-venv
+        uses: actions/cache@v5
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-py3.12-${{ hashFiles('requirements/dev.txt') }}
+          restore-keys: |
+            venv-${{ runner.os }}-py3.12-
+
+      # Cache do pytest (L2)
+      - name: "Cache pytest"
+        uses: actions/cache@v5
+        with:
+          path: .pytest_cache
+          key: pytest-${{ runner.os }}-py3.12-${{ hashFiles('tests/**/*.py') }}
+          restore-keys: |
+            pytest-${{ runner.os }}-py3.12-
+
+      # Só instala se o cache falhou
+      - name: "Instalar Dependências"
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install-dev
 
       # Executa testes com pytest-xdist (-n auto)
