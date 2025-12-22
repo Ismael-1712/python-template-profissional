@@ -102,7 +102,7 @@ class TestVSCodeConfiguration:
 
         # Validar campos obrigatórios
         assert direct_push_task.get("type") == "shell", "Task deve ser do tipo 'shell'"
-        assert "./scripts/direct-push-main.sh" in direct_push_task.get(
+        assert "./scripts/git/direct-push-main.sh" in direct_push_task.get(
             "command",
             "",
         ), "Comando deve referenciar o script correto"
@@ -125,7 +125,7 @@ class TestVSCodeConfiguration:
 
         # Validar campos obrigatórios
         assert pr_cleanup_task.get("type") == "shell", "Task deve ser do tipo 'shell'"
-        assert "./scripts/post-pr-cleanup.sh" in pr_cleanup_task.get(
+        assert "./scripts/git/post-pr-cleanup.sh" in pr_cleanup_task.get(
             "command",
             "",
         ), "Comando deve referenciar o script correto"

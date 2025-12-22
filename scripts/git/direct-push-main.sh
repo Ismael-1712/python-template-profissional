@@ -1,9 +1,9 @@
 #!/bin/bash
-# scripts/direct-push-main.sh
+# scripts/git/direct-push-main.sh
 # Protocolo automatizado para push direto na branch main
 # Baseado em: docs/guides/DIRECT_PUSH_PROTOCOL.md
 #
-# Uso: ./scripts/direct-push-main.sh
+# Uso: ./scripts/git/direct-push-main.sh
 # Executa após ter feito commit local na main
 
 set -e  # Exit on error

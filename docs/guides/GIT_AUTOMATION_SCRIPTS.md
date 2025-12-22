@@ -39,21 +39,21 @@ Este projeto inclui **dois scripts de automação** que implementam os protocolo
 Os scripts já vêm com permissões de execução configuradas:
 
 ```bash
-ls -lh scripts/*.sh
+ls -lh scripts/git/*.sh
 ```
 
 **Resultado esperado:**
 
 ```
--rwxr-xr-x 1 user user 3.5K Dec 15 20:15 scripts/post-pr-cleanup.sh
--rwxr-xr-x 1 user user 3.3K Dec 15 20:16 scripts/direct-push-main.sh
+-rwxr-xr-x 1 user user 3.5K Dec 15 20:15 scripts/git/post-pr-cleanup.sh
+-rwxr-xr-x 1 user user 3.3K Dec 15 20:16 scripts/git/direct-push-main.sh
 ```
 
 ### Se Necessário, Configure Permissões
 
 ```bash
-chmod +x scripts/post-pr-cleanup.sh
-chmod +x scripts/direct-push-main.sh
+chmod +x scripts/git/post-pr-cleanup.sh
+chmod +x scripts/git/direct-push-main.sh
 ```
 
 ---
@@ -75,7 +75,7 @@ Automatiza a limpeza do repositório após um Pull Request ser aprovado e mergea
 ### Sintaxe
 
 ```bash
-./scripts/post-pr-cleanup.sh <branch-name>
+./scripts/git/post-pr-cleanup.sh <branch-name>
 ```
 
 ### Parâmetros
@@ -88,7 +88,7 @@ Automatiza a limpeza do repositório após um Pull Request ser aprovado e mergea
 
 ```bash
 # Após PR #169 ser mergeado
-./scripts/post-pr-cleanup.sh feat/P010-vector-bridge
+./scripts/git/post-pr-cleanup.sh feat/P010-vector-bridge
 ```
 
 ### O Que o Script Faz
@@ -161,7 +161,7 @@ dd51c96 chore(deps): Bump python-semantic-release
 
 | Erro | Causa | Solução |
 |------|-------|---------|
-| `Branch name required` | Não passou nome da branch | Execute: `./scripts/post-pr-cleanup.sh <branch>` |
+| `Branch name required` | Não passou nome da branch | Execute: `./scripts/git/post-pr-cleanup.sh <branch>` |
 | `Failed to checkout main` | Conflitos não resolvidos | Resolva conflitos manualmente |
 | `Could not delete local branch` | Branch tem mudanças não mergeadas | Use `git branch -D <branch>` para forçar |
 
@@ -184,7 +184,7 @@ Automatiza o workflow completo de push direto na branch main, incluindo validaç
 ### Sintaxe
 
 ```bash
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 ### Parâmetros
@@ -207,7 +207,7 @@ git add docs/guide/NEW_GUIDE.md
 git commit -m "docs: Adiciona novo guia"
 
 # Execute o script
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 ### O Que o Script Faz
@@ -310,7 +310,7 @@ git commit -m "feat: implementa nova funcionalidade"
 git push origin feat/nova-funcionalidade
 
 # 4. Após aprovação e merge no GitHub
-./scripts/post-pr-cleanup.sh feat/nova-funcionalidade
+./scripts/git/post-pr-cleanup.sh feat/nova-funcionalidade
 ```
 
 ### Workflow 2: Correções Diretas na Main
@@ -321,7 +321,7 @@ git add docs/guide/correcao.md
 git commit -m "docs: corrige typo no guia"
 
 # 2. Usar script automatizado
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 ---
@@ -333,14 +333,14 @@ git commit -m "docs: corrige typo no guia"
 **Sintomas:**
 
 ```bash
-bash: ./scripts/direct-push-main.sh: Permission denied
+bash: ./scripts/git/direct-push-main.sh: Permission denied
 ```
 
 **Solução:**
 
 ```bash
-chmod +x scripts/direct-push-main.sh
-chmod +x scripts/post-pr-cleanup.sh
+chmod +x scripts/git/direct-push-main.sh
+chmod +x scripts/git/post-pr-cleanup.sh
 ```
 
 ---
@@ -365,7 +365,7 @@ git add .
 git commit --amend  # ou novo commit
 
 # Executar novamente
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 ---
@@ -474,7 +474,7 @@ git push origin feat/search-optimization
 # GitHub: Criar PR, passar CI, obter aprovação, Squash & Merge
 
 # Dia 2: Limpar após merge
-./scripts/post-pr-cleanup.sh feat/search-optimization
+./scripts/git/post-pr-cleanup.sh feat/search-optimization
 ```
 
 **Resultado:**
@@ -497,7 +497,7 @@ git add src/fix/critical_bug.py
 git commit -m "fix: corrige vazamento de memória crítico"
 
 # Push automatizado com validação
-./scripts/direct-push-main.sh
+./scripts/git/direct-push-main.sh
 ```
 
 **Resultado:**
@@ -535,8 +535,8 @@ Adicione ao seu `.bashrc` ou `.zshrc`:
 
 ```bash
 # Aliases Git Automation
-alias pr-cleanup='./scripts/post-pr-cleanup.sh'
-alias push-main='./scripts/direct-push-main.sh'
+alias pr-cleanup='./scripts/git/post-pr-cleanup.sh'
+alias push-main='./scripts/git/direct-push-main.sh'
 ```
 
 **Uso:**
@@ -559,7 +559,7 @@ Adicione ao `.vscode/tasks.json`:
     {
       "label": "Git: Direct Push Main",
       "type": "shell",
-      "command": "./scripts/direct-push-main.sh",
+      "command": "./scripts/git/direct-push-main.sh",
       "group": "build",
       "presentation": {
         "reveal": "always",
