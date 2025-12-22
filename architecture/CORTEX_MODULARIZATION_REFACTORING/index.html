@@ -1253,6 +1253,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#update-2025-12-22-sunset-do-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ UPDATE (2025-12-22): Sunset do Wrapper
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1875,10 +1886,19 @@
 </tbody>
 </table>
 <hr />
-<p><strong>Última Atualização:</strong> 2025-12-21
-<strong>Status:</strong> COMPLETED
+<p><strong>Última Atualização:</strong> 2025-12-22
+<strong>Status:</strong> COMPLETED → FINALIZED (wrapper removido em 2025-12-22)
 <strong>Decisor:</strong> Eng. Team (Ismael Tavares)
 <strong>Princípio Aplicado:</strong> SOLID (SRP) + Iterative Fractionation Protocol</p>
+<hr />
+<h2 id="update-2025-12-22-sunset-do-wrapper">⚠️ UPDATE (2025-12-22): Sunset do Wrapper</h2>
+<p><strong>Decisão:</strong> Wrapper <code>scripts/cli/cortex.py</code> foi <strong>REMOVIDO</strong> após validação completa.</p>
+<p><strong>Motivo:</strong> A unificação estrutural conforme ARCHITECTURE_TRIAD.md elimina a ambiguidade de caminhos.</p>
+<p><strong>Método de Invocação Único (Pós-Sunset):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cortex<span class="w"> </span>--help<span class="w">              </span><span class="c1"># Via entry point instalado (pyproject.toml)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w">   </span><span class="c1"># Via module invocation</span>
+</code></pre></div>
+<p><strong>Impacto:</strong> Documentação histórica neste arquivo preserva o caminho antigo para referência histórica, mas todos os exemplos operacionais devem usar o novo método.</p>
 
 
 
