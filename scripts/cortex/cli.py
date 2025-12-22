@@ -27,10 +27,8 @@ _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
-from scripts.core.cortex.knowledge_sync import (  # noqa: E402
-    KnowledgeSyncer,
-    SyncStatus,
+from scripts.core.cortex.knowledge_orchestrator import (  # noqa: E402
+    KnowledgeOrchestrator,
 )
 from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
@@ -692,15 +690,15 @@ def knowledge_scan(
         else:
             typer.echo("📋 Mode: Standard Sequential\n")
 
-        # Instantiate scanner and scan
-        scanner = KnowledgeScanner(
+        # Instantiate orchestrator and scan
+        orchestrator = KnowledgeOrchestrator(
             workspace_root=workspace_root,
             force_parallel=parallel,
         )
-        entries = scanner.scan()
+        result = orchestrator.scan(verbose=verbose)
 
         # Display results
-        if not entries:
+        if not result.entries:
             typer.secho(
                 "⚠️  No knowledge entries found",
                 fg=typer.colors.YELLOW,
@@ -712,16 +710,16 @@ def knowledge_scan(
             return
 
         # Success summary
-        entry_word = "entry" if len(entries) == 1 else "entries"
+        entry_word = "entry" if result.total_count == 1 else "entries"
         typer.secho(
-            f"✅ Found {len(entries)} knowledge {entry_word}",
+            f"✅ Found {result.total_count} knowledge {entry_word}",
             fg=typer.colors.GREEN,
             bold=True,
         )
         typer.echo()
 
         # List entries
-        for entry in entries:
+        for entry in result.entries:
             # Status emoji mapping
             status_emoji = {
                 "active": "✅",
@@ -744,7 +742,7 @@ def knowledge_scan(
                     typer.echo(f"   Content: {content_preview}...")
                 typer.echo()  # Blank line between entries
 
-        logger.info(f"Knowledge scan completed: {len(entries)} entries found")
+        logger.info(f"Knowledge scan completed: {result.total_count} entries found")
 
     except Exception as e:
         logger.error(f"Error scanning knowledge base: {e}", exc_info=True)
@@ -799,130 +797,59 @@ def knowledge_sync(
         else:
             typer.echo()
 
-        # Step 1: Scan for knowledge entries
-        scanner = KnowledgeScanner(workspace_root=workspace_root)
-        all_entries = scanner.scan()
+        # Use orchestrator to handle scan, filter, and sync logic
+        orchestrator = KnowledgeOrchestrator(workspace_root=workspace_root)
+        summary = orchestrator.sync_multiple(entry_id=entry_id, dry_run=dry_run)
 
-        if not all_entries:
-            typer.secho(
-                "⚠️  No knowledge entries found",
-                fg=typer.colors.YELLOW,
-            )
-            typer.echo(
-                "\nTip: Create knowledge entries in docs/knowledge/ "
-                "with valid YAML frontmatter.",
-            )
-            return
+        # Display progress for each result
+        if summary.results:
+            typer.echo(f"Processing {summary.total_processed} entries...\n")
 
-        # Step 2: Filter entries if specific ID requested
-        if entry_id:
-            entries_to_sync = [e for e in all_entries if e.id == entry_id]
-            if not entries_to_sync:
-                typer.secho(
-                    f"❌ Entry '{entry_id}' not found",
-                    fg=typer.colors.RED,
-                )
+            for result in summary.results:
                 typer.echo(
-                    f"\nAvailable entries: {', '.join(e.id for e in all_entries)}",
+                    f"📄 {result.entry.id} ({len(result.entry.sources)} source(s))",
                 )
-                raise typer.Exit(code=1)
-        else:
-            entries_to_sync = all_entries
 
-        # Step 3: Filter entries that have sources
-        entries_with_sources = [e for e in entries_to_sync if e.sources]
-
-        if not entries_with_sources:
-            if entry_id:
-                typer.secho(
-                    f"⚠️  Entry '{entry_id}' has no external sources",
-                    fg=typer.colors.YELLOW,
-                )
-            else:
-                typer.secho(
-                    "⚠️  No entries with external sources found",
-                    fg=typer.colors.YELLOW,
-                )
-            return
-
-        # Step 4: Synchronize entries
-        syncer = KnowledgeSyncer()
-        sync_count = 0
-        error_count = 0
-
-        typer.echo(f"Processing {len(entries_with_sources)} entries...\n")
-
-        for entry in entries_with_sources:
-            # Verify file_path is available
-            if not entry.file_path:
-                typer.secho(
-                    f"⚠️  {entry.id}: Missing file path (internal error)",
-                    fg=typer.colors.YELLOW,
-                )
-                error_count += 1
-                continue
-
-            typer.echo(f"📄 {entry.id} ({len(entry.sources)} source(s))")
-
-            if dry_run:
-                # Dry run mode: just log what would be synced
-                for source in entry.sources:
-                    typer.echo(f"   Would sync: {source.url}")
-                sync_count += 1
-            else:
-                # Real sync mode
-                try:
-                    result = syncer.sync_entry(entry, entry.file_path)
-
-                    # Use explicit status from Core (moved from CLI logic)
-                    if result.status == SyncStatus.UPDATED:
-                        typer.secho("   ✅ Synchronized", fg=typer.colors.GREEN)
-                        sync_count += 1
-                    elif result.status == SyncStatus.NOT_MODIFIED:
-                        typer.echo("   ℹ️  No changes (304 Not Modified)")
-                        sync_count += 1
-                    else:  # ERROR
-                        typer.secho(
-                            f"   ❌ Failed: {result.error_message}",
-                            fg=typer.colors.RED,
-                        )
-                        error_count += 1
-
-                except Exception as e:
+                if dry_run:
+                    for source in result.entry.sources:
+                        typer.echo(f"   Would sync: {source.url}")
+                elif result.status.value == "updated":
+                    typer.secho("   ✅ Synchronized", fg=typer.colors.GREEN)
+                elif result.status.value == "not_modified":
+                    typer.echo("   ℹ️  No changes (304 Not Modified)")
+                else:  # error
                     typer.secho(
-                        f"   ❌ Failed: {e}",
+                        f"   ❌ Failed: {result.error_message}",
                         fg=typer.colors.RED,
                     )
-                    logger.error(
-                        f"Error syncing entry {entry.id}: {e}",
-                        exc_info=True,
-                    )
-                    error_count += 1
 
-        # Step 5: Summary
+        # Display summary
         typer.echo()
         if dry_run:
             typer.secho(
-                f"🔍 Dry run complete: {sync_count} entries would be synced",
+                f"🔍 Dry run complete: "
+                f"{summary.total_processed} entries would be synced",
                 fg=typer.colors.BLUE,
                 bold=True,
             )
-        elif error_count == 0:
+        elif summary.error_count == 0:
             typer.secho(
-                f"✅ Synchronization complete: {sync_count} entries processed",
+                f"✅ Synchronization complete: "
+                f"{summary.successful_count} entries processed",
                 fg=typer.colors.GREEN,
                 bold=True,
             )
         else:
             typer.secho(
                 f"⚠️  Synchronization complete with errors: "
-                f"{sync_count} succeeded, {error_count} failed",
+                f"{summary.successful_count} succeeded, {summary.error_count} failed",
                 fg=typer.colors.YELLOW,
                 bold=True,
             )
 
         logger.info(
-            f"Knowledge sync completed: {sync_count} succeeded, {error_count} failed",
+            f"Knowledge sync completed: "
+            f"{summary.successful_count} succeeded, {summary.error_count} failed",
         )
 
     except typer.Exit:
