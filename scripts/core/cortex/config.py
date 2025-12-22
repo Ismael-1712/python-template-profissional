@@ -10,6 +10,7 @@ License: MIT
 from __future__ import annotations
 
 import re
+from dataclasses import dataclass, field
 from typing import Any
 
 # ============================================================================
@@ -148,3 +149,99 @@ WARNING_MESSAGES: dict[str, str] = {
     "empty_links": "Field 'linked_code' is empty (recommended for traceability)",
     "no_frontmatter": "File has no YAML frontmatter header",
 }
+
+
+# ============================================================================
+# CONFIGURATION SCHEMA
+# ============================================================================
+
+
+@dataclass(frozen=True)
+class CortexConfigSchema:
+    """Immutable configuration schema for CORTEX operations.
+
+    Provides type-safe configuration with defaults from DEFAULT_CONFIG.
+    All fields are frozen to prevent accidental modification.
+
+    Attributes:
+        scan_paths: Directories to scan for documentation
+        file_patterns: Glob patterns for files to include
+        exclude_paths: Directories to exclude from scans
+        validate_code_links: Whether to validate links to code files
+        validate_doc_links: Whether to validate links to other docs
+        strict_mode: Whether to fail on warnings (or just errors)
+        max_errors_per_file: Maximum validation errors to report per file
+
+    Examples:
+        >>> config = CortexConfigSchema.from_dict({"scan_paths": ["custom/"]})
+        >>> print(config.scan_paths)
+        ["custom/"]
+        >>> print(config.file_patterns)  # From defaults
+        ["*.md"]
+    """
+
+    scan_paths: list[str] = field(default_factory=lambda: ["docs/"])
+    file_patterns: list[str] = field(default_factory=lambda: ["*.md"])
+    exclude_paths: list[str] = field(
+        default_factory=lambda: [
+            ".git/",
+            "__pycache__/",
+            ".venv/",
+            "venv/",
+            "node_modules/",
+            ".pytest_cache/",
+        ],
+    )
+    validate_code_links: bool = True
+    validate_doc_links: bool = True
+    strict_mode: bool = False
+    max_errors_per_file: int = 50
+
+    @classmethod
+    def from_dict(cls, config_dict: dict[str, Any]) -> CortexConfigSchema:
+        """Create schema from dictionary, using defaults for missing keys.
+
+        Args:
+            config_dict: Configuration dictionary (possibly partial)
+
+        Returns:
+            Validated CortexConfigSchema instance
+
+        Examples:
+            >>> config = CortexConfigSchema.from_dict({
+            ...     "scan_paths": ["custom/"],
+            ...     "strict_mode": True
+            ... })
+        """
+        # Extract only known fields
+        known_fields = {
+            "scan_paths",
+            "file_patterns",
+            "exclude_paths",
+            "validate_code_links",
+            "validate_doc_links",
+            "strict_mode",
+            "max_errors_per_file",
+        }
+        filtered = {k: v for k, v in config_dict.items() if k in known_fields}
+        return cls(**filtered)
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert schema to dictionary representation.
+
+        Returns:
+            Configuration as mutable dictionary
+
+        Examples:
+            >>> config = CortexConfigSchema()
+            >>> config_dict = config.to_dict()
+        """
+        return {
+            "scan_paths": list(self.scan_paths),
+            "file_patterns": list(self.file_patterns),
+            "exclude_paths": list(self.exclude_paths),
+            "validate_code_links": self.validate_code_links,
+            "validate_doc_links": self.validate_doc_links,
+            "strict_mode": self.strict_mode,
+            "max_errors_per_file": self.max_errors_per_file,
+        }
