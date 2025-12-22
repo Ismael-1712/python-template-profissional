@@ -1,0 +1,1577 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GEM">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Auditoria de Performance CI/CD - Análise de Bottlenecks - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#auditoria-de-infraestrutura-e-performance-ci" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Auditoria de Performance CI/CD - Análise de Bottlenecks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 RESUMO EXECUTIVO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-analise-de-topologia-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1️⃣ ANÁLISE DE TOPOLOGIA (WORKFLOW)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1️⃣ ANÁLISE DE TOPOLOGIA (WORKFLOW)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-critico-waterfall-bottleneck" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔴 Problema Crítico: Waterfall Bottleneck
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topologia-atual-waterfall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📐 Topologia Atual (Waterfall)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topologia-otimizada-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Topologia Otimizada (Pipeline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-diagnostico-de-io-e-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2️⃣ DIAGNÓSTICO DE I/O E DEPENDÊNCIAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2️⃣ DIAGNÓSTICO DE I/O E DEPENDÊNCIAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#por-que-o-setup-leva-6-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐌 Por que o Setup leva 6 minutos?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐌 Por que o Setup leva 6 minutos?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-volume-de-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Volume de Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-processo-de-instalacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Processo de Instalação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-cache-atual-multinivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Cache Atual (Multinível)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-verificacao-de-cache-de-ferramentas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3️⃣ VERIFICAÇÃO DE CACHE DE FERRAMENTAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3️⃣ VERIFICAÇÃO DE CACHE DE FERRAMENTAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mypy-cache-implementado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Mypy Cache (Implementado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pytest-cache-nao-implementado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Pytest Cache (NÃO Implementado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-paralelismo-interno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4️⃣ PARALELISMO INTERNO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4️⃣ PARALELISMO INTERNO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pytest-xdist-configurado-corretamente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Pytest-xdist (Configurado Corretamente)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analise-de-impacto-e-recomendacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 ANÁLISE DE IMPACTO E RECOMENDAÇÕES
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 ANÁLISE DE IMPACTO E RECOMENDAÇÕES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prioridade-1-desacoplar-jobs-topologia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Prioridade 1: Desacoplar Jobs (Topologia)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prioridade-2-cache-de-pytest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Prioridade 2: Cache de Pytest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prioridade-3-otimizar-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Prioridade 3: Otimizar Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prioridade-4-warm-up-cache-proativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Prioridade 4: Warm-up Cache Proativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estimativa-de-tempo-economizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 ESTIMATIVA DE TEMPO ECONOMIZADO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 ESTIMATIVA DE TEMPO ECONOMIZADO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cenario-atual-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário Atual (Baseline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenario-otimizado-topologia-caching-l2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenário Otimizado (Topologia + Caching L2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plano-de-acao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 PLANO DE AÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 PLANO DE AÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sprint-1-semana-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sprint 1 (Semana 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sprint-2-semana-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sprint 2 (Semana 2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-de-sucesso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas de Sucesso
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔬 CONCLUSÕES
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔬 CONCLUSÕES">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problemas-identificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas Identificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ganhos-estimados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganhos Estimados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#por-que-o-setup-leva-6-minutos_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por que o Setup leva 6 minutos?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-desacoplar-os-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como desacoplar os jobs?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estimativa-de-tempo-com-caching-de-2o-nivel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estimativa de Tempo com Caching de 2º Nível
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anexos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 ANEXOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📝 ANEXOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-verificacao-de-cache-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. Verificação de Cache atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-configuracao-de-pytest-xdist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Configuração de Pytest-xdist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-estrutura-do-workflow-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. Estrutura do Workflow Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-estrutura-do-workflow-proposto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. Estrutura do Workflow Proposto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="auditoria-de-infraestrutura-e-performance-ci">🔍 AUDITORIA DE INFRAESTRUTURA E PERFORMANCE CI</h1>
+<p><strong>Data:</strong> 22/12/2025
+<strong>Duração Atual:</strong> 13 minutos (6 min setup + 7 min execução)
+<strong>Meta:</strong> &lt; 2 minutos (conforme documentado no workflow)
+<strong>Gap de Performance:</strong> 11 minutos (550% acima da meta)</p>
+<hr />
+<h2 id="resumo-executivo">📊 RESUMO EXECUTIVO</h2>
+<p>O pipeline GitHub Actions apresenta um <strong>Waterfall Bottleneck crítico</strong> causado pela topologia do workflow onde TODOS os jobs de <code>tests</code> aguardam o término de TODA a matrix strategy do job <code>setup</code> antes de iniciar. Identificamos 4 oportunidades de otimização que podem reduzir o tempo total para <strong>3-4 minutos</strong> (redução de ~70%).</p>
+<hr />
+<h2 id="1-analise-de-topologia-workflow">1️⃣ ANÁLISE DE TOPOLOGIA (WORKFLOW)</h2>
+<h3 id="problema-critico-waterfall-bottleneck">🔴 Problema Crítico: Waterfall Bottleneck</h3>
+<p><strong>Localização:</strong> <a href=".github/workflows/ci.yml#L119-L190">.github/workflows/ci.yml</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># LINHA 119: Job Quality</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">quality</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🔍</span><span class="nv"> </span><span class="s">Quality</span><span class="nv"> </span><span class="s">&amp;</span><span class="nv"> </span><span class="s">Security&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup</span><span class="w">  </span><span class="c1"># ❌ AGUARDA setup[3.10, 3.11, 3.12] completar</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># LINHA 190: Job Tests</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nt">tests</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🧪</span><span class="nv"> </span><span class="s">Tests</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">${{</span><span class="nv"> </span><span class="s">matrix.python-version</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup</span><span class="w">  </span><span class="c1"># ❌ AGUARDA setup[3.10, 3.11, 3.12] completar</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nt">strategy</span><span class="p">:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="nt">matrix</span><span class="p">:</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3.10&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;3.12&quot;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h3 id="topologia-atual-waterfall">📐 Topologia Atual (Waterfall)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│ setup[3.10] │ ─────┐
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└─────────────┘      │
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>                     │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>┌─────────────┐      │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│ setup[3.11] │ ─────┤──── BARREIRA DE SINCRONIZAÇÃO
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>└─────────────┘      │     (Aguarda TODOS os setup)
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                     │              │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>┌─────────────┐      │              │
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│ setup[3.12] │ ─────┘              ▼
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>└─────────────┘              ┌──────────────┐
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>                             │   quality    │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>                             │ tests[3.10]  │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>                             │ tests[3.11]  │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>                             │ tests[3.12]  │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>                             └──────────────┘
+</code></pre></div>
+<p><strong>Impacto:</strong> Se <code>setup[3.10]</code> termina em 4min e <code>setup[3.12]</code> em 6min, os jobs de <code>tests[3.10]</code> e <code>quality</code> <strong>aguardam 2 minutos ociosos</strong>.</p>
+<h3 id="topologia-otimizada-pipeline">✅ Topologia Otimizada (Pipeline)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌─────────────┐                  ┌──────────────┐
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│ setup[3.10] │ ────────────────▶│ tests[3.10]  │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>└─────────────┘                  └──────────────┘
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>┌─────────────┐                  ┌──────────────┐
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ setup[3.11] │ ────────────────▶│ tests[3.11]  │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└─────────────┘                  └──────────────┘
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>┌─────────────┐                  ┌──────────────┐  ┌──────────┐
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│ setup[3.12] │ ────────────────▶│ tests[3.12]  │─▶│ quality  │
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>└─────────────┘                  └──────────────┘  └──────────┘
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                                  (paralelo)
+</code></pre></div>
+<p><strong>Ganho Estimado:</strong> <strong>2-3 minutos</strong> (eliminação de idle time)</p>
+<hr />
+<h2 id="2-diagnostico-de-io-e-dependencias">2️⃣ DIAGNÓSTICO DE I/O E DEPENDÊNCIAS</h2>
+<h3 id="por-que-o-setup-leva-6-minutos">🐌 Por que o Setup leva 6 minutos?</h3>
+<h4 id="a-volume-de-dependencias">A. Volume de Dependências</h4>
+<ul>
+<li><strong>Arquivo:</strong> <a href="requirements/dev.txt">requirements/dev.txt</a></li>
+<li><strong>Linhas:</strong> 172 pacotes Python</li>
+<li><strong>Tamanho do venv:</strong> 7.3GB (verificado localmente)</li>
+</ul>
+<p><strong>Principais Pacotes Pesados:</strong></p>
+<ul>
+<li><code>chromadb&gt;=0.4.0</code> (banco vetorial com dependências nativas)</li>
+<li><code>sentence-transformers&gt;=2.2.0</code> (modelos ML ~500MB)</li>
+<li><code>torch</code> (implícito via sentence-transformers, ~800MB)</li>
+<li><code>mkdocs-material</code> + <code>mkdocstrings</code> (documentação)</li>
+<li><code>pytest-xdist</code>, <code>coverage</code>, <code>mypy</code>, <code>ruff</code></li>
+</ul>
+<h4 id="b-processo-de-instalacao">B. Processo de Instalação</h4>
+<p><strong>Localização:</strong> <a href="Makefile#L73-L127">Makefile</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># LINHA 73: install-dev</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nf">install-dev</span><span class="o">:</span><span class="w"> </span><span class="n">validate</span>-<span class="n">python</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c"> # 1. Cria .venv (se não existe)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w"> </span><span class="k">$(</span>SYSTEM_PYTHON<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span><span class="k">$(</span>VENV<span class="k">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c"> # 2. Instala via install_dev.py</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w"> </span><span class="k">$(</span>VENV<span class="k">)</span>/bin/python<span class="w"> </span><span class="k">$(</span>SCRIPTS_DIR<span class="k">)</span>/cli/install_dev.py
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c"> # 3. Inicializa CORTEX Neural Index</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w"> </span><span class="k">$(</span>VENV<span class="k">)</span>/bin/python<span class="w"> </span>-m<span class="w"> </span>scripts.cli.cortex<span class="w"> </span>neural<span class="w"> </span>index
+</code></pre></div>
+<p><strong>Fluxo de I/O (Cold Start):</strong></p>
+<ol>
+<li>Download de 172 wheels do PyPI (~1.5GB) → <strong>2 min</strong></li>
+<li>Compilação de extensões nativas (chromadb, torch) → <strong>2 min</strong></li>
+<li>Criação do venv com symlinks → <strong>1 min</strong></li>
+<li>Neural index (opcional, pode falhar) → <strong>1 min</strong></li>
+</ol>
+<p><strong>Total:</strong> ~6 minutos (sem cache)</p>
+<h4 id="c-cache-atual-multinivel">C. Cache Atual (Multinível)</h4>
+<p><strong>Localização:</strong> <a href=".github/workflows/ci.yml#L68-L90">.github/workflows/ci.yml</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># NÍVEL 1: Cache de downloads do pip (wheels)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Cache</span><span class="nv"> </span><span class="s">pip</span><span class="nv"> </span><span class="s">downloads&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v5</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.cache/pip</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip-${{ runner.os }}-${{ hashFiles(&#39;requirements/dev.txt&#39;) }}</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># NÍVEL 2: Cache do venv completo</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Cache</span><span class="nv"> </span><span class="s">virtual</span><span class="nv"> </span><span class="s">environment&quot;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v5</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.venv</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">venv-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles(&#39;requirements/dev.txt&#39;) }}</span>
+</code></pre></div>
+<p><strong>Status:</strong> ✅ <strong>Implementado e funcional</strong></p>
+<p><strong>Com Cache Hit:</strong></p>
+<ul>
+<li>Restauração do cache: <strong>30-45 segundos</strong></li>
+<li>Validação da instalação: <strong>5 segundos</strong></li>
+<li>Total: <strong>&lt; 1 minuto</strong></li>
+</ul>
+<p><strong>Problema:</strong> Cache miss no primeiro run ou após mudanças em <code>requirements/dev.txt</code> → Volta aos 6 minutos.</p>
+<hr />
+<h2 id="3-verificacao-de-cache-de-ferramentas">3️⃣ VERIFICAÇÃO DE CACHE DE FERRAMENTAS</h2>
+<h3 id="mypy-cache-implementado">✅ Mypy Cache (Implementado)</h3>
+<p><strong>Localização:</strong> <a href=".github/workflows/ci.yml#L148-L154">.github/workflows/ci.yml</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Restaurar</span><span class="nv"> </span><span class="s">cache</span><span class="nv"> </span><span class="s">do</span><span class="nv"> </span><span class="s">mypy&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v5</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.mypy_cache</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypy-${{ runner.os }}-${{ hashFiles(&#39;scripts/**/*.py&#39;, &#39;src/**/*.py&#39;, &#39;tests/**/*.py&#39;) }}</span>
+</code></pre></div>
+<p><strong>Status:</strong> ✅ Type checking incremental habilitado
+<strong>Ganho:</strong> <strong>30-60 segundos</strong> (cold start: ~90s → warm: ~30s)</p>
+<h3 id="pytest-cache-nao-implementado">❌ Pytest Cache (NÃO Implementado)</h3>
+<p><strong>Localização:</strong> Ausente no workflow</p>
+<p><strong>Impacto:</strong></p>
+<ul>
+<li>Pytest re-executa TODOS os testes a cada run</li>
+<li>Sem cache de <code>.pytest_cache/</code>, não há inteligência de <code>--lf</code> (last failed) ou <code>--ff</code> (failed first)</li>
+</ul>
+<p><strong>Ganho Potencial:</strong> <strong>20-40 segundos</strong> (re-run seletivo de testes falhados)</p>
+<hr />
+<h2 id="4-paralelismo-interno">4️⃣ PARALELISMO INTERNO</h2>
+<h3 id="pytest-xdist-configurado-corretamente">✅ Pytest-xdist (Configurado Corretamente)</h3>
+<p><strong>Localização:</strong> <a href="pyproject.toml#L127-L144">pyproject.toml</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">[tool.pytest.ini_options]</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="s2">&quot;-n&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;auto&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1"># ✅ Paralelismo automático (detecta cores disponíveis)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">]</span>
+</code></pre></div>
+<p><strong>Execução no CI:</strong> <a href=".github/workflows/ci.yml#L223-L225">.github/workflows/ci.yml</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Executar</span><span class="nv"> </span><span class="s">Testes</span><span class="nv"> </span><span class="s">(Paralelo)&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make test-ci</span><span class="w">  </span><span class="c1"># → pytest com -n auto</span>
+</code></pre></div>
+<p><strong>Status:</strong> ✅ <strong>Funcional</strong></p>
+<p><strong>Cores Disponíveis no GitHub Actions:</strong></p>
+<ul>
+<li>Runners <code>ubuntu-latest</code>: <strong>2 cores</strong></li>
+<li>Pytest-xdist usa <strong>2 workers</strong> automaticamente</li>
+</ul>
+<p><strong>Ganho Observado:</strong> Testes executam em <strong>~50% do tempo</strong> comparado à execução serial.</p>
+<hr />
+<h2 id="analise-de-impacto-e-recomendacoes">📈 ANÁLISE DE IMPACTO E RECOMENDAÇÕES</h2>
+<h3 id="prioridade-1-desacoplar-jobs-topologia">🎯 Prioridade 1: Desacoplar Jobs (Topologia)</h3>
+<p><strong>Problema:</strong> Waterfall bottleneck
+<strong>Solução:</strong> Modificar <code>needs:</code> para dependência granular por versão Python
+<strong>Esforço:</strong> 15 minutos (edição do YAML)
+<strong>Ganho:</strong> <strong>2-3 minutos</strong> (15-23% de redução)</p>
+<p><strong>Implementação:</strong></p>
+<p>GitHub Actions não suporta <code>needs</code> dinâmico por item da matrix. <strong>Solução:</strong> Separar em jobs independentes.</p>
+<p><strong>Abordagem Recomendada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># JOBS SEPARADOS POR VERSÃO PYTHON (Desacoplamento)</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">setup-py310</span><span class="p">:</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;⚙️</span><span class="nv"> </span><span class="s">Setup</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.10&quot;</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="c1"># ... (mesmo código do setup atual)</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="nt">setup-py311</span><span class="p">:</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;⚙️</span><span class="nv"> </span><span class="s">Setup</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.11&quot;</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="c1"># ...</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="nt">setup-py312</span><span class="p">:</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;⚙️</span><span class="nv"> </span><span class="s">Setup</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.12&quot;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="c1"># ...</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="c1"># JOBS DE TESTES (Dependência Granular)</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="nt">tests-py310</span><span class="p">:</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🧪</span><span class="nv"> </span><span class="s">Tests</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.10&quot;</span>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup-py310</span><span class="w">  </span><span class="c1"># ✅ Desacoplado - inicia assim que setup-py310 termina</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="w">    </span><span class="c1"># ...</span>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="nt">tests-py311</span><span class="p">:</span>
+<a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🧪</span><span class="nv"> </span><span class="s">Tests</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.11&quot;</span>
+<a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup-py311</span><span class="w">  </span><span class="c1"># ✅ Independente de setup-py310</span>
+<a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a><span class="w">    </span><span class="c1"># ...</span>
+<a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>
+<a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a><span class="nt">tests-py312</span><span class="p">:</span>
+<a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🧪</span><span class="nv"> </span><span class="s">Tests</span><span class="nv"> </span><span class="s">Python</span><span class="nv"> </span><span class="s">3.12&quot;</span>
+<a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup-py312</span>
+<a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a><span class="w">    </span><span class="c1"># ...</span>
+<a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a>
+<a id="__codelineno-8-48" name="__codelineno-8-48" href="#__codelineno-8-48"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-49" name="__codelineno-8-49" href="#__codelineno-8-49"></a><span class="c1"># QUALITY (Usa apenas Python 3.12)</span>
+<a id="__codelineno-8-50" name="__codelineno-8-50" href="#__codelineno-8-50"></a><span class="c1"># ====================================================================</span>
+<a id="__codelineno-8-51" name="__codelineno-8-51" href="#__codelineno-8-51"></a>
+<a id="__codelineno-8-52" name="__codelineno-8-52" href="#__codelineno-8-52"></a><span class="nt">quality</span><span class="p">:</span>
+<a id="__codelineno-8-53" name="__codelineno-8-53" href="#__codelineno-8-53"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🔍</span><span class="nv"> </span><span class="s">Quality</span><span class="nv"> </span><span class="s">&amp;</span><span class="nv"> </span><span class="s">Security&quot;</span>
+<a id="__codelineno-8-54" name="__codelineno-8-54" href="#__codelineno-8-54"></a><span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup-py312</span><span class="w">  </span><span class="c1"># ✅ Aguarda apenas Python 3.12</span>
+<a id="__codelineno-8-55" name="__codelineno-8-55" href="#__codelineno-8-55"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-8-56" name="__codelineno-8-56" href="#__codelineno-8-56"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-8-57" name="__codelineno-8-57" href="#__codelineno-8-57"></a><span class="w">    </span><span class="c1"># ...</span>
+</code></pre></div>
+<p><strong>Ganho:</strong> Se setup-py310 termina 2 minutos antes de setup-py312, tests-py310 começa 2 minutos mais cedo.</p>
+<hr />
+<h3 id="prioridade-2-cache-de-pytest">🎯 Prioridade 2: Cache de Pytest</h3>
+<p><strong>Problema:</strong> Re-execução completa de testes
+<strong>Solução:</strong> Adicionar cache de <code>.pytest_cache/</code>
+<strong>Esforço:</strong> 5 minutos
+<strong>Ganho:</strong> <strong>20-40 segundos</strong> (1-3% de redução)</p>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Restaurar</span><span class="nv"> </span><span class="s">cache</span><span class="nv"> </span><span class="s">do</span><span class="nv"> </span><span class="s">pytest&quot;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v5</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.pytest_cache</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles(&#39;tests/**/*.py&#39;) }}</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="nt">restore-keys</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="no">pytest-${{ runner.os }}-py${{ matrix.python-version }}-</span>
+</code></pre></div>
+<hr />
+<h3 id="prioridade-3-otimizar-dependencias">🎯 Prioridade 3: Otimizar Dependências</h3>
+<p><strong>Problema:</strong> 7.3GB de venv (172 pacotes)
+<strong>Solução:</strong> Separar dependências de runtime vs dev/test
+<strong>Esforço:</strong> 2-4 horas (refatoração)
+<strong>Ganho:</strong> <strong>1-2 minutos</strong> (7-15% de redução)</p>
+<p><strong>Estratégia:</strong></p>
+<ol>
+<li>Criar <code>requirements/runtime.txt</code> (apenas FastAPI, Typer, Pydantic)</li>
+<li>Criar <code>requirements/test.txt</code> (pytest, coverage, mypy)</li>
+<li>Criar <code>requirements/docs.txt</code> (mkdocs)</li>
+<li>Criar <code>requirements/ml.txt</code> (chromadb, sentence-transformers) — <strong>opcional</strong></li>
+</ol>
+<p><strong>Impacto no CI:</strong></p>
+<ul>
+<li>Setup de testes: ~3GB venv (172 → ~80 pacotes)</li>
+<li>Redução de 50% no tempo de cold start</li>
+</ul>
+<hr />
+<h3 id="prioridade-4-warm-up-cache-proativo">🎯 Prioridade 4: Warm-up Cache Proativo</h3>
+<p><strong>Problema:</strong> Cache miss no primeiro run após push
+<strong>Solução:</strong> Workflow diário de warm-up
+<strong>Esforço:</strong> 30 minutos
+<strong>Ganho:</strong> <strong>Cache hit rate: 90%+</strong> (benefício indireto)</p>
+<p><strong>Implementação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># .github/workflows/cache-warmup.yml</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Cache</span><span class="nv"> </span><span class="s">Warmup&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nt">on</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">6</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*&quot;</span><span class="w">  </span><span class="c1"># 06:00 UTC diariamente</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">warmup-py310</span><span class="p">:</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v6</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">          </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pip&#39;</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make install-dev</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">  </span><span class="nt">warmup-py311</span><span class="p">:</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v6</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.11&quot;</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">          </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pip&#39;</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make install-dev</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">  </span><span class="nt">warmup-py312</span><span class="p">:</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v6</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.12&quot;</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">          </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;pip&#39;</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">make install-dev</span>
+</code></pre></div>
+<hr />
+<h2 id="estimativa-de-tempo-economizado">📊 ESTIMATIVA DE TEMPO ECONOMIZADO</h2>
+<h3 id="cenario-atual-baseline">Cenário Atual (Baseline)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>┌─────────────────────┬──────────┬────────────┐
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>│ Fase                │ Tempo    │ Crítico    │
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>├─────────────────────┼──────────┼────────────┤
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>│ Setup (3 versões)   │ 6 min    │ Sim        │
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>│ Quality             │ 3.5 min  │ Não        │
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>│ Tests (3 versões)   │ 3.5 min  │ Sim        │
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>├─────────────────────┼──────────┼────────────┤
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>│ TOTAL (Waterfall)   │ 13 min   │            │
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>└─────────────────────┴──────────┴────────────┘
+</code></pre></div>
+<h3 id="cenario-otimizado-topologia-caching-l2">Cenário Otimizado (Topologia + Caching L2)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>┌─────────────────────┬──────────┬────────────┬──────────┐
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>│ Fase                │ Tempo    │ Paralelo   │ Crítico  │
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>├─────────────────────┼──────────┼────────────┼──────────┤
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>│ Setup[3.10]         │ 4 min    │ ✅         │ Não      │
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>│ Setup[3.11]         │ 4.5 min  │ ✅         │ Não      │
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>│ Setup[3.12]         │ 5 min    │ ✅         │ Sim      │
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>│ Tests[3.10]         │ 3 min    │ ✅         │ Não      │
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>│ Tests[3.11]         │ 3 min    │ ✅         │ Não      │
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>│ Tests[3.12]         │ 3 min    │ ✅         │ Não      │
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>│ Quality             │ 2.5 min  │ Com 3.12   │ Sim      │
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>├─────────────────────┼──────────┼────────────┼──────────┤
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>│ TOTAL (Pipeline)    │ ~7.5 min │            │          │
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>│ (caminho crítico)   │          │            │          │
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>└─────────────────────┴──────────┴────────────┴──────────┘
+</code></pre></div>
+<p><strong>Caminho Crítico:</strong> Setup[3.12] (5 min) → Tests[3.12] ou Quality (2.5 min paralelos) = <strong>7.5 minutos</strong></p>
+<p><strong>Com Cache Hit (90% dos casos):</strong></p>
+<ul>
+<li>Setup: 6 min → <strong>45 segundos</strong></li>
+<li>Quality: 2.5 min → <strong>1.5 minutos</strong></li>
+<li>Tests: 3 min → <strong>2 minutos</strong></li>
+<li><strong>Total: ~3-4 minutos</strong></li>
+</ul>
+<hr />
+<h2 id="plano-de-acao">🚀 PLANO DE AÇÃO</h2>
+<h3 id="sprint-1-semana-1">Sprint 1 (Semana 1)</h3>
+<ul>
+<li>[ ] <strong>Dia 1-2:</strong> Desacoplar jobs (separar setup por versão)</li>
+<li>[ ] <strong>Dia 3:</strong> Adicionar cache de pytest</li>
+<li>[ ] <strong>Dia 4-5:</strong> Testes A/B e validação</li>
+</ul>
+<h3 id="sprint-2-semana-2">Sprint 2 (Semana 2)</h3>
+<ul>
+<li>[ ] <strong>Dia 1-3:</strong> Refatorar dependências (separar runtime/test/docs)</li>
+<li>[ ] <strong>Dia 4:</strong> Implementar cache warmup diário</li>
+<li>[ ] <strong>Dia 5:</strong> Documentação e monitoring</li>
+</ul>
+<h3 id="metricas-de-sucesso">Métricas de Sucesso</h3>
+<ul>
+<li>✅ Tempo total CI: &lt; 5 minutos (com cache)</li>
+<li>✅ Tempo total CI: &lt; 8 minutos (cold start)</li>
+<li>✅ Cache hit rate: &gt; 85%</li>
+<li>✅ Paralelismo efetivo: 3 jobs simultâneos</li>
+</ul>
+<hr />
+<h2 id="conclusoes">🔬 CONCLUSÕES</h2>
+<h3 id="problemas-identificados">Problemas Identificados</h3>
+<ol>
+<li><strong>Waterfall Bottleneck (Crítico):</strong> Jobs aguardam matrix completa ao invés de item específico</li>
+<li><strong>Dependências Monolíticas:</strong> 172 pacotes = 7.3GB venv (80% não usado em runtime)</li>
+<li><strong>Cache L2 Incompleto:</strong> Pytest cache ausente</li>
+<li><strong>Paralelismo Limitado:</strong> ✅ Já usa pytest-xdist corretamente</li>
+</ol>
+<h3 id="ganhos-estimados">Ganhos Estimados</h3>
+<table>
+<thead>
+<tr>
+<th>Otimização</th>
+<th>Ganho de Tempo</th>
+<th>Esforço</th>
+<th>ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desacoplar topologia</td>
+<td>2-3 min</td>
+<td>Baixo</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Cache pytest</td>
+<td>20-40 seg</td>
+<td>Baixo</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Separar dependências</td>
+<td>1-2 min</td>
+<td>Médio</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Warm-up cache diário</td>
+<td>Indireto</td>
+<td>Baixo</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>4-6 min</strong></td>
+<td><strong>1-2d</strong></td>
+<td><strong>70%↓</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="por-que-o-setup-leva-6-minutos_1">Por que o Setup leva 6 minutos?</h3>
+<ol>
+<li><strong>Volume de Dependências:</strong> 172 pacotes, totalizando 7.3GB de venv</li>
+<li><strong>Compilação Nativa:</strong> Pacotes como <code>chromadb</code> e <code>torch</code> exigem compilação de extensões C/C++</li>
+<li><strong>Download de Wheels:</strong> ~1.5GB de downloads do PyPI (sem cache)</li>
+<li><strong>Neural Index:</strong> Inicialização do CORTEX consome ~1 minuto adicional</li>
+</ol>
+<h3 id="como-desacoplar-os-jobs">Como desacoplar os jobs?</h3>
+<p><strong>Solução:</strong> Separar o job <code>setup</code> em 3 jobs independentes (<code>setup-py310</code>, <code>setup-py311</code>, <code>setup-py312</code>) e vincular cada job de teste ao seu respectivo setup. Isso elimina a barreira de sincronização e permite que os jobs de teste comecem assim que o setup da sua versão Python termina.</p>
+<h3 id="estimativa-de-tempo-com-caching-de-2o-nivel">Estimativa de Tempo com Caching de 2º Nível</h3>
+<p>Com cache de pytest + cache de venv + desacoplamento de jobs:</p>
+<ul>
+<li><strong>Tempo Total (Cold Start):</strong> ~7-8 minutos (↓42% vs baseline)</li>
+<li><strong>Tempo Total (Cache Hit):</strong> ~3-4 minutos (↓70% vs baseline)</li>
+<li><strong>Cache Hit Rate Esperado:</strong> 85-90% (com warm-up diário)</li>
+</ul>
+<hr />
+<h2 id="anexos">📝 ANEXOS</h2>
+<h3 id="a-verificacao-de-cache-atual">A. Verificação de Cache atual</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Cache de pip (wheels)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>✅<span class="w"> </span>Implementado:<span class="w"> </span>actions/cache@v5<span class="w"> </span>em<span class="w"> </span>~/.cache/pip
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Cache de venv</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>✅<span class="w"> </span>Implementado:<span class="w"> </span>actions/cache@v5<span class="w"> </span>em<span class="w"> </span>.venv
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Cache de mypy</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>✅<span class="w"> </span>Implementado:<span class="w"> </span>actions/cache@v5<span class="w"> </span>em<span class="w"> </span>.mypy_cache
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># Cache de pytest</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>❌<span class="w"> </span>NÃO<span class="w"> </span>Implementado:<span class="w"> </span>.pytest_cache/
+</code></pre></div>
+<h3 id="b-configuracao-de-pytest-xdist">B. Configuração de Pytest-xdist</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># pyproject.toml (linha 127-144)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">[tool.pytest.ini_options]</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;auto&quot;</span><span class="p">]</span><span class="w">  </span><span class="c1"># ✅ Paralelismo ativo</span>
+</code></pre></div>
+<h3 id="c-estrutura-do-workflow-atual">C. Estrutura do Workflow Atual</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">setup (matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.10, 3.11, 3.12)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nt">├── quality (needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">setup)</span><span class="w">      </span><span class="c1"># Aguarda TODOS os setup</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nt">└── tests (matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.10, 3.11, 3.12)</span><span class="w">  </span><span class="c1"># Aguarda TODOS os setup</span>
+</code></pre></div>
+<h3 id="d-estrutura-do-workflow-proposto">D. Estrutura do Workflow Proposto</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="l l-Scalar l-Scalar-Plain">setup-py310 → tests-py310</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="l l-Scalar l-Scalar-Plain">setup-py311 → tests-py311</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="l l-Scalar l-Scalar-Plain">setup-py312 → tests-py312</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">           </span><span class="l l-Scalar l-Scalar-Plain">└→ quality (paralelo com tests-py312)</span>
+</code></pre></div>
+<hr />
+<p><strong>Auditoria realizada por:</strong> GitHub Copilot (SRE Assistant)
+<strong>Metodologia:</strong> Análise estática + Introspecção de contexto
+<strong>Ferramentas:</strong> <code>grep_search</code>, <code>read_file</code>, <code>run_in_terminal</code>
+<strong>Revisão:</strong> Pendente (aguardando validação técnica)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

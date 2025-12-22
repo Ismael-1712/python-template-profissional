@@ -740,7 +740,7 @@
 </ul>
 <h3 id="task-4-cli-basica-init-2h">Task 4: CLI básica (init) (2h)</h3>
 <ul>
-<li>[ ] Criar <code>scripts/cli/cortex.py</code></li>
+<li>[ ] Criar <code>scripts/cortex/cli.py</code></li>
 <li>[ ] Importar <code>typer</code></li>
 <li>[ ] Criar <code>app = typer.Typer(name="cortex")</code></li>
 <li>[ ] Implementar comando <code>@app.command() def init(path: Path)</code></li>
@@ -809,8 +809,8 @@
 <li>[ ] Todas as tasks dos 4 sprints estão marcadas como ✅</li>
 <li>[ ] Testes unitários têm cobertura &gt;= 90%</li>
 <li>[ ] Todos os testes passam: <code>pytest tests/test_cortex_*.py -v</code></li>
-<li>[ ] Linting passa: <code>ruff check scripts/core/cortex/ scripts/cli/cortex.py</code></li>
-<li>[ ] Type checking passa: <code>mypy scripts/core/cortex/ scripts/cli/cortex.py</code></li>
+<li>[ ] Linting passa: <code>ruff check scripts/core/cortex/ scripts/cortex/cli.py</code></li>
+<li>[ ] Type checking passa: <code>mypy scripts/core/cortex/ scripts/cortex/cli.py</code></li>
 <li>[ ] Todos os docs/ têm Frontmatter válido</li>
 <li>[ ] <code>mkdocs build --strict</code> passa sem erros</li>
 <li>[ ] Pre-commit hook está ativo e funcionando</li>

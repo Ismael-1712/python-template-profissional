@@ -856,14 +856,14 @@
 </ol>
 <h3 id="fase-3-cli-basica-2-horas">Fase 3: CLI Básica (2 horas)</h3>
 <ol>
-<li>Criar <code>scripts/cli/cortex.py</code> (comando <code>init</code> apenas)</li>
+<li>Criar <code>scripts/cortex/cli.py</code> (comando <code>init</code> apenas)</li>
 <li>Testar manualmente: <code>cortex init docs/test.md</code></li>
 </ol>
 <h3 id="fase-4-scanner-5-horas">Fase 4: Scanner (5 horas)</h3>
 <ol>
 <li>Criar <code>scripts/core/cortex/scanner.py</code> ✅ <strong>CRÍTICO</strong></li>
 <li>Criar <code>tests/test_cortex_scanner.py</code></li>
-<li>Atualizar <code>scripts/cli/cortex.py</code> (comando <code>audit</code>)</li>
+<li>Atualizar <code>scripts/cortex/cli.py</code> (comando <code>audit</code>)</li>
 </ol>
 <h3 id="fase-5-migracao-14-horas">Fase 5: Migração (14 horas)</h3>
 <ol>
@@ -876,7 +876,7 @@
 <ol>
 <li>Atualizar <code>.pre-commit-config.yaml</code></li>
 <li>Criar <code>.github/workflows/docs-validation.yml</code></li>
-<li>Atualizar <code>scripts/cli/cortex.py</code> (comando <code>report</code>)</li>
+<li>Atualizar <code>scripts/cortex/cli.py</code> (comando <code>report</code>)</li>
 </ol>
 <p>id: example-guide
 type: guide
@@ -889,7 +889,7 @@ context_tags:</p>
 <li>testing</li>
 <li>example
 linked_code:</li>
-<li>scripts/cli/cortex.py</li>
+<li>scripts/cortex/cli.py</li>
 </ul>
 <h2 id="validacao-final">✅ VALIDAÇÃO FINAL</h2>
 <p><strong>Antes de considerar o CORTEX completo, validar:</strong></p>
@@ -898,8 +898,8 @@ linked_code:</li>
 <li>[ ] <code>pyproject.toml</code> foi atualizado com dependências</li>
 <li>[ ] Todos os 30+ arquivos <code>.md</code> têm Frontmatter</li>
 <li>[ ] <code>pytest tests/test_cortex_*.py -v</code> passa (100% dos testes)</li>
-<li>[ ] <code>ruff check scripts/core/cortex/ scripts/cli/cortex.py</code> passa</li>
-<li>[ ] <code>mypy scripts/core/cortex/ scripts/cli/cortex.py</code> passa</li>
+<li>[ ] <code>ruff check scripts/core/cortex/ scripts/cortex/cli.py</code> passa</li>
+<li>[ ] <code>mypy scripts/core/cortex/ scripts/cortex/cli.py</code> passa</li>
 <li>[ ] <code>mkdocs build --strict</code> passa</li>
 <li>[ ] <code>cortex audit docs/</code> retorna 0 erros</li>
 <li>[ ] Pre-commit hook funciona</li>

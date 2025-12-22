@@ -883,7 +883,7 @@
 <li>[ ] Breaking Change</li>
 </ul>
 <h2 id="objetivo">🎯 Objetivo</h2>
-<p>Refatorar <code>scripts/cli/cortex.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
+<p>Refatorar <code>scripts/cortex/cli.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
 <h2 id="resumo-executivo">📊 Resumo Executivo</h2>
 <table>
 <thead>
@@ -929,7 +929,7 @@
 </table>
 <h2 id="arquitetura">🏗️ Arquitetura</h2>
 <h3 id="antes-monolito">ANTES (Monólito)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cli/cortex.py (2113 linhas)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cortex/cli.py (2113 linhas)
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Helper Functions (67 linhas) ❌
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Typer Commands (1900+ linhas) ⚠️
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── Entry Point (86 linhas)
@@ -943,7 +943,7 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── __init__.py
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    └── frontmatter_helpers.py  # ✅ Helpers puros
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cortex/cli.py           # 🔄 Wrapper retrocompatível
 </code></pre></div>
 <h2 id="mudancas-implementadas">🔬 Mudanças Implementadas</h2>
 <h3 id="iteracao-1-extracao-de-helpers-commit-58e1aaa">Iteração 1: Extração de Helpers (Commit <code>58e1aaa</code>)</h3>
@@ -956,7 +956,7 @@
 </ul>
 <p><strong>Modificado:</strong></p>
 <ul>
-<li><code>scripts/cli/cortex.py</code> - Removidas 67 linhas (funções privadas)</li>
+<li><code>scripts/cortex/cli.py</code> - Removidas 67 linhas (funções privadas)</li>
 <li>Imports atualizados para usar módulo extraído</li>
 </ul>
 <p><strong>Validação:</strong></p>
@@ -969,8 +969,8 @@
 <p><strong>Criado:</strong></p>
 <ul>
 <li><code>scripts/cortex/__main__.py</code> - Entry point para <code>python -m scripts.cortex</code></li>
-<li><code>scripts/cortex/cli.py</code> - CLI movido de <code>scripts/cli/cortex.py</code> (2037 linhas)</li>
-<li><code>scripts/cli/cortex.py</code> - Wrapper retrocompatível (18 linhas)</li>
+<li><code>scripts/cortex/cli.py</code> - CLI movido de <code>scripts/cortex/cli.py</code> (2037 linhas)</li>
+<li><code>scripts/cortex/cli.py</code> - Wrapper retrocompatível (18 linhas)</li>
 </ul>
 <p><strong>Modificado:</strong></p>
 <ul>
@@ -985,7 +985,7 @@
 <p><strong>Validação:</strong></p>
 <ul>
 <li>✅ Ambas invocações funcionam:</li>
-<li><code>python scripts/cli/cortex.py --help</code> (legado)</li>
+<li><code>python scripts/cortex/cli.py --help</code> (legado)</li>
 <li><code>python -m scripts.cortex --help</code> (moderno)</li>
 <li>✅ 546 testes passed</li>
 <li>✅ Make validate completo</li>
@@ -1042,7 +1042,7 @@
 </tr>
 <tr>
 <td><strong>Retrocompat</strong></td>
-<td><code>scripts/cli/cortex.py</code></td>
+<td><code>scripts/cortex/cli.py</code></td>
 <td>✅ Funcionando</td>
 </tr>
 <tr>
@@ -1054,7 +1054,7 @@
 </table>
 <h3 id="casos-de-teste-funcionais">Casos de Teste Funcionais</h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Teste 1: Wrapper retrocompatível</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help<span class="w">  </span><span class="c1"># ✅ OK</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>--help<span class="w">  </span><span class="c1"># ✅ OK</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Teste 2: Método moderno (-m)</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help<span class="w">      </span><span class="c1"># ✅ OK</span>
@@ -1069,7 +1069,7 @@
 <h2 id="retrocompatibilidade">🔄 Retrocompatibilidade</h2>
 <p><strong>100% GARANTIDA</strong> - Três métodos de invocação suportados:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Método 1 (Legado - via wrapper)</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>audit
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Método 2 (Moderno - via -m)</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>audit
@@ -1077,7 +1077,7 @@
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Método 3 (Instalado - via console_scripts)</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>cortex<span class="w"> </span>audit
 </code></pre></div>
-<p><strong>Wrapper Criado:</strong> <code>scripts/cli/cortex.py</code> delega para <code>scripts.cortex.cli:main</code></p>
+<p><strong>Wrapper Criado:</strong> <code>scripts/cortex/cli.py</code> delega para <code>scripts.cortex.cli:main</code></p>
 <h2 id="protocolo-seguido">📚 Protocolo Seguido</h2>
 <p>Refatoração executada conforme <a href="docs/guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md">Protocolo de Fracionamento Iterativo</a>:</p>
 <ul>

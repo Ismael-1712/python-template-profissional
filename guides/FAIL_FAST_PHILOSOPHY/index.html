@@ -1283,7 +1283,7 @@
 </code></pre></div>
 <h3 id="typer-cli-excecoes-especiais">Typer CLI (Exceções Especiais)</h3>
 <p><strong>Typer usa <code>typer.Exit(code=X)</code> em vez de <code>sys.exit(X)</code>:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># scripts/cli/cortex.py</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># scripts/cortex/cli.py</span>
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">audit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run metadata audit.&quot;&quot;&quot;</span>
@@ -1548,7 +1548,7 @@
 <ul>
 <li><a href="../../scripts/cli/git_sync.py#L110-L118">scripts/cli/git_sync.py</a> - Hierarquia de exceções</li>
 <li><a href="../../scripts/cli/doctor.py#L416-L430">scripts/cli/doctor.py</a> - Exit codes em diagnóstico</li>
-<li><a href="../../scripts/cli/cortex.py#L582-L600">scripts/cli/cortex.py</a> - Typer exit codes</li>
+<li><a href="../../scripts/cortex/cli.py#L582-L600">scripts/cortex/cli.py</a> - Typer exit codes</li>
 <li><a href="../../scripts/ci_recovery/main.py#L291-L303">scripts/ci_recovery/main.py</a> - Recovery system</li>
 <li><a href="../../scripts/maintain_versions.py#L37-L46">scripts/maintain_versions.py</a> - KeyboardInterrupt handling</li>
 </ul>

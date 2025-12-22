@@ -1285,7 +1285,7 @@
 <h2 id="status">Status</h2>
 <p><strong>COMPLETED</strong> - Refatoração concluída em 2025-12-21 (2 iterações)</p>
 <h2 id="resumo-executivo">Resumo Executivo</h2>
-<p>Refatoração estrutural do script <code>scripts/cli/cortex.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
+<p>Refatoração estrutural do script <code>scripts/cortex/cli.py</code> (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão <strong>God Function</strong> e seguindo princípios SOLID.</p>
 <h3 id="metricas-finais">Métricas Finais</h3>
 <table>
 <thead>
@@ -1337,7 +1337,7 @@
 </table>
 <h2 id="contexto-e-motivacao">Contexto e Motivação</h2>
 <h3 id="diagnostico-inicial">Diagnóstico Inicial</h3>
-<p>Durante auditoria de código (P26 - Refatoração de Scripts), <code>scripts/cli/cortex.py</code> foi identificado como <strong>Priority 1 Refactoring Candidate</strong> por:</p>
+<p>Durante auditoria de código (P26 - Refatoração de Scripts), <code>scripts/cortex/cli.py</code> foi identificado como <strong>Priority 1 Refactoring Candidate</strong> por:</p>
 <ol>
 <li><strong>God Function (2113 linhas)</strong>: Centralização excessiva de responsabilidades</li>
 <li><strong>Violação do SRP</strong>: Interface CLI + Lógica de Negócio + Helpers Utilitários</li>
@@ -1353,7 +1353,7 @@
 <hr />
 <h2 id="arquitetura">Arquitetura</h2>
 <h3 id="estrutura-antes-monolito">Estrutura ANTES (Monólito)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cli/cortex.py (2113 linhas)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/cortex/cli.py (2113 linhas)
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Imports &amp; Setup (60 linhas)
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Helper Functions (67 linhas)
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── _infer_doc_type()
@@ -1383,7 +1383,7 @@
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── __init__.py
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    └── frontmatter_helpers.py  # ✅ Helpers de frontmatter
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível (18 linhas)
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>scripts/cortex/cli.py           # 🔄 Wrapper retrocompatível (18 linhas)
 </code></pre></div>
 <p><strong>Benefícios:</strong></p>
 <ul>
@@ -1415,20 +1415,20 @@
 <ul>
 <li><strong>Responsabilidade:</strong> Transformar monólito em pacote</li>
 <li><strong>Arquivos Criados:</strong> <code>__main__.py</code>, <code>cli.py</code> (movido)</li>
-<li><strong>Wrapper:</strong> <code>scripts/cli/cortex.py</code> (retrocompatibilidade)</li>
+<li><strong>Wrapper:</strong> <code>scripts/cortex/cli.py</code> (retrocompatibilidade)</li>
 <li><strong>Validação:</strong> 546 testes ✓ | Ambas chamadas funcionais ✓</li>
 </ul>
 <h3 id="2-retrocompatibilidade">2. Retrocompatibilidade</h3>
-<p><strong>Decisão:</strong> Criar wrapper em <code>scripts/cli/cortex.py</code> ao invés de deletar</p>
+<p><strong>Decisão:</strong> Criar wrapper em <code>scripts/cortex/cli.py</code> ao invés de deletar</p>
 <p><strong>Justificativa:</strong></p>
 <ul>
-<li>Workflows existentes (<code>python scripts/cli/cortex.py</code>) continuam funcionando</li>
+<li>Workflows existentes (<code>python scripts/cortex/cli.py</code>) continuam funcionando</li>
 <li>Gradual migration path (equipe pode migrar quando quiser)</li>
 <li>Zero impacto em CI/CD ou automações</li>
 </ul>
 <p><strong>Métodos de Invocação Suportados:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Método 1 (Legado - via wrapper)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>--help
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Método 2 (Moderno - via -m)</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help
@@ -1513,14 +1513,14 @@
 <a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>make<span class="w"> </span>validate<span class="w">  </span><span class="c1"># 546 passed ✓</span>
 </code></pre></div>
 <h4 id="fase-4-commit-atomico"><strong>Fase 4: Commit Atômico</strong></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/cortex/<span class="w"> </span>scripts/cli/cortex.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git<span class="w"> </span>add<span class="w"> </span>scripts/cortex/<span class="w"> </span>scripts/cortex/cli.py
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;refactor(cortex): extract frontmatter helpers (Iteration 1)&quot;</span>
 </code></pre></div>
 <p><strong>SHA:</strong> <code>58e1aaa</code></p>
 <h4 id="fase-5-migracao-para-pacote-iteracao-2"><strong>Fase 5: Migração para Pacote (Iteração 2)</strong></h4>
 <p><strong>Ações:</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Mover monólito para pacote</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>mv<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>scripts/cortex/cli.py
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>mv<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>scripts/cortex/cli.py
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 2. Criar entry point</span>
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>scripts/cortex/__main__.py<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
@@ -1530,7 +1530,7 @@
 <a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s">EOF</span>
 <a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
 <a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># 3. Criar wrapper retrocompatível</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
 <a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s">from scripts.cortex.cli import main</span>
 <a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s">if __name__ == &quot;__main__&quot;:</span>
 <a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">    main()</span>
@@ -1589,7 +1589,7 @@
 </tr>
 <tr>
 <td><strong>Retrocompat</strong></td>
-<td><code>scripts/cli/cortex.py</code></td>
+<td><code>scripts/cortex/cli.py</code></td>
 <td>✅ Funcionando</td>
 </tr>
 <tr>
@@ -1616,7 +1616,7 @@
 <p><strong>Resultado:</strong> ✅ Frontmatter adicionado, arquivo intacto</p>
 <h4 id="teste-3-retrocompatibilidade">Teste 3: Retrocompatibilidade</h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Método legado</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>--help
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>--help
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Método moderno</span>
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>--help
@@ -1675,11 +1675,11 @@
 <h3 id="mudancas-em-workflows">Mudanças em Workflows</h3>
 <h4 id="desenvolvedores">Desenvolvedores</h4>
 <p><strong>ANTES:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>audit
 </code></pre></div>
 <p><strong>DEPOIS (ambos funcionam):</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Opção 1 (Legado - via wrapper)</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>python<span class="w"> </span>scripts/cli/cortex.py<span class="w"> </span>audit
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>python<span class="w"> </span>scripts/cortex/cli.py<span class="w"> </span>audit
 <a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Opção 2 (Moderno - via -m)</span>
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.cortex<span class="w"> </span>audit
@@ -1820,7 +1820,7 @@
 <li><strong>Pacote:</strong> <a href="../../scripts/cortex/"><code>scripts/cortex/</code></a></li>
 <li><strong>CLI:</strong> <a href="../../scripts/cortex/cli.py"><code>scripts/cortex/cli.py</code></a></li>
 <li><strong>Core:</strong> <a href="../../scripts/cortex/core/frontmatter_helpers.py"><code>scripts/cortex/core/frontmatter_helpers.py</code></a></li>
-<li><strong>Wrapper:</strong> <a href="../../scripts/cli/cortex.py"><code>scripts/cli/cortex.py</code></a></li>
+<li><strong>Wrapper:</strong> <a href="../../scripts/cortex/cli.py"><code>scripts/cortex/cli.py</code></a></li>
 </ul>
 <h3 id="commits">Commits</h3>
 <ul>
@@ -1892,7 +1892,7 @@
 <strong>Princípio Aplicado:</strong> SOLID (SRP) + Iterative Fractionation Protocol</p>
 <hr />
 <h2 id="update-2025-12-22-sunset-do-wrapper">⚠️ UPDATE (2025-12-22): Sunset do Wrapper</h2>
-<p><strong>Decisão:</strong> Wrapper <code>scripts/cli/cortex.py</code> foi <strong>REMOVIDO</strong> após validação completa.</p>
+<p><strong>Decisão:</strong> Wrapper <code>scripts/cortex/cli.py</code> foi <strong>REMOVIDO</strong> após validação completa.</p>
 <p><strong>Motivo:</strong> A unificação estrutural conforme ARCHITECTURE_TRIAD.md elimina a ambiguidade de caminhos.</p>
 <p><strong>Método de Invocação Único (Pós-Sunset):</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>cortex<span class="w"> </span>--help<span class="w">              </span><span class="c1"># Via entry point instalado (pyproject.toml)</span>
