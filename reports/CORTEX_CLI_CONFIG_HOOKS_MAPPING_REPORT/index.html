@@ -1,0 +1,1876 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GEM & SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Mapeamento Técnico - Configuração e Hooks do CORTEX CLI (Etapa 01/04) - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mapeamento-tecnico-configuracao-e-hooks-do-cortex-cli" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mapeamento Técnico - Configuração e Hooks do CORTEX CLI (Etapa 01/04)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-da-validacao-inicial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status da Validação Inicial
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-escaneamento-do-cli-scriptscortexclipy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Escaneamento do CLI (scripts/cortex/cli.py)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Escaneamento do CLI (scripts/cortex/cli.py)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-comando-config-linhas-1016-1150" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Comando config (Linhas 1016-1150)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-comando-setup-hooks-linhas-572-665" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. Comando setup-hooks (Linhas 572-665)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-verificacao-de-dependencias-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Verificação de Dependências Core
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Verificação de Dependências Core">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-arquivo-scriptscorecortexconfigpy-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Arquivo scripts/core/cortex/config.py (Existente)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-ausencia-de-schema-centralizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Ausência de Schema Centralizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-auditoria-de-git-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Auditoria de Git Hooks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Auditoria de Git Hooks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-scripts-em-scriptsgit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Scripts em scripts/git/
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-hooks-gerenciados-pelo-setup-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Hooks Gerenciados pelo setup-hooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-analise-de-dependencias-externas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Análise de Dependências Externas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Análise de Dependências Externas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-biblioteca-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Biblioteca YAML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-biblioteca-pathlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Biblioteca pathlib
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2. Biblioteca pathlib">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#no-comando-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Comando config
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#no-comando-setup-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Comando setup-hooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-mapeamento-de-io-para-configorchestrator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Mapeamento de I/O para ConfigOrchestrator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Mapeamento de I/O para ConfigOrchestrator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-operacoes-a-serem-extraidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Operações a Serem Extraídas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.1. Operações a Serem Extraídas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#categoria-1-gerenciamento-de-arquivos-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Categoria 1: Gerenciamento de Arquivos YAML
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#categoria-2-validacao-de-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Categoria 2: Validação de Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#categoria-3-merge-de-configuracao-com-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Categoria 3: Merge de Configuração com Defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-operacoes-de-git-hooks-a-serem-extraidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Operações de Git Hooks a Serem Extraídas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-operacoes-compartilhadas-utilitarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Operações Compartilhadas (Utilitários)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-diagrama-de-dependencias-atuais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Diagrama de Dependências Atuais
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-riscos-e-consideracoes-para-extracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Riscos e Considerações para Extração
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Riscos e Considerações para Extração">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-riscos-de-quebra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Riscos de Quebra
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-dependencias-externas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Dependências Externas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-proposta-de-arquitetura-pos-extracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Proposta de Arquitetura Pós-Extração
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Proposta de Arquitetura Pós-Extração">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-estrutura-de-arquivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Estrutura de Arquivos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-fluxo-de-refatoracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Fluxo de Refatoração
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-estatisticas-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Estatísticas de Código
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Estatísticas de Código">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-linhas-a-serem-movidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1. Linhas a Serem Movidas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-reducao-esperada-no-clipy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2. Redução Esperada no cli.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-proximos-passos-etapa-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Próximos Passos (Etapa 02)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Próximos Passos (Etapa 02)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-checklist-de-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1. Checklist de Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Referências
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Referências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-documentos-consultados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1. Documentos Consultados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-codigo-analisado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2. Código Analisado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mapeamento-tecnico-configuracao-e-hooks-do-cortex-cli">Mapeamento Técnico - Configuração e Hooks do CORTEX CLI</h1>
+<h2 id="status-da-validacao-inicial">Status da Validação Inicial</h2>
+<p>✅ <strong>Estado GREEN Confirmado</strong> (2025-12-22 20:05:44)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>✓ Ruff: All checks passed
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>✓ MyPy: Success (164 source files)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>✓ Dev Doctor: Ambiente SAUDÁVEL
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>✓ Pytest: 576 passed, 2 skipped in 7.50s
+</code></pre></div>
+<hr />
+<h2 id="1-escaneamento-do-cli-scriptscortexclipy">1. Escaneamento do CLI (scripts/cortex/cli.py)</h2>
+<h3 id="11-comando-config-linhas-1016-1150">1.1. Comando <code>config</code> (Linhas 1016-1150)</h3>
+<p><strong>Localização:</strong> <code>@app.command(name="config")</code> → função <code>config_manager()</code></p>
+<p><strong>Assinatura:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">config_manager</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">show</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>          <span class="c1"># --show flag</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>       <span class="c1"># --validate flag</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;scripts/audit_config.yaml&quot;</span><span class="p">),</span>  <span class="c1"># --path/-p option</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+<p><strong>Responsabilidades Identificadas:</strong></p>
+<ol>
+<li><strong>Resolução de Caminho de Configuração</strong></li>
+<li>Linha 1057: <code>config_path = _project_root / path if not path.is_absolute() else path</code></li>
+<li>
+<p>Lógica: Resolve caminhos relativos contra a raiz do projeto</p>
+</li>
+<li>
+<p><strong>Validação de Existência de Arquivo</strong></p>
+</li>
+<li>Linhas 1059-1063: Verifica se <code>config_path.exists()</code> antes de prosseguir</li>
+<li>
+<p>Retorna <code>Exit(code=1)</code> se não encontrado</p>
+</li>
+<li>
+<p><strong>Leitura de YAML</strong></p>
+</li>
+<li>
+<p>Linha 1067-1068:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">with</span> <span class="n">config_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">config_data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Dependência:</strong> <code>import yaml</code> (inline, linha 1051)</p>
+</li>
+<li>
+<p><strong>Validação de Schema YAML</strong></p>
+</li>
+<li>Linhas 1071-1090: Valida presença de chaves obrigatórias</li>
+<li>Chaves requeridas: <code>scan_paths</code>, <code>file_patterns</code>, <code>exclude_paths</code></li>
+<li>
+<p>Gera warning se arquivo vazio (<code>config_data is None</code>)</p>
+</li>
+<li>
+<p><strong>Exibição Formatada de YAML</strong></p>
+</li>
+<li>
+<p>Linhas 1102-1108:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">formatted_yaml</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">config_data</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">allow_unicode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">formatted_yaml</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Estatísticas de Configuração</strong></p>
+</li>
+<li>Linhas 1113-1125: Gera sumário com contadores:<ul>
+<li>Número de <code>scan_paths</code></li>
+<li>Número de <code>file_patterns</code></li>
+<li>Número de <code>exclude_paths</code></li>
+<li>Número de <code>custom_patterns</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>Tratamento de Erros:</strong></p>
+<ul>
+<li><code>yaml.YAMLError</code> (linha 1133): Sintaxe YAML inválida</li>
+<li><code>OSError</code> (linha 1139): Erros de I/O</li>
+<li><code>Exception</code> (linha 1145): Catch-all genérico</li>
+</ul>
+<hr />
+<h3 id="12-comando-setup-hooks-linhas-572-665">1.2. Comando <code>setup-hooks</code> (Linhas 572-665)</h3>
+<p><strong>Localização:</strong> <code>@app.command(name="setup-hooks")</code> → função <code>setup_hooks()</code></p>
+<p><strong>Assinatura:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">setup_hooks</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>  <span class="c1"># Sem parâmetros</span>
+</code></pre></div>
+<p><strong>Responsabilidades Identificadas:</strong></p>
+<ol>
+<li><strong>Detecção do Diretório .git</strong></li>
+<li>
+<p>Linhas 589-596:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">git_dir</span> <span class="o">=</span> <span class="n">_project_root</span> <span class="o">/</span> <span class="s2">&quot;.git&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">git_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">secho</span><span class="p">(</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="s2">&quot;❌ Error: .git directory not found...&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="n">fg</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">RED</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="p">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Criação do Diretório de Hooks</strong></p>
+</li>
+<li>Linha 598: <code>hooks_dir.mkdir(exist_ok=True)</code></li>
+<li>
+<p><strong>Operação pathlib:</strong> <code>Path.mkdir(exist_ok=True)</code></p>
+</li>
+<li>
+<p><strong>Geração de Script Shell</strong></p>
+</li>
+<li>Linhas 601-619: Define template de hook bash (multi-line string)</li>
+<li>
+<p>Conteúdo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Auto-generated by CORTEX - Do not edit manually</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Check if cortex command exists</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">if</span><span class="w"> </span>!<span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>cortex<span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Warning: &#39;cortex&#39; command not found...&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">fi</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔄 Regenerating CORTEX context map...&quot;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>cortex<span class="w"> </span>map<span class="w"> </span>--output<span class="w"> </span>.cortex/context.json
+</code></pre></div>
+</li>
+<li>
+<p><strong>Backup de Hooks Existentes</strong></p>
+</li>
+<li>
+<p>Linhas 634-638:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">if</span> <span class="n">hook_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">backup_path</span> <span class="o">=</span> <span class="n">hook_path</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.backup&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📦 Backing up existing </span><span class="si">{</span><span class="n">hook_name</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">hook_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">backup_path</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Operação pathlib:</strong> <code>Path.rename()</code>, <code>Path.with_suffix()</code></p>
+</li>
+<li>
+<p><strong>Escrita de Arquivo de Hook</strong></p>
+</li>
+<li>
+<p>Linhas 641-643:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">with</span> <span class="n">hook_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">hook_script</span><span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Operação pathlib:</strong> <code>Path.open(mode="w", encoding="utf-8")</code></p>
+</li>
+<li>
+<p><strong>Modificação de Permissões (chmod)</strong></p>
+</li>
+<li>Linha 646: <code>hook_path.chmod(0o755)</code></li>
+<li><strong>Operação pathlib:</strong> <code>Path.chmod()</code> para tornar executável</li>
+<li>Equivale ao comando Unix: <code>chmod 755 &lt;hook_file&gt;</code></li>
+</ol>
+<p><strong>Hooks Instalados:</strong></p>
+<ul>
+<li><code>post-merge</code>: Executa após <code>git pull</code> / <code>git merge</code></li>
+<li><code>post-checkout</code>: Executa após <code>git checkout</code> (mudança de branch)</li>
+<li><code>post-rewrite</code>: Executa após <code>git rebase</code> / <code>git commit --amend</code></li>
+</ul>
+<p><strong>Validação em Ambiente Real:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>.git/hooks/post-*
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>-rwxr-xr-x<span class="w"> </span><span class="m">1</span><span class="w"> </span>user<span class="w"> </span>user<span class="w"> </span><span class="m">350</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">20</span>:05<span class="w"> </span>.git/hooks/post-checkout
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>-rwxr-xr-x<span class="w"> </span><span class="m">1</span><span class="w"> </span>user<span class="w"> </span>user<span class="w"> </span><span class="m">350</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">20</span>:05<span class="w"> </span>.git/hooks/post-merge
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>-rwxr-xr-x<span class="w"> </span><span class="m">1</span><span class="w"> </span>user<span class="w"> </span>user<span class="w"> </span><span class="m">350</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">22</span><span class="w"> </span><span class="m">20</span>:05<span class="w"> </span>.git/hooks/post-rewrite
+</code></pre></div>
+<hr />
+<h2 id="2-verificacao-de-dependencias-core">2. Verificação de Dependências Core</h2>
+<h3 id="21-arquivo-scriptscorecortexconfigpy-existente">2.1. Arquivo <code>scripts/core/cortex/config.py</code> (Existente)</h3>
+<p><strong>Status:</strong> ✅ JÁ EXISTE (151 linhas)</p>
+<p><strong>Conteúdo Atual:</strong></p>
+<ol>
+<li><strong>Padrões de Validação (Linhas 17-39)</strong></li>
+<li><code>ID_PATTERN</code>: Regex para kebab-case</li>
+<li><code>VERSION_PATTERN</code>: Regex para semver (x.y.z)</li>
+<li><code>DATE_PATTERN</code>: Regex para ISO 8601 (YYYY-MM-DD)</li>
+<li>
+<p><code>TAG_PATTERN</code>: Regex para tags em kebab-case</p>
+</li>
+<li>
+<p><strong>Valores Permitidos (Linhas 41-49)</strong></p>
+</li>
+<li><code>ALLOWED_TYPES</code>: <code>["guide", "arch", "reference", "history", "knowledge"]</code></li>
+<li>
+<p><code>ALLOWED_STATUSES</code>: <code>["draft", "active", "deprecated", "archived"]</code></p>
+</li>
+<li>
+<p><strong>Campos Obrigatórios (Linhas 51-77)</strong></p>
+</li>
+<li><code>REQUIRED_FIELDS</code>: <code>["id", "type", "status", "version", "author", "date"]</code></li>
+<li><code>RECOMMENDED_FIELDS</code>: <code>["context_tags", "linked_code"]</code></li>
+<li>
+<p><code>OPTIONAL_FIELDS</code>: <code>["dependencies", "related_docs"]</code></p>
+</li>
+<li>
+<p><strong>Constantes de Validação (Linhas 79-88)</strong></p>
+</li>
+<li><code>MIN_AUTHOR_LENGTH</code>: 3</li>
+<li><code>MAX_CONTEXT_TAGS</code>: 10</li>
+<li><code>MAX_LINKED_CODE</code>: 20</li>
+<li>
+<p><code>MAX_RELATED_DOCS</code>: 10</p>
+</li>
+<li>
+<p><strong>Configuração Padrão (Linhas 90-114)</strong></p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">DEFAULT_CONFIG</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="s2">&quot;scan_paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;docs/&quot;</span><span class="p">],</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="s2">&quot;file_patterns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;*.md&quot;</span><span class="p">],</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="s2">&quot;exclude_paths&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;.git/&quot;</span><span class="p">,</span> <span class="s2">&quot;__pycache__/&quot;</span><span class="p">,</span> <span class="s2">&quot;.venv/&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="s2">&quot;validate_code_links&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="s2">&quot;validate_doc_links&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="s2">&quot;strict_mode&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="s2">&quot;max_errors_per_file&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="p">}</span>
+</code></pre></div>
+<ol>
+<li><strong>Mensagens de Erro/Warnings (Linhas 116-151)</strong></li>
+<li><code>ERROR_MESSAGES</code>: Dicionário de templates de erro</li>
+<li><code>WARNING_MESSAGES</code>: Dicionário de templates de warning</li>
+</ol>
+<p><strong>Conclusão:</strong> Este arquivo já fornece CONSTANTES, mas não fornece uma <strong>classe de orquestração</strong> para I/O de configuração.</p>
+<hr />
+<h3 id="22-ausencia-de-schema-centralizado">2.2. Ausência de Schema Centralizado</h3>
+<p><strong>Achado:</strong> ❌ NÃO existe uma classe <code>CortexConfig</code> ou <code>ConfigSchema</code></p>
+<p><strong>Evidências:</strong></p>
+<ul>
+<li>Busca por <code>class Config</code> em <code>scripts/core/cortex/**</code>: 0 resultados</li>
+<li>Não há modelo Pydantic ou dataclass para configuração do CORTEX</li>
+</ul>
+<p><strong>Padrões Existentes em Outros Módulos:</strong></p>
+<ol>
+<li><strong>scripts/audit/config.py</strong> (72 linhas)</li>
+<li>Função: <code>load_config(config_path: Path | None = None) -&gt; dict[str, Any]</code></li>
+<li>Merge de configuração com defaults</li>
+<li>
+<p>Uso de <code>yaml.safe_load()</code></p>
+</li>
+<li>
+<p><strong>scripts/git_sync/config.py</strong> (49 linhas)</p>
+</li>
+<li>Função: <code>load_config(config_path: Path | None = None) -&gt; dict[str, Any]</code></li>
+<li>Padrão idêntico ao audit/config.py</li>
+</ol>
+<p><strong>Oportunidade de Reutilização:</strong></p>
+<ul>
+<li>Ambos os módulos (audit, git_sync) implementam <code>load_config()</code> de forma similar</li>
+<li>Há potencial para <strong>consolidação de padrões</strong> no ConfigOrchestrator</li>
+</ul>
+<hr />
+<h2 id="3-auditoria-de-git-hooks">3. Auditoria de Git Hooks</h2>
+<h3 id="31-scripts-em-scriptsgit">3.1. Scripts em <code>scripts/git/</code></h3>
+<p><strong>Listagem:</strong></p>
+<ol>
+<li><code>direct-push-main.sh</code> (138 linhas)</li>
+<li>Protocolo automatizado para push direto na <code>main</code></li>
+<li>Baseado em: <code>docs/guides/DIRECT_PUSH_PROTOCOL.md</code></li>
+<li>
+<p><strong>NÃO é instalado como Git Hook</strong> (script manual via task)</p>
+</li>
+<li>
+<p><code>post-pr-cleanup.sh</code> (137 linhas)</p>
+</li>
+<li>Limpeza após merge de Pull Request</li>
+<li>Baseado em: <code>docs/guides/POST_PR_MERGE_PROTOCOL.md</code></li>
+<li>
+<p><strong>NÃO é instalado como Git Hook</strong> (script manual via task)</p>
+</li>
+<li>
+<p><code>sync-all-branches.sh</code></p>
+</li>
+<li><code>update-branches.sh</code></li>
+<li><code>update-local.sh</code></li>
+<li><code>update-main.sh</code></li>
+<li>Scripts auxiliares de sincronização Git</li>
+<li><strong>NÃO são instalados como Git Hooks</strong></li>
+</ol>
+<p><strong>Conclusão:</strong> Os scripts em <code>scripts/git/</code> são ferramentas CLI independentes, não hooks.</p>
+<hr />
+<h3 id="32-hooks-gerenciados-pelo-setup-hooks">3.2. Hooks Gerenciados pelo <code>setup-hooks</code></h3>
+<p><strong>Hooks Instalados Atualmente:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>Arquivo Gerado</th>
+<th>Trigger</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>post-merge</code></td>
+<td><code>.git/hooks/post-merge</code></td>
+<td>Após <code>git pull</code> / <code>git merge</code></td>
+<td><code>cortex map --output .cortex/context.json</code></td>
+</tr>
+<tr>
+<td><code>post-checkout</code></td>
+<td><code>.git/hooks/post-checkout</code></td>
+<td>Após <code>git checkout</code></td>
+<td><code>cortex map --output .cortex/context.json</code></td>
+</tr>
+<tr>
+<td><code>post-rewrite</code></td>
+<td><code>.git/hooks/post-rewrite</code></td>
+<td>Após <code>git rebase</code> / <code>commit --amend</code></td>
+<td><code>cortex map --output .cortex/context.json</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Todos os hooks executam a <strong>mesma ação</strong>: regenerar o mapa de contexto</li>
+<li>Script gerado é <strong>idêntico</strong> para os 3 hooks</li>
+<li>Hooks são <strong>auto-gerados</strong> (comentário: "Auto-generated by CORTEX - Do not edit manually")</li>
+<li>Permissões: <code>0o755</code> (rwxr-xr-x)</li>
+</ul>
+<p><strong>Validação em <code>.git/hooks/</code>:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>find<span class="w"> </span>.git/hooks<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;post-*&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>.git/hooks/post-rewrite
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>.git/hooks/post-merge
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>.git/hooks/post-checkout
+</code></pre></div>
+<p><strong>Conteúdo Real (post-merge):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># Auto-generated by CORTEX - Do not edit manually</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># This hook regenerates the project context map after Git operations</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># Check if cortex command exists</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">if</span><span class="w"> </span>!<span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>cortex<span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Warning: &#39;cortex&#39; command not found. Skipping...&quot;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">fi</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔄 Regenerating CORTEX context map...&quot;</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>cortex<span class="w"> </span>map<span class="w"> </span>--output<span class="w"> </span>.cortex/context.json
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Context map updated successfully!&quot;</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="k">else</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Warning: Failed to update context map&quot;</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="k">fi</span>
+</code></pre></div>
+<hr />
+<h2 id="4-analise-de-dependencias-externas">4. Análise de Dependências Externas</h2>
+<h3 id="41-biblioteca-yaml">4.1. Biblioteca YAML</h3>
+<p><strong>Importação:</strong></p>
+<ul>
+<li><strong>Localização:</strong> Inline, dentro dos comandos (não no topo do arquivo)</li>
+<li>Linha 162: <code>import yaml</code> (dentro de <code>init()</code>)</li>
+<li>Linha 1051: <code>import yaml</code> (dentro de <code>config_manager()</code>)</li>
+</ul>
+<p><strong>Funções Utilizadas:</strong></p>
+<ol>
+<li><strong>yaml.safe_load()</strong> (Leitura)</li>
+<li>Linha 1068: <code>config_data = yaml.safe_load(f)</code></li>
+<li>Conversão de YAML string → dict Python</li>
+<li>
+<p><strong>Safe:</strong> Protegido contra execução arbitrária de código</p>
+</li>
+<li>
+<p><strong>yaml.dump()</strong> (Escrita)</p>
+</li>
+<li>Linha 164: Serialização de frontmatter</li>
+<li>Linha 1102: Serialização de configuração</li>
+<li>
+<p>Parâmetros comuns:</p>
+<ul>
+<li><code>default_flow_style=False</code>: Usa estilo block (mais legível)</li>
+<li><code>sort_keys=False</code>: Preserva ordem das chaves</li>
+<li><code>allow_unicode=True</code>: Suporta caracteres UTF-8</li>
+</ul>
+</li>
+<li>
+<p><strong>yaml.YAMLError</strong> (Exceção)</p>
+</li>
+<li>Linha 1133: <code>except yaml.YAMLError as e:</code></li>
+<li>Captura erros de sintaxe YAML</li>
+</ol>
+<p><strong>Conclusão:</strong> O comando <code>config</code> é o único que realiza operações YAML no CLI.</p>
+<hr />
+<h3 id="42-biblioteca-pathlib">4.2. Biblioteca pathlib</h3>
+<p><strong>Importação:</strong></p>
+<ul>
+<li><strong>Localização:</strong> Topo do arquivo (linha 19)</li>
+<li><code>from pathlib import Path</code></li>
+</ul>
+<p><strong>Operações Utilizadas:</strong></p>
+<h4 id="no-comando-config">No Comando <code>config</code></h4>
+<ol>
+<li><strong>Resolução de Caminho</strong></li>
+<li><code>_project_root / path</code> (operador <code>/</code>)</li>
+<li>
+<p><code>path.is_absolute()</code></p>
+</li>
+<li>
+<p><strong>Verificação de Existência</strong></p>
+</li>
+<li>
+<p><code>config_path.exists()</code></p>
+</li>
+<li>
+<p><strong>Leitura de Arquivo</strong></p>
+</li>
+<li><code>config_path.open("r", encoding="utf-8")</code></li>
+</ol>
+<h4 id="no-comando-setup-hooks">No Comando <code>setup-hooks</code></h4>
+<ol>
+<li><strong>Construção de Caminhos</strong></li>
+<li><code>_project_root / ".git"</code></li>
+<li>
+<p><code>git_dir / "hooks"</code></p>
+</li>
+<li>
+<p><strong>Criação de Diretório</strong></p>
+</li>
+<li>
+<p><code>hooks_dir.mkdir(exist_ok=True)</code></p>
+</li>
+<li>
+<p><strong>Manipulação de Sufixos</strong></p>
+</li>
+<li>
+<p><code>hook_path.with_suffix(".backup")</code></p>
+</li>
+<li>
+<p><strong>Renomeação de Arquivos</strong></p>
+</li>
+<li>
+<p><code>hook_path.rename(backup_path)</code></p>
+</li>
+<li>
+<p><strong>Escrita de Arquivo</strong></p>
+</li>
+<li>
+<p><code>hook_path.open("w", encoding="utf-8")</code></p>
+</li>
+<li>
+<p><strong>Modificação de Permissões</strong></p>
+</li>
+<li><code>hook_path.chmod(0o755)</code> ⚠️ <strong>Unix-specific</strong></li>
+</ol>
+<p><strong>Nota de Portabilidade:</strong></p>
+<ul>
+<li><code>chmod()</code> funciona em Unix/Linux/macOS</li>
+<li>No Windows, pode não ter efeito ou levantar exceção</li>
+<li>Não há tratamento específico para cross-platform</li>
+</ul>
+<hr />
+<h2 id="5-mapeamento-de-io-para-configorchestrator">5. Mapeamento de I/O para ConfigOrchestrator</h2>
+<h3 id="51-operacoes-a-serem-extraidas">5.1. Operações a Serem Extraídas</h3>
+<p>Com base na análise, as seguintes operações devem ser movidas para um <strong>ConfigOrchestrator</strong>:</p>
+<h4 id="categoria-1-gerenciamento-de-arquivos-yaml"><strong>Categoria 1: Gerenciamento de Arquivos YAML</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ConfigOrchestrator</span><span class="p">:</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Carrega e valida arquivo YAML.&quot;&quot;&quot;</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>        <span class="c1"># Extração: Linhas 1057-1068 (config_manager)</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>        <span class="c1"># Responsabilidades:</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>        <span class="c1"># - Resolução de caminho relativo/absoluto</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>        <span class="c1"># - Verificação de existência</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>        <span class="c1"># - yaml.safe_load()</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="c1"># - Tratamento de yaml.YAMLError</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_yaml</span><span class="p">(</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Salva dados em arquivo YAML formatado.&quot;&quot;&quot;</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>        <span class="c1"># Extração: Linhas 1102-1108 (config_manager)</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>        <span class="c1"># Responsabilidades:</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>        <span class="c1"># - yaml.dump() com opções padrão</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>        <span class="c1"># - Criação de diretórios pai se necessário</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>        <span class="c1"># - Tratamento de OSError</span>
+</code></pre></div>
+<h4 id="categoria-2-validacao-de-schema"><strong>Categoria 2: Validação de Schema</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_config_schema</span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">config_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>        <span class="n">required_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Valida presença de chaves obrigatórias.&quot;&quot;&quot;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="c1"># Extração: Linhas 1071-1090 (config_manager)</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>        <span class="c1"># Retorna: (is_valid, missing_keys)</span>
+</code></pre></div>
+<h4 id="categoria-3-merge-de-configuracao-com-defaults"><strong>Categoria 3: Merge de Configuração com Defaults</strong></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">merge_with_defaults</span><span class="p">(</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">user_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>        <span class="n">defaults</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Mescla configuração do usuário com defaults.&quot;&quot;&quot;</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="c1"># Padrão de: scripts/audit/config.py (load_config)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        <span class="c1"># Padrão de: scripts/git_sync/config.py (load_config)</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        <span class="c1"># Oportunidade de consolidação</span>
+</code></pre></div>
+<hr />
+<h3 id="52-operacoes-de-git-hooks-a-serem-extraidas">5.2. Operações de Git Hooks a Serem Extraídas</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">HooksOrchestrator</span><span class="p">:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">detect_git_directory</span><span class="p">(</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">project_root</span><span class="p">:</span> <span class="n">Path</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Detecta e valida diretório .git.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>        <span class="c1"># Extração: Linhas 589-596 (setup_hooks)</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_hook_script</span><span class="p">(</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hook_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gera script bash para hook Git.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>        <span class="c1"># Extração: Linhas 601-619 (setup_hooks)</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>        <span class="c1"># Parâmetro hook_type: &quot;post-merge&quot;, &quot;post-checkout&quot;, etc.</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>        <span class="c1"># Parâmetro command: &quot;cortex map --output .cortex/context.json&quot;</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">install_hook</span><span class="p">(</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hook_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">script_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>        <span class="n">hooks_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">backup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Instala hook Git com backup opcional.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>        <span class="c1"># Extração: Linhas 634-648 (setup_hooks)</span>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>        <span class="c1"># Responsabilidades:</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>        <span class="c1"># - Backup de hook existente</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>        <span class="c1"># - Escrita do arquivo</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>        <span class="c1"># - chmod 0o755 (tornar executável)</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">install_cortex_hooks</span><span class="p">(</span>
+<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">project_root</span><span class="p">:</span> <span class="n">Path</span>
+<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Instala todos os hooks do CORTEX.&quot;&quot;&quot;</span>
+<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>        <span class="c1"># Extração: Loop completo (linhas 621-648)</span>
+<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>        <span class="c1"># Retorna: Lista de hooks instalados</span>
+</code></pre></div>
+<hr />
+<h3 id="53-operacoes-compartilhadas-utilitarios">5.3. Operações Compartilhadas (Utilitários)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">FileSystemOrchestrator</span><span class="p">:</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Garante que diretório existe.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>        <span class="c1"># path.mkdir(exist_ok=True, parents=True)</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">backup_file</span><span class="p">(</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.backup&quot;</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Cria backup de arquivo existente.&quot;&quot;&quot;</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>        <span class="c1"># Extração: Linhas 634-638 (setup_hooks)</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">make_executable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Torna arquivo executável (Unix).&quot;&quot;&quot;</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>        <span class="c1"># file_path.chmod(0o755)</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>        <span class="c1"># TODO: Verificar plataforma (os.name) antes</span>
+</code></pre></div>
+<hr />
+<h2 id="6-diagrama-de-dependencias-atuais">6. Diagrama de Dependências Atuais</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>graph TD
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>    CLI[scripts/cortex/cli.py] --&gt;|import yaml| YAML[PyYAML Library]
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>    CLI --&gt;|from pathlib import Path| PATHLIB[pathlib stdlib]
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>    CLI --&gt;|Lê| CONFIG_FILE[scripts/audit_config.yaml]
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    CLI --&gt;|Escreve| GIT_HOOKS[.git/hooks/post-*]
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    CONFIG_FILE -.Schema Não Validado.-&gt; SCHEMA[❌ No Schema Class]
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    CLI -.Inline Validation.-&gt; SCHEMA
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>    subgraph &quot;Padrões Similares&quot;
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>        AUDIT[scripts/audit/config.py]
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>        GIT_SYNC[scripts/git_sync/config.py]
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>    end
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    AUDIT --&gt;|yaml.safe_load| YAML
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>    GIT_SYNC --&gt;|yaml.safe_load| YAML
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>    style SCHEMA fill:#ffcccc,stroke:#cc0000
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>    style CONFIG_FILE fill:#e1f5ff
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>    style GIT_HOOKS fill:#fff4e1
+</code></pre></div>
+<hr />
+<h2 id="7-riscos-e-consideracoes-para-extracao">7. Riscos e Considerações para Extração</h2>
+<h3 id="71-riscos-de-quebra">7.1. Riscos de Quebra</h3>
+<ol>
+<li><strong>Imports Inline de YAML</strong></li>
+<li>Risco: Mover <code>import yaml</code> para o topo pode causar ImportError se PyYAML não estiver instalado</li>
+<li>
+<p>Mitigação: Manter lazy import ou documentar dependência</p>
+</li>
+<li>
+<p><strong>Acoplamento com _project_root</strong></p>
+</li>
+<li>Risco: <code>_project_root</code> é variável global do módulo CLI</li>
+<li>
+<p>Mitigação: Passar <code>project_root</code> como parâmetro para Orchestrator</p>
+</li>
+<li>
+<p><strong>Tratamento de Erros Específicos</strong></p>
+</li>
+<li>Risco: CLI usa <code>typer.secho()</code> e <code>typer.Exit(code=1)</code> para erros</li>
+<li>
+<p>Mitigação: Orchestrator deve levantar exceções, CLI trata apresentação</p>
+</li>
+<li>
+<p><strong>Operação chmod() no Windows</strong></p>
+</li>
+<li>Risco: <code>chmod(0o755)</code> pode falhar no Windows</li>
+<li>Mitigação: Adicionar verificação de plataforma (<code>os.name == 'posix'</code>)</li>
+</ol>
+<hr />
+<h3 id="72-dependencias-externas">7.2. Dependências Externas</h3>
+<p><strong>PyYAML:</strong></p>
+<ul>
+<li>Verificação em <code>pyproject.toml</code>: ✅ Presente</li>
+<li>Versão: Gerenciada por UV (lock file)</li>
+</ul>
+<p><strong>pathlib:</strong></p>
+<ul>
+<li>Biblioteca padrão do Python 3.4+</li>
+<li>✅ Sem riscos de dependência</li>
+</ul>
+<hr />
+<h2 id="8-proposta-de-arquitetura-pos-extracao">8. Proposta de Arquitetura Pós-Extração</h2>
+<h3 id="81-estrutura-de-arquivos">8.1. Estrutura de Arquivos</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>scripts/core/cortex/
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>├── config.py                    # Existente - Constantes
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>├── config_orchestrator.py       # NOVO - Gerenciamento de YAML
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>├── hooks_orchestrator.py        # NOVO - Gerenciamento de Git Hooks
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>└── filesystem_utils.py          # NOVO - Utilitários de I/O
+</code></pre></div>
+<h3 id="82-fluxo-de-refatoracao">8.2. Fluxo de Refatoração</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>graph TD
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    ETAPA1[Etapa 01: Mapeamento&lt;br/&gt;✅ Este Documento] --&gt; ETAPA2
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>    ETAPA2[Etapa 02: Extração&lt;br/&gt;Criar Orchestrators] --&gt; ETAPA3
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>    ETAPA3[Etapa 03: Religação&lt;br/&gt;Atualizar CLI] --&gt; ETAPA4
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>    ETAPA4[Etapa 04: Validação&lt;br/&gt;make validate + cortex scan]
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>    style ETAPA1 fill:#c8e6c9
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    style ETAPA2 fill:#fff4e1
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    style ETAPA3 fill:#fff4e1
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>    style ETAPA4 fill:#fff4e1
+</code></pre></div>
+<hr />
+<h2 id="9-estatisticas-de-codigo">9. Estatísticas de Código</h2>
+<h3 id="91-linhas-a-serem-movidas">9.1. Linhas a Serem Movidas</h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Linhas Totais</th>
+<th>Linhas de I/O</th>
+<th>% I/O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config</code></td>
+<td>135</td>
+<td>~80</td>
+<td>59%</td>
+</tr>
+<tr>
+<td><code>setup-hooks</code></td>
+<td>94</td>
+<td>~70</td>
+<td>74%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>229</strong></td>
+<td><strong>~150</strong></td>
+<td><strong>65%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-reducao-esperada-no-clipy">9.2. Redução Esperada no cli.py</h3>
+<ul>
+<li><strong>Antes:</strong> 1742 linhas</li>
+<li><strong>Após:</strong> ~1592 linhas (estimativa)</li>
+<li><strong>Redução:</strong> ~150 linhas (8.6%)</li>
+</ul>
+<hr />
+<h2 id="10-proximos-passos-etapa-02">10. Próximos Passos (Etapa 02)</h2>
+<h3 id="101-checklist-de-implementacao">10.1. Checklist de Implementação</h3>
+<ul>
+<li>[ ] Criar <code>scripts/core/cortex/config_orchestrator.py</code></li>
+<li>[ ] Implementar <code>load_yaml()</code></li>
+<li>[ ] Implementar <code>save_yaml()</code></li>
+<li>[ ] Implementar <code>validate_config_schema()</code></li>
+<li>
+<p>[ ] Implementar <code>merge_with_defaults()</code></p>
+</li>
+<li>
+<p>[ ] Criar <code>scripts/core/cortex/hooks_orchestrator.py</code></p>
+</li>
+<li>[ ] Implementar <code>detect_git_directory()</code></li>
+<li>[ ] Implementar <code>generate_hook_script()</code></li>
+<li>[ ] Implementar <code>install_hook()</code></li>
+<li>
+<p>[ ] Implementar <code>install_cortex_hooks()</code></p>
+</li>
+<li>
+<p>[ ] Criar testes unitários</p>
+</li>
+<li>[ ] <code>tests/test_config_orchestrator.py</code></li>
+<li>
+<p>[ ] <code>tests/test_hooks_orchestrator.py</code></p>
+</li>
+<li>
+<p>[ ] Atualizar <code>scripts/cortex/cli.py</code></p>
+</li>
+<li>[ ] Substituir lógica inline por chamadas aos Orchestrators</li>
+<li>
+<p>[ ] Manter tratamento de erros e UI (typer)</p>
+</li>
+<li>
+<p>[ ] Validação completa</p>
+</li>
+<li>[ ] <code>make validate</code></li>
+<li>[ ] <code>cortex scan</code></li>
+<li>[ ] <code>pytest tests/</code></li>
+</ul>
+<hr />
+<h2 id="11-referencias">11. Referências</h2>
+<h3 id="111-documentos-consultados">11.1. Documentos Consultados</h3>
+<ul>
+<li><a href="../../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a></li>
+<li>Seção: "Fases Obrigatórias (Iterativas)"</li>
+<li>Fase 0: Mapeamento (Este documento)</li>
+</ul>
+<h3 id="112-codigo-analisado">11.2. Código Analisado</h3>
+<ul>
+<li><a href="../../scripts/cortex/cli.py">scripts/cortex/cli.py</a> (1742 linhas)</li>
+<li>Comando <code>config</code>: Linhas 1016-1150</li>
+<li>
+<p>Comando <code>setup-hooks</code>: Linhas 572-665</p>
+</li>
+<li>
+<p><a href="../../scripts/core/cortex/config.py">scripts/core/cortex/config.py</a> (151 linhas)</p>
+</li>
+<li>
+<p>Constantes e defaults existentes</p>
+</li>
+<li>
+<p><a href="../../scripts/audit/config.py">scripts/audit/config.py</a> (72 linhas)</p>
+</li>
+<li>
+<p>Padrão de <code>load_config()</code></p>
+</li>
+<li>
+<p><a href="../../scripts/git_sync/config.py">scripts/git_sync/config.py</a> (49 linhas)</p>
+</li>
+<li>Padrão de <code>load_config()</code></li>
+</ul>
+<hr />
+<h2 id="conclusao">Conclusão</h2>
+<p>Este mapeamento técnico identificou <strong>150 linhas de lógica de I/O</strong> que podem ser extraídas do CLI monolítico para Orchestrators dedicados, seguindo o <strong>Protocolo de Fracionamento Iterativo</strong>.</p>
+<p><strong>Estado Atual:</strong> ✅ GREEN (todos os testes passando)
+<strong>Próxima Etapa:</strong> Extração dos módulos (Fase 1 do protocolo)</p>
+<hr />
+<p><strong>Revisado por:</strong> GitHub Copilot (Claude Sonnet 4.5)
+<strong>Data:</strong> 2025-12-22
+<strong>Validação CI:</strong> ✅ 576 testes passando</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

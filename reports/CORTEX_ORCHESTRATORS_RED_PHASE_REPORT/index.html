@@ -1,0 +1,1822 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GEM & SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Orquestradores CORTEX - Fase RED (Etapa 02/04) - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#orquestradores-cortex-fase-red-do-tdd" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Orquestradores CORTEX - Fase RED (Etapa 02/04)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-da-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status da Implementação
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-estrutura-de-arquivos-criados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Estrutura de Arquivos Criados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Estrutura de Arquivos Criados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-modulos-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Módulos Core
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-testes-unitarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. Testes Unitários
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-configorchestrator-esqueleto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ConfigOrchestrator - Esqueleto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. ConfigOrchestrator - Esqueleto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-assinatura-da-classe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Assinatura da Classe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-metodos-definidos-nao-implementados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Métodos Definidos (Não Implementados)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-excecoes-customizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Exceções Customizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-hooksorchestrator-esqueleto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. HooksOrchestrator - Esqueleto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. HooksOrchestrator - Esqueleto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-assinatura-da-classe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Assinatura da Classe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-metodos-definidos-nao-implementados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Métodos Definidos (Não Implementados)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-excecoes-customizadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Exceções Customizadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-cortexconfigschema-dataclass-imutavel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. CortexConfigSchema - Dataclass Imutável
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. CortexConfigSchema - Dataclass Imutável">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-metodos-implementados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Métodos Implementados ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-validacao-do-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Validação do Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-relatorio-de-testes-estado-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Relatório de Testes - Estado RED
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Relatório de Testes - Estado RED">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-sumario-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Sumário Geral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-testes-que-passaram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Testes que PASSARAM ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-teste-skipped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3. Teste SKIPPED ⏭️
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-testes-que-falharam-amostra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4. Testes que FALHARAM 🔴 (Amostra)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.4. Testes que FALHARAM 🔴 (Amostra)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configorchestrator-20-testes-falhando" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConfigOrchestrator (20 testes falhando)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hooksorchestrator-18-testes-falhando" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HooksOrchestrator (18 testes falhando)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-cobertura-de-testes-por-funcionalidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Cobertura de Testes por Funcionalidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Cobertura de Testes por Funcionalidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-configorchestrator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. ConfigOrchestrator
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-hooksorchestrator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. HooksOrchestrator
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-analise-de-qualidade-dos-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Análise de Qualidade dos Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Análise de Qualidade dos Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-padroes-seguidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Padrões Seguidos ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-cobertura-de-edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Cobertura de Edge Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-proximos-passos-etapa-03-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Próximos Passos (Etapa 03 - Implementação)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Próximos Passos (Etapa 03 - Implementação)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-ordem-de-implementacao-sugerida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Ordem de Implementação Sugerida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-checklist-de-implementacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Checklist de Implementação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-metricas-de-progresso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Métricas de Progresso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Métricas de Progresso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-linhas-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1. Linhas de Código
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-complexidade-ciclomatica-estimada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2. Complexidade Ciclomática (Estimada)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-conformidade-com-protocolo-de-fracionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Conformidade com Protocolo de Fracionamento
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Conformidade com Protocolo de Fracionamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-checklist-do-protocolo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1. Checklist do Protocolo ✅
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-principios-solid-aplicados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2. Princípios SOLID Aplicados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-riscos-e-mitigacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Riscos e Mitigações
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Riscos e Mitigações">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-riscos-identificados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1. Riscos Identificados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-estrategias-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2. Estratégias de Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusão
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="orquestradores-cortex-fase-red-do-tdd">Orquestradores CORTEX - Fase RED do TDD</h1>
+<h2 id="status-da-implementacao">Status da Implementação</h2>
+<p>✅ <strong>Esqueletos Criados</strong> (2025-12-22)
+🔴 <strong>Estado RED Confirmado</strong> (38 testes falhando, 4 passando, 1 skip)</p>
+<hr />
+<h2 id="1-estrutura-de-arquivos-criados">1. Estrutura de Arquivos Criados</h2>
+<h3 id="11-modulos-core">1.1. Módulos Core</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>scripts/core/cortex/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── config.py                     # ✅ ATUALIZADO - Adicionado CortexConfigSchema
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── config_orchestrator.py        # ✅ NOVO - Esqueleto com NotImplementedError
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>└── hooks_orchestrator.py         # ✅ NOVO - Esqueleto com NotImplementedError
+</code></pre></div>
+<h3 id="12-testes-unitarios">1.2. Testes Unitários</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tests/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── test_config_orchestrator.py   # ✅ NOVO - 25 testes (RED)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── test_hooks_orchestrator.py    # ✅ NOVO - 18 testes (RED)
+</code></pre></div>
+<p><strong>Total:</strong> 43 testes criados (38 falhando conforme esperado)</p>
+<hr />
+<h2 id="2-configorchestrator-esqueleto">2. ConfigOrchestrator - Esqueleto</h2>
+<h3 id="21-assinatura-da-classe">2.1. Assinatura da Classe</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ConfigOrchestrator</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Orchestrator for YAML configuration file operations.&quot;&quot;&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="n">project_root</span>
+</code></pre></div>
+<h3 id="22-metodos-definidos-nao-implementados">2.2. Métodos Definidos (Não Implementados)</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Responsabilidade</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>load_yaml(path)</code></td>
+<td>Carrega arquivo YAML com resolução de caminho</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>save_yaml(data, path, **kwargs)</code></td>
+<td>Salva YAML formatado</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>validate_config_schema(config, required_keys)</code></td>
+<td>Valida presença de chaves</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>merge_with_defaults(user_config, defaults)</code></td>
+<td>Mescla config com defaults</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>load_config_with_defaults(path, required_keys)</code></td>
+<td>Operação integrada</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-excecoes-customizadas">2.3. Exceções Customizadas</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ConfigLoadError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when configuration file cannot be loaded.&quot;&quot;&quot;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">ConfigValidationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when configuration fails schema validation.&quot;&quot;&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="3-hooksorchestrator-esqueleto">3. HooksOrchestrator - Esqueleto</h2>
+<h3 id="31-assinatura-da-classe">3.1. Assinatura da Classe</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">HooksOrchestrator</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Orchestrator for Git hooks installation and management.&quot;&quot;&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="n">project_root</span>
+</code></pre></div>
+<h3 id="32-metodos-definidos-nao-implementados">3.2. Métodos Definidos (Não Implementados)</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Responsabilidade</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>detect_git_directory()</code></td>
+<td>Detecta e valida .git</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>generate_hook_script(hook_type, command)</code></td>
+<td>Gera script bash</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>install_hook(name, script, dir, backup)</code></td>
+<td>Instala hook individual</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>make_executable(file_path)</code></td>
+<td>Define chmod 0o755</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>backup_existing_hook(hook_path, suffix)</code></td>
+<td>Faz backup de hook existente</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>install_cortex_hooks()</code></td>
+<td>Instala todos os hooks CORTEX</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+<tr>
+<td><code>_ensure_hooks_directory(git_dir)</code></td>
+<td>Garante existência de .git/hooks</td>
+<td>🔴 NotImplementedError</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-excecoes-customizadas">3.3. Exceções Customizadas</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">GitDirectoryNotFoundError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when .git directory cannot be found.&quot;&quot;&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">HookInstallationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when hook installation fails.&quot;&quot;&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="4-cortexconfigschema-dataclass-imutavel">4. CortexConfigSchema - Dataclass Imutável</h2>
+<h3 id="41-implementacao">4.1. Implementação</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">CortexConfigSchema</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Immutable configuration schema for CORTEX operations.&quot;&quot;&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">scan_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;docs/&quot;</span><span class="p">])</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">file_patterns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;*.md&quot;</span><span class="p">])</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">exclude_paths</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>        <span class="s2">&quot;.git/&quot;</span><span class="p">,</span> <span class="s2">&quot;__pycache__/&quot;</span><span class="p">,</span> <span class="s2">&quot;.venv/&quot;</span><span class="p">,</span> <span class="s2">&quot;venv/&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>        <span class="s2">&quot;node_modules/&quot;</span><span class="p">,</span> <span class="s2">&quot;.pytest_cache/&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="p">])</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="n">validate_code_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">validate_doc_links</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">strict_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">max_errors_per_file</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
+</code></pre></div>
+<h3 id="42-metodos-implementados">4.2. Métodos Implementados ✅</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nd">@classmethod</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">CortexConfigSchema</span><span class="p">:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create schema from dictionary, using defaults for missing keys.&quot;&quot;&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="c1"># Filtra apenas campos conhecidos</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="c1"># Retorna instância validada</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert schema to dictionary representation.&quot;&quot;&quot;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="c1"># Serializa para dict mutável</span>
+</code></pre></div>
+<h3 id="43-validacao-do-schema">4.3. Validação do Schema</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>python3<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s">from scripts.core.cortex.config import CortexConfigSchema</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">schema = CortexConfigSchema()</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">print(&#39;✅ Schema criado com sucesso!&#39;)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">print(f&#39;scan_paths: {schema.scan_paths}&#39;)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">print(f&#39;file_patterns: {schema.file_patterns}&#39;)</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s">print(f&#39;strict_mode: {schema.strict_mode}&#39;)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s"># Teste from_dict</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="s">custom = CortexConfigSchema.from_dict({&quot;scan_paths&quot;: [&quot;custom/&quot;]})</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="s">print(f&#39;\n✅ from_dict() funcionou!&#39;)</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s">print(f&#39;custom scan_paths: {custom.scan_paths}&#39;)</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s">print(f&#39;custom file_patterns (default): {custom.file_patterns}&#39;)</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">EOF</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># Output:</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="c1"># ✅ Schema criado com sucesso!</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="c1"># scan_paths: [&#39;docs/&#39;]</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="c1"># file_patterns: [&#39;*.md&#39;]</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="c1"># strict_mode: False</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="c1">#</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="c1"># ✅ from_dict() funcionou!</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="c1"># custom scan_paths: [&#39;custom/&#39;]</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="c1"># custom file_patterns (default): [&#39;*.md&#39;]</span>
+</code></pre></div>
+<hr />
+<h2 id="5-relatorio-de-testes-estado-red">5. Relatório de Testes - Estado RED</h2>
+<h3 id="51-sumario-geral">5.1. Sumário Geral</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>================================== SUMÁRIO ==================================
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Total de Testes: 43
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Falhados: 38 (88.4%)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>Passados: 4 (9.3%)
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>Skipped: 1 (2.3%)
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>Tempo de Execução: 2.63s
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>=============================================================================
+</code></pre></div>
+<h3 id="52-testes-que-passaram">5.2. Testes que PASSARAM ✅</h3>
+<table>
+<thead>
+<tr>
+<th>Teste</th>
+<th>Razão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TestConfigOrchestratorInit::test_init_with_valid_path</code></td>
+<td>Apenas testa <code>__init__()</code></td>
+</tr>
+<tr>
+<td><code>TestConfigOrchestratorInit::test_init_stores_project_root</code></td>
+<td>Apenas testa atribuição</td>
+</tr>
+<tr>
+<td><code>TestHooksOrchestratorInit::test_init_with_valid_path</code></td>
+<td>Apenas testa <code>__init__()</code></td>
+</tr>
+<tr>
+<td><code>TestHooksOrchestratorInit::test_init_stores_project_root</code></td>
+<td>Apenas testa atribuição</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota:</strong> Estes testes passam porque <code>__init__()</code> está implementado.</p>
+<h3 id="53-teste-skipped">5.3. Teste SKIPPED ⏭️</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>tests/test_hooks_orchestrator.py::TestMakeExecutable::test_make_executable_windows_no_error
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Razão: Marcado com @pytest.mark.skipif(os.name != &quot;nt&quot;)
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>       (teste Windows-specific, pulado em Linux)
+</code></pre></div>
+<h3 id="54-testes-que-falharam-amostra">5.4. Testes que FALHARAM 🔴 (Amostra)</h3>
+<h4 id="configorchestrator-20-testes-falhando">ConfigOrchestrator (20 testes falhando)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>FAILED tests/test_config_orchestrator.py::TestLoadYAML::test_load_yaml_with_valid_file
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  NotImplementedError: load_yaml() not yet implemented
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>FAILED tests/test_config_orchestrator.py::TestLoadYAML::test_load_yaml_with_relative_path
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>  NotImplementedError: load_yaml() not yet implemented
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>FAILED tests/test_config_orchestrator.py::TestSaveYAML::test_save_yaml_creates_file
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>  NotImplementedError: save_yaml() not yet implemented
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>FAILED tests/test_config_orchestrator.py::TestValidateConfigSchema::test_validate_config_schema_all_keys_present
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>  NotImplementedError: validate_config_schema() not yet implemented
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>FAILED tests/test_config_orchestrator.py::TestMergeWithDefaults::test_merge_with_defaults_user_overrides
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>  NotImplementedError: merge_with_defaults() not yet implemented
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>FAILED tests/test_config_orchestrator.py::TestLoadConfigWithDefaults::test_load_config_with_defaults_success
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>  NotImplementedError: load_config_with_defaults() not yet implemented
+</code></pre></div>
+<h4 id="hooksorchestrator-18-testes-falhando">HooksOrchestrator (18 testes falhando)</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>FAILED tests/test_hooks_orchestrator.py::TestDetectGitDirectory::test_detect_git_directory_exists
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  NotImplementedError: detect_git_directory() not yet implemented
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>FAILED tests/test_hooks_orchestrator.py::TestGenerateHookScript::test_generate_hook_script_post_merge
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>  NotImplementedError: generate_hook_script() not yet implemented
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>FAILED tests/test_hooks_orchestrator.py::TestInstallHook::test_install_hook_creates_file
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>  NotImplementedError: install_hook() not yet implemented
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>FAILED tests/test_hooks_orchestrator.py::TestMakeExecutable::test_make_executable_sets_permissions
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>  NotImplementedError: make_executable() not yet implemented
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>FAILED tests/test_hooks_orchestrator.py::TestBackupExistingHook::test_backup_existing_hook_creates_backup
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>  NotImplementedError: backup_existing_hook() not yet implemented
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>FAILED tests/test_hooks_orchestrator.py::TestInstallCortexHooks::test_install_cortex_hooks_creates_all_hooks
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>  NotImplementedError: install_cortex_hooks() not yet implemented
+</code></pre></div>
+<hr />
+<h2 id="6-cobertura-de-testes-por-funcionalidade">6. Cobertura de Testes por Funcionalidade</h2>
+<h3 id="61-configorchestrator">6.1. ConfigOrchestrator</h3>
+<table>
+<thead>
+<tr>
+<th>Funcionalidade</th>
+<th>Testes Criados</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inicialização</td>
+<td>2</td>
+<td>✅ PASSANDO</td>
+</tr>
+<tr>
+<td>Carregamento YAML</td>
+<td>6</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Salvamento YAML</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Validação de Schema</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Merge com Defaults</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Operação Integrada</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total:</strong> 20 testes</p>
+<h3 id="62-hooksorchestrator">6.2. HooksOrchestrator</h3>
+<table>
+<thead>
+<tr>
+<th>Funcionalidade</th>
+<th>Testes Criados</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inicialização</td>
+<td>2</td>
+<td>✅ PASSANDO</td>
+</tr>
+<tr>
+<td>Detecção .git</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Geração de Scripts</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Instalação de Hook</td>
+<td>4</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Make Executable</td>
+<td>2</td>
+<td>🔴/⏭️ FALHANDO/SKIP</td>
+</tr>
+<tr>
+<td>Backup de Hooks</td>
+<td>3</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Instalação Completa</td>
+<td>4</td>
+<td>🔴 FALHANDO</td>
+</tr>
+<tr>
+<td>Utilitários</td>
+<td>2</td>
+<td>🔴 FALHANDO</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total:</strong> 23 testes</p>
+<hr />
+<h2 id="7-analise-de-qualidade-dos-testes">7. Análise de Qualidade dos Testes</h2>
+<h3 id="71-padroes-seguidos">7.1. Padrões Seguidos ✅</h3>
+<ol>
+<li><strong>Nomenclatura Descritiva</strong></li>
+<li><code>test_load_yaml_with_valid_file</code></li>
+<li><code>test_install_hook_creates_file</code></li>
+<li>
+<p>Clareza sobre o que está sendo testado</p>
+</li>
+<li>
+<p><strong>Arrange-Act-Assert</strong></p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Arrange</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;test_config.yaml&quot;</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># Act</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">result</span> <span class="o">=</span> <span class="n">orchestrator</span><span class="o">.</span><span class="n">load_yaml</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Assert</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expected_data</span>
+</code></pre></div>
+<ol>
+<li><strong>Uso de Fixtures</strong></li>
+<li><code>tmp_path</code>: Diretórios temporários isolados</li>
+<li>
+<p>Evita side effects entre testes</p>
+</li>
+<li>
+<p><strong>Testes de Casos de Erro</strong></p>
+</li>
+<li><code>test_load_yaml_file_not_found</code></li>
+<li><code>test_detect_git_directory_not_found</code></li>
+<li>
+<p><code>pytest.raises()</code> para exceções esperadas</p>
+</li>
+<li>
+<p><strong>Testes de Portabilidade</strong></p>
+</li>
+<li><code>test_make_executable_windows_no_error</code> (skip condicional)</li>
+<li><code>if os.name == "posix"</code> para verificações Unix-specific</li>
+</ol>
+<h3 id="72-cobertura-de-edge-cases">7.2. Cobertura de Edge Cases</h3>
+<table>
+<thead>
+<tr>
+<th>Edge Case</th>
+<th>Teste</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arquivo YAML vazio</td>
+<td><code>test_load_yaml_empty_file</code></td>
+</tr>
+<tr>
+<td>Sintaxe YAML inválida</td>
+<td><code>test_load_yaml_invalid_syntax</code></td>
+</tr>
+<tr>
+<td>Caminho relativo vs absoluto</td>
+<td><code>test_load_yaml_with_relative_path</code> / <code>test_load_yaml_with_absolute_path</code></td>
+</tr>
+<tr>
+<td>Diretórios pai não existem</td>
+<td><code>test_save_yaml_creates_parent_directories</code></td>
+</tr>
+<tr>
+<td>Hook já existe</td>
+<td><code>test_install_hook_with_backup</code></td>
+</tr>
+<tr>
+<td>.git é arquivo (worktree)</td>
+<td><code>test_detect_git_directory_is_file</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-proximos-passos-etapa-03-implementacao">8. Próximos Passos (Etapa 03 - Implementação)</h2>
+<h3 id="81-ordem-de-implementacao-sugerida">8.1. Ordem de Implementação Sugerida</h3>
+<p><strong>ConfigOrchestrator (Prioridade 1):</strong></p>
+<ol>
+<li><code>load_yaml()</code> - Base para outras operações</li>
+<li><code>validate_config_schema()</code> - Validação simples</li>
+<li><code>merge_with_defaults()</code> - Lógica de merge</li>
+<li><code>save_yaml()</code> - Persistência</li>
+<li><code>load_config_with_defaults()</code> - Integração</li>
+</ol>
+<p><strong>HooksOrchestrator (Prioridade 2):</strong></p>
+<ol>
+<li><code>detect_git_directory()</code> - Pré-requisito</li>
+<li><code>_ensure_hooks_directory()</code> - Utilitário</li>
+<li><code>generate_hook_script()</code> - Geração de conteúdo</li>
+<li><code>make_executable()</code> - Operação chmod</li>
+<li><code>backup_existing_hook()</code> - Backup</li>
+<li><code>install_hook()</code> - Instalação individual</li>
+<li><code>install_cortex_hooks()</code> - Orquestração completa</li>
+</ol>
+<h3 id="82-checklist-de-implementacao">8.2. Checklist de Implementação</h3>
+<ul>
+<li>[ ] Implementar <code>ConfigOrchestrator.load_yaml()</code></li>
+<li>[ ] Implementar <code>ConfigOrchestrator.save_yaml()</code></li>
+<li>[ ] Implementar <code>ConfigOrchestrator.validate_config_schema()</code></li>
+<li>[ ] Implementar <code>ConfigOrchestrator.merge_with_defaults()</code></li>
+<li>[ ] Implementar <code>ConfigOrchestrator.load_config_with_defaults()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.detect_git_directory()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator._ensure_hooks_directory()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.generate_hook_script()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.make_executable()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.backup_existing_hook()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.install_hook()</code></li>
+<li>[ ] Implementar <code>HooksOrchestrator.install_cortex_hooks()</code></li>
+<li>[ ] Executar testes até estado GREEN</li>
+<li>[ ] Validar cobertura de código (&gt;90%)</li>
+</ul>
+<hr />
+<h2 id="9-metricas-de-progresso">9. Métricas de Progresso</h2>
+<h3 id="91-linhas-de-codigo">9.1. Linhas de Código</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Linhas</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config_orchestrator.py</code></td>
+<td>176</td>
+<td>Esqueleto + Docstrings</td>
+</tr>
+<tr>
+<td><code>hooks_orchestrator.py</code></td>
+<td>220</td>
+<td>Esqueleto + Docstrings</td>
+</tr>
+<tr>
+<td><code>config.py</code> (atualizado)</td>
+<td>+100</td>
+<td>CortexConfigSchema</td>
+</tr>
+<tr>
+<td><code>test_config_orchestrator.py</code></td>
+<td>355</td>
+<td>Testes TDD</td>
+</tr>
+<tr>
+<td><code>test_hooks_orchestrator.py</code></td>
+<td>378</td>
+<td>Testes TDD</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~1229</strong></td>
+<td><strong>Código Novo</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-complexidade-ciclomatica-estimada">9.2. Complexidade Ciclomática (Estimada)</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Métodos</th>
+<th>Complexidade Esperada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ConfigOrchestrator</td>
+<td>5</td>
+<td>Baixa (1-3 por método)</td>
+</tr>
+<tr>
+<td>HooksOrchestrator</td>
+<td>7</td>
+<td>Média (2-5 por método)</td>
+</tr>
+<tr>
+<td>CortexConfigSchema</td>
+<td>2</td>
+<td>Baixa (1-2 por método)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-conformidade-com-protocolo-de-fracionamento">10. Conformidade com Protocolo de Fracionamento</h2>
+<h3 id="101-checklist-do-protocolo">10.1. Checklist do Protocolo ✅</h3>
+<ul>
+<li>[x] <strong>Fase 0: Mapeamento</strong> - Concluída (Relatório anterior)</li>
+<li>[x] <strong>Fase 1: Extração</strong> - Esqueletos criados</li>
+<li>[x] <strong>TDD RED</strong> - 38 testes falhando conforme esperado</li>
+<li>[ ] <strong>Fase 2: Implementação</strong> - Próxima etapa</li>
+<li>[ ] <strong>Fase 3: Religação</strong> - Integração com CLI</li>
+<li>[ ] <strong>Fase 4: Validação</strong> - make validate + cortex scan</li>
+</ul>
+<h3 id="102-principios-solid-aplicados">10.2. Princípios SOLID Aplicados</h3>
+<table>
+<thead>
+<tr>
+<th>Princípio</th>
+<th>Aplicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong>ingle Responsibility</td>
+<td>ConfigOrchestrator só gerencia YAML, HooksOrchestrator só gerencia hooks</td>
+</tr>
+<tr>
+<td><strong>O</strong>pen/Closed</td>
+<td>Métodos bem definidos, extensíveis via herança</td>
+</tr>
+<tr>
+<td><strong>L</strong>iskov Substitution</td>
+<td>Exceções customizadas podem substituir Exception</td>
+</tr>
+<tr>
+<td><strong>I</strong>nterface Segregation</td>
+<td>Métodos granulares (não monolíticos)</td>
+</tr>
+<tr>
+<td><strong>D</strong>ependency Inversion</td>
+<td>Aceita Path (abstração) ao invés de strings hardcoded</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-riscos-e-mitigacoes">11. Riscos e Mitigações</h2>
+<h3 id="111-riscos-identificados">11.1. Riscos Identificados</h3>
+<table>
+<thead>
+<tr>
+<th>Risco</th>
+<th>Probabilidade</th>
+<th>Impacto</th>
+<th>Mitigação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Implementação difere dos testes</td>
+<td>Média</td>
+<td>Alto</td>
+<td>Code review rigoroso</td>
+</tr>
+<tr>
+<td>Testes não cobrem edge cases</td>
+<td>Baixa</td>
+<td>Médio</td>
+<td>Já coberto nos testes criados</td>
+</tr>
+<tr>
+<td>Integração com CLI quebra</td>
+<td>Média</td>
+<td>Alto</td>
+<td>Etapa 03 separada com validação</td>
+</tr>
+<tr>
+<td>Windows incompatibilidade</td>
+<td>Baixa</td>
+<td>Baixo</td>
+<td>Skip condicional já implementado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="112-estrategias-de-validacao">11.2. Estratégias de Validação</h3>
+<ol>
+<li><strong>Testes Incrementais:</strong> Implementar um método por vez</li>
+<li><strong>Git Commits Atômicos:</strong> Commit após cada método GREEN</li>
+<li><strong>Code Review:</strong> Revisar contra mapeamento técnico</li>
+<li><strong>Validação CI:</strong> make validate após cada implementação</li>
+</ol>
+<hr />
+<h2 id="conclusao">Conclusão</h2>
+<p>✅ <strong>Etapa 02/04 CONCLUÍDA com Sucesso</strong></p>
+<p><strong>Entregas:</strong></p>
+<ul>
+<li>2 orquestradores com esqueletos bem documentados</li>
+<li>1 dataclass imutável (CortexConfigSchema) implementada</li>
+<li>43 testes unitários (38 RED, 4 GREEN, 1 SKIP)</li>
+<li>Cobertura completa de casos de uso e edge cases</li>
+</ul>
+<p><strong>Estado Atual:</strong> 🔴 RED (esperado e desejado no TDD)</p>
+<p><strong>Próxima Etapa:</strong> Implementação dos métodos para alcançar estado 🟢 GREEN</p>
+<hr />
+<p><strong>Revisado por:</strong> GitHub Copilot (Claude Sonnet 4.5)
+<strong>Data:</strong> 2025-12-22
+<strong>Fase TDD:</strong> 🔴 RED (38 falhas esperadas)</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
