@@ -184,7 +184,7 @@ jobs:
 
       # Garantir pytest mesmo com cache sujo
       - name: "Verificar disponibilidade do pytest"
-        run: .venv/bin/python -m pip install pytest pytest-xdist types-requests typer
+        run: .venv/bin/python -m pip install pytest pytest-xdist types-requests typer tomlkit python-frontmatter
 
       # Executa testes com pytest-xdist (-n auto)
       - name: "Executar Testes (Paralelo)"
@@ -245,7 +245,7 @@ jobs:
 
       # Garantir pytest mesmo com cache sujo
       - name: "Verificar disponibilidade do pytest"
-        run: .venv/bin/python -m pip install pytest pytest-xdist types-requests typer
+        run: .venv/bin/python -m pip install pytest pytest-xdist types-requests typer tomlkit python-frontmatter
 
       # Executa testes com pytest-xdist (-n auto)
       - name: "Executar Testes (Paralelo)"
@@ -303,6 +303,10 @@ jobs:
       - name: "Instalar Dependências"
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install-dev
+
+      # Garantir pytest mesmo com cache sujo
+      - name: "Verificar disponibilidade do pytest"
+        run: .venv/bin/python -m pip install pytest pytest-xdist types-requests typer tomlkit python-frontmatter
 
       # Executa testes com pytest-xdist (-n auto)
       - name: "Executar Testes (Paralelo)"
