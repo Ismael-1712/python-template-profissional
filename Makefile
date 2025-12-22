@@ -26,6 +26,10 @@ SCRIPTS_DIR := scripts
 # Artefatos para limpeza
 BUILD_ARTIFACTS := build dist *.egg-info
 
+# Python Baseline Configuration (CI Compatibility)
+PYTHON_BASELINE := 3.10
+CURRENT_PYTHON_VERSION := $(shell $(PYTHON) -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+
 # i18n Configuration
 LOCALES_DIR := locales
 BABEL_CFG := babel.cfg
@@ -35,7 +39,7 @@ POT_FILE := $(LOCALES_DIR)/messages.pot
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats validate-python requirements
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
@@ -54,11 +58,33 @@ doctor:
 upgrade-python:
 	@$(PYTHON) $(SCRIPTS_DIR)/maintain_versions.py
 
+## requirements: Recompila requirements/dev.txt usando a versão baseline (CI-compatible)
+requirements:
+	@echo "🔄 Compilando requirements com Python $(PYTHON_BASELINE) (CI-compatible)..."
+	@if ! command -v python$(PYTHON_BASELINE) &> /dev/null; then \
+		echo "❌ Erro: python$(PYTHON_BASELINE) não encontrado. Use 'pyenv install $(PYTHON_BASELINE)'"; \
+		exit 1; \
+	fi
+	@python$(PYTHON_BASELINE) -m pip install pip-tools --quiet
+	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in --output-file requirements/dev.txt
+	@echo "✅ Lockfile gerado com Python $(PYTHON_BASELINE) (compatível com CI)"
+
 ## setup: Alias para install-dev (configura ambiente completo)
 setup: install-dev
 
+## validate-python: Valida se a versão do Python é compatível com a baseline do CI
+validate-python:
+	@if [ "$(CURRENT_PYTHON_VERSION)" != "$(PYTHON_BASELINE)" ]; then \
+		echo "⚠️  \033[1;33mAVISO:\033[0m Python $(CURRENT_PYTHON_VERSION) detectado, mas a baseline do CI é $(PYTHON_BASELINE)"; \
+		echo "    O lockfile gerado pode ser incompatível com o CI."; \
+		echo "    Considere usar: pyenv local $(PYTHON_BASELINE) && make install-dev"; \
+		echo "    Ou execute: make requirements (para forçar Python $(PYTHON_BASELINE))"; \
+	else \
+		echo "✅ Python $(CURRENT_PYTHON_VERSION) está compatível com a baseline do CI"; \
+	fi
+
 ## install-dev: Instala ambiente de desenvolvimento (Cria .venv se necessário)
-install-dev:
+install-dev: validate-python
 	@echo "🔧 Verificando ambiente virtual..."
 	@REQUIREMENTS_IN="requirements/dev.in"; \
 	HASH_FILE="$(VENV)/.install_complete"; \
