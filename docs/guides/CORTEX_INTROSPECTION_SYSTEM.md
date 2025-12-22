@@ -71,7 +71,7 @@ JSON gerado dinamicamente contendo:
   "cli_commands": [
     {
       "name": "cortex",
-      "script_path": "scripts/cli/cortex.py",
+      "script_path": "scripts/cortex/cli.py",
       "description": "CORTEX - Documentation as Code CLI"
     }
   ],
@@ -256,7 +256,7 @@ grep -r "Tríade\|src/api\|develop branch" .github/copilot-instructions.md
 
 - `.github/copilot-instructions.md` - Instruções agnósticas
 - `scripts/core/cortex/mapper.py` - Implementação do mapper
-- `scripts/cli/cortex.py` - CLI do CORTEX
+- `scripts/cortex/cli.py` - CLI do CORTEX
 - `.cortex/context.json` - Contexto gerado (volátil)
 
 ---

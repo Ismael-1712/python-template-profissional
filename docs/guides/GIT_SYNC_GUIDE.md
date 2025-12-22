@@ -1,3 +1,14 @@
+---
+id: git-sync-guide
+type: guide
+status: active
+version: 1.0.0
+author: GEM
+date: '2025-12-22'
+tags: [git, sync, workflow]
+context_tags: [development, version-control]
+---
+
 # Guia de Sincronização Git
 
 Este documento contém os comandos e scripts para manter seu repositório sincronizado.
@@ -10,7 +21,7 @@ Este documento contém os comandos e scripts para manter seu repositório sincro
 ### Alterações enviadas
 
 - Reorganização do Cortex com orquestrador centralizado
-- Remoção do CLI duplicado (`scripts/cli/cortex.py`)
+- Remoção do CLI duplicado (`scripts/cortex/cli.py`)
 - Atualização dos hooks do pre-commit
 - Novos arquivos de documentação de PR
 

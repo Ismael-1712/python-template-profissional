@@ -11,7 +11,7 @@ linked_code:
 - scripts/core/cortex/models.py
 - scripts/core/cortex/metadata.py
 - tests/test_cortex_metadata.py
-- scripts/cli/cortex.py
+- scripts/cortex/cli.py
 - scripts/core/cortex/scanner.py
 - tests/test_cortex_scanner.py
 - scripts/core/cortex/migrate.py
@@ -71,7 +71,7 @@ title: 🧠 CORTEX - Checklist de Implementação
 
 ### Task 4: CLI básica (init) (2h)
 
-- [ ] Criar `scripts/cli/cortex.py`
+- [ ] Criar `scripts/cortex/cli.py`
 - [ ] Importar `typer`
 - [ ] Criar `app = typer.Typer(name="cortex")`
 - [ ] Implementar comando `@app.command() def init(path: Path)`
@@ -146,8 +146,8 @@ title: 🧠 CORTEX - Checklist de Implementação
 - [ ] Todas as tasks dos 4 sprints estão marcadas como ✅
 - [ ] Testes unitários têm cobertura >= 90%
 - [ ] Todos os testes passam: `pytest tests/test_cortex_*.py -v`
-- [ ] Linting passa: `ruff check scripts/core/cortex/ scripts/cli/cortex.py`
-- [ ] Type checking passa: `mypy scripts/core/cortex/ scripts/cli/cortex.py`
+- [ ] Linting passa: `ruff check scripts/core/cortex/ scripts/cortex/cli.py`
+- [ ] Type checking passa: `mypy scripts/core/cortex/ scripts/cortex/cli.py`
 - [ ] Todos os docs/ têm Frontmatter válido
 - [ ] `mkdocs build --strict` passa sem erros
 - [ ] Pre-commit hook está ativo e funcionando

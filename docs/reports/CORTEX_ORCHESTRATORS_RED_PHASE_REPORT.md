@@ -1,6 +1,6 @@
 ---
 id: cortex-orchestrators-red-phase-report
-type: report
+type: history
 status: active
 version: 1.0.0
 author: GEM & SRE Team

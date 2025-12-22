@@ -20,7 +20,7 @@ linked_code: []
 
 ## 🎯 Objetivo
 
-Refatorar `scripts/cli/cortex.py` (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão **God Function** e seguindo princípios SOLID.
+Refatorar `scripts/cortex/cli.py` (2113 linhas) para arquitetura modular em pacote Python, eliminando o antipadrão **God Function** e seguindo princípios SOLID.
 
 ## 📊 Resumo Executivo
 
@@ -37,7 +37,7 @@ Refatorar `scripts/cli/cortex.py` (2113 linhas) para arquitetura modular em paco
 ### ANTES (Monólito)
 
 ```
-scripts/cli/cortex.py (2113 linhas)
+scripts/cortex/cli.py (2113 linhas)
 ├── Helper Functions (67 linhas) ❌
 ├── Typer Commands (1900+ linhas) ⚠️
 └── Entry Point (86 linhas)
@@ -54,7 +54,7 @@ scripts/cortex/                  # 🆕 Pacote Python
     ├── __init__.py
     └── frontmatter_helpers.py  # ✅ Helpers puros
 
-scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
+scripts/cortex/cli.py           # 🔄 Wrapper retrocompatível
 ```
 
 ## 🔬 Mudanças Implementadas
@@ -70,7 +70,7 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
 
 **Modificado:**
 
-- `scripts/cli/cortex.py` - Removidas 67 linhas (funções privadas)
+- `scripts/cortex/cli.py` - Removidas 67 linhas (funções privadas)
 - Imports atualizados para usar módulo extraído
 
 **Validação:**
@@ -84,8 +84,8 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
 **Criado:**
 
 - `scripts/cortex/__main__.py` - Entry point para `python -m scripts.cortex`
-- `scripts/cortex/cli.py` - CLI movido de `scripts/cli/cortex.py` (2037 linhas)
-- `scripts/cli/cortex.py` - Wrapper retrocompatível (18 linhas)
+- `scripts/cortex/cli.py` - CLI movido de `scripts/cortex/cli.py` (2037 linhas)
+- `scripts/cortex/cli.py` - Wrapper retrocompatível (18 linhas)
 
 **Modificado:**
 
@@ -102,7 +102,7 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
 **Validação:**
 
 - ✅ Ambas invocações funcionam:
-  - `python scripts/cli/cortex.py --help` (legado)
+  - `python scripts/cortex/cli.py --help` (legado)
   - `python -m scripts.cortex --help` (moderno)
 - ✅ 546 testes passed
 - ✅ Make validate completo
@@ -129,14 +129,14 @@ scripts/cli/cortex.py           # 🔄 Wrapper retrocompatível
 | **Type Check** | Mypy --strict | ✅ Success (155 files) |
 | **Pre-commit** | 13 hooks | ✅ 13/13 passed |
 | **Funcional** | `cortex init` | ✅ Funcionando |
-| **Retrocompat** | `scripts/cli/cortex.py` | ✅ Funcionando |
+| **Retrocompat** | `scripts/cortex/cli.py` | ✅ Funcionando |
 | **Moderno** | `python -m scripts.cortex` | ✅ Funcionando |
 
 ### Casos de Teste Funcionais
 
 ```bash
 # Teste 1: Wrapper retrocompatível
-python scripts/cli/cortex.py --help  # ✅ OK
+python scripts/cortex/cli.py --help  # ✅ OK
 
 # Teste 2: Método moderno (-m)
 python -m scripts.cortex --help      # ✅ OK
@@ -155,7 +155,7 @@ make validate  # ✅ 546 passed
 
 ```bash
 # Método 1 (Legado - via wrapper)
-python scripts/cli/cortex.py audit
+python scripts/cortex/cli.py audit
 
 # Método 2 (Moderno - via -m)
 python -m scripts.cortex audit
@@ -164,7 +164,7 @@ python -m scripts.cortex audit
 cortex audit
 ```
 
-**Wrapper Criado:** `scripts/cli/cortex.py` delega para `scripts.cortex.cli:main`
+**Wrapper Criado:** `scripts/cortex/cli.py` delega para `scripts.cortex.cli:main`
 
 ## 📚 Protocolo Seguido
 

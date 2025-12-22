@@ -17,7 +17,7 @@ tags:
 related:
   - docs/architecture/PERFORMANCE_NOTES.md
   - scripts/core/cortex/knowledge_scanner.py
-  - scripts/cli/cortex.py
+  - scripts/cortex/cli.py
 ---
 
 # Cortex Scanner - Parallel Processing Guide
@@ -212,7 +212,7 @@ See [PERFORMANCE_NOTES.md](../architecture/PERFORMANCE_NOTES.md) for roadmap:
 
 - [Performance Benchmarks](../architecture/PERFORMANCE_NOTES.md)
 - [KnowledgeScanner Source](../../scripts/core/cortex/knowledge_scanner.py)
-- [CLI Implementation](../../scripts/cli/cortex.py)
+- [CLI Implementation](../../scripts/cortex/cli.py)
 - [Python GIL Documentation](https://docs.python.org/3/c-api/init.html#thread-state-and-the-global-interpreter-lock)
 
 ---

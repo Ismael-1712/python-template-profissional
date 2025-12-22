@@ -1,8 +1,11 @@
 ---
+id: ci-performance-audit-report
 title: "Auditoria de Performance CI/CD - Análise de Bottlenecks"
-date: 2025-12-22
+type: history
+author: GEM
+date: '2025-12-22'
 version: 2.0.0
-status: completed
+status: active
 tags: [ci-cd, performance, infrastructure, sre]
 ---
 

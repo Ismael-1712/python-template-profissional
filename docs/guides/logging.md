@@ -15,13 +15,13 @@ env_vars:
     values: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
     default: INFO
     required: false
-    example: "LOG_LEVEL=DEBUG python scripts/cli/cortex.py"
+    example: "LOG_LEVEL=DEBUG python scripts/cortex/cli.py"
   LOG_FORMAT:
     description: Define o formato de saída dos logs
     values: [text, json]
     default: text
     required: false
-    example: "LOG_FORMAT=json python scripts/cli/cortex.py"
+    example: "LOG_FORMAT=json python scripts/cortex/cli.py"
 tags:
   - observability
   - logging
@@ -65,7 +65,7 @@ Controla o nível de verbosidade dos logs.
 
 ```bash
 # Ativar modo debug
-LOG_LEVEL=DEBUG python scripts/cli/cortex.py
+LOG_LEVEL=DEBUG python scripts/cortex/cli.py
 
 # Apenas erros (produção)
 LOG_LEVEL=ERROR python scripts/cli/audit.py
@@ -86,10 +86,10 @@ Define o formato de saída dos logs.
 
 ```bash
 # Formato texto (padrão)
-python scripts/cli/cortex.py
+python scripts/cortex/cli.py
 
 # Formato JSON (para integração com ELK, Splunk, etc.)
-LOG_FORMAT=json python scripts/cli/cortex.py
+LOG_FORMAT=json python scripts/cortex/cli.py
 ```
 
 ---
@@ -306,7 +306,7 @@ cat cortex.log | jq 'select(.trace_id | startswith("a1b2c3d4"))'
 
 ```bash
 # Ativar modo DEBUG + JSON
-LOG_LEVEL=DEBUG LOG_FORMAT=json python scripts/cli/cortex.py map
+LOG_LEVEL=DEBUG LOG_FORMAT=json python scripts/cortex/cli.py map
 
 # Processar output
 cat cortex.log | jq 'select(.level == "DEBUG")' > debug_flow.json
