@@ -1,10 +1,10 @@
 #!/bin/bash
-# scripts/post-pr-cleanup.sh
+# scripts/git/post-pr-cleanup.sh
 # Protocolo automatizado para limpeza após Pull Request Merge
 # Baseado em: docs/guides/POST_PR_MERGE_PROTOCOL.md
 #
-# Uso: ./scripts/post-pr-cleanup.sh <branch-name>
-# Exemplo: ./scripts/post-pr-cleanup.sh feat/P010-vector-bridge
+# Uso: ./scripts/git/post-pr-cleanup.sh <branch-name>
+# Exemplo: ./scripts/git/post-pr-cleanup.sh feat/P010-vector-bridge
 
 set -e  # Exit on error
 set -o pipefail  # Fail on pipe errors

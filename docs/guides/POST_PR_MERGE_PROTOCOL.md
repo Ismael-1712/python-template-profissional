@@ -204,11 +204,11 @@ echo "✅ Limpeza concluída!"
 git status
 ```
 
-Salve como `scripts/post-pr-cleanup.sh` e execute:
+Salve como `scripts/git/post-pr-cleanup.sh` e execute:
 
 ```bash
-chmod +x scripts/post-pr-cleanup.sh
-./scripts/post-pr-cleanup.sh feat/P010-vector-bridge
+chmod +x scripts/git/post-pr-cleanup.sh
+./scripts/git/post-pr-cleanup.sh feat/P010-vector-bridge
 ```
 
 ---
