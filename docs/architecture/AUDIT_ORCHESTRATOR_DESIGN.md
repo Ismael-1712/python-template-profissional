@@ -16,7 +16,6 @@ linked_code:
   - scripts/core/cortex/models.py
   - scripts/cortex/cli.py
 related_docs:
-  - docs/architecture/CORTEX_ARCHITECTURE.md
 ---
 
 # AUDIT ORCHESTRATOR - Design de Refatoração

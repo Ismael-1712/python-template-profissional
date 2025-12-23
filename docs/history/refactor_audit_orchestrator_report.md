@@ -1,4 +1,17 @@
 ---
+id: refactor-audit-orchestrator-report
+type: history
+status: stable
+version: 1.0.0
+author: Engineering Team
+date: 2025-12-23
+tags:
+  - refactoring
+  - architecture
+  - hexagonal
+---
+
+---
 title: "Refatoração Audit Orchestrator - Relatório Técnico"
 date: 2025-12-23
 type: technical-report
