@@ -1,0 +1,385 @@
+"""CORTEX Audit Orchestrator.
+
+Facade for audit operations including metadata validation, link checking,
+and Knowledge Graph health validation. Provides a high-level interface for
+auditing documentation across the entire project.
+
+Features:
+- Metadata audit with frontmatter validation
+- Root Lockdown policy enforcement
+- Knowledge Graph link validation
+- Health report generation
+- Configurable fail-on-error and strict modes
+
+This orchestrator follows the Thin CLI pattern, extracting business logic
+from cli.py and delegating to specialized auditors (MetadataAuditor,
+KnowledgeAuditor).
+
+Usage:
+    from scripts.core.cortex.audit_orchestrator import AuditOrchestrator
+
+    orchestrator = AuditOrchestrator(workspace_root=Path.cwd())
+
+    # Audit metadata only
+    result = orchestrator.run_metadata_audit(
+        path=Path("docs/"),
+        fail_on_error=False
+    )
+
+    # Audit Knowledge Graph
+    result = orchestrator.run_knowledge_audit(
+        strict=False,
+        output_path=Path("docs/reports/KNOWLEDGE_HEALTH.md")
+    )
+
+    # Combined audit
+    result = orchestrator.run_full_audit(
+        path=Path("docs/"),
+        check_links=True,
+        fail_on_error=True
+    )
+
+Author: Engineering Team
+License: MIT
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from scripts.core.cortex.knowledge_validator import ValidationReport
+
+from scripts.core.cortex.metadata import FrontmatterParser
+from scripts.core.cortex.models import (
+    FullAuditResult,
+    KnowledgeAuditResult,
+    MetadataAuditResult,
+)
+from scripts.cortex.core.knowledge_auditor import KnowledgeAuditor
+from scripts.cortex.core.metadata_auditor import MetadataAuditor
+from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem
+
+logger = logging.getLogger(__name__)
+
+
+class AuditOrchestrator:
+    """Orchestrates CORTEX audit operations.
+
+    Provides a unified interface for auditing documentation metadata
+    and Knowledge Graph health. Acts as a Facade over MetadataAuditor
+    and KnowledgeAuditor, delegating to specialized components.
+
+    This orchestrator implements the "Thin CLI" pattern by extracting
+    all business logic from the CLI layer, making it testable and
+    reusable across different interfaces.
+
+    Attributes:
+        workspace_root: Root directory of the workspace/project
+        knowledge_dir: Directory containing knowledge entries
+        fs: FileSystemAdapter for I/O operations
+        parser: FrontmatterParser for metadata extraction
+    """
+
+    def __init__(
+        self,
+        workspace_root: Path,
+        knowledge_dir: Path | None = None,
+        fs: FileSystemAdapter | None = None,
+    ) -> None:
+        """Initialize the audit orchestrator.
+
+        Args:
+            workspace_root: Root directory of the workspace
+            knowledge_dir: Directory with knowledge entries
+                (default: workspace_root/docs/knowledge)
+            fs: FileSystemAdapter for I/O operations (default: RealFileSystem)
+        """
+        if fs is None:
+            fs = RealFileSystem()
+
+        self.workspace_root = workspace_root.resolve()
+        self.knowledge_dir = knowledge_dir or (workspace_root / "docs/knowledge")
+        self.fs = fs
+        self.parser = FrontmatterParser(fs=fs)
+
+        logger.debug(
+            "Initialized AuditOrchestrator with root: %s",
+            self.workspace_root,
+        )
+
+    def collect_markdown_files(
+        self,
+        path: Path,
+    ) -> list[Path]:
+        """Collect all Markdown files from path.
+
+        Args:
+            path: Path to file or directory to scan
+
+        Returns:
+            List of Markdown file paths
+
+        Raises:
+            FileNotFoundError: If path doesn't exist
+            ValueError: If path is not a file or directory
+        """
+        if not path.exists():
+            msg = f"Path does not exist: {path}"
+            raise FileNotFoundError(msg)
+
+        md_files: list[Path] = []
+
+        if path.is_file():
+            if path.suffix.lower() in [".md", ".markdown"]:
+                md_files = [path]
+            else:
+                msg = f"Path is not a Markdown file: {path}"
+                raise ValueError(msg)
+        elif path.is_dir():
+            # Recursively find all .md files
+            md_files = list(path.rglob("*.md")) + list(path.rglob("*.markdown"))
+        else:
+            msg = f"Path is neither a file nor directory: {path}"
+            raise ValueError(msg)
+
+        logger.debug("Collected %d Markdown files from %s", len(md_files), path)
+        return md_files
+
+    def run_metadata_audit(
+        self,
+        path: Path | None = None,
+        *,
+        fail_on_error: bool = False,
+    ) -> MetadataAuditResult:
+        """Run metadata audit on documentation files.
+
+        Validates YAML frontmatter, checks required fields, verifies
+        code links, and enforces Root Lockdown policy.
+
+        Args:
+            path: Path to audit (default: docs/)
+            fail_on_error: If True, result.should_fail will be True on errors
+
+        Returns:
+            MetadataAuditResult with detailed audit information
+
+        Raises:
+            FileNotFoundError: If path doesn't exist
+            ValueError: If path is invalid
+
+        Example:
+            >>> orchestrator = AuditOrchestrator(Path.cwd())
+            >>> result = orchestrator.run_metadata_audit(Path("docs/"))
+            >>> assert result.is_successful or not result.should_fail
+        """
+        # Default to docs/ if no path provided
+        if path is None:
+            path = self.workspace_root / "docs"
+
+        # Collect Markdown files
+        md_files = self.collect_markdown_files(path)
+
+        # Instantiate and run MetadataAuditor
+        auditor = MetadataAuditor(workspace_root=self.workspace_root)
+        report = auditor.audit(md_files)
+
+        # Determine if audit should trigger failure
+        should_fail = fail_on_error and report.total_errors > 0
+
+        # Build result object
+        result = MetadataAuditResult(
+            report=report,
+            files_audited=md_files,
+            root_violations=report.root_violations,
+            should_fail=should_fail,
+        )
+
+        logger.info(
+            "Metadata audit complete: %d files, %d errors, %d warnings",
+            len(md_files),
+            report.total_errors,
+            report.total_warnings,
+        )
+
+        return result
+
+    def run_knowledge_audit(
+        self,
+        *,
+        strict: bool = False,
+        output_path: Path | None = None,
+    ) -> KnowledgeAuditResult:
+        """Run Knowledge Graph audit and generate health report.
+
+        Validates semantic links, calculates health metrics, and
+        generates a comprehensive report.
+
+        Args:
+            strict: If True, broken links trigger failure
+            output_path: Path for health report
+                (default: docs/reports/KNOWLEDGE_HEALTH.md)
+
+        Returns:
+            KnowledgeAuditResult with validation report and metrics
+
+        Raises:
+            FileNotFoundError: If knowledge directory doesn't exist
+
+        Example:
+            >>> orchestrator = AuditOrchestrator(Path.cwd())
+            >>> result = orchestrator.run_knowledge_audit(strict=True)
+            >>> assert result.is_healthy or result.should_fail
+        """
+        # Default output path
+        if output_path is None:
+            output_path = self.workspace_root / "docs/reports/KNOWLEDGE_HEALTH.md"
+
+        # Instantiate and run KnowledgeAuditor
+        auditor = KnowledgeAuditor(
+            workspace_root=self.workspace_root,
+            knowledge_dir=self.knowledge_dir,
+        )
+        validation_report, resolved_entries = auditor.validate()
+
+        # Calculate metrics
+        num_entries = len(resolved_entries)
+        total_links = sum(len(e.links) for e in resolved_entries)
+        valid_links = sum(
+            sum(1 for link in e.links if link.status.value == "valid")
+            for e in resolved_entries
+        )
+        broken_links = sum(
+            sum(1 for link in e.links if link.status.value == "broken")
+            for e in resolved_entries
+        )
+
+        # Save report
+        self.save_knowledge_report(validation_report, output_path)
+
+        # Determine if audit should trigger failure
+        should_fail = strict and broken_links > 0
+
+        # Build result object
+        result = KnowledgeAuditResult(
+            validation_report=validation_report,
+            num_entries=num_entries,
+            total_links=total_links,
+            valid_links=valid_links,
+            broken_links=broken_links,
+            should_fail=should_fail,
+            output_path=output_path,
+        )
+
+        logger.info(
+            "Knowledge Graph audit complete: %d entries, %d links "
+            "(%d valid, %d broken)",
+            num_entries,
+            total_links,
+            valid_links,
+            broken_links,
+        )
+
+        return result
+
+    def run_full_audit(
+        self,
+        path: Path | None = None,
+        *,
+        check_links: bool = False,
+        fail_on_error: bool = False,
+        strict: bool = False,
+        output_path: Path | None = None,
+    ) -> FullAuditResult:
+        """Run combined metadata and Knowledge Graph audit.
+
+        Performs both metadata validation and Knowledge Graph validation
+        in a single operation.
+
+        Args:
+            path: Path to audit for metadata (default: docs/)
+            check_links: If True, also run Knowledge Graph audit
+            fail_on_error: If True, metadata errors trigger failure
+            strict: If True, broken links trigger failure
+            output_path: Path for Knowledge Graph health report
+
+        Returns:
+            FullAuditResult combining both audit results
+
+        Example:
+            >>> orchestrator = AuditOrchestrator(Path.cwd())
+            >>> result = orchestrator.run_full_audit(
+            ...     check_links=True,
+            ...     fail_on_error=True
+            ... )
+            >>> assert result.is_successful or result.should_fail
+        """
+        metadata_result: MetadataAuditResult | None = None
+        knowledge_result: KnowledgeAuditResult | None = None
+
+        # Run metadata audit unless ONLY check_links is requested with no path
+        # If path is provided, always run metadata audit
+        # If check_links is True and path is None, only run knowledge audit
+        if path is not None or not check_links:
+            metadata_result = self.run_metadata_audit(
+                path=path,
+                fail_on_error=fail_on_error,
+            )
+
+        # Run Knowledge Graph audit if requested
+        if check_links:
+            knowledge_result = self.run_knowledge_audit(
+                strict=strict,
+                output_path=output_path,
+            )
+
+        # Aggregate failure status
+        should_fail = (metadata_result.should_fail if metadata_result else False) or (
+            knowledge_result.should_fail if knowledge_result else False
+        )
+
+        # Build result object
+        result = FullAuditResult(
+            metadata_result=metadata_result,
+            knowledge_result=knowledge_result,
+            should_fail=should_fail,
+        )
+
+        logger.info(
+            "Full audit complete: metadata=%s, knowledge=%s, should_fail=%s",
+            metadata_result is not None,
+            knowledge_result is not None,
+            should_fail,
+        )
+
+        return result
+
+    def save_knowledge_report(
+        self,
+        validation_report: ValidationReport,
+        output_path: Path,
+    ) -> None:
+        """Save Knowledge Graph health report to file.
+
+        Delegates to KnowledgeAuditor for report generation.
+
+        Args:
+            validation_report: ValidationReport to save
+            output_path: Path where report should be saved
+
+        Raises:
+            IOError: If report cannot be written
+        """
+        # Ensure output directory exists
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Delegate to KnowledgeAuditor
+        auditor = KnowledgeAuditor(
+            workspace_root=self.workspace_root,
+            knowledge_dir=self.knowledge_dir,
+        )
+        auditor.save_report(validation_report, output_path)
+
+        logger.debug("Knowledge Graph report saved to %s", output_path)

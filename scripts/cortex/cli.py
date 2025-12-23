@@ -27,6 +27,9 @@ _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
+from scripts.core.cortex.audit_orchestrator import (  # noqa: E402
+    AuditOrchestrator,
+)
 from scripts.core.cortex.knowledge_orchestrator import (  # noqa: E402
     KnowledgeOrchestrator,
 )
@@ -410,157 +413,115 @@ def audit(
         cortex audit --links --strict   # Fail CI on broken links
     """
     try:
-        # ============================================================
-        # KNOWLEDGE GRAPH VALIDATION (--links flag)
-        # ============================================================
-        if links:
-            from scripts.cortex.adapters.ui import UIPresenter
-            from scripts.cortex.core.knowledge_auditor import (
-                KnowledgeAuditor,
-                ValidationReport,
-            )
+        from scripts.cortex.adapters.ui import UIPresenter
 
-            ui = UIPresenter()
+        workspace_root = Path.cwd()
+        ui = UIPresenter()
+
+        # ============================================================
+        # ORCHESTRATE AUDIT VIA AuditOrchestrator (Thin CLI Pattern)
+        # ============================================================
+        orchestrator = AuditOrchestrator(workspace_root=workspace_root)
+
+        # Run full audit with all parameters
+        result = orchestrator.run_full_audit(
+            path=path,
+            check_links=links,
+            fail_on_error=fail_on_error,
+            strict=strict,
+            output_path=output,
+        )
+
+        # ============================================================
+        # DISPLAY RESULTS (Interface Layer Only)
+        # ============================================================
+
+        # Display Knowledge Graph results if --links was used
+        if result.knowledge_result:
             ui.display_knowledge_graph_header()
-
-            workspace_root = Path.cwd()
-
-            # ============================================================
-            # RUN AUDITOR (Business Logic Extracted to Core)
-            # ============================================================
             ui.show_info("📚 Scanning Knowledge Nodes...")
-            auditor = KnowledgeAuditor(
-                workspace_root=workspace_root,
-                knowledge_dir=workspace_root / "docs/knowledge",
-            )
-            validation_report: ValidationReport
-            validation_report, resolved_entries = auditor.validate()
 
-            # Count and display progress
-            num_entries = len(resolved_entries)
-            total_links = sum(len(e.links) for e in resolved_entries)
-            valid_links = sum(
-                sum(1 for link in e.links if link.status.value == "valid")
-                for e in resolved_entries
-            )
-            broken_links_count = sum(
-                sum(1 for link in e.links if link.status.value == "broken")
-                for e in resolved_entries
-            )
+            kg_result = result.knowledge_result
 
-            ui.display_knowledge_scan_progress(num_entries, total_links)
-            ui.display_link_resolution(valid_links, broken_links_count)
+            ui.display_knowledge_scan_progress(
+                kg_result.num_entries,
+                kg_result.total_links,
+            )
+            ui.display_link_resolution(
+                kg_result.valid_links,
+                kg_result.broken_links,
+            )
 
             # Display metrics
-            ui.display_knowledge_metrics(validation_report)
+            ui.display_knowledge_metrics(kg_result.validation_report)
 
-            # Save report
-            output_path = output or (
-                workspace_root / "docs/reports/KNOWLEDGE_HEALTH.md"
-            )
-            auditor.save_report(validation_report, output_path)
+            # Show report saved message
+            report_path = kg_result.output_path.relative_to(workspace_root)
             typer.secho(
-                f"\n📄 Report saved to: {output_path.relative_to(workspace_root)}",
+                f"\n📄 Report saved to: {report_path}",
                 fg=typer.colors.CYAN,
             )
 
-            # Determine exit code
-            if strict and len(validation_report.anomalies.broken_links) > 0:
+            # Determine Knowledge Graph validation status
+            if strict and kg_result.broken_links > 0:
                 ui.show_error(
                     "Validation FAILED: Broken links detected (--strict mode)",
                     bold=True,
                 )
                 raise typer.Exit(code=1)
 
-            if not validation_report.is_healthy:
+            if not kg_result.validation_report.is_healthy:
                 ui.show_warning("Validation completed with warnings")
                 if fail_on_error:
                     raise typer.Exit(code=1)
             else:
                 ui.show_success("Validation PASSED", bold=True)
 
-            return  # Exit after link validation
+            # If only Knowledge Graph was requested, exit here
+            if not result.metadata_result:
+                return
 
-        # ============================================================
-        # STANDARD METADATA AUDIT (original behavior)
-        # ============================================================
-        from scripts.cortex.core.metadata_auditor import MetadataAuditor
+        # Display Metadata audit results if performed
+        if result.metadata_result:
+            meta_result = result.metadata_result
 
-        # Default to docs/ if no path provided
-        if path is None:
-            path = Path("docs")
-
-        workspace_root = Path.cwd()
-        logger.info(f"Starting audit of {path}")
-
-        # Collect markdown files to audit
-        md_files: list[Path] = []
-
-        if not path.exists():
-            typer.secho(
-                f"❌ Error: Path {path} does not exist",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(code=1)
-
-        if path.is_file():
-            if path.suffix in [".md", ".markdown"]:
-                md_files = [path]
-            else:
-                typer.secho(
-                    f"❌ Error: {path} is not a Markdown file",
-                    fg=typer.colors.RED,
-                    err=True,
+            # Only show header if we didn't show Knowledge Graph header
+            if not result.knowledge_result:
+                typer.echo(
+                    f"\n📋 Found {len(meta_result.files_audited)} "
+                    f"Markdown file(s) to audit\n",
                 )
+
+            ui.display_audit_results(meta_result.report)
+
+            logger.info(
+                f"Audit complete: {meta_result.report.total_errors} errors, "
+                f"{meta_result.report.total_warnings} warnings",
+            )
+
+            # Exit with error code if requested and errors found
+            if meta_result.should_fail:
                 raise typer.Exit(code=1)
-        elif path.is_dir():
-            # Recursively find all .md files
-            md_files = list(path.rglob("*.md")) + list(path.rglob("*.markdown"))
-        else:
-            typer.secho(
-                f"❌ Error: {path} is neither a file nor directory",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(code=1)
-
-        if not md_files:
-            typer.secho(
-                f"⚠️  No Markdown files found in {path}",
-                fg=typer.colors.YELLOW,
-            )
-            return
-
-        typer.echo(f"\n📋 Found {len(md_files)} Markdown file(s) to audit\n")
-
-        # ============================================================
-        # RUN AUDITOR (Business Logic Extracted to Core)
-        # ============================================================
-        from scripts.cortex.adapters.ui import UIPresenter
-        from scripts.cortex.core.metadata_auditor import AuditReport
-
-        ui = UIPresenter()
-        metadata_auditor = MetadataAuditor(workspace_root=workspace_root)
-        report: AuditReport = metadata_auditor.audit(md_files)
-
-        # ============================================================
-        # DISPLAY RESULTS (Interface Layer)
-        # ============================================================
-        ui.display_audit_results(report)
-
-        logger.info(
-            f"Audit complete: {report.total_errors} errors, "
-            f"{report.total_warnings} warnings",
-        )
-
-        # Exit with error code if requested and errors found
-        if fail_on_error and report.total_errors > 0:
-            raise typer.Exit(code=1)
 
     except typer.Exit:
         # Re-raise Exit exceptions
         raise
+
+    except FileNotFoundError as e:
+        typer.secho(
+            f"❌ Error: {e}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1) from e
+
+    except ValueError as e:
+        typer.secho(
+            f"❌ Error: {e}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1) from e
 
     except Exception as e:
         logger.error(f"Error during audit: {e}", exc_info=True)
