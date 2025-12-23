@@ -1,7 +1,7 @@
 ---
 id: refactor-audit-orchestrator-report
 type: history
-status: stable
+status: active
 version: 1.0.0
 author: Engineering Team
 date: 2025-12-23
