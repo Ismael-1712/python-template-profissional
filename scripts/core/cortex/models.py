@@ -365,3 +365,137 @@ class MigrationSummary(BaseModel):
     errors: int
     # list[MigrationResult] - avoiding circular import
     results: list[Any] = Field(default_factory=list)
+
+
+# ============================================================================
+# AUDIT RESULT MODELS
+# ============================================================================
+# Models for audit orchestrator results, decoupling business logic from CLI
+
+
+class MetadataAuditResult(BaseModel):
+    """Result of metadata audit operation.
+
+    Encapsulates the results of auditing documentation metadata,
+    decoupling the business logic from CLI presentation.
+
+    Attributes:
+        report: Detailed audit report with file-level results (AuditReport)
+        files_audited: List of files that were audited
+        root_violations: Files violating Root Lockdown policy
+        should_fail: True if audit should trigger failure (based on fail_on_error)
+
+    Example:
+        >>> result = MetadataAuditResult(
+        ...     report=audit_report,
+        ...     files_audited=[Path("docs/guide.md")],
+        ...     root_violations=[],
+        ...     should_fail=False,
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    report: Any  # AuditReport - avoiding circular import
+    files_audited: list[Path]
+    root_violations: list[str] = Field(default_factory=list)
+    should_fail: bool = False
+
+    @property
+    def is_successful(self) -> bool:
+        """Check if audit passed with no errors."""
+        return self.report.is_successful  # type: ignore[no-any-return]
+
+    @property
+    def total_errors(self) -> int:
+        """Total number of errors found."""
+        return self.report.total_errors  # type: ignore[no-any-return]
+
+    @property
+    def total_warnings(self) -> int:
+        """Total number of warnings found."""
+        return self.report.total_warnings  # type: ignore[no-any-return]
+
+
+class KnowledgeAuditResult(BaseModel):
+    """Result of Knowledge Graph audit operation.
+
+    Encapsulates the results of Knowledge Graph validation,
+    including health metrics and link status.
+
+    Attributes:
+        validation_report: ValidationReport with metrics and anomalies
+        num_entries: Number of knowledge entries scanned
+        total_links: Total number of semantic links found
+        valid_links: Number of valid links
+        broken_links: Number of broken links
+        should_fail: True if audit should trigger failure (based on strict mode)
+        output_path: Path where health report was saved
+
+    Example:
+        >>> result = KnowledgeAuditResult(
+        ...     validation_report=report,
+        ...     num_entries=42,
+        ...     total_links=150,
+        ...     valid_links=148,
+        ...     broken_links=2,
+        ...     should_fail=True,
+        ...     output_path=Path("docs/reports/KNOWLEDGE_HEALTH.md"),
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    validation_report: Any  # ValidationReport - avoiding circular import
+    num_entries: int
+    total_links: int
+    valid_links: int
+    broken_links: int
+    should_fail: bool = False
+    output_path: Path
+
+    @property
+    def is_healthy(self) -> bool:
+        """Check if Knowledge Graph is healthy."""
+        return self.validation_report.is_healthy  # type: ignore[no-any-return]
+
+    @property
+    def health_score(self) -> float:
+        """Overall health score (0.0 - 1.0)."""
+        return self.validation_report.metrics.health_score  # type: ignore[no-any-return]
+
+
+class FullAuditResult(BaseModel):
+    """Result of combined audit operation.
+
+    Combines metadata and Knowledge Graph audit results.
+
+    Attributes:
+        metadata_result: Result of metadata audit (None if not performed)
+        knowledge_result: Result of Knowledge Graph audit (None if not performed)
+        should_fail: True if any audit should trigger failure
+
+    Example:
+        >>> result = FullAuditResult(
+        ...     metadata_result=metadata_result,
+        ...     knowledge_result=knowledge_result,
+        ...     should_fail=False,
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    metadata_result: MetadataAuditResult | None = None
+    knowledge_result: KnowledgeAuditResult | None = None
+    should_fail: bool = False
+
+    @property
+    def is_successful(self) -> bool:
+        """Check if all audits passed."""
+        metadata_ok = (
+            self.metadata_result.is_successful if self.metadata_result else True
+        )
+        knowledge_ok = (
+            self.knowledge_result.is_healthy if self.knowledge_result else True
+        )
+        return metadata_ok and knowledge_ok
