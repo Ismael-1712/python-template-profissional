@@ -181,10 +181,10 @@ class TestRealFilesGovernance:
                     )
                     continue
 
-                # Deve ter (title OU id) E type E status
-                has_title_or_id = ("title" in metadata) or ("id" in metadata)
-                has_type = "type" in metadata
-                has_status = "status" in metadata
+                # CAMPOS OBRIGATÓRIOS (sincronizado com CI Auditor):
+                # - type, status, id, author, date (obrigatórios)
+                # - title (opcional, mas recomendado)
+                required_keys = {"type", "status", "id", "author", "date"}
 
                 # Detectar uso do padrão antigo (agora rejeitado)
                 uses_old_pattern = ("doc_type" in metadata) or (
@@ -192,12 +192,9 @@ class TestRealFilesGovernance:
                 )
 
                 missing = []
-                if not has_title_or_id:
-                    missing.append("title ou id")
-                if not has_type:
-                    missing.append("type")
-                if not has_status:
-                    missing.append("status")
+                for key in required_keys:
+                    if key not in metadata:
+                        missing.append(key)
 
                 # Rejeitar explicitamente o padrão antigo
                 if uses_old_pattern:
