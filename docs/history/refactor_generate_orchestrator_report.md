@@ -1,16 +1,11 @@
 ---
-title: Refatoração - GenerationOrchestrator
-description: Extração da lógica de geração de documentos do CLI para orquestrador
-  dedicado
-created_at: 2025-12-23
-tags:
-- refactoring
-- architecture
-- orchestrator-pattern
-- technical-debt
-version: '1.0'
+id: refactor-generate-orchestrator-report
 type: history
 status: active
+version: 1.0.0
+author: Engineering Team
+date: 2025-12-24
+tags: [refactoring, architecture, hexagonal]
 ---
 # Refatoração: GenerationOrchestrator
 
