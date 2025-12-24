@@ -170,7 +170,7 @@ class TestDependencyAlignment:
                         {
                             "tool": tool_name,
                             "expected_package": expected_package,
-                        }
+                        },
                     )
 
         # Assert with detailed error message
@@ -218,3 +218,73 @@ class TestDependencyAlignment:
             f"  Missing: {expected_critical_tools - mapped_tools}\n"
             f"  Extra: {mapped_tools - expected_critical_tools}\n"
         )
+
+    def test_requirements_files_are_synchronized(self, project_root: Path) -> None:
+        """Verify that requirements/dev.txt is synchronized with dev.in.
+
+        This test prevents CI failures caused by outdated lockfiles.
+        If dev.in is modified, dev.txt must be regenerated with pip-compile.
+
+        Raises:
+            AssertionError: If lockfile is out of sync
+        """
+        dev_in_path = project_root / "requirements" / "dev.in"
+        dev_txt_path = project_root / "requirements" / "dev.txt"
+
+        # Both files must exist
+        assert dev_in_path.exists(), (
+            f"❌ Missing file: {dev_in_path}\nThe requirements input file is required."
+        )
+        assert dev_txt_path.exists(), (
+            f"❌ Missing file: {dev_txt_path}\n"
+            "Run: pip-compile requirements/dev.in "
+            "--output-file requirements/dev.txt"
+        )
+
+        # Read dev.in to extract package names
+        dev_in_content = dev_in_path.read_text(encoding="utf-8")
+        dev_txt_content = dev_txt_path.read_text(encoding="utf-8")
+
+        # Extract package names from dev.in (ignore comments and empty lines)
+        required_packages = set()
+        for line in dev_in_content.splitlines():
+            line = line.strip()
+            # Skip comments, empty lines, and conditional deps
+            if not line or line.startswith("#"):
+                continue
+            # Extract package name (before ==, >=, <, ;, etc.)
+            package_match = re.match(r"^([a-zA-Z0-9_-]+)", line)
+            if package_match:
+                package_name = package_match.group(1).lower()
+                required_packages.add(package_name)
+
+        # Check if all packages from dev.in are in dev.txt
+        missing_packages = []
+        for package in required_packages:
+            # Look for the package in dev.txt (case-insensitive)
+            package_pattern = re.compile(
+                rf"^{re.escape(package)}==",
+                re.IGNORECASE | re.MULTILINE,
+            )
+            if not package_pattern.search(dev_txt_content):
+                missing_packages.append(package)
+
+        # Assert with descriptive error message
+        if missing_packages:
+            error_message = (
+                "\n❌ REQUIREMENTS LOCKFILE OUT OF SYNC ❌\n\n"
+                "The following packages from dev.in are NOT in dev.txt:\n\n"
+            )
+
+            for package in sorted(missing_packages):
+                error_message += f"  • {package}\n"
+
+            error_message += (
+                "\n🔧 FIX:\n"
+                "  pip-compile requirements/dev.in "
+                "--output-file requirements/dev.txt --strip-extras\n\n"
+                "🛡️ This autoimune system prevents CI failures "
+                "from outdated lockfiles.\n"
+            )
+
+            pytest.fail(error_message)
