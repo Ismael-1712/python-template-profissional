@@ -15,6 +15,7 @@ Architecture:
 """
 
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -288,3 +289,113 @@ class TestDependencyAlignment:
             )
 
             pytest.fail(error_message)
+
+    def test_requirements_txt_is_synced(self, project_root: Path) -> None:
+        """Verify requirements/dev.txt is in sync using pip-compile.
+
+        This test uses pip-compile to generate what the lockfile should be
+        and compares it with the current file to detect sync issues.
+
+        Raises:
+            AssertionError: If lockfile is out of sync with dev.in
+        """
+        dev_in_path = project_root / "requirements" / "dev.in"
+        dev_txt_path = project_root / "requirements" / "dev.txt"
+
+        # Both files must exist
+        if not dev_in_path.exists():
+            pytest.skip(f"Skipping: {dev_in_path} not found")
+        if not dev_txt_path.exists():
+            pytest.skip(f"Skipping: {dev_txt_path} not found")
+
+        try:
+            # Generate what the file should look like (output to stdout)
+            # SECURITY: Safe subprocess use - shell=False, validated paths,
+            # timeout protection
+            result = subprocess.run(  # noqa: S603
+                [
+                    "pip-compile",
+                    str(dev_in_path),
+                    "--output-file=-",
+                    "--strip-extras",
+                    "--quiet",
+                ],
+                check=False,
+                cwd=str(project_root),
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+
+            if result.returncode != 0:
+                pytest.fail(
+                    f"pip-compile failed:\n{result.stderr or result.stdout}",
+                )
+
+            # Read current dev.txt
+            current_content = dev_txt_path.read_text(encoding="utf-8")
+
+            # Normalize both for comparison (remove comments and whitespace)
+            def normalize_requirements(content: str) -> set[str]:
+                lines = set()
+                for line in content.splitlines():
+                    line = line.strip()
+                    # Skip comments and empty lines
+                    if not line or line.startswith("#"):
+                        continue
+                    lines.add(line)
+                return lines
+
+            generated = normalize_requirements(result.stdout)
+            current = normalize_requirements(current_content)
+
+            if generated != current:
+                missing_in_current = generated - current
+                extra_in_current = current - generated
+
+                error_message = (
+                    "\n❌ REQUIREMENTS LOCKFILE OUT OF SYNC ❌\n\n"
+                    "requirements/dev.txt differs from what pip-compile "
+                    "would generate.\n\n"
+                )
+
+                if missing_in_current:
+                    error_message += "📦 Missing in current dev.txt:\n"
+                    for line in sorted(missing_in_current)[:5]:
+                        error_message += f"  + {line}\n"
+                    if len(missing_in_current) > 5:
+                        error_message += (
+                            f"  ... and {len(missing_in_current) - 5} more\n"
+                        )
+                    error_message += "\n"
+
+                if extra_in_current:
+                    error_message += "📦 Extra in current dev.txt:\n"
+                    for line in sorted(extra_in_current)[:5]:
+                        error_message += f"  - {line}\n"
+                    if len(extra_in_current) > 5:
+                        error_message += f"  ... and {len(extra_in_current) - 5} more\n"
+                    error_message += "\n"
+
+                error_message += (
+                    "🔧 FIX:\n"
+                    "  make install-dev\n"
+                    "  # OR manually:\n"
+                    "  pip-compile requirements/dev.in "
+                    "--output-file requirements/dev.txt --strip-extras\n\n"
+                    "🛡️ This autoimune system prevents CI failures "
+                    "from outdated lockfiles.\n"
+                )
+
+                pytest.fail(error_message)
+
+        except FileNotFoundError:
+            pytest.skip(
+                "pip-compile not found in PATH. "
+                "Install pip-tools: pip install pip-tools",
+            )
+        except subprocess.TimeoutExpired:
+            pytest.fail(
+                "pip-compile timed out after 60 seconds. "
+                "This may indicate a problem with the requirements files.",
+            )
