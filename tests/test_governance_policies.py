@@ -169,7 +169,8 @@ class TestRealFilesGovernance:
                 metadata = yaml.safe_load(frontmatter_raw)
 
                 # Verificar campos obrigatórios (baseado no padrão do projeto)
-                # Aceita ambos os padrões: type/status OU doc_type/doc_status
+                # PADRÃO ESTRITO: Apenas type/status são aceitos
+                # (doc_type/doc_status são rejeitados)
                 # Title é obrigatório, mas pode estar em 'title' ou 'id' (fallback)
                 if metadata is None or not isinstance(metadata, dict):
                     files_with_invalid_frontmatter.append(
@@ -180,18 +181,34 @@ class TestRealFilesGovernance:
                     )
                     continue
 
-                # Deve ter (title OU id) E (type OU doc_type) E (status OU doc_status)
+                # Deve ter (title OU id) E type E status
                 has_title_or_id = ("title" in metadata) or ("id" in metadata)
-                has_type = ("type" in metadata) or ("doc_type" in metadata)
-                has_status = ("status" in metadata) or ("doc_status" in metadata)
+                has_type = "type" in metadata
+                has_status = "status" in metadata
+
+                # Detectar uso do padrão antigo (agora rejeitado)
+                uses_old_pattern = ("doc_type" in metadata) or (
+                    "doc_status" in metadata
+                )
 
                 missing = []
                 if not has_title_or_id:
                     missing.append("title ou id")
                 if not has_type:
-                    missing.append("type ou doc_type")
+                    missing.append("type")
                 if not has_status:
-                    missing.append("status ou doc_status")
+                    missing.append("status")
+
+                # Rejeitar explicitamente o padrão antigo
+                if uses_old_pattern:
+                    files_with_invalid_frontmatter.append(
+                        (
+                            str(md_file),
+                            "Padrão antigo detectado: use 'type' e 'status' "
+                            "ao invés de 'doc_type' e 'doc_status'",
+                        ),
+                    )
+                    continue
 
                 if missing:
                     files_with_invalid_frontmatter.append(
