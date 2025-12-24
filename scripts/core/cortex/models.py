@@ -499,3 +499,136 @@ class FullAuditResult(BaseModel):
             self.knowledge_result.is_healthy if self.knowledge_result else True
         )
         return metadata_ok and knowledge_ok
+
+
+# =============================================================================
+# Document Generation Models
+# =============================================================================
+
+
+class SingleGenerationResult(BaseModel):
+    r"""Result of generating a single document.
+
+    Encapsulates the outcome of generating one document (README, CONTRIBUTING),
+    including success status, generated content, and metadata.
+
+    Attributes:
+        success: True if generation succeeded without errors
+        target: Target document type (readme/contributing)
+        output_path: Absolute path where document was/would be written
+        content: Generated document content (always present, even in dry-run)
+        content_size: Size of generated content in bytes
+        error_message: Error description if success=False
+        was_written: True if content was written to disk (False in dry-run)
+        template_name: Name of Jinja2 template used
+
+    Example:
+        >>> result = SingleGenerationResult(
+        ...     success=True,
+        ...     target="readme",
+        ...     output_path=Path("README.md"),
+        ...     content="# My Project\\n...",
+        ...     content_size=1024,
+        ...     was_written=True,
+        ...     template_name="README.md.j2",
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    success: bool
+    target: str  # "readme" | "contributing"
+    output_path: Path
+    content: str
+    content_size: int
+    error_message: str | None = None
+    was_written: bool = False
+    template_name: str
+
+
+class DriftCheckResult(BaseModel):
+    r"""Result of drift detection check.
+
+    Compares current file content with expected content from template.
+    Used for CI/CD governance to detect manual edits or outdated files.
+
+    Attributes:
+        has_drift: True if current content differs from expected
+        target: Target document type being checked
+        output_path: Path to the file that was checked
+        diff: Unified diff string (empty if no drift)
+        current_content: Current file content (empty string if file missing)
+        expected_content: Content that would be generated from template
+        line_changes: Number of lines changed (additions + deletions)
+        error_message: Error description if check failed
+
+    Example:
+        >>> result = DriftCheckResult(
+        ...     has_drift=True,
+        ...     target="readme",
+        ...     output_path=Path("README.md"),
+        ...     diff="- Old line\\n+ New line\\n",
+        ...     current_content="...",
+        ...     expected_content="...",
+        ...     line_changes=2,
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    has_drift: bool
+    target: str  # "readme" | "contributing"
+    output_path: Path
+    diff: str = ""
+    current_content: str = ""
+    expected_content: str = ""
+    line_changes: int = 0
+    error_message: str | None = None
+
+
+class BatchGenerationResult(BaseModel):
+    """Result of batch document generation (target='all').
+
+    Aggregates results from generating multiple documents,
+    providing summary statistics and individual results.
+
+    Attributes:
+        success: True if ALL documents generated successfully
+        results: List of individual generation results
+        total_count: Total number of documents processed
+        success_count: Number of documents generated successfully
+        error_count: Number of documents that failed
+        total_bytes: Total size of all generated content
+        targets_processed: List of target names processed
+
+    Example:
+        >>> result = BatchGenerationResult(
+        ...     success=True,
+        ...     results=[readme_result, contributing_result],
+        ...     total_count=2,
+        ...     success_count=2,
+        ...     error_count=0,
+        ...     total_bytes=2048,
+        ...     targets_processed=["readme", "contributing"],
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
+
+    success: bool
+    results: list[SingleGenerationResult]
+    total_count: int
+    success_count: int
+    error_count: int
+    total_bytes: int
+    targets_processed: list[str]
+
+    @property
+    def has_errors(self) -> bool:
+        """Check if any documents failed to generate."""
+        return self.error_count > 0
+
+    @property
+    def all_succeeded(self) -> bool:
+        """Check if all documents generated successfully."""
+        return self.error_count == 0 and self.success_count == self.total_count

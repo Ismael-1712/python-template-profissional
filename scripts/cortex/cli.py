@@ -30,6 +30,10 @@ if str(_project_root) not in sys.path:
 from scripts.core.cortex.audit_orchestrator import (  # noqa: E402
     AuditOrchestrator,
 )
+from scripts.core.cortex.generation_orchestrator import (  # noqa: E402
+    GenerationOrchestrator,
+    GenerationTarget,
+)
 from scripts.core.cortex.knowledge_orchestrator import (  # noqa: E402
     KnowledgeOrchestrator,
 )
@@ -37,11 +41,12 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
+from scripts.core.cortex.models import (  # noqa: E402
+    DriftCheckResult,
+    SingleGenerationResult,
+)
 from scripts.core.cortex.project_orchestrator import (  # noqa: E402
     ProjectOrchestrator,
-)
-from scripts.core.cortex.readme_generator import (  # noqa: E402
-    DocumentGenerator,
 )
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
@@ -1389,6 +1394,81 @@ def guardian_check(
         raise typer.Exit(code=1) from e
 
 
+def _display_drift_result(drift_result: DriftCheckResult, target_name: str) -> None:
+    """Helper to display a single drift check result."""
+    if drift_result.has_drift:
+        typer.secho(
+            f"❌ DRIFT DETECTED in {target_name}",
+            fg=typer.colors.RED,
+            bold=True,
+        )
+        typer.echo()
+        typer.secho("📋 Diff:", fg=typer.colors.YELLOW)
+        typer.echo(drift_result.diff)
+        typer.echo()
+    else:
+        typer.secho(f"✅ {target_name} is in sync", fg=typer.colors.GREEN)
+
+
+def _display_generation_result(
+    gen_result: SingleGenerationResult,
+    dry_run: bool,
+) -> None:
+    """Helper to display a single generation result."""
+    target_name = gen_result.target.upper()
+    icon = "📄" if dry_run else "🎨"
+    typer.secho(f"{icon} Processing {target_name}...", fg=typer.colors.CYAN)
+
+    if gen_result.success:
+        if dry_run:
+            typer.secho(
+                f"✅ Would write to: {gen_result.output_path}",
+                fg=typer.colors.YELLOW,
+            )
+            typer.echo(f"   Size: {gen_result.content_size} bytes")
+        else:
+            typer.secho(
+                f"✅ Generated: {gen_result.output_path}",
+                fg=typer.colors.GREEN,
+            )
+            typer.echo(f"   Size: {gen_result.content_size} bytes")
+    else:
+        typer.secho(
+            f"❌ Failed: {gen_result.error_message}",
+            fg=typer.colors.RED,
+        )
+
+
+def _validate_cli_args(
+    target: str,
+    output: Path | None,
+    check: bool,
+    dry_run: bool,
+) -> None:
+    """Validate CLI arguments and raise Exit if invalid."""
+    valid_targets = ["readme", "contributing", "all"]
+    if target not in valid_targets:
+        typer.secho(f"❌ Invalid target: {target}", fg=typer.colors.RED, err=True)
+        typer.echo(f"Valid targets: {', '.join(valid_targets)}")
+        raise typer.Exit(code=1)
+
+    if output and target == "all":
+        typer.secho(
+            "❌ Cannot use --output with target 'all'",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    if check and dry_run:
+        typer.secho(
+            "❌ Cannot use --check with --dry-run",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+
 @app.command(name="generate")
 def generate_docs(
     target: Annotated[
@@ -1440,190 +1520,167 @@ def generate_docs(
     """
     try:
         with trace_context():
-            # Validate target
-            valid_targets = ["readme", "contributing", "all"]
-            if target not in valid_targets:
-                typer.secho(
-                    f"❌ Invalid target: {target}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                typer.echo(f"Valid targets: {', '.join(valid_targets)}")
-                raise typer.Exit(code=1)
+            # Validate CLI arguments
+            _validate_cli_args(target, output, check, dry_run)
 
-            # Validate options
-            if output and target == "all":
-                typer.secho(
-                    "❌ Cannot use --output with target 'all'",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(code=1)
+            # Initialize orchestrator
+            orchestrator = GenerationOrchestrator()
 
-            if check and dry_run:
-                typer.secho(
-                    "❌ Cannot use --check with --dry-run",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
-                raise typer.Exit(code=1)
+            # Map target string to enum
+            target_enum_map = {
+                "readme": GenerationTarget.README,
+                "contributing": GenerationTarget.CONTRIBUTING,
+                "all": GenerationTarget.ALL,
+            }
+            target_enum = target_enum_map[target]
 
-            # Initialize generator
-            generator = DocumentGenerator()
-
-            # Determine which documents to generate
-            targets_to_process = []
-            if target == "all":
-                targets_to_process = [
-                    ("readme", "README.md.j2", generator.project_root / "README.md"),
-                    (
-                        "contributing",
-                        "CONTRIBUTING.md.j2",
-                        generator.project_root / "CONTRIBUTING.md",
-                    ),
-                ]
-            elif target == "readme":
-                output_path = output or generator.project_root / "README.md"
-                targets_to_process = [("readme", "README.md.j2", output_path)]
-            elif target == "contributing":
-                output_path = output or generator.project_root / "CONTRIBUTING.md"
-                targets_to_process = [
-                    ("contributing", "CONTRIBUTING.md.j2", output_path),
-                ]
-
-            # Header
+            # Print header
             typer.echo()
             mode = "CHECK MODE" if check else "GENERATION MODE"
             typer.secho(f"🔨 CORTEX Dynamic Document Generator ({mode})", bold=True)
             typer.echo("=" * 70)
-
-            # Collect data once
             typer.echo()
-            typer.secho("📊 Collecting data sources...", fg=typer.colors.CYAN)
-            data = generator.collect_all_data()
 
-            # Display collected data
-            typer.echo()
-            typer.secho("✓ Project Metadata:", fg=typer.colors.GREEN)
-            typer.echo(f"  Name: {data.project.name}")
-            typer.echo(f"  Version: {data.project.version}")
-            typer.echo(f"  Python: {data.project.python_version}")
+            # === DRIFT CHECK MODE ===
+            if check:
+                if target == "all":
+                    drift_results = orchestrator.check_batch_drift()
 
-            typer.echo()
-            typer.secho("✓ Knowledge Graph:", fg=typer.colors.GREEN)
-            typer.echo(f"  Nodes: {data.graph.total_nodes}")
-            typer.echo(f"  Links: {data.graph.total_links}")
-            typer.echo(f"  Connectivity: {data.graph.connectivity_score:.1f}%")
+                    for drift_result in drift_results:
+                        _display_drift_result(drift_result, drift_result.target.upper())
 
-            typer.echo()
-            typer.secho("✓ Health Score:", fg=typer.colors.GREEN)
-            health_color = (
-                typer.colors.GREEN
-                if data.health.score >= 70
-                else typer.colors.YELLOW
-                if data.health.score >= 50
-                else typer.colors.RED
-            )
-            typer.secho(f"  Score: {data.health.score}/100", fg=health_color, bold=True)
-            typer.echo(f"  Status: {data.health.status}")
+                    typer.echo("=" * 70)
+                    has_drift = any(r.has_drift for r in drift_results)
 
-            # Process each target
-            has_drift = False
-            for target_name, template_name, output_path in targets_to_process:
-                typer.echo()
-                typer.secho(
-                    f"{'🔍' if check else '🎨'} Processing {target_name.upper()}...",
-                    fg=typer.colors.CYAN,
-                )
-
-                if check:
-                    # Drift detection mode
-                    result = generator.check_drift(output_path, template_name)
-
-                    if result.has_drift:
-                        has_drift = True
+                    if has_drift:
                         typer.secho(
-                            f"❌ DRIFT DETECTED in {output_path.name}",
+                            "💥 DRIFT DETECTED - Documents are out of sync!",
                             fg=typer.colors.RED,
                             bold=True,
                         )
                         typer.echo()
-                        typer.secho("📋 Diff:", fg=typer.colors.YELLOW)
-                        typer.echo(result.diff)
+                        typer.echo("💡 To fix, run:")
+                        typer.echo(f"   cortex generate {target}")
                         typer.echo()
-                    else:
-                        typer.secho(
-                            f"✅ {output_path.name} is in sync",
-                            fg=typer.colors.GREEN,
-                        )
+                        logger.warning("Drift detected in generated documents")
+                        raise typer.Exit(code=1)
+
+                    typer.secho(
+                        "✅ All documents are in sync!",
+                        fg=typer.colors.GREEN,
+                        bold=True,
+                    )
                 else:
-                    # Generation mode
-                    content = generator.generate_document(
-                        template_name,
-                        output_path=None if dry_run else output_path,
+                    drift_result = orchestrator.check_drift(target_enum)
+                    _display_drift_result(
+                        drift_result,
+                        drift_result.output_path.name,
                     )
 
-                    if dry_run:
-                        typer.echo()
+                    if drift_result.has_drift:
+                        typer.echo("=" * 70)
                         typer.secho(
-                            f"📄 DRY RUN - Preview of {output_path.name} "
-                            f"(first 30 lines):",
+                            "💥 Document is out of sync!",
+                            fg=typer.colors.RED,
                             bold=True,
                         )
+                        typer.echo()
+                        typer.echo("💡 To fix, run:")
+                        typer.echo(f"   cortex generate {target}")
+                        typer.echo()
+                        logger.warning(f"Drift detected in {target}")
+                        raise typer.Exit(code=1)
+
+                    typer.secho(
+                        f"✅ {drift_result.output_path.name} is in sync",
+                        fg=typer.colors.GREEN,
+                        bold=True,
+                    )
+
+            # === GENERATION MODE ===
+            elif target == "all":
+                batch_result = orchestrator.generate_batch(dry_run=dry_run)
+
+                for gen_result in batch_result.results:
+                    _display_generation_result(gen_result, dry_run)
+
+                typer.echo()
+                typer.echo("=" * 70)
+
+                if batch_result.success:
+                    mode_text = "Dry run completed" if dry_run else "SUCCESS"
+                    typer.secho(
+                        f"✅ {mode_text} - {batch_result.success_count} document(s)!",
+                        fg=typer.colors.GREEN,
+                        bold=True,
+                    )
+                    typer.echo(f"   Total size: {batch_result.total_bytes} bytes")
+                else:
+                    typer.secho(
+                        f"⚠️  Completed with errors: "
+                        f"{batch_result.success_count} succeeded, "
+                        f"{batch_result.error_count} failed",
+                        fg=typer.colors.YELLOW,
+                        bold=True,
+                    )
+                    raise typer.Exit(code=1)
+
+            else:
+                # Generate single document
+                gen_result = orchestrator.generate_single(
+                    target=target_enum,
+                    output_path=output,
+                    dry_run=dry_run,
+                )
+
+                typer.secho(
+                    f"{'🎨' if not dry_run else '📄'} Processing {target.upper()}...",
+                    fg=typer.colors.CYAN,
+                )
+                typer.echo()
+
+                if gen_result.success:
+                    if dry_run:
+                        typer.secho("📄 DRY RUN - Preview (first 30 lines):", bold=True)
                         typer.echo("=" * 70)
-                        preview_lines = content.split("\n")[:30]
+                        preview_lines = gen_result.content.split("\n")[:30]
                         for line in preview_lines:
                             typer.echo(line)
                         typer.echo("...")
                         typer.echo("=" * 70)
                         typer.secho(
-                            f"✅ Would write to: {output_path}",
+                            f"✅ Would write to: {gen_result.output_path}",
                             fg=typer.colors.YELLOW,
                         )
+                        typer.echo(f"   Size: {gen_result.content_size} bytes")
                     else:
                         typer.secho(
-                            f"✅ Generated: {output_path}",
+                            f"✅ Generated: {gen_result.output_path}",
                             fg=typer.colors.GREEN,
+                            bold=True,
                         )
-                        typer.echo(f"   Size: {len(content)} bytes")
+                        typer.echo(f"   Size: {gen_result.content_size} bytes")
+                        typer.echo(f"   Template: {gen_result.template_name}")
 
-            # Final summary
-            typer.echo()
-            typer.echo("=" * 70)
-
-            if check:
-                if has_drift:
+                    typer.echo()
+                    typer.echo("=" * 70)
                     typer.secho(
-                        "💥 DRIFT DETECTED - Documents are out of sync!",
+                        "✅ Generation completed successfully!",
+                        fg=typer.colors.GREEN,
+                        bold=True,
+                    )
+                else:
+                    typer.secho(
+                        f"❌ Generation failed: {gen_result.error_message}",
                         fg=typer.colors.RED,
                         bold=True,
                     )
-                    typer.echo()
-                    typer.echo("💡 To fix, run:")
-                    typer.echo(f"   cortex generate {target}")
-                    typer.echo()
-                    logger.warning("Drift detected in generated documents")
                     raise typer.Exit(code=1)
-                typer.secho(
-                    "✅ All documents are in sync!",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
-                logger.info("Drift check passed")
-            elif dry_run:
-                typer.secho("✅ Dry run completed", fg=typer.colors.GREEN)
-            else:
-                typer.secho(
-                    f"✅ SUCCESS - {len(targets_to_process)} document(s) generated!",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
-                typer.echo(f"📅 Generated at: {data.generated_at}")
-                logger.info(
-                    f"Document generation completed: {len(targets_to_process)} files",
-                )
 
             typer.echo()
+
+    except typer.Exit:
+        raise
 
     except FileNotFoundError as e:
         typer.secho(f"❌ Missing file: {e}", fg=typer.colors.RED, err=True)
@@ -1635,7 +1692,7 @@ def generate_docs(
         raise typer.Exit(code=1) from e
 
     except Exception as e:
-        logger.error(f"Error generating documents: {e}", exc_info=True)
+        logger.exception("Error generating documents")
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
 
