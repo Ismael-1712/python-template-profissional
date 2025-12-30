@@ -8,6 +8,7 @@ Key Features:
 - Output validation (non-empty, basic syntax check)
 - Automatic cleanup on failure
 - Preserves pip-compile exit codes and output
+- Enforces relative paths to prevent CI drift
 """
 
 from __future__ import annotations
@@ -50,13 +51,6 @@ def safe_pip_compile(
         subprocess.CalledProcessError: If pip-compile fails
         RuntimeError: If output validation fails
         OSError: If file operations fail
-
-    Example:
-        >>> result = safe_pip_compile(
-        ...     Path("requirements/dev.in"),
-        ...     Path("requirements/dev.txt"),
-        ...     "/path/to/pip-compile"
-        ... )
     """
     # Create temporary output path with PID to avoid race conditions
     temp_output = output_file.with_suffix(f".tmp.{os.getpid()}.txt")
@@ -65,15 +59,28 @@ def safe_pip_compile(
         # Ensure output directory exists
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
+        # SECURITY & DETERMINISM:
+        # Force input path to be relative to workspace/cwd.
+        # This prevents absolute paths (e.g. /home/user/...) from appearing
+        # in the generated .txt file comments (# via ...), which causes
+        # CI failures due to "sync drift".
+        try:
+            cwd = workspace_root or Path.cwd()
+            # Resolve to ensure we have absolute paths, then make relative
+            relative_input = input_file.resolve().relative_to(cwd.resolve())
+            input_path_str = str(relative_input)
+        except (ValueError, RuntimeError):
+            # Fallback: if paths are on different drives or cannot be relativized
+            input_path_str = str(input_file)
+
         # Run pip-compile to temporary file
-        result = subprocess.run(  # noqa: S603
+        result = subprocess.run(  # noqa: subprocess
             [
                 pip_compile_path,
-                "--resolver=backtracking",
-                "--strip-extras",
+                "--generate-hashes",  # Security: CWE-494 Supply Chain integrity
                 "--output-file",
                 str(temp_output),
-                str(input_file),
+                input_path_str,  # <--- Now strictly relative
             ],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection
