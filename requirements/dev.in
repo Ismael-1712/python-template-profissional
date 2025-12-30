@@ -17,6 +17,10 @@ mypy==1.19.1
 types-PyYAML==6.0.12.20250915
 types-requests==2.32.4.20250913
 
+# Pydantic (runtime + settings para BaseSettings)
+pydantic>=2.0
+pydantic-settings>=2.0
+
 # CLI Framework
 typer==0.20.1
 

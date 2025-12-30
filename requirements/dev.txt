@@ -90,9 +90,14 @@ pluggy==1.6.0
 pre-commit==4.5.1
     # via -r requirements/dev.in
 pydantic==2.12.5
-    # via python-semantic-release
+    # via
+    #   -r requirements/dev.in
+    #   pydantic-settings
+    #   python-semantic-release
 pydantic-core==2.41.5
     # via pydantic
+pydantic-settings==2.12.0
+    # via -r requirements/dev.in
 pygments==2.19.2
     # via
     #   pytest
@@ -108,6 +113,8 @@ pytest-cov==7.0.0
     # via -r requirements/dev.in
 pytest-xdist==3.8.0
     # via -r requirements/dev.in
+python-dotenv==1.2.1
+    # via pydantic-settings
 python-frontmatter==1.1.0
     # via -r requirements/dev.in
 python-gitlab==6.5.0
@@ -167,7 +174,9 @@ typing-extensions==4.15.0
     #   typing-inspection
     #   virtualenv
 typing-inspection==0.4.2
-    # via pydantic
+    # via
+    #   pydantic
+    #   pydantic-settings
 urllib3==2.6.2
     # via
     #   requests
