@@ -81,7 +81,7 @@ jobs:
         run: |
           python -m pip install pip-tools
           pip-compile requirements/dev.in --output-file requirements/dev.txt.check --resolver=backtracking --strip-extras
-          if ! diff -u requirements/dev.txt requirements/dev.txt.check; then
+          if ! diff -u -I "^#    pip-compile" requirements/dev.txt requirements/dev.txt.check; then
             echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
             echo "Run 'make install-dev' locally and commit the updated dev.txt"
             exit 1
