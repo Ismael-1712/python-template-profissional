@@ -93,6 +93,14 @@ jobs:
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install-dev
 
+      # Debug: Verificar pacotes instalados (investigação de falha de tipagem)
+      - name: "Debug Installed Packages"
+        run: |
+          .venv/bin/pip list | grep -E "(types-|pydantic)" || true
+          .venv/bin/pip show types-PyYAML || echo "❌ types-PyYAML NOT FOUND"
+          .venv/bin/pip show pydantic-settings || echo "❌ pydantic-settings NOT FOUND"
+          .venv/bin/pip show types-requests || echo "❌ types-requests NOT FOUND"
+
       # Cache do mypy (type checking incremental)
       - name: "Restaurar cache do mypy"
         uses: actions/cache@v5
