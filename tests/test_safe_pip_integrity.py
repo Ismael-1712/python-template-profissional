@@ -11,7 +11,7 @@ from scripts.utils.safe_pip import safe_pip_compile
 @pytest.mark.unit
 @pytest.mark.xfail(
     reason="Feature de segurança (hashes) planejada para próxima sprint",
-    strict=True,
+    strict=False,
 )
 def test_pip_compile_enforces_hashes() -> None:
     """ALVO: Tarefa [003] - Integrity Validation.

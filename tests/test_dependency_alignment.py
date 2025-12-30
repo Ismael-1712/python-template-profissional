@@ -317,6 +317,7 @@ class TestDependencyAlignment:
                     "pip-compile",
                     str(dev_in_path),
                     "--output-file=-",
+                    "--resolver=backtracking",
                     "--strip-extras",
                     "--quiet",
                 ],
@@ -382,7 +383,8 @@ class TestDependencyAlignment:
                     "  make install-dev\n"
                     "  # OR manually:\n"
                     "  pip-compile requirements/dev.in "
-                    "--output-file requirements/dev.txt --strip-extras\n\n"
+                    "--output-file requirements/dev.txt "
+                    "--resolver=backtracking --strip-extras\n\n"
                     "🛡️ This autoimune system prevents CI failures "
                     "from outdated lockfiles.\n"
                 )

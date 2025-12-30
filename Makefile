@@ -69,7 +69,7 @@ requirements:
 		exit 1; \
 	fi
 	@python$(PYTHON_BASELINE) -m pip install pip-tools --quiet
-	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in
+	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in --output-file requirements/dev.txt --resolver=backtracking --strip-extras
 	@echo "✅ Lockfile gerado com Python $(PYTHON_BASELINE) (compatível com CI)"
 
 ## validate-python: Valida se a versão do Python é compatível com a baseline do CI

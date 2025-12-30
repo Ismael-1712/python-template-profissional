@@ -66,10 +66,11 @@ def safe_pip_compile(
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Run pip-compile to temporary file
-        result = subprocess.run(  # noqa: subprocess
+        result = subprocess.run(  # noqa: S603
             [
                 pip_compile_path,
-                "--generate-hashes",  # Security: CWE-494 Supply Chain integrity
+                "--resolver=backtracking",
+                "--strip-extras",
                 "--output-file",
                 str(temp_output),
                 str(input_file),

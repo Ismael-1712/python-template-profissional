@@ -80,8 +80,8 @@ jobs:
       - name: "Check Lockfile Consistency"
         run: |
           python -m pip install pip-tools
-          pip-compile requirements/dev.in
-          if ! git diff --exit-code requirements/dev.txt; then
+          pip-compile requirements/dev.in --output-file requirements/dev.txt.check --resolver=backtracking --strip-extras
+          if ! diff -u requirements/dev.txt requirements/dev.txt.check; then
             echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
             echo "Run 'make install-dev' locally and commit the updated dev.txt"
             exit 1
