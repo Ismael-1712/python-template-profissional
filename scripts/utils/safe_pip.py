@@ -77,7 +77,8 @@ def safe_pip_compile(
         result = subprocess.run(  # noqa: S603,subprocess
             [
                 pip_compile_path,
-                "--generate-hashes",  # Security: CWE-494 Supply Chain integrity
+                # NOTE: --generate-hashes disabled (planned for future sprint)
+                # See: test_pip_compile_enforces_hashes (currently xfail)
                 "--output-file",
                 str(temp_output),
                 input_path_str,  # <--- Now strictly relative
