@@ -79,7 +79,7 @@ class GitOperations:
 
         for attempt in range(MAX_RETRIES):
             try:
-                result = subprocess.run(  # nosec # noqa: subprocess
+                result = subprocess.run(  # nosec # noqa: S603
                     command,
                     cwd=self.workspace_root,
                     shell=False,  # Security: prevent shell injection

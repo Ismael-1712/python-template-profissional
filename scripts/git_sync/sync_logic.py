@@ -148,7 +148,7 @@ class SyncOrchestrator:
             if env:
                 env_vars.update(env)
 
-            result = subprocess.run(  # noqa: subprocess
+            result = subprocess.run(  # noqa: S603
                 command,
                 cwd=self.workspace_root,
                 timeout=timeout,

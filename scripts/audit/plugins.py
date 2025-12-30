@@ -123,7 +123,7 @@ def simulate_ci(
             "tests/",
         ]
 
-        result = subprocess.run(  # noqa: subprocess
+        result = subprocess.run(  # noqa: S603
             cmd,
             check=False,
             env=ci_env,

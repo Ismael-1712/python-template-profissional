@@ -192,7 +192,7 @@ def install_dev_environment(workspace_root: Path) -> int:
     try:
         # ========== STEP 1: Install project + pip-tools ==========
         logger.info("Step 1/3: Installing project and pip-tools...")
-        result1 = subprocess.run(  # nosec # noqa: subprocess
+        result1 = subprocess.run(  # nosec # noqa: S603
             [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection
@@ -235,7 +235,7 @@ def install_dev_environment(workspace_root: Path) -> int:
                 # Use AtomicFileWriter for consistent validation
                 tmp_output = requirements_file.with_suffix(f".tmp.{os.getpid()}.txt")
                 try:
-                    result2 = subprocess.run(  # nosec # noqa: subprocess
+                    result2 = subprocess.run(  # nosec # noqa: S603
                         pip_compile_cmd
                         + [
                             "--output-file",
@@ -289,7 +289,7 @@ def install_dev_environment(workspace_root: Path) -> int:
         # ========== STEP 3: Install pinned dependencies (WITH ROLLBACK) ==========
         logger.info("Step 3/3: Installing pinned dependencies...")
         try:
-            result3 = subprocess.run(  # nosec # noqa: subprocess
+            result3 = subprocess.run(  # nosec # noqa: S603
                 [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
                 cwd=workspace_root,
                 shell=False,  # Security: prevent shell injection
@@ -310,7 +310,7 @@ def install_dev_environment(workspace_root: Path) -> int:
         # ========== STEP 5: Install Git Hooks (MANDATORY) ==========
         logger.info("Step 5/5: Installing mandatory Git hooks...")
         try:
-            result_hooks = subprocess.run(  # nosec # noqa: subprocess
+            result_hooks = subprocess.run(  # nosec # noqa: S603
                 ["pre-commit", "install", "--install-hooks"],
                 cwd=workspace_root,
                 shell=False,  # Security: prevent shell injection

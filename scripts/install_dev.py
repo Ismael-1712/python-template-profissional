@@ -135,7 +135,7 @@ def install_dev_environment(workspace_root: Path) -> int:
     try:
         # ========== STEP 1: Install project + pip-tools ==========
         logger.info("Step 1/3: Installing project and pip-tools...")
-        result1 = subprocess.run(  # noqa: subprocess
+        result1 = subprocess.run(  # noqa: S603
             [sys.executable, "-m", "pip", "install", "-e", ".[dev]"],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection
@@ -167,7 +167,7 @@ def install_dev_environment(workspace_root: Path) -> int:
             # Use safe_pip_compile by manually constructing the command
             # This is a workaround since safe_pip expects an executable path
             try:
-                result2 = subprocess.run(  # noqa: subprocess
+                result2 = subprocess.run(  # noqa: S603
                     pip_compile_cmd
                     + [
                         "--output-file",
@@ -203,7 +203,7 @@ def install_dev_environment(workspace_root: Path) -> int:
 
         # ========== STEP 3: Install pinned dependencies ==========
         logger.info("Step 3/3: Installing pinned dependencies...")
-        result3 = subprocess.run(  # noqa: subprocess
+        result3 = subprocess.run(  # noqa: S603
             [sys.executable, "-m", "pip", "install", "-r", "requirements/dev.txt"],
             cwd=workspace_root,
             shell=False,  # Security: prevent shell injection

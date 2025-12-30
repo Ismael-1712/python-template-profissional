@@ -83,12 +83,12 @@ class TestAuditWithMemoryFileSystem:
             "\n"
             "def deploy_code(branch):\n"
             "    # CRITICAL: Shell injection vulnerability\n"
-            '    subprocess.run(f"git checkout {branch}", shell=True)\n'  # noqa:subprocess
+            '    subprocess.run(f"git checkout {branch}", shell=True)\n'
             "\n"
             "def execute_command(cmd):\n"
             "    # HIGH: Direct OS command execution\n"
             "    import os\n"
-            "    os.system(cmd)\n"  # noqa:subprocess
+            "    os.system(cmd)\n"
         )
 
         file_path = Path("/workspace/vulnerable_script.py")
@@ -193,7 +193,7 @@ def safe_function():
             "import subprocess\n"
             "\n"
             "def unsafe_function(user_input):\n"
-            "    subprocess.run(user_input, shell=True)\n"  # noqa:subprocess
+            "    subprocess.run(user_input, shell=True)\n"
         )
 
         memory_fs.write_text(Path("/workspace/src/safe.py"), safe_code)
@@ -325,7 +325,7 @@ def broken_function(
             "\n"
             "    # This should still be detected\n"
             "    import subprocess\n"
-            '    subprocess.run("ls", shell=True)\n'  # noqa:subprocess
+            '    subprocess.run("ls", shell=True)\n'
         )
 
         file_path = Path("/workspace/unicode.py")

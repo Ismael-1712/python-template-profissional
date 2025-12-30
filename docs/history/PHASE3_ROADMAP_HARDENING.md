@@ -607,7 +607,42 @@ class KnowledgeIndex:
 
 ---
 
+## 🎉 Marcos Completados (Ciclo 3 - Dezembro 2025)
+
+### ✅ Refatoração Hexagonal do CLI CORTEX
+
+**Data:** 30/12/2025
+**Escopo:** Arquitetura Hexagonal + Dependency Injection + Test Suite
+
+**Entregas:**
+
+- ✅ **Adapter Pattern para UI:** Criação de `scripts/cortex/adapters/ui.py` (UIPresenter)
+- ✅ **Dependency Injection:** Eliminação de variável global `_project_root` via `typer.Context`
+- ✅ **Test Suite Completa:** `tests/test_ui_adapter.py` com 25 testes (100% cobertura de UI)
+- ✅ **Linting Hardening:** Substituição de 18 instâncias de `# noqa` genérico por códigos específicos (S603, S602, S605)
+- ✅ **Type Safety:** 100% mypy strict compliance em 179 arquivos
+
+**Métricas de Impacto:**
+
+- Redução de 20% nas linhas do `cli.py` (extração de lógica de apresentação)
+- Cobertura de UI: 0% → 100%
+- Variáveis globais eliminadas: 1 (_project_root)
+- Build 100% verde: Lint ✅ | Type-check ✅ | Tests ✅ (712 passed)
+
+**Documentação:**
+
+- [ADR-005: CLI Hexagonal Refactor](../architecture/ADR_005_CLI_HEXAGONAL_REFACTOR.md)
+
+**Técnica Aplicada:**
+
+- Hexagonal Architecture (Ports & Adapters)
+- SOLID Principles (Dependency Inversion, Single Responsibility)
+- Test-Driven Development (TDD para UI Adapter)
+
+---
+
 **Status:** 📋 **PLANEJADO** (Aguardando finalização da Fase 2)
+⚠️ **Nota:** Ciclo 3 (Dezembro 2025) já iniciou com refatoração arquitetural do CLI.
 
 **Data de Início Prevista:** Janeiro 2026
 

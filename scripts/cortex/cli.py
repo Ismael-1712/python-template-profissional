@@ -21,11 +21,12 @@ from typing import Annotated
 
 import typer
 
-# Add project root to sys.path
+# Add project root to sys.path dynamically
+# Note: Will be set up in the main callback to avoid global state
 _script_dir = Path(__file__).resolve().parent
-_project_root = _script_dir.parent.parent
-if str(_project_root) not in sys.path:
-    sys.path.insert(0, str(_project_root))
+_project_root_for_path = _script_dir.parent.parent
+if str(_project_root_for_path) not in sys.path:
+    sys.path.insert(0, str(_project_root_for_path))
 
 from scripts.core.cortex.audit_orchestrator import (  # noqa: E402
     AuditOrchestrator,
@@ -60,6 +61,21 @@ app = typer.Typer(
     help="CORTEX - Documentation as Code Manager",
     add_completion=False,
 )
+
+
+@app.callback()
+def setup_context(ctx: typer.Context) -> None:
+    """CORTEX: Advanced Project Governance & Observability System.
+
+    Dependency Injection: Initializes project_root in context for all commands.
+    """
+    # Define project root relative to this file location dynamically
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent.parent
+
+    # Store in context for dependency injection
+    ctx.ensure_object(dict)
+    ctx.obj["project_root"] = project_root
 
 
 @app.command()
@@ -464,7 +480,7 @@ def audit(
 
 
 @app.command(name="setup-hooks")
-def setup_hooks() -> None:
+def setup_hooks(ctx: typer.Context) -> None:
     """Install Git hooks to auto-regenerate context map.
 
     Creates Git hooks that automatically run 'cortex map' after:
@@ -483,13 +499,16 @@ def setup_hooks() -> None:
         HooksOrchestrator,
     )
 
+    # Get project_root from context
+    project_root = ctx.obj["project_root"]
+
     logger.info("Installing Git hooks for CORTEX...")
     typer.echo("🔧 Installing Git hooks for CORTEX...")
     typer.echo()
 
     try:
         # Use HooksOrchestrator to handle all hook installation logic
-        orchestrator = HooksOrchestrator(project_root=_project_root)
+        orchestrator = HooksOrchestrator(project_root=project_root)
         installed_hooks = orchestrator.install_cortex_hooks()
 
         # Display results
@@ -752,6 +771,7 @@ def guardian_probe(
 
 @app.command(name="config")
 def config_manager(
+    ctx: typer.Context,
     show: Annotated[
         bool,
         typer.Option(
@@ -791,9 +811,12 @@ def config_manager(
         ConfigValidationError,
     )
 
+    # Get project_root from context
+    project_root = ctx.obj["project_root"]
+
     try:
         # Resolve path relative to project root
-        config_path = _project_root / path if not path.is_absolute() else path
+        config_path = project_root / path if not path.is_absolute() else path
 
         if not config_path.exists():
             typer.secho(
@@ -805,7 +828,7 @@ def config_manager(
 
         # Use ConfigOrchestrator to load and validate configuration
         logger.info(f"Reading configuration from: {config_path}")
-        orchestrator = ConfigOrchestrator(project_root=_project_root)
+        orchestrator = ConfigOrchestrator(project_root=project_root)
         ui = UIPresenter()
 
         # Validate YAML syntax and required keys
@@ -868,6 +891,7 @@ def config_manager(
 
 @app.command(name="map")
 def project_map(
+    ctx: typer.Context,
     output: Annotated[
         Path,
         typer.Option(
@@ -934,6 +958,9 @@ def project_map(
     try:
         from scripts.cortex.core.context_mapper import ContextMapper
 
+        # Get project_root from context
+        project_root = ctx.obj["project_root"]
+
         logger.info("Generating project context map...")
         ui = UIPresenter()
 
@@ -943,7 +970,7 @@ def project_map(
                 ui.show_info("🧠 Including Knowledge Node rules...")
 
         # Generate context map
-        mapper = ContextMapper(project_root=_project_root)
+        mapper = ContextMapper(project_root=project_root)
 
         if update_config:
             # Map + Config Sync
@@ -967,17 +994,17 @@ def project_map(
                 ui.display_config_sync_header()
                 template = mapper.get_template_path(template_path)
                 ui.show_warning(
-                    f"Template not found: {template.relative_to(_project_root)}",
+                    f"Template not found: {template.relative_to(project_root)}",
                 )
                 ui.show_info("   Skipping configuration sync.")
                 return
 
             ui.display_config_sync_header()
             template = mapper.get_template_path(template_path)
-            target = _project_root / "pyproject.toml"
-            ui.display_config_sync_template_info(template, target, _project_root)
+            target = project_root / "pyproject.toml"
+            ui.display_config_sync_template_info(template, target, project_root)
 
-            ui.display_config_sync_result(result.config_sync_result, _project_root)
+            ui.display_config_sync_result(result.config_sync_result, project_root)
 
             if not result.config_sync_result.success:
                 logger.error(

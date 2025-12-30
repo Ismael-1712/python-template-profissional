@@ -68,7 +68,7 @@ def run_command(
         )
 
     try:
-        result = subprocess.run(  # noqa: subprocess
+        result = subprocess.run(  # noqa: S603
             command,  # Usa o comando original, não sanitizado
             cwd=cwd or repository_path,  # <-- 'self.' removido
             capture_output=capture_output,

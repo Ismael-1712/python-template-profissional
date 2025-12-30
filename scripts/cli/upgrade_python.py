@@ -98,7 +98,7 @@ def run_command(cmd: list[str], check: bool = True) -> tuple[int, str, str]:
         Tupla (returncode, stdout, stderr)
     """
     try:
-        result = subprocess.run(  # noqa: subprocess
+        result = subprocess.run(  # noqa: S603
             cmd,
             shell=False,  # Security: prevent shell injection
             capture_output=True,
