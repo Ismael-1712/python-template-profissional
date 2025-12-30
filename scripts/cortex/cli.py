@@ -41,14 +41,12 @@ from scripts.core.cortex.metadata import (  # noqa: E402
     FrontmatterParseError,
     FrontmatterParser,
 )
-from scripts.core.cortex.models import (  # noqa: E402
-    DriftCheckResult,
-    SingleGenerationResult,
-)
 from scripts.core.cortex.project_orchestrator import (  # noqa: E402
     ProjectOrchestrator,
 )
 from scripts.core.guardian.hallucination_probe import HallucinationProbe  # noqa: E402
+from scripts.cortex.adapters.ui import UIPresenter  # noqa: E402
+from scripts.cortex.core.interaction_service import InteractionService  # noqa: E402
 from scripts.utils.banner import print_startup_banner  # noqa: E402
 from scripts.utils.context import trace_context  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
@@ -129,23 +127,22 @@ def init(
                     content = f.read()
                 lines = content.split("\n")
                 if lines[0].strip() == "---":
-                    typer.echo("Current frontmatter:")
-                    typer.echo("---")
+                    # Extract existing frontmatter
+                    existing_fm_lines = []
                     for line in lines[1:]:
                         if line.strip() == "---":
                             break
-                        typer.echo(f"  {line}")
-                    typer.echo("---")
-
-                if not typer.confirm(
-                    "\nDo you want to overwrite it? (Use --force to skip this prompt)",
-                ):
-                    typer.secho(
-                        "✋ Aborted. No changes made.",
-                        fg=typer.colors.BLUE,
+                        existing_fm_lines.append(line)
+                    ui = UIPresenter()
+                    ui.display_init_preview(
+                        existing_frontmatter="\n".join(existing_fm_lines),
                     )
-                    logger.info("User aborted overwrite")
-                    raise typer.Abort()
+
+                # Use InteractionService for confirmation
+                InteractionService.confirm_action(
+                    "\nDo you want to overwrite it? (Use --force to skip this prompt)",
+                    abort_message="Aborted. No changes made.",
+                )
 
                 # User confirmed, set force=True for orchestrator
                 force = True
@@ -165,7 +162,6 @@ def init(
                 fg=typer.colors.GREEN,
             )
             typer.echo()
-            typer.echo("Generated frontmatter:")
             # Show the new frontmatter from result
             import yaml
 
@@ -175,9 +171,8 @@ def init(
                 allow_unicode=True,
                 sort_keys=False,
             )
-            typer.echo("---")
-            typer.echo(frontmatter_yaml.rstrip())
-            typer.echo("---")
+            ui = UIPresenter()
+            ui.display_init_preview(generated_frontmatter=frontmatter_yaml)
             logger.info(f"Successfully added frontmatter to {path}")
 
         elif result.status == "skipped":
@@ -418,8 +413,6 @@ def audit(
         cortex audit --links --strict   # Fail CI on broken links
     """
     try:
-        from scripts.cortex.adapters.ui import UIPresenter
-
         workspace_root = Path.cwd()
         ui = UIPresenter()
 
@@ -696,29 +689,9 @@ def knowledge_scan(
         )
         typer.echo()
 
-        # List entries
-        for entry in result.entries:
-            # Status emoji mapping
-            status_emoji = {
-                "active": "✅",
-                "deprecated": "🚫",
-                "draft": "📝",
-            }.get(entry.status.value, "📎")
-
-            typer.echo(f"{status_emoji} {entry.id} ({entry.status.value})")
-
-            if verbose:
-                if entry.tags:
-                    tags_str = ", ".join(entry.tags)
-                    typer.echo(f"   Tags: {tags_str}")
-                if entry.golden_paths:
-                    typer.echo(f"   Golden Paths: {entry.golden_paths}")
-                if entry.sources:
-                    typer.echo(f"   Sources: {len(entry.sources)} reference(s)")
-                if entry.cached_content:
-                    content_preview = entry.cached_content[:80].replace("\n", " ")
-                    typer.echo(f"   Content: {content_preview}...")
-                typer.echo()  # Blank line between entries
+        # List entries using UIPresenter
+        ui = UIPresenter()
+        ui.display_knowledge_entries(result.entries, verbose=verbose)
 
         logger.info(f"Knowledge scan completed: {result.total_count} entries found")
 
@@ -1168,7 +1141,6 @@ def project_map(
         cortex map --update-config --template=custom.toml  # Custom template
     """
     try:
-        from scripts.cortex.adapters.ui import UIPresenter
         from scripts.cortex.core.context_mapper import ContextMapper
 
         logger.info("Generating project context map...")
@@ -1363,20 +1335,9 @@ def guardian_check(
             )
             typer.echo()
 
-            for orphan in result.orphans:
-                typer.secho(f"  • {orphan.key}", fg=typer.colors.RED, bold=True)
-                typer.echo(f"    Location: {orphan.source_file}:{orphan.line_number}")
-                if orphan.context:
-                    typer.echo(f"    Context: {orphan.context}")
-                if orphan.default_value:
-                    typer.echo(f"    Default: {orphan.default_value}")
-                typer.echo()
-
-            if result.documented:
-                doc_msg = f"✅ {len(result.documented)} configurations ARE documented:"
-                typer.echo(doc_msg)
-                for key, files in result.documented.items():
-                    typer.echo(f"   • {key} → {', '.join(str(f.name) for f in files)}")
+            # Display orphans using UIPresenter
+            ui = UIPresenter()
+            ui.display_guardian_orphans(result.orphans, result.documented)
 
             if fail_on_error:
                 typer.echo()
@@ -1392,81 +1353,6 @@ def guardian_check(
         logger.error("Error during guardian check: %s", e, exc_info=True)
         typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from e
-
-
-def _display_drift_result(drift_result: DriftCheckResult, target_name: str) -> None:
-    """Helper to display a single drift check result."""
-    if drift_result.has_drift:
-        typer.secho(
-            f"❌ DRIFT DETECTED in {target_name}",
-            fg=typer.colors.RED,
-            bold=True,
-        )
-        typer.echo()
-        typer.secho("📋 Diff:", fg=typer.colors.YELLOW)
-        typer.echo(drift_result.diff)
-        typer.echo()
-    else:
-        typer.secho(f"✅ {target_name} is in sync", fg=typer.colors.GREEN)
-
-
-def _display_generation_result(
-    gen_result: SingleGenerationResult,
-    dry_run: bool,
-) -> None:
-    """Helper to display a single generation result."""
-    target_name = gen_result.target.upper()
-    icon = "📄" if dry_run else "🎨"
-    typer.secho(f"{icon} Processing {target_name}...", fg=typer.colors.CYAN)
-
-    if gen_result.success:
-        if dry_run:
-            typer.secho(
-                f"✅ Would write to: {gen_result.output_path}",
-                fg=typer.colors.YELLOW,
-            )
-            typer.echo(f"   Size: {gen_result.content_size} bytes")
-        else:
-            typer.secho(
-                f"✅ Generated: {gen_result.output_path}",
-                fg=typer.colors.GREEN,
-            )
-            typer.echo(f"   Size: {gen_result.content_size} bytes")
-    else:
-        typer.secho(
-            f"❌ Failed: {gen_result.error_message}",
-            fg=typer.colors.RED,
-        )
-
-
-def _validate_cli_args(
-    target: str,
-    output: Path | None,
-    check: bool,
-    dry_run: bool,
-) -> None:
-    """Validate CLI arguments and raise Exit if invalid."""
-    valid_targets = ["readme", "contributing", "all"]
-    if target not in valid_targets:
-        typer.secho(f"❌ Invalid target: {target}", fg=typer.colors.RED, err=True)
-        typer.echo(f"Valid targets: {', '.join(valid_targets)}")
-        raise typer.Exit(code=1)
-
-    if output and target == "all":
-        typer.secho(
-            "❌ Cannot use --output with target 'all'",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(code=1)
-
-    if check and dry_run:
-        typer.secho(
-            "❌ Cannot use --check with --dry-run",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(code=1)
 
 
 @app.command(name="generate")
@@ -1521,7 +1407,8 @@ def generate_docs(
     try:
         with trace_context():
             # Validate CLI arguments
-            _validate_cli_args(target, output, check, dry_run)
+            ui = UIPresenter()
+            ui.validate_generate_args(target, output, check, dry_run)
 
             # Initialize orchestrator
             orchestrator = GenerationOrchestrator()
@@ -1547,7 +1434,10 @@ def generate_docs(
                     drift_results = orchestrator.check_batch_drift()
 
                     for drift_result in drift_results:
-                        _display_drift_result(drift_result, drift_result.target.upper())
+                        ui.display_drift_result(
+                            drift_result,
+                            drift_result.target.upper(),
+                        )
 
                     typer.echo("=" * 70)
                     has_drift = any(r.has_drift for r in drift_results)
@@ -1572,7 +1462,7 @@ def generate_docs(
                     )
                 else:
                     drift_result = orchestrator.check_drift(target_enum)
-                    _display_drift_result(
+                    ui.display_drift_result(
                         drift_result,
                         drift_result.output_path.name,
                     )
@@ -1602,7 +1492,7 @@ def generate_docs(
                 batch_result = orchestrator.generate_batch(dry_run=dry_run)
 
                 for gen_result in batch_result.results:
-                    _display_generation_result(gen_result, dry_run)
+                    ui.display_generation_result(gen_result, dry_run)
 
                 typer.echo()
                 typer.echo("=" * 70)

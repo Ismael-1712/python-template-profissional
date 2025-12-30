@@ -15,6 +15,12 @@ from pathlib import Path
 import typer
 
 from scripts.core.cortex.mapper import ProjectContext
+from scripts.core.cortex.models import (
+    DriftCheckResult,
+    KnowledgeEntry,
+    SingleGenerationResult,
+)
+from scripts.core.guardian.models import ConfigFinding
 from scripts.cortex.core.knowledge_auditor import ValidationReport
 from scripts.cortex.core.metadata_auditor import AuditReport
 from scripts.utils.toml_merger import MergeResult
@@ -385,3 +391,194 @@ class UIPresenter:
         )
         typer.secho(f"  Score: {score}/100", fg=health_color, bold=True)
         typer.echo(f"  Status: {status}")
+
+    @staticmethod
+    def display_drift_result(
+        drift_result: DriftCheckResult,
+        target_name: str,
+    ) -> None:
+        """Display drift check result for a single document.
+
+        Args:
+            drift_result: DriftCheckResult with has_drift and diff attributes.
+            target_name: Name of the target document being checked.
+        """
+        if drift_result.has_drift:
+            typer.secho(
+                f"❌ DRIFT DETECTED in {target_name}",
+                fg=typer.colors.RED,
+                bold=True,
+            )
+            typer.echo()
+            typer.secho("📋 Diff:", fg=typer.colors.YELLOW)
+            typer.echo(drift_result.diff)
+            typer.echo()
+        else:
+            typer.secho(f"✅ {target_name} is in sync", fg=typer.colors.GREEN)
+
+    @staticmethod
+    def display_generation_result(
+        gen_result: SingleGenerationResult,
+        dry_run: bool,
+    ) -> None:
+        """Display generation result for a single document.
+
+        Args:
+            gen_result: SingleGenerationResult with success, output_path, etc.
+            dry_run: Whether this is a dry-run operation.
+        """
+        target_name = gen_result.target.upper()
+        icon = "📄" if dry_run else "🎨"
+        typer.secho(f"{icon} Processing {target_name}...", fg=typer.colors.CYAN)
+
+        if gen_result.success:
+            if dry_run:
+                typer.secho(
+                    f"✅ Would write to: {gen_result.output_path}",
+                    fg=typer.colors.YELLOW,
+                )
+                typer.echo(f"   Size: {gen_result.content_size} bytes")
+            else:
+                typer.secho(
+                    f"✅ Generated: {gen_result.output_path}",
+                    fg=typer.colors.GREEN,
+                )
+                typer.echo(f"   Size: {gen_result.content_size} bytes")
+        else:
+            typer.secho(
+                f"❌ Failed: {gen_result.error_message}",
+                fg=typer.colors.RED,
+            )
+
+    @staticmethod
+    def validate_generate_args(
+        target: str,
+        output: Path | None,
+        check: bool,
+        dry_run: bool,
+    ) -> None:
+        """Validate CLI arguments for generate command.
+
+        Args:
+            target: Target document type (readme, contributing, all).
+            output: Optional output path.
+            check: Whether to check for drift.
+            dry_run: Whether this is a dry-run operation.
+
+        Raises:
+            typer.Exit: If validation fails.
+        """
+        valid_targets = ["readme", "contributing", "all"]
+        if target not in valid_targets:
+            typer.secho(
+                f"❌ Invalid target: {target}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            typer.echo(f"Valid targets: {', '.join(valid_targets)}")
+            raise typer.Exit(code=1)
+
+        if output and target == "all":
+            typer.secho(
+                "❌ Cannot use --output with target 'all'",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(code=1)
+
+        if check and dry_run:
+            typer.secho(
+                "❌ Cannot use --check with --dry-run",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(code=1)
+
+    @staticmethod
+    def display_init_preview(
+        existing_frontmatter: str | None = None,
+        generated_frontmatter: str | None = None,
+    ) -> None:
+        """Display frontmatter preview for init command.
+
+        Args:
+            existing_frontmatter: Existing YAML frontmatter to show (optional).
+            generated_frontmatter: Generated YAML frontmatter to show (optional).
+        """
+        if existing_frontmatter:
+            typer.echo("Current frontmatter:")
+            typer.echo("---")
+            for line in existing_frontmatter.split("\n"):
+                if line.strip():
+                    typer.echo(f"  {line}")
+            typer.echo("---")
+
+        if generated_frontmatter:
+            typer.echo("Generated frontmatter:")
+            typer.echo("---")
+            typer.echo(generated_frontmatter.rstrip())
+            typer.echo("---")
+
+    @staticmethod
+    def display_knowledge_entries(
+        entries: list[KnowledgeEntry],
+        verbose: bool = False,
+    ) -> None:
+        """Display list of knowledge entries.
+
+        Args:
+            entries: List of KnowledgeEntry objects to display.
+            verbose: Whether to show detailed information.
+        """
+        for entry in entries:
+            # Status emoji mapping
+            status_emoji = {
+                "active": "✅",
+                "deprecated": "🚫",
+                "draft": "📝",
+            }.get(entry.status.value, "📎")
+
+            typer.echo(f"{status_emoji} {entry.id} ({entry.status.value})")
+
+            if verbose:
+                if entry.tags:
+                    tags_str = ", ".join(entry.tags)
+                    typer.echo(f"   Tags: {tags_str}")
+                if entry.golden_paths:
+                    typer.echo(f"   Golden Paths: {entry.golden_paths}")
+                if entry.sources:
+                    typer.echo(f"   Sources: {len(entry.sources)} reference(s)")
+                if entry.cached_content:
+                    content_preview = entry.cached_content[:80].replace("\n", " ")
+                    typer.echo(f"   Content: {content_preview}...")
+                typer.echo()  # Blank line between entries
+
+    @staticmethod
+    def display_guardian_orphans(
+        orphans: list[ConfigFinding],
+        documented: dict[str, list[Path]] | None = None,
+    ) -> None:
+        """Display orphaned configuration findings.
+
+        Args:
+            orphans: List of orphan configuration objects.
+            documented: Dictionary of documented configurations (optional).
+        """
+        if orphans:
+            for orphan in orphans:
+                typer.secho(f"  • {orphan.key}", fg=typer.colors.RED, bold=True)
+                typer.echo(
+                    f"    Location: {orphan.source_file}:{orphan.line_number}",
+                )
+                if orphan.context:
+                    typer.echo(f"    Context: {orphan.context}")
+                if orphan.default_value:
+                    typer.echo(f"    Default: {orphan.default_value}")
+                typer.echo()
+
+        if documented:
+            doc_msg = f"✅ {len(documented)} configurations ARE documented:"
+            typer.echo(doc_msg)
+            for key, files in documented.items():
+                file_names = ", ".join(str(f.name) for f in files)
+                typer.echo(f"   • {key} → {file_names}")
