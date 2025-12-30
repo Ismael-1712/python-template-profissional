@@ -914,6 +914,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#marcos-completados-ciclo-3-dezembro-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎉 Marcos Completados (Ciclo 3 - Dezembro 2025)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎉 Marcos Completados (Ciclo 3 - Dezembro 2025)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#refatoracao-hexagonal-do-cli-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ Refatoração Hexagonal do CLI CORTEX
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1558,7 +1586,38 @@
 <li><a href="../../guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION/">REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md</a> - Protocolo de refatoração</li>
 </ul>
 <hr />
-<p><strong>Status:</strong> 📋 <strong>PLANEJADO</strong> (Aguardando finalização da Fase 2)</p>
+<h2 id="marcos-completados-ciclo-3-dezembro-2025">🎉 Marcos Completados (Ciclo 3 - Dezembro 2025)</h2>
+<h3 id="refatoracao-hexagonal-do-cli-cortex">✅ Refatoração Hexagonal do CLI CORTEX</h3>
+<p><strong>Data:</strong> 30/12/2025
+<strong>Escopo:</strong> Arquitetura Hexagonal + Dependency Injection + Test Suite</p>
+<p><strong>Entregas:</strong></p>
+<ul>
+<li>✅ <strong>Adapter Pattern para UI:</strong> Criação de <code>scripts/cortex/adapters/ui.py</code> (UIPresenter)</li>
+<li>✅ <strong>Dependency Injection:</strong> Eliminação de variável global <code>_project_root</code> via <code>typer.Context</code></li>
+<li>✅ <strong>Test Suite Completa:</strong> <code>tests/test_ui_adapter.py</code> com 25 testes (100% cobertura de UI)</li>
+<li>✅ <strong>Linting Hardening:</strong> Substituição de 18 instâncias de <code># noqa</code> genérico por códigos específicos (S603, S602, S605)</li>
+<li>✅ <strong>Type Safety:</strong> 100% mypy strict compliance em 179 arquivos</li>
+</ul>
+<p><strong>Métricas de Impacto:</strong></p>
+<ul>
+<li>Redução de 20% nas linhas do <code>cli.py</code> (extração de lógica de apresentação)</li>
+<li>Cobertura de UI: 0% → 100%</li>
+<li>Variáveis globais eliminadas: 1 (_project_root)</li>
+<li>Build 100% verde: Lint ✅ | Type-check ✅ | Tests ✅ (712 passed)</li>
+</ul>
+<p><strong>Documentação:</strong></p>
+<ul>
+<li><a href="../../architecture/ADR_005_CLI_HEXAGONAL_REFACTOR/">ADR-005: CLI Hexagonal Refactor</a></li>
+</ul>
+<p><strong>Técnica Aplicada:</strong></p>
+<ul>
+<li>Hexagonal Architecture (Ports &amp; Adapters)</li>
+<li>SOLID Principles (Dependency Inversion, Single Responsibility)</li>
+<li>Test-Driven Development (TDD para UI Adapter)</li>
+</ul>
+<hr />
+<p><strong>Status:</strong> 📋 <strong>PLANEJADO</strong> (Aguardando finalização da Fase 2)
+⚠️ <strong>Nota:</strong> Ciclo 3 (Dezembro 2025) já iniciou com refatoração arquitetural do CLI.</p>
 <p><strong>Data de Início Prevista:</strong> Janeiro 2026</p>
 <p><strong>Owner:</strong> Equipe de Engenharia (Human + LLM Agents)</p>
 
