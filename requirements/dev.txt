@@ -157,7 +157,7 @@ tomlkit==0.13.3
     # via python-semantic-release
 tox==4.32.0
     # via -r requirements/dev.in
-typer==0.20.1
+typer==0.21.0
     # via -r requirements/dev.in
 types-pyyaml==6.0.12.20250915
     # via -r requirements/dev.in
