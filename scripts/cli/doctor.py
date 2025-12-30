@@ -376,7 +376,7 @@ class DevDoctor:
 
         # Verificação robusta via pip list
         try:
-            result = subprocess.run(  # noqa: subprocess
+            result = subprocess.run(  # noqa: S603,subprocess
                 [sys.executable, "-m", "pip", "list", "--format=json"],
                 capture_output=True,
                 text=True,
