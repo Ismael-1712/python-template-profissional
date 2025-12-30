@@ -362,6 +362,60 @@ class DevDoctor:
             critical=True,  # BLOQUEADOR: sem hooks = ambiente inseguro
         )
 
+    def check_type_stubs(self) -> DiagnosticResult:
+        """Verifica se os stubs vitais para o MyPy estão instalados (Autoimunidade)."""
+        required_stubs = [
+            "types-PyYAML",
+            "types-requests",
+            "pydantic-settings",
+        ]
+
+        missing = []
+        import json
+        import subprocess
+
+        # Verificação robusta via pip list
+        try:
+            result = subprocess.run(  # noqa: subprocess
+                [sys.executable, "-m", "pip", "list", "--format=json"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            # Normaliza para lowercase para comparação
+            installed_packages = {
+                pkg["name"].lower() for pkg in json.loads(result.stdout)
+            }
+
+            for stub in required_stubs:
+                if stub.lower() not in installed_packages:
+                    missing.append(stub)
+
+        except Exception as e:
+            return DiagnosticResult(
+                "Type Stubs",
+                False,
+                f"⚠️ Erro ao verificar pacotes: {e}\n"
+                "  💊 Prescrição: Reinstale o ambiente com 'make install-dev'",
+                critical=True,
+            )
+
+        if missing:
+            return DiagnosticResult(
+                "Type Stubs",
+                False,
+                f"🚨 AUTOIMUNIDADE: Stubs/Libs faltantes: {', '.join(missing)}\n"
+                "  Sem esses stubs, o type-check FALHARÁ silenciosamente!\n"
+                "  💊 Prescrição: make install-dev",
+                critical=True,
+            )
+
+        return DiagnosticResult(
+            "Type Stubs",
+            True,
+            f"Stubs de tipagem verificados ({len(required_stubs)} pacotes)",
+        )
+
     def run_diagnostics(self) -> bool:
         """Executa todas as verificações diagnósticas."""
         print(f"{BOLD}{BLUE}🔍 Dev Doctor - Diagnóstico de Ambiente{RESET}\n")
@@ -372,6 +426,7 @@ class DevDoctor:
         self.results.append(self.check_virtual_environment())
         self.results.append(self.check_tool_paths())
         self.results.append(self.check_vital_dependencies())
+        self.results.append(self.check_type_stubs())
         self.results.append(self.check_git_hooks())
 
         critical_failures = 0
