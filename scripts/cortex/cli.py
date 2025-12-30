@@ -257,25 +257,11 @@ def migrate(
 
         logger.info("Starting migration of %s (dry_run=%s)", path, dry_run)
 
-        if dry_run:
-            typer.secho(
-                "\n🔍 DRY-RUN MODE: No files will be modified\n",
-                fg=typer.colors.YELLOW,
-                bold=True,
-            )
-        else:
-            typer.secho(
-                "\n⚠️  APPLY MODE: Files will be modified!\n",
-                fg=typer.colors.RED,
-                bold=True,
-            )
-
         # Initialize orchestrator
         orchestrator = ProjectOrchestrator(workspace_root=workspace_root)
+        ui = UIPresenter()
 
         # Perform migration
-        typer.echo(f"📂 Scanning {path} for Markdown files...\n")
-
         summary = orchestrator.migrate_project(
             directory=path,
             dry_run=dry_run,
@@ -283,58 +269,8 @@ def migrate(
             recursive=recursive,
         )
 
-        # Print detailed results
-        if summary.total > 0:
-            typer.echo("\n" + "=" * 70)
-            typer.secho("\n📊 Migration Summary:", fg=typer.colors.CYAN, bold=True)
-            typer.echo("=" * 70)
-            typer.echo(f"Total files processed: {summary.total}")
-            typer.secho(
-                f"  ✅ Created: {summary.created}",
-                fg=typer.colors.GREEN,
-            )
-            typer.secho(
-                f"  🔄 Updated: {summary.updated}",
-                fg=typer.colors.YELLOW,
-            )
-            if summary.errors > 0:
-                typer.secho(
-                    f"  ❌ Errors:  {summary.errors}",
-                    fg=typer.colors.RED,
-                )
-            typer.echo("=" * 70)
-
-            # Show sample of results
-            if len(summary.results) > 0:
-                typer.echo("\nSample results:")
-                for result in summary.results[:5]:
-                    status_icon = {
-                        "created": "✅",
-                        "updated": "🔄",
-                        "skipped": "⏭️ ",
-                        "error": "❌",
-                    }.get(result.action, "❓")
-                    file_info = f"{result.file_path.name}: {result.message}"
-                    typer.echo(f"  {status_icon} {file_info}")
-
-                if len(summary.results) > 5:
-                    typer.echo(f"  ... and {len(summary.results) - 5} more files")
-        else:
-            typer.secho(
-                "\n⚠️  No Markdown files found in the specified directory.",
-                fg=typer.colors.YELLOW,
-            )
-
-        # Provide next steps
-        if dry_run and (summary.created + summary.updated > 0):
-            typer.echo("\n" + "=" * 70)
-            typer.secho(
-                "\n💡 To apply these changes, run:\n",
-                fg=typer.colors.CYAN,
-                bold=True,
-            )
-            typer.secho(f"   cortex migrate {path} --apply", fg=typer.colors.WHITE)
-            typer.echo()
+        # Display results
+        ui.display_migration_summary(summary, path, dry_run)
 
         if summary.errors > 0:
             logger.warning("Migration completed with %d error(s)", summary.errors)
@@ -557,27 +493,8 @@ def setup_hooks() -> None:
         installed_hooks = orchestrator.install_cortex_hooks()
 
         # Display results
-        typer.secho("✅ Git hooks installed successfully!", fg=typer.colors.GREEN)
-        typer.echo()
-        typer.echo("📋 Installed hooks:")
-
-        hook_descriptions = {
-            "post-merge": "Runs after git pull/merge",
-            "post-checkout": "Runs after git checkout (branch switch)",
-            "post-rewrite": "Runs after git rebase/commit --amend",
-        }
-
-        for hook_name in installed_hooks:
-            description = hook_descriptions.get(hook_name, "Git hook")
-            typer.echo(f"  • {hook_name:<20} - {description}")
-
-        typer.echo()
-        typer.secho(
-            "🎉 Context map will now auto-regenerate after Git operations!",
-            fg=typer.colors.GREEN,
-        )
-        typer.echo()
-        typer.echo("💡 Test it: git checkout - (to switch back and forth)")
+        ui = UIPresenter()
+        ui.display_hooks_installation(installed_hooks)
 
     except GitDirectoryNotFoundError as e:
         typer.secho(
@@ -739,64 +656,13 @@ def knowledge_sync(
         workspace_root = Path.cwd()
         logger.info("Starting knowledge synchronization...")
 
-        typer.secho("\n🔄 Knowledge Synchronizer", bold=True, fg=typer.colors.CYAN)
-        typer.echo(f"Workspace: {workspace_root}")
-        if entry_id:
-            typer.echo(f"Target Entry: {entry_id}")
-        if dry_run:
-            typer.echo("Mode: DRY RUN (no changes will be saved)\n")
-        else:
-            typer.echo()
-
         # Use orchestrator to handle scan, filter, and sync logic
         orchestrator = KnowledgeOrchestrator(workspace_root=workspace_root)
         summary = orchestrator.sync_multiple(entry_id=entry_id, dry_run=dry_run)
 
-        # Display progress for each result
-        if summary.results:
-            typer.echo(f"Processing {summary.total_processed} entries...\n")
-
-            for result in summary.results:
-                typer.echo(
-                    f"📄 {result.entry.id} ({len(result.entry.sources)} source(s))",
-                )
-
-                if dry_run:
-                    for source in result.entry.sources:
-                        typer.echo(f"   Would sync: {source.url}")
-                elif result.status.value == "updated":
-                    typer.secho("   ✅ Synchronized", fg=typer.colors.GREEN)
-                elif result.status.value == "not_modified":
-                    typer.echo("   ℹ️  No changes (304 Not Modified)")
-                else:  # error
-                    typer.secho(
-                        f"   ❌ Failed: {result.error_message}",
-                        fg=typer.colors.RED,
-                    )
-
-        # Display summary
-        typer.echo()
-        if dry_run:
-            typer.secho(
-                f"🔍 Dry run complete: "
-                f"{summary.total_processed} entries would be synced",
-                fg=typer.colors.BLUE,
-                bold=True,
-            )
-        elif summary.error_count == 0:
-            typer.secho(
-                f"✅ Synchronization complete: "
-                f"{summary.successful_count} entries processed",
-                fg=typer.colors.GREEN,
-                bold=True,
-            )
-        else:
-            typer.secho(
-                f"⚠️  Synchronization complete with errors: "
-                f"{summary.successful_count} succeeded, {summary.error_count} failed",
-                fg=typer.colors.YELLOW,
-                bold=True,
-            )
+        # Display results
+        ui = UIPresenter()
+        ui.display_sync_summary(summary, entry_id, dry_run)
 
         logger.info(
             f"Knowledge sync completed: "
@@ -848,74 +714,31 @@ def guardian_probe(
         workspace_root = Path.cwd()
         logger.info(f"Running Hallucination Probe for canary: {canary_id}")
 
-        typer.secho("\n🔍 Hallucination Probe", bold=True, fg=typer.colors.CYAN)
-        typer.echo(f"Workspace: {workspace_root}")
-        typer.echo(f"Target Canary: {canary_id}\n")
-
         # Initialize and run probe
         probe = HallucinationProbe(
             workspace_root=workspace_root,
             canary_id=canary_id,
         )
 
+        # Get result and display
+        ui = UIPresenter()
+
         if verbose:
             # Detailed validation mode
             result = probe.run()
+            ui.display_probe_result(result, canary_id, verbose=True)
 
-            if result.passed:
-                typer.secho(
-                    f"✅ PASSED: Canary '{canary_id}' found and validated",
-                    fg=typer.colors.GREEN,
-                    bold=True,
-                )
-                typer.echo("\n📊 Scan Details:")
-                typer.echo(f"   Total entries scanned: {result.total_entries_scanned}")
-                if result.found_entry:
-                    typer.echo(f"   Canary status: {result.found_entry.status.value}")
-                    if result.found_entry.golden_paths:
-                        typer.echo(
-                            f"   Golden paths: {result.found_entry.golden_paths}",
-                        )
-                    if result.found_entry.tags:
-                        tags_str = ", ".join(result.found_entry.tags)
-                        typer.echo(f"   Tags: {tags_str}")
-                typer.echo(f"\n💬 Message: {result.message}")
-            else:
-                typer.secho(
-                    f"❌ FAILED: {result.message}",
-                    fg=typer.colors.RED,
-                    bold=True,
-                )
-                typer.echo("\n📊 Scan Details:")
-                typer.echo(f"   Total entries scanned: {result.total_entries_scanned}")
-                typer.echo(
-                    "\n⚠️  WARNING: Knowledge system may be hallucinating or "
-                    "canary entry is missing!",
-                )
+            if not result.passed:
                 logger.error(f"Hallucination probe failed: {result.message}")
                 raise typer.Exit(code=1)
-        # Simple boolean check
-        elif probe.probe():
-            typer.secho(
-                f"✅ System healthy - canary '{canary_id}' found and active",
-                fg=typer.colors.GREEN,
-                bold=True,
-            )
-            typer.echo("\n💡 Tip: Use --verbose for detailed validation info")
         else:
-            typer.secho(
-                f"❌ System check failed - canary '{canary_id}' not found or inactive",
-                fg=typer.colors.RED,
-                bold=True,
-            )
-            typer.echo(
-                f"\n⚠️  WARNING: Knowledge system may be hallucinating!\n"
-                f"   - Verify that docs/knowledge/{canary_id}.md exists\n"
-                f"   - Check that the entry has status: active\n"
-                f"   - Run 'cortex knowledge-scan' to see all entries",
-            )
-            logger.error(f"Hallucination probe failed for canary: {canary_id}")
-            raise typer.Exit(code=1)
+            # Simple boolean check mode
+            simple_result = probe.run()
+            ui.display_probe_result(simple_result, canary_id, verbose=False)
+
+            if not simple_result.passed:
+                logger.error(f"Hallucination probe failed for canary: {canary_id}")
+                raise typer.Exit(code=1)
 
         logger.info("Hallucination probe completed successfully")
 
@@ -983,6 +806,7 @@ def config_manager(
         # Use ConfigOrchestrator to load and validate configuration
         logger.info(f"Reading configuration from: {config_path}")
         orchestrator = ConfigOrchestrator(project_root=_project_root)
+        ui = UIPresenter()
 
         # Validate YAML syntax and required keys
         if validate:
@@ -993,8 +817,7 @@ def config_manager(
                     config_path,
                     required_keys,
                 )
-                typer.secho("✓ Configuration is valid!", fg=typer.colors.GREEN)
-                typer.echo()
+                ui.display_validation_success()
             except ConfigValidationError as e:
                 typer.secho(
                     f"❌ Validation failed: {e}",
@@ -1005,8 +828,6 @@ def config_manager(
 
         # Display configuration
         if show:
-            import yaml
-
             # Load config without validation for display
             config_data = orchestrator.load_yaml(config_path)
 
@@ -1017,41 +838,11 @@ def config_manager(
                 )
                 raise typer.Exit(code=1)
 
-            typer.echo(f"📄 Configuration: {config_path}")
-            typer.echo("=" * 60)
-            typer.echo()
-
-            # Format and display YAML
-            formatted_yaml = yaml.dump(
-                config_data,
-                default_flow_style=False,
-                sort_keys=False,
-                allow_unicode=True,
-            )
-            typer.echo(formatted_yaml)
-
-            typer.echo("=" * 60)
-            typer.echo()
-
-            # Display summary statistics
-            typer.secho("📊 Configuration Summary:", fg=typer.colors.CYAN, bold=True)
-            typer.echo(f"  Scan Paths: {len(config_data.get('scan_paths', []))}")
-            typer.echo(
-                f"  File Patterns: {len(config_data.get('file_patterns', []))}",
-            )
-            typer.echo(
-                f"  Exclude Paths: {len(config_data.get('exclude_paths', []))}",
-            )
-            typer.echo(
-                f"  Custom Patterns: {len(config_data.get('custom_patterns', []))}",
-            )
-            typer.echo()
+            ui.display_config(config_data, config_path)
 
         # If neither show nor validate, display help
         if not show and not validate:
-            typer.echo("💡 Use --show to display configuration")
-            typer.echo("💡 Use --validate to check syntax")
-            typer.echo("💡 Use --help for more options")
+            ui.display_config_hints()
 
     except ConfigLoadError as e:
         logger.error(f"Configuration load error: {e}", exc_info=True)
