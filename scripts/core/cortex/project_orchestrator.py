@@ -34,9 +34,10 @@ License: MIT
 from __future__ import annotations
 
 import logging
-import re
+import os
 from pathlib import Path
-from typing import Any
+
+import frontmatter
 
 from scripts.core.cortex.metadata import FrontmatterParser
 from scripts.core.cortex.migrate import DocumentMigrator, MigrationResult
@@ -61,12 +62,6 @@ class ProjectOrchestrator:
         parser: FrontmatterParser for detecting existing frontmatter
     """
 
-    # Regex pattern for detecting existing frontmatter
-    FRONTMATTER_PATTERN = re.compile(
-        r"^---\s*\n.*?\n---\s*\n",
-        re.DOTALL | re.MULTILINE,
-    )
-
     def __init__(
         self,
         workspace_root: Path,
@@ -90,41 +85,6 @@ class ProjectOrchestrator:
             "Initialized ProjectOrchestrator with root: %s",
             self.workspace_root,
         )
-
-    def _has_frontmatter(self, content: str) -> bool:
-        """Check if content already has YAML frontmatter.
-
-        Args:
-            content: Markdown file content
-
-        Returns:
-            True if frontmatter exists
-        """
-        return bool(self.FRONTMATTER_PATTERN.match(content))
-
-    def _extract_existing_frontmatter(
-        self,
-        content: str,
-    ) -> dict[str, Any] | None:
-        """Extract existing frontmatter from content.
-
-        Args:
-            content: Markdown file content
-
-        Returns:
-            Dictionary of frontmatter metadata or None if not found
-        """
-        if not self._has_frontmatter(content):
-            return None
-
-        try:
-            import frontmatter as fm
-
-            post = fm.loads(content)
-            return dict(post.metadata) if post.metadata else None
-        except Exception as e:
-            logger.warning("Failed to parse existing frontmatter: %s", e)
-            return None
 
     def initialize_file(
         self,
@@ -170,13 +130,38 @@ class ProjectOrchestrator:
                 error=f"Path is not a file: {path}",
             )
 
-        try:
-            # Read current content
-            content = self.fs.read_text(path)
+        # Validate write permission (only for RealFileSystem)
+        # MemoryFileSystem doesn't support os.access, so we check the type
+        from scripts.utils.filesystem import RealFileSystem
 
-            # Check for existing frontmatter
-            old_frontmatter = self._extract_existing_frontmatter(content)
+        if isinstance(self.fs, RealFileSystem):
+            if not os.access(path, os.W_OK):
+                return InitResult(
+                    path=path,
+                    status="error",
+                    old_frontmatter=None,
+                    new_frontmatter={},
+                    error=f"Permission denied: {path}",
+                )
+
+        try:
+            # Read current content with encoding validation
+            try:
+                content = self.fs.read_text(path, encoding="utf-8")
+            except UnicodeDecodeError as e:
+                return InitResult(
+                    path=path,
+                    status="error",
+                    old_frontmatter=None,
+                    new_frontmatter={},
+                    error=f"File encoding error (expected UTF-8): {e}",
+                )
+
+            # Parse file using frontmatter library (robust YAML parsing)
+            post = frontmatter.loads(content)
+            old_frontmatter = dict(post.metadata) if post.metadata else None
             has_existing = old_frontmatter is not None
+            content_body = post.content  # Body without frontmatter
 
             # If has frontmatter and not force, skip
             if has_existing and not force:
@@ -184,8 +169,6 @@ class ProjectOrchestrator:
                     "File %s already has frontmatter, skipping (force=False)",
                     path,
                 )
-                # old_frontmatter is guaranteed to be dict here (not None)
-                # because has_existing is True
                 return InitResult(
                     path=path,
                     status="skipped",
@@ -197,16 +180,12 @@ class ProjectOrchestrator:
             frontmatter_block = generate_default_frontmatter(path)
 
             # Parse the generated frontmatter to extract metadata dict
-            import frontmatter as fm
-
-            temp_doc = fm.loads(frontmatter_block + "\nTemp content")
+            temp_doc = frontmatter.loads(frontmatter_block + "\nTemp content")
             new_frontmatter = dict(temp_doc.metadata)
 
-            # Remove old frontmatter from content if exists
-            clean_content = self.FRONTMATTER_PATTERN.sub("", content)
-
-            # Construct new content with frontmatter
-            new_content = frontmatter_block + clean_content.lstrip()
+            # Construct new content: new frontmatter + original body
+            # Preserve body content exactly as it was (after frontmatter)
+            new_content = frontmatter_block + content_body.lstrip()
 
             # Write back to file (not dry-run, this is actual initialization)
             self.fs.write_text(path, new_content)
@@ -224,6 +203,15 @@ class ProjectOrchestrator:
                 new_frontmatter=new_frontmatter,
             )
 
+        except PermissionError as e:
+            logger.error("Permission denied writing to %s: %s", path, e)
+            return InitResult(
+                path=path,
+                status="error",
+                old_frontmatter=None,
+                new_frontmatter={},
+                error=f"Permission denied: {path}",
+            )
         except Exception as e:
             logger.exception("Failed to initialize file %s", path)
             return InitResult(
