@@ -171,7 +171,6 @@ forbidden_modules = ["scripts.cortex"]
 # Configuração do Deptry (Dependências Não Utilizadas)
 [tool.deptry]
 extend_exclude = [
-    "scripts/",
     "tests/",
     ".venv/",
     "build/",
@@ -182,6 +181,7 @@ extend_exclude = [
 DEP002 = ["uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi"]
 
 # Configuração do Interrogate (Cobertura de Docstrings)
+DEP004 = ["scripts/"]
 [tool.interrogate]
 ignore-init-method = true
 ignore-init-module = true
