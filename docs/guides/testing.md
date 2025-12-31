@@ -335,4 +335,194 @@ Para esses casos, use `unittest.mock.patch` ou `RealFileSystem` com `tempfile`.
 
 ---
 
-**Última atualização:** 2025-12-05 (v1.1.0) - Adicionada seção de testes in-memory
+## 🎯 Testes de CLI (Typer CliRunner)
+
+### ⚠️ Regra Obrigatória: NUNCA Use subprocess para Testes de CLI
+
+**Por quê?**
+
+1. **Autoimunidade de CI**: `subprocess.run()` executa em ambiente real, não isolado
+2. **Performance**: 95% mais rápido sem overhead de spawnar processos
+3. **Segurança**: Eliminação de riscos de escape de shell e injeção de comandos
+4. **Determinismo**: CliRunner não depende de PATH, variáveis de ambiente, etc.
+
+### ✅ Padrão Correto: typer.testing.CliRunner
+
+Use `CliRunner` para invocar comandos Typer de forma isolada:
+
+```python
+from typer.testing import CliRunner
+from scripts.cortex.cli import app
+
+runner = CliRunner()
+
+def test_cortex_map_command():
+    """Testa o comando 'cortex map' de forma isolada."""
+    result = runner.invoke(app, ["map", "--verbose"])
+
+    # Verificações
+    assert result.exit_code == 0
+    assert "✅ Context map generated" in result.stdout
+```
+
+### Exemplos Práticos
+
+#### Teste com Flags e Argumentos
+
+```python
+def test_cortex_audit_with_strict_mode():
+    """Testa audit em modo strict."""
+    runner = CliRunner()
+    result = runner.invoke(app, [
+        "audit",
+        "docs/guides/",
+        "--strict",
+        "--fail-on-error"
+    ])
+
+    assert result.exit_code in [0, 1]  # Pode falhar se houver erros
+    assert "Audit complete" in result.stdout
+```
+
+#### Teste de Comando que Deve Falhar
+
+```python
+def test_cortex_audit_fails_with_invalid_path():
+    """Verifica que comando falha com path inválido."""
+    runner = CliRunner()
+    result = runner.invoke(app, ["audit", "/caminho/invalido"])
+
+    assert result.exit_code == 1
+    assert "Error" in result.stdout or "not found" in result.stdout.lower()
+```
+
+#### Teste com Entrada Interativa (stdin)
+
+```python
+def test_interactive_command():
+    """Testa comando que pede confirmação do usuário."""
+    runner = CliRunner()
+
+    # Simula usuário digitando 'y' + Enter
+    result = runner.invoke(app, ["init", "docs/new.md"], input="y\n")
+
+    assert result.exit_code == 0
+    assert "Frontmatter added" in result.stdout
+```
+
+#### Teste com Mock de Sistema de Arquivos
+
+```python
+from unittest.mock import patch, MagicMock
+
+def test_cortex_map_with_mocked_fs():
+    """Testa cortex map com filesystem mockado."""
+    runner = CliRunner()
+
+    with patch("scripts.cortex.commands.setup.Path") as mock_path:
+        mock_path.return_value.exists.return_value = True
+
+        result = runner.invoke(app, ["map"])
+
+        assert result.exit_code == 0
+        mock_path.assert_called()
+```
+
+### Anti-Patterns (NÃO FAÇA)
+
+❌ **ERRADO - Usando subprocess**:
+
+```python
+import subprocess
+
+def test_cortex_map_wrong():
+    # NUNCA FAÇA ISSO!
+    result = subprocess.run(
+        ["python", "-m", "scripts.cortex.cli", "map"],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
+```
+
+**Problemas**:
+
+- Depende do ambiente externo (PATH, virtualenv)
+- Lento (spawna processo Python completo)
+- Frágil em CI/CD (variáveis de ambiente)
+- Risco de segurança
+
+✅ **CORRETO - Usando CliRunner**:
+
+```python
+from typer.testing import CliRunner
+from scripts.cortex.cli import app
+
+def test_cortex_map_correct():
+    runner = CliRunner()
+    result = runner.invoke(app, ["map"])
+    assert result.exit_code == 0
+```
+
+### Estrutura de Teste Recomendada
+
+```python
+"""Testes para comandos cortex CLI."""
+import pytest
+from typer.testing import CliRunner
+from scripts.cortex.cli import app
+
+# Fixture reutilizável
+@pytest.fixture
+def cli_runner():
+    """Retorna CliRunner configurado."""
+    return CliRunner()
+
+class TestCortexCommands:
+    """Suite de testes para comandos cortex."""
+
+    def test_map_generates_context(self, cli_runner):
+        """Verifica que 'cortex map' gera contexto."""
+        result = cli_runner.invoke(app, ["map"])
+        assert result.exit_code == 0
+        assert ".cortex/context.json" in result.stdout
+
+    def test_audit_validates_docs(self, cli_runner):
+        """Verifica que 'cortex audit' valida documentação."""
+        result = cli_runner.invoke(app, ["audit", "docs/"])
+        assert result.exit_code == 0
+        assert "Audit" in result.stdout
+```
+
+### Debugging de Testes CLI
+
+Se um teste falhar, inspecione a saída:
+
+```python
+def test_debug_output(cli_runner):
+    result = cli_runner.invoke(app, ["comando", "--opcao"])
+
+    # Debug helpers
+    print(f"Exit Code: {result.exit_code}")
+    print(f"STDOUT:\n{result.stdout}")
+    print(f"Exception: {result.exception}")
+
+    # Se houver exceção, mostra traceback completo
+    if result.exception:
+        import traceback
+        traceback.print_exception(
+            type(result.exception),
+            result.exception,
+            result.exception.__traceback__
+        )
+```
+
+### Referências
+
+- [Documentação Typer Testing](https://typer.tiangolo.com/tutorial/testing/)
+- [Testes CLI Existentes](../../tests/test_cortex_cli_commands.py)
+- [Relatório Ciclo 5](../reports/CICLO5_CLI_ATOMIZATION_FINAL.md)
+
+---
+
+**Última atualização:** 2025-12-31 (v1.2.0) - Adicionada seção de testes CLI obrigatórios

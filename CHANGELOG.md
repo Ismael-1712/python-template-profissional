@@ -4,6 +4,27 @@
 
 ### Changed
 
+- **⚠️ BREAKING CHANGE - CLI Command Atomization (Ciclo 5)**: Migração de comandos CLI de subgrupos aninhados para comandos diretos hifenizados
+  - **Motivação**: Eliminar "Cegueira de Ferramenta" e melhorar Developer Experience
+  - **Mudanças na Sintaxe**:
+    - ❌ **ANTES (subgrupos)**: `cortex guardian check`, `cortex knowledge scan`
+    - ✅ **AGORA (atomizados)**: `cortex guardian-check`, `cortex knowledge-scan`
+  - **Comandos Afetados**:
+    - `guardian check` → `guardian-check`
+    - `guardian probe` → `guardian-probe`
+    - `knowledge scan` → `knowledge-scan`
+    - `knowledge sync` → `knowledge-sync`
+  - **Melhorias de Segurança e Performance**:
+    - Autoimunidade de CI: Testes CLI agora usam `typer.testing.CliRunner` (isolados do sistema)
+    - Performance: 95% mais rápido (sem overhead de subprocess)
+    - Segurança: Eliminado risco de escape de shell e injeção de comandos
+  - **Documentação Atualizada**:
+    - `docs/reference/CLI_COMMANDS.md`: Referência completa dos comandos
+    - `docs/guides/testing.md`: Guia de testes com CliRunner
+    - `CONTRIBUTING.md`: Workflow de desenvolvimento atualizado
+  - **Migração**: Atualize scripts e CI/CD que usam comandos antigos
+  - **Detalhes**: Consulte `docs/reports/CICLO5_CLI_ATOMIZATION_FINAL.md`
+
 - **CORTEX Knowledge Orchestrator: Hexagonal Architecture Refactoring**: Migrated business logic from CLI to Core layer
   - **Etapa 01 - SyncResult Implementation** (commit `9173128`):
     - Created `SyncStatus` enum (`UPDATED`, `NOT_MODIFIED`, `ERROR`) in Core
