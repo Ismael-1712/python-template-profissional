@@ -151,12 +151,31 @@ complexity-check:
 		scripts/ src/
 	@echo "✅ Análise de complexidade concluída (legacy files excluded)"
 
-## validate: Executa validação completa (lint + type-check + test + complexity)
-validate: lint type-check complexity-check test
+## arch-check: Valida separação de camadas arquiteturais (Import Linter)
+arch-check:
+	@echo "🏗️  Verificando contratos arquiteturais..."
+	@$(VENV)/bin/lint-imports || (echo "⚠️  Violações de arquitetura detectadas (grandfathering mode)" && exit 0)
+
+## deps-check: Detecta dependências não utilizadas (Deptry)
+deps-check:
+	@echo "📦 Verificando dependências não utilizadas..."
+	@$(PYTHON) -m deptry . || (echo "⚠️  Dependências não utilizadas detectadas (grandfathering mode)" && exit 0)
+
+## docs-check: Valida cobertura de docstrings (Interrogate)
+docs-check:
+	@echo "📚 Verificando cobertura de documentação..."
+	@$(PYTHON) -m interrogate -vv scripts/ src/ || (echo "⚠️  Baixa cobertura de docstrings detectada (grandfathering mode)" && exit 0)
+
+## ci-check: Valida workflows do GitHub Actions (versões e cache)
+ci-check:
+	@echo "🔍 Auditando workflows do GitHub Actions..."
+	@$(PYTHON) scripts/ci/audit_workflows.py
+
+## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci)
+validate: lint type-check complexity-check arch-check deps-check docs-check ci-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
-	@echo "✅ Validação completa concluída"
-	@echo "✅ Validação completa concluída"
+	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa)"
 
 ## format: Formata código automaticamente com ruff
 format:

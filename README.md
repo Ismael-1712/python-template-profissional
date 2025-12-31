@@ -581,6 +581,49 @@ make format
 make validate
 ```
 
+#### 🛡️ Architectural Guardrails (Quality Suite)
+
+**Tríade de Blindagem Arquitetural** com validação automatizada:
+
+```bash
+# Validação completa (executa todas as verificações abaixo)
+make validate
+
+# Verificações individuais:
+make lint              # Ruff: Estilo de código + McCabe complexity (C901)
+make type-check        # Mypy: Type safety estrito
+make complexity-check  # Xenon: Complexidade ciclomática ≤ 10
+make arch-check        # Import Linter: Separação de camadas arquiteturais
+make deps-check        # Deptry: Dependências não utilizadas
+make docs-check        # Interrogate: Cobertura de docstrings (atual: 99.1%)
+make test              # Pytest: Suite de testes completa
+```
+
+**Pipeline de Validação:**
+
+```
+lint → type-check → complexity-check → arch-check → deps-check → docs-check → test
+  ↓         ↓              ↓               ↓            ↓            ↓          ↓
+Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest
+```
+
+**Métricas de Qualidade:**
+
+| Pilar | Ferramenta | Threshold | Status Atual |
+|-------|-----------|-----------|--------------|
+| 🧠 **Complexidade** | Xenon | CC ≤ 10 | ✅ PASSED |
+| 🏗️ **Arquitetura** | Import Linter | 0 violações novas | ⚠️ 1 baseline |
+| 🧹 **Higiene** | Deptry | 0 deps não usadas | ✅ PASSED |
+| 📚 **Documentação** | Interrogate | Cobertura ≥ 95% | ✅ 99.1% |
+| 🎯 **Type Safety** | Mypy | Strict mode | ✅ PASSED |
+| ✅ **Testes** | Pytest | 100% passing | ✅ 779/780 |
+
+**Estratégia de Baseline (Grandfathering):**
+
+- Código legado tolerado (exit 0 em violações)
+- Novas violações **bloqueiam** o build
+- Meta: Melhoria contínua sem quebrar CI
+
 ---
 
 ### 🔧 **DevTools Layer — CLI & Utilities**

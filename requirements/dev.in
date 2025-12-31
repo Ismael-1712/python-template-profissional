@@ -21,6 +21,11 @@ types-requests==2.32.4.20250913
 radon
 xenon
 
+# Architecture & Dependency Governance (Tríade de Blindagem)
+import-linter==2.0  # Enforça separação de camadas arquiteturais
+deptry==0.21.2      # Detecta dependências não utilizadas
+interrogate==1.7.0  # Métrica de cobertura de docstrings
+
 # Pydantic (runtime + settings para BaseSettings)
 pydantic>=2.0
 pydantic-settings>=2.0

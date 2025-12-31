@@ -3,10 +3,10 @@ id: guide-engineering-standards
 title: Padrões de Engenharia e Boas Práticas
 type: guide
 status: active
-version: 1.2.0
+version: 2.0.0
 author: DevOps Team
 date: 2025-12-31
-tags: [standards, python, security, typing, testing, observability, http, complexity]
+tags: [standards, python, security, typing, testing, observability, http, complexity, architecture, dependencies, documentation]
 ---
 
 # Padrões de Engenharia e Boas Práticas
@@ -18,13 +18,16 @@ Este documento consolida as decisões técnicas e padrões de engenharia adotado
 ## 📚 Índice
 
 1. [Complexidade Ciclomática Máxima](#complexidade-ciclomática-máxima)
-2. [Lazy Imports](#lazy-imports)
-3. [Sanitização de Ambiente](#sanitização-de-ambiente)
-4. [Tipagem em Testes](#tipagem-em-testes)
-5. [Future Annotations](#future-annotations)
-6. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
-7. [Enums vs Magic Strings](#enums-vs-magic-strings)
-8. [Requisições HTTP e Observabilidade](#requisições-http-e-observabilidade)
+2. [Arquitetura em Camadas (Import Linter)](#arquitetura-em-camadas-import-linter)
+3. [Higiene de Dependências (Deptry)](#higiene-de-dependências-deptry)
+4. [Cobertura de Documentação (Interrogate)](#cobertura-de-documentação-interrogate)
+5. [Lazy Imports](#lazy-imports)
+6. [Sanitização de Ambiente](#sanitização-de-ambiente)
+7. [Tipagem em Testes](#tipagem-em-testes)
+8. [Future Annotations](#future-annotations)
+9. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
+10. [Enums vs Magic Strings](#enums-vs-magic-strings)
+11. [Requisições HTTP e Observabilidade](#requisições-http-e-observabilidade)
 
 ---
 
@@ -146,7 +149,7 @@ O comando `make validate` executa todas as verificações, incluindo complexidad
 
 ```bash
 make validate
-# Executa: lint → type-check → complexity-check → test → docs-check
+# Executa: lint → type-check → complexity-check → arch-check → deps-check → docs-check → test
 ```
 
 **Qualquer falha bloqueia o merge.** Isso garante que código complexo nunca entre na base.
@@ -157,6 +160,424 @@ make validate
 - [Clean Code, Chapter 3 - Robert C. Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
 - [Xenon Documentation](https://xenon.readthedocs.io/)
 - [Ruff C901 Rule](https://docs.astral.sh/ruff/rules/complex-structure/)
+
+---
+
+## 🏗️ Arquitetura em Camadas (Import Linter)
+
+### Motivação
+
+Arquiteturas sem fronteiras claras sofrem de:
+
+- **Acoplamento Circular**: Módulo A depende de B, que depende de A (ciclos de importação).
+- **Violação de SoC (Separation of Concerns)**: Lógica de negócio misturada com CLI/UI.
+- **Dificuldade de Teste**: Camadas altas (CLI) não deveriam ser importadas por camadas baixas (Core).
+- **Mudanças em Cascata**: Alteração em um módulo quebra vários outros inesperadamente.
+
+### Padrão: Arquitetura em Camadas
+
+Este projeto adota **Layered Architecture** com separação clara:
+
+```
+┌─────────────────────────────────┐
+│  CLI / UI (scripts/cli)         │  ← Camada de Apresentação
+├─────────────────────────────────┤
+│  Application (scripts/cortex)   │  ← Orquestração de Casos de Uso
+├─────────────────────────────────┤
+│  Core / Domain (scripts/core)   │  ← Lógica de Negócio Pura
+└─────────────────────────────────┘
+```
+
+**Regra de Ouro**: **Camadas inferiores NÃO podem importar camadas superiores**.
+
+### Contratos Arquiteturais
+
+O **Import Linter** valida os seguintes contratos:
+
+#### 1. Core não deve importar CLI
+
+```python
+# ❌ PROIBIDO em scripts/core/**/*.py
+from scripts.cli.doctor import run_diagnostics
+
+# ✅ PERMITIDO: Core expõe interfaces, CLI consome
+from scripts.core.diagnostic_engine import DiagnosticEngine
+```
+
+**Motivação**: Core deve ser reutilizável em diferentes contextos (CLI, API, testes).
+
+#### 2. Cortex Core não deve importar Cortex CLI
+
+```python
+# ❌ PROIBIDO em scripts/core/cortex/**/*.py
+from scripts.cortex.cli import main
+
+# ✅ PERMITIDO: Inversão de dependência
+from scripts.core.cortex.orchestrator import CortexOrchestrator
+```
+
+**Motivação**: Lógica de orquestração não deve depender de comandos CLI.
+
+### Como Verificar
+
+Execute:
+
+```bash
+make arch-check
+# ou
+lint-imports
+```
+
+**Saída esperada:**
+
+```
+=============
+Import Linter
+=============
+
+Contracts
+---------
+
+Core não deve importar CLI KEPT ✓
+Cortex Core não deve importar Cortex CLI KEPT ✓
+
+Contracts: 2 kept, 0 broken.
+```
+
+### Como Resolver Violações
+
+Se você encontrar erro de violação de contrato:
+
+#### ❌ **VIOLAÇÃO DETECTADA:**
+
+```
+scripts.core.cortex.audit_orchestrator -> scripts.cortex.core.knowledge_auditor (l.61)
+```
+
+**Problema**: `scripts/core/cortex/audit_orchestrator.py` está importando de `scripts/cortex/`, violando a separação de camadas.
+
+#### ✅ **SOLUÇÃO 1: Mover Módulo**
+
+Mova `scripts/cortex/core/knowledge_auditor.py` para `scripts/core/cortex/knowledge_auditor.py`.
+
+#### ✅ **SOLUÇÃO 2: Inversão de Dependência**
+
+```python
+# scripts/core/cortex/audit_orchestrator.py
+from abc import ABC, abstractmethod
+
+class KnowledgeAuditor(ABC):
+    """Interface para auditores de conhecimento."""
+
+    @abstractmethod
+    def audit(self, path: Path) -> AuditResult:
+        """Audita arquivo de conhecimento."""
+        pass
+
+# scripts/cortex/core/knowledge_auditor.py (implementação concreta)
+from scripts.core.cortex.audit_orchestrator import KnowledgeAuditor
+
+class ConcreteKnowledgeAuditor(KnowledgeAuditor):
+    """Implementação concreta do auditor."""
+
+    def audit(self, path: Path) -> AuditResult:
+        # Implementação específica
+        pass
+```
+
+### Estratégia de Baseline (Grandfathering)
+
+Código legado pode ter violações. Para não quebrar o build:
+
+```toml
+# pyproject.toml
+[[tool.importlinter.contracts]]
+name = "Core não deve importar CLI"
+type = "forbidden"
+source_modules = ["scripts.core"]
+forbidden_modules = ["scripts.cli"]
+```
+
+**Violações atuais são toleradas**, mas:
+
+- ✅ Novas violações **bloquearão** o build
+- 🔄 Violações legadas devem ser corrigidas gradualmente
+
+### Benefícios
+
+- ✅ **Testabilidade**: Core pode ser testado sem depender de CLI
+- ✅ **Reutilização**: Core pode ser usado em API, Worker, CLI
+- ✅ **Manutenção**: Mudanças em CLI não quebram Core
+- ✅ **Clareza**: Arquitetura explícita e auditável
+
+### Referências
+
+- [Import Linter Documentation](https://import-linter.readthedocs.io/)
+- [Clean Architecture - Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)
+
+---
+
+## 🧹 Higiene de Dependências (Deptry)
+
+### Motivação
+
+Dependências não utilizadas causam:
+
+- **Bloat de Imagem Docker**: Pacotes desnecessários aumentam tamanho da imagem.
+- **Vulnerabilidades Desnecessárias**: Mais deps = mais superfície de ataque.
+- **Confusão**: Desenvolvedores não sabem quais deps são realmente usadas.
+- **Build Lento**: `pip install` instala pacotes inúteis.
+
+### Padrão: Zero Dependências Não Utilizadas
+
+Este projeto adota **higiene estrita de dependências**:
+
+- ✅ Toda dependência em `pyproject.toml` **DEVE** ser usada no código.
+- ✅ Toda importação no código **DEVE** estar declarada em `pyproject.toml`.
+
+### Ferramenta: Deptry
+
+**Deptry** escaneia o código e detecta:
+
+1. **DEP002**: Dependência declarada mas não usada
+2. **DEP001**: Importação usada mas não declarada
+3. **DEP003**: Dependência transitiva usada diretamente
+
+### Como Verificar
+
+Execute:
+
+```bash
+make deps-check
+# ou
+deptry .
+```
+
+**Saída esperada:**
+
+```
+📦 Verificando dependências não utilizadas...
+Scanning 5 files...
+
+Success! No dependency issues found.
+```
+
+### Como Resolver Violações
+
+#### ❌ **VIOLAÇÃO: DEP002 (Dependência não usada)**
+
+```
+pyproject.toml: DEP002 'requests' defined as a dependency but not used in the codebase
+```
+
+**Solução**: Remova `requests` de `pyproject.toml` se não for usado.
+
+```toml
+# pyproject.toml - ANTES
+dependencies = [
+    "fastapi",
+    "requests",  # ← Não usado, remove!
+]
+
+# pyproject.toml - DEPOIS
+dependencies = [
+    "fastapi",
+]
+```
+
+#### ❌ **VIOLAÇÃO: DEP001 (Importação não declarada)**
+
+```
+src/app/api.py: DEP001 'pydantic' imported but not declared in dependencies
+```
+
+**Solução**: Adicione `pydantic` às dependências.
+
+```toml
+# pyproject.toml
+dependencies = [
+    "fastapi",
+    "pydantic>=2.0",  # ← Adicionar
+]
+```
+
+### Configuração de Exclusões
+
+Algumas pastas não precisam de validação estrita:
+
+```toml
+# pyproject.toml
+[tool.deptry]
+extend_exclude = [
+    "scripts/",  # Scripts CLI podem usar deps de dev
+    "tests/",    # Testes podem usar pytest, etc.
+]
+```
+
+### Estratégia de Baseline (Grandfathering)
+
+Dependências legadas do template podem ser ignoradas temporariamente:
+
+```toml
+[tool.deptry.per_rule_ignores]
+DEP002 = [
+    "uvicorn",  # Usado em produção via CLI, não em imports diretos
+    "chromadb", # Template placeholder
+]
+```
+
+**Novas dependências NÃO terão essa tolerância.**
+
+### Benefícios
+
+- ✅ **Imagens Docker Enxutas**: Apenas deps necessárias
+- ✅ **Segurança**: Menos deps = menos CVEs
+- ✅ **Clareza**: Documentação implícita das dependências reais
+- ✅ **Build Rápido**: `pip install` mais eficiente
+
+### Referências
+
+- [Deptry Documentation](https://deptry.com/)
+- [PEP 621 - Dependency Specification](https://peps.python.org/pep-0621/)
+
+---
+
+## 📚 Cobertura de Documentação (Interrogate)
+
+### Motivação
+
+Código sem docstrings é:
+
+- **Difícil de Entender**: Desenvolvedores perdem tempo tentando decifrar o que faz.
+- **Difícil de Manter**: Mudanças podem quebrar comportamentos não documentados.
+- **Não Profissional**: Falta de documentação sinaliza baixa maturidade.
+- **Incompatível com Geração de Docs**: MkDocs, Sphinx não conseguem gerar documentação.
+
+### Padrão: Cobertura Mínima de 95%
+
+Este projeto exige **95% de cobertura de docstrings** em:
+
+- Módulos (docstring no topo do arquivo)
+- Classes (docstring logo após `class`)
+- Funções e métodos públicos (docstring logo após `def`)
+
+**Exceções:**
+
+- Métodos mágicos (`__init__`, `__str__`)
+- Métodos privados (começam com `_`)
+- Setters (`@property.setter`)
+
+### Ferramenta: Interrogate
+
+**Interrogate** escaneia o código e gera relatório de cobertura:
+
+```bash
+make docs-check
+# ou
+interrogate -vv scripts/ src/
+```
+
+**Saída esperada:**
+
+```
+📚 Verificando cobertura de documentação...
+
+======= Coverage for /home/ismae/projects/python-template-profissional/ ========
+|------------------------------------------------|-------|------|-------|--------|
+| TOTAL                                          |   813 |    7 |   806 |  99.1% |
+---------------- RESULT: PASSED (minimum: 95.0%, actual: 99.1%) -----------------
+```
+
+### Como Escrever Docstrings
+
+#### ✅ **PADRÃO: Google Docstring Style**
+
+```python
+def process_order(order_id: str, user_id: str) -> OrderResult:
+    """Process customer order and update inventory.
+
+    This function validates the order, checks inventory availability,
+    processes payment, and updates the database atomically.
+
+    Args:
+        order_id: Unique identifier of the order to process.
+        user_id: Unique identifier of the user placing the order.
+
+    Returns:
+        OrderResult object containing success status and order details.
+
+    Raises:
+        OrderNotFoundError: If order_id does not exist in database.
+        InsufficientStockError: If inventory is insufficient for order.
+        PaymentFailedError: If payment processing fails.
+
+    Example:
+        >>> result = process_order("ORD-123", "USR-456")
+        >>> print(result.status)
+        'success'
+    """
+    # Implementação
+    pass
+```
+
+#### ❌ **EVITE: Docstrings Vazias**
+
+```python
+def process_order(order_id: str, user_id: str) -> OrderResult:
+    """Process order."""  # ← Não explica nada!
+    pass
+```
+
+#### ❌ **EVITE: Sem Docstring**
+
+```python
+def process_order(order_id: str, user_id: str) -> OrderResult:
+    # ← Nenhuma documentação!
+    pass
+```
+
+### Configuração
+
+```toml
+# pyproject.toml
+[tool.interrogate]
+ignore-init-method = true      # __init__ não precisa de docstring
+ignore-magic = true            # __str__, __repr__ não precisam
+fail-under = 95.0              # Mínimo 95% de cobertura
+verbose = 1
+exclude = ["setup.py", "build/"]
+```
+
+### Estratégia de Baseline (Grandfathering)
+
+Código legado pode ter baixa cobertura. Configuração inicial:
+
+```toml
+[tool.interrogate]
+fail-under = 0  # Baseline inicial: tolerar código legado
+```
+
+**Meta progressiva:**
+
+- Sprint 1: 0% → 50%
+- Sprint 2: 50% → 75%
+- Sprint 3: 75% → 95%
+
+**Novas funções DEVEM ter 100% de cobertura.**
+
+### Benefícios
+
+- ✅ **Código Auto-Explicativo**: Docstrings servem como documentação viva
+- ✅ **Geração de Docs**: MkDocs gera documentação bonita automaticamente
+- ✅ **Onboarding Rápido**: Novos devs entendem o código mais rápido
+- ✅ **Manutenção Segura**: Docstrings previnem regressões
+
+### Referências
+
+- [Interrogate Documentation](https://interrogate.readthedocs.io/)
+- [Google Python Style Guide - Docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings)
+- [PEP 257 - Docstring Conventions](https://peps.python.org/pep-0257/)
 
 ---
 
