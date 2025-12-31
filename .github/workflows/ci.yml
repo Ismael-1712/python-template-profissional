@@ -101,6 +101,25 @@ jobs:
           .venv/bin/pip show pydantic-settings || echo "❌ pydantic-settings NOT FOUND"
           .venv/bin/pip show types-requests || echo "❌ types-requests NOT FOUND"
 
+      # Safety Check: Garantir que type stubs críticos estejam instalados
+      # (mesmo quando cache venv é utilizado, pode estar desatualizado)
+      - name: "Ensure Type Stubs (Autoimunidade)"
+        run: |
+          echo "🛡️ Verificando stubs críticos para MyPy strict mode..."
+          MISSING=""
+          .venv/bin/pip show types-PyYAML > /dev/null 2>&1 || MISSING="$MISSING types-PyYAML"
+          .venv/bin/pip show types-requests > /dev/null 2>&1 || MISSING="$MISSING types-requests"
+          .venv/bin/pip show pydantic-settings > /dev/null 2>&1 || MISSING="$MISSING pydantic-settings"
+
+          if [ -n "$MISSING" ]; then
+            echo "⚠️ Missing type stubs detected:$MISSING"
+            echo "🔧 Installing missing packages..."
+            .venv/bin/pip install $MISSING
+            echo "✅ Type stubs installed successfully"
+          else
+            echo "✅ All type stubs present (autoimune)"
+          fi
+
       # Cache do mypy (type checking incremental)
       - name: "Restaurar cache do mypy"
         uses: actions/cache@v5

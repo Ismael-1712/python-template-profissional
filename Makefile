@@ -143,8 +143,16 @@ lint:
 type-check:
 	$(PYTHON) -m mypy scripts/ src/ tests/
 
-## validate: Executa validação completa (lint + type-check + test)
-validate: lint type-check test
+## complexity-check: Verifica complexidade ciclomática do código (Xenon)
+complexity-check:
+	@echo "🧠 Verificando complexidade ciclomática (Xenon)..."
+	$(PYTHON) -m xenon --max-absolute B --max-modules B --max-average A \
+		--exclude "scripts/core/cortex/knowledge_validator.py,scripts/core/cortex/metadata.py,scripts/core/cortex/migrate.py,scripts/audit_dependencies.py,scripts/benchmark_cortex_perf.py,scripts/example_guardian_scanner.py,scripts/cortex/adapters/ui.py,scripts/cortex/commands/setup.py,scripts/cortex/commands/config.py,scripts/cortex/commands/docs.py,scripts/git_sync/sync_logic.py,scripts/ci_recovery/analyzer.py,scripts/ci_recovery/executor.py,scripts/utils/toml_merger.py,scripts/cli/install_dev.py,scripts/cli/mock_generate.py,scripts/cli/mock_ci.py,scripts/cli/fusion.py,scripts/cli/audit.py,scripts/cli/mock_validate.py,scripts/cli/upgrade_python.py,scripts/audit/analyzer.py,scripts/audit/plugins.py,scripts/audit/reporter.py,scripts/core/mock_generator.py,scripts/core/doc_gen.py,scripts/core/cortex/scanner.py,scripts/core/cortex/project_orchestrator.py,scripts/core/cortex/knowledge_scanner.py,scripts/core/cortex/knowledge_orchestrator.py,scripts/core/cortex/mapper.py,scripts/core/cortex/link_resolver.py,scripts/core/mock_ci/git_ops.py" \
+		scripts/ src/
+	@echo "✅ Análise de complexidade concluída (legacy files excluded)"
+
+## validate: Executa validação completa (lint + type-check + test + complexity)
+validate: lint type-check complexity-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída"

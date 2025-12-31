@@ -207,8 +207,9 @@ class UIPresenter:
         """Display header for audit operation."""
         UIPresenter.show_header("🔒 CORTEX Metadata Audit")
 
+    # TODO: Refactor God Function - split into display methods per section
     @staticmethod
-    def display_audit_results(report: AuditReport) -> None:
+    def display_audit_results(report: AuditReport) -> None:  # noqa: C901
         """Display metadata audit results.
 
         Args:
@@ -770,8 +771,9 @@ class UIPresenter:
         typer.echo("💡 Use --validate to check syntax")
         typer.echo("💡 Use --help for more options")
 
+    # TODO: Refactor God Function - split summary into dedicated presenters
     @staticmethod
-    def display_sync_summary(
+    def display_sync_summary(  # noqa: C901
         summary: SyncSummary,
         entry_id: str | None,
         dry_run: bool,

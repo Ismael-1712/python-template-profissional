@@ -121,7 +121,8 @@ def audit(
         raise typer.Exit(code=1) from e
 
 
-def generate_docs(
+# TODO: Refactor God Function - split doc generation into specialized handlers
+def generate_docs(  # noqa: C901
     ctx: typer.Context,
     target: Annotated[
         str,

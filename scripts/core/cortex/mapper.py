@@ -468,7 +468,8 @@ class ProjectMapper:
             logger.warning(f"Failed to extract knowledge rules: {e}")
             return [], ""
 
-    def _format_knowledge_markdown(self, entries: list[KnowledgeEntry]) -> str:
+    # TODO: Refactor God Function - break down markdown formatting into sections
+    def _format_knowledge_markdown(self, entries: list[KnowledgeEntry]) -> str:  # noqa: C901
         """Format knowledge entries as LLM-friendly Markdown.
 
         Args:

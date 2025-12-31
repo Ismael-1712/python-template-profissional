@@ -118,7 +118,8 @@ class TestRealFilesGovernance:
         "tests",  # Fixtures de teste não precisam de governança
     }
 
-    def test_project_wide_markdown_compliance(self) -> None:
+    # TODO: Refactor God Function - split compliance checks into focused assertions
+    def test_project_wide_markdown_compliance(self) -> None:  # noqa: C901
         """Todos os arquivos Markdown do projeto devem ter Frontmatter válido.
 
         Este teste varre a raiz completa do projeto (`.`), excluindo apenas

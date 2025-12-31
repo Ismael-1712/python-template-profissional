@@ -457,7 +457,8 @@ class KnowledgeValidator:
         )
         return report
 
-    def generate_report(
+    # TODO: Refactor God Function - break down into smaller composable methods
+    def generate_report(  # noqa: C901
         self,
         report: ValidationReport,
         include_orphans: bool = True,

@@ -290,7 +290,8 @@ class TestDependencyAlignment:
 
             pytest.fail(error_message)
 
-    def test_requirements_txt_is_synced(self, project_root: Path) -> None:
+    # TODO: Refactor God Function - split validation into smaller test methods
+    def test_requirements_txt_is_synced(self, project_root: Path) -> None:  # noqa: C901
         """Verify requirements/dev.txt is in sync using pip-compile.
 
         This test uses pip-compile to generate what the lockfile should be

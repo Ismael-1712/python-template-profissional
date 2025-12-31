@@ -308,7 +308,8 @@ class SyncOrchestrator:
             step.fail(str(e))
             raise
 
-    def _generate_smart_commit_message(self, git_status: dict[str, Any]) -> str:
+    # TODO: Refactor God Function - split commit message logic into builder pattern
+    def _generate_smart_commit_message(self, git_status: dict[str, Any]) -> str:  # noqa: C901
         """Generate intelligent commit message based on changes."""
         changed_files = git_status.get("changed_files", [])
 
@@ -452,7 +453,8 @@ class SyncOrchestrator:
 
             raise
 
-    def _prune_merged_local_branches(
+    # TODO: Refactor God Function - split pruning logic into validation steps
+    def _prune_merged_local_branches(  # noqa: C901
         self,
         git_status: dict[str, Any],
     ) -> dict[str, Any]:

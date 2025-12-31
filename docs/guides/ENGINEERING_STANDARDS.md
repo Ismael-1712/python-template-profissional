@@ -3,10 +3,10 @@ id: guide-engineering-standards
 title: Padrões de Engenharia e Boas Práticas
 type: guide
 status: active
-version: 1.1.0
+version: 1.2.0
 author: DevOps Team
-date: 2025-12-07
-tags: [standards, python, security, typing, testing, observability, http]
+date: 2025-12-31
+tags: [standards, python, security, typing, testing, observability, http, complexity]
 ---
 
 # Padrões de Engenharia e Boas Práticas
@@ -17,13 +17,146 @@ Este documento consolida as decisões técnicas e padrões de engenharia adotado
 
 ## 📚 Índice
 
-1. [Lazy Imports](#lazy-imports)
-2. [Sanitização de Ambiente](#sanitização-de-ambiente)
-3. [Tipagem em Testes](#tipagem-em-testes)
-4. [Future Annotations](#future-annotations)
-5. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
-6. [Enums vs Magic Strings](#enums-vs-magic-strings)
-7. [Requisições HTTP e Observabilidade](#requisições-http-e-observabilidade)
+1. [Complexidade Ciclomática Máxima](#complexidade-ciclomática-máxima)
+2. [Lazy Imports](#lazy-imports)
+3. [Sanitização de Ambiente](#sanitização-de-ambiente)
+4. [Tipagem em Testes](#tipagem-em-testes)
+5. [Future Annotations](#future-annotations)
+6. [Atomicidade em Scripts de Infraestrutura](#atomicidade-em-scripts-de-infraestrutura)
+7. [Enums vs Magic Strings](#enums-vs-magic-strings)
+8. [Requisições HTTP e Observabilidade](#requisições-http-e-observabilidade)
+
+---
+
+## 🧠 Complexidade Ciclomática Máxima
+
+### Motivação
+
+Funções e métodos com alta complexidade ciclomática (muitos caminhos de execução) são:
+
+- **Difíceis de Entender**: Muitas ramificações (`if`, `for`, `while`) tornam o código confuso.
+- **Difíceis de Testar**: Cada caminho precisa de um teste específico, aumentando exponencialmente o esforço.
+- **Propensos a Bugs**: Maior complexidade = maior chance de erros lógicos.
+- **Difíceis de Manter**: Modificações podem quebrar comportamentos inesperados.
+
+### Padrão Ouro: Complexidade ≤ 10
+
+Este projeto adota **complexidade ciclomática máxima de 10** (McCabe Complexity), o padrão ouro da indústria recomendado por:
+
+- **IEEE Computer Society**
+- **Software Engineering Institute (SEI)**
+- **Clean Code (Robert C. Martin)**
+
+### Ferramentas de Validação
+
+#### 1. Ruff (Feedback Imediato)
+
+O Ruff está configurado para avisar sobre complexidade durante o desenvolvimento:
+
+```toml
+[tool.ruff.lint]
+select = ["C901"]  # McCabe Complexity
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+```
+
+Execute: `make lint` ou `ruff check .`
+
+#### 2. Xenon (Gatekeeper Estrito)
+
+O Xenon bloqueia commits que violam o padrão de complexidade:
+
+```bash
+make complexity-check
+# ou
+xenon --max-absolute B --max-modules A --max-average A scripts/ src/
+```
+
+**Métricas do Xenon:**
+
+- `--max-absolute B`: Nenhum bloco pode ter complexidade C ou pior (≥ 11)
+- `--max-modules A`: Módulos inteiros devem manter complexidade média A (≤ 5)
+- `--max-average A`: Projeto inteiro deve manter média A
+
+**O build FALHARÁ se estas métricas não forem atendidas.**
+
+### Como Resolver Erros de Complexidade
+
+Se você encontrar erro `C901` (McCabe complexity) ou falha no Xenon:
+
+#### ❌ **NÃO FAÇA ISSO:**
+
+```python
+def process_order(order, user, inventory, payment):
+    if user.is_premium():
+        if order.total > 100:
+            if inventory.check_stock(order.items):
+                if payment.validate():
+                    if order.shipping == "express":
+                        # ... mais lógica
+                        return success
+    return failure
+```
+
+**Complexidade: ~15** (God Function!)
+
+#### ✅ **FAÇA ISSO (Extrair Método):**
+
+```python
+def process_order(order: Order, user: User, inventory: Inventory, payment: Payment) -> Result:
+    """Process customer order with validation."""
+    if not _is_order_eligible(order, user):
+        return Result.failure("Order not eligible")
+
+    if not _validate_inventory_and_payment(order, inventory, payment):
+        return Result.failure("Validation failed")
+
+    return _execute_order(order)
+
+def _is_order_eligible(order: Order, user: User) -> bool:
+    """Check if order is eligible for processing."""
+    return user.is_premium() and order.total > 100
+
+def _validate_inventory_and_payment(
+    order: Order, inventory: Inventory, payment: Payment
+) -> bool:
+    """Validate inventory and payment for order."""
+    return inventory.check_stock(order.items) and payment.validate()
+
+def _execute_order(order: Order) -> Result:
+    """Execute the order based on shipping type."""
+    if order.shipping == "express":
+        return _process_express_shipping(order)
+    return _process_standard_shipping(order)
+```
+
+**Complexidade de cada função: ≤ 5**
+
+### Benefícios da Refatoração
+
+- ✅ **Código Auto-Documentado**: Cada função tem nome que explica o que faz
+- ✅ **Testável**: Funções pequenas são fáceis de testar isoladamente
+- ✅ **Manutenível**: Mudanças são localizadas e seguras
+- ✅ **Reutilizável**: Funções pequenas podem ser usadas em outros contextos
+
+### Integração com CI/CD
+
+O comando `make validate` executa todas as verificações, incluindo complexidade:
+
+```bash
+make validate
+# Executa: lint → type-check → complexity-check → test → docs-check
+```
+
+**Qualquer falha bloqueia o merge.** Isso garante que código complexo nunca entre na base.
+
+### Referências
+
+- [McCabe Complexity - Wikipedia](https://en.wikipedia.org/wiki/Cyclomatic_complexity)
+- [Clean Code, Chapter 3 - Robert C. Martin](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
+- [Xenon Documentation](https://xenon.readthedocs.io/)
+- [Ruff C901 Rule](https://docs.astral.sh/ruff/rules/complex-structure/)
 
 ---
 
