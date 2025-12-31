@@ -166,8 +166,13 @@ docs-check:
 	@echo "📚 Verificando cobertura de documentação..."
 	@$(PYTHON) -m interrogate -vv scripts/ src/ || (echo "⚠️  Baixa cobertura de docstrings detectada (grandfathering mode)" && exit 0)
 
-## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura)
-validate: lint type-check complexity-check arch-check deps-check docs-check test
+## ci-check: Valida workflows do GitHub Actions (versões e cache)
+ci-check:
+	@echo "🔍 Auditando workflows do GitHub Actions..."
+	@$(PYTHON) scripts/ci/audit_workflows.py
+
+## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci)
+validate: lint type-check complexity-check arch-check deps-check docs-check ci-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa)"

@@ -299,6 +299,7 @@ forbidden_modules = ["scripts.cli"]
 ```
 
 **Violações atuais são toleradas**, mas:
+
 - ✅ Novas violações **bloquearão** o build
 - 🔄 Violações legadas devem ser corrigidas gradualmente
 
@@ -462,6 +463,7 @@ Este projeto exige **95% de cobertura de docstrings** em:
 - Funções e métodos públicos (docstring logo após `def`)
 
 **Exceções:**
+
 - Métodos mágicos (`__init__`, `__str__`)
 - Métodos privados (começam com `_`)
 - Setters (`@property.setter`)
@@ -557,6 +559,7 @@ fail-under = 0  # Baseline inicial: tolerar código legado
 ```
 
 **Meta progressiva:**
+
 - Sprint 1: 0% → 50%
 - Sprint 2: 50% → 75%
 - Sprint 3: 75% → 95%
