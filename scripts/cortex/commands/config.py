@@ -183,7 +183,7 @@ def project_map(
         cortex map --update-config --template=custom.toml  # Custom template
     """
     try:
-        from scripts.core.cortex.context_mapper import ContextMapper
+        from scripts.cortex.core.context_mapper import ContextMapper
 
         # Get project_root from context
         project_root = ctx.obj["project_root"]

@@ -60,7 +60,7 @@ def guardian_check(
         cortex guardian check . --docs custom_docs/
     """
     try:
-        from scripts.core.cortex.guardian_orchestrator import GuardianOrchestrator
+        from scripts.cortex.core.guardian_orchestrator import GuardianOrchestrator
 
         ui = UIPresenter()
         ui.display_guardian_header(path, docs_path)

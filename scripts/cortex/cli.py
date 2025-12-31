@@ -50,6 +50,13 @@ app = typer.Typer(
 )
 
 
+def version_callback(value: bool) -> None:
+    """Print version and exit."""
+    if value:
+        typer.echo("CORTEX v0.1.0 - Documentation as Code")
+        raise typer.Exit()
+
+
 @app.callback()
 def setup_context(
     ctx: typer.Context,
@@ -109,13 +116,6 @@ app.command(name="generate")(docs_commands.generate_docs)
 
 # Register guardian commands (guardian check)
 app.command(name="guardian-check")(guardian_commands.guardian_check)
-
-
-def version_callback(value: bool) -> None:
-    """Print version and exit."""
-    if value:
-        typer.echo("CORTEX v0.1.0 - Documentation as Code")
-        raise typer.Exit()
 
 
 def main() -> None:
