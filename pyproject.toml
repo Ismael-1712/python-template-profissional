@@ -74,12 +74,16 @@ target-version = "py310"
 
 # Configuração do Linter do Ruff
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "UP", "B", "D"]
+select = ["E", "F", "W", "I", "N", "UP", "B", "D", "C901"]
 ignore = ["D203", "D213"]
 
 # Configuração do pydocstyle (D-Rules)
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+# Configuração do McCabe (Complexidade Ciclomática)
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 # Configuração do Formatador do Ruff
 [tool.ruff.format]

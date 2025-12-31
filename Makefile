@@ -143,8 +143,14 @@ lint:
 type-check:
 	$(PYTHON) -m mypy scripts/ src/ tests/
 
-## validate: Executa validação completa (lint + type-check + test)
-validate: lint type-check test
+## complexity-check: Verifica complexidade ciclomática do código (Xenon)
+complexity-check:
+	@echo "🧠 Verificando complexidade ciclomática (Xenon)..."
+	$(PYTHON) -m xenon --max-absolute B --max-modules A --max-average A scripts/ src/
+	@echo "✅ Análise de complexidade concluída"
+
+## validate: Executa validação completa (lint + type-check + test + complexity)
+validate: lint type-check complexity-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída"
