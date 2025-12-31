@@ -88,6 +88,7 @@ class TestRealFilesGovernance:
     # Arquivos de infraestrutura que são isentos das regras de Frontmatter
     EXEMPT_FILES = {
         "README.md",  # README da raiz do projeto (documentação de entrada)
+        "KNOWLEDGE_HEALTH.md",
         "CONTRIBUTING.md",  # Guia de contribuição (pode ter formato próprio)
         "CODE_OF_CONDUCT.md",  # Código de conduta padrão
         "SECURITY.md",  # Política de segurança
