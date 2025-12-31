@@ -133,7 +133,7 @@ jobs:
 
       # CORTEX Guardian (configurações não documentadas)
       - name: "Check Undocumented Configuration"
-        run: .venv/bin/python -m scripts.cortex guardian check . --fail-on-error
+        run: .venv/bin/python -m scripts.cortex guardian-check . --fail-on-error
 
   # ====================================================================
   # JOB 2: TESTS Python 3.10 (INDEPENDENTE)
