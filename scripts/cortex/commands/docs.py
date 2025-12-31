@@ -101,6 +101,12 @@ def audit(
         if results.metadata_result:
             ui.display_audit_results(results.metadata_result.report)
 
+        # Show Knowledge Health report path if it was generated
+        if results.knowledge_result and results.knowledge_result.output_path:
+            ui.show_success(
+                f"📊 Knowledge Health report: {results.knowledge_result.output_path}",
+            )
+
         # Final status check for fail-on-error
         if fail_on_error and results.should_fail:
             ui.show_error("Audit failed with errors. Exiting with code 1.")
