@@ -69,9 +69,17 @@ def safe_pip_compile(
             # Resolve to ensure we have absolute paths, then make relative
             relative_input = input_file.resolve().relative_to(cwd.resolve())
             input_path_str = str(relative_input)
+            # Calculate relative output path for header correction
+            relative_output = output_file.resolve().relative_to(cwd.resolve())
+            output_path_str = str(relative_output)
+            # Use temp path for actual pip-compile to preserve atomicity
+            relative_temp = temp_output.resolve().relative_to(cwd.resolve())
+            temp_path_str = str(relative_temp)
         except (ValueError, RuntimeError):
             # Fallback: if paths are on different drives or cannot be relativized
             input_path_str = str(input_file)
+            output_path_str = str(output_file)
+            temp_path_str = str(temp_output)
 
         # Run pip-compile to temporary file
         result = subprocess.run(  # noqa: S603,subprocess
@@ -79,8 +87,9 @@ def safe_pip_compile(
                 pip_compile_path,
                 # NOTE: --generate-hashes disabled (planned for future sprint)
                 # See: test_pip_compile_enforces_hashes (currently xfail)
+                "--strip-extras",  # FIX: Remove extras to match CI standards
                 "--output-file",
-                str(temp_output),
+                temp_path_str,  # Use temp for atomicity
                 input_path_str,  # <--- Now strictly relative
             ],
             cwd=workspace_root,
@@ -108,6 +117,16 @@ def safe_pip_compile(
                 f"(expected comment header): {first_line[:50]}"
             )
             raise RuntimeError(msg)
+
+        # POST-PROCESS: Fix header to use final output path instead of temp path
+        # This prevents drift between local and CI due to different temp file PIDs
+        content = temp_output.read_text(encoding="utf-8")
+        # Replace temp path with final output path in the header comment
+        content = content.replace(
+            f"--output-file={temp_path_str}",
+            f"--output-file={output_path_str}",
+        )
+        temp_output.write_text(content, encoding="utf-8")
 
         # Atomic replace (POSIX guarantees atomicity)
         temp_output.replace(output_file)
