@@ -295,6 +295,28 @@ done
 test-matrix:
 	$(PYTHON) -m tox
 
+## mutation-check: Run mutation testing to validate test quality (⚠️ Slow process)
+mutation-check:
+	@echo "🧟 ================================================"
+	@echo "🧟 MUTATION TESTING (Validação de Qualidade de Testes)"
+	@echo "🧟 ================================================"
+	@echo ""
+	@echo "⚠️  ATENÇÃO: Este processo é DEMORADO e pode levar vários minutos."
+	@echo "   - Mutmut irá modificar o código fonte temporariamente"
+	@echo "   - Para cada mutação, a suite de testes será executada"
+	@echo "   - Mutantes 'Mortos' = Testes funcionando corretamente ✅"
+	@echo "   - Mutantes 'Sobreviventes' = Testes falsos positivos ❌"
+	@echo ""
+	@echo "💡 Dica: Para testar apenas um arquivo específico:"
+	@echo "   1. Edite [tool.mutmut] em pyproject.toml"
+	@echo "   2. Altere paths_to_mutate = [\"scripts/utils/security.py\"]"
+	@echo "   3. Execute: mutmut run"
+	@echo ""
+	@read -p "Pressione ENTER para continuar ou Ctrl+C para cancelar..." DUMMY
+	@echo ""
+	@echo "🚀 Iniciando mutation testing..."
+	@$(PYTHON) -m mutmut run
+
 ## commit: Intelligent commit with Smart Governance (idempotent hooks)
 commit:
 	@if [ -z "$(MSG)" ]; then \
