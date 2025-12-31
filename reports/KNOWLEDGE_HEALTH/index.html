@@ -21,7 +21,7 @@
     
     
       
-        <title>Knowledge Graph Health Report - {{ project_name }}</title>
+        <title>📊 Knowledge Graph Health Report - {{ project_name }}</title>
       
     
     
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Knowledge Graph Health Report
+              📊 Knowledge Graph Health Report
             
           </span>
         </div>
@@ -561,6 +561,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="🔴 Critical Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#broken-links-11-total" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broken Links (11 total)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -576,10 +593,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#orphan-nodes-1-total-1000" class="md-nav__link">
+  <a href="#orphan-nodes-2-total-1000" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Orphan Nodes (1 total - 100.0%)
+        Orphan Nodes (2 total - 100.0%)
       
     </span>
   </a>
@@ -587,10 +604,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#dead-end-nodes-1-total-1000" class="md-nav__link">
+  <a href="#dead-end-nodes-1-total-500" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dead End Nodes (1 total - 100.0%)
+        Dead End Nodes (1 total - 50.0%)
       
     </span>
   </a>
@@ -680,14 +697,9 @@
 
 
 
-<hr />
-<p>generated_at: 2025-12-15T15:45:13.989824+00:00
-health_score: 60.0
-status: critical</p>
-<hr />
 <h1 id="knowledge-graph-health-report">📊 Knowledge Graph Health Report</h1>
-<p><strong>Generated:</strong> 2025-12-15 15:45:13 UTC
-<strong>Overall Health Score:</strong> 60.0/100 (🔴 Critical)</p>
+<p><strong>Generated:</strong> 2025-12-31 15:14:10 UTC
+<strong>Overall Health Score:</strong> 20.0/100 (🔴 Critical)</p>
 <hr />
 <h2 id="executive-summary">📈 Executive Summary</h2>
 <table>
@@ -701,37 +713,37 @@ status: critical</p>
 <tbody>
 <tr>
 <td>Total Nodes</td>
-<td>1</td>
+<td>2</td>
 <td>-</td>
 </tr>
 <tr>
 <td>Total Links</td>
-<td>0</td>
+<td>11</td>
 <td>-</td>
 </tr>
 <tr>
 <td>Valid Links</td>
 <td>0</td>
-<td>🟢</td>
+<td>⚠️</td>
 </tr>
 <tr>
 <td>Broken Links</td>
-<td>0</td>
-<td>🟢</td>
+<td>11</td>
+<td>🔴</td>
 </tr>
 <tr>
 <td>Connectivity Score</td>
-<td>0.0%</td>
+<td>50.0%</td>
 <td>⚠️</td>
 </tr>
 <tr>
 <td>Link Health Score</td>
-<td>100.0%</td>
-<td>🟢</td>
+<td>0.0%</td>
+<td>⚠️</td>
 </tr>
 <tr>
 <td><strong>Overall Health Score</strong></td>
-<td><strong>60.0</strong></td>
+<td><strong>20.0</strong></td>
 <td>🔴</td>
 </tr>
 </tbody>
@@ -739,21 +751,103 @@ status: critical</p>
 <hr />
 <h2 id="critical-issues">🔴 Critical Issues</h2>
 <ul>
+<li>🔴 11 broken links detected</li>
 <li>🔴 100.0% orphan nodes (threshold: 30%)</li>
-<li>🔴 Health score 60.0 below threshold (70)</li>
+<li>🔴 Health score 20.0 below threshold (70)</li>
 </ul>
+<h3 id="broken-links-11-total">Broken Links (11 total)</h3>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Target</th>
+<th>Line</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md#armadilha-do-hook-obsoleto</code></td>
+<td>98</td>
+<td>- [DEV_ENVIRONMENT_TROUBLESHOO...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../guides/TESTING_STRATEGY_MOCKS.md</code></td>
+<td>181</td>
+<td>- 📝 <strong>Documentado:</strong> Adicionad...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../guides/TESTING_STRATEGY_MOCKS.md#filesystem-operations</code></td>
+<td>190</td>
+<td>- [TESTING_STRATEGY_MOCKS.md -...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../architecture/ROADMAP_DELTA_AUDIT.md#p15</code></td>
+<td>293</td>
+<td>- Roadmap: [P15 - Adoção de Ji...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../../scripts/audit_dashboard/exporter_html.py</code></td>
+<td>294</td>
+<td>- Código: [exporter_html.py](....</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../architecture/ROADMAP_DELTA_AUDIT.md#p13.1</code></td>
+<td>389</td>
+<td>- Roadmap: [P13.1 - Regulariza...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../architecture/SECURITY_STRATEGY.md#subprocess-execution</code></td>
+<td>390</td>
+<td>- [SECURITY_STRATEGY.md - Subp...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../architecture/ROADMAP_DELTA_AUDIT.md#p13</code></td>
+<td>442</td>
+<td>- Roadmap: [P13 - Saneamento d...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../history/SRE_TECHNICAL_DEBT_CATALOG.md</code></td>
+<td>566</td>
+<td>- [SRE Technical Debt Catalog]...</td>
+</tr>
+<tr>
+<td>operational-war-diary</td>
+<td><code>../guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md</code></td>
+<td>567</td>
+<td>- [Dev Environment Troubleshoo...</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>... (1 more)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommendation:</strong> Fix these links immediately or mark them as external.</p>
 <hr />
 <h2 id="warnings">⚠️  Warnings</h2>
 <ul>
 <li>ℹ️  1 dead end nodes (can be enriched)</li>
 </ul>
-<h3 id="orphan-nodes-1-total-1000">Orphan Nodes (1 total - 100.0%)</h3>
+<h3 id="orphan-nodes-2-total-1000">Orphan Nodes (2 total - 100.0%)</h3>
 <p>Documents with no incoming links:</p>
 <ul>
 <li><code>kno-001</code></li>
+<li><code>operational-war-diary</code></li>
 </ul>
 <p><strong>Recommendation:</strong> Add links from main navigation or index documents.</p>
-<h3 id="dead-end-nodes-1-total-1000">Dead End Nodes (1 total - 100.0%)</h3>
+<h3 id="dead-end-nodes-1-total-500">Dead End Nodes (1 total - 50.0%)</h3>
 <p>Documents with no outgoing links:</p>
 <ul>
 <li><code>kno-001</code></li>
@@ -763,6 +857,7 @@ status: critical</p>
 <h2 id="action-items">🎯 Action Items</h2>
 <h3 id="high-priority">High Priority</h3>
 <ol>
+<li>✅ Fix 11 broken links (see table above)</li>
 <li>⚠️  Review orphan nodes and add navigation links</li>
 </ol>
 <h3 id="medium-priority">Medium Priority</h3>
