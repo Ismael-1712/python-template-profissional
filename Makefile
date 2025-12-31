@@ -145,6 +145,9 @@ type-check:
 
 ## validate: Executa validação completa (lint + type-check + test)
 validate: lint type-check test
+	@echo "📚 Verifying Documentation Integrity..."
+	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
+	@echo "✅ Validação completa concluída"
 	@echo "✅ Validação completa concluída"
 
 ## format: Formata código automaticamente com ruff
