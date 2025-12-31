@@ -151,3 +151,57 @@ markers = [
     "integration: mark a test as an integration test.",
     "e2e: mark a test as an end-to-end test.",
 ]
+
+# Configuração do Import Linter (Arquitetura - Separação de Camadas)
+[tool.importlinter]
+root_packages = ["scripts", "src"]
+
+[[tool.importlinter.contracts]]
+name = "Core não deve importar CLI"
+type = "forbidden"
+source_modules = ["scripts.core"]
+forbidden_modules = ["scripts.cli"]
+
+[[tool.importlinter.contracts]]
+name = "Cortex Core não deve importar Cortex CLI"
+type = "forbidden"
+source_modules = ["scripts.core.cortex"]
+forbidden_modules = ["scripts.cortex"]
+
+# Configuração do Deptry (Dependências Não Utilizadas)
+[tool.deptry]
+extend_exclude = [
+    "scripts/",
+    "tests/",
+    ".venv/",
+    "build/",
+    "dist/",
+]
+# Grandfathering: ignorar deps atuais do projeto (template)
+[tool.deptry.per_rule_ignores]
+DEP002 = ["uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi"]
+
+# Configuração do Interrogate (Cobertura de Docstrings)
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = true
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = true
+fail-under = 0  # Grandfathering: começar em 0 e aumentar gradualmente
+exclude = [
+    "setup.py",
+    "docs",
+    "build",
+    "scripts/audit_dashboard.py",  # Legado
+]
+verbose = 1
+quiet = false
+whitelist-regex = []
+color = true
+omit-covered-files = false

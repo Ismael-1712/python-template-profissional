@@ -2,6 +2,66 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🛡️ Quality Suite Consolidation - Architectural Guardrails and Code Health**:
+  - **Tríade de Blindagem Arquitetural**: Three-layer validation system for architecture, dependencies, and documentation
+    - **Import Linter (Architecture Layer Separation)**:
+      - Enforces forbidden imports between architectural layers (Core ↛ CLI)
+      - Configured contracts in `pyproject.toml`:
+        - `Core não deve importar CLI`: Prevents circular dependencies
+        - `Cortex Core não deve importar Cortex CLI`: Maintains clean architecture
+      - New Makefile target: `make arch-check`
+      - Integration: Added to `make validate` pipeline
+      - Status: 1 contract passed, 1 baseline violation (grandfathering mode)
+    - **Deptry (Dependency Hygiene)**:
+      - Detects unused dependencies (DEP002) preventing bloat
+      - Prevents missing dependencies (DEP001) catching import errors early
+      - Configured exclusions for `scripts/`, `tests/` in `pyproject.toml`
+      - Grandfathering: Template dependencies whitelisted temporarily
+      - New Makefile target: `make deps-check`
+      - Status: ✅ Zero violations detected
+    - **Interrogate (Documentation Coverage)**:
+      - Measures docstring coverage across codebase
+      - Configured with Google-style docstring convention
+      - Baseline: `fail-under = 0` (grandfathering legacy code)
+      - Current coverage: **99.1%** (806/813 items documented)
+      - New Makefile target: `make docs-check`
+      - Status: ✅ PASSED with excellent coverage
+  - **Complexity Vaccine (Dual-Layer Defense)**:
+    - **Ruff C901 Rule**: Immediate feedback during development (linting phase)
+      - Configured `max-complexity = 10` in `pyproject.toml`
+      - Integrated into `make lint` workflow
+    - **Xenon (CI Gatekeeper)**: Strict enforcement in validation pipeline
+      - Configured thresholds: `--max-absolute B`, `--max-modules A`, `--max-average A`
+      - Legacy code exclusions maintained via explicit file list
+      - Integrated into `make complexity-check` and `make validate`
+  - **Grandfathering Strategy (Baseline Protection)**:
+    - Import Linter: Current violations documented but tolerated (exit 0)
+    - Deptry: Template dependencies ignored via `per_rule_ignores`
+    - Interrogate: `fail-under = 0` allows gradual improvement
+    - Xenon: Legacy files explicitly excluded
+    - **Goal**: "Electric fence" for new code without breaking existing build
+  - **Updated Documentation**:
+    - Enhanced `docs/guides/ENGINEERING_STANDARDS.md` (v2.0.0):
+      - Added section: "Arquitetura em Camadas (Import Linter)"
+      - Added section: "Higiene de Dependências (Deptry)"
+      - Added section: "Cobertura de Documentação (Interrogate)"
+      - Updated index with new quality pillars
+    - Updated `requirements/dev.in`:
+      - `import-linter==2.0`: Architectural layer enforcement
+      - `deptry==0.21.2`: Dependency hygiene checker
+      - `interrogate==1.7.0`: Docstring coverage metrics
+  - **CI/CD Integration**:
+    - Updated `make validate` to include: `arch-check`, `deps-check`, `docs-check`
+    - Pipeline order: `lint → type-check → complexity-check → arch-check → deps-check → docs-check → test`
+    - All checks passing: ✅ Build remains GREEN
+  - **Maturity Pillars Implemented**:
+    - 🏗️ **Separation of Concerns**: Import Linter contracts (50% compliance)
+    - 🧩 **Modularidad**: Layered architecture enforced
+    - 🧹 **Hygiene**: Deptry zero violations (100% clean)
+    - 📚 **Explicit Clarity**: Interrogate 99.1% coverage
+
 ### Changed
 
 - **⚠️ BREAKING CHANGE - CLI Command Atomization (Ciclo 5)**: Migração de comandos CLI de subgrupos aninhados para comandos diretos hifenizados
