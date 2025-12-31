@@ -39,3 +39,6 @@ tox
 
 # Frontmatter parsing
 python-frontmatter
+
+# Mutation Testing
+mutmut

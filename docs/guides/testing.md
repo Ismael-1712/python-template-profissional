@@ -525,4 +525,191 @@ def test_debug_output(cli_runner):
 
 ---
 
-**Última atualização:** 2025-12-31 (v1.2.0) - Adicionada seção de testes CLI obrigatórios
+## 🧟 Mutation Testing (Validação de Qualidade de Testes)
+
+### O Problema: Testes Falsos Positivos
+
+Você pode ter 100% de cobertura de código, mas isso **NÃO garante** que seus testes estejam validando a lógica corretamente.
+
+**Exemplo de teste falso positivo:**
+
+```python
+def soma(a, b):
+    return a + b  # Lógica correta
+
+def test_soma():
+    resultado = soma(2, 3)
+    assert resultado  # ❌ Passa, mas não valida o valor!
+```
+
+Este teste tem cobertura 100%, mas **não valida se o resultado é 5**. Se alguém mudar para `return a - b`, o teste continua passando.
+
+### A Solução: Mutation Testing
+
+O **Mutation Testing** (Teste de Mutação) funciona assim:
+
+1. 🧬 **Mutação**: O mutmut modifica o código automaticamente (ex: `+` vira `-`, `==` vira `!=`)
+2. 🧪 **Teste**: Executa a suite de testes com o código mutado
+3. 📊 **Análise**:
+   - **Mutante Morto ✅**: Teste falhou → Teste está funcionando corretamente
+   - **Mutante Sobrevivente ❌**: Teste passou → Teste não está validando a lógica
+
+### Como Usar
+
+#### 1. Executar Mutation Testing Completo (⚠️ Demorado)
+
+```bash
+make mutation-check
+```
+
+Este comando:
+
+- Exibe aviso sobre o tempo de execução
+- Roda mutmut em todo o código (`scripts/`, `src/`)
+- Gera relatório de mutantes mortos vs. sobreviventes
+
+#### 2. Executar em Arquivo Específico (Recomendado)
+
+Para desenvolvimento diário, teste apenas o arquivo que você está trabalhando:
+
+```bash
+# Exemplo: validar apenas utils/security.py
+# Nota: mutmut usa configuração do pyproject.toml, então ajuste temporariamente
+# a seção [tool.mutmut] para paths_to_mutate = ["scripts/utils/security.py"]
+mutmut run
+
+# Ver resultados
+mutmut results
+
+# Ver detalhes de um mutante sobrevivente específico
+mutmut show 1
+```
+
+### Interpretando os Resultados
+
+**Exemplo de output:**
+
+```
+Legend for output:
+🎉 Killed mutants: The goal! Your tests caught the bug.
+⏰ Timeout: Mutant caused infinite loop (good!).
+🤔 Suspicious: Mutant caused error but test passed (investigate).
+🙁 Survived: Mutant passed all tests (FIX YOUR TESTS!).
+```
+
+**Exemplo de relatório:**
+
+```
+Survived:   5   (❌ Testes fracos - prioridade alta)
+Killed:     42  (✅ Testes funcionando)
+Timeout:    2   (✅ Testes funcionando)
+Suspicious: 1   (⚠️  Investigar)
+```
+
+### Como Corrigir Mutantes Sobreviventes
+
+1. **Identificar o mutante:**
+
+   ```bash
+   mutmut show 3
+   ```
+
+2. **Ver o código mutado:**
+
+   ```diff
+   - if status == "active":
+   + if status == "inactive":  # Mutação
+   ```
+
+3. **Adicionar/melhorar teste:**
+
+   ```python
+   def test_status_validation():
+       result = validar_status("active")
+       assert result is True  # ✅ Agora detecta a mutação
+
+       result_inativo = validar_status("inactive")
+       assert result_inativo is False  # ✅ Teste negativo
+   ```
+
+### Configuração
+
+A configuração do mutmut está em [`pyproject.toml`](../../pyproject.toml):
+
+```toml
+[tool.mutmut]
+paths_to_mutate = "scripts/,src/"
+runner = "python -m pytest"
+tests_dir = "tests/"
+backup = false
+```
+
+### Quando Usar Mutation Testing
+
+✅ **Use quando:**
+
+- Implementar lógica crítica (segurança, validações)
+- Refatorar código existente
+- Aumentar confiança na suite de testes
+- Auditar qualidade de testes legados
+
+❌ **Evite quando:**
+
+- Código trivial (getters/setters)
+- Testes ainda não escritos (escreva primeiro)
+- CI/CD diário (muito lento)
+
+### Métricas de Qualidade
+
+**Meta de Mutation Score:**
+
+- 🥇 **Excelente**: > 80% mutantes mortos
+- 🥈 **Bom**: 60-80% mutantes mortos
+- 🥉 **Aceitável**: 40-60% mutantes mortos
+- ❌ **Crítico**: < 40% mutantes mortos
+
+### Exemplo Prático
+
+**Código original:**
+
+```python
+def validar_email(email: str) -> bool:
+    return "@" in email and "." in email
+```
+
+**Mutações possíveis:**
+
+```python
+# Mutante 1: Operador lógico
+return "@" in email or "." in email  # ❌ Sobrevivente?
+
+# Mutante 2: Operador de comparação
+return "@" not in email and "." in email  # ✅ Deve morrer
+
+# Mutante 3: String literal
+return "" in email and "." in email  # ✅ Deve morrer
+```
+
+**Testes robustos:**
+
+```python
+def test_validar_email():
+    # Casos positivos
+    assert validar_email("user@example.com") is True
+
+    # Casos negativos (matam mutantes)
+    assert validar_email("user@example") is False  # Sem domínio
+    assert validar_email("userexample.com") is False  # Sem @
+    assert validar_email("user@") is False  # Incompleto
+    assert validar_email("") is False  # Vazio
+```
+
+### Referências
+
+- [Documentação Mutmut](https://mutmut.readthedocs.io/)
+- [Mutation Testing: Conceitos](https://en.wikipedia.org/wiki/Mutation_testing)
+- [Configuração do Projeto](../../pyproject.toml#L208)
+
+---
+
+**Última atualização:** 2025-12-31 (v1.3.0) - Adicionada seção Mutation Testing

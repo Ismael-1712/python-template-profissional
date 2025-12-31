@@ -4,6 +4,33 @@
 
 ### Added
 
+- **🧟 Mutation Testing (Test Quality Validation)**:
+  - **Mutmut Integration**: Detects false positive tests through systematic code mutation
+    - Automatically modifies source code (mutates) to validate if tests catch logical errors
+    - Configured in `pyproject.toml` with paths: `scripts/`, `src/`
+    - Runner: `python -m pytest` (integrates with existing test suite)
+    - New Makefile target: `make mutation-check`
+      - Interactive mode with execution time warning
+      - Example usage for single file testing provided
+    - Status: ✅ Configured and ready for on-demand execution
+  - **Test Quality Metrics**:
+    - Killed Mutants: Tests working correctly (goal)
+    - Survived Mutants: False positives requiring test improvements
+    - Timeout/Suspicious: Edge cases to investigate
+  - **Documentation**:
+    - New section in `docs/guides/testing.md`: "🧟 Mutation Testing"
+    - Explains concept: deliberate code sabotage to validate tests
+    - Provides interpretation guide for mutation reports
+    - Includes practical examples and quality metrics (target: >80% killed)
+  - **Philosophy**: Complements code coverage (100% coverage ≠ quality tests)
+    - Example: `assert result` passes but doesn't validate correctness
+    - Mutation testing ensures tests validate actual logic, not just execution
+  - **Usage Strategy**:
+    - Full project scan: `make mutation-check` (slow, for audits)
+    - Single file: `mutmut run --paths-to-mutate scripts/utils/security.py` (daily development)
+    - Not included in `make validate` to preserve CI/CD speed
+  - **Dependencies**: Added `mutmut` to `requirements/dev.in`
+
 - **🛡️ Quality Suite Consolidation - Architectural Guardrails and Code Health**:
   - **Tríade de Blindagem Arquitetural**: Three-layer validation system for architecture, dependencies, and documentation
     - **Import Linter (Architecture Layer Separation)**:

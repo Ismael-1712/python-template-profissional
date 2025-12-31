@@ -205,3 +205,12 @@ quiet = false
 whitelist-regex = []
 color = true
 omit-covered-files = false
+
+# Configuração do Mutmut (Mutation Testing)
+[tool.mutmut]
+paths_to_mutate = ["scripts", "src"]
+runner = "python -m pytest"
+tests_dir = "tests"
+backup = false
+# Modo de sobrevivência: apenas erros de teste são considerados mutantes mortos
+# (mutantes que causam syntax errors são ignorados automaticamente)
