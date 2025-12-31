@@ -1,10 +1,12 @@
 """Tests for CI integrity ensuring workflows match CLI commands."""
 
 import re
-import subprocess  # nosec B404
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
+
+from scripts.cortex.cli import app
 
 
 class TestCIIntegrity:
@@ -23,12 +25,13 @@ class TestCIIntegrity:
         """Valida comandos do Cortex nos workflows.
 
         Varre arquivos .yml, extrai 'scripts.cortex <cmd>' e testa
-        se respondem ao --help.
+        se respondem ao --help usando CliRunner (in-memory execution).
         """
         if not self.WORKFLOWS_DIR.exists():
             pytest.skip("Diretório de workflows não encontrado")
 
         cortex_commands = []
+        runner = CliRunner()
 
         # 1. Extrair comandos dos arquivos YAML
         # Padrão: python -m scripts.cortex <comando>
@@ -44,21 +47,17 @@ class TestCIIntegrity:
                 if not cmd.startswith("-"):
                     cortex_commands.append((workflow_file.name, cmd))
 
-        # 2. Validar cada comando extraído
+        # 2. Validar cada comando extraído usando CliRunner
         for source_file, command in cortex_commands:
-            # Executa o comando com --help para verificar existência
-            # nosec B603, B607: Uso controlado de subprocess para testes internos
-            result = subprocess.run(  # nosec B603
-                ["python", "-m", "scripts.cortex", command, "--help"],
-                capture_output=True,
-                text=True,
-            )
+            # Executa o comando com --help em memória (sem subprocess)
+            result = runner.invoke(app, [command, "--help"])
 
-            if result.returncode != 0:
+            if result.exit_code != 0:
                 pytest.fail(
                     f"\n❌ ERRO CRÍTICO DE INTEGRIDADE DE CI:\n"
                     f"O workflow '{source_file}' usa comando INEXISTENTE: "
                     f"'{command}'.\n"
                     f"Isso ocorre ao renomear comandos no CLI sem atualizar a CI.\n\n"
-                    f"Saída do erro:\n{result.stderr}\n"
+                    f"Saída do erro:\n{result.output}\n"
+                    f"Exception (if any): {result.exception}\n",
                 )

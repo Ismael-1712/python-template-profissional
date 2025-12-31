@@ -1,16 +1,12 @@
 ---
-id: knowledge-health-report
-type: history
-status: generated
-author: CORTEX System
-date: '2025-12-31'
-generated_at: 2025-12-31T15:14:10.412608+00:00
+generated_at: 2025-12-31T16:55:33.706180+00:00
 health_score: 20.0
+status: critical
 ---
 
 # 📊 Knowledge Graph Health Report
 
-**Generated:** 2025-12-31 15:14:10 UTC
+**Generated:** 2025-12-31 16:55:33 UTC
 **Overall Health Score:** 20.0/100 (🔴 Critical)
 
 ---
@@ -87,12 +83,12 @@ Documents with no outgoing links:
 
 ### Medium Priority
 
-1. ℹ️  Add "See Also" sections to dead end nodes
-2. ℹ️  Update top hubs to ensure accuracy
+3. ℹ️  Add "See Also" sections to dead end nodes
+4. ℹ️  Update top hubs to ensure accuracy
 
 ### Low Priority
 
-1. 📊 Monitor connectivity score (target: >90%)
+5. 📊 Monitor connectivity score (target: >90%)
 
 ---
 
