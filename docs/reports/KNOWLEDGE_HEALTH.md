@@ -1,24 +1,17 @@
 ---
-id: rep-knowledge-health
-type: reference
-title: Knowledge Graph Health Report
-status: active
+id: knowledge-health-report
+type: history
+status: generated
 author: CORTEX System
-date: 2025-12-15
-version: 1.0.0
-tags: [report, health, knowledge-graph]
----
-
----
-generated_at: 2025-12-15T15:45:13.989824+00:00
-health_score: 60.0
-status: critical
+date: '2025-12-31'
+generated_at: 2025-12-31T15:14:10.412608+00:00
+health_score: 20.0
 ---
 
 # 📊 Knowledge Graph Health Report
 
-**Generated:** 2025-12-15 15:45:13 UTC
-**Overall Health Score:** 60.0/100 (🔴 Critical)
+**Generated:** 2025-12-31 15:14:10 UTC
+**Overall Health Score:** 20.0/100 (🔴 Critical)
 
 ---
 
@@ -26,20 +19,39 @@ status: critical
 
 | Metric                  | Value    | Status |
 |-------------------------|----------|--------|
-| Total Nodes             | 1       | -      |
-| Total Links             | 0      | -      |
-| Valid Links             | 0      | 🟢 |
-| Broken Links            | 0        | 🟢 |
-| Connectivity Score      | 0.0%    | ⚠️ |
-| Link Health Score       | 100.0%    | 🟢 |
-| **Overall Health Score**| **60.0**| 🔴 |
+| Total Nodes             | 2       | -      |
+| Total Links             | 11      | -      |
+| Valid Links             | 0      | ⚠️ |
+| Broken Links            | 11        | 🔴 |
+| Connectivity Score      | 50.0%    | ⚠️ |
+| Link Health Score       | 0.0%    | ⚠️ |
+| **Overall Health Score**| **20.0**| 🔴 |
 
 ---
 
 ## 🔴 Critical Issues
 
+- 🔴 11 broken links detected
 - 🔴 100.0% orphan nodes (threshold: 30%)
-- 🔴 Health score 60.0 below threshold (70)
+- 🔴 Health score 20.0 below threshold (70)
+
+### Broken Links (11 total)
+
+| Source      | Target       | Line | Context                           |
+|-------------|--------------|------|-----------------------------------|
+| operational-war-diary | `../guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md#armadilha-do-hook-obsoleto` | 98 | - [DEV_ENVIRONMENT_TROUBLESHOO... |
+| operational-war-diary | `../guides/TESTING_STRATEGY_MOCKS.md` | 181 | - 📝 **Documentado:** Adicionad... |
+| operational-war-diary | `../guides/TESTING_STRATEGY_MOCKS.md#filesystem-operations` | 190 | - [TESTING_STRATEGY_MOCKS.md -... |
+| operational-war-diary | `../architecture/ROADMAP_DELTA_AUDIT.md#p15` | 293 | - Roadmap: [P15 - Adoção de Ji... |
+| operational-war-diary | `../../scripts/audit_dashboard/exporter_html.py` | 294 | - Código: [exporter_html.py](.... |
+| operational-war-diary | `../architecture/ROADMAP_DELTA_AUDIT.md#p13.1` | 389 | - Roadmap: [P13.1 - Regulariza... |
+| operational-war-diary | `../architecture/SECURITY_STRATEGY.md#subprocess-execution` | 390 | - [SECURITY_STRATEGY.md - Subp... |
+| operational-war-diary | `../architecture/ROADMAP_DELTA_AUDIT.md#p13` | 442 | - Roadmap: [P13 - Saneamento d... |
+| operational-war-diary | `../history/SRE_TECHNICAL_DEBT_CATALOG.md` | 566 | - [SRE Technical Debt Catalog]... |
+| operational-war-diary | `../guides/DEV_ENVIRONMENT_TROUBLESHOOTING.md` | 567 | - [Dev Environment Troubleshoo... |
+| ... | ... | ... | ... (1 more) |
+
+**Recommendation:** Fix these links immediately or mark them as external.
 
 ---
 
@@ -47,15 +59,16 @@ status: critical
 
 - ℹ️  1 dead end nodes (can be enriched)
 
-### Orphan Nodes (1 total - 100.0%)
+### Orphan Nodes (2 total - 100.0%)
 
 Documents with no incoming links:
 
 - `kno-001`
+- `operational-war-diary`
 
 **Recommendation:** Add links from main navigation or index documents.
 
-### Dead End Nodes (1 total - 100.0%)
+### Dead End Nodes (1 total - 50.0%)
 
 Documents with no outgoing links:
 
@@ -69,16 +82,17 @@ Documents with no outgoing links:
 
 ### High Priority
 
+1. ✅ Fix 11 broken links (see table above)
 2. ⚠️  Review orphan nodes and add navigation links
 
 ### Medium Priority
 
-3. ℹ️  Add "See Also" sections to dead end nodes
-4. ℹ️  Update top hubs to ensure accuracy
+1. ℹ️  Add "See Also" sections to dead end nodes
+2. ℹ️  Update top hubs to ensure accuracy
 
 ### Low Priority
 
-5. 📊 Monitor connectivity score (target: >90%)
+1. 📊 Monitor connectivity score (target: >90%)
 
 ---
 
