@@ -76,3 +76,12 @@ repos:
         types: [markdown]
         pass_filenames: false
         description: "Automatically updates the vector store when documentation changes."
+  - repo: local
+    hooks:
+      - id: governance-policy-strict
+        name: CORTEX - Governança Estrita (Pytest)
+        entry: python -m pytest tests/test_governance_policies.py
+        language: system
+        files: ^docs/.*\.md$
+        pass_filenames: false
+        always_run: true
