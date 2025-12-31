@@ -88,3 +88,4 @@ __pycache__/
 project_structure.txt
 .mypy_cache/
 scripts/utils/*.bak
+docs/reports/KNOWLEDGE_HEALTH.md
