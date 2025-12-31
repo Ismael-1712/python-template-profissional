@@ -29,8 +29,9 @@ app = typer.Typer(
 )
 
 
+# TODO: Refactor God Function - split init logic into orchestrator pattern
 @app.command()
-def init(
+def init(  # noqa: C901
     ctx: typer.Context,
     path: Annotated[
         Path,

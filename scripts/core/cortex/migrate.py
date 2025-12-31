@@ -261,6 +261,8 @@ class DocumentMigrator:
 
         return final_content
 
+    # TODO: Refactor God Function - extract validation, generation,
+    # and writing into separate methods
     def migrate_file(
         self,
         file_path: Path,

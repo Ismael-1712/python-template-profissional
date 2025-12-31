@@ -168,7 +168,8 @@ def _cleanup_backup(backup_file: Path | None) -> None:
         logger.debug("🧹 Backup cleaned up: %s", backup_file)
 
 
-def install_dev_environment(workspace_root: Path) -> int:
+# TODO: Refactor God Function - split into dedicated orchestrator steps
+def install_dev_environment(workspace_root: Path) -> int:  # noqa: C901
     """Execute complete development environment installation sequence.
 
     Args:

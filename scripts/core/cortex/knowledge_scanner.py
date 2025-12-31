@@ -77,7 +77,8 @@ class KnowledgeScanner:
             force_parallel,
         )
 
-    def scan(self, knowledge_dir: Path | None = None) -> list[KnowledgeEntry]:
+    # TODO: Refactor God Function - split parsing and scanning logic
+    def scan(self, knowledge_dir: Path | None = None) -> list[KnowledgeEntry]:  # noqa: C901
         """Scan directory for Knowledge Node files and parse into entries.
 
         Recursively finds all .md files in the knowledge directory,

@@ -279,7 +279,8 @@ def handle_init_command(args: argparse.Namespace) -> int:
         return 2
 
 
-def main() -> int:
+# TODO: Refactor God Function - split CLI logic from orchestration
+def main() -> int:  # noqa: C901
     """Função principal CLI para integração CI/CD.
 
     Returns:

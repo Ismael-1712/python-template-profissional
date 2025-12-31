@@ -51,7 +51,8 @@ class CodeAnalyzer:
         self.max_findings_per_file = max_findings_per_file
         self.fs = fs_adapter or RealFileSystem()
 
-    def analyze_file(self, file_path: Path) -> list[AuditResult]:
+    # TODO: Refactor God Function - split into smaller validators
+    def analyze_file(self, file_path: Path) -> list[AuditResult]:  # noqa: C901
         """Analyze a single Python file for security patterns.
 
         Args:

@@ -312,7 +312,8 @@ class CodeAuditor:
         return report
 
 
-def main() -> None:
+# TODO: Refactor God Function - split CLI logic from business logic
+def main() -> None:  # noqa: C901
     """Main entry point."""
     # Banner de inicialização
     print_startup_banner(

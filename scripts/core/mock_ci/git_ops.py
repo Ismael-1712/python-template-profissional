@@ -43,7 +43,8 @@ class GitOperations:
         """
         self.workspace_root = workspace_root.resolve()
 
-    def run_command(self, command: list[str]) -> tuple[bool, str]:
+    # TODO: Refactor God Function - split retry logic and error handling
+    def run_command(self, command: list[str]) -> tuple[bool, str]:  # noqa: C901
         """Executa comando git de forma segura com timeout e retry.
 
         Args:

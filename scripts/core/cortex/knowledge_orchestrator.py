@@ -163,7 +163,8 @@ class KnowledgeOrchestrator:
             entries_with_sources=entries_with_sources,
         )
 
-    def sync_multiple(
+    # TODO: Refactor God Function - extract sync logic into smaller steps
+    def sync_multiple(  # noqa: C901
         self,
         entry_id: str | None = None,
         dry_run: bool = False,

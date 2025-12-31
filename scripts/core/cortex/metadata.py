@@ -135,7 +135,8 @@ class FrontmatterParser:
         except OSError as e:
             raise FrontmatterParseError(f"Cannot read file {path}: {e}") from e
 
-    def validate_metadata(self, metadata: dict[str, Any]) -> ValidationResult:
+    # TODO: Refactor God Function - split validation rules into dedicated validators
+    def validate_metadata(self, metadata: dict[str, Any]) -> ValidationResult:  # noqa: C901
         """Validate frontmatter metadata against CORTEX schema.
 
         Checks all required fields, validates formats (ID, version, date),

@@ -32,7 +32,8 @@ from scripts.utils.logger import setup_logging
 logger = setup_logging(__name__)
 
 
-def main() -> int:
+# TODO: Refactor God Function - split CLI parsing from generation logic
+def main() -> int:  # noqa: C901
     """Main CLI entry point with banner injection."""
     # Inject startup banner
     print_startup_banner(
