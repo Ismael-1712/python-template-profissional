@@ -114,11 +114,9 @@ def init(
         logger.info(f"Initializing frontmatter for: {path}")
 
         # Check if file is a markdown file
+        ui = UIPresenter()
         if path.suffix.lower() not in [".md", ".markdown"]:
-            typer.secho(
-                f"⚠️  Warning: File {path} is not a Markdown file (.md)",
-                fg=typer.colors.YELLOW,
-            )
+            ui.display_init_file_warning(path)
             if not typer.confirm("Continue anyway?"):
                 raise typer.Abort()
 
@@ -133,10 +131,7 @@ def init(
             try:
                 parser.parse_file(path)
                 # File has frontmatter, prompt user
-                typer.secho(
-                    f"⚠️  File {path.name} already has YAML frontmatter.",
-                    fg=typer.colors.YELLOW,
-                )
+                ui.display_init_existing_frontmatter_warning(path.name)
 
                 # Show existing frontmatter preview
                 with open(path, encoding="utf-8") as f:
@@ -149,7 +144,6 @@ def init(
                         if line.strip() == "---":
                             break
                         existing_fm_lines.append(line)
-                    ui = UIPresenter()
                     ui.display_init_preview(
                         existing_frontmatter="\n".join(existing_fm_lines),
                     )
@@ -173,11 +167,6 @@ def init(
 
         # Handle result based on status
         if result.status == "success":
-            typer.secho(
-                f"✅ Success! Added frontmatter to {path}",
-                fg=typer.colors.GREEN,
-            )
-            typer.echo()
             # Show the new frontmatter from result
             import yaml
 
@@ -187,20 +176,15 @@ def init(
                 allow_unicode=True,
                 sort_keys=False,
             )
-            ui = UIPresenter()
-            ui.display_init_preview(generated_frontmatter=frontmatter_yaml)
+            ui.display_init_success(path, frontmatter_yaml)
             logger.info(f"Successfully added frontmatter to {path}")
 
         elif result.status == "skipped":
-            typer.secho(
-                f"⚠️  File {path.name} already has frontmatter. "
-                "Use --force to overwrite.",
-                fg=typer.colors.YELLOW,
-            )
+            ui.display_init_skip_warning(path.name)
             logger.info(f"Skipped {path} (already has frontmatter)")
 
         elif result.status == "error":
-            typer.secho(f"❌ Error: {result.error}", fg=typer.colors.RED, err=True)
+            ui.show_error(f"Error: {result.error}")
             logger.error(f"Error initializing {path}: {result.error}")
             raise typer.Exit(code=1)
 
@@ -209,7 +193,8 @@ def init(
 
     except Exception as e:
         logger.error(f"Error initializing frontmatter: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -300,7 +285,8 @@ def migrate(
 
     except Exception as e:
         logger.exception("Error during migration")
-        typer.secho(f"❌ Migration failed: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Migration failed: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -407,10 +393,8 @@ def audit(
 
             # Show report saved message
             report_path = kg_result.output_path.relative_to(workspace_root)
-            typer.secho(
-                f"\n📄 Report saved to: {report_path}",
-                fg=typer.colors.CYAN,
-            )
+            ui.show_info(f"📄 Report saved to: {report_path}")
+            ui.show_blank_line()
 
             # Determine Knowledge Graph validation status
             if strict and kg_result.broken_links > 0:
@@ -437,10 +421,12 @@ def audit(
 
             # Only show header if we didn't show Knowledge Graph header
             if not result.knowledge_result:
-                typer.echo(
-                    f"\n📋 Found {len(meta_result.files_audited)} "
-                    f"Markdown file(s) to audit\n",
+                ui.show_blank_line()
+                ui.show_info(
+                    f"📋 Found {len(meta_result.files_audited)} "
+                    f"Markdown file(s) to audit",
                 )
+                ui.show_blank_line()
 
             ui.display_audit_results(meta_result.report)
 
@@ -458,24 +444,19 @@ def audit(
         raise
 
     except FileNotFoundError as e:
-        typer.secho(
-            f"❌ Error: {e}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
     except ValueError as e:
-        typer.secho(
-            f"❌ Error: {e}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
     except Exception as e:
         logger.error(f"Error during audit: {e}", exc_info=True)
-        typer.secho(f"❌ Audit failed: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Audit failed: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -503,8 +484,8 @@ def setup_hooks(ctx: typer.Context) -> None:
     project_root = ctx.obj["project_root"]
 
     logger.info("Installing Git hooks for CORTEX...")
-    typer.echo("🔧 Installing Git hooks for CORTEX...")
-    typer.echo()
+    ui = UIPresenter()
+    ui.display_hooks_installing()
 
     try:
         # Use HooksOrchestrator to handle all hook installation logic
@@ -512,24 +493,15 @@ def setup_hooks(ctx: typer.Context) -> None:
         installed_hooks = orchestrator.install_cortex_hooks()
 
         # Display results
-        ui = UIPresenter()
         ui.display_hooks_installation(installed_hooks)
 
     except GitDirectoryNotFoundError as e:
-        typer.secho(
-            "❌ Error: .git directory not found. Are you in a Git repository?",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui.display_hooks_git_error()
         logger.error("Git directory not found in project root")
         raise typer.Exit(code=1) from e
 
     except HookInstallationError as e:
-        typer.secho(
-            f"❌ Error installing hooks: {e}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui.show_error(f"Error installing hooks: {e}")
         logger.error(f"Hook installation failed: {e}", exc_info=True)
         raise typer.Exit(code=1) from e
 
@@ -579,23 +551,9 @@ def knowledge_scan(
         workspace_root = Path.cwd()
         logger.info("Scanning Knowledge Base...")
 
-        typer.secho("\n🧠 Knowledge Base Scanner", bold=True, fg=typer.colors.CYAN)
-        typer.echo(f"Workspace: {workspace_root}")
-        typer.echo("Knowledge Directory: docs/knowledge/\n")
-
-        # Show mode indicator
-        if parallel:
-            typer.secho(
-                "⚡ Mode: EXPERIMENTAL PARALLEL",
-                fg=typer.colors.YELLOW,
-                bold=True,
-            )
-            typer.secho(
-                "   (GIL may impact performance on some systems)\n",
-                fg=typer.colors.YELLOW,
-            )
-        else:
-            typer.echo("📋 Mode: Standard Sequential\n")
+        ui = UIPresenter()
+        mode = "EXPERIMENTAL PARALLEL" if parallel else "Standard Sequential"
+        ui.display_scan_header(workspace_root, mode)
 
         # Instantiate orchestrator and scan
         orchestrator = KnowledgeOrchestrator(
@@ -606,34 +564,21 @@ def knowledge_scan(
 
         # Display results
         if not result.entries:
-            typer.secho(
-                "⚠️  No knowledge entries found",
-                fg=typer.colors.YELLOW,
-            )
-            typer.echo(
-                "\nTip: Create knowledge entries in docs/knowledge/ "
-                "with valid YAML frontmatter.",
-            )
+            ui.display_scan_empty_warning()
             return
 
         # Success summary
-        entry_word = "entry" if result.total_count == 1 else "entries"
-        typer.secho(
-            f"✅ Found {result.total_count} knowledge {entry_word}",
-            fg=typer.colors.GREEN,
-            bold=True,
-        )
-        typer.echo()
+        ui.display_scan_success(result.total_count)
 
         # List entries using UIPresenter
-        ui = UIPresenter()
         ui.display_knowledge_entries(result.entries, verbose=verbose)
 
         logger.info(f"Knowledge scan completed: {result.total_count} entries found")
 
     except Exception as e:
         logger.error(f"Error scanning knowledge base: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -692,7 +637,8 @@ def knowledge_sync(
         raise
     except Exception as e:
         logger.error(f"Error during knowledge sync: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -765,7 +711,8 @@ def guardian_probe(
         raise
     except Exception as e:
         logger.error(f"Error during hallucination probe: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -818,22 +765,18 @@ def config_manager(
         # Resolve path relative to project root
         config_path = project_root / path if not path.is_absolute() else path
 
+        ui = UIPresenter()
         if not config_path.exists():
-            typer.secho(
-                f"❌ Configuration file not found: {config_path}",
-                fg=typer.colors.RED,
-                err=True,
-            )
+            ui.show_error(f"Configuration file not found: {config_path}")
             raise typer.Exit(code=1)
 
         # Use ConfigOrchestrator to load and validate configuration
         logger.info(f"Reading configuration from: {config_path}")
         orchestrator = ConfigOrchestrator(project_root=project_root)
-        ui = UIPresenter()
 
         # Validate YAML syntax and required keys
         if validate:
-            typer.echo("🔍 Validating configuration file...")
+            ui.show_info("🔍 Validating configuration file...")
             try:
                 required_keys = ["scan_paths", "file_patterns", "exclude_paths"]
                 config_data = orchestrator.load_config_with_defaults(
@@ -842,11 +785,7 @@ def config_manager(
                 )
                 ui.display_validation_success()
             except ConfigValidationError as e:
-                typer.secho(
-                    f"❌ Validation failed: {e}",
-                    fg=typer.colors.RED,
-                    err=True,
-                )
+                ui.show_error(f"Validation failed: {e}")
                 raise typer.Exit(code=1) from e
 
         # Display configuration
@@ -855,10 +794,7 @@ def config_manager(
             config_data = orchestrator.load_yaml(config_path)
 
             if config_data is None:
-                typer.secho(
-                    "⚠️  Configuration file is empty",
-                    fg=typer.colors.YELLOW,
-                )
+                ui.show_warning("Configuration file is empty")
                 raise typer.Exit(code=1)
 
             ui.display_config(config_data, config_path)
@@ -869,23 +805,15 @@ def config_manager(
 
     except ConfigLoadError as e:
         logger.error(f"Configuration load error: {e}", exc_info=True)
-        typer.secho(
-            f"❌ Error loading configuration: {e}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui.show_error(f"Error loading configuration: {e}")
         raise typer.Exit(code=1) from e
     except OSError as e:
         logger.error(f"File error: {e}", exc_info=True)
-        typer.secho(
-            f"❌ Error reading file: {e}",
-            fg=typer.colors.RED,
-            err=True,
-        )
+        ui.show_error(f"Error reading file: {e}")
         raise typer.Exit(code=1) from e
     except Exception as e:
         logger.error(f"Error managing configuration: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -1027,7 +955,8 @@ def project_map(
 
     except Exception as e:
         logger.error(f"Error generating context map: {e}", exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -1097,9 +1026,8 @@ def guardian_check(
     try:
         from scripts.cortex.core.guardian_orchestrator import GuardianOrchestrator
 
-        typer.secho("\n🔍 Visibility Guardian - Orphan Detection", bold=True)
-        typer.echo(f"Scanning: {path}")
-        typer.echo(f"Documentation: {docs_path}\n")
+        ui = UIPresenter()
+        ui.display_guardian_header(path, docs_path)
 
         # Execute orphan detection
         orchestrator = GuardianOrchestrator()
@@ -1107,69 +1035,36 @@ def guardian_check(
 
         # Display scan errors if any
         if result.scan_errors:
-            typer.secho(
-                "⚠️  Some files had errors during scanning:",
-                fg=typer.colors.YELLOW,
-            )
-            for error in result.scan_errors:
-                typer.echo(f"   • {error}")
+            ui.display_guardian_scan_errors(result.scan_errors)
 
         # Display findings
-        findings_msg = (
-            f"   Found {result.total_findings} configurations in "
-            f"{result.files_scanned} files"
-        )
-        typer.echo(findings_msg)
+        ui.display_guardian_findings(result.total_findings, result.files_scanned)
 
         if result.total_findings == 0:
-            typer.secho(
-                "✅ No configurations found - nothing to check!",
-                fg=typer.colors.GREEN,
-            )
+            ui.display_guardian_no_configs()
             return
 
         # Display results
-        typer.echo("\n" + "=" * 70)
-        typer.secho("📊 RESULTS", bold=True)
-        typer.echo("=" * 70)
+        ui.display_guardian_results_header()
 
         if not result.has_orphans:
-            typer.secho(
-                "\n✅ SUCCESS: All configurations are documented!",
-                fg=typer.colors.GREEN,
-                bold=True,
-            )
-            msg = f"   {len(result.documented)} configurations found in documentation"
-            typer.echo(msg)
+            ui.display_guardian_success(len(result.documented))
         else:
-            orphan_msg = (
-                f"\n❌ ORPHANS DETECTED: {len(result.orphans)} "
-                "undocumented configurations"
-            )
-            typer.secho(
-                orphan_msg,
-                fg=typer.colors.RED,
-                bold=True,
-            )
-            typer.echo()
+            ui.display_guardian_orphans_header(len(result.orphans))
 
             # Display orphans using UIPresenter
-            ui = UIPresenter()
             ui.display_guardian_orphans(result.orphans, result.documented)
 
             if fail_on_error:
-                typer.echo()
-                typer.secho(
-                    "💥 Exiting with error (--fail-on-error)",
-                    fg=typer.colors.RED,
-                )
+                ui.display_guardian_fail_exit()
                 raise typer.Exit(code=1)
 
-        typer.echo()
+        ui.show_blank_line()
 
     except Exception as e:
         logger.error("Error during guardian check: %s", e, exc_info=True)
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 
@@ -1240,11 +1135,8 @@ def generate_docs(
             target_enum = target_enum_map[target]
 
             # Print header
-            typer.echo()
             mode = "CHECK MODE" if check else "GENERATION MODE"
-            typer.secho(f"🔨 CORTEX Dynamic Document Generator ({mode})", bold=True)
-            typer.echo("=" * 70)
-            typer.echo()
+            ui.display_generate_mode_header(mode)
 
             # === DRIFT CHECK MODE ===
             if check:
@@ -1257,27 +1149,14 @@ def generate_docs(
                             drift_result.target.upper(),
                         )
 
-                    typer.echo("=" * 70)
                     has_drift = any(r.has_drift for r in drift_results)
 
                     if has_drift:
-                        typer.secho(
-                            "💥 DRIFT DETECTED - Documents are out of sync!",
-                            fg=typer.colors.RED,
-                            bold=True,
-                        )
-                        typer.echo()
-                        typer.echo("💡 To fix, run:")
-                        typer.echo(f"   cortex generate {target}")
-                        typer.echo()
+                        ui.display_generate_drift_fix_hint(target)
                         logger.warning("Drift detected in generated documents")
                         raise typer.Exit(code=1)
 
-                    typer.secho(
-                        "✅ All documents are in sync!",
-                        fg=typer.colors.GREEN,
-                        bold=True,
-                    )
+                    ui.show_success("All documents are in sync!", bold=True)
                 else:
                     drift_result = orchestrator.check_drift(target_enum)
                     ui.display_drift_result(
@@ -1286,22 +1165,12 @@ def generate_docs(
                     )
 
                     if drift_result.has_drift:
-                        typer.echo("=" * 70)
-                        typer.secho(
-                            "💥 Document is out of sync!",
-                            fg=typer.colors.RED,
-                            bold=True,
-                        )
-                        typer.echo()
-                        typer.echo("💡 To fix, run:")
-                        typer.echo(f"   cortex generate {target}")
-                        typer.echo()
+                        ui.display_generate_drift_fix_hint(target)
                         logger.warning(f"Drift detected in {target}")
                         raise typer.Exit(code=1)
 
-                    typer.secho(
-                        f"✅ {drift_result.output_path.name} is in sync",
-                        fg=typer.colors.GREEN,
+                    ui.show_success(
+                        f"{drift_result.output_path.name} is in sync",
                         bold=True,
                     )
 
@@ -1312,25 +1181,15 @@ def generate_docs(
                 for gen_result in batch_result.results:
                     ui.display_generation_result(gen_result, dry_run)
 
-                typer.echo()
-                typer.echo("=" * 70)
+                ui.display_generate_batch_summary(
+                    batch_result.success,
+                    batch_result.success_count,
+                    batch_result.error_count,
+                    batch_result.total_bytes,
+                    dry_run,
+                )
 
-                if batch_result.success:
-                    mode_text = "Dry run completed" if dry_run else "SUCCESS"
-                    typer.secho(
-                        f"✅ {mode_text} - {batch_result.success_count} document(s)!",
-                        fg=typer.colors.GREEN,
-                        bold=True,
-                    )
-                    typer.echo(f"   Total size: {batch_result.total_bytes} bytes")
-                else:
-                    typer.secho(
-                        f"⚠️  Completed with errors: "
-                        f"{batch_result.success_count} succeeded, "
-                        f"{batch_result.error_count} failed",
-                        fg=typer.colors.YELLOW,
-                        bold=True,
-                    )
+                if not batch_result.success:
                     raise typer.Exit(code=1)
 
             else:
@@ -1341,67 +1200,45 @@ def generate_docs(
                     dry_run=dry_run,
                 )
 
-                typer.secho(
-                    f"{'🎨' if not dry_run else '📄'} Processing {target.upper()}...",
-                    fg=typer.colors.CYAN,
-                )
-                typer.echo()
+                ui.display_generate_processing(target, dry_run)
 
                 if gen_result.success:
                     if dry_run:
-                        typer.secho("📄 DRY RUN - Preview (first 30 lines):", bold=True)
-                        typer.echo("=" * 70)
-                        preview_lines = gen_result.content.split("\n")[:30]
-                        for line in preview_lines:
-                            typer.echo(line)
-                        typer.echo("...")
-                        typer.echo("=" * 70)
-                        typer.secho(
-                            f"✅ Would write to: {gen_result.output_path}",
-                            fg=typer.colors.YELLOW,
+                        ui.display_generate_dry_run_preview(gen_result.content)
+                        ui.display_generate_dry_run_result(
+                            gen_result.output_path,
+                            gen_result.content_size,
                         )
-                        typer.echo(f"   Size: {gen_result.content_size} bytes")
                     else:
-                        typer.secho(
-                            f"✅ Generated: {gen_result.output_path}",
-                            fg=typer.colors.GREEN,
-                            bold=True,
+                        ui.display_generate_success_single(
+                            gen_result.output_path,
+                            gen_result.content_size,
+                            gen_result.template_name,
                         )
-                        typer.echo(f"   Size: {gen_result.content_size} bytes")
-                        typer.echo(f"   Template: {gen_result.template_name}")
 
-                    typer.echo()
-                    typer.echo("=" * 70)
-                    typer.secho(
-                        "✅ Generation completed successfully!",
-                        fg=typer.colors.GREEN,
-                        bold=True,
-                    )
+                    ui.display_generate_final_success()
                 else:
-                    typer.secho(
-                        f"❌ Generation failed: {gen_result.error_message}",
-                        fg=typer.colors.RED,
+                    ui.show_error(
+                        f"Generation failed: {gen_result.error_message}",
                         bold=True,
                     )
                     raise typer.Exit(code=1)
 
-            typer.echo()
+            ui.show_blank_line()
 
     except typer.Exit:
         raise
 
     except FileNotFoundError as e:
-        typer.secho(f"❌ Missing file: {e}", fg=typer.colors.RED, err=True)
-        typer.echo()
-        typer.echo("💡 Tip: Ensure the following files exist:")
-        typer.echo("   • pyproject.toml")
-        typer.echo("   • docs/templates/[template_name].jinja")
-        typer.echo("   • .cortex/context.json (run 'cortex map' first)")
+        ui = UIPresenter()
+        ui.show_error(f"Missing file: {e}")
+        ui.display_generate_missing_file_tips()
         raise typer.Exit(code=1) from e
 
     except Exception as e:
         logger.exception("Error generating documents")
-        typer.secho(f"❌ Error: {e}", fg=typer.colors.RED, err=True)
+        ui = UIPresenter()
+        ui.show_error(f"Error: {e}")
         raise typer.Exit(code=1) from e
 
 

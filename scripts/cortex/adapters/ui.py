@@ -63,6 +63,24 @@ class UIPresenter:
         typer.echo(message)
 
     @staticmethod
+    def show_blank_line() -> None:
+        """Display a blank line."""
+        typer.echo()
+
+    @staticmethod
+    def show_bold(message: str, color: str | None = None) -> None:
+        """Display bold message with optional color.
+
+        Args:
+            message: Message to display.
+            color: Optional typer.colors constant (e.g., typer.colors.CYAN).
+        """
+        if color:
+            typer.secho(message, bold=True, fg=color)
+        else:
+            typer.secho(message, bold=True)
+
+    @staticmethod
     def show_header(title: str, width: int = 70) -> None:
         """Display a formatted header."""
         typer.echo("\n" + "=" * width)
@@ -900,3 +918,349 @@ class UIPresenter:
                 f"   - Check that the entry has status: active\n"
                 f"   - Run 'cortex knowledge-scan' to see all entries",
             )
+
+    @staticmethod
+    def display_scan_header(workspace: Path, mode: str = "Sequential") -> None:
+        """Display header for knowledge scan operation.
+
+        Args:
+            workspace: Current workspace path.
+            mode: Scan mode (Sequential or EXPERIMENTAL PARALLEL).
+        """
+        typer.secho("\n🧠 Knowledge Base Scanner", bold=True, fg=typer.colors.CYAN)
+        typer.echo(f"Workspace: {workspace}")
+        typer.echo("Knowledge Directory: docs/knowledge/")
+        UIPresenter.show_blank_line()
+
+        if "PARALLEL" in mode.upper():
+            typer.secho(
+                "⚡ Mode: EXPERIMENTAL PARALLEL",
+                fg=typer.colors.YELLOW,
+                bold=True,
+            )
+            typer.secho(
+                "   (GIL may impact performance on some systems)",
+                fg=typer.colors.YELLOW,
+            )
+            UIPresenter.show_blank_line()
+        else:
+            typer.echo(f"📋 Mode: {mode}")
+            UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_scan_empty_warning() -> None:
+        """Display warning when no knowledge entries are found."""
+        UIPresenter.show_warning("No knowledge entries found")
+        typer.echo(
+            "\nTip: Create knowledge entries in docs/knowledge/ "
+            "with valid YAML frontmatter.",
+        )
+
+    @staticmethod
+    def display_scan_success(total_count: int) -> None:
+        """Display success message with entry count.
+
+        Args:
+            total_count: Number of entries found.
+        """
+        entry_word = "entry" if total_count == 1 else "entries"
+        UIPresenter.show_success(
+            f"Found {total_count} knowledge {entry_word}",
+            bold=True,
+        )
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_guardian_header(scan_path: Path, docs_path: Path) -> None:
+        """Display header for Guardian orphan detection.
+
+        Args:
+            scan_path: Path being scanned.
+            docs_path: Documentation path.
+        """
+        typer.secho("\n🔍 Visibility Guardian - Orphan Detection", bold=True)
+        typer.echo(f"Scanning: {scan_path}")
+        typer.echo(f"Documentation: {docs_path}\n")
+
+    @staticmethod
+    def display_guardian_scan_errors(scan_errors: list[str]) -> None:
+        """Display scan errors from Guardian.
+
+        Args:
+            scan_errors: List of error messages.
+        """
+        UIPresenter.show_warning("Some files had errors during scanning:")
+        for error in scan_errors:
+            typer.echo(f"   • {error}")
+
+    @staticmethod
+    def display_guardian_findings(total_findings: int, files_scanned: int) -> None:
+        """Display Guardian scan findings summary.
+
+        Args:
+            total_findings: Total configurations found.
+            files_scanned: Number of files scanned.
+        """
+        findings_msg = (
+            f"   Found {total_findings} configurations in {files_scanned} files"
+        )
+        typer.echo(findings_msg)
+
+    @staticmethod
+    def display_guardian_no_configs() -> None:
+        """Display message when no configurations found."""
+        UIPresenter.show_success("No configurations found - nothing to check!")
+
+    @staticmethod
+    def display_guardian_results_header() -> None:
+        """Display results header for Guardian."""
+        typer.echo("\n" + "=" * 70)
+        typer.secho("📊 RESULTS", bold=True)
+        typer.echo("=" * 70)
+
+    @staticmethod
+    def display_guardian_success(documented_count: int) -> None:
+        """Display success message for Guardian when all configs are documented.
+
+        Args:
+            documented_count: Number of documented configurations.
+        """
+        typer.secho(
+            "\n✅ SUCCESS: All configurations are documented!",
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+        msg = f"   {documented_count} configurations found in documentation"
+        typer.echo(msg)
+
+    @staticmethod
+    def display_guardian_orphans_header(orphan_count: int) -> None:
+        """Display header when orphans are detected.
+
+        Args:
+            orphan_count: Number of orphaned configurations.
+        """
+        orphan_msg = (
+            f"\n❌ ORPHANS DETECTED: {orphan_count} undocumented configurations"
+        )
+        typer.secho(
+            orphan_msg,
+            fg=typer.colors.RED,
+            bold=True,
+        )
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_guardian_fail_exit() -> None:
+        """Display exit message for Guardian fail-on-error mode."""
+        UIPresenter.show_blank_line()
+        typer.secho(
+            "💥 Exiting with error (--fail-on-error)",
+            fg=typer.colors.RED,
+        )
+
+    @staticmethod
+    def display_generate_mode_header(mode: str) -> None:
+        """Display header for generate command.
+
+        Args:
+            mode: Mode description (e.g., "CHECK MODE" or "GENERATION MODE").
+        """
+        UIPresenter.show_blank_line()
+        typer.secho(
+            f"🔨 CORTEX Dynamic Document Generator ({mode})",
+            bold=True,
+        )
+        UIPresenter.show_separator()
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_generate_processing(target: str, dry_run: bool = False) -> None:
+        """Display processing message for generate command.
+
+        Args:
+            target: Target document name.
+            dry_run: Whether in dry-run mode.
+        """
+        icon = "📄" if dry_run else "🎨"
+        typer.secho(
+            f"{icon} Processing {target.upper()}...",
+            fg=typer.colors.CYAN,
+        )
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_generate_dry_run_preview(content: str, max_lines: int = 30) -> None:
+        """Display dry-run preview of generated content.
+
+        Args:
+            content: Generated content to preview.
+            max_lines: Maximum number of lines to show.
+        """
+        typer.secho("📄 DRY RUN - Preview (first 30 lines):", bold=True)
+        UIPresenter.show_separator()
+        preview_lines = content.split("\n")[:max_lines]
+        for line in preview_lines:
+            typer.echo(line)
+        typer.echo("...")
+        UIPresenter.show_separator()
+
+    @staticmethod
+    def display_generate_dry_run_result(output_path: Path, content_size: int) -> None:
+        """Display dry-run result message.
+
+        Args:
+            output_path: Would-be output path.
+            content_size: Size of generated content.
+        """
+        typer.secho(
+            f"✅ Would write to: {output_path}",
+            fg=typer.colors.YELLOW,
+        )
+        typer.echo(f"   Size: {content_size} bytes")
+
+    @staticmethod
+    def display_generate_success_single(
+        output_path: Path,
+        content_size: int,
+        template_name: str,
+    ) -> None:
+        """Display successful generation of single document.
+
+        Args:
+            output_path: Path where document was generated.
+            content_size: Size of generated content.
+            template_name: Name of template used.
+        """
+        typer.secho(
+            f"✅ Generated: {output_path}",
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+        typer.echo(f"   Size: {content_size} bytes")
+        typer.echo(f"   Template: {template_name}")
+
+    @staticmethod
+    def display_generate_final_success() -> None:
+        """Display final success message for generation."""
+        UIPresenter.show_blank_line()
+        UIPresenter.show_separator()
+        UIPresenter.show_success("Generation completed successfully!", bold=True)
+
+    @staticmethod
+    def display_generate_batch_summary(
+        success: bool,
+        success_count: int,
+        error_count: int,
+        total_bytes: int,
+        dry_run: bool,
+    ) -> None:
+        """Display batch generation summary.
+
+        Args:
+            success: Whether batch was successful.
+            success_count: Number of successful generations.
+            error_count: Number of failed generations.
+            total_bytes: Total size of generated content.
+            dry_run: Whether in dry-run mode.
+        """
+        UIPresenter.show_blank_line()
+        UIPresenter.show_separator()
+
+        if success:
+            mode_text = "Dry run completed" if dry_run else "SUCCESS"
+            typer.secho(
+                f"✅ {mode_text} - {success_count} document(s)!",
+                fg=typer.colors.GREEN,
+                bold=True,
+            )
+            typer.echo(f"   Total size: {total_bytes} bytes")
+        else:
+            typer.secho(
+                f"⚠️  Completed with errors: "
+                f"{success_count} succeeded, "
+                f"{error_count} failed",
+                fg=typer.colors.YELLOW,
+                bold=True,
+            )
+
+    @staticmethod
+    def display_generate_drift_fix_hint(target: str) -> None:
+        """Display hint on how to fix drift.
+
+        Args:
+            target: Target document that has drift.
+        """
+        UIPresenter.show_separator()
+        typer.secho(
+            "💥 DRIFT DETECTED - Documents are out of sync!",
+            fg=typer.colors.RED,
+            bold=True,
+        )
+        UIPresenter.show_blank_line()
+        typer.echo("💡 To fix, run:")
+        typer.echo(f"   cortex generate {target}")
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_generate_missing_file_tips() -> None:
+        """Display tips for missing file errors."""
+        UIPresenter.show_blank_line()
+        typer.echo("💡 Tip: Ensure the following files exist:")
+        typer.echo("   • pyproject.toml")
+        typer.echo("   • docs/templates/[template_name].jinja")
+        typer.echo("   • .cortex/context.json (run 'cortex map' first)")
+
+    @staticmethod
+    def display_init_file_warning(path: Path) -> None:
+        """Display warning for non-Markdown files in init command.
+
+        Args:
+            path: File path being initialized.
+        """
+        UIPresenter.show_warning(f"Warning: File {path} is not a Markdown file (.md)")
+
+    @staticmethod
+    def display_init_existing_frontmatter_warning(filename: str) -> None:
+        """Display warning when file already has frontmatter.
+
+        Args:
+            filename: Name of the file.
+        """
+        UIPresenter.show_warning(f"File {filename} already has YAML frontmatter.")
+
+    @staticmethod
+    def display_init_success(path: Path, frontmatter_yaml: str) -> None:
+        """Display success message for init command.
+
+        Args:
+            path: Path to the file that was initialized.
+            frontmatter_yaml: YAML frontmatter that was added.
+        """
+        UIPresenter.show_success(f"Success! Added frontmatter to {path}")
+        UIPresenter.show_blank_line()
+        UIPresenter.display_init_preview(generated_frontmatter=frontmatter_yaml)
+
+    @staticmethod
+    def display_init_skip_warning(filename: str) -> None:
+        """Display skip warning for init command.
+
+        Args:
+            filename: Name of the file being skipped.
+        """
+        UIPresenter.show_warning(
+            f"File {filename} already has frontmatter. Use --force to overwrite.",
+        )
+
+    @staticmethod
+    def display_hooks_installing() -> None:
+        """Display installing hooks message."""
+        typer.echo("🔧 Installing Git hooks for CORTEX...")
+        UIPresenter.show_blank_line()
+
+    @staticmethod
+    def display_hooks_git_error() -> None:
+        """Display error when Git directory not found."""
+        UIPresenter.show_error(
+            "Error: .git directory not found. Are you in a Git repository?",
+        )

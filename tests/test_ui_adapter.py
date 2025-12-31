@@ -87,6 +87,31 @@ class TestUIPresenter:
 
         self.mock_echo.assert_called_once_with("Information message")
 
+    def test_show_blank_line(self) -> None:
+        """Test blank line display."""
+        UIPresenter.show_blank_line()
+
+        self.mock_echo.assert_called_once_with()
+
+    def test_show_bold_no_color(self) -> None:
+        """Test bold message without color."""
+        UIPresenter.show_bold("Bold message")
+
+        call_args = self.mock_secho.call_args
+        assert "Bold message" in call_args[0][0]
+        assert call_args[1]["bold"] is True
+
+    def test_show_bold_with_color(self) -> None:
+        """Test bold message with color."""
+        import typer
+
+        UIPresenter.show_bold("Colored bold", color=typer.colors.CYAN)
+
+        call_args = self.mock_secho.call_args
+        assert "Colored bold" in call_args[0][0]
+        assert call_args[1]["bold"] is True
+        assert call_args[1]["fg"] == typer.colors.CYAN
+
     def test_show_header(self) -> None:
         """Test header formatting with separators."""
         UIPresenter.show_header("Test Header", width=50)
@@ -696,3 +721,428 @@ class TestUIPresenter:
         assert any("Golden Paths:" in call for call in verbose_calls)
         assert any("Sources:" in call for call in verbose_calls)
         assert any("Content:" in call for call in verbose_calls)
+
+    # ==================== Knowledge Scan Tests ====================
+
+    def test_display_scan_header_sequential(self) -> None:
+        """Test knowledge scan header in sequential mode."""
+        UIPresenter.display_scan_header(Path("/tmp/workspace"), mode="Sequential")
+
+        # Verify header was shown
+        header_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Knowledge Base Scanner" in str(call)
+        ]
+        assert len(header_calls) > 0
+
+        # Verify mode was shown
+        mode_calls = [
+            call for call in self.mock_echo.call_args_list if "Sequential" in str(call)
+        ]
+        assert len(mode_calls) > 0
+
+    def test_display_scan_header_parallel(self) -> None:
+        """Test knowledge scan header in parallel mode."""
+        UIPresenter.display_scan_header(
+            Path("/tmp/workspace"),
+            mode="EXPERIMENTAL PARALLEL",
+        )
+
+        # Verify parallel warning was shown
+        parallel_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "EXPERIMENTAL PARALLEL" in str(call)
+        ]
+        assert len(parallel_calls) > 0
+
+    def test_display_scan_empty_warning(self) -> None:
+        """Test warning when no knowledge entries found."""
+        UIPresenter.display_scan_empty_warning()
+
+        # Verify warning was shown
+        warning_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "No knowledge entries found" in str(call)
+        ]
+        assert len(warning_calls) > 0
+
+    def test_display_scan_success(self) -> None:
+        """Test knowledge scan success message."""
+        UIPresenter.display_scan_success(total_count=5)
+
+        # Verify success message with count
+        success_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Found 5 knowledge" in str(call)
+        ]
+        assert len(success_calls) > 0
+
+    def test_display_scan_success_single(self) -> None:
+        """Test knowledge scan success with singular entry."""
+        UIPresenter.display_scan_success(total_count=1)
+
+        # Verify singular form
+        success_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "1 knowledge entry" in str(call)
+        ]
+        assert len(success_calls) > 0
+
+    # ==================== Guardian Display Tests ====================
+
+    def test_display_guardian_header(self) -> None:
+        """Test guardian orphan detection header."""
+        UIPresenter.display_guardian_header(
+            Path("/tmp/src"),
+            Path("/tmp/docs"),
+        )
+
+        # Verify header was shown
+        header_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Visibility Guardian" in str(call)
+        ]
+        assert len(header_calls) > 0
+
+        # Verify paths were shown
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("/tmp/src" in call for call in echo_calls)
+        assert any("/tmp/docs" in call for call in echo_calls)
+
+    def test_display_guardian_scan_errors(self) -> None:
+        """Test guardian scan errors display."""
+        errors = ["Error in file1.py", "Error in file2.py"]
+        UIPresenter.display_guardian_scan_errors(errors)
+
+        # Verify warning was shown
+        warning_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Some files had errors" in str(call)
+        ]
+        assert len(warning_calls) > 0
+
+        # Verify errors were listed
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("Error in file1.py" in call for call in echo_calls)
+        assert any("Error in file2.py" in call for call in echo_calls)
+
+    def test_display_guardian_findings(self) -> None:
+        """Test guardian findings summary."""
+        UIPresenter.display_guardian_findings(total_findings=10, files_scanned=5)
+
+        # Verify findings were shown
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("10 configurations" in call for call in echo_calls)
+        assert any("5 files" in call for call in echo_calls)
+
+    def test_display_guardian_no_configs(self) -> None:
+        """Test message when no configs found."""
+        UIPresenter.display_guardian_no_configs()
+
+        # Verify success message
+        success_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "No configurations found" in str(call)
+        ]
+        assert len(success_calls) > 0
+
+    def test_display_guardian_results_header(self) -> None:
+        """Test guardian results header."""
+        UIPresenter.display_guardian_results_header()
+
+        # Verify header was shown (uses secho for RESULTS)
+        secho_calls = [str(call) for call in self.mock_secho.call_args_list]
+        assert any("RESULTS" in call for call in secho_calls)
+
+        # Verify separators
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("=" in call for call in echo_calls)
+
+    def test_display_guardian_success(self) -> None:
+        """Test guardian success message."""
+        UIPresenter.display_guardian_success(documented_count=15)
+
+        # Verify success message
+        success_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "SUCCESS" in str(call) and "documented" in str(call)
+        ]
+        assert len(success_calls) > 0
+
+        # Verify count was shown
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("15 configurations" in call for call in echo_calls)
+
+    def test_display_guardian_orphans_header(self) -> None:
+        """Test orphans detected header."""
+        UIPresenter.display_guardian_orphans_header(orphan_count=3)
+
+        # Verify error message
+        error_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "ORPHANS DETECTED" in str(call) and "3" in str(call)
+        ]
+        assert len(error_calls) > 0
+
+    def test_display_guardian_fail_exit(self) -> None:
+        """Test fail-on-error exit message."""
+        UIPresenter.display_guardian_fail_exit()
+
+        # Verify exit message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "fail-on-error" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    # ==================== Generate Command Tests ====================
+
+    def test_display_generate_mode_header(self) -> None:
+        """Test generate mode header display."""
+        UIPresenter.display_generate_mode_header("CHECK MODE")
+
+        # Verify header was shown
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Document Generator" in str(call) and "CHECK MODE" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_generate_processing(self) -> None:
+        """Test generate processing message."""
+        UIPresenter.display_generate_processing("readme", dry_run=False)
+
+        # Verify processing message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Processing" in str(call) and "README" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_generate_processing_dry_run(self) -> None:
+        """Test generate processing in dry-run mode."""
+        UIPresenter.display_generate_processing("contributing", dry_run=True)
+
+        # Verify dry-run icon
+        secho_calls = [str(call) for call in self.mock_secho.call_args_list]
+        assert any("📄" in call for call in secho_calls)
+
+    def test_display_generate_dry_run_preview(self) -> None:
+        """Test dry-run preview display."""
+        content = "# Test Content\n\n" + "\n".join([f"Line {i}" for i in range(50)])
+        UIPresenter.display_generate_dry_run_preview(content, max_lines=10)
+
+        # Verify preview header
+        secho_calls = [
+            call for call in self.mock_secho.call_args_list if "DRY RUN" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+        # Verify separators
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        separator_count = sum(1 for call in echo_calls if "=" * 70 in call)
+        assert separator_count >= 2
+
+    def test_display_generate_dry_run_result(self) -> None:
+        """Test dry-run result message."""
+        UIPresenter.display_generate_dry_run_result(
+            Path("README.md"),
+            content_size=2048,
+        )
+
+        # Verify would-write message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Would write to" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+        # Verify size
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("2048 bytes" in call for call in echo_calls)
+
+    def test_display_generate_success_single(self) -> None:
+        """Test successful single generation display."""
+        UIPresenter.display_generate_success_single(
+            Path("CONTRIBUTING.md"),
+            content_size=4096,
+            template_name="CONTRIBUTING.md.j2",
+        )
+
+        # Verify success message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Generated" in str(call) and "CONTRIBUTING.md" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+        # Verify template info
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any(
+            "Template:" in call and "CONTRIBUTING.md.j2" in call for call in echo_calls
+        )
+
+    def test_display_generate_final_success(self) -> None:
+        """Test final success message."""
+        UIPresenter.display_generate_final_success()
+
+        # Verify success message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "completed successfully" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_generate_batch_summary_success(self) -> None:
+        """Test batch summary for successful generation."""
+        UIPresenter.display_generate_batch_summary(
+            success=True,
+            success_count=3,
+            error_count=0,
+            total_bytes=10240,
+            dry_run=False,
+        )
+
+        # Verify success message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "SUCCESS" in str(call) and "3 document" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_generate_batch_summary_with_errors(self) -> None:
+        """Test batch summary with errors."""
+        UIPresenter.display_generate_batch_summary(
+            success=False,
+            success_count=2,
+            error_count=1,
+            total_bytes=5120,
+            dry_run=False,
+        )
+
+        # Verify warning message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "with errors" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_generate_drift_fix_hint(self) -> None:
+        """Test drift fix hint display."""
+        UIPresenter.display_generate_drift_fix_hint("readme")
+
+        # Verify drift message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "DRIFT DETECTED" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+        # Verify fix hint
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("cortex generate readme" in call for call in echo_calls)
+
+    def test_display_generate_missing_file_tips(self) -> None:
+        """Test missing file tips display."""
+        UIPresenter.display_generate_missing_file_tips()
+
+        # Verify tips were shown
+        echo_calls = [str(call) for call in self.mock_echo.call_args_list]
+        assert any("pyproject.toml" in call for call in echo_calls)
+        assert any("context.json" in call for call in echo_calls)
+
+    # ==================== Init Command Tests ====================
+
+    def test_display_init_file_warning(self) -> None:
+        """Test init file type warning."""
+        UIPresenter.display_init_file_warning(Path("test.txt"))
+
+        # Verify warning
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "not a Markdown file" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_init_existing_frontmatter_warning(self) -> None:
+        """Test existing frontmatter warning."""
+        UIPresenter.display_init_existing_frontmatter_warning("test.md")
+
+        # Verify warning
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "already has" in str(call) and "frontmatter" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_init_success(self) -> None:
+        """Test init success display."""
+        yaml_content = "id: test\ntitle: Test\n"
+        UIPresenter.display_init_success(Path("test.md"), yaml_content)
+
+        # Verify success message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "Success" in str(call) and "frontmatter" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    def test_display_init_skip_warning(self) -> None:
+        """Test init skip warning."""
+        UIPresenter.display_init_skip_warning("existing.md")
+
+        # Verify skip message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if "already has frontmatter" in str(call) and "--force" in str(call)
+        ]
+        assert len(secho_calls) > 0
+
+    # ==================== Hooks Installation Tests ====================
+
+    def test_display_hooks_installing(self) -> None:
+        """Test hooks installation message."""
+        UIPresenter.display_hooks_installing()
+
+        # Verify installation message
+        echo_calls = [
+            call
+            for call in self.mock_echo.call_args_list
+            if "Installing Git hooks" in str(call)
+        ]
+        assert len(echo_calls) > 0
+
+    def test_display_hooks_git_error(self) -> None:
+        """Test hooks Git directory error."""
+        UIPresenter.display_hooks_git_error()
+
+        # Verify error message
+        secho_calls = [
+            call
+            for call in self.mock_secho.call_args_list
+            if ".git directory not found" in str(call)
+        ]
+        assert len(secho_calls) > 0
