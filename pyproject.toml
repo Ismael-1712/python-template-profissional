@@ -193,7 +193,7 @@ ignore-module = false
 ignore-nested-functions = false
 ignore-nested-classes = true
 ignore-setters = true
-fail-under = 0  # Grandfathering: começar em 0 e aumentar gradualmente
+fail-under = 99  # Grandfathering: começar em 0 e aumentar gradualmente
 exclude = [
     "setup.py",
     "docs",
