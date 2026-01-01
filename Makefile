@@ -317,6 +317,25 @@ mutation-check:
 	@echo "🚀 Iniciando mutation testing..."
 	@$(PYTHON) -m mutmut run
 
+## mutation-ci: Run mutation testing in CI mode (non-interactive, core only)
+mutation-ci:
+	@echo "🧟 ================================================"
+	@echo "🧟 MUTATION TESTING - CI MODE (Core Only)"
+	@echo "🧟 ================================================"
+	@echo ""
+	@echo "🎯 Target: scripts/core/"
+	@echo "📊 Mode: Non-interactive (CI optimized)"
+	@echo "⏱️  Expected: 30min - 6h depending on test suite size"
+	@echo ""
+	@echo "🚀 Starting mutation testing..."
+	@$(PYTHON) -m mutmut run --paths-to-mutate scripts/core --no-progress --CI
+	@echo ""
+	@echo "📊 Generating HTML report..."
+	@$(PYTHON) -m mutmut html
+	@echo ""
+	@echo "✅ Mutation testing complete!"
+	@echo "📁 Report available at: html/index.html"
+
 ## commit: Intelligent commit with Smart Governance (idempotent hooks)
 commit:
 	@if [ -z "$(MSG)" ]; then \

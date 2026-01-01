@@ -659,6 +659,38 @@ backup = false
 - Testes ainda não escritos (escreva primeiro)
 - CI/CD diário (muito lento)
 
+### Auditoria Noturna Automatizada
+
+Este projeto executa **mutation testing automaticamente** todas as noites às **03:00 AM (BRT)** através do workflow [`mutation-audit.yml`](../../.github/workflows/mutation-audit.yml).
+
+**Características:**
+
+- 🕐 **Agendamento**: Diário às 03:00 BRT (06:00 UTC)
+- 🎯 **Foco**: `scripts/core/` (núcleo do projeto)
+- 📊 **Relatório**: HTML disponível como artefato do workflow
+- ⏱️ **Timeout**: 6 horas máximo
+- 📥 **Retenção**: Relatórios salvos por 30 dias
+
+**Como acessar os relatórios:**
+
+1. Acesse [GitHub Actions](../../actions/workflows/mutation-audit.yml)
+2. Selecione a execução desejada
+3. Baixe o artefato `mutation-report-{run_number}`
+4. Abra `html/index.html` no navegador
+
+**Execução manual:**
+
+```bash
+# Via GitHub Actions (recomendado para CI)
+gh workflow run mutation-audit.yml
+
+# Via Makefile (local, modo interativo)
+make mutation-check
+
+# Via Makefile (local, modo CI - core only)
+make mutation-ci
+```
+
 ### Métricas de Qualidade
 
 **Meta de Mutation Score:**
