@@ -31,7 +31,7 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 # Add project root to sys.path
-_script_dir = Path(__file__).resolve().parent
+_script_dir = Path(__file__).resolve().parent  # pragma: no mutate
 _project_root = _script_dir.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))

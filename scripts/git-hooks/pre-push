@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Cores para alerta visual
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+# Padrão de arquivos críticos
+CORE_PATTERN="scripts/core/"
+
+# Detecta arquivos alterados
+CHANGED_FILES=$(git diff --name-only HEAD origin/main 2>/dev/null)
+
+if echo "$CHANGED_FILES" | grep -q "$CORE_PATTERN"; then
+    echo -e "\n${RED}╔════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${RED}║ 🚨  ALERTA SRE: Alteração em Lógica de Negócio (Core)   ║${NC}"
+    echo -e "${RED}╚════════════════════════════════════════════════════════════╝${NC}"
+
+    echo -e "${YELLOW}Arquivos sensíveis modificados:${NC}"
+    FILES_AFFECTED=$(echo "$CHANGED_FILES" | grep "$CORE_PATTERN")
+    echo "$FILES_AFFECTED" | head -n 3
+    [ $(echo "$FILES_AFFECTED" | wc -l) -gt 3 ] && echo "... e outros."
+
+    # Pega o primeiro arquivo para sugerir o comando
+    FIRST_FILE=$(echo "$FILES_AFFECTED" | head -n 1)
+
+    echo -e "\n${CYAN}💡 Recomendação de Qualidade:${NC}"
+    echo -e "Antes de considerar esta tarefa pronta, execute:"
+    echo -e "\n    ${RED}mutmut run --paths-to-mutate $FIRST_FILE --simple-output --runner \"python -m pytest -n 10 -x\"${NC}\n"
+
+    echo -e "${YELLOW}⚠️  O Push prosseguirá em 3 segundos...${NC}"
+    sleep 3
+fi
+
+exit 0
