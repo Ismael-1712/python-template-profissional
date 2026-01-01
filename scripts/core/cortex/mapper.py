@@ -39,7 +39,7 @@ if str(_project_root) not in sys.path:  # pragma: no mutate
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
-logger = setup_logging(__name__, log_file="cortex_mapper.log")
+logger = setup_logging(__name__, log_file="cortex_mapper.log")  # pragma: no mutate
 
 # Import Knowledge components
 try:
