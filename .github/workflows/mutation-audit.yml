@@ -1,8 +1,6 @@
 name: 🧟 Mutation Testing Audit
 
 on:
-  schedule:
-    - cron: '0 6 * * *'  # 03:00 AM BRT (Daily)
   workflow_dispatch:      # Permite disparo manual
 
 jobs:
