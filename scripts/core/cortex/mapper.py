@@ -33,7 +33,7 @@ except ModuleNotFoundError:
 # Add project root to sys.path
 _script_dir = Path(__file__).resolve().parent  # pragma: no mutate
 _project_root = _script_dir.parent.parent  # pragma: no mutate
-if str(_project_root) not in sys.path:
+if str(_project_root) not in sys.path:  # pragma: no mutate
     sys.path.insert(0, str(_project_root))
 
 from scripts.utils.filesystem import FileSystemAdapter, RealFileSystem  # noqa: E402
