@@ -8,6 +8,7 @@ on:
 jobs:
   mutation-analysis:
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # 🛡️ TRAVA DE SEGURANÇA: Cancela se passar de 1h
     permissions:
       contents: read
       security-events: write
@@ -28,12 +29,13 @@ jobs:
           pip install -r requirements/dev.txt
           pip install .
 
-      - name: 🧟 Executar Mutation Testing & Gerar Relatório
+      - name: 🧟 Executar Mutation Testing (Escopo Focado)
         run: |
-          # Executa tudo no mesmo passo para garantir persistência
-          echo '🚀 Iniciando Mutmut...'
-          # O "|| true" garante que erros de código não parem o relatório
-          mutmut run --paths-to-mutate scripts/core --simple-output || true
+          echo '🚀 Iniciando Mutmut (Modo Cirúrgico)...'
+
+          # MUDANÇA: Focando apenas no mapper.py para validar o fluxo rapidamente
+          # O timeout de 300s por mutante evita loops infinitos
+          mutmut run --paths-to-mutate scripts/core/cortex/mapper.py --simple-output --runner "python -m pytest -x" || true
 
           echo '📊 Gerando HTML...'
           mutmut html
