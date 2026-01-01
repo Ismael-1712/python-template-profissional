@@ -49,7 +49,7 @@ try:
 
     KNOWLEDGE_AVAILABLE = True  # pragma: no mutate
 except ImportError:
-    KNOWLEDGE_AVAILABLE = False
+    KNOWLEDGE_AVAILABLE = False  # pragma: no mutate
     logger.debug("Knowledge components not available")
 
 
