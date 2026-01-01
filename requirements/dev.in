@@ -41,5 +41,5 @@ tox
 python-frontmatter
 
 # Mutation Testing
-mutmut
+mutmut==2.4.5
 tomlkit
