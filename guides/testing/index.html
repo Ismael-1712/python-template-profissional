@@ -993,6 +993,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#auditoria-noturna-automatizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditoria Noturna Automatizada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#metricas-de-qualidade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1689,6 +1700,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#auditoria-noturna-automatizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditoria Noturna Automatizada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#metricas-de-qualidade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2302,6 +2324,33 @@ O objetivo é garantir que a suíte de testes seja rápida (&lt; 50ms), determin
 <li>Testes ainda não escritos (escreva primeiro)</li>
 <li>CI/CD diário (muito lento)</li>
 </ul>
+<h3 id="auditoria-noturna-automatizada">Auditoria Noturna Automatizada</h3>
+<p>Este projeto executa <strong>mutation testing automaticamente</strong> todas as noites às <strong>03:00 AM (BRT)</strong> através do workflow <a href="../../.github/workflows/mutation-audit.yml"><code>mutation-audit.yml</code></a>.</p>
+<p><strong>Características:</strong></p>
+<ul>
+<li>🕐 <strong>Agendamento</strong>: Diário às 03:00 BRT (06:00 UTC)</li>
+<li>🎯 <strong>Foco</strong>: <code>scripts/core/</code> (núcleo do projeto)</li>
+<li>📊 <strong>Relatório</strong>: HTML disponível como artefato do workflow</li>
+<li>⏱️ <strong>Timeout</strong>: 6 horas máximo</li>
+<li>📥 <strong>Retenção</strong>: Relatórios salvos por 30 dias</li>
+</ul>
+<p><strong>Como acessar os relatórios:</strong></p>
+<ol>
+<li>Acesse <a href="../../actions/workflows/mutation-audit.yml">GitHub Actions</a></li>
+<li>Selecione a execução desejada</li>
+<li>Baixe o artefato <code>mutation-report-{run_number}</code></li>
+<li>Abra <code>html/index.html</code> no navegador</li>
+</ol>
+<p><strong>Execução manual:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Via GitHub Actions (recomendado para CI)</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>gh<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span>mutation-audit.yml
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="c1"># Via Makefile (local, modo interativo)</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>make<span class="w"> </span>mutation-check
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1"># Via Makefile (local, modo CI - core only)</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>make<span class="w"> </span>mutation-ci
+</code></pre></div>
 <h3 id="metricas-de-qualidade">Métricas de Qualidade</h3>
 <p><strong>Meta de Mutation Score:</strong></p>
 <ul>
@@ -2312,29 +2361,29 @@ O objetivo é garantir que a suíte de testes seja rápida (&lt; 50ms), determin
 </ul>
 <h3 id="exemplo-pratico">Exemplo Prático</h3>
 <p><strong>Código original:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validar_email</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>    <span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validar_email</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>    <span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>
 </code></pre></div>
 <p><strong>Mutações possíveis:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># Mutante 1: Operador lógico</span>
-<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ❌ Sobrevivente?</span>
-<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
-<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="c1"># Mutante 2: Operador de comparação</span>
-<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ✅ Deve morrer</span>
-<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>
-<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="c1"># Mutante 3: String literal</span>
-<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ✅ Deve morrer</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="c1"># Mutante 1: Operador lógico</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">or</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ❌ Sobrevivente?</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="c1"># Mutante 2: Operador de comparação</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ✅ Deve morrer</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="c1"># Mutante 3: String literal</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="k">return</span> <span class="s2">&quot;&quot;</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">email</span>  <span class="c1"># ✅ Deve morrer</span>
 </code></pre></div>
 <p><strong>Testes robustos:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_email</span><span class="p">():</span>
-<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>    <span class="c1"># Casos positivos</span>
-<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@example.com&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
-<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>
-<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>    <span class="c1"># Casos negativos (matam mutantes)</span>
-<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@example&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Sem domínio</span>
-<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;userexample.com&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Sem @</span>
-<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Incompleto</span>
-<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Vazio</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_email</span><span class="p">():</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>    <span class="c1"># Casos positivos</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@example.com&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>    <span class="c1"># Casos negativos (matam mutantes)</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@example&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Sem domínio</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;userexample.com&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Sem @</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;user@&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Incompleto</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a>    <span class="k">assert</span> <span class="n">validar_email</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># Vazio</span>
 </code></pre></div>
 <h3 id="referencias_2">Referências</h3>
 <ul>
