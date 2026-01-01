@@ -47,7 +47,7 @@ try:
     from scripts.core.cortex.link_resolver import LinkResolver
     from scripts.core.cortex.models import KnowledgeEntry
 
-    KNOWLEDGE_AVAILABLE = True
+    KNOWLEDGE_AVAILABLE = True  # pragma: no mutate
 except ImportError:
     KNOWLEDGE_AVAILABLE = False
     logger.debug("Knowledge components not available")
