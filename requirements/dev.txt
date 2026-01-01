@@ -58,7 +58,7 @@ filelock==3.20.1
     #   virtualenv
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.45
+gitpython==3.1.46
     # via python-semantic-release
 grimp==3.14
     # via import-linter
