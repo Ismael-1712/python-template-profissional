@@ -48,7 +48,7 @@ jobs:
       CI: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Configurar Python 3.10 (baseline)"
         uses: actions/setup-python@v6
@@ -165,7 +165,7 @@ jobs:
       CI: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Configurar Python 3.10"
         uses: actions/setup-python@v6
@@ -224,7 +224,7 @@ jobs:
       CI: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Configurar Python 3.11"
         uses: actions/setup-python@v6
@@ -283,7 +283,7 @@ jobs:
       CI: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Configurar Python 3.12"
         uses: actions/setup-python@v6
