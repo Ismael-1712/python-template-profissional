@@ -1,141 +1,54 @@
-# ======================================================================
-# 🧟 MUTATION TESTING AUDIT - SCHEDULED NIGHTLY
-# ======================================================================
-# Este workflow executa testes de mutação de forma agendada para auditar
-# a qualidade da suíte de testes sem impactar o fluxo de desenvolvimento.
-#
-# ESTRATÉGIA:
-# - Execução: Diariamente às 03:00 AM BRT (06:00 UTC)
-# - Objetivo: Validar eficácia dos testes contra mutações de código
-# - Foco: scripts/core (núcleo do projeto)
-# - Limite: 6h (timeout do GitHub Actions)
-#
-# MUTAÇÃO:
-# - Ferramenta: mutmut
-# - Output: Relatório HTML com análise detalhada
-# - Artefato: Disponível para download por 30 dias
-#
-# NOTA TÉCNICA: Horário de Brasília (BRT) é UTC-3
-# - 03:00 BRT = 06:00 UTC
-#
-# AUTOR: DevOps Engineering Team
-# VERSÃO: 1.0.0
-# ======================================================================
-
-name: "🧟 Mutation Testing Audit"
+name: 🧟 Mutation Testing Audit
 
 on:
-  # Execução agendada: Diariamente às 03:00 AM BRT (06:00 UTC)
   schedule:
-    - cron: '0 6 * * *'
-
-  # Permite execução manual para testes e debugging
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-# Timeout global para evitar custos excessivos
-# Mutation testing pode ser lento, mas limitamos a 6h
-env:
-  MUTATION_TIMEOUT: 21600  # 6 horas em segundos
+    - cron: '0 6 * * *'  # 03:00 AM BRT (Daily)
+  workflow_dispatch:      # Permite disparo manual
 
 jobs:
-  # --------------------------------------------------------------------
-  # JOB: MUTATION ANALYSIS
-  # --------------------------------------------------------------------
   mutation-analysis:
-    name: "🧬 Mutation Analysis (Core)"
     runs-on: ubuntu-latest
-    timeout-minutes: 360  # 6 horas
-
-    env:
-      CI: true
-      PYTHONUNBUFFERED: 1
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
-      # --- 1. CHECKOUT ---
-      - name: "📥 Checkout do Repositório"
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-        with:
-          fetch-depth: 0  # História completa para análise
+      - name: 📥 Checkout do Repositório
+        uses: actions/checkout@v4
 
-      # --- 2. CONFIGURAR PYTHON ---
-      - name: "🐍 Configurar Python 3.12"
-        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      - name: 🐍 Configurar Python 3.10
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-          cache: "pip"
+          python-version: '3.10'
+          cache: 'pip'
 
-      # --- 3. INSTALAR DEPENDÊNCIAS ---
-      - name: "📦 Instalar Dependências do Projeto"
+      - name: 📦 Instalar Dependências do Projeto
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/dev.txt
+          pip install .
 
-      # --- 4. EXECUTAR MUTATION TESTING ---
-      - name: "🧟 Executar Mutation Testing (Core)"
-        id: mutation
+      - name: 🧟 Executar Mutation Testing & Gerar Relatório
         run: |
-          echo "::group::Mutation Testing - Core"
-          echo "🎯 Foco: scripts/core/"
-          echo "⏱️  Timeout: 6 horas"
-          echo ""
+          # Executa tudo no mesmo passo para garantir persistência
+          echo '🚀 Iniciando Mutmut...'
+          # O "|| true" garante que erros de código não parem o relatório
+          mutmut run --paths-to-mutate scripts/core --simple-output || true
 
-          # Executar mutmut focado no core (CI mode - sem interatividade)
-          python -m mutmut run \
-            --paths-to-mutate scripts/core \
-            --no-progress \
-            --CI || echo "status=partial" >> $GITHUB_OUTPUT
+          echo '📊 Gerando HTML...'
+          mutmut html
 
-          echo "::endgroup::"
-
-          # Capturar estatísticas
-          echo "::group::Mutation Statistics"
-          python -m mutmut results
-          echo "::endgroup::"
-        continue-on-error: true
-
-      # --- 5. GERAR RELATÓRIO HTML ---
-      - name: "📊 Gerar Relatório HTML"
-        if: always()
-        run: |
-          echo "::group::Generating HTML Report"
-          python -m mutmut html
-          echo "::endgroup::"
-
-          # Adicionar timestamp ao relatório
-          echo "Generated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > html/timestamp.txt
-          echo "Commit: ${GITHUB_SHA}" >> html/timestamp.txt
-
-      # --- 6. UPLOAD DE ARTEFATOS ---
-      - name: "📦 Upload Relatório de Mutação"
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: mutation-report-${{ github.run_number }}
-          path: html/
-          retention-days: 30
-          if-no-files-found: warn
-
-      # --- 7. SUMÁRIO DO WORKFLOW ---
-      - name: "📋 Sumário da Execução"
-        if: always()
-        run: |
-          echo "## 🧟 Mutation Testing Report" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Execution Details:**" >> $GITHUB_STEP_SUMMARY
-          echo "- 📅 Date: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "- 🎯 Target: \`scripts/core/\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔧 Commit: \`${GITHUB_SHA:0:7}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Results:**" >> $GITHUB_STEP_SUMMARY
-
-          if [ -f .mutmut-cache ]; then
-            python -m mutmut results >> $GITHUB_STEP_SUMMARY
+          if [ -d "html" ]; then
+            echo "✅ Relatório gerado com sucesso."
           else
-            echo "⚠️ No mutation cache found" >> $GITHUB_STEP_SUMMARY
+            echo "❌ CRÍTICO: Pasta html não encontrada."
+            ls -la
+            exit 1
           fi
 
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📥 Download the HTML report from workflow artifacts." >> $GITHUB_STEP_SUMMARY
+      - name: 📦 Upload Relatório de Mutação
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-report
+          path: html/
+          retention-days: 7
