@@ -17,122 +17,26 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from scripts.core.cortex.models import KnowledgeEntry
 
+from scripts.core.cortex.adapters.reporters import (
+    FileReportWriter,
+    MarkdownReporter,
+)
+from scripts.core.cortex.domain.validator_types import (
+    AnomalyReport,
+    BrokenLinkDetail,
+    HealthMetrics,
+    NodeRanking,
+    ValidationReport,
+)
 from scripts.core.cortex.models import LinkStatus
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class NodeRanking:
-    """Ranking of a Knowledge Node by inbound link count.
-
-    Attributes:
-        node_id: Knowledge Node identifier
-        inbound_count: Number of inbound links
-        rank: Position in ranking (1 = most cited)
-    """
-
-    node_id: str
-    inbound_count: int
-    rank: int
-
-
-@dataclass
-class BrokenLinkDetail:
-    """Detailed information about a broken link.
-
-    Attributes:
-        source_id: Source Knowledge Node ID
-        target_raw: Raw target string that failed to resolve
-        line_number: Line number where the link appears
-        context: Snippet of surrounding text for context
-    """
-
-    source_id: str
-    target_raw: str
-    line_number: int
-    context: str
-
-
-@dataclass
-class HealthMetrics:
-    """Health metrics for the Knowledge Graph.
-
-    Attributes:
-        total_nodes: Total number of Knowledge Nodes
-        total_links: Total number of links (all statuses)
-        valid_links: Number of successfully resolved links
-        broken_links: Number of broken links
-        connectivity_score: Percentage of connected nodes (0-100)
-        link_health_score: Percentage of valid links (0-100)
-        health_score: Overall health score (0-100)
-        top_hubs: Top N most referenced nodes
-        generated_at: Timestamp of metrics generation
-    """
-
-    total_nodes: int
-    total_links: int
-    valid_links: int
-    broken_links: int
-    connectivity_score: float
-    link_health_score: float
-    health_score: float
-    top_hubs: list[NodeRanking] = field(default_factory=list)
-    generated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-@dataclass
-class AnomalyReport:
-    """Report of structural anomalies in the Knowledge Graph.
-
-    Attributes:
-        orphan_nodes: Node IDs with 0 inbound links
-        dead_end_nodes: Node IDs with 0 outbound links
-        broken_links: Detailed list of broken links
-        total_issues: Total count of all anomalies
-    """
-
-    orphan_nodes: list[str] = field(default_factory=list)
-    dead_end_nodes: list[str] = field(default_factory=list)
-    broken_links: list[BrokenLinkDetail] = field(default_factory=list)
-
-    @property
-    def total_issues(self) -> int:
-        """Calculate total number of issues."""
-        return (
-            len(self.orphan_nodes)
-            + len(self.dead_end_nodes)
-            + len(
-                self.broken_links,
-            )
-        )
-
-
-@dataclass
-class ValidationReport:
-    """Complete validation report for the Knowledge Graph.
-
-    Attributes:
-        metrics: Health metrics
-        anomalies: Detected anomalies
-        is_healthy: True if no critical issues found
-        critical_errors: List of critical error messages
-        warnings: List of warning messages
-    """
-
-    metrics: HealthMetrics
-    anomalies: AnomalyReport
-    is_healthy: bool = True
-    critical_errors: list[str] = field(default_factory=list)
-    warnings: list[str] = field(default_factory=list)
 
 
 class KnowledgeValidator:
@@ -457,14 +361,16 @@ class KnowledgeValidator:
         )
         return report
 
-    # TODO: Refactor God Function - break down into smaller composable methods
-    def generate_report(  # noqa: C901
+    def generate_report(
         self,
         report: ValidationReport,
         include_orphans: bool = True,
         include_dead_ends: bool = True,
     ) -> str:
         """Generate Markdown report from validation results.
+
+        This method delegates to the MarkdownReporter adapter,
+        following the Hexagonal Architecture pattern.
 
         Args:
             report: ValidationReport to format
@@ -474,300 +380,17 @@ class KnowledgeValidator:
         Returns:
             Markdown-formatted report string
         """
-        m = report.metrics
-        a = report.anomalies
-
-        # Determine status emoji
-        if m.health_score >= 90:
-            status_emoji = "🟢"
-            status_text = "Excellent"
-        elif m.health_score >= 80:
-            status_emoji = "🟢"
-            status_text = "Healthy"
-        elif m.health_score >= 70:
-            status_emoji = "🟡"
-            status_text = "Needs Attention"
-        else:
-            status_emoji = "🔴"
-            status_text = "Critical"
-
-        lines = [
-            "---",
-            f"generated_at: {m.generated_at.isoformat()}",
-            f"health_score: {m.health_score:.1f}",
-            f"status: {status_text.lower()}",
-            "---",
-            "",
-            "# 📊 Knowledge Graph Health Report",
-            "",
-            f"**Generated:** {m.generated_at.strftime('%Y-%m-%d %H:%M:%S UTC')}",
-            (
-                f"**Overall Health Score:** {m.health_score:.1f}/100 "
-                f"({status_emoji} {status_text})"
-            ),
-            "",
-            "---",
-            "",
-            "## 📈 Executive Summary",
-            "",
-            "| Metric                  | Value    | Status |",
-            "|-------------------------|----------|--------|",
-            f"| Total Nodes             | {m.total_nodes}       | -      |",
-            f"| Total Links             | {m.total_links}      | -      |",
-            (
-                f"| Valid Links             | {m.valid_links}      | "
-                f"{'🟢' if m.valid_links == m.total_links else '⚠️'} |"
-            ),
-            (
-                f"| Broken Links            | {m.broken_links}        | "
-                f"{'🟢' if m.broken_links == 0 else '🔴'} |"
-            ),
-            (
-                f"| Connectivity Score      | {m.connectivity_score:.1f}%    | "
-                f"{'🟢' if m.connectivity_score >= 80 else '⚠️'} |"
-            ),
-            (
-                f"| Link Health Score       | {m.link_health_score:.1f}%    | "
-                f"{'🟢' if m.link_health_score >= 90 else '⚠️'} |"
-            ),
-            f"| **Overall Health Score**| **{m.health_score:.1f}**| {status_emoji} |",
-            "",
-            "---",
-            "",
-        ]
-
-        # Top Hubs
-        if m.top_hubs:
-            lines.extend(
-                [
-                    "## 🏆 Top 5 Most Referenced Documents (Hubs)",
-                    "",
-                    "| Rank | Document ID | Inbound Links | Status |",
-                    "|------|-------------|---------------|--------|",
-                ],
-            )
-            for hub in m.top_hubs:
-                lines.append(
-                    (
-                        f"| {hub.rank}    | {hub.node_id}     | "
-                        f"{hub.inbound_count}            | 🟢     |"
-                    ),
-                )
-            lines.extend(
-                [
-                    "",
-                    (
-                        "**Interpretation:** These documents are critical "
-                        "references. Ensure they are well-maintained."
-                    ),
-                    "",
-                    "---",
-                    "",
-                ],
-            )
-
-        # Critical Issues
-        if report.critical_errors or a.broken_links:
-            lines.extend(["## 🔴 Critical Issues", ""])
-
-            if report.critical_errors:
-                for error in report.critical_errors:
-                    lines.append(f"- {error}")
-                lines.append("")
-
-            if a.broken_links:
-                lines.extend(
-                    [
-                        f"### Broken Links ({len(a.broken_links)} total)",
-                        "",
-                        (
-                            "| Source      | Target       | Line | "
-                            "Context                           |"
-                        ),
-                        (
-                            "|-------------|--------------|------|"
-                            "-----------------------------------|"
-                        ),
-                    ],
-                )
-                for broken in a.broken_links[:10]:  # Limit to first 10
-                    context_short = (
-                        broken.context[:30] + "..."
-                        if len(broken.context) > 30
-                        else broken.context
-                    )
-                    lines.append(
-                        (
-                            f"| {broken.source_id} | `{broken.target_raw}` | "
-                            f"{broken.line_number} | {context_short} |"
-                        ),
-                    )
-                if len(a.broken_links) > 10:
-                    lines.append(
-                        f"| ... | ... | ... | ... ({len(a.broken_links) - 10} more) |",
-                    )
-                lines.extend(
-                    [
-                        "",
-                        (
-                            "**Recommendation:** Fix these links immediately "
-                            "or mark them as external."
-                        ),
-                        "",
-                    ],
-                )
-
-            lines.extend(["---", ""])
-
-        # Warnings
-        if (
-            report.warnings
-            or (include_orphans and a.orphan_nodes)
-            or (include_dead_ends and a.dead_end_nodes)
-        ):
-            lines.extend(["## ⚠️  Warnings", ""])
-
-            for warning in report.warnings:
-                lines.append(f"- {warning}")
-            if report.warnings:
-                lines.append("")
-
-            # Orphans
-            if include_orphans and a.orphan_nodes:
-                orphan_pct = (
-                    (len(a.orphan_nodes) / m.total_nodes * 100)
-                    if m.total_nodes > 0
-                    else 0
-                )
-                lines.extend(
-                    [
-                        (
-                            f"### Orphan Nodes ({len(a.orphan_nodes)} total - "
-                            f"{orphan_pct:.1f}%)"
-                        ),
-                        "",
-                        "Documents with no incoming links:",
-                        "",
-                    ],
-                )
-                for orphan in a.orphan_nodes[:10]:
-                    lines.append(f"- `{orphan}`")
-                if len(a.orphan_nodes) > 10:
-                    lines.append(f"- ... ({len(a.orphan_nodes) - 10} more)")
-                lines.extend(
-                    [
-                        "",
-                        (
-                            "**Recommendation:** Add links from main navigation "
-                            "or index documents."
-                        ),
-                        "",
-                    ],
-                )
-
-            # Dead Ends
-            if include_dead_ends and a.dead_end_nodes:
-                dead_end_pct = (
-                    (len(a.dead_end_nodes) / m.total_nodes * 100)
-                    if m.total_nodes > 0
-                    else 0
-                )
-                lines.extend(
-                    [
-                        (
-                            f"### Dead End Nodes ({len(a.dead_end_nodes)} total - "
-                            f"{dead_end_pct:.1f}%)"
-                        ),
-                        "",
-                        "Documents with no outgoing links:",
-                        "",
-                    ],
-                )
-                for dead_end in a.dead_end_nodes[:10]:
-                    lines.append(f"- `{dead_end}`")
-                if len(a.dead_end_nodes) > 10:
-                    lines.append(f"- ... ({len(a.dead_end_nodes) - 10} more)")
-                lines.extend(
-                    [
-                        "",
-                        (
-                            '**Recommendation:** Add "See Also" sections to '
-                            "enrich navigation."
-                        ),
-                        "",
-                    ],
-                )
-
-            lines.extend(["---", ""])
-
-        # Action Items
-        lines.extend(
-            [
-                "## 🎯 Action Items",
-                "",
-                "### High Priority",
-                "",
-            ],
-        )
-        if a.broken_links:
-            lines.append(
-                f"1. ✅ Fix {len(a.broken_links)} broken links (see table above)",
-            )
-        if len(a.orphan_nodes) > m.total_nodes * 0.3:
-            lines.append("2. ⚠️  Review orphan nodes and add navigation links")
-
-        lines.extend(
-            [
-                "",
-                "### Medium Priority",
-                "",
-                '3. ℹ️  Add "See Also" sections to dead end nodes',
-                "4. ℹ️  Update top hubs to ensure accuracy",
-                "",
-                "### Low Priority",
-                "",
-                "5. 📊 Monitor connectivity score (target: >90%)",
-                "",
-                "---",
-                "",
-                "## 📚 How to Improve This Score",
-                "",
-                "**To reach 95+:**",
-                "",
-                "- Fix all broken links (→ +5 points)",
-                "- Reduce orphans to <5% (→ +3 points)",
-                "",
-                "**Commands:**",
-                "",
-                "```bash",
-                "# Re-run analysis",
-                "cortex audit --links",
-                "",
-                "# Generate updated report",
-                "cortex report --health",
-                "```",
-                "",
-                "---",
-                "",
-                "**Report generated by CORTEX Knowledge Validator v0.1.0**",
-            ],
-        )
-
-        return "\n".join(lines)
+        return MarkdownReporter.generate(report, include_orphans, include_dead_ends)
 
     def save_report(self, report: ValidationReport, output_path: Path) -> None:
         """Save validation report to file.
+
+        This method delegates to adapters (MarkdownReporter + FileReportWriter),
+        following the Hexagonal Architecture pattern.
 
         Args:
             report: ValidationReport to save
             output_path: Path where to save the report
         """
         markdown = self.generate_report(report)
-
-        # Ensure parent directory exists
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Write report
-        output_path.write_text(markdown, encoding="utf-8")
-
-        logger.info(f"Report saved to {output_path}")
+        FileReportWriter.save(markdown, output_path)
