@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [ "setuptools>=61.0",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,49 +8,14 @@ version = "0.1.0"
 description = "Template profissional para projetos Python"
 requires-python = ">=3.10"
 readme = "README.md"
-authors = [
-    { name = "Ismael", email = "ismael@example.com" }
-]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-]
-dependencies = [
-    "typer>=0.9.0",
-    "pydantic>=2.0.0",
-    "pydantic-settings>=2.0.0",
-    "uvicorn>=0.23.0",
-    "fastapi>=0.103.0",
-    "python-dotenv>=1.0.0",
-    "rich>=13.0.0",
-    "click>=8.0.0",
-    "pyyaml>=6.0",
-    "python-frontmatter>=1.0.0"
-]
+classifiers = [ "Development Status :: 3 - Alpha", "Intended Audience :: Developers", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.10",]
+dependencies = [ "typer>=0.9.0", "pydantic>=2.0.0", "pydantic-settings>=2.0.0", "uvicorn>=0.23.0", "fastapi>=0.103.0", "python-dotenv>=1.0.0", "rich>=13.0.0", "click>=8.0.0", "pyyaml>=6.0", "python-frontmatter>=1.0.0",]
+[[project.authors]]
+name = "Ismael"
+email = "ismael@example.com"
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pytest-xdist>=3.0.0",
-    "ruff>=0.1.0",
-    "mypy>=1.0.0",
-    "pre-commit>=3.0.0",
-    "tox>=4.0.0",
-    "deptry>=0.12.0",
-    "mutmut>=3.0.0",
-    "interrogate>=1.5.0",
-    "python-semantic-release>=8.0.0",
-    "import-linter>=1.0",
-    "xenon>=0.9.0",
-    "radon>=6.0.0",
-    "types-requests>=2.0.0",
-    "types-pyyaml>=6.0.0",
-    "mkdocs-material>=9.0.0",
-    "babel>=2.10.0"
-]
+dev = [ "pytest>=7.0.0", "pytest-cov>=4.0.0", "pytest-xdist>=3.0.0", "ruff>=0.1.0", "mypy>=1.0.0", "pre-commit>=3.0.0", "tox>=4.0.0", "deptry>=0.12.0", "mutmut>=3.0.0", "interrogate>=1.5.0", "python-semantic-release>=8.0.0", "import-linter>=1.0", "xenon>=0.9.0", "radon>=6.0.0", "types-requests>=2.0.0", "types-pyyaml>=6.0.0", "mkdocs-material>=9.0.0", "babel>=2.10.0",]
 
 [project.scripts]
 cortex = "scripts.cortex.cli:app"
@@ -59,27 +24,9 @@ audit = "scripts.cli.audit:main"
 install-dev = "scripts.cli.install_dev:main"
 git-sync = "scripts.cli.git_sync:main"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["src*", "scripts*"]
-
 [tool.ruff]
 line-length = 88
 target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "UP", "B", "D", "C901"]
-ignore = ["D203", "D213"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.ruff.lint.mccabe]
-max-complexity = 10
-
-[tool.ruff.format]
-quote-style = "double"
-skip-magic-trailing-comma = false
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:project.version"
@@ -88,9 +35,6 @@ changelog_file = "CHANGELOG.md"
 build_command = "python3 -m build"
 minor_on_default_scope = true
 major_on_breaking_change = true
-
-[tool.semantic_release.changelog]
-categories = ["feat", "fix", "docs", "refactor", "perf"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -109,45 +53,27 @@ strict_optional = true
 ignore_missing_imports = true
 follow_imports = "normal"
 strict_equality = true
-exclude = ["venv/", ".venv/", "build/", "dist/", "scripts/audit_dashboard.py"]
-
+exclude = [ "venv/", ".venv/", "build/", "dist/", "scripts/audit_dashboard.py",]
 [[tool.mypy.overrides]]
 module = "frontmatter"
 ignore_missing_imports = true
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = "-ra --strict-markers --strict-config --showlocals -n auto"
-markers = [
-    "unit: mark a test as a unit test.",
-    "integration: mark a test as an integration test.",
-    "e2e: mark a test as an end-to-end test."
-]
-
 [tool.importlinter]
-root_packages = ["scripts", "src"]
-
+root_packages = [ "scripts", "src",]
 [[tool.importlinter.contracts]]
 name = "Core não deve importar CLI"
 type = "forbidden"
-source_modules = ["scripts.core"]
-forbidden_modules = ["scripts.cli"]
+source_modules = [ "scripts.core",]
+forbidden_modules = [ "scripts.cli",]
 
 [[tool.importlinter.contracts]]
 name = "Cortex Core não deve importar Cortex CLI"
 type = "forbidden"
-source_modules = ["scripts.core.cortex"]
-forbidden_modules = ["scripts.cortex"]
+source_modules = [ "scripts.core.cortex",]
+forbidden_modules = [ "scripts.cortex",]
 
 [tool.deptry]
-extend_exclude = ["tests/", ".venv/", "build/", "dist/"]
-
-[tool.deptry.per_rule_ignores]
-DEP002 = ["uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi"]
-DEP004 = ["scripts/"]
+extend_exclude = [ "tests/", ".venv/", "build/", "dist/",]
 
 [tool.interrogate]
 ignore-init-method = true
@@ -161,16 +87,48 @@ ignore-nested-functions = false
 ignore-nested-classes = true
 ignore-setters = true
 fail-under = 99
-exclude = ["setup.py", "docs", "build", "scripts/audit_dashboard.py"]
+exclude = [ "setup.py", "docs", "build", "scripts/audit_dashboard.py",]
 verbose = 1
 quiet = false
 whitelist-regex = []
 color = true
 omit-covered-files = false
 
-# Configuração Mutmut v3
 [tool.mutmut]
 runner = "python -m pytest -x"
 tests_dir = "tests/"
-paths_to_mutate = "scripts/"
+paths_to_mutate = [ "scripts/",]
 backup = false
+
+[tool.ruff.lint]
+select = [ "E", "F", "W", "I", "N", "UP", "B", "D", "C901",]
+ignore = [ "D203", "D213",]
+
+[tool.ruff.format]
+quote-style = "double"
+skip-magic-trailing-comma = false
+
+[tool.semantic_release.changelog]
+categories = [ "feat", "fix", "docs", "refactor", "perf",]
+
+[tool.pytest.ini_options]
+testpaths = [ "tests",]
+python_files = [ "test_*.py",]
+python_classes = [ "Test*",]
+python_functions = [ "test_*",]
+addopts = "-ra --strict-markers --strict-config --showlocals -n auto"
+markers = [ "unit: mark a test as a unit test.", "integration: mark a test as an integration test.", "e2e: mark a test as an end-to-end test.",]
+
+[tool.deptry.per_rule_ignores]
+DEP002 = [ "uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi",]
+DEP004 = [ "scripts/",]
+
+[tool.setuptools.packages.find]
+where = [ ".",]
+include = [ "src*", "scripts*",]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
