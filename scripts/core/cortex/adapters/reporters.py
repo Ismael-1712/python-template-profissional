@@ -240,7 +240,7 @@ class MarkdownReporter:
 
     @staticmethod
     def _build_dead_ends_section(
-        dead_end_nodes: list[str], total_nodes: int
+        dead_end_nodes: list[str], total_nodes: int,
     ) -> list[str]:
         """Build dead end nodes subsection.
 

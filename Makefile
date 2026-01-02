@@ -156,10 +156,6 @@ arch-check:
 	@echo "🏗️  Verificando contratos arquiteturais..."
 	@$(VENV)/bin/lint-imports || (echo "⚠️  Violações de arquitetura detectadas (grandfathering mode)" && exit 0)
 
-## deps-check: Detecta dependências não utilizadas (Deptry)
-deps-check:
-	@echo "📦 Verificando dependências não utilizadas..."
-	@$(PYTHON) -m deptry . || (echo "⚠️  Dependências não utilizadas detectadas (grandfathering mode)" && exit 0)
 
 ## docs-check: Valida cobertura de docstrings (Interrogate)
 docs-check:
@@ -171,8 +167,14 @@ ci-check:
 	@echo "🔍 Auditando workflows do GitHub Actions..."
 	@$(PYTHON) scripts/ci/audit_workflows.py
 
+
+## deps-check: Verifica se arquivos requirements.txt estão sincronizados com .in
+deps-check:
+	@echo "🛡️  Executando Protocolo de Imunidade de Dependências..."
+	@$(PYTHON) scripts/ci/verify_deps.py
+
 ## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci)
-validate: lint type-check complexity-check arch-check deps-check docs-check ci-check test
+validate: deps-check lint type-check complexity-check arch-check deps-check docs-check ci-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa)"

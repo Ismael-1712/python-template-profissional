@@ -43,3 +43,4 @@ python-frontmatter
 # Mutation Testing
 mutmut==3.4.0
 tomlkit
+pip-tools
