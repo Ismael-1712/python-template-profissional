@@ -1,0 +1,1095 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Como utilizar Mutation Testing para validar a qualidade dos testes unitários">
+      
+      
+        <meta name="author" content="SRE Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Mutation Testing - Guia de Uso - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mutation-testing-guia-de-uso" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mutation Testing - Guia de Uso
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#o-que-e-mutation-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 O Que É Mutation Testing?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 O Que É Mutation Testing?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#analogia-guarda-vs-inspetor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analogia: Guarda vs Inspetor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Como Funciona?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-pratico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo Prático
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quando-usar-matriz-de-decisao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚠️ Quando Usar (Matriz de Decisão)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="⚠️ Quando Usar (Matriz de Decisão)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#regra-de-ouro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Regra de Ouro
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛠️ Como Usar
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛠️ Como Usar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#comando-simplificado-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comando Simplificado (Recomendado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sem-target-erro-didatico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sem Target (Erro Didático)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modo-manual-avancado-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modo Manual Avançado (Opcional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interpretando-resultados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Interpretando Resultados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Interpretando Resultados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#saida-tipica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saída Típica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acoes-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ações Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exemplo-de-correcao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exemplo de Correção
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#politica-de-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚫 Política de CI/CD
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚫 Política de CI/CD">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#por-que" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Por Quê?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quando-foi-removido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quando Foi Removido?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#melhores-praticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Melhores Práticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 Referências
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📞 Suporte
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="mutation-testing-guia-de-uso">🧟 Mutation Testing - Guia de Uso</h1>
+<h2 id="o-que-e-mutation-testing">📚 O Que É Mutation Testing?</h2>
+<p><strong>Mutation Testing</strong> é uma técnica avançada de validação da qualidade dos <strong>testes</strong>, não do código de produção. É literalmente "testar os testes".</p>
+<h3 id="analogia-guarda-vs-inspetor">Analogia: Guarda vs Inspetor</h3>
+<p>Imagine que seu código é uma fortaleza e seus testes são os guardas que protegem essa fortaleza contra invasores (bugs).</p>
+<ul>
+<li><strong>Testes Tradicionais (Guarda):</strong> Verificam se tudo está funcionando corretamente no cenário feliz.</li>
+<li><strong>Mutation Testing (Inspetor):</strong> Simula invasores tentando invadir a fortaleza por diferentes ângulos para verificar se os guardas realmente estão atentos.</li>
+</ul>
+<h3 id="como-funciona">Como Funciona?</h3>
+<ol>
+<li><strong>Mutmut</strong> modifica automaticamente seu código (cria "mutantes")</li>
+<li>Exemplo: Troca <code>&gt;</code> por <code>&gt;=</code>, muda <code>True</code> para <code>False</code>, remove condições</li>
+<li>Executa sua suite de testes contra cada mutante</li>
+<li><strong>Mutante Morto (✅):</strong> Seus testes detectaram a mudança → <strong>Ótimo!</strong></li>
+<li><strong>Mutante Sobrevivente (❌):</strong> Seus testes passaram mesmo com o bug → <strong>Problema!</strong></li>
+</ol>
+<h3 id="exemplo-pratico">Exemplo Prático</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Código Original</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">validar_idade</span><span class="p">(</span><span class="n">idade</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="k">return</span> <span class="n">idade</span> <span class="o">&gt;=</span> <span class="mi">18</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Mutante 1: Troca &gt;= por &gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">validar_idade</span><span class="p">(</span><span class="n">idade</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">return</span> <span class="n">idade</span> <span class="o">&gt;</span> <span class="mi">18</span>  <span class="c1"># 🧟 Mutante!</span>
+</code></pre></div>
+<p>Se você tiver um teste apenas com <code>idade=20</code>, ele passará para <strong>ambas as versões</strong>. O mutante sobreviveu! Você precisa de um teste com <code>idade=18</code> para matá-lo.</p>
+<hr />
+<h2 id="quando-usar-matriz-de-decisao">⚠️ Quando Usar (Matriz de Decisão)</h2>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Usar Mutation?</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Refatoração de Código Core</strong></td>
+<td>✅ SIM</td>
+<td>Garante que os testes realmente protegem contra regressões</td>
+</tr>
+<tr>
+<td><strong>Bug Crítico Repetido</strong></td>
+<td>✅ SIM</td>
+<td>Valida se os testes agora detectariam esse tipo de bug</td>
+</tr>
+<tr>
+<td><strong>Novo Módulo Crítico (Segurança/Pagamento)</strong></td>
+<td>✅ SIM</td>
+<td>Alta criticidade exige alta confiança nos testes</td>
+</tr>
+<tr>
+<td><strong>Código Trivial (Getters/Setters)</strong></td>
+<td>❌ NÃO</td>
+<td>Overhead não justifica o benefício</td>
+</tr>
+<tr>
+<td><strong>Protótipos/Spikes</strong></td>
+<td>❌ NÃO</td>
+<td>Código temporário não requer essa profundidade</td>
+</tr>
+<tr>
+<td><strong>CI Automático</strong></td>
+<td>❌ <strong>NUNCA</strong></td>
+<td>Processo lento e caro (pode levar horas)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="regra-de-ouro">Regra de Ouro</h3>
+<blockquote>
+<p><strong>Mutation Testing é uma ferramenta de auditoria cirúrgica, não um validador diário.</strong></p>
+</blockquote>
+<hr />
+<h2 id="como-usar">🛠️ Como Usar</h2>
+<h3 id="comando-simplificado-recomendado">Comando Simplificado (Recomendado)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>scripts/utils/filesystem.py
+</code></pre></div>
+<p><strong>Comportamento:</strong></p>
+<ul>
+<li>Limpa cache anterior automaticamente</li>
+<li>Executa mutmut apenas no arquivo especificado</li>
+<li>Gera relatório HTML em <code>html/index.html</code></li>
+<li>Modo <code>--simple-output</code> para facilitar leitura</li>
+</ul>
+<h3 id="sem-target-erro-didatico">Sem Target (Erro Didático)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>make<span class="w"> </span>mutation
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>❌<span class="w"> </span>Erro:<span class="w"> </span>Você<span class="w"> </span>deve<span class="w"> </span>especificar<span class="w"> </span>um<span class="w"> </span>arquivo<span class="w"> </span>alvo.
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>📖<span class="w"> </span>Uso<span class="w"> </span>correto:
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">   </span>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>caminho/do/arquivo.py
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>💡<span class="w"> </span>Exemplo:
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">   </span>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>scripts/utils/filesystem.py
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>📚<span class="w"> </span>Para<span class="w"> </span>mais<span class="w"> </span>informações,<span class="w"> </span>consulte:
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">   </span>docs/guides/MUTATION_TESTING.md
+</code></pre></div>
+<h3 id="modo-manual-avancado-opcional">Modo Manual Avançado (Opcional)</h3>
+<p>Se precisar de controle fino, use <code>mutmut</code> diretamente:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. Limpar cache</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>rm<span class="w"> </span>-f<span class="w"> </span>.mutmut-cache
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 2. Executar mutation em múltiplos arquivos</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>mutmut<span class="w"> </span>run<span class="w"> </span>--paths-to-mutate<span class="w"> </span>scripts/utils/
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># 3. Ver resultados</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>mutmut<span class="w"> </span>results
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># 4. Inspecionar mutante específico</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>mutmut<span class="w"> </span>show<span class="w"> </span>&lt;id&gt;
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 5. Gerar HTML</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>mutmut<span class="w"> </span>html
+</code></pre></div>
+<hr />
+<h2 id="interpretando-resultados">📊 Interpretando Resultados</h2>
+<h3 id="saida-tipica">Saída Típica</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>🧟 Mutation Testing - Manual Local Execution
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>🎯 Target: scripts/utils/filesystem.py
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Legend for output:
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>🎉 Killed mutants.   The goal is for everything to end up in this bucket.
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>⏰ Timeout.          Test suite took 10 times as long as the baseline so were killed.
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>🤔 Suspicious.       Tests took a long time, but not long enough to be killed.
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>🙁 Survived.         This means your tests need to be expanded.
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>🔇 Skipped.          Skipped.
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>mutmut cache is out of date, clearing it...
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>1. TIMEOUT
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>2. KILLED
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>3. KILLED
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>4. SURVIVED
+</code></pre></div>
+<h3 id="acoes-recomendadas">Ações Recomendadas</h3>
+<ul>
+<li><strong>KILLED (🎉):</strong> Tudo certo! Mantenha assim.</li>
+<li><strong>SURVIVED (🙁):</strong> <strong>Ação Requerida!</strong> Adicione teste específico para cobrir esse caso.</li>
+<li><strong>TIMEOUT (⏰):</strong> Possível loop infinito. Revise a lógica ou o teste.</li>
+<li><strong>SUSPICIOUS (🤔):</strong> Teste demorado. Considere otimização.</li>
+</ul>
+<h3 id="exemplo-de-correcao">Exemplo de Correção</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ❌ Teste Fraco (Mutante Sobrevive)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># ✅ Teste Robusto (Mata o Mutante)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Acima do limite</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Exatamente no limite (mata mutante &gt;= &gt; &gt;)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span> <span class="c1"># Abaixo do limite</span>
+</code></pre></div>
+<hr />
+<h2 id="politica-de-cicd">🚫 Política de CI/CD</h2>
+<p><strong>❌ Mutation Testing NÃO deve rodar automaticamente no GitHub Actions.</strong></p>
+<h3 id="por-que">Por Quê?</h3>
+<ul>
+<li>⏱️ <strong>Lentidão:</strong> Pode levar de 30 minutos a várias horas.</li>
+<li>💰 <strong>Custo:</strong> Consome minutos de CI desnecessariamente.</li>
+<li>🔄 <strong>Frequência:</strong> Não é necessário validar mutantes a cada commit.</li>
+<li>🎯 <strong>Propósito:</strong> É uma ferramenta de auditoria pontual, não de validação contínua.</li>
+</ul>
+<h3 id="quando-foi-removido">Quando Foi Removido?</h3>
+<p>Anteriormente existia um workflow <code>.github/workflows/mutation-audit.yml</code> que foi <strong>removido</strong> em conformidade com esta política.</p>
+<hr />
+<h2 id="melhores-praticas">🎓 Melhores Práticas</h2>
+<ol>
+<li><strong>Execute Localmente Antes de PRs Críticos</strong></li>
+<li>
+<p>Especialmente em refatorações de módulos core.</p>
+</li>
+<li>
+<p><strong>Comece Pequeno</strong></p>
+</li>
+<li>
+<p>Use <code>target=arquivo_especifico.py</code> ao invés de diretórios inteiros.</p>
+</li>
+<li>
+<p><strong>Documente Mutantes Sobreviventes Esperados</strong></p>
+</li>
+<li>Alguns mutantes podem ser falsos positivos (ex: logging).</li>
+<li>
+<p>Documente no código por que aquele mutante é aceitável.</p>
+</li>
+<li>
+<p><strong>Não Busque 100% de Morte</strong></p>
+</li>
+<li>Objetivo razoável: 80-90% de mutantes mortos.</li>
+<li>
+<p>Custo-benefício diminui conforme se aproxima de 100%.</p>
+</li>
+<li>
+<p><strong>Combine com Coverage</strong></p>
+</li>
+<li>Coverage diz <strong>O QUE</strong> foi executado.</li>
+<li>Mutation diz <strong>SE O QUE</strong> foi executado realmente validou o comportamento.</li>
+</ol>
+<hr />
+<h2 id="referencias">🔗 Referências</h2>
+<ul>
+<li><a href="https://mutmut.readthedocs.io/">Mutmut Documentation</a></li>
+<li><a href="https://thevaluable.dev/mutation-testing-python/">Mutation Testing Best Practices</a></li>
+<li>Arquivo de configuração: <code>pyproject.toml</code> → <code>[tool.mutmut]</code></li>
+</ul>
+<hr />
+<h2 id="suporte">📞 Suporte</h2>
+<p>Dúvidas ou problemas com Mutation Testing?</p>
+<ol>
+<li>Consulte este guia primeiro</li>
+<li>Revise a documentação do Mutmut</li>
+<li>Abra uma discussão no repositório com o label <code>quality-assurance</code></li>
+</ol>
+<hr />
+<p><strong>Última Atualização:</strong> 2026-01-01
+<strong>Responsável:</strong> SRE Team
+<strong>Status:</strong> Ativo</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
