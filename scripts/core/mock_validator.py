@@ -172,7 +172,7 @@ class TestMockValidator:
         """
         logger.info("Validando sintaxe dos arquivos de teste...")
 
-        test_files = self.fs.glob(self.workspace_root / "tests", "**/*.py")
+        test_files = list(self.fs.glob(self.workspace_root / "tests", "**/*.py"))
         if not test_files:
             logger.warning("Nenhum arquivo de teste encontrado")
             return True
@@ -480,7 +480,7 @@ def test_path_operations():
                 logger.error(f"Erro ao criar diretório de testes: {e}")
 
         # Cria arquivos de exemplo se não há testes
-        test_files = self.fs.glob(tests_dir, "*.py")
+        test_files = list(self.fs.glob(tests_dir, "*.py"))
         if len(test_files) <= 1:  # Apenas __init__.py ou vazio
             created = self.create_sample_test_files()
             fixed_count += len(created)

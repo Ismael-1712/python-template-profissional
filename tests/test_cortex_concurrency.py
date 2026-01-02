@@ -390,7 +390,7 @@ class TestMemoryFileSystemThreadSafety:
 
         def search_files() -> list[Path]:
             """Search for Python files."""
-            return fs.rglob(Path("src"), "*.py")
+            return list(fs.rglob(Path("src"), "*.py"))
 
         # Run 10 concurrent searches
         with ThreadPoolExecutor(max_workers=10) as executor:

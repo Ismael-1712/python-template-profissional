@@ -60,7 +60,7 @@ class TestMemoryFileSystem:
         fs.write_text(Path("src/main.py"), "# main")
 
         # Glob for test files
-        test_files = fs.glob(Path("tests"), "test_*.py")
+        test_files = list(fs.glob(Path("tests"), "test_*.py"))
 
         expected_count = 2
         assert len(test_files) == expected_count
@@ -82,7 +82,7 @@ class TestMemoryFileSystem:
         fs.write_text(Path("project/config.yaml"), "# config")
 
         # Search recursively for all .py files
-        py_files = fs.rglob(Path("project"), "*.py")
+        py_files = list(fs.rglob(Path("project"), "*.py"))
 
         # Should find all 5 Python files across all subdirectories
         expected_count = 5
@@ -108,7 +108,7 @@ class TestMemoryFileSystem:
         fs.write_text(Path("tests/integration/test_baz.py"), "# test baz")
 
         # Search recursively only for test_*.py files
-        test_files = fs.rglob(Path("tests"), "test_*.py")
+        test_files = list(fs.rglob(Path("tests"), "test_*.py"))
 
         # Should find only files starting with "test_"
         expected_count = 3
@@ -126,7 +126,7 @@ class TestMemoryFileSystem:
         fs.mkdir(Path("empty/sub1/sub2"))
 
         # Search should return empty list
-        results = fs.rglob(Path("empty"), "*.py")
+        results = list(fs.rglob(Path("empty"), "*.py"))
         assert len(results) == 0
         assert results == []
 
@@ -273,7 +273,7 @@ class TestRealFileSystem:
         fs.write_text(test_dir / "conftest.py", "# conftest")
 
         # Glob for test files
-        test_files = fs.glob(test_dir, "test_*.py")
+        test_files = list(fs.glob(test_dir, "test_*.py"))
 
         expected_count = 2
         assert len(test_files) == expected_count
@@ -298,7 +298,7 @@ class TestRealFileSystem:
         fs.write_text(project_dir / "docs/readme.txt", "# readme")
 
         # Search recursively for all .py files
-        py_files = fs.rglob(project_dir, "*.py")
+        py_files = list(fs.rglob(project_dir, "*.py"))
 
         # Should find all 5 Python files
         expected_count = 5
@@ -327,7 +327,7 @@ class TestRealFileSystem:
         fs.write_text(tests_dir / "integration/test_baz.py", "# test baz")
 
         # Search recursively only for test_*.py files
-        test_files = fs.rglob(tests_dir, "test_*.py")
+        test_files = list(fs.rglob(tests_dir, "test_*.py"))
 
         # Should find only files starting with "test_"
         expected_count = 3
@@ -431,8 +431,8 @@ class TestIntegrationScenarios:
         fs.write_text(Path("tests/test_utils.py"), "# test utils")
 
         # Discover Python files
-        src_files = fs.glob(Path("src"), "*.py")
-        test_files = fs.glob(Path("tests"), "test_*.py")
+        src_files = list(fs.glob(Path("src"), "*.py"))
+        test_files = list(fs.glob(Path("tests"), "test_*.py"))
 
         expected_src_count = 2
         expected_test_count = 2
