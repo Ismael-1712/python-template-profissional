@@ -174,7 +174,7 @@ deps-check:
 	@$(PYTHON) scripts/ci/verify_deps.py
 
 ## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci)
-validate: deps-check lint type-check complexity-check arch-check deps-check docs-check ci-check test
+validate: format deps-check lint type-check complexity-check arch-check deps-check docs-check ci-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa)"
@@ -313,3 +313,9 @@ mutation: ## 🧟 Run mutation testing (Usage: make mutation target=scripts/file
 	@echo "📊 Report:"
 	@mutmut results
 	@echo "📝 HTML Report generated. Run 'mutmut html' to view details."
+
+## format: Aplica formatação automática e correções de lint (Ruff)
+format:
+	@echo "✨ Aplicando Auto-Correção de Estilo (Auto-Immune)..."
+	@$(PYTHON) -m ruff format .
+	@$(PYTHON) -m ruff check --fix .
