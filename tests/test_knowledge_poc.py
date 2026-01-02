@@ -41,7 +41,7 @@ def scan_knowledge_base(
         >>> len(docs)
         1
     """
-    return fs.rglob(root, pattern)
+    return list(fs.rglob(root, pattern))
 
 
 def extract_metadata(fs: FileSystemAdapter, doc_path: Path) -> dict[str, str | int]:
@@ -237,6 +237,10 @@ class TestKnowledgeScannerPoC:
         # Criar estrutura real em diretório temporário
         docs_dir = tmp_path / "knowledge_base"
         docs_dir.mkdir()
+
+        # Criar diretórios pais antes de escrever arquivos
+        (docs_dir / "guides").mkdir(parents=True, exist_ok=True)
+        (docs_dir / "api").mkdir(parents=True, exist_ok=True)
 
         fs.write_text(docs_dir / "index.md", "# Knowledge Base Index")
         fs.write_text(docs_dir / "guides/quickstart.md", "# Quick Start")

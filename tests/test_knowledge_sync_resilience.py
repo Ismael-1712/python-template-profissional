@@ -11,6 +11,7 @@ License: MIT
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock
@@ -35,48 +36,57 @@ class MockFileSystem(FileSystemAdapter):
         """Initialize mock filesystem."""
         self.files: dict[Path, str] = {}
 
-    def read_text(self, path: Path, encoding: str = "utf-8") -> str:
+    def read_text(self, path: str | Path, encoding: str = "utf-8") -> str:
         """Read text from mock file."""
+        path = Path(path)
         if path not in self.files:
             raise FileNotFoundError(f"File not found: {path}")
         return self.files[path]
 
     def write_text(
         self,
-        path: Path,
+        path: str | Path,
         content: str,
         encoding: str = "utf-8",
     ) -> None:
         """Write text to mock file."""
+        path = Path(path)
         self.files[path] = content
 
-    def exists(self, path: Path) -> bool:
+    def exists(self, path: str | Path) -> bool:
         """Check if mock file exists."""
-        return path in self.files
+        return Path(path) in self.files
 
-    def is_file(self, path: Path) -> bool:
+    def is_file(self, path: str | Path) -> bool:
         """Check if path is a file."""
-        return path in self.files
+        return Path(path) in self.files
 
-    def is_dir(self, path: Path) -> bool:
+    def is_dir(self, path: str | Path) -> bool:
         """Check if path is a directory."""
         return False
 
-    def mkdir(self, path: Path, parents: bool = False, exist_ok: bool = False) -> None:
+    def mkdir(
+        self,
+        path: str | Path,
+        parents: bool = False,
+        exist_ok: bool = False,
+    ) -> None:
         """Mock mkdir - no-op for tests."""
 
-    def glob(self, path: Path, pattern: str) -> list[Path]:
-        """Mock glob - returns empty list."""
-        return []
+    def glob(self, path: str | Path, pattern: str) -> Iterator[Path]:
+        """Mock glob - returns empty iterator."""
+        return iter([])
 
-    def rglob(self, path: Path, pattern: str) -> list[Path]:
-        """Mock rglob - returns empty list."""
-        return []
+    def rglob(self, path: str | Path, pattern: str) -> Iterator[Path]:
+        """Mock rglob - returns empty iterator."""
+        return iter([])
 
-    def copy(self, src: Path, dst: Path) -> None:
+    def copy(self, src: str | Path, dst: str | Path) -> None:
         """Mock copy - copies between mock files."""
-        if src in self.files:
-            self.files[dst] = self.files[src]
+        src_path = Path(src)
+        dst_path = Path(dst)
+        if src_path in self.files:
+            self.files[dst_path] = self.files[src_path]
 
 
 @pytest.fixture

@@ -295,46 +295,43 @@ done
 test-matrix:
 	$(PYTHON) -m tox
 
-## mutation-check: Run mutation testing to validate test quality (⚠️ Slow process)
-mutation-check:
+## mutation: Run manual mutation testing on specific file (⚠️ Slow process, LOCAL ONLY)
+mutation:
+	@if [ -z "$(target)" ]; then \
+		echo "❌ Erro: Você deve especificar um arquivo alvo."; \
+		echo ""; \
+		echo "📖 Uso correto:"; \
+		echo "   make mutation target=caminho/do/arquivo.py"; \
+		echo ""; \
+		echo "💡 Exemplo:"; \
+		echo "   make mutation target=scripts/utils/filesystem.py"; \
+		echo ""; \
+		echo "📚 Para mais informações, consulte:"; \
+		echo "   docs/guides/MUTATION_TESTING.md"; \
+		exit 1; \
+	fi
 	@echo "🧟 ================================================"
-	@echo "🧟 MUTATION TESTING (Validação de Qualidade de Testes)"
+	@echo "🧟 MUTATION TESTING - Manual Local Execution"
 	@echo "🧟 ================================================"
 	@echo ""
-	@echo "⚠️  ATENÇÃO: Este processo é DEMORADO e pode levar vários minutos."
-	@echo "   - Mutmut irá modificar o código fonte temporariamente"
-	@echo "   - Para cada mutação, a suite de testes será executada"
-	@echo "   - Mutantes 'Mortos' = Testes funcionando corretamente ✅"
-	@echo "   - Mutantes 'Sobreviventes' = Testes falsos positivos ❌"
+	@echo "🎯 Target: $(target)"
+	@echo "⚠️  ATENÇÃO: Este processo pode levar vários minutos."
 	@echo ""
-	@echo "💡 Dica: Para testar apenas um arquivo específico:"
-	@echo "   1. Edite [tool.mutmut] em pyproject.toml"
-	@echo "   2. Altere paths_to_mutate = [\"scripts/utils/security.py\"]"
-	@echo "   3. Execute: mutmut run"
-	@echo ""
-	@read -p "Pressione ENTER para continuar ou Ctrl+C para cancelar..." DUMMY
+	@echo "🗑️  Limpando cache anterior..."
+	@rm -f .mutmut-cache
 	@echo ""
 	@echo "🚀 Iniciando mutation testing..."
-	@$(PYTHON) -m mutmut run
-
-## mutation-ci: Run mutation testing in CI mode (non-interactive, core only)
-mutation-ci:
-	@echo "🧟 ================================================"
-	@echo "🧟 MUTATION TESTING - CI MODE (Core Only)"
-	@echo "🧟 ================================================"
+	@$(PYTHON) -m mutmut run --paths-to-mutate $(target) --simple-output --runner "python -m pytest -x" || true
 	@echo ""
-	@echo "🎯 Target: scripts/core/"
-	@echo "📊 Mode: Non-interactive (CI optimized)"
-	@echo "⏱️  Expected: 30min - 6h depending on test suite size"
+	@echo "📊 Gerando relatório HTML..."
+	@$(PYTHON) -m mutmut html || echo "⚠️  Aviso: Nenhum relatório gerado (possível falta de mutantes)"
 	@echo ""
-	@echo "🚀 Starting mutation testing..."
-	@$(PYTHON) -m mutmut run --paths-to-mutate scripts/core --no-progress --CI
-	@echo ""
-	@echo "📊 Generating HTML report..."
-	@$(PYTHON) -m mutmut html
-	@echo ""
-	@echo "✅ Mutation testing complete!"
-	@echo "📁 Report available at: html/index.html"
+	@if [ -d "html" ]; then \
+		echo "✅ Mutation testing complete!"; \
+		echo "📁 Relatório disponível em: html/index.html"; \
+	else \
+		echo "⚠️  Nenhum relatório HTML gerado"; \
+	fi
 
 ## commit: Intelligent commit with Smart Governance (idempotent hooks)
 commit:

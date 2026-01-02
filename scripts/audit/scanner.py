@@ -72,9 +72,8 @@ class FileScanner:
                 continue
 
             for pattern in self.file_patterns:
-                # Use recursive glob pattern for adapter compatibility
-                recursive_pattern = f"**/{pattern}"
-                matched_files = self.fs.glob(scan_dir, recursive_pattern)
+                # Use rglob for recursive search
+                matched_files = self.fs.rglob(scan_dir, pattern)
 
                 for file_path in matched_files:
                     # Skip excluded paths

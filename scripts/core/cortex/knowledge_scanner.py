@@ -134,7 +134,7 @@ class KnowledgeScanner:
 
         # Scan for Markdown files
         logger.info("Scanning knowledge directory: %s", knowledge_dir)
-        markdown_files = self.fs.rglob(knowledge_dir, "*.md")
+        markdown_files = list(self.fs.rglob(knowledge_dir, "*.md"))
         logger.debug("Found %d Markdown files to process", len(markdown_files))
 
         entries: list[KnowledgeEntry] = []
