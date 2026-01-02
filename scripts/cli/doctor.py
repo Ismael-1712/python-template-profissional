@@ -125,7 +125,7 @@ class DevDoctor:
         )
 
     def check_tool_paths(self) -> DiagnosticResult:
-        """Check if tools are running from venv (Pyenv-Aware)."""
+        """Check if tools are running from venv (Pyenv-Aware & CI-Safe)."""
         tools = ["pre-commit", "tox"]
         misaligned = []
 
@@ -144,9 +144,13 @@ class DevDoctor:
             # via Make without activating venv in shell.
             is_shim = resolved_path and ".pyenv/shims" in resolved_path
 
+            # CI-Safe: If tool is not in PATH but exists in venv, that's OK
+            # (CI environments often don't add .venv/bin to PATH)
             if not resolved_path:
-                misaligned.append(f"{tool} not found in PATH")
-            elif not str(resolved_path).startswith(str(self.venv_bin)) and not is_shim:
+                # Tool not in PATH, but it exists in venv (checked above)
+                # This is acceptable - tools can be executed via full path
+                continue
+            if not str(resolved_path).startswith(str(self.venv_bin)) and not is_shim:
                 # It's not in venv AND not a shim (e.g., /usr/bin/pre-commit)
                 misaligned.append(f"{tool} -> {resolved_path}")
 
