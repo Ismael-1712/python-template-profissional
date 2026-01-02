@@ -47,7 +47,7 @@ jobs:
           fi
 
       - name: 📦 Upload Relatório de Mutação
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: mutation-report
           path: html/
