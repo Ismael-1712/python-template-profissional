@@ -110,7 +110,7 @@ class InMemoryVectorStore(VectorStorePort):
                     "embedding": chunk.embedding,
                 }
                 for chunk in self._chunks
-            ]
+            ],
         }
 
         # Write to file

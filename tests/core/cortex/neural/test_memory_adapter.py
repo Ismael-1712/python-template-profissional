@@ -78,7 +78,8 @@ class TestInMemoryVectorStoreAdd:
         assert len(vector_store._chunks) == 0
 
     def test_add_chunks_without_embeddings(
-        self, vector_store: InMemoryVectorStore
+        self,
+        vector_store: InMemoryVectorStore,
     ) -> None:
         """Should raise ValueError when chunk has no embedding."""
         chunk_no_embedding = DocumentChunk(
@@ -203,7 +204,8 @@ class TestInMemoryVectorStorePersistence:
             assert store2._chunks[0].content == "Python is a programming language"
 
     def test_load_nonexistent_file_raises_error(
-        self, vector_store: InMemoryVectorStore
+        self,
+        vector_store: InMemoryVectorStore,
     ) -> None:
         """Should raise FileNotFoundError when loading from non-existent file."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -214,14 +216,16 @@ class TestInMemoryVectorStorePersistence:
                 vector_store_with_path.load()
 
     def test_persist_without_path_raises_error(
-        self, vector_store: InMemoryVectorStore
+        self,
+        vector_store: InMemoryVectorStore,
     ) -> None:
         """Should raise ValueError when persisting without store_path."""
         with pytest.raises(ValueError, match="store_path"):
             vector_store.persist()
 
     def test_load_without_path_raises_error(
-        self, vector_store: InMemoryVectorStore
+        self,
+        vector_store: InMemoryVectorStore,
     ) -> None:
         """Should raise ValueError when loading without store_path."""
         with pytest.raises(ValueError, match="store_path"):

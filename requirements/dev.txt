@@ -232,7 +232,7 @@ tomlkit==0.13.3
     # via
     #   -r requirements/dev.in
     #   python-semantic-release
-tox==4.32.0
+tox==4.33.0
     # via -r requirements/dev.in
 typer==0.21.0
     # via -r requirements/dev.in
