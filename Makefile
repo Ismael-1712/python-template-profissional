@@ -296,59 +296,18 @@ test-matrix:
 	$(PYTHON) -m tox
 
 ## mutation: Run manual mutation testing on specific file (⚠️ Slow process, LOCAL ONLY)
-mutation:
+mutation: ## 🧟 Run mutation testing (Usage: make mutation target=scripts/file.py)
 	@if [ -z "$(target)" ]; then \
-		echo "❌ Erro: Você deve especificar um arquivo alvo."; \
-		echo ""; \
-		echo "📖 Uso correto:"; \
-		echo "   make mutation target=caminho/do/arquivo.py"; \
-		echo ""; \
-		echo "💡 Exemplo:"; \
-		echo "   make mutation target=scripts/utils/filesystem.py"; \
-		echo ""; \
-		echo "📚 Para mais informações, consulte:"; \
-		echo "   docs/guides/MUTATION_TESTING.md"; \
+		echo "❌ Error: Missing target. Usage: make mutation target=path/to/file.py"; \
 		exit 1; \
 	fi
-	@echo "🧟 ================================================"
-	@echo "🧟 MUTATION TESTING - Manual Local Execution"
-	@echo "🧟 ================================================"
+	@echo "🧟 Starting Mutation Testing on: $(target)"
+	@echo "🧹 Cleaning cache..."
+	@rm -rf .mutmut-cache
+	@echo "🚀 Running Mutmut (Config loaded from pyproject.toml)..."
+	@# Na v3, passamos o arquivo alvo como argumento posicional
+	@mutmut run $(target) || true
 	@echo ""
-	@echo "🎯 Target: $(target)"
-	@echo "⚠️  ATENÇÃO: Este processo pode levar vários minutos."
-	@echo ""
-	@echo "🗑️  Limpando cache anterior..."
-	@rm -f .mutmut-cache
-	@echo ""
-	@echo "🚀 Iniciando mutation testing..."
-	@$(PYTHON) -m mutmut run --paths-to-mutate $(target) --simple-output --runner "python -m pytest -x" || true
-	@echo ""
-	@echo "📊 Gerando relatório HTML..."
-	@$(PYTHON) -m mutmut html || echo "⚠️  Aviso: Nenhum relatório gerado (possível falta de mutantes)"
-	@echo ""
-	@if [ -d "html" ]; then \
-		echo "✅ Mutation testing complete!"; \
-		echo "📁 Relatório disponível em: html/index.html"; \
-	else \
-		echo "⚠️  Nenhum relatório HTML gerado"; \
-	fi
-
-## commit: Intelligent commit with Smart Governance (idempotent hooks)
-commit:
-	@if [ -z "$(MSG)" ]; then \
-		echo "❌ Usage: make commit MSG='your commit message'"; \
-		echo "   Example: make commit MSG='feat: add new feature'"; \
-		exit 1; \
-	fi
-	@echo "🔄 Executing intelligent commit workflow..."
-	@git add -u
-	@git commit -m "$(MSG)"
-	@echo "✅ Commit completed successfully!"
-
-## commit-amend: Amend last commit with auto-staging of volatile files
-commit-amend:
-	@echo "🔄 Amending last commit..."
-	@git add -u
-	@git add audit_metrics.json docs/reference/CLI_COMMANDS.md 2>/dev/null || true
-	@git commit --amend --no-edit
-	@echo "✅ Commit amended!"
+	@echo "📊 Report:"
+	@mutmut results
+	@echo "📝 HTML Report generated. Run 'mutmut html' to view details."
