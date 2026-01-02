@@ -147,19 +147,15 @@ type-check:
 complexity-check:
 	@echo "🧠 Verificando complexidade ciclomática (Xenon)..."
 	$(PYTHON) -m xenon --max-absolute B --max-modules B --max-average A \
-		--exclude "scripts/core/cortex/knowledge_validator.py,scripts/core/cortex/metadata.py,scripts/core/cortex/migrate.py,scripts/audit_dependencies.py,scripts/benchmark_cortex_perf.py,scripts/example_guardian_scanner.py,scripts/cortex/adapters/ui.py,scripts/cortex/commands/setup.py,scripts/cortex/commands/config.py,scripts/cortex/commands/docs.py,scripts/git_sync/sync_logic.py,scripts/ci_recovery/analyzer.py,scripts/ci_recovery/executor.py,scripts/utils/toml_merger.py,scripts/cli/install_dev.py,scripts/cli/mock_generate.py,scripts/cli/mock_ci.py,scripts/cli/fusion.py,scripts/cli/audit.py,scripts/cli/mock_validate.py,scripts/cli/upgrade_python.py,scripts/audit/analyzer.py,scripts/audit/plugins.py,scripts/audit/reporter.py,scripts/core/mock_generator.py,scripts/core/doc_gen.py,scripts/core/cortex/scanner.py,scripts/core/cortex/project_orchestrator.py,scripts/core/cortex/knowledge_scanner.py,scripts/core/cortex/knowledge_orchestrator.py,scripts/core/cortex/mapper.py,scripts/core/cortex/link_resolver.py,scripts/core/mock_ci/git_ops.py" \
+		--exclude "scripts/core/cortex/metadata.py,scripts/core/cortex/migrate.py,scripts/audit_dependencies.py,scripts/benchmark_cortex_perf.py,scripts/example_guardian_scanner.py,scripts/cortex/adapters/ui.py,scripts/cortex/commands/setup.py,scripts/cortex/commands/config.py,scripts/cortex/commands/docs.py,scripts/git_sync/sync_logic.py,scripts/ci_recovery/analyzer.py,scripts/ci_recovery/executor.py,scripts/utils/toml_merger.py,scripts/cli/install_dev.py,scripts/cli/mock_generate.py,scripts/cli/mock_ci.py,scripts/cli/fusion.py,scripts/cli/audit.py,scripts/cli/mock_validate.py,scripts/cli/upgrade_python.py,scripts/audit/analyzer.py,scripts/audit/plugins.py,scripts/audit/reporter.py,scripts/core/mock_generator.py,scripts/core/doc_gen.py,scripts/core/cortex/scanner.py,scripts/core/cortex/project_orchestrator.py,scripts/core/cortex/knowledge_scanner.py,scripts/core/cortex/knowledge_orchestrator.py,scripts/core/cortex/mapper.py,scripts/core/cortex/link_resolver.py,scripts/core/mock_ci/git_ops.py" \
 		scripts/ src/
-	@echo "✅ Análise de complexidade concluída (legacy files excluded)"
+	@echo "✅ Análise de complexidade concluída (legacy files excluded, knowledge_validator.py refactored)"
 
 ## arch-check: Valida separação de camadas arquiteturais (Import Linter)
 arch-check:
 	@echo "🏗️  Verificando contratos arquiteturais..."
 	@$(VENV)/bin/lint-imports || (echo "⚠️  Violações de arquitetura detectadas (grandfathering mode)" && exit 0)
 
-## deps-check: Detecta dependências não utilizadas (Deptry)
-deps-check:
-	@echo "📦 Verificando dependências não utilizadas..."
-	@$(PYTHON) -m deptry . || (echo "⚠️  Dependências não utilizadas detectadas (grandfathering mode)" && exit 0)
 
 ## docs-check: Valida cobertura de docstrings (Interrogate)
 docs-check:
@@ -171,8 +167,14 @@ ci-check:
 	@echo "🔍 Auditando workflows do GitHub Actions..."
 	@$(PYTHON) scripts/ci/audit_workflows.py
 
+
+## deps-check: Verifica se arquivos requirements.txt estão sincronizados com .in
+deps-check:
+	@echo "🛡️  Executando Protocolo de Imunidade de Dependências..."
+	@$(PYTHON) scripts/ci/verify_deps.py
+
 ## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci)
-validate: lint type-check complexity-check arch-check deps-check docs-check ci-check test
+validate: format deps-check lint type-check complexity-check arch-check deps-check docs-check ci-check test
 	@echo "📚 Verifying Documentation Integrity..."
 	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa)"
@@ -311,3 +313,9 @@ mutation: ## 🧟 Run mutation testing (Usage: make mutation target=scripts/file
 	@echo "📊 Report:"
 	@mutmut results
 	@echo "📝 HTML Report generated. Run 'mutmut html' to view details."
+
+## format: Aplica formatação automática e correções de lint (Ruff)
+format:
+	@echo "✨ Aplicando Auto-Correção de Estilo (Auto-Immune)..."
+	@$(PYTHON) -m ruff format .
+	@$(PYTHON) -m ruff check --fix .
