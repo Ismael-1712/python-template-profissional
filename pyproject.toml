@@ -1,96 +1,84 @@
-# Define o sistema de build do projeto.
-# Usamos 'setuptools', o padrão moderno.
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-# Metadados do Projeto (PEP 621)
-# ESTE ARQUIVO É GERADO PELO TEMPLATE COPIER
-# Para modificar: edite pyproject.toml.jinja
 [project]
-name = "python_template_profissional"
+name = "python-template-profissional"
 version = "0.1.0"
-description = "Professional Python Template with CORTEX architecture"
-readme = "README.md"
+description = "Template profissional para projetos Python"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+readme = "README.md"
 authors = [
-    { name = "Template Development Team", email = "dev@example.com" }
+    { name = "Ismael", email = "ismael@example.com" }
 ]
-
-# Dependências do projeto (API + CLI)
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+]
 dependencies = [
-    "fastapi",
-    "uvicorn[standard]",
-    "typer[all]",
-    "pydantic>=2.0",
-    "pydantic-settings>=2.0",
-    "chromadb>=0.4.0",
-    "sentence-transformers>=2.2.0",
-    "tomli>=2.0.1",
+    "typer>=0.9.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "uvicorn>=0.23.0",
+    "fastapi>=0.103.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "python-frontmatter>=1.0.0"
 ]
 
-# Dependências de desenvolvimento
 [project.optional-dependencies]
 dev = [
-    "pip-tools~=7.4",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.0.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
-    "pytest>=7.0.0",
-    "pytest-xdist>=3.0.0",
-    "pytest-cov>=4.0.0",
-    "babel>=2.10",
-    "mkdocs-material>=9.5",
-    "mkdocstrings[python]>=0.25",
-    "python-frontmatter>=1.0.0",
-    "pyyaml>=6.0",
-    "jinja2>=3.0",
+    "pre-commit>=3.0.0",
+    "tox>=4.0.0",
+    "deptry>=0.12.0",
+    "mutmut>=3.0.0",
+    "interrogate>=1.5.0",
+    "python-semantic-release>=8.0.0",
+    "import-linter>=1.0",
+    "xenon>=0.9.0",
+    "radon>=6.0.0",
+    "types-requests>=2.0.0",
+    "types-pyyaml>=6.0.0"
 ]
 
-# Console scripts - comandos globais do sistema
 [project.scripts]
-python-template = "src.app.main:app"
-dev-doctor = "scripts.cli.doctor:main"
-dev-audit = "scripts.cli.audit:main"
+cortex = "scripts.cortex.cli:app"
+doctor = "scripts.cli.doctor:main"
+audit = "scripts.cli.audit:main"
+install-dev = "scripts.cli.install_dev:main"
 git-sync = "scripts.cli.git_sync:main"
-upgrade-python = "scripts.cli.upgrade_python:main"
-mock-gen = "scripts.cli.mock_generate:main"
-mock-check = "scripts.cli.mock_validate:main"
-mock-ci = "scripts.cli.mock_ci:main"
-cortex = "scripts.cortex.cli:main"
-toml-fusion = "scripts.cli.fusion:main"
 
-# Configuração do setuptools para incluir pacotes
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["scripts*"]
+include = ["src*", "scripts*"]
 
-# --- Configuração das Ferramentas ---
-
-# Configuração do Ruff (Linter e Formatador)
 [tool.ruff]
 line-length = 88
 target-version = "py310"
 
-# Configuração do Linter do Ruff
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "D", "C901"]
 ignore = ["D203", "D213"]
 
-# Configuração do pydocstyle (D-Rules)
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-# Configuração do McCabe (Complexidade Ciclomática)
 [tool.ruff.lint.mccabe]
 max-complexity = 10
 
-# Configuração do Formatador do Ruff
 [tool.ruff.format]
 quote-style = "double"
 skip-magic-trailing-comma = false
 
-# Configuração do Semantic Release
 [tool.semantic_release]
 version_variable = "pyproject.toml:project.version"
 upload_to_pypi = false
@@ -102,7 +90,6 @@ major_on_breaking_change = true
 [tool.semantic_release.changelog]
 categories = ["feat", "fix", "docs", "refactor", "perf"]
 
-# Configuração do Mypy (Type Checking)
 [tool.mypy]
 python_version = "3.10"
 disallow_untyped_defs = true
@@ -120,39 +107,24 @@ strict_optional = true
 ignore_missing_imports = true
 follow_imports = "normal"
 strict_equality = true
-
-exclude = [
-    "venv/",
-    ".venv/",
-    "build/",
-    "dist/",
-    "scripts/audit_dashboard.py"
-]
+exclude = ["venv/", ".venv/", "build/", "dist/", "scripts/audit_dashboard.py"]
 
 [[tool.mypy.overrides]]
 module = "frontmatter"
 ignore_missing_imports = true
 
-# Configuração do Pytest
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = [
-    "-ra",
-    "--strict-markers",
-    "--strict-config",
-    "--showlocals",
-    "-n", "auto",
-]
+addopts = "-ra --strict-markers --strict-config --showlocals -n auto"
 markers = [
     "unit: mark a test as a unit test.",
     "integration: mark a test as an integration test.",
-    "e2e: mark a test as an end-to-end test.",
+    "e2e: mark a test as an end-to-end test."
 ]
 
-# Configuração do Import Linter (Arquitetura - Separação de Camadas)
 [tool.importlinter]
 root_packages = ["scripts", "src"]
 
@@ -168,20 +140,13 @@ type = "forbidden"
 source_modules = ["scripts.core.cortex"]
 forbidden_modules = ["scripts.cortex"]
 
-# Configuração do Deptry (Dependências Não Utilizadas)
 [tool.deptry]
-extend_exclude = [
-    "tests/",
-    ".venv/",
-    "build/",
-    "dist/",
-]
-# Grandfathering: ignorar deps atuais do projeto (template)
+extend_exclude = ["tests/", ".venv/", "build/", "dist/"]
+
 [tool.deptry.per_rule_ignores]
 DEP002 = ["uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi"]
-
-# Configuração do Interrogate (Cobertura de Docstrings)
 DEP004 = ["scripts/"]
+
 [tool.interrogate]
 ignore-init-method = true
 ignore-init-module = true
@@ -193,24 +158,17 @@ ignore-module = false
 ignore-nested-functions = false
 ignore-nested-classes = true
 ignore-setters = true
-fail-under = 99  # Grandfathering: começar em 0 e aumentar gradualmente
-exclude = [
-    "setup.py",
-    "docs",
-    "build",
-    "scripts/audit_dashboard.py",  # Legado
-]
+fail-under = 99
+exclude = ["setup.py", "docs", "build", "scripts/audit_dashboard.py"]
 verbose = 1
 quiet = false
 whitelist-regex = []
 color = true
 omit-covered-files = false
 
-# Configuração do Mutmut (Mutation Testing)
+# Configuração do Mutmut (Compatível com v3)
 [tool.mutmut]
-paths_to_mutate = ["scripts", "src"]
-runner = "python -m pytest"
-tests_dir = "tests"
+runner = "python -m pytest -x"
+tests_dir = "tests/"
+paths_to_mutate = "scripts/"
 backup = false
-# Modo de sobrevivência: apenas erros de teste são considerados mutantes mortos
-# (mutantes que causam syntax errors são ignorados automaticamente)
