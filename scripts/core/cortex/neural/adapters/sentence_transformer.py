@@ -82,11 +82,10 @@ class SentenceTransformerAdapter(EmbeddingPort):
         raw_embedding = self.model.encode(text, convert_to_numpy=False)
 
         # Ensure it's a list of floats (sentence-transformers may return numpy array)
-        embedding: Embedding = (
-            raw_embedding.tolist()
-            if hasattr(raw_embedding, "tolist")
-            else raw_embedding
-        )
+        if hasattr(raw_embedding, "tolist"):
+            embedding: Embedding = raw_embedding.tolist()  # type: ignore[assignment]
+        else:
+            embedding = raw_embedding  # type: ignore[assignment]
 
         return embedding
 
@@ -114,10 +113,9 @@ class SentenceTransformerAdapter(EmbeddingPort):
         raw_embeddings = self.model.encode(texts, convert_to_numpy=False)
 
         # Ensure it's a list of lists (handle numpy arrays)
-        embeddings: list[Embedding] = (
-            raw_embeddings.tolist()
-            if hasattr(raw_embeddings, "tolist")
-            else raw_embeddings
-        )
+        if hasattr(raw_embeddings, "tolist"):
+            embeddings: list[Embedding] = raw_embeddings.tolist()  # type: ignore[assignment]
+        else:
+            embeddings = raw_embeddings  # type: ignore[assignment]
 
         return embeddings
