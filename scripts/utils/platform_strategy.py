@@ -69,14 +69,17 @@ class PlatformStrategy(Protocol):
         ...
 
     @staticmethod
-    def ensure_durability(fd: int) -> None:
+    def ensure_durability(path: Path | int) -> bool:
         """Force write to physical storage media.
 
         Ensures data durability across system crashes and power failures.
         Behavior varies significantly across platforms.
 
         Args:
-            fd: File descriptor (from file.fileno())
+            path: File path or file descriptor (from file.fileno())
+
+        Returns:
+            True if sync was successful, False otherwise
 
         Platform Behavior:
             Unix/Linux: Calls fsync() - guarantees physical write
@@ -176,7 +179,7 @@ class UnixStrategy:
         return "git"
 
     @staticmethod
-    def ensure_durability(fd: int) -> None:
+    def ensure_durability(path: Path | int) -> bool:
         """Force write to physical disk using fsync().
 
         On Unix/Linux, fsync() provides strong durability guarantees:
@@ -185,7 +188,10 @@ class UnixStrategy:
         - Blocks until physical write completes
 
         Args:
-            fd: File descriptor from file.fileno()
+            path: File path or file descriptor from file.fileno()
+
+        Returns:
+            True if sync was successful, False otherwise
 
         Raises:
             OSError: If fsync fails (disk full, I/O error, etc.)
@@ -194,7 +200,20 @@ class UnixStrategy:
             fsync() is expensive (10-100ms typical). Use sparingly
             on critical data only (e.g., config files, state snapshots).
         """
-        os.fsync(fd)
+        try:
+            if isinstance(path, int):
+                os.fsync(path)
+            else:
+                # For directories or files, open and sync
+                fd = os.open(str(path), os.O_RDONLY)
+                try:
+                    os.fsync(fd)
+                finally:
+                    os.close(fd)
+            return True
+        except OSError as e:
+            logger.warning(f"fsync failed for {path}: {e}")
+            return False
 
     @staticmethod
     def set_file_permissions(path: Path, mode: int) -> None:
@@ -270,7 +289,7 @@ class WindowsStrategy:
         return "git.exe"
 
     @staticmethod
-    def ensure_durability(fd: int) -> None:
+    def ensure_durability(path: Path | int) -> bool:
         """Force write to storage using fsync() (best effort on Windows).
 
         Windows Behavior:
@@ -279,7 +298,10 @@ class WindowsStrategy:
             cache writes for performance.
 
         Args:
-            fd: File descriptor from file.fileno()
+            path: File path or file descriptor from file.fileno()
+
+        Returns:
+            True if sync was successful, False otherwise
 
         Limitations:
             For true durability on Windows, use Win32 API FlushFileBuffers
@@ -294,13 +316,24 @@ class WindowsStrategy:
             for most use cases (config files, logs). For critical data
             (database WAL), consider platform-specific code.
         """
-        # Best-effort flush - Windows fsync() has weaker semantics
-        # than Unix but still provides buffer flush to OS
-        os.fsync(fd)
-        logger.debug(
-            "fsync() called on Windows (buffer flush only, "
-            "not guaranteed physical write)",
-        )
+        try:
+            if isinstance(path, int):
+                os.fsync(path)
+            else:
+                # For directories or files, open and sync
+                fd = os.open(str(path), os.O_RDONLY)
+                try:
+                    os.fsync(fd)
+                finally:
+                    os.close(fd)
+            logger.debug(
+                "fsync() called on Windows (buffer flush only, "
+                "not guaranteed physical write)",
+            )
+            return True
+        except OSError as e:
+            logger.warning(f"fsync failed for {path}: {e}")
+            return False
 
     @staticmethod
     def set_file_permissions(path: Path, mode: int) -> None:

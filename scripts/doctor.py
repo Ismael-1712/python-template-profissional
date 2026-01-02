@@ -35,4 +35,4 @@ warnings.warn(
 from scripts.cli.doctor import main  # noqa: E402
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
