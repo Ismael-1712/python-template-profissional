@@ -1,110 +1,174 @@
-"""Vector Bridge module for CORTEX (Neural Interface)."""
+"""VectorBridge - Use Case Orchestrator for Neural Subsystem.
 
-import hashlib
+This module implements the VectorBridge as a hexagonal use case orchestrator
+that coordinates between EmbeddingPort and VectorStorePort to provide
+document indexing and semantic search capabilities.
+"""
+
 import logging
 import re
 from pathlib import Path
-from typing import Any
 
-from scripts.core.cortex.neural.models import VectorChunk
+from scripts.core.cortex.neural.domain import DocumentChunk, SearchResult
+from scripts.core.cortex.neural.ports import EmbeddingPort, VectorStorePort
 
 logger = logging.getLogger(__name__)
 
 
 class VectorBridge:
-    """Bridge between CORTEX knowledge and Vector Database.
+    """Orchestrates document indexing and semantic search.
 
-    Uses Lazy Loading to avoid importing heavy ML libraries at module level.
+    This class acts as a use case in the hexagonal architecture,
+    coordinating between embedding generation and vector storage
+    without depending on specific implementations.
+
+    Attributes:
+        embedding_service: Port for generating text embeddings
+        vector_store: Port for storing and searching document chunks
     """
 
-    def __init__(self, persistence_path: Path) -> None:
-        """Initialize the Vector Bridge.
+    def __init__(
+        self,
+        embedding_service: EmbeddingPort,
+        vector_store: VectorStorePort,
+    ) -> None:
+        """Initialize the VectorBridge with injected dependencies.
 
         Args:
-            persistence_path: Directory to store the ChromaDB database.
+            embedding_service: Service implementing EmbeddingPort
+            vector_store: Service implementing VectorStorePort
         """
-        self.persistence_path = persistence_path
-        # Use Any to satisfy MyPy with Lazy Loading
-        self.client: Any = None
-        self.collection: Any = None
-        self.model: Any = None
+        self.embedding_service = embedding_service
+        self.vector_store = vector_store
 
-    def _initialize_resources(self) -> None:
-        """Lazy load ChromaDB and SentenceTransformer."""
-        if self.client is not None:
+    def index_document(self, content: str, source_file: Path) -> None:
+        """Index a document by chunking, embedding, and storing.
+
+        This orchestrates the complete indexing pipeline:
+        1. Chunk the document content
+        2. Generate embeddings for each chunk
+        3. Store enriched chunks in vector store
+
+        Args:
+            content: The full text content of the document
+            source_file: Path to the source document
+        """
+        # Step 1: Chunk the content
+        chunks = self._chunk_content(content, source_file)
+
+        if not chunks:
+            logger.warning("No chunks created for %s", source_file)
             return
 
-        try:
-            import chromadb
-            from sentence_transformers import SentenceTransformer
-        except ImportError as e:
-            logger.error(
-                "Neural dependencies not found. "
-                "Run 'pip install chromadb sentence-transformers'",
+        # Step 2: Generate embeddings for all chunks
+        chunk_texts = [chunk.content for chunk in chunks]
+        embeddings = self.embedding_service.batch_embed(chunk_texts)
+
+        # Step 3: Enrich chunks with embeddings
+        enriched_chunks: list[DocumentChunk] = []
+        for chunk, embedding in zip(chunks, embeddings, strict=True):
+            # Create new chunk with embedding (dataclass is frozen)
+            enriched_chunk = DocumentChunk(
+                content=chunk.content,
+                source_file=chunk.source_file,
+                line_start=chunk.line_start,
+                metadata=chunk.metadata,
+                embedding=embedding,
             )
-            msg = "Missing neural dependencies"
-            raise ImportError(msg) from e
+            enriched_chunks.append(enriched_chunk)
 
-        logger.info("Initializing Vector Store at %s", self.persistence_path)
+        # Step 4: Store in vector store
+        self.vector_store.add(enriched_chunks)
 
-        # Initialize ChromaDB
-        self.client = chromadb.PersistentClient(path=str(self.persistence_path))
-
-        # Initialize Collection
-        self.collection = self.client.get_or_create_collection(
-            name="cortex_knowledge",
+        logger.info(
+            "Indexed %d chunks from %s",
+            len(enriched_chunks),
+            source_file,
         )
 
-        # Initialize Model (downloading if necessary)
-        # cache_folder ensures we don't redownload models constantly
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+    def query_similar(self, query: str, limit: int = 5) -> list[SearchResult]:
+        """Search for similar content using semantic search.
 
-    def _chunk_content(self, text: str, source_id: str) -> list[VectorChunk]:
-        """Divide texto Markdown em chunks baseados em headers.
+        This orchestrates the search pipeline:
+        1. Generate embedding for the query
+        2. Search vector store for similar chunks
+        3. Return ranked results
 
         Args:
-            text: Conteúdo Markdown completo.
-            source_id: Identificador do documento fonte.
+            query: The search query text
+            limit: Maximum number of results to return
 
         Returns:
-            Lista de VectorChunk objects.
+            List of SearchResult objects ranked by similarity
         """
-        chunks: list[VectorChunk] = []
+        # Step 1: Generate query embedding
+        query_embedding = self.embedding_service.embed(query)
+
+        # Step 2: Search vector store
+        results = self.vector_store.search(query_embedding, limit=limit)
+
+        logger.info("Found %d similar documents for query", len(results))
+
+        return results
+
+    def _chunk_content(
+        self,
+        text: str,
+        source_file: Path,
+    ) -> list[DocumentChunk]:
+        """Divide text into chunks based on markdown headers.
+
+        Args:
+            text: Full markdown content
+            source_file: Path to the source file
+
+        Returns:
+            List of DocumentChunk objects (without embeddings)
+        """
+        if not text.strip():
+            return []
+
+        chunks: list[DocumentChunk] = []
         max_chunk_size = 1000
-        global_index = 0  # Índice global para todo o documento
+        line_number = 1  # Track line numbers
 
         # Split by markdown headers
         sections = re.split(r"(^#{1,6}\s+.*$)", text, flags=re.MULTILINE)
 
         current_section = ""
         current_header = ""
+        section_start_line = 1
 
         for section in sections:
             # Check if it's a header
             if re.match(r"^#{1,6}\s+", section):
                 # Save previous section if exists
                 if current_section.strip():
-                    section_chunks, global_index = self._create_chunks_from_section(
+                    section_chunks = self._create_chunks_from_section(
                         current_section,
-                        source_id,
+                        source_file,
                         current_header,
                         max_chunk_size,
-                        global_index,
+                        section_start_line,
                     )
                     chunks.extend(section_chunks)
+
                 current_header = section.strip()
                 current_section = section + "\n"
+                section_start_line = line_number
+                line_number += section.count("\n") + 1
             else:
                 current_section += section
+                line_number += section.count("\n")
 
         # Add last section
         if current_section.strip():
-            section_chunks, global_index = self._create_chunks_from_section(
+            section_chunks = self._create_chunks_from_section(
                 current_section,
-                source_id,
+                source_file,
                 current_header,
                 max_chunk_size,
-                global_index,
+                section_start_line,
             )
             chunks.extend(section_chunks)
 
@@ -113,170 +177,72 @@ class VectorBridge:
     def _create_chunks_from_section(
         self,
         section: str,
-        source_id: str,
+        source_file: Path,
         header: str,
         max_size: int,
-        start_index: int,
-    ) -> tuple[list[VectorChunk], int]:
-        """Cria chunks de uma seção, subdividindo se necessário.
+        start_line: int,
+    ) -> list[DocumentChunk]:
+        """Create chunks from a section, subdividing if necessary.
 
         Args:
-            section: Texto da seção.
-            source_id: ID do documento.
-            header: Header da seção.
-            max_size: Tamanho máximo do chunk.
-            start_index: Índice inicial global para os chunks.
+            section: Section text
+            source_file: Source file path
+            header: Section header
+            max_size: Maximum chunk size in characters
+            start_line: Starting line number for this section
 
         Returns:
-            Tupla contendo (lista de VectorChunk, próximo índice disponível).
+            List of DocumentChunk objects
         """
-        chunks: list[VectorChunk] = []
-        chunk_index = start_index
+        chunks: list[DocumentChunk] = []
+        current_line = start_line
 
         if len(section) <= max_size:
             # Section is small enough, create single chunk
-            unique_str = f"{source_id}:{chunk_index}:{section}"
-            chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
             chunks.append(
-                VectorChunk(
-                    chunk_id=chunk_id,
-                    source_id=source_id,
+                DocumentChunk(
                     content=section.strip(),
-                    vector=[],  # Will be populated during indexing
-                    metadata={"header": header, "chunk_index": chunk_index},
+                    source_file=source_file,
+                    line_start=current_line,
+                    metadata={"header": header} if header else {},
+                    embedding=None,  # Will be added during indexing
                 ),
             )
-            chunk_index += 1
         else:
             # Section is too large, split by paragraphs
             paragraphs = section.split("\n\n")
             current_chunk = ""
+            chunk_start_line = current_line
 
             for para in paragraphs:
                 if len(current_chunk) + len(para) > max_size and current_chunk:
                     # Save current chunk
-                    unique_str = f"{source_id}:{chunk_index}:{current_chunk}"
-                    chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
                     chunks.append(
-                        VectorChunk(
-                            chunk_id=chunk_id,
-                            source_id=source_id,
+                        DocumentChunk(
                             content=current_chunk.strip(),
-                            vector=[],
-                            metadata={"header": header, "chunk_index": chunk_index},
+                            source_file=source_file,
+                            line_start=chunk_start_line,
+                            metadata={"header": header} if header else {},
+                            embedding=None,
                         ),
                     )
                     current_chunk = para + "\n\n"
-                    chunk_index += 1
+                    chunk_start_line = current_line
                 else:
                     current_chunk += para + "\n\n"
 
+                current_line += para.count("\n") + 2  # +2 for paragraph separator
+
             # Add remaining chunk
             if current_chunk.strip():
-                unique_str = f"{source_id}:{chunk_index}:{current_chunk}"
-                chunk_id = hashlib.sha256(unique_str.encode()).hexdigest()[:16]
                 chunks.append(
-                    VectorChunk(
-                        chunk_id=chunk_id,
-                        source_id=source_id,
+                    DocumentChunk(
                         content=current_chunk.strip(),
-                        vector=[],
-                        metadata={"header": header, "chunk_index": chunk_index},
+                        source_file=source_file,
+                        line_start=chunk_start_line,
+                        metadata={"header": header} if header else {},
+                        embedding=None,
                     ),
                 )
-                chunk_index += 1
 
-        return chunks, chunk_index
-
-    def index_document(self, entry: Any) -> bool:
-        """Index a document into the vector store.
-
-        Args:
-            entry: KnowledgeEntry object (typed as Any to avoid circular imports)
-
-        Returns:
-            True if indexed, False if skipped.
-        """
-        self._initialize_resources()
-
-        # Extract content from entry
-        if not hasattr(entry, "cached_content") or not entry.cached_content:
-            logger.warning("Entry has no content, skipping indexing")
-            return False
-
-        source_id = str(entry.file_path) if hasattr(entry, "file_path") else "unknown"
-
-        # Chunk the content
-        chunks = self._chunk_content(entry.cached_content, source_id)
-
-        if not chunks:
-            logger.warning("No chunks created for %s", source_id)
-            return False
-
-        # Generate embeddings for all chunks
-        contents = [chunk.content for chunk in chunks]
-        embeddings = self.model.encode(contents, show_progress_bar=False)
-
-        # Prepare data for ChromaDB
-        ids = [chunk.chunk_id for chunk in chunks]
-        documents = contents
-        metadatas = [chunk.metadata for chunk in chunks]
-
-        # Upsert into ChromaDB
-        try:
-            self.collection.upsert(
-                ids=ids,
-                documents=documents,
-                embeddings=embeddings.tolist(),
-                metadatas=metadatas,
-            )
-            logger.info("Indexed %d chunks from %s", len(chunks), source_id)
-            return True
-        except Exception as e:
-            logger.error("Failed to index %s: %s", source_id, e)
-            return False
-
-    def query_similar(self, query: str, n_results: int = 5) -> list[dict[str, Any]]:
-        """Search for similar content in the vector store.
-
-        Args:
-            query: The search text.
-            n_results: Number of results to return.
-
-        Returns:
-            List of matches with content and metadata.
-        """
-        self._initialize_resources()
-
-        # Generate embedding for query
-        query_embedding = self.model.encode([query], show_progress_bar=False)[0]
-
-        # Query ChromaDB
-        try:
-            results = self.collection.query(
-                query_embeddings=[query_embedding.tolist()],
-                n_results=n_results,
-            )
-
-            # Format results
-            matches: list[dict[str, Any]] = []
-
-            if results and "documents" in results:
-                documents = results["documents"][0] if results["documents"] else []
-                metadatas = results["metadatas"][0] if results["metadatas"] else []
-                distances = results["distances"][0] if results["distances"] else []
-
-                for i, doc in enumerate(documents):
-                    match = {
-                        "content": doc,
-                        "metadata": metadatas[i] if i < len(metadatas) else {},
-                        "distance": distances[i] if i < len(distances) else 0.0,
-                    }
-                    matches.append(match)
-
-            logger.info("Found %d similar documents for query", len(matches))
-            return matches
-
-        except Exception as e:
-            logger.error("Query failed: %s", e)
-            return []
+        return chunks
