@@ -45,18 +45,47 @@ app = typer.Typer(
 )
 
 
-# Placeholder for EmbeddingPort (to be implemented with real service later)
+# Placeholder for EmbeddingPort (fallback quando SentenceTransformer falha)
 class PlaceholderEmbeddingService(EmbeddingPort):
-    """Placeholder embedding service - to be replaced with real implementation."""
+    """Placeholder embedding service - fallback for when real AI is unavailable."""
 
     def embed(self, text: str) -> list[float]:
         """Generate dummy embedding."""
-        # This is a placeholder - real implementation would use sentence-transformers
+        logger.warning("Using placeholder embedding service (not production-ready)")
         return [0.0] * 384  # Standard dimension for many models
 
     def batch_embed(self, texts: list[str]) -> list[list[float]]:
         """Generate dummy embeddings for batch."""
         return [self.embed(text) for text in texts]
+
+
+def _get_embedding_service() -> EmbeddingPort:
+    """Factory function to get the best available embedding service.
+
+    Returns:
+        SentenceTransformerAdapter if available, otherwise PlaceholderEmbeddingService
+
+    Raises:
+        typer.Exit: If no embedding service is available and strict mode is on
+    """
+    try:
+        from scripts.core.cortex.neural.adapters.sentence_transformer import (
+            SentenceTransformerAdapter,
+        )
+
+        logger.info("Loading SentenceTransformer adapter...")
+        console.print("[cyan]🧠 Loading AI model (all-MiniLM-L6-v2)...[/cyan]")
+        return SentenceTransformerAdapter()
+    except Exception as e:
+        logger.warning(f"Failed to load SentenceTransformer: {e}")
+        console.print(
+            "[yellow]⚠️  Could not load AI model. Using placeholder service.[/yellow]",
+        )
+        console.print(
+            "[yellow]   For production use, ensure sentence-transformers "
+            "is installed.[/yellow]",
+        )
+        return PlaceholderEmbeddingService()
 
 
 @app.command()
@@ -96,7 +125,7 @@ def index(
     db_absolute = project_root / db_path
     db_absolute.mkdir(parents=True, exist_ok=True)
 
-    embedding_service = PlaceholderEmbeddingService()
+    embedding_service = _get_embedding_service()  # Use factory with fallback
     vector_store = InMemoryVectorStore(store_path=db_absolute / "store.json")
     bridge = VectorBridge(
         embedding_service=embedding_service,
@@ -196,7 +225,7 @@ def ask(
         raise typer.Exit(code=1)
 
     # Initialize VectorBridge with dependencies
-    embedding_service = PlaceholderEmbeddingService()
+    embedding_service = _get_embedding_service()  # Use factory with fallback
     vector_store = InMemoryVectorStore(store_path=db_absolute / "store.json")
     vector_store.load()  # Load existing data
 

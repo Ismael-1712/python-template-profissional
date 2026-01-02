@@ -44,3 +44,6 @@ python-frontmatter
 mutmut==3.4.0
 tomlkit
 pip-tools
+
+# Machine Learning - Embeddings
+sentence-transformers>=3.0.0

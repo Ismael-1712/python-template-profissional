@@ -58,6 +58,10 @@ exclude = [ "venv/", ".venv/", "build/", "dist/", "scripts/audit_dashboard.py",]
 module = "frontmatter"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "scripts.core.cortex.neural.adapters.sentence_transformer"
+warn_unused_ignores = false
+
 [tool.importlinter]
 root_packages = [ "scripts", "src",]
 [[tool.importlinter.contracts]]
