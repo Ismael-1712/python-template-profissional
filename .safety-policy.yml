@@ -1,13 +1,74 @@
-security:
-  ignore-cvss-severity-below: 0.0
-  ignore-cvss-unknown-severity: false
-  ignore-vulnerabilities:
-    # py: ReDoS (DISPUTED) - Dependência transitiva do pytest/interrogate
-    # CVE-2022-42969 - Padrão ReDoS disputado, não podemos atualizar no momento
-    51457:
-    # urllib3: CVE-2025-50182 - Limitado por kubernetes que requer urllib3<2.4.0
-    # Atualizaremos quando o kubernetes permitir urllib3>=2.5.0
-    77745:
-    # urllib3: CVE-2025-50181 - Limitado por kubernetes que requer urllib3<2.4.0
-    # Atualizaremos quando o kubernetes permitir urllib3>=2.5.0
-    77744:
+version: '3.0'
+
+scanning-settings:
+  max-depth: 6
+  exclude: []
+  include-files: []
+  system:
+    targets: []
+
+
+report:
+  dependency-vulnerabilities:
+    enabled: true
+    auto-ignore-in-report:
+      python:
+        environment-results: true
+        unpinned-requirements: true
+      cvss-severity: []
+
+
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - medium
+        - high
+      exploitability:
+        - critical
+        - medium
+        - high
+
+security-updates:
+  dependency-vulnerabilities:
+    auto-security-updates-limit:
+      - patch
+
+installation:
+  default-action: allow
+  audit-logging:
+    enabled: true
+  allow:
+    packages: []
+    # Vulnerabilities ignored with documented technical justifications
+    # Migrated from v2.x policy file (2026-01-03)
+    vulnerabilities:
+      # CVE-51457: py package - ReDoS (DISPUTED)
+      # Reason: Transitive dependency from pytest/interrogate
+      # We cannot update at this time - disputed vulnerability
+      51457:
+        reason: ReDoS (DISPUTED) - Transitive dependency from pytest/interrogate
+        expires: '2030-12-31'
+
+      # CVE-77745: urllib3 - CVE-2025-50182
+      # Reason: Kubernetes version constraint requires urllib3<2.4.0
+      # Will update when kubernetes allows urllib3>=2.5.0
+      77745:
+        reason: Kubernetes constraint requires urllib3<2.4.0 - awaiting compatibility update
+        expires: '2030-12-31'
+
+      # CVE-77744: urllib3 - CVE-2025-50181
+      # Reason: Kubernetes version constraint requires urllib3<2.4.0
+      # Will update when kubernetes allows urllib3>=2.5.0
+      77744:
+        reason: Kubernetes constraint requires urllib3<2.4.0 - awaiting compatibility update
+        expires: '2030-12-31'
+  deny:
+    packages: {}
+    vulnerabilities:
+      warning-on-any-of:
+        cvss-severity: []
+      block-on-any-of:
+        cvss-severity: []

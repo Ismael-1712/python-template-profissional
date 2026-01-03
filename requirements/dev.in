@@ -51,7 +51,7 @@ pip-tools
 
 # Security Scanners
 bandit>=1.7.0
-safety>=2.3.0
+safety>=3.2.0  # Migrated to v3.x for policy file v3.0 support
 
 # Machine Learning - Embeddings
 sentence-transformers>=3.0.0
