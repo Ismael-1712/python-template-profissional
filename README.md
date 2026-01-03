@@ -755,7 +755,10 @@ make complexity-check           # Xenon: Complexidade ciclomática ≤ 10
 make arch-check                 # Import Linter: Separação de camadas arquiteturais
 make docs-check                 # Interrogate: Cobertura de docstrings (≥95%)
 make ci-check                   # GitHub Actions workflows audit (versões + cache)
-make audit-security             # Auditoria de segurança (fail-on: HIGH severity)
+make audit-custom               # Auditoria de segurança customizada (fail-on: HIGH severity)
+make security-sast              # Bandit: Static Application Security Testing
+make security-sca               # Safety: Software Composition Analysis
+make audit-security             # Suite completa de segurança (Custom + SAST + SCA)
 make guardian-check             # Guardian: Políticas arquiteturais (shadow config detection)
 make cortex-audit               # CORTEX: Integridade de documentação (links + frontmatter)
 make test                       # Pytest: Suite de testes completa (779 testes)
@@ -787,7 +790,9 @@ format → deps-check → lint → type-check → complexity-check → arch-chec
 | 🎯 **Type Safety** | Mypy | Strict mode | ✅ PASSED |
 | ✅ **Testes** | Pytest | 100% passing | ✅ 779/780 |
 | 🛡️ **TDD Guardian** | diff-cover | Delta Coverage = 100% | ✅ ACTIVE |
-| 🔒 **Segurança** | Audit CLI | Fail-on HIGH | ✅ MONITORED |
+| 🔒 **Segurança Custom** | Audit CLI | Fail-on HIGH | ✅ MONITORED |
+| 🔐 **SAST** | Bandit | Code vulnerabilities | ✅ ACTIVE |
+| 🔐 **SCA** | Safety | Dependency vulnerabilities | ✅ ACTIVE |
 | 🛡️ **Guardian** | Config Scanner | Shadow detection | ✅ ACTIVE |
 | 📄 **CORTEX** | Knowledge Graph | Links + metadata | ✅ VALIDATED |
 

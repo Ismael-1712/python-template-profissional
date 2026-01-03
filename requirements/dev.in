@@ -49,6 +49,10 @@ textual==6.12.0  # Pin required by mutmut (avoid version conflicts)
 tomlkit
 pip-tools
 
+# Security Scanners
+bandit>=1.7.0
+safety>=2.3.0
+
 # Machine Learning - Embeddings
 sentence-transformers>=3.0.0
 

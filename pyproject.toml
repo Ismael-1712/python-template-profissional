@@ -136,3 +136,7 @@ convention = "google"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "scripts/core/mock_ci"]
+skips = ["B101"]  # B101: assert_used (opcional, se exclude_dirs não bastar)
