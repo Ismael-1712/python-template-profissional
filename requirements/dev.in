@@ -21,6 +21,9 @@ types-requests==2.32.4.20250913
 radon
 xenon
 
+# TDD & Test Coverage Tools
+diff-cover>=9.0.0
+
 # Architecture & Dependency Governance (Tríade de Blindagem)
 import-linter==2.9  # Enforça separação de camadas arquiteturais
 deptry==0.24.0      # Detecta dependências não utilizadas
