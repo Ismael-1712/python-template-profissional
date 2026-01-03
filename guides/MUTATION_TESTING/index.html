@@ -634,10 +634,32 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#configuracao-central-pyprojecttoml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚙️ Configuração Central (pyproject.toml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#comando-simplificado-recomendado" class="md-nav__link">
     <span class="md-ellipsis">
       
         Comando Simplificado (Recomendado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visualizar-relatorio-detalhado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visualizar Relatório Detalhado
       
     </span>
   </a>
@@ -886,64 +908,81 @@
 </blockquote>
 <hr />
 <h2 id="como-usar">🛠️ Como Usar</h2>
+<h3 id="configuracao-central-pyprojecttoml">⚙️ Configuração Central (pyproject.toml)</h3>
+<p><strong>IMPORTANTE:</strong> Desde o Mutmut v3.x, toda a configuração é feita <strong>exclusivamente</strong> via <code>pyproject.toml</code>. Argumentos CLI antigos (como <code>--paths-to-mutate</code>) foram removidos.</p>
+<p><strong>Exemplo de configuração:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[tool.mutmut]</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">runner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;python -m pytest -x&quot;</span><span class="w">  </span><span class="c1"># Comando para executar testes</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">tests_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tests/&quot;</span><span class="w">            </span><span class="c1"># Diretório de testes</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">paths_to_mutate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;scripts/&quot;</span><span class="p">]</span><span class="w">  </span><span class="c1"># ⚠️ DEVE ser uma lista!</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">backup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">                  </span><span class="c1"># Não criar backups</span>
+</code></pre></div>
+<p><strong>Dica:</strong> Para alterar os caminhos a serem mutados, edite <code>paths_to_mutate</code> no <code>pyproject.toml</code>.</p>
+<hr />
 <h3 id="comando-simplificado-recomendado">Comando Simplificado (Recomendado)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>scripts/utils/filesystem.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Executar mutation testing em um arquivo específico</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>scripts/utils/filesystem.py
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Visualizar relatório HTML no navegador</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>make<span class="w"> </span>mutation-report
 </code></pre></div>
 <p><strong>Comportamento:</strong></p>
 <ul>
-<li>Limpa cache anterior automaticamente</li>
-<li>Executa mutmut apenas no arquivo especificado</li>
-<li>Gera relatório HTML em <code>html/index.html</code></li>
-<li>Modo <code>--simple-output</code> para facilitar leitura</li>
+<li>✅ Limpa cache anterior automaticamente</li>
+<li>✅ Executa mutmut apenas no arquivo especificado</li>
+<li>✅ Exibe resultados no terminal</li>
+<li>✅ Sugere comando para abrir relatório HTML</li>
 </ul>
+<h3 id="visualizar-relatorio-detalhado">Visualizar Relatório Detalhado</h3>
+<p>Após executar <code>make mutation</code>, você pode visualizar os resultados detalhados:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>make<span class="w"> </span>mutation-report
+</code></pre></div>
+<p>Isso irá:</p>
+<ol>
+<li>Gerar relatório HTML em <code>html/index.html</code></li>
+<li>Abrir automaticamente no navegador padrão (Linux/Mac/WSL)</li>
+<li>Em caso de falha, exibir o caminho completo do arquivo</li>
+</ol>
 <h3 id="sem-target-erro-didatico">Sem Target (Erro Didático)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>make<span class="w"> </span>mutation
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>❌<span class="w"> </span>Erro:<span class="w"> </span>Você<span class="w"> </span>deve<span class="w"> </span>especificar<span class="w"> </span>um<span class="w"> </span>arquivo<span class="w"> </span>alvo.
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>📖<span class="w"> </span>Uso<span class="w"> </span>correto:
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">   </span>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>caminho/do/arquivo.py
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>💡<span class="w"> </span>Exemplo:
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">   </span>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>scripts/utils/filesystem.py
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>📚<span class="w"> </span>Para<span class="w"> </span>mais<span class="w"> </span>informações,<span class="w"> </span>consulte:
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">   </span>docs/guides/MUTATION_TESTING.md
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>make<span class="w"> </span>mutation
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>❌<span class="w"> </span>Erro:<span class="w"> </span>Missing<span class="w"> </span>target.<span class="w"> </span>Usage:<span class="w"> </span>make<span class="w"> </span>mutation<span class="w"> </span><span class="nv">target</span><span class="o">=</span>path/to/file.py
 </code></pre></div>
 <h3 id="modo-manual-avancado-opcional">Modo Manual Avançado (Opcional)</h3>
 <p>Se precisar de controle fino, use <code>mutmut</code> diretamente:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 1. Limpar cache</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>rm<span class="w"> </span>-f<span class="w"> </span>.mutmut-cache
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 2. Executar mutation em múltiplos arquivos</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>mutmut<span class="w"> </span>run<span class="w"> </span>--paths-to-mutate<span class="w"> </span>scripts/utils/
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># 3. Ver resultados</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>mutmut<span class="w"> </span>results
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># 4. Inspecionar mutante específico</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>mutmut<span class="w"> </span>show<span class="w"> </span>&lt;id&gt;
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 5. Gerar HTML</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>mutmut<span class="w"> </span>html
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 1. Limpar cache</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>rm<span class="w"> </span>-f<span class="w"> </span>.mutmut-cache
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># 2. Executar mutation em arquivo específico</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>mutmut<span class="w"> </span>run<span class="w"> </span>scripts/utils/filesystem.py
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># 3. Ver resultados</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>mutmut<span class="w"> </span>results
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="c1"># 4. Inspecionar mutante específico</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>mutmut<span class="w"> </span>show<span class="w"> </span>&lt;id&gt;
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># 5. Gerar HTML</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>mutmut<span class="w"> </span>html
 </code></pre></div>
+<p><strong>⚠️ ATENÇÃO:</strong> Na v3.x, NÃO use flags como <code>--paths-to-mutate</code>. Configure tudo no <code>pyproject.toml</code>.</p>
 <hr />
 <h2 id="interpretando-resultados">📊 Interpretando Resultados</h2>
 <h3 id="saida-tipica">Saída Típica</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>🧟 Mutation Testing - Manual Local Execution
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>🎯 Target: scripts/utils/filesystem.py
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Legend for output:
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>🎉 Killed mutants.   The goal is for everything to end up in this bucket.
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>⏰ Timeout.          Test suite took 10 times as long as the baseline so were killed.
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>🤔 Suspicious.       Tests took a long time, but not long enough to be killed.
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>🙁 Survived.         This means your tests need to be expanded.
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>🔇 Skipped.          Skipped.
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>mutmut cache is out of date, clearing it...
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>1. TIMEOUT
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>2. KILLED
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>3. KILLED
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>4. SURVIVED
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>🧟 Mutation Testing - Manual Local Execution
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>🎯 Target: scripts/utils/filesystem.py
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Legend for output:
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>🎉 Killed mutants.   The goal is for everything to end up in this bucket.
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>⏰ Timeout.          Test suite took 10 times as long as the baseline so were killed.
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>🤔 Suspicious.       Tests took a long time, but not long enough to be killed.
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>🙁 Survived.         This means your tests need to be expanded.
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>🔇 Skipped.          Skipped.
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>mutmut cache is out of date, clearing it...
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>1. TIMEOUT
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>2. KILLED
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>3. KILLED
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>4. SURVIVED
 </code></pre></div>
 <h3 id="acoes-recomendadas">Ações Recomendadas</h3>
 <ul>
@@ -953,15 +992,15 @@
 <li><strong>SUSPICIOUS (🤔):</strong> Teste demorado. Considere otimização.</li>
 </ul>
 <h3 id="exemplo-de-correcao">Exemplo de Correção</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ❌ Teste Fraco (Mutante Sobrevive)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># ✅ Teste Robusto (Mata o Mutante)</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Acima do limite</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Exatamente no limite (mata mutante &gt;= &gt; &gt;)</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span> <span class="c1"># Abaixo do limite</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># ❌ Teste Fraco (Mutante Sobrevive)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># ✅ Teste Robusto (Mata o Mutante)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_validar_idade</span><span class="p">():</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Acima do limite</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># Exatamente no limite (mata mutante &gt;= &gt; &gt;)</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="k">assert</span> <span class="n">validar_idade</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span> <span class="c1"># Abaixo do limite</span>
 </code></pre></div>
 <hr />
 <h2 id="politica-de-cicd">🚫 Política de CI/CD</h2>
