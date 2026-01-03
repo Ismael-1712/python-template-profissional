@@ -165,9 +165,12 @@ cortex knowledge-sync --all          # Sincronizar regras de fontes remotas
 cortex guardian check .              # Detectar configs hardcoded
 cortex guardian probe                # Probe interativo
 
-# === Neural Search ===
-cortex neural index                  # Indexar docs no ChromaDB
-cortex neural ask "query"            # Busca semântica
+# === Neural Search (AI Powered) ===
+cortex neural index                  # Indexar docs com IA (ChromaDB)
+cortex neural index --memory-type ram # Modo RAM (sem persistência)
+cortex neural ask "query"            # Busca semântica inteligente
+cortex neural ask "query" --top 10   # Top 10 resultados
+# 📖 Guia completo: docs/guides/NEURAL_CORTEX.md (ou seção README)
 ```
 
 ### 🐛 Diagnóstico e Troubleshooting
@@ -220,34 +223,177 @@ cat docs/architecture/CORTEX_INDICE.md  # Índice completo (115 docs)
 
 ## ✨ Features Completas
 
-### 🧠 **Neural Layer — Semantic Search & Vector Indexing**
+### 🧠 **Neural Cortex (AI Powered) — Semantic Search & Vector Memory**
 
-**Busca semântica sobre toda a documentação usando ChromaDB e embeddings.**
+**Sistema de busca semântica e memória de longo prazo usando IA real (SentenceTransformers) e persistência vetorial (ChromaDB).**
 
-**Comandos:**
+#### 🚀 Capacidades
+
+- **Busca Semântica Inteligente**: Encontre documentação por conceito, não apenas palavras-chave
+- **Memória de Longo Prazo**: ChromaDB persiste embeddings no disco (`.cortex/memory`)
+- **Real AI Embeddings**: SentenceTransformers (`all-MiniLM-L6-v2`) para vetorização semântica
+- **Arquitetura Hexagonal**: Ports & Adapters para trocar embedding engines ou vector stores
+- **Fallback Graceful**: Sistema detecta quando IA não está disponível e alerta o usuário
+
+#### 📦 Instalação
+
+O sistema Neural é instalado automaticamente com as dependências de desenvolvimento:
 
 ```bash
-# Indexar documentação no vector store
-cortex neural index
+# Instalar dependências completas (inclui IA)
+make install-dev
 
-# Buscar semanticamente
-cortex neural ask "Como configurar hooks do git?"
+# Ou manualmente
+pip install -r requirements/dev.txt
 
-# Re-indexar após mudanças
-cortex neural index --rebuild
+# Dependências principais:
+# - sentence-transformers: Embeddings semânticos
+# - chromadb: Vector database persistente
+# - torch: Backend para modelos de IA
 ```
 
-**Arquitetura:**
+#### 🎯 Uso Básico
 
-- 📊 **VectorBridge**: Interface com ChromaDB para armazenamento vetorial
-- 🔍 **Semantic Search**: Busca por similaridade usando embeddings
-- 🗂️ **Auto-indexing**: Hook pre-commit sincroniza automaticamente
+```bash
+# 1. Indexar toda a documentação
+cortex neural index --memory-type chroma
 
-**Casos de Uso:**
+# Banner exibe status do sistema:
+# 🧠 CORTEX Neural System Status
+# Motor Cognitivo: 🟢 SentenceTransformers (Real AI)
+# Memória:        🟢 ChromaDB (Persistent)
+# Modelo:         all-MiniLM-L6-v2
+# Caminho:        .cortex/memory
 
-- Encontrar documentação relevante sem conhecer paths exatos
-- Descobrir padrões similares no código
-- RAG (Retrieval-Augmented Generation) para chatbots
+# 2. Fazer perguntas em linguagem natural
+cortex neural ask "Como funciona a arquitetura hexagonal?"
+
+# 3. Buscar casos de uso específicos
+cortex neural ask "Exemplos de testes com mocks"
+
+# 4. Opções avançadas
+cortex neural index --memory-type ram    # Usar RAM em vez de ChromaDB
+cortex neural ask "query" --top 10       # Retornar 10 resultados
+cortex neural ask "query" --db .custom   # Usar diretório customizado
+```
+
+#### 🏗️ Arquitetura Hexagonal
+
+O Neural Cortex segue **Arquitetura Hexagonal** (Ports & Adapters):
+
+```
+┌─────────────────────────────────────────┐
+│         VectorBridge (Core Logic)       │
+│                                         │
+│  ┌──────────────┐    ┌──────────────┐  │
+│  │ EmbeddingPort│    │VectorStorePort│ │
+│  └──────┬───────┘    └──────┬────────┘ │
+└─────────┼──────────────────┼───────────┘
+          │                  │
+     ┌────▼────┐       ┌─────▼──────┐
+     │Adapters │       │  Adapters  │
+     │─────────│       │────────────│
+     │Sentence │       │  ChromaDB  │
+     │Transform│       │  InMemory  │
+     │Placeholder      │  (Future)  │
+     └─────────┘       └────────────┘
+```
+
+**Benefícios:**
+
+- ✅ **Substituível**: Trocar SentenceTransformers por OpenAI embeddings sem mudar lógica
+- ✅ **Testável**: Mocks triviais para ports
+- ✅ **Extensível**: Adicionar Pinecone/Weaviate apenas implementando `VectorStorePort`
+
+**Gerar Diagramas:**
+
+```bash
+python scripts/docs/HEXAGONAL_VALIDATOR_DIAGRAMS.py
+```
+
+Documentação arquitetural completa em [`docs/architecture/`](docs/architecture/).
+
+#### 🎛️ Modos de Operação
+
+**🟢 Modo Produção (AI Real + Persistência)**
+
+```bash
+cortex neural index --memory-type chroma
+# Motor Cognitivo: 🟢 SentenceTransformers (Real AI)
+# Memória:        🟢 ChromaDB (Persistent)
+```
+
+**⚠️ Modo Fallback (Placeholder + RAM)**
+
+```bash
+# Se sentence-transformers não estiver instalado:
+cortex neural index --memory-type ram
+# Motor Cognitivo: ⚠️  Placeholder (Dummy Mode)
+# Memória:        ⚠️  RAM (Volatile + JSON)
+```
+
+**Verbose by Default:** O banner de status SEMPRE exibe qual modo está ativo. Elimina "cegueira de ferramenta".
+
+#### 🔧 Casos de Uso
+
+**1. RAG (Retrieval-Augmented Generation)**
+
+```bash
+# Indexar documentação
+cortex neural index
+
+# Integrar com chatbot (exemplo Python)
+from scripts.core.cortex.neural.vector_bridge import VectorBridge
+results = bridge.query_similar("Como testar APIs?", limit=3)
+context = "\n".join([r.chunk.content for r in results])
+# Passar context para GPT-4/Claude
+```
+
+**2. Descoberta de Padrões**
+
+```bash
+cortex neural ask "Exemplos de dependency injection"
+cortex neural ask "Como implementar observers?"
+```
+
+**3. Onboarding de Desenvolvedores**
+
+```bash
+cortex neural ask "Por onde começar no projeto?"
+cortex neural ask "Como rodar testes localmente?"
+```
+
+#### 📊 Performance
+
+- **Indexação**: ~100 docs/segundo (depende do hardware e modelo)
+- **Busca**: < 100ms para 1000+ documentos
+- **Memória**: Embeddings armazenados em disco (não consome RAM)
+- **Modelo**: 384 dimensões, ~80MB em disco
+
+#### 🛠️ Troubleshooting
+
+**Erro: "Using placeholder embedding service"**
+
+```bash
+# Instalar dependências de IA
+pip install sentence-transformers torch
+
+# Verificar instalação
+python -c "from sentence_transformers import SentenceTransformer; print('OK')"
+```
+
+**Erro: "ChromaDB not installed"**
+
+```bash
+pip install chromadb
+```
+
+**Banco de dados corrompido:**
+
+```bash
+rm -rf .cortex/memory
+cortex neural index  # Re-indexar do zero
+```
 
 ---
 
