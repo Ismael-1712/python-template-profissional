@@ -215,15 +215,24 @@ docs-build:
 
 ## clean: Remove artefatos de build, cache e arquivos temporários
 clean:
-	rm -rf $(BUILD_ARTIFACTS)
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete 2>/dev/null || true
-	find . -type f -name "*.pyo" -delete 2>/dev/null || true
-	rm -rf .pytest_cache
-	rm -rf .ruff_cache
-	rm -rf htmlcov .coverage 2>/dev/null || true
-	rm -f audit_report_*.json sync_report_*.json 2>/dev/null || true
-	rm -rf site 2>/dev/null || true
+	@echo "🧹 Cleaning project artifacts..."
+	@rm -rf $(BUILD_ARTIFACTS)
+	@find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name ".ruff_cache" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	@find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	@find . -type f -name "*.log" -delete 2>/dev/null || true
+	@find . -type f -name ".coverage" -delete 2>/dev/null || true
+	@find . -type f -name "requirements.tmp.*" -delete 2>/dev/null || true
+	@find . -type f -name ".DS_Store" -delete 2>/dev/null || true
+	@find . -type f -name "*~" -delete 2>/dev/null || true
+	@rm -rf htmlcov dist build site 2>/dev/null || true
+	@rm -f audit_report_*.json sync_report_*.json 2>/dev/null || true
+	@rm -rf .cortex/memory 2>/dev/null || true
+	@echo "✨ Clean complete!"
 
 ## clean-all: Limpeza profunda incluindo dependências compiladas e ambiente virtual
 clean-all: clean
