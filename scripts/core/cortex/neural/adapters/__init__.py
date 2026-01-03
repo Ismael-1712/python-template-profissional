@@ -6,6 +6,7 @@ in scripts.core.cortex.neural.ports.
 Available adapters:
 - InMemoryVectorStore: Simple in-memory vector storage with JSON persistence
 - SentenceTransformerAdapter: Real AI embedding using sentence-transformers
+- ChromaDBVectorStore: Persistent vector storage using ChromaDB
 """
 
 from scripts.core.cortex.neural.adapters.memory import InMemoryVectorStore
@@ -24,3 +25,12 @@ try:
 except ImportError:
     # sentence-transformers not installed - this is OK
     SentenceTransformerAdapter = None  # type: ignore[assignment,misc]
+
+# Lazy import for ChromaDBVectorStore (optional dependency)
+try:
+    from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
+
+    __all__.append("ChromaDBVectorStore")
+except ImportError:
+    # chromadb not installed - this is OK
+    ChromaDBVectorStore = None  # type: ignore[assignment,misc]
