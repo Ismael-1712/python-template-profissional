@@ -250,6 +250,13 @@ test-verbose:
 test-coverage:
 	PYTHONPATH=. $(PYTHON) -m pytest --cov=$(SRC_DIR) $(TEST_DIR)
 
+## tdd-check: Verifica se código novo tem testes (Delta Coverage)
+tdd-check:
+	@echo "🧪 Running TDD Delta Coverage Check..."
+	@PYTHONPATH=. $(PYTHON) -m pytest --cov --cov-report=xml --cov-report=term-missing
+	@$(VENV)/bin/diff-cover coverage.xml --compare-branch=origin/main --fail-under=100
+	@echo "✅ TDD Guardian: All new code has tests!"
+
 ## docs-serve: Inicia servidor local de documentação (http://127.0.0.1:8000)
 docs-serve:
 	$(VENV)/bin/mkdocs serve
