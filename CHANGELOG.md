@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🛡️ TDD Guardian Activation**: Comando `make tdd-check` agora faz parte do `make validate`, garantindo que todo código novo tenha 100% de cobertura de testes (Delta Coverage)
+  - Utiliza `diff-cover` para verificar apenas mudanças em relação à branch `origin/main`
+  - Falha automaticamente se cobertura delta < 100%
+  - Pipeline de validação expandido: `test → tdd-check`
+
 ### Security
 
 - **🛡️ Xenon Root Scanning**: Xenon agora escaneia todo o repositório (`.`) ao invés de apenas `scripts/ src/`, eliminando blind spots na raiz que poderiam ocultar código de alta complexidade

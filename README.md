@@ -117,11 +117,12 @@ make doctor                          # Verificar saúde do ambiente
 
 ```bash
 # Validação completa antes de commit
-make validate                        # Lint + Type Check + Tests (1-2 min)
+make validate                        # Lint + Type Check + Tests + TDD Guardian (1-2 min)
 
 # Atalhos úteis
 make format                          # Auto-formatar código (ruff)
 make test                            # Rodar testes (436 testes, ~5s)
+make tdd-check                       # Verificar cobertura delta (TDD Guardian)
 make audit                           # Gerar dashboard de qualidade
 
 # Commit inteligente (auto-formatting + hooks)
@@ -753,14 +754,15 @@ make arch-check        # Import Linter: Separação de camadas arquiteturais
 make deps-check        # Deptry: Dependências não utilizadas
 make docs-check        # Interrogate: Cobertura de docstrings (atual: 99.1%)
 make test              # Pytest: Suite de testes completa
+make tdd-check         # TDD Guardian: Cobertura delta 100% (código novo)
 ```
 
 **Pipeline de Validação:**
 
 ```
-lint → type-check → complexity-check → arch-check → deps-check → docs-check → test
-  ↓         ↓              ↓               ↓            ↓            ↓          ↓
-Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest
+lint → type-check → complexity-check → arch-check → deps-check → docs-check → test → tdd-check
+  ↓         ↓              ↓               ↓            ↓            ↓          ↓       ↓
+Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest   diff-cover
 ```
 
 **Métricas de Qualidade:**
@@ -773,6 +775,7 @@ Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest
 | 📚 **Documentação** | Interrogate | Cobertura ≥ 95% | ✅ 99.1% |
 | 🎯 **Type Safety** | Mypy | Strict mode | ✅ PASSED |
 | ✅ **Testes** | Pytest | 100% passing | ✅ 779/780 |
+| 🛡️ **TDD Guardian** | diff-cover | Delta Coverage = 100% | ✅ ACTIVE |
 
 **Estratégia de Baseline (Grandfathering):**
 
