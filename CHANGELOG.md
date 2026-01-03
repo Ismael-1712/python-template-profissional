@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
+### Security
+
+- **🛡️ Xenon Root Scanning**: Xenon agora escaneia todo o repositório (`.`) ao invés de apenas `scripts/ src/`, eliminando blind spots na raiz que poderiam ocultar código de alta complexidade
+
 ### Added
+
+- **🧪 TDD Guardian Engine**: Adicionado `diff-cover>=9.0.0` para validação de cobertura delta em futuros workflows TDD, permitindo verificação de cobertura de testes em alterações de código
 
 - **🧟 Mutation Testing DevX Improvements**:
   - Novo target `make mutation-report`: Abre relatório HTML do mutation testing automaticamente no navegador
