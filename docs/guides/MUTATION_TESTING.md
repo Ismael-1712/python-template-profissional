@@ -71,33 +71,60 @@ Se você tiver um teste apenas com `idade=20`, ele passará para **ambas as vers
 
 ## 🛠️ Como Usar
 
+### ⚙️ Configuração Central (pyproject.toml)
+
+**IMPORTANTE:** Desde o Mutmut v3.x, toda a configuração é feita **exclusivamente** via `pyproject.toml`. Argumentos CLI antigos (como `--paths-to-mutate`) foram removidos.
+
+**Exemplo de configuração:**
+
+```toml
+[tool.mutmut]
+runner = "python -m pytest -x"  # Comando para executar testes
+tests_dir = "tests/"            # Diretório de testes
+paths_to_mutate = ["scripts/"]  # ⚠️ DEVE ser uma lista!
+backup = false                  # Não criar backups
+```
+
+**Dica:** Para alterar os caminhos a serem mutados, edite `paths_to_mutate` no `pyproject.toml`.
+
+---
+
 ### Comando Simplificado (Recomendado)
 
 ```bash
+# Executar mutation testing em um arquivo específico
 make mutation target=scripts/utils/filesystem.py
+
+# Visualizar relatório HTML no navegador
+make mutation-report
 ```
 
 **Comportamento:**
 
-- Limpa cache anterior automaticamente
-- Executa mutmut apenas no arquivo especificado
-- Gera relatório HTML em `html/index.html`
-- Modo `--simple-output` para facilitar leitura
+- ✅ Limpa cache anterior automaticamente
+- ✅ Executa mutmut apenas no arquivo especificado
+- ✅ Exibe resultados no terminal
+- ✅ Sugere comando para abrir relatório HTML
+
+### Visualizar Relatório Detalhado
+
+Após executar `make mutation`, você pode visualizar os resultados detalhados:
+
+```bash
+make mutation-report
+```
+
+Isso irá:
+
+1. Gerar relatório HTML em `html/index.html`
+2. Abrir automaticamente no navegador padrão (Linux/Mac/WSL)
+3. Em caso de falha, exibir o caminho completo do arquivo
 
 ### Sem Target (Erro Didático)
 
 ```bash
 $ make mutation
-❌ Erro: Você deve especificar um arquivo alvo.
-
-📖 Uso correto:
-   make mutation target=caminho/do/arquivo.py
-
-💡 Exemplo:
-   make mutation target=scripts/utils/filesystem.py
-
-📚 Para mais informações, consulte:
-   docs/guides/MUTATION_TESTING.md
+❌ Erro: Missing target. Usage: make mutation target=path/to/file.py
 ```
 
 ### Modo Manual Avançado (Opcional)
@@ -108,8 +135,8 @@ Se precisar de controle fino, use `mutmut` diretamente:
 # 1. Limpar cache
 rm -f .mutmut-cache
 
-# 2. Executar mutation em múltiplos arquivos
-mutmut run --paths-to-mutate scripts/utils/
+# 2. Executar mutation em arquivo específico
+mutmut run scripts/utils/filesystem.py
 
 # 3. Ver resultados
 mutmut results
@@ -120,6 +147,8 @@ mutmut show <id>
 # 5. Gerar HTML
 mutmut html
 ```
+
+**⚠️ ATENÇÃO:** Na v3.x, NÃO use flags como `--paths-to-mutate`. Configure tudo no `pyproject.toml`.
 
 ---
 

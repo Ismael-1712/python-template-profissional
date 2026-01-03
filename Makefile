@@ -363,7 +363,15 @@ mutation: ## 🧟 Run mutation testing (Usage: make mutation target=scripts/file
 	@echo ""
 	@echo "📊 Report:"
 	@mutmut results
-	@echo "📝 HTML Report generated. Run 'mutmut html' to view details."
+	@echo ""
+	@echo "💡 To view detailed HTML report, run: make mutation-report"
+
+## mutation-report: Open mutation testing HTML report in browser
+mutation-report: ## 📊 View mutation testing report (browser)
+	@echo "📊 Generating HTML report..."
+	@mutmut html
+	@echo "🌍 Opening report in browser..."
+	@xdg-open html/index.html 2>/dev/null || open html/index.html 2>/dev/null || echo "📄 Report available at: file://$(PWD)/html/index.html"
 
 ## format: Aplica formatação automática e correções de lint (Ruff)
 format:

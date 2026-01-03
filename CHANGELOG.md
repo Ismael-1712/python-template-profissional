@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🧟 Mutation Testing DevX Improvements**:
+  - Novo target `make mutation-report`: Abre relatório HTML do mutation testing automaticamente no navegador
+  - Suporte multi-plataforma: Linux (xdg-open), macOS (open), fallback para exibição de caminho
+  - Target `mutation` agora sugere `make mutation-report` ao invés de comando manual `mutmut html`
+  - Elimina erro comum de executar `mutmut html` fora do venv
+
+### Changed
+
+- **📚 Mutation Testing Documentation Overhaul**:
+  - Atualizado `docs/guides/MUTATION_TESTING.md` para refletir Mutmut v3.x
+  - Removidas menções a argumentos CLI antigos (`--paths-to-mutate`)
+  - Adicionada seção sobre configuração exclusiva via `[tool.mutmut]` no `pyproject.toml`
+  - Documentado novo comando `make mutation-report`
+  - README agora referencia guia de mutation testing na seção de Relatórios e Métricas
+
 ### Fixed
 
 - **🛡️ Dependency Split-Brain Prevention**:
