@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🔐 Security Hardening Tools**: Implementação de scanners SAST e SCA no pipeline de validação
+  - `bandit>=1.7.0`: Static Application Security Testing para detecção de vulnerabilidades no código
+  - `safety>=2.3.0`: Software Composition Analysis para auditoria de dependências
+  - Novos targets no Makefile:
+    - `make security-sast`: Executa Bandit para análise de código estático
+    - `make security-sca`: Executa Safety para verificação de vulnerabilidades em dependências
+    - `make audit-custom`: Renomeado de `audit-security` (auditoria customizada)
+    - `make audit-security`: Agregador que executa Custom + SAST + SCA
+  - Configuração do Bandit em `pyproject.toml` com exclusão de testes e diretórios de CI
+  - Métricas de segurança adicionadas ao README.md (SAST e SCA)
+
 ### Changed
 
 - **🏗️ Quality Gate Unification**: Consolidação de todas as ferramentas de qualidade no comando `make validate` (Fonte Única da Verdade)

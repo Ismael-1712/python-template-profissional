@@ -15,10 +15,16 @@ attrs==25.4.0
     #   interrogate
     #   jsonschema
     #   referencing
+authlib==1.6.6
+    # via safety
 babel==2.17.0
     # via -r requirements/dev.in
 backoff==2.2.1
     # via posthog
+backports-datetime-fromisoformat==2.0.3
+    # via marshmallow
+bandit==1.9.2
+    # via -r requirements/dev.in
 bcrypt==5.0.0
     # via chromadb
 build==1.3.0
@@ -35,6 +41,8 @@ certifi==2025.11.12
     #   httpx
     #   kubernetes
     #   requests
+cffi==2.0.0
+    # via cryptography
 cfgv==3.5.0
     # via pre-commit
 chardet==5.2.0
@@ -52,8 +60,10 @@ click==8.1.8
     #   import-linter
     #   interrogate
     #   mutmut
+    #   nltk
     #   pip-tools
     #   python-semantic-release
+    #   safety
     #   typer
     #   uvicorn
 click-option-group==0.5.9
@@ -69,6 +79,8 @@ coverage==7.13.1
     # via
     #   mutmut
     #   pytest-cov
+cryptography==46.0.3
+    # via authlib
 deprecated==1.3.1
     # via python-semantic-release
 deptry==0.24.0
@@ -81,6 +93,10 @@ distro==1.9.0
     # via posthog
 dotty-dict==1.3.1
     # via python-semantic-release
+dparse==0.6.4
+    # via
+    #   safety
+    #   safety-schemas
 durationpy==0.10
     # via kubernetes
 exceptiongroup==1.3.1
@@ -92,6 +108,7 @@ execnet==2.1.2
 filelock==3.20.2
     # via
     #   huggingface-hub
+    #   safety
     #   torch
     #   tox
     #   transformers
@@ -127,7 +144,9 @@ httpcore==1.0.9
 httptools==0.7.1
     # via uvicorn
 httpx==0.28.1
-    # via chromadb
+    # via
+    #   chromadb
+    #   safety
 huggingface-hub==0.36.0
     # via
     #   sentence-transformers
@@ -158,9 +177,12 @@ jinja2==3.1.6
     # via
     #   diff-cover
     #   python-semantic-release
+    #   safety
     #   torch
 joblib==1.5.3
-    # via scikit-learn
+    # via
+    #   nltk
+    #   scikit-learn
 jsonschema==4.25.1
     # via chromadb
 jsonschema-specifications==2025.9.1
@@ -182,6 +204,8 @@ markdown-it-py==4.0.0
     #   textual
 markupsafe==3.0.3
     # via jinja2
+marshmallow==4.1.2
+    # via safety
 mdit-py-plugins==0.5.0
     # via textual
 mdurl==0.1.2
@@ -198,6 +222,8 @@ mypy-extensions==1.1.0
     # via mypy
 networkx==3.4.2
     # via torch
+nltk==3.9.2
+    # via safety
 nodeenv==1.10.0
     # via pre-commit
 numpy==2.2.6
@@ -278,11 +304,14 @@ packaging==25.0
     # via
     #   build
     #   deptry
+    #   dparse
     #   huggingface-hub
     #   onnxruntime
     #   pyproject-api
     #   pytest
     #   requirements-parser
+    #   safety
+    #   safety-schemas
     #   tox
     #   transformers
 pathspec==0.12.1
@@ -319,12 +348,16 @@ pyasn1-modules==0.4.2
     # via google-auth
 pybase64==1.4.3
     # via chromadb
+pycparser==2.23
+    # via cffi
 pydantic==2.12.5
     # via
     #   -r requirements/dev.in
     #   chromadb
     #   pydantic-settings
     #   python-semantic-release
+    #   safety
+    #   safety-schemas
 pydantic-core==2.41.5
     # via pydantic
 pydantic-settings==2.12.0
@@ -370,6 +403,7 @@ python-semantic-release==10.5.3
 pyyaml==6.0.3
     # via
     #   -r requirements/dev.in
+    #   bandit
     #   chromadb
     #   huggingface-hub
     #   kubernetes
@@ -388,7 +422,9 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
 regex==2025.11.3
-    # via transformers
+    # via
+    #   nltk
+    #   transformers
 requests==2.32.5
     # via
     #   huggingface-hub
@@ -398,6 +434,7 @@ requests==2.32.5
     #   python-semantic-release
     #   requests-oauthlib
     #   requests-toolbelt
+    #   safety
     #   transformers
     #   xenon
 requests-oauthlib==2.0.0
@@ -408,6 +445,7 @@ requirements-parser==0.13.0
     # via deptry
 rich==14.2.0
     # via
+    #   bandit
     #   chromadb
     #   import-linter
     #   python-semantic-release
@@ -419,10 +457,18 @@ rpds-py==0.30.0
     #   referencing
 rsa==4.9.1
     # via google-auth
+ruamel-yaml==0.19.1
+    # via
+    #   safety
+    #   safety-schemas
 ruff==0.14.10
     # via -r requirements/dev.in
 safetensors==0.7.0
     # via transformers
+safety==3.7.0
+    # via -r requirements/dev.in
+safety-schemas==0.0.16
+    # via safety
 scikit-learn==1.7.2
     # via sentence-transformers
 scipy==1.15.3
@@ -445,6 +491,8 @@ six==1.17.0
     #   python-dateutil
 smmap==5.0.2
     # via gitdb
+stevedore==5.6.0
+    # via bandit
 sympy==1.14.0
     # via
     #   onnxruntime
@@ -452,7 +500,9 @@ sympy==1.14.0
 tabulate==0.9.0
     # via interrogate
 tenacity==9.1.2
-    # via chromadb
+    # via
+    #   chromadb
+    #   safety
 textual==6.12.0
     # via
     #   -r requirements/dev.in
@@ -471,17 +521,20 @@ tomli==2.3.0 ; python_version < "3.11"
     #   build
     #   coverage
     #   deptry
+    #   dparse
     #   import-linter
     #   interrogate
     #   mypy
     #   pip-tools
     #   pyproject-api
     #   pytest
+    #   safety
     #   tox
 tomlkit==0.13.3
     # via
     #   -r requirements/dev.in
     #   python-semantic-release
+    #   safety
 torch==2.9.1
     # via sentence-transformers
 tox==4.33.0
@@ -490,6 +543,7 @@ tqdm==4.67.1
     # via
     #   chromadb
     #   huggingface-hub
+    #   nltk
     #   sentence-transformers
     #   transformers
 transformers==4.57.3
@@ -500,6 +554,7 @@ typer==0.21.0
     # via
     #   -r requirements/dev.in
     #   chromadb
+    #   safety
 types-pyyaml==6.0.12.20250915
     # via -r requirements/dev.in
 types-requests==2.32.4.20250913
@@ -508,11 +563,13 @@ typing-extensions==4.15.0
     # via
     #   anyio
     #   chromadb
+    #   cryptography
     #   exceptiongroup
     #   grimp
     #   grpcio
     #   huggingface-hub
     #   import-linter
+    #   marshmallow
     #   mypy
     #   opentelemetry-api
     #   opentelemetry-exporter-otlp-proto-grpc
@@ -521,6 +578,8 @@ typing-extensions==4.15.0
     #   pydantic
     #   pydantic-core
     #   referencing
+    #   safety
+    #   safety-schemas
     #   sentence-transformers
     #   textual
     #   torch

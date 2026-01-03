@@ -102,11 +102,13 @@ class ChromaDBVectorStore(VectorStorePort):
         self._collection.add(
             ids=ids,
             embeddings=cast(
-                "Any", embeddings
+                "Any",
+                embeddings,
             ),  # Cast para Any silencia incompatibilidade Sequence
             documents=documents,
             metadatas=cast(
-                "Any", metadatas
+                "Any",
+                metadatas,
             ),  # Cast para Any silencia incompatibilidade Mapping
         )
 
@@ -130,7 +132,8 @@ class ChromaDBVectorStore(VectorStorePort):
         # Query ChromaDB
         results = self._collection.query(
             query_embeddings=cast(
-                "Any", [query_embedding]
+                "Any",
+                [query_embedding],
             ),  # Cast para Any silencia incompatibilidade Sequence
             n_results=limit,
         )
@@ -210,7 +213,8 @@ class ChromaDBVectorStore(VectorStorePort):
 
         # For safety, hash it to ensure it's valid for ChromaDB
         # (ChromaDB has some restrictions on ID format)
-        id_hash = hashlib.md5(base_id.encode()).hexdigest()[:8]
+        # MD5 for non-security ID generation (data structure, not crypto)
+        id_hash = hashlib.md5(base_id.encode(), usedforsecurity=False).hexdigest()[:8]
 
         # Return hybrid: readable + hash for uniqueness
         return (

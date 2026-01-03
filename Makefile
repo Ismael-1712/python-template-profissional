@@ -218,10 +218,24 @@ deps-check:
 	@echo "🛡️  Executando Protocolo de Imunidade de Dependências..."
 	@$(PYTHON) scripts/ci/verify_deps.py
 
-## audit-security: Executa auditoria de segurança do código (HIGH severity)
-audit-security:
-	@echo "🔒 Executando Auditoria de Segurança..."
+## audit-custom: Executa auditoria de segurança customizada (HIGH severity)
+audit-custom:
+	@echo "🔒 Executando Auditoria de Segurança Customizada..."
 	@$(PYTHON) -m scripts.cli.audit --config scripts/audit_config.yaml --fail-on HIGH --quiet
+
+## security-sast: Static Application Security Testing (Bandit)
+security-sast:
+	@echo "🔒 Running SAST (Bandit)..."
+	@$(PYTHON) -m bandit -c pyproject.toml -r . -ll  # -ll = Falha apenas em MEDIUM ou HIGH
+
+## security-sca: Software Composition Analysis (Safety)
+security-sca:
+	@echo "🔒 Running SCA (Safety)..."
+	@$(PYTHON) -m safety scan --detailed-output || true  # Continue on vuln (dev environment)
+
+## audit-security: Executa suite completa de segurança (Custom + SAST + SCA)
+audit-security: audit-custom security-sast security-sca
+	@echo "✅ Security Audit Complete!"
 
 ## guardian-check: Valida políticas arquiteturais via Guardian Scanner
 guardian-check:
