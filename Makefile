@@ -39,19 +39,64 @@ POT_FILE := $(LOCALES_DIR)/messages.pot
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats validate-python requirements
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats validate-python requirements check-venv sync
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
 	@echo "📋 Comandos Disponíveis:"
 	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  make /' | column -t -s ':'
 
+## check-venv: Diagnostica o estado do ambiente virtual e pip-sync
+check-venv:
+	@echo "🔍 Diagnóstico do Ambiente Virtual"
+	@echo "=================================="
+	@echo ""
+	@if [ -d "$(VENV)" ]; then \
+		echo "✅ Virtual environment encontrado: $(VENV)"; \
+		echo ""; \
+		echo "📍 Python Ativo:"; \
+		echo "   Caminho: $$($(VENV)/bin/python -c 'import sys; print(sys.executable)')"; \
+		echo "   Versão:  $$($(VENV)/bin/python --version)"; \
+		echo ""; \
+		echo "📦 Textual (pacote de teste):"; \
+		$(VENV)/bin/python -c "import textual; print(f'   Versão instalada: {textual.__version__}')" 2>/dev/null || echo "   ❌ Não instalado"; \
+		echo "   Versão esperada:  $$(grep '^textual==' requirements/dev.txt | cut -d'=' -f3)"; \
+		echo ""; \
+		echo "🛠️  pip-tools:"; \
+		$(VENV)/bin/pip show pip-tools >/dev/null 2>&1 && echo "   ✅ Instalado" || echo "   ❌ Não instalado"; \
+		echo ""; \
+		echo "💡 Comandos úteis:"; \
+		echo "   make sync          → Sincroniza dependências no venv local"; \
+		echo "   make install-dev   → Reinstala ambiente completo"; \
+	else \
+		echo "❌ Virtual environment NÃO encontrado: $(VENV)"; \
+		echo ""; \
+		echo "💡 Execute: make install-dev"; \
+	fi
+
+## sync: Sincroniza dependências usando pip-sync no ambiente virtual local
+sync:
+	@echo "🔄 Sincronizando dependências no ambiente virtual local..."
+	@if [ ! -d "$(VENV)" ]; then \
+		echo "❌ Erro: Virtual environment não encontrado. Execute 'make install-dev' primeiro."; \
+		exit 1; \
+	fi
+	@if [ ! -f "requirements/dev.txt" ]; then \
+		echo "❌ Erro: requirements/dev.txt não encontrado."; \
+		exit 1; \
+	fi
+	@echo "📦 Usando: $(VENV)/bin/pip-sync"
+	@$(VENV)/bin/pip-sync requirements/dev.txt
+	@echo "✅ Sincronização concluída!"
+	@echo ""
+	@echo "💡 Dica: Execute 'make check-venv' para validar o estado do ambiente."
+
 ## run: Inicia servidor local com hot-reload
 run:
 	PYTHONPATH=. $(PYTHON) -m uvicorn src.app.main:app --reload --host 0.0.0.0 --port 8000
 
 ## doctor: Executa diagnóstico preventivo do ambiente de desenvolvimento
-doctor:
+doctor: check-venv
 	@$(PYTHON) -m scripts.cli.doctor
 
 ## upgrade-python: Atualiza versões Python para os patches mais recentes (via pyenv)

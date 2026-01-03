@@ -1,5 +1,22 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- **🛡️ Dependency Split-Brain Prevention**:
+  - Corrigido `verify_deps.py` para usar Python do venv ao validar lockfiles
+  - Adicionado `--resolver=backtracking` para consistência com `make requirements`
+  - Pinnado `textual==6.12.0` no `requirements/dev.in` para evitar conflitos de resolução com mutmut
+
+### Added
+
+- **🔧 Makefile Dependency Guardrails**:
+  - Novo target `make check-venv`: Diagnostica estado do ambiente virtual (Python path, versões instaladas vs esperadas, pip-tools)
+  - Novo target `make sync`: Sincroniza dependências no venv local usando explicitamente `.venv/bin/pip-sync`
+  - Target `doctor` agora depende de `check-venv` para validação proativa
+  - Elimina "dependency split-brain" onde pip-sync roda no ambiente errado
+
 ## [0.2.0] - 2026-01-03 - "The AI Update"
 
 ### Added - Neural Cortex (AI-Powered Features)

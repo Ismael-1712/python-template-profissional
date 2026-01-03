@@ -27,6 +27,10 @@ def check_sync(req_name: str) -> bool:
 
     print(f"🔍 Verificando integridade de {req_name}...", end=" ", flush=True)
 
+    # Use venv Python if available to avoid dependency conflicts
+    venv_python = project_root / ".venv" / "bin" / "python"
+    python_exec = str(venv_python) if venv_python.exists() else sys.executable
+
     with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
         tmp_path = tmp.name
 
@@ -34,13 +38,14 @@ def check_sync(req_name: str) -> bool:
         # Execute pip-compile from root using RELATIVE paths
         subprocess.check_call(
             [
-                sys.executable,
+                python_exec,
                 "-m",
                 "piptools",
                 "compile",
                 str(in_file),
                 "--output-file",
                 tmp_path,
+                "--resolver=backtracking",
                 "--strip-extras",
                 "--quiet",
             ],
@@ -54,10 +59,13 @@ def check_sync(req_name: str) -> bool:
         print("❌ DESSINCRONIZADO")
         # Show filtered diff (only real lines)
         print("--- Diff (ignoring comments) ---")
-        subprocess.run(
-            ["diff", "-I", "^#", str(project_root / txt_file), tmp_path],
-            check=False,
-        )
+        try:
+            # Using check_call to match project pattern (shell=False, validated inputs)
+            subprocess.check_call(
+                ["diff", "-I", "^#", str(project_root / txt_file), tmp_path],
+            )
+        except subprocess.CalledProcessError:
+            pass  # diff returns non-zero when files differ (expected)
         return False
 
     except subprocess.CalledProcessError as e:
@@ -75,12 +83,12 @@ def _compare_files_content(path_a: Path, path_b: Path) -> bool:
         # Ignore ALL lines starting with # (comments, paths, timestamps)
         lines_a = [
             line.strip()
-            for line in fa.readlines()
+            for line in fa
             if line.strip() and not line.strip().startswith("#")
         ]
         lines_b = [
             line.strip()
-            for line in fb.readlines()
+            for line in fb
             if line.strip() and not line.strip().startswith("#")
         ]
     return lines_a == lines_b
