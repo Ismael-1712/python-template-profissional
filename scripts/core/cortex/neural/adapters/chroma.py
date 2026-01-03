@@ -93,7 +93,7 @@ class ChromaDBVectorStore(VectorStorePort):
             documents.append(chunk.content)
 
             # Preserve metadata + add structural info
-            metadata = dict(chunk.metadata)
+            metadata: dict[str, Any] = dict(chunk.metadata)
             metadata["source_file"] = str(chunk.source_file)
             metadata["line_start"] = str(chunk.line_start)
             metadatas.append(metadata)

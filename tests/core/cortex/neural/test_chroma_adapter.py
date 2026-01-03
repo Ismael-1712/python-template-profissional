@@ -46,7 +46,7 @@ def sample_chunks() -> list[DocumentChunk]:
 
 
 @pytest.fixture
-def mock_chroma_client() -> dict[str, Any]:  # type: ignore[misc]
+def mock_chroma_client() -> Any:
     """Create a mocked ChromaDB client."""
     with patch("scripts.core.cortex.neural.adapters.chroma.chromadb") as mock_chromadb:
         mock_client = MagicMock()
@@ -66,9 +66,7 @@ def mock_chroma_client() -> dict[str, Any]:  # type: ignore[misc]
 class TestChromaDBVectorStoreInit:
     """Test suite for ChromaDBVectorStore initialization."""
 
-    def test_init_with_default_directory(
-        self, mock_chroma_client: dict[str, Any]
-    ) -> None:
+    def test_init_with_default_directory(self, mock_chroma_client: Any) -> None:
         """Should initialize with default persist directory."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
 
@@ -79,9 +77,7 @@ class TestChromaDBVectorStoreInit:
         call_kwargs = mock_chroma_client["chromadb"].PersistentClient.call_args[1]
         assert ".cortex/memory" in str(call_kwargs["path"])
 
-    def test_init_with_custom_directory(
-        self, mock_chroma_client: dict[str, Any]
-    ) -> None:
+    def test_init_with_custom_directory(self, mock_chroma_client: Any) -> None:
         """Should initialize with custom persist directory."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
 
@@ -92,7 +88,7 @@ class TestChromaDBVectorStoreInit:
         call_kwargs = mock_chroma_client["chromadb"].PersistentClient.call_args[1]
         assert custom_path in str(call_kwargs["path"])
 
-    def test_init_creates_collection(self, mock_chroma_client: dict[str, Any]) -> None:
+    def test_init_creates_collection(self, mock_chroma_client: Any) -> None:
         """Should create or get the 'cortex_knowledge' collection."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
 
@@ -109,7 +105,7 @@ class TestChromaDBVectorStoreAdd:
 
     def test_add_single_chunk(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
         sample_chunks: list[DocumentChunk],
     ) -> None:
         """Should add a single chunk to ChromaDB collection."""
@@ -136,7 +132,7 @@ class TestChromaDBVectorStoreAdd:
 
     def test_add_multiple_chunks(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
         sample_chunks: list[DocumentChunk],
     ) -> None:
         """Should add multiple chunks to ChromaDB collection."""
@@ -156,7 +152,7 @@ class TestChromaDBVectorStoreAdd:
 
     def test_add_generates_deterministic_ids(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
         sample_chunks: list[DocumentChunk],
     ) -> None:
         """Should generate deterministic IDs based on content."""
@@ -177,7 +173,7 @@ class TestChromaDBVectorStoreAdd:
 
     def test_add_preserves_metadata(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
         sample_chunks: list[DocumentChunk],
     ) -> None:
         """Should preserve chunk metadata in ChromaDB."""
@@ -201,7 +197,7 @@ class TestChromaDBVectorStoreSearch:
 
     def test_search_returns_results(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
         sample_chunks: list[DocumentChunk],
     ) -> None:
         """Should search and return SearchResult objects."""
@@ -248,7 +244,7 @@ class TestChromaDBVectorStoreSearch:
 
     def test_search_respects_limit(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
     ) -> None:
         """Should respect the limit parameter."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
@@ -271,7 +267,7 @@ class TestChromaDBVectorStoreSearch:
 
     def test_search_converts_distance_to_similarity_score(
         self,
-        mock_chroma_client: dict[str, Any],
+        mock_chroma_client: Any,
     ) -> None:
         """Should convert ChromaDB distance to similarity score."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
@@ -298,7 +294,7 @@ class TestChromaDBVectorStoreSearch:
 class TestChromaDBVectorStorePersist:
     """Test suite for the persist method."""
 
-    def test_persist_is_automatic(self, mock_chroma_client: dict[str, Any]) -> None:
+    def test_persist_is_automatic(self, mock_chroma_client: Any) -> None:
         """Should handle persist (ChromaDB auto-persists with PersistentClient)."""
         from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
 
