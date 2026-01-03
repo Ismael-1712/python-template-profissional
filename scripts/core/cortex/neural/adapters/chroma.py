@@ -6,7 +6,7 @@ providing automatic disk persistence and efficient similarity search.
 
 import hashlib
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import chromadb
 from chromadb.config import Settings
@@ -101,9 +101,13 @@ class ChromaDBVectorStore(VectorStorePort):
         # Add to ChromaDB collection (upsert semantics)
         self._collection.add(
             ids=ids,
-            embeddings=embeddings,
+            embeddings=cast(
+                "Any", embeddings
+            ),  # Cast para Any silencia incompatibilidade Sequence
             documents=documents,
-            metadatas=metadatas,
+            metadatas=cast(
+                "Any", metadatas
+            ),  # Cast para Any silencia incompatibilidade Mapping
         )
 
     def search(
@@ -125,7 +129,9 @@ class ChromaDBVectorStore(VectorStorePort):
         """
         # Query ChromaDB
         results = self._collection.query(
-            query_embeddings=[query_embedding],
+            query_embeddings=cast(
+                "Any", [query_embedding]
+            ),  # Cast para Any silencia incompatibilidade Sequence
             n_results=limit,
         )
 
