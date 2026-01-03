@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **🔐 Security Migration: Safety v2 → v3**: Migração do arquivo de política de segurança para formato v3.0
+  - **Breaking Change**: Safety CLI atualizado de v2.x para v3.7.0 (major version bump)
+  - Arquivo `.safety-policy.yml` convertido do formato v2.x para v3.0
+  - **Preservação de CVEs críticos**:
+    - `51457` (py package): ReDoS (DISPUTED) - dependência transitiva pytest/interrogate
+    - `77745` (urllib3): CVE-2025-50182 - limitado por constraint do Kubernetes
+    - `77744` (urllib3): CVE-2025-50181 - limitado por constraint do Kubernetes
+  - Requisitos de schema v3.0: campo `expires` obrigatório (definido como 2030-12-31)
+  - Pin atualizado em `requirements/dev.in`: `safety>=3.2.0`
+  - Backup do arquivo legado: `.safety-policy.yml.bak`
+  - **Impacto**: Comando `make validate` agora compatível com Safety v3.x
+
 ### Added
 
 - **🔐 Security Hardening Tools**: Implementação de scanners SAST e SCA no pipeline de validação

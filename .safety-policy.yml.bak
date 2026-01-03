@@ -1,0 +1,13 @@
+security:
+  ignore-cvss-severity-below: 0.0
+  ignore-cvss-unknown-severity: false
+  ignore-vulnerabilities:
+    # py: ReDoS (DISPUTED) - Dependência transitiva do pytest/interrogate
+    # CVE-2022-42969 - Padrão ReDoS disputado, não podemos atualizar no momento
+    51457:
+    # urllib3: CVE-2025-50182 - Limitado por kubernetes que requer urllib3<2.4.0
+    # Atualizaremos quando o kubernetes permitir urllib3>=2.5.0
+    77745:
+    # urllib3: CVE-2025-50181 - Limitado por kubernetes que requer urllib3<2.4.0
+    # Atualizaremos quando o kubernetes permitir urllib3>=2.5.0
+    77744:
