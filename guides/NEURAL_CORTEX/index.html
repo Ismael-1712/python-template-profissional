@@ -753,6 +753,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#interpretacao-de-scores-de-confianca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpretação de Scores de Confiança
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1010,63 +1021,101 @@
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Especificar banco de dados customizado</span>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;query&quot;</span><span class="w"> </span>--db<span class="w"> </span>.custom/memory
 </code></pre></div>
+<p><strong>Output Esperado (Nova Interface com Rastreabilidade):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>🧠 CORTEX Neural System Status
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>┃ Motor Cognitivo: 🟢 SentenceTransformers ┃
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>┃                   (Real AI)              ┃
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>┃ Memória:         🟢 ChromaDB (Persistent)┃
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>┃ Modelo:          all-MiniLM-L6-v2        ┃
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>┃ Caminho:         .cortex/memory          ┃
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>Query: Como rodar testes?
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>        🎯 Resultados da Busca Semântica
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>┏━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┓
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>┃  # ┃ Confiança  ┃ Fonte                 ┃ Snippet            ┃
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>┡━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━┩
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>│  1 │ 0.92       │ CONTRIBUTING.md:145   │ Para rodar testes  │
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>│    │            │                       │ locais, execute:   │
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>│    │            │                       │ make test...       │
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>│  2 │ 0.87       │ README.md:78          │ ## Testes Execute  │
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>│    │            │                       │ a suite completa   │
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>│    │            │                       │ com pytest...      │
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>│  3 │ 0.74       │ docs/testing.md:12    │ Framework de testes│
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>│    │            │                       │ usa pytest com...  │
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>└────┴────────────┴───────────────────────┴────────────────────┘
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>✓ 3 resultados relevantes encontrados
+</code></pre></div>
+<p><strong>Novo Formato de Saída:</strong></p>
+<ul>
+<li><strong>Coluna "Confiança"</strong>: Score formatado (0.00 a 1.00) com cores:</li>
+<li>🟢 <strong>Verde</strong> (≥ 0.80): Alta confiança</li>
+<li>🟡 <strong>Amarelo</strong> (≥ 0.60): Confiança moderada</li>
+<li>🔴 <strong>Vermelho</strong> (&lt; 0.60): Confiança baixa</li>
+<li><strong>Coluna "Fonte"</strong>: Rastreabilidade completa <code>arquivo:linha</code></li>
+<li><strong>Coluna "Snippet"</strong>: Primeiros 147 caracteres com truncamento inteligente</li>
+<li><strong>Mensagem final</strong>: Texto em português com emoji de confirmação</li>
+</ul>
 <h2 id="arquitetura">🏗️ Arquitetura</h2>
 <h3 id="componentes-principais">Componentes Principais</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>┌──────────────────────────────────────────────┐
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>│              CLI Commands                    │
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>│  (cortex neural index / ask)                 │
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>└─────────────────┬────────────────────────────┘
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>                  │
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>                  ▼
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>┌──────────────────────────────────────────────┐
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>│          VectorBridge (Core)                 │
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>│  - index_document()                          │
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>│  - query_similar()                           │
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>│  - Business Logic (Pure)                     │
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>└─────────┬────────────────────┬───────────────┘
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>          │                    │
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>     ┌────▼────┐          ┌────▼──────┐
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>     │Embedding│          │ Vector    │
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>     │  Port   │          │Store Port │
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>     └────┬────┘          └────┬──────┘
-<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>          │                    │
-<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>    ┌─────▼──────┐      ┌──────▼────────┐
-<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    │ Adapters   │      │   Adapters    │
-<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>    │────────────│      │───────────────│
-<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    │Sentence    │      │ ChromaDB      │
-<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    │Transformer │      │ InMemory      │
-<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>    │Placeholder │      │ (Future)      │
-<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>    │OpenAI (fut)│      │ Pinecone (fut)│
-<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>    └────────────┘      └───────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>┌──────────────────────────────────────────────┐
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>│              CLI Commands                    │
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>│  (cortex neural index / ask)                 │
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>└─────────────────┬────────────────────────────┘
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>                  │
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>                  ▼
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>┌──────────────────────────────────────────────┐
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│          VectorBridge (Core)                 │
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>│  - index_document()                          │
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>│  - query_similar()                           │
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>│  - Business Logic (Pure)                     │
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>└─────────┬────────────────────┬───────────────┘
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>          │                    │
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>     ┌────▼────┐          ┌────▼──────┐
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>     │Embedding│          │ Vector    │
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>     │  Port   │          │Store Port │
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>     └────┬────┘          └────┬──────┘
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>          │                    │
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    ┌─────▼──────┐      ┌──────▼────────┐
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    │ Adapters   │      │   Adapters    │
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    │────────────│      │───────────────│
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>    │Sentence    │      │ ChromaDB      │
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>    │Transformer │      │ InMemory      │
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>    │Placeholder │      │ (Future)      │
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>    │OpenAI (fut)│      │ Pinecone (fut)│
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>    └────────────┘      └───────────────┘
 </code></pre></div>
 <h3 id="ports-interfaces">Ports (Interfaces)</h3>
 <p><strong>EmbeddingPort:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingPort</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contrato para serviços de embedding.&quot;&quot;&quot;</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gera embedding para um texto.&quot;&quot;&quot;</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="o">...</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">batch_embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gera embeddings em lote.&quot;&quot;&quot;</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="o">...</span>
-</code></pre></div>
-<p><strong>VectorStorePort:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">VectorStorePort</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contrato para armazenamento de vetores.&quot;&quot;&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingPort</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contrato para serviços de embedding.&quot;&quot;&quot;</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">:</span> <span class="n">DocumentChunk</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Armazena chunk com embedding.&quot;&quot;&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gera embedding para um texto.&quot;&quot;&quot;</span>
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="o">...</span>
 <a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SearchResult</span><span class="p">]:</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Busca por similaridade.&quot;&quot;&quot;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">batch_embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Gera embeddings em lote.&quot;&quot;&quot;</span>
 <a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>        <span class="o">...</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">persist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Persiste dados no disco.&quot;&quot;&quot;</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="o">...</span>
+</code></pre></div>
+<p><strong>VectorStorePort:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">VectorStorePort</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Contrato para armazenamento de vetores.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">:</span> <span class="n">DocumentChunk</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Armazena chunk com embedding.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="o">...</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SearchResult</span><span class="p">]:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Busca por similaridade.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="o">...</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">persist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Persiste dados no disco.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>        <span class="o">...</span>
 </code></pre></div>
 <h3 id="adapters-implementacoes">Adapters (Implementações)</h3>
 <table>
@@ -1120,7 +1169,7 @@
 <li>✅ Busca &lt; 100ms para 1000+ docs</li>
 </ul>
 <p><strong>Comando:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--memory-type<span class="w"> </span>chroma
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--memory-type<span class="w"> </span>chroma
 </code></pre></div>
 <h3 id="2-modo-ram-desenvolvimento">2. Modo RAM (Desenvolvimento)</h3>
 <p><strong>Configuração:</strong></p>
@@ -1136,7 +1185,7 @@
 <li>✅ Útil para testes/debug</li>
 </ul>
 <p><strong>Comando:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--memory-type<span class="w"> </span>ram
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--memory-type<span class="w"> </span>ram
 </code></pre></div>
 <h3 id="3-modo-fallback-emergencia">3. Modo Fallback (Emergência)</h3>
 <p><strong>Configuração:</strong></p>
@@ -1157,21 +1206,21 @@
 <li>Erro ao carregar modelo de IA</li>
 </ul>
 <p><strong>Output:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>⚠️  Could not load AI model. Using placeholder service.
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>   For production use, ensure sentence-transformers is installed.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>⚠️  Could not load AI model. Using placeholder service.
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>   For production use, ensure sentence-transformers is installed.
 </code></pre></div>
 <h2 id="banner-de-status-verbose-by-default">📊 Banner de Status (Verbose by Default)</h2>
 <h3 id="por-que-verbose">Por Que Verbose?</h3>
 <p><strong>Problema:</strong> "Cegueira de Ferramenta" - usuário não sabe se IA está ativa ou degradada.</p>
 <p><strong>Solução:</strong> Todo comando Neural exibe status completo ANTES de operar:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>🧠 CORTEX Neural System Status
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>┃ Motor Cognitivo: 🟢 SentenceTransformers ┃
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>┃                   (Real AI)              ┃
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>┃ Memória:         🟢 ChromaDB (Persistent)┃
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>┃ Modelo:          all-MiniLM-L6-v2        ┃
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>┃ Caminho:         .cortex/memory          ┃
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>🧠 CORTEX Neural System Status
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>┃ Motor Cognitivo: 🟢 SentenceTransformers ┃
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>┃                   (Real AI)              ┃
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>┃ Memória:         🟢 ChromaDB (Persistent)┃
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>┃ Modelo:          all-MiniLM-L6-v2        ┃
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>┃ Caminho:         .cortex/memory          ┃
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 </code></pre></div>
 <h3 id="interpretacao-de-icones">Interpretação de Ícones</h3>
 <table>
@@ -1200,95 +1249,140 @@
 </tr>
 </tbody>
 </table>
+<h3 id="interpretacao-de-scores-de-confianca">Interpretação de Scores de Confiança</h3>
+<p>Os scores de confiança indicam a similaridade semântica entre sua consulta e os resultados encontrados:</p>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Cor</th>
+<th>Interpretação</th>
+<th>Ação Recomendada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0.80 - 1.00</strong></td>
+<td>🟢 Verde</td>
+<td><strong>Alta Confiança</strong> - Resultado altamente relevante, semântica muito próxima da consulta</td>
+<td>Use com confiança, ideal para RAG</td>
+</tr>
+<tr>
+<td><strong>0.60 - 0.79</strong></td>
+<td>🟡 Amarelo</td>
+<td><strong>Confiança Moderada</strong> - Resultado relacionado, mas pode não ser exatamente o que busca</td>
+<td>Revise o contexto antes de usar</td>
+</tr>
+<tr>
+<td><strong>&lt; 0.60</strong></td>
+<td>🔴 Vermelho</td>
+<td><strong>Confiança Baixa</strong> - Resultado tangencialmente relacionado ou potencialmente irrelevante</td>
+<td>Refine sua consulta ou considere outras fontes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exemplo Prático:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;autenticação JWT&quot;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="c1"># Score 0.92 (Verde)  → &quot;Como implementar JWT authentication&quot;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Score 0.75 (Amarelo) → &quot;Segurança em APIs REST&quot;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># Score 0.55 (Vermelho) → &quot;Configuração de banco de dados&quot;</span>
+</code></pre></div>
+<p><strong>Dica:</strong> Se todos os resultados aparecem em vermelho, considere:</p>
+<ul>
+<li>Reformular a consulta com termos mais específicos</li>
+<li>Verificar se a documentação relevante foi indexada</li>
+<li>Executar <code>cortex neural index</code> novamente</li>
+</ul>
 <h2 id="casos-de-uso">🎯 Casos de Uso</h2>
 <h3 id="1-rag-retrieval-augmented-generation">1. RAG (Retrieval-Augmented Generation)</h3>
 <p><strong>Problema:</strong> Chatbot precisa de contexto do projeto para responder.</p>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.vector_bridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">VectorBridge</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.adapters.sentence_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformerAdapter</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.adapters.chroma</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChromaDBVectorStore</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Setup</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">embedding</span> <span class="o">=</span> <span class="n">SentenceTransformerAdapter</span><span class="p">()</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">vector_store</span> <span class="o">=</span> <span class="n">ChromaDBVectorStore</span><span class="p">(</span><span class="n">persist_directory</span><span class="o">=</span><span class="s2">&quot;.cortex/memory&quot;</span><span class="p">)</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">bridge</span> <span class="o">=</span> <span class="n">VectorBridge</span><span class="p">(</span><span class="n">embedding_service</span><span class="o">=</span><span class="n">embedding</span><span class="p">,</span> <span class="n">vector_store</span><span class="o">=</span><span class="n">vector_store</span><span class="p">)</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># Buscar contexto</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="n">results</span> <span class="o">=</span> <span class="n">bridge</span><span class="o">.</span><span class="n">query_similar</span><span class="p">(</span><span class="s2">&quot;Como testar APIs?&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">])</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="c1"># Passar para LLM</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="s2">Contexto do projeto:</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="si">{</span><span class="n">context</span><span class="si">}</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="s2">Pergunta do usuário: Como testar APIs neste projeto?</span>
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a><span class="c1"># Send to GPT-4/Claude...</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.vector_bridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">VectorBridge</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.adapters.sentence_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformerAdapter</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scripts.core.cortex.neural.adapters.chroma</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChromaDBVectorStore</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># Setup</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">embedding</span> <span class="o">=</span> <span class="n">SentenceTransformerAdapter</span><span class="p">()</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">vector_store</span> <span class="o">=</span> <span class="n">ChromaDBVectorStore</span><span class="p">(</span><span class="n">persist_directory</span><span class="o">=</span><span class="s2">&quot;.cortex/memory&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">bridge</span> <span class="o">=</span> <span class="n">VectorBridge</span><span class="p">(</span><span class="n">embedding_service</span><span class="o">=</span><span class="n">embedding</span><span class="p">,</span> <span class="n">vector_store</span><span class="o">=</span><span class="n">vector_store</span><span class="p">)</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="c1"># Buscar contexto</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="n">results</span> <span class="o">=</span> <span class="n">bridge</span><span class="o">.</span><span class="n">query_similar</span><span class="p">(</span><span class="s2">&quot;Como testar APIs?&quot;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">r</span><span class="o">.</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">])</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="c1"># Passar para LLM</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="s2">Contexto do projeto:</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="si">{</span><span class="n">context</span><span class="si">}</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="s2">Pergunta do usuário: Como testar APIs neste projeto?</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="c1"># Send to GPT-4/Claude...</span>
 </code></pre></div>
 <h3 id="2-descoberta-de-padroes">2. Descoberta de Padrões</h3>
 <p><strong>Problema:</strong> Novo desenvolvedor não sabe como implementar feature X.</p>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Exemplos de dependency injection&quot;</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como estruturar testes?&quot;</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Padrão observer implementation&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Exemplos de dependency injection&quot;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como estruturar testes?&quot;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Padrão observer implementation&quot;</span>
 </code></pre></div>
 <h3 id="3-onboarding-automatizado">3. Onboarding Automatizado</h3>
 <p><strong>Problema:</strong> Onboarding manual consome tempo de seniors.</p>
 <p><strong>Solução:</strong> Bot que responde perguntas comuns:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como configurar ambiente de dev?&quot;</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Onde estão as configurações de CI?&quot;</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como fazer deploy?&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como configurar ambiente de dev?&quot;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Onde estão as configurações de CI?&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como fazer deploy?&quot;</span>
 </code></pre></div>
 <h3 id="4-code-review-assistido">4. Code Review Assistido</h3>
 <p><strong>Problema:</strong> Revisor não lembra de padrões do projeto.</p>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Qual padrão de error handling usamos?&quot;</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como estruturar logging?&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Qual padrão de error handling usamos?&quot;</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;Como estruturar logging?&quot;</span>
 </code></pre></div>
 <h2 id="configuracao-avancada">⚙️ Configuração Avançada</h2>
 <h3 id="customizar-diretorios">Customizar Diretórios</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Indexar docs customizados</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--docs<span class="w"> </span>/custom/docs/path
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="c1"># Salvar em local customizado</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--db<span class="w"> </span>/data/vectors
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="c1"># Usar ambos</span>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--docs<span class="w"> </span>./wiki<span class="w"> </span>--db<span class="w"> </span>./wiki-vectors
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Indexar docs customizados</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--docs<span class="w"> </span>/custom/docs/path
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Salvar em local customizado</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--db<span class="w"> </span>/data/vectors
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Usar ambos</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--docs<span class="w"> </span>./wiki<span class="w"> </span>--db<span class="w"> </span>./wiki-vectors
 </code></pre></div>
 <h3 id="performance-tuning">Performance Tuning</h3>
 <p><strong>Indexação em Lote:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Indexar apenas arquivos modificados (futuro)</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--incremental
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Rebuild completo</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--rebuild
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Indexar apenas arquivos modificados (futuro)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--incremental
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Rebuild completo</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index<span class="w"> </span>--rebuild
 </code></pre></div>
 <p><strong>Busca Otimizada:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Menos resultados = mais rápido</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;query&quot;</span><span class="w"> </span>--top<span class="w"> </span><span class="m">3</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Mais resultados = maior cobertura</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;query&quot;</span><span class="w"> </span>--top<span class="w"> </span><span class="m">20</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Menos resultados = mais rápido</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;query&quot;</span><span class="w"> </span>--top<span class="w"> </span><span class="m">3</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Mais resultados = maior cobertura</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>cortex<span class="w"> </span>neural<span class="w"> </span>ask<span class="w"> </span><span class="s2">&quot;query&quot;</span><span class="w"> </span>--top<span class="w"> </span><span class="m">20</span>
 </code></pre></div>
 <h2 id="troubleshooting">🐛 Troubleshooting</h2>
 <h3 id="erro-using-placeholder-embedding-service">Erro: "Using placeholder embedding service"</h3>
 <p><strong>Causa:</strong> <code>sentence-transformers</code> não instalado.</p>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>pip<span class="w"> </span>install<span class="w"> </span>sentence-transformers<span class="w"> </span>torch
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>pip<span class="w"> </span>install<span class="w"> </span>sentence-transformers<span class="w"> </span>torch
 </code></pre></div>
 <p><strong>Verificar:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from sentence_transformers import SentenceTransformer; print(&#39;OK&#39;)&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from sentence_transformers import SentenceTransformer; print(&#39;OK&#39;)&quot;</span>
 </code></pre></div>
 <h3 id="erro-chromadb-not-installed">Erro: "ChromaDB not installed"</h3>
 <p><strong>Causa:</strong> <code>chromadb</code> não instalado.</p>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>pip<span class="w"> </span>install<span class="w"> </span>chromadb
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>pip<span class="w"> </span>install<span class="w"> </span>chromadb
 </code></pre></div>
 <p><strong>Fallback automático para RAM:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>⚠️  ChromaDB not installed. Using RAM storage instead.
-<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>   Install with: pip install chromadb
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>⚠️  ChromaDB not installed. Using RAM storage instead.
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>   Install with: pip install chromadb
 </code></pre></div>
 <h3 id="banco-de-dados-corrompido">Banco de Dados Corrompido</h3>
 <p><strong>Sintomas:</strong></p>
@@ -1297,25 +1391,25 @@
 <li>Resultados vazios após indexação</li>
 </ul>
 <p><strong>Solução:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Deletar banco e re-indexar</span>
-<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.cortex/memory
-<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Deletar banco e re-indexar</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>.cortex/memory
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>cortex<span class="w"> </span>neural<span class="w"> </span>index
 </code></pre></div>
 <h3 id="performance-lenta">Performance Lenta</h3>
 <p><strong>Causas Comuns:</strong></p>
 <ol>
 <li><strong>Modelo não carregado em GPU:</strong></li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># Verificar se CUDA disponível</span>
-<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;import torch; print(torch.cuda.is_available())&quot;</span>
-<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
-<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># Se True, SentenceTransformer usará GPU automaticamente</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># Verificar se CUDA disponível</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;import torch; print(torch.cuda.is_available())&quot;</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="c1"># Se True, SentenceTransformer usará GPU automaticamente</span>
 </code></pre></div>
 <ol>
 <li><strong>Muitos documentos (&gt; 10k):</strong></li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Considerar Pinecone/Weaviate para scale</span>
-<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="c1"># (Implementar adapter para VectorStorePort)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Considerar Pinecone/Weaviate para scale</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="c1"># (Implementar adapter para VectorStorePort)</span>
 </code></pre></div>
 <h2 id="proximos-passos">📚 Próximos Passos</h2>
 <ul>
