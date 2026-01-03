@@ -218,11 +218,24 @@ deps-check:
 	@echo "🛡️  Executando Protocolo de Imunidade de Dependências..."
 	@$(PYTHON) scripts/ci/verify_deps.py
 
-## validate: Executa validação completa (lint + type-check + test + complexity + arquitetura + ci + tdd)
-validate: format deps-check lint type-check complexity-check arch-check deps-check docs-check ci-check test tdd-check
-	@echo "📚 Verifying Documentation Integrity..."
-	PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
-	@echo "✅ Validação completa concluída (Tríade de Blindagem Ativa + TDD Guardian)"
+## audit-security: Executa auditoria de segurança do código (HIGH severity)
+audit-security:
+	@echo "🔒 Executando Auditoria de Segurança..."
+	@$(PYTHON) -m scripts.cli.audit --config scripts/audit_config.yaml --fail-on HIGH --quiet
+
+## guardian-check: Valida políticas arquiteturais via Guardian Scanner
+guardian-check:
+	@echo "🛡️  Executando Guardian Architectural Policies..."
+	@$(PYTHON) -m scripts.core.cortex.project_orchestrator guardian check . --fail-on-error
+
+## cortex-audit: Valida integridade da documentação (links, frontmatter, cobertura)
+cortex-audit:
+	@echo "📚 Verificando Integridade da Documentação (CORTEX)..."
+	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
+
+## validate: Executa validação completa (Quality Gate Unificado - Fonte Única da Verdade)
+validate: format deps-check lint type-check complexity-check arch-check docs-check ci-check audit-security guardian-check cortex-audit test tdd-check
+	@echo "✅ Quality Gate Passed: All systems go!"
 
 ## format: Formata código automaticamente com ruff
 ## save: Formata código, adiciona todas as alterações e faz commit. Uso: make save m="Mensagem do commit"
