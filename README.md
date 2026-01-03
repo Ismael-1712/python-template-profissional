@@ -117,7 +117,7 @@ make doctor                          # Verificar saúde do ambiente
 
 ```bash
 # Validação completa antes de commit
-make validate                        # Lint + Type Check + Tests + TDD Guardian (1-2 min)
+make validate                        # Quality Gate Unificado (Fonte Única da Verdade)
 
 # Atalhos úteis
 make format                          # Auto-formatar código (ruff)
@@ -744,25 +744,36 @@ make validate
 
 ```bash
 # Validação completa (executa todas as verificações abaixo)
-make validate
+make validate                   # ⭐ Quality Gate Unificado - Fonte Única da Verdade
 
-# Verificações individuais:
-make lint              # Ruff: Estilo de código + McCabe complexity (C901)
-make type-check        # Mypy: Type safety estrito
-make complexity-check  # Xenon: Complexidade ciclomática ≤ 10
-make arch-check        # Import Linter: Separação de camadas arquiteturais
-make deps-check        # Deptry: Dependências não utilizadas
-make docs-check        # Interrogate: Cobertura de docstrings (atual: 99.1%)
-make test              # Pytest: Suite de testes completa
-make tdd-check         # TDD Guardian: Cobertura delta 100% (código novo)
+# Verificações individuais (na ordem de execução do validate):
+make format                     # Ruff: Auto-formatação + lint fixes
+make deps-check                 # Verificação de sincronização requirements.in → .txt
+make lint                       # Ruff: Estilo de código + McCabe complexity (C901)
+make type-check                 # Mypy: Type safety estrito
+make complexity-check           # Xenon: Complexidade ciclomática ≤ 10
+make arch-check                 # Import Linter: Separação de camadas arquiteturais
+make docs-check                 # Interrogate: Cobertura de docstrings (≥95%)
+make ci-check                   # GitHub Actions workflows audit (versões + cache)
+make audit-security             # Auditoria de segurança (fail-on: HIGH severity)
+make guardian-check             # Guardian: Políticas arquiteturais (shadow config detection)
+make cortex-audit               # CORTEX: Integridade de documentação (links + frontmatter)
+make test                       # Pytest: Suite de testes completa (779 testes)
+make tdd-check                  # TDD Guardian: Cobertura delta 100% (código novo)
 ```
 
-**Pipeline de Validação:**
+**Pipeline de Validação (Quality Gate):**
 
 ```
-lint → type-check → complexity-check → arch-check → deps-check → docs-check → test → tdd-check
-  ↓         ↓              ↓               ↓            ↓            ↓          ↓       ↓
-Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest   diff-cover
+format → deps-check → lint → type-check → complexity-check → arch-check →
+  docs-check → ci-check → audit-security → guardian-check → cortex-audit →
+  test → tdd-check
+    ↓         ↓         ↓        ↓              ↓               ↓
+  Ruff     Verify   Ruff     Mypy          Xenon       Import Linter
+                                                              ↓
+                                                        Interrogate → GitHub Audit →
+                                                        Security Audit → Guardian →
+                                                        CORTEX → Pytest → diff-cover
 ```
 
 **Métricas de Qualidade:**
@@ -776,6 +787,9 @@ Ruff     Mypy          Xenon      Import Linter   Deptry    Interrogate   Pytest
 | 🎯 **Type Safety** | Mypy | Strict mode | ✅ PASSED |
 | ✅ **Testes** | Pytest | 100% passing | ✅ 779/780 |
 | 🛡️ **TDD Guardian** | diff-cover | Delta Coverage = 100% | ✅ ACTIVE |
+| 🔒 **Segurança** | Audit CLI | Fail-on HIGH | ✅ MONITORED |
+| 🛡️ **Guardian** | Config Scanner | Shadow detection | ✅ ACTIVE |
+| 📄 **CORTEX** | Knowledge Graph | Links + metadata | ✅ VALIDATED |
 
 **Estratégia de Baseline (Grandfathering):**
 

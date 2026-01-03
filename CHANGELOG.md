@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **🏗️ Quality Gate Unification**: Consolidação de todas as ferramentas de qualidade no comando `make validate` (Fonte Única da Verdade)
+  - Adicionados novos targets individuais:
+    - `make audit-security`: Auditoria de segurança (fail-on: HIGH severity)
+    - `make guardian-check`: Validação de políticas arquiteturais (shadow config detection)
+    - `make cortex-audit`: Integridade de documentação (links + frontmatter)
+  - Removida duplicação de `deps-check` no pipeline
+  - Pipeline otimizado: `format → deps-check → lint → type-check → complexity-check → arch-check → docs-check → ci-check → audit-security → guardian-check → cortex-audit → test → tdd-check`
+  - Documentação atualizada com métricas completas de cada pilar do Quality Gate
+
 ### Added
 
 - **🛡️ TDD Guardian Activation**: Comando `make tdd-check` agora faz parte do `make validate`, garantindo que todo código novo tenha 100% de cobertura de testes (Delta Coverage)
