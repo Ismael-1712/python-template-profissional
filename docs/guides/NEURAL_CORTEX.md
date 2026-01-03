@@ -94,6 +94,47 @@ cortex neural ask "Exemplos de dependency injection" --top 10
 cortex neural ask "query" --db .custom/memory
 ```
 
+**Output Esperado (Nova Interface com Rastreabilidade):**
+
+```
+🧠 CORTEX Neural System Status
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Motor Cognitivo: 🟢 SentenceTransformers ┃
+┃                   (Real AI)              ┃
+┃ Memória:         🟢 ChromaDB (Persistent)┃
+┃ Modelo:          all-MiniLM-L6-v2        ┃
+┃ Caminho:         .cortex/memory          ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Query: Como rodar testes?
+
+        🎯 Resultados da Busca Semântica
+┏━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┓
+┃  # ┃ Confiança  ┃ Fonte                 ┃ Snippet            ┃
+┡━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━┩
+│  1 │ 0.92       │ CONTRIBUTING.md:145   │ Para rodar testes  │
+│    │            │                       │ locais, execute:   │
+│    │            │                       │ make test...       │
+│  2 │ 0.87       │ README.md:78          │ ## Testes Execute  │
+│    │            │                       │ a suite completa   │
+│    │            │                       │ com pytest...      │
+│  3 │ 0.74       │ docs/testing.md:12    │ Framework de testes│
+│    │            │                       │ usa pytest com...  │
+└────┴────────────┴───────────────────────┴────────────────────┘
+
+✓ 3 resultados relevantes encontrados
+```
+
+**Novo Formato de Saída:**
+
+- **Coluna "Confiança"**: Score formatado (0.00 a 1.00) com cores:
+  - 🟢 **Verde** (≥ 0.80): Alta confiança
+  - 🟡 **Amarelo** (≥ 0.60): Confiança moderada
+  - 🔴 **Vermelho** (< 0.60): Confiança baixa
+- **Coluna "Fonte"**: Rastreabilidade completa `arquivo:linha`
+- **Coluna "Snippet"**: Primeiros 147 caracteres com truncamento inteligente
+- **Mensagem final**: Texto em português com emoji de confirmação
+
 ## 🏗️ Arquitetura
 
 ### Componentes Principais
@@ -266,6 +307,32 @@ cortex neural index --memory-type ram
 | 🟢 | Optimal | Configuração de produção (IA real + persistência) |
 | ⚠️ | Degraded | Fallback ativo (placeholder ou RAM) |
 | ❌ | Error | Sistema não funcional (não deve ocorrer) |
+
+### Interpretação de Scores de Confiança
+
+Os scores de confiança indicam a similaridade semântica entre sua consulta e os resultados encontrados:
+
+| Score | Cor | Interpretação | Ação Recomendada |
+|-------|-----|---------------|------------------|
+| **0.80 - 1.00** | 🟢 Verde | **Alta Confiança** - Resultado altamente relevante, semântica muito próxima da consulta | Use com confiança, ideal para RAG |
+| **0.60 - 0.79** | 🟡 Amarelo | **Confiança Moderada** - Resultado relacionado, mas pode não ser exatamente o que busca | Revise o contexto antes de usar |
+| **< 0.60** | 🔴 Vermelho | **Confiança Baixa** - Resultado tangencialmente relacionado ou potencialmente irrelevante | Refine sua consulta ou considere outras fontes |
+
+**Exemplo Prático:**
+
+```bash
+cortex neural ask "autenticação JWT"
+
+# Score 0.92 (Verde)  → "Como implementar JWT authentication"
+# Score 0.75 (Amarelo) → "Segurança em APIs REST"
+# Score 0.55 (Vermelho) → "Configuração de banco de dados"
+```
+
+**Dica:** Se todos os resultados aparecem em vermelho, considere:
+
+- Reformular a consulta com termos mais específicos
+- Verificar se a documentação relevante foi indexada
+- Executar `cortex neural index` novamente
 
 ## 🎯 Casos de Uso
 

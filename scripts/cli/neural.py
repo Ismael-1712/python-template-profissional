@@ -32,6 +32,7 @@ if str(_project_root) not in sys.path:
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
 from scripts.core.cortex.neural.adapters.memory import InMemoryVectorStore  # noqa: E402
+from scripts.core.cortex.neural.domain import SearchResult  # noqa: E402
 from scripts.core.cortex.neural.ports import (  # noqa: E402
     EmbeddingPort,
     VectorStorePort,
@@ -313,6 +314,61 @@ def index(
     )
 
 
+def _format_search_results(results: list[SearchResult]) -> Table:
+    """Format search results as rich table with traceability.
+
+    Args:
+        results: List of SearchResult objects
+
+    Returns:
+        Rich Table with formatted results
+    """
+    table = Table(
+        title="🎯 Resultados da Busca Semântica",
+        show_header=True,
+        header_style="bold magenta",
+    )
+    table.add_column("#", style="dim", width=4, justify="right")
+    table.add_column("Confiança", justify="right", width=12)
+    table.add_column("Fonte", style="cyan", width=35)
+    table.add_column("Snippet", width=60)
+
+    for i, result in enumerate(results, start=1):
+        score = result.score
+        chunk = result.chunk
+
+        # Format confidence score with conditional color
+        if score >= 0.8:
+            score_style = "bold green"
+        elif score >= 0.6:
+            score_style = "yellow"
+        else:
+            score_style = "red"
+
+        score_text = Text(f"{score:.2f}", style=score_style)
+
+        # Format source with file:line traceability
+        source_file = chunk.source_file.name if chunk.source_file else "Desconhecido"
+        line_start = chunk.line_start if hasattr(chunk, "line_start") else 0
+        source_location = (
+            f"{source_file}:{line_start}" if line_start > 0 else source_file
+        )
+
+        # Format snippet with intelligent truncation
+        snippet = chunk.content.strip().replace("\n", " ")
+        if len(snippet) > 150:
+            snippet = snippet[:147] + "..."
+
+        table.add_row(
+            str(i),
+            score_text,
+            source_location,
+            snippet,
+        )
+
+    return table
+
+
 @app.command()
 def ask(
     query: Annotated[str, typer.Argument(help="Search query")],
@@ -395,32 +451,14 @@ def ask(
         console.print("[yellow]No results found.[/yellow]")
         return
 
-    # Display results
-    table = Table(title="Search Results", show_header=True, header_style="bold magenta")
-    table.add_column("#", style="dim", width=4)
-    table.add_column("Score", justify="right", width=10)
-    table.add_column("Source", style="cyan", width=30)
-    table.add_column("Content Preview", width=60)
-
-    for i, result in enumerate(results, start=1):
-        score = result.score
-        chunk = result.chunk
-        metadata = chunk.metadata
-
-        source = metadata.get("header", str(chunk.source_file))
-        preview = (
-            chunk.content[:200] + "..." if len(chunk.content) > 200 else chunk.content
-        )
-
-        table.add_row(
-            str(i),
-            f"{score:.4f}",
-            source,
-            preview,
-        )
-
+    # Display results with rich traceability
+    table = _format_search_results(results)
+    console.print()
     console.print(table)
-    console.print(f"\n[bold green]Found {len(results)} relevant results[/bold green]")
+    console.print(
+        f"\n[bold green]✓ {len(results)} resultados relevantes "
+        f"encontrados[/bold green]",
+    )
 
 
 def main() -> None:
