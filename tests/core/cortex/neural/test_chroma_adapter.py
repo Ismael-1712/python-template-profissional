@@ -8,6 +8,7 @@ This test suite follows the Red-Green-Refactor cycle:
 Uses unittest.mock to avoid creating real ChromaDB files during tests.
 """
 
+import sys
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -15,6 +16,13 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from scripts.core.cortex.neural.domain import DocumentChunk
+
+# Mock heavy dependencies in sys.modules BEFORE any imports
+# This prevents ModuleNotFoundError in CI where these libs may not be installed
+if "chromadb" not in sys.modules:
+    sys.modules["chromadb"] = MagicMock()
+if "chromadb.config" not in sys.modules:
+    sys.modules["chromadb.config"] = MagicMock()
 
 
 @pytest.fixture
