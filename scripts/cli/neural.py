@@ -19,8 +19,10 @@ from typing import Annotated
 
 import typer
 from rich.console import Console
+from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
+from rich.text import Text
 
 # Add project root to sys.path
 _script_dir = Path(__file__).resolve().parent
@@ -60,6 +62,73 @@ class PlaceholderEmbeddingService(EmbeddingPort):
     def batch_embed(self, texts: list[str]) -> list[list[float]]:
         """Generate dummy embeddings for batch."""
         return [self.embed(text) for text in texts]
+
+
+def _print_system_status_banner(
+    embedding_service: EmbeddingPort,
+    vector_store: VectorStorePort,
+    memory_type: str,
+    db_path: Path,
+) -> None:
+    """Display system status banner with cognitive engine and memory info.
+
+    Args:
+        embedding_service: The embedding service being used
+        vector_store: The vector store being used
+        memory_type: Type of memory ('ram' or 'chroma')
+        db_path: Path to database storage
+    """
+    # Determine cognitive engine status
+    is_real_ai = not isinstance(embedding_service, PlaceholderEmbeddingService)
+    ai_status = (
+        "🟢 SentenceTransformers (Real AI)"
+        if is_real_ai
+        else "⚠️  Placeholder (Dummy Mode)"
+    )
+    ai_color = "green" if is_real_ai else "yellow"
+
+    # Determine memory type
+    from scripts.core.cortex.neural.adapters.memory import InMemoryVectorStore
+
+    is_chroma = memory_type == "chroma" and not isinstance(
+        vector_store,
+        InMemoryVectorStore,
+    )
+    memory_status = (
+        "🟢 ChromaDB (Persistent)" if is_chroma else "⚠️  RAM (Volatile + JSON)"
+    )
+    memory_color = "green" if is_chroma else "yellow"
+
+    # Get model name
+    model_name = "all-MiniLM-L6-v2" if is_real_ai else "N/A (No AI Model)"
+
+    # Create status table
+    status_lines = Text()
+    status_lines.append("Motor Cognitivo: ", style="bold")
+    status_lines.append(ai_status, style=ai_color)
+    status_lines.append("\n")
+
+    status_lines.append("Memória:        ", style="bold")
+    status_lines.append(memory_status, style=memory_color)
+    status_lines.append("\n")
+
+    status_lines.append("Modelo:         ", style="bold")
+    status_lines.append(model_name, style="cyan")
+    status_lines.append("\n")
+
+    status_lines.append("Caminho:        ", style="bold")
+    status_lines.append(str(db_path), style="dim")
+
+    panel = Panel(
+        status_lines,
+        title="[bold cyan]🧠 CORTEX Neural System Status[/bold cyan]",
+        border_style="cyan",
+        padding=(1, 2),
+    )
+
+    console.print()
+    console.print(panel)
+    console.print()
 
 
 def _get_embedding_service() -> EmbeddingPort:
@@ -177,6 +246,15 @@ def index(
 
     embedding_service = _get_embedding_service()  # Use factory with fallback
     vector_store = _get_vector_store(memory_type, db_absolute)
+
+    # Display system status banner
+    _print_system_status_banner(
+        embedding_service,
+        vector_store,
+        memory_type,
+        db_absolute,
+    )
+
     bridge = VectorBridge(
         embedding_service=embedding_service,
         vector_store=vector_store,
@@ -287,6 +365,14 @@ def ask(
     # Initialize VectorBridge with dependencies
     embedding_service = _get_embedding_service()  # Use factory with fallback
     vector_store = _get_vector_store(memory_type, db_absolute)
+
+    # Display system status banner
+    _print_system_status_banner(
+        embedding_service,
+        vector_store,
+        memory_type,
+        db_absolute,
+    )
 
     # Load existing data for RAM storage
     if memory_type == "ram":

@@ -1,5 +1,77 @@
 # Changelog
 
+## [0.2.0] - 2026-01-03 - "The AI Update"
+
+### Added - Neural Cortex (AI-Powered Features)
+
+- **🧠 Real AI Embeddings (SentenceTransformers)**:
+  - Neural semantic search usando modelo `all-MiniLM-L6-v2` (384 dimensões)
+  - Busca por conceitos, não apenas palavras-chave
+  - Adapter pattern implementado em `scripts/core/cortex/neural/adapters/sentence_transformer.py`
+  - Fallback graceful para PlaceholderEmbeddingService quando IA não disponível
+  - Dependencies: `sentence-transformers`, `torch`
+
+- **💾 Vector Persistence (ChromaDB)**:
+  - Memória de longo prazo para embeddings em `.cortex/memory/`
+  - ChromaDBVectorStore adapter com persistência automática
+  - Suporta modo RAM (InMemoryVectorStore) como alternativa
+  - Commands: `cortex neural index --memory-type chroma|ram`
+  - Performance: < 100ms para busca em 1000+ docs
+
+- **🏗️ Hexagonal Architecture Refactor**:
+  - **Neural Core**: Ports (`EmbeddingPort`, `VectorStorePort`) definem contratos
+  - **Adapters**: Implementações intercambiáveis (SentenceTransformer, ChromaDB, InMemory)
+  - **VectorBridge**: Core logic isolada de tecnologias específicas
+  - Diagrams generator: `scripts/docs/HEXAGONAL_VALIDATOR_DIAGRAMS.py`
+  - Testes independentes de implementação concreta
+  - Facilita troca de embedding engines (OpenAI, Cohere, etc.) sem refactor
+
+### Changed - UX & Documentation
+
+- **📊 CLI Neural - Verbose Status Banner**:
+  - Banner informativo ao iniciar comandos Neural (Verbose by Default)
+  - Exibe: Motor Cognitivo (🟢 Real AI / ⚠️ Placeholder), Memória (🟢 Persistent / ⚠️ RAM), Modelo, Caminho
+  - Elimina "cegueira de ferramenta" - usuário sempre sabe se sistema rebaixou
+  - Formatação visual com `rich.Panel` e ícones de status coloridos
+  - Implementado em `scripts/cli/neural.py:_print_system_status_banner()`
+
+- **📖 README.md - Neural Cortex Section**:
+  - Nova seção "🧠 Neural Cortex (AI Powered)" com 150+ linhas de documentação
+  - Capacidades, instalação, uso básico, arquitetura hexagonal, modos de operação
+  - Casos de uso detalhados: RAG, descoberta de padrões, onboarding
+  - Performance metrics e troubleshooting completo
+  - Atualização de comandos rápidos com novos parâmetros Neural
+
+- **📝 CHANGELOG.md - Version 0.2.0**:
+  - Registro completo das mudanças em AI, persistência e arquitetura
+  - Categorização clara: Added, Changed, Refactored
+  - Links para documentação arquitetural
+
+### Refactored - Code Quality
+
+- **⚙️ Dependency Injection Pattern**:
+  - Factories: `_get_embedding_service()`, `_get_vector_store()` com fallback logic
+  - Commands (`index`, `ask`) recebem dependencies via DI
+  - Facilita testing com mocks e stubs
+
+- **🧪 Testability Improvements**:
+  - Interfaces (Ports) permitem mock trivial
+  - Separation of Concerns: lógica de negócio vs. infraestrutura
+  - Unit tests isolados de ChromaDB/SentenceTransformers
+
+### Documentation
+
+- **🏛️ Architecture Documentation**:
+  - Diagramas hexagonais auto-gerados em `docs/architecture/`
+  - Mencionado no README como fonte da verdade arquitetural
+  - Command: `python scripts/docs/HEXAGONAL_VALIDATOR_DIAGRAMS.py`
+
+- **📚 Guides**:
+  - README seção Neural Cortex serve como guia primário
+  - Referência a `docs/architecture/` para deep dives
+
+---
+
 ## [Unreleased]
 
 ### Added
