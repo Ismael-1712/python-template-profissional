@@ -86,13 +86,17 @@ class HooksOrchestrator:
     ) -> str:
         """Generate Git hook script content from template.
 
-        Creates a bash script that checks for command availability and
-        executes it after Git operations.
+        Creates a bash script that locates the Git repository root,
+        finds the Python interpreter in .venv, and executes the CORTEX
+        command via Python module instead of relying on PATH.
+
+        This approach works in WSL and non-interactive shell contexts
+        where the 'cortex' command may not be in PATH.
 
         Args:
             hook_type: Type of hook (e.g., "post-merge", "post-checkout")
             command: Command to execute (e.g., "cortex map --output .cortex/
-                context.json")
+                context.json") - will be converted to Python module call
 
         Returns:
             Bash script content as string
@@ -102,15 +106,31 @@ class HooksOrchestrator:
             ...     "post-merge",
             ...     "cortex map --output .cortex/context.json"
             ... )
-            >>> print(script)  # Contains #!/bin/bash and command
+            >>> print(script)  # Contains git rev-parse and python -m
         """
+        # Extract command arguments (everything after 'cortex')
+        # e.g., "cortex map --output .cortex/context.json" → "map --output ..."
+        cmd_parts = command.split(maxsplit=1)
+        if len(cmd_parts) > 1 and cmd_parts[0] in ("cortex", "python"):
+            cmd_args = cmd_parts[1]  # Get everything after first word
+        else:
+            cmd_args = command  # Use full command if format unexpected
+
         script = f"""#!/bin/bash
 # Auto-generated CORTEX {hook_type} hook
 # Maintains AI context fresh after Git operations
+# WSL-compatible: Uses Python module instead of PATH-dependent 'cortex' command
 
-# Check if command exists
-if command -v {command.split()[0]} >/dev/null 2>&1; then
-    {command} || true  # Don't fail Git operation if command fails
+# Locate repository root dynamically
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+
+# Locate Python interpreter in virtual environment
+VENV_PYTHON="$REPO_ROOT/.venv/bin/python"
+
+# Execute CORTEX command if venv exists
+if [ -f "$VENV_PYTHON" ]; then
+    cd "$REPO_ROOT" || exit 0
+    "$VENV_PYTHON" -m scripts.cortex.cli {cmd_args} >/dev/null 2>&1 || true
 fi
 
 exit 0

@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **🔧 WSL Compatibility: Git Hooks Robustness**: Refatoração dos Git hooks CORTEX para funcionar em ambientes WSL sem depender de PATH
+  - **Problema**: Hooks falhavam silenciosamente em WSL com warning `'cortex' command not found`
+  - **Causa Raiz**: Hooks dependiam de executável `cortex` no PATH, que não existe sem `pip install -e .`
+  - **Solução**: Hooks agora localizam dinamicamente o repositório Git e usam Python do venv diretamente
+  - Técnicas aplicadas:
+    - `git rev-parse --show-toplevel`: Localiza raiz do repositório (portável entre máquinas)
+    - `$REPO_ROOT/.venv/bin/python`: Usa Python do venv sem depender de ativação manual
+    - `python -m scripts.cortex.cli`: Executa módulo diretamente (sem entry points)
+  - Hooks afetados: `post-merge`, `post-checkout`, `post-rewrite`
+  - Testabilidade: 6 novos testes unitários em `test_hooks_orchestrator.py`
+  - **Impacto**: Comando `cortex setup-hooks` agora gera hooks 100% compatíveis com WSL e shells não-interativos
+
 ### Changed
 
 - **🔐 Security Migration: Safety v2 → v3**: Migração do arquivo de política de segurança para formato v3.0
