@@ -6,22 +6,43 @@
 #
 annotated-types==0.7.0
     # via pydantic
+anyio==4.12.0
+    # via
+    #   httpx
+    #   watchfiles
 attrs==25.4.0
-    # via interrogate
+    # via
+    #   interrogate
+    #   jsonschema
+    #   referencing
 babel==2.17.0
     # via -r requirements/dev.in
+backoff==2.2.1
+    # via posthog
+bcrypt==5.0.0
+    # via chromadb
 build==1.3.0
-    # via pip-tools
+    # via
+    #   chromadb
+    #   pip-tools
 cachetools==6.2.4
-    # via tox
+    # via
+    #   google-auth
+    #   tox
 certifi==2025.11.12
-    # via requests
+    # via
+    #   httpcore
+    #   httpx
+    #   kubernetes
+    #   requests
 cfgv==3.5.0
     # via pre-commit
 chardet==5.2.0
     # via tox
 charset-normalizer==3.4.4
     # via requests
+chromadb==1.4.0
+    # via -r requirements/dev.in
 click==8.1.8
     # via
     #   click-option-group
@@ -32,6 +53,7 @@ click==8.1.8
     #   pip-tools
     #   python-semantic-release
     #   typer
+    #   uvicorn
 click-option-group==0.5.9
     # via python-semantic-release
 colorama==0.4.6
@@ -39,6 +61,8 @@ colorama==0.4.6
     #   interrogate
     #   radon
     #   tox
+coloredlogs==15.0.1
+    # via onnxruntime
 coverage==7.13.1
     # via
     #   mutmut
@@ -49,10 +73,16 @@ deptry==0.24.0
     # via -r requirements/dev.in
 distlib==0.4.0
     # via virtualenv
+distro==1.9.0
+    # via posthog
 dotty-dict==1.3.1
     # via python-semantic-release
+durationpy==0.10
+    # via kubernetes
 exceptiongroup==1.3.1
-    # via pytest
+    # via
+    #   anyio
+    #   pytest
 execnet==2.1.2
     # via pytest-xdist
 filelock==3.20.2
@@ -62,6 +92,8 @@ filelock==3.20.2
     #   tox
     #   transformers
     #   virtualenv
+flatbuffers==25.12.19
+    # via onnxruntime
 fsspec==2025.12.0
     # via
     #   huggingface-hub
@@ -70,23 +102,50 @@ gitdb==4.0.12
     # via gitpython
 gitpython==3.1.46
     # via python-semantic-release
+google-auth==2.45.0
+    # via kubernetes
+googleapis-common-protos==1.72.0
+    # via opentelemetry-exporter-otlp-proto-grpc
 grimp==3.14
     # via import-linter
+grpcio==1.76.0
+    # via
+    #   chromadb
+    #   opentelemetry-exporter-otlp-proto-grpc
+h11==0.16.0
+    # via
+    #   httpcore
+    #   uvicorn
 hf-xet==1.2.0
     # via huggingface-hub
+httpcore==1.0.9
+    # via httpx
+httptools==0.7.1
+    # via uvicorn
+httpx==0.28.1
+    # via chromadb
 huggingface-hub==0.36.0
     # via
     #   sentence-transformers
     #   tokenizers
     #   transformers
+humanfriendly==10.0
+    # via coloredlogs
 identify==2.6.15
     # via pre-commit
 idna==3.11
-    # via requests
+    # via
+    #   anyio
+    #   httpx
+    #   requests
 import-linter==2.9
     # via -r requirements/dev.in
+importlib-metadata==8.7.1
+    # via opentelemetry-api
 importlib-resources==6.5.2
-    # via python-semantic-release
+    # via
+    #   chromadb
+    #   python-semantic-release
 iniconfig==2.3.0
     # via pytest
 interrogate==1.7.0
@@ -97,6 +156,12 @@ jinja2==3.1.6
     #   torch
 joblib==1.5.3
     # via scikit-learn
+jsonschema==4.25.1
+    # via chromadb
+jsonschema-specifications==2025.9.1
+    # via jsonschema
+kubernetes==34.1.0
+    # via chromadb
 libcst==1.8.6
     # via mutmut
 librt==0.7.7
@@ -116,6 +181,8 @@ mdit-py-plugins==0.5.0
     # via textual
 mdurl==0.1.2
     # via markdown-it-py
+mmh3==5.2.0
+    # via chromadb
 mpmath==1.3.0
     # via sympy
 mutmut==3.4.0
@@ -130,6 +197,8 @@ nodeenv==1.10.0
     # via pre-commit
 numpy==2.2.6
     # via
+    #   chromadb
+    #   onnxruntime
     #   scikit-learn
     #   scipy
     #   transformers
@@ -172,11 +241,40 @@ nvidia-nvshmem-cu12==3.3.20
     # via torch
 nvidia-nvtx-cu12==12.8.90
     # via torch
+oauthlib==3.3.1
+    # via requests-oauthlib
+onnxruntime==1.23.2
+    # via chromadb
+opentelemetry-api==1.39.1
+    # via
+    #   chromadb
+    #   opentelemetry-exporter-otlp-proto-grpc
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
+opentelemetry-exporter-otlp-proto-common==1.39.1
+    # via opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-exporter-otlp-proto-grpc==1.39.1
+    # via chromadb
+opentelemetry-proto==1.39.1
+    # via
+    #   opentelemetry-exporter-otlp-proto-common
+    #   opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-sdk==1.39.1
+    # via
+    #   chromadb
+    #   opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-semantic-conventions==0.60b1
+    # via opentelemetry-sdk
+orjson==3.11.5
+    # via chromadb
+overrides==7.7.0
+    # via chromadb
 packaging==25.0
     # via
     #   build
     #   deptry
     #   huggingface-hub
+    #   onnxruntime
     #   pyproject-api
     #   pytest
     #   requirements-parser
@@ -196,13 +294,29 @@ pluggy==1.6.0
     #   pytest
     #   pytest-cov
     #   tox
+posthog==5.4.0
+    # via chromadb
 pre-commit==4.5.1
     # via -r requirements/dev.in
+protobuf==6.33.2
+    # via
+    #   googleapis-common-protos
+    #   onnxruntime
+    #   opentelemetry-proto
 py==1.11.0
     # via interrogate
+pyasn1==0.6.1
+    # via
+    #   pyasn1-modules
+    #   rsa
+pyasn1-modules==0.4.2
+    # via google-auth
+pybase64==1.4.3
+    # via chromadb
 pydantic==2.12.5
     # via
     #   -r requirements/dev.in
+    #   chromadb
     #   pydantic-settings
     #   python-semantic-release
 pydantic-core==2.41.5
@@ -214,6 +328,8 @@ pygments==2.19.2
     #   pytest
     #   rich
     #   textual
+pypika==0.48.9
+    # via chromadb
 pyproject-api==1.10.0
     # via tox
 pyproject-hooks==1.2.0
@@ -230,8 +346,14 @@ pytest-cov==7.0.0
     # via -r requirements/dev.in
 pytest-xdist==3.8.0
     # via -r requirements/dev.in
+python-dateutil==2.9.0.post0
+    # via
+    #   kubernetes
+    #   posthog
 python-dotenv==1.2.1
-    # via pydantic-settings
+    # via
+    #   pydantic-settings
+    #   uvicorn
 python-frontmatter==1.1.0
     # via -r requirements/dev.in
 python-gitlab==6.5.0
@@ -241,36 +363,55 @@ python-semantic-release==10.5.3
 pyyaml==6.0.3
     # via
     #   -r requirements/dev.in
+    #   chromadb
     #   huggingface-hub
+    #   kubernetes
     #   libcst
     #   pre-commit
     #   python-frontmatter
     #   transformers
+    #   uvicorn
     #   xenon
 radon==6.0.1
     # via
     #   -r requirements/dev.in
     #   xenon
+referencing==0.37.0
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 regex==2025.11.3
     # via transformers
 requests==2.32.5
     # via
     #   huggingface-hub
+    #   kubernetes
+    #   posthog
     #   python-gitlab
     #   python-semantic-release
+    #   requests-oauthlib
     #   requests-toolbelt
     #   transformers
     #   xenon
+requests-oauthlib==2.0.0
+    # via kubernetes
 requests-toolbelt==1.0.0
     # via python-gitlab
 requirements-parser==0.13.0
     # via deptry
 rich==14.2.0
     # via
+    #   chromadb
     #   import-linter
     #   python-semantic-release
     #   textual
     #   typer
+rpds-py==0.30.0
+    # via
+    #   jsonschema
+    #   referencing
+rsa==4.9.1
+    # via google-auth
 ruff==0.14.10
     # via -r requirements/dev.in
 safetensors==0.7.0
@@ -290,19 +431,29 @@ shellingham==1.5.4
     #   python-semantic-release
     #   typer
 six==1.17.0
-    # via mando
+    # via
+    #   kubernetes
+    #   mando
+    #   posthog
+    #   python-dateutil
 smmap==5.0.2
     # via gitdb
 sympy==1.14.0
-    # via torch
+    # via
+    #   onnxruntime
+    #   torch
 tabulate==0.9.0
     # via interrogate
+tenacity==9.1.2
+    # via chromadb
 textual==6.12.0
     # via mutmut
 threadpoolctl==3.6.0
     # via scikit-learn
 tokenizers==0.22.1
-    # via transformers
+    # via
+    #   chromadb
+    #   transformers
 toml==0.10.2
     # via mutmut
 tomli==2.3.0 ; python_version < "3.11"
@@ -328,6 +479,7 @@ tox==4.33.0
     # via -r requirements/dev.in
 tqdm==4.67.1
     # via
+    #   chromadb
     #   huggingface-hub
     #   sentence-transformers
     #   transformers
@@ -336,26 +488,37 @@ transformers==4.57.3
 triton==3.5.1
     # via torch
 typer==0.21.0
-    # via -r requirements/dev.in
+    # via
+    #   -r requirements/dev.in
+    #   chromadb
 types-pyyaml==6.0.12.20250915
     # via -r requirements/dev.in
 types-requests==2.32.4.20250913
     # via -r requirements/dev.in
 typing-extensions==4.15.0
     # via
+    #   anyio
+    #   chromadb
     #   exceptiongroup
     #   grimp
+    #   grpcio
     #   huggingface-hub
     #   import-linter
     #   mypy
+    #   opentelemetry-api
+    #   opentelemetry-exporter-otlp-proto-grpc
+    #   opentelemetry-sdk
+    #   opentelemetry-semantic-conventions
     #   pydantic
     #   pydantic-core
+    #   referencing
     #   sentence-transformers
     #   textual
     #   torch
     #   tox
     #   typer
     #   typing-inspection
+    #   uvicorn
     #   virtualenv
 typing-inspection==0.4.2
     # via
@@ -363,20 +526,33 @@ typing-inspection==0.4.2
     #   pydantic-settings
 uc-micro-py==1.0.3
     # via linkify-it-py
-urllib3==2.6.2
+urllib3==2.3.0
     # via
+    #   kubernetes
     #   requests
     #   types-requests
+uvicorn==0.40.0
+    # via chromadb
+uvloop==0.22.1
+    # via uvicorn
 virtualenv==20.35.4
     # via
     #   pre-commit
     #   tox
+watchfiles==1.1.1
+    # via uvicorn
+websocket-client==1.9.0
+    # via kubernetes
+websockets==15.0.1
+    # via uvicorn
 wheel==0.45.1
     # via pip-tools
 wrapt==2.0.1
     # via deprecated
 xenon==0.9.3
     # via -r requirements/dev.in
+zipp==3.23.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

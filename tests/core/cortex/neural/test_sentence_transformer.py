@@ -6,9 +6,15 @@ loading the actual 500MB model during unit tests.
 
 from __future__ import annotations
 
+import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
+
+# Mock heavy dependencies in sys.modules BEFORE any imports
+# This prevents ModuleNotFoundError in CI where these libs may not be installed
+if "sentence_transformers" not in sys.modules:
+    sys.modules["sentence_transformers"] = MagicMock()
 
 from scripts.core.cortex.neural.adapters.sentence_transformer import (
     SentenceTransformerAdapter,

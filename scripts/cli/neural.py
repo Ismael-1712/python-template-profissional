@@ -30,7 +30,10 @@ if str(_project_root) not in sys.path:
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner  # noqa: E402
 from scripts.core.cortex.neural.adapters.memory import InMemoryVectorStore  # noqa: E402
-from scripts.core.cortex.neural.ports import EmbeddingPort  # noqa: E402
+from scripts.core.cortex.neural.ports import (  # noqa: E402
+    EmbeddingPort,
+    VectorStorePort,
+)
 from scripts.core.cortex.neural.vector_bridge import VectorBridge  # noqa: E402
 from scripts.utils.logger import setup_logging  # noqa: E402
 
@@ -88,6 +91,40 @@ def _get_embedding_service() -> EmbeddingPort:
         return PlaceholderEmbeddingService()
 
 
+def _get_vector_store(memory_type: str, persist_dir: Path) -> VectorStorePort:
+    """Factory function to get the vector store based on memory type.
+
+    Args:
+        memory_type: Type of storage ('ram' or 'chroma')
+        persist_dir: Directory for persistent storage
+
+    Returns:
+        VectorStorePort implementation (InMemoryVectorStore or ChromaDBVectorStore)
+    """
+    if memory_type == "chroma":
+        try:
+            from scripts.core.cortex.neural.adapters.chroma import ChromaDBVectorStore
+
+            logger.info("Using ChromaDB persistent vector store")
+            console.print("[cyan]💾 Using ChromaDB (persistent storage)...[/cyan]")
+            return ChromaDBVectorStore(persist_directory=str(persist_dir))
+        except ImportError:
+            logger.warning("ChromaDB not available, falling back to RAM storage")
+            console.print(
+                "[yellow]⚠️  ChromaDB not installed. "
+                "Using RAM storage instead.[/yellow]",
+            )
+            console.print(
+                "[yellow]   Install with: pip install chromadb[/yellow]",
+            )
+            return InMemoryVectorStore(store_path=persist_dir / "store.json")
+    else:
+        # Default to RAM storage
+        logger.info("Using in-memory vector store")
+        console.print("[cyan]🧠 Using RAM storage (with JSON persistence)...[/cyan]")
+        return InMemoryVectorStore(store_path=persist_dir / "store.json")
+
+
 @app.command()
 def index(
     docs_path: Annotated[
@@ -102,13 +139,26 @@ def index(
         Path,
         typer.Option(
             "--db",
-            help="Path to ChromaDB storage",
+            help="Path to vector database storage",
         ),
-    ] = Path(".cortex/vectordb"),
+    ] = Path(".cortex/memory"),
+    memory_type: Annotated[
+        str,
+        typer.Option(
+            "--memory-type",
+            "-m",
+            help="Storage type: 'ram' (JSON) or 'chroma' (persistent DB)",
+        ),
+    ] = "chroma",
 ) -> None:
     """Index all documentation into the vector store.
 
     Scans documentation files and creates semantic embeddings for RAG.
+
+    Args:
+        docs_path: Path to documentation directory
+        db_path: Path to vector database storage
+        memory_type: Storage type ('ram' or 'chroma')
     """
     console.print("\n[bold cyan]🧬 CORTEX Neural Interface - Indexing[/bold cyan]\n")
 
@@ -126,7 +176,7 @@ def index(
     db_absolute.mkdir(parents=True, exist_ok=True)
 
     embedding_service = _get_embedding_service()  # Use factory with fallback
-    vector_store = InMemoryVectorStore(store_path=db_absolute / "store.json")
+    vector_store = _get_vector_store(memory_type, db_absolute)
     bridge = VectorBridge(
         embedding_service=embedding_service,
         vector_store=vector_store,
@@ -200,16 +250,25 @@ def ask(
         Path,
         typer.Option(
             "--db",
-            help="Path to ChromaDB storage",
+            help="Path to vector database storage",
         ),
-    ] = Path(".cortex/vectordb"),
+    ] = Path(".cortex/memory"),
+    memory_type: Annotated[
+        str,
+        typer.Option(
+            "--memory-type",
+            "-m",
+            help="Storage type: 'ram' (JSON) or 'chroma' (persistent DB)",
+        ),
+    ] = "chroma",
 ) -> None:
     """Perform semantic search on indexed documentation.
 
     Args:
         query: Natural language search query
         n_results: Number of top results to return
-        db_path: Path to vector database
+        db_path: Path to vector database storage
+        memory_type: Storage type ('ram' or 'chroma')
     """
     console.print("\n[bold cyan]🧬 CORTEX Neural Interface - Search[/bold cyan]\n")
     console.print(f"[yellow]Query:[/yellow] {query}\n")
@@ -217,7 +276,8 @@ def ask(
     project_root = _project_root
     db_absolute = project_root / db_path
 
-    if not (db_absolute / "store.json").exists():
+    # Check if database exists (different for each type)
+    if memory_type == "ram" and not (db_absolute / "store.json").exists():
         console.print(
             "[red]Error: Vector database not found. "
             "Run 'cortex neural index' first.[/red]",
@@ -226,8 +286,11 @@ def ask(
 
     # Initialize VectorBridge with dependencies
     embedding_service = _get_embedding_service()  # Use factory with fallback
-    vector_store = InMemoryVectorStore(store_path=db_absolute / "store.json")
-    vector_store.load()  # Load existing data
+    vector_store = _get_vector_store(memory_type, db_absolute)
+
+    # Load existing data for RAM storage
+    if memory_type == "ram":
+        vector_store.load()
 
     bridge = VectorBridge(
         embedding_service=embedding_service,
