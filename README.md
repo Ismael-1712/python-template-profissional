@@ -196,7 +196,11 @@ make audit                           # Gerar audit_dashboard.html
 cat docs/reports/KNOWLEDGE_HEALTH.md # Health do knowledge graph
 cat .cortex/context.json             # Mapa completo do projeto
 make test-coverage                   # Cobertura de testes
+make mutation target=scripts/file.py # Mutation testing (local)
+make mutation-report                 # Visualizar relatório HTML de mutation
 ```
+
+**🧟 Mutation Testing:** Valida a qualidade dos seus testes. Consulte [Guia de Mutation Testing](docs/guides/MUTATION_TESTING.md) para detalhes.
 
 ### 🔄 Git & CI/CD
 
