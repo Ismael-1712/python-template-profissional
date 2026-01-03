@@ -139,6 +139,12 @@ echo "black==24.1.0" >> requirements/dev.in
 pip-compile --output-file requirements/dev.txt requirements/dev.in
 make install-dev
 
+# Sincronizar ambiente com lockfile (recomendado após git pull)
+make sync                            # Usa .venv/bin/pip-sync para garantir sincronia exata
+
+# Verificar estado do ambiente virtual
+make check-venv                      # Diagnóstico: Python path, versões, pip-tools
+
 # Atualizar todas as dependências
 pip-compile --upgrade --output-file requirements/dev.txt requirements/dev.in
 
