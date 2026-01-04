@@ -64,6 +64,16 @@ Metodologias e padrões validados em produção:
 
 - **[REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md](guides/REFACTORING_PROTOCOL_ITERATIVE_FRACTIONATION.md)** - Protocolo de Fracionamento Iterativo
 
+## 📊 Relatórios Técnicos (`reports/`)
+
+Análises técnicas, métricas de débito técnico e planos de ação:
+
+- **[TDD_GUARDIAN_FORENSICS.md](reports/TDD_GUARDIAN_FORENSICS.md)** - 🛡️ **Análise Forense do TDD Guardian**
+  - Análise forense da cobertura de testes em scripts
+  - Levantamento de débito técnico (~140 arquivos sem cobertura padronizada)
+  - Plano de expansão do TDD Guardian (Fase 1: Warn-Only implementada)
+  - Roadmap de endurecimento progressivo (Q1-Q3 2026)
+
 ## 🎯 Navegação Rápida
 
 ### Para Novos Desenvolvedores
