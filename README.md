@@ -206,8 +206,16 @@ make mutation-report                 # Visualizar relatório HTML de mutation
 ### 🔄 Git & CI/CD
 
 ```bash
+# Sincronização inteligente de branches (novo wrapper recomendado)
+./scripts/git/cleanup-with-auto-discard.sh <branch-name>
+# ↳ Descarta automaticamente arquivos gerados (audit_metrics.json, etc)
+# ↳ Sincroniza main → Deleta branch → Atualiza api/cli → GC
+# 📖 Guia: docs/guides/GIT_WORKFLOW_TROUBLESHOOTING.md
+
+# Comandos tradicionais
 git-sync                             # Sincronizar com remoto (com auditoria)
 git-sync --dry-run                   # Preview de mudanças
+./scripts/git/post-pr-cleanup.sh <branch>  # Cleanup pós-PR (requer working tree limpo)
 python -m scripts.cli.mock_ci        # Rodar pipeline CI localmente
 make commit MSG="fix: bug"           # Commit com smart hooks
 ```
