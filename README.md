@@ -687,9 +687,23 @@ make test-verbose
 # Testes com cobertura
 make test-coverage
 
+# Validar cobertura delta (TDD Guardian - CI)
+make test-delta
+
 # Matriz de versões Python (tox)
 make test-matrix
 ```
+
+**TDD Guardian - Aplicação Obrigatória de Testes:**
+
+Este projeto implementa o **TDD Guardian**, um mecanismo de duas camadas que garante a presença de testes para todo código novo:
+
+1. **Hook de Pre-commit (Estrutural)**: Valida que cada arquivo `.py` em `src/` tenha um teste correspondente em `tests/`. Exemplo:
+   - `src/main.py` → **REQUER** `tests/test_main.py`
+   - `src/core/utils.py` → **REQUER** `tests/core/test_utils.py`
+   - Arquivos `__init__.py` são ignorados automaticamente
+
+2. **Validação de Cobertura Delta (CI)**: O comando `make test-delta` executa `diff-cover` com `--fail-under=100`, exigindo que **todo código modificado/adicionado** tenha 100% de cobertura de testes.
 
 **Arquivos de Testes:**
 
@@ -697,6 +711,7 @@ make test-matrix
 - `test_guardian_*.py` — Testes do Guardian
 - `test_link_*.py` — Testes de resolução de links
 - `test_mock_ci_*.py` — Testes do Mock CI Runner
+- `test_tdd_guardian.py` — Testes do TDD Guardian (meta-teste)
 
 #### 🔬 Type Safety (Mypy Strict)
 
@@ -1073,6 +1088,7 @@ make type-check                # Mypy strict
 make test                      # Pytest completo
 make test-verbose              # Testes detalhados
 make test-coverage             # Com relatório de cobertura
+make test-delta                # Cobertura delta (requer 100% em código novo)
 
 # === Diagnóstico ===
 make doctor                    # Diagnóstico de ambiente

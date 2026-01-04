@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🛡️ TDD Guardian: Mecanismo de Aplicação Obrigatória de Testes**: Implementação de sistema de duas camadas que garante a presença de testes para todo código novo
+  - **Camada 1 - Hook de Pre-commit (Estrutural)**:
+    - Script `scripts/hooks/tdd_guardian.py`: Valida mapeamento `src/*.py` → `tests/test_*.py`
+    - Hook local adicionado ao `.pre-commit-config.yaml`
+    - Ignora automaticamente `__init__.py` e arquivos fora de `src/`
+    - Mensagens de erro claras indicando testes faltantes
+  - **Camada 2 - Validação de Cobertura Delta (CI)**:
+    - Novo target `make test-delta`: Executa `diff-cover` com `--fail-under=100`
+    - Requer 100% de cobertura em código modificado/adicionado (comparado com `origin/main`)
+    - Depende de `test-coverage` para gerar `coverage.xml`
+  - Dependência `diff-cover>=9.0.0` já presente em `requirements/dev.in`
+  - Suite de testes abrangente em `tests/hooks/test_tdd_guardian.py` (11 casos de teste)
+  - Documentação atualizada no README.md com exemplos de uso e filosofia TDD
+  - **Impacto**: Projeto agora possui Quality Gate rigoroso que impede commits sem testes correspondentes
+
 ### Fixed
 
 - **🔧 WSL Compatibility: Git Hooks Robustness**: Refatoração dos Git hooks CORTEX para funcionar em ambientes WSL sem depender de PATH

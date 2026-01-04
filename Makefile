@@ -39,7 +39,7 @@ POT_FILE := $(LOCALES_DIR)/messages.pot
 # TARGETS (COMANDOS)
 # =============================================================================
 
-.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats validate-python requirements check-venv sync
+.PHONY: help setup install-dev build lint format audit test test-verbose test-coverage test-delta clean clean-all check all version info release doctor upgrade-python i18n-extract i18n-init i18n-update i18n-compile i18n-stats validate-python requirements check-venv sync
 
 ## help: Exibe esta mensagem de ajuda com todos os comandos disponíveis
 help:
@@ -275,7 +275,13 @@ test-verbose:
 
 ## test-coverage: Executa testes com relatório de cobertura
 test-coverage:
-	PYTHONPATH=. $(PYTHON) -m pytest --cov=$(SRC_DIR) $(TEST_DIR)
+	PYTHONPATH=. $(PYTHON) -m pytest --cov=$(SRC_DIR) --cov-report=xml --cov-report=term-missing $(TEST_DIR)
+
+## test-delta: Valida cobertura delta (requer 100% nos arquivos novos/modificados)
+test-delta: test-coverage
+	@echo "🧪 Validando cobertura delta (diff com origin/main)..."
+	@$(VENV)/bin/diff-cover coverage.xml --compare-branch=origin/main --fail-under=100
+	@echo "✅ Cobertura delta aprovada!"
 
 ## tdd-check: Verifica se código novo tem testes (Delta Coverage)
 tdd-check:

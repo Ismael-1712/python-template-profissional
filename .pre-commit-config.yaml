@@ -76,6 +76,15 @@ repos:
         types: [markdown]
         pass_filenames: false
         description: "Automatically updates the vector store when documentation changes."
+
+      - id: tdd-guardian
+        name: "TDD Guardian - Requer testes para código novo"
+        entry: python3 scripts/hooks/tdd_guardian.py
+        language: system
+        pass_filenames: true
+        types: [python]
+        description: "Garante que novos arquivos em src/ tenham testes correspondentes em tests/"
+
   - repo: local
     hooks:
       - id: governance-policy-strict
