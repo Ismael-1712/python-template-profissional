@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **♻️ CORTEX Knowledge Orchestrator - Phase 1 Refactoring**: Extração de lógica de domínio da God Function `sync_multiple` (CC=23)
+  - **Novos Módulos de Domínio Puro (Hexagonal Architecture)**:
+    - `scripts/core/cortex/sync_filters.py`: Filtros para entries (por ID, por sources, validação)
+    - `scripts/core/cortex/sync_aggregator.py`: Agregação de estatísticas de sync
+  - **Cobertura de Testes (TDD First)**:
+    - `tests/core/cortex/test_sync_filters.py`: 13 testes (filtragem e validação)
+    - `tests/core/cortex/test_sync_aggregator.py`: 6 testes (agregação de métricas)
+  - **Princípios Aplicados**:
+    - Extract Method → Extract Class (SRP)
+    - Stateless functions (pure domain logic)
+    - Zero I/O e zero logging (separação infra/domínio)
+  - **Próximos Passos (Phase 2)**: Integração dos módulos no orchestrator para reduzir CC de 23 → ~18
+  - Baseline: 19 novos testes unitários passando, zero regressões nos 16 testes existentes
+
 ### Added
 
 - **🛡️ TDD Guardian: Mecanismo de Aplicação Obrigatória de Testes**: Implementação de sistema de duas camadas que garante a presença de testes para todo código novo

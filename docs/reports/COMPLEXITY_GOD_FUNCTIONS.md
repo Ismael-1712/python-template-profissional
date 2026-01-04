@@ -36,6 +36,7 @@ title: Matriz de Prioridade de Refatoração - God Functions
 Uma função que "sabe demais" ou "faz demais". Alta complexidade ciclomática indica código difícil de testar, propenso a bugs e caro para manter.
 
 ### Critérios de Classificação
+
 - **Rank A (1-5):** Baixa complexidade (Ideal) ✅
 - **Rank B (6-10):** Baixo risco 🟢
 - **Rank C (11-20):** Moderado (Alerta 🚧)
@@ -47,6 +48,7 @@ Uma função que "sabe demais" ou "faz demais". Alta complexidade ciclomática i
 ## 📋 RELATÓRIO DE DÍVIDA TÉCNICA (Ordenado por Criticidade)
 
 ### 🚨 NÍVEL 1: CRITICIDADE EXTREMA (RANK E - F)
+
 _Refatoração Obrigatória. Este código é instável, difícil de testar e propenso a bugs._
 
 **Status:** ✅ **NENHUMA FUNÇÃO NESTE NÍVEL**
@@ -55,20 +57,47 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).
 ---
 
 ### ⚠️ NÍVEL 2: ALTA CRITICIDADE (RANK D)
+
 _Refatoração Recomendada. Código denso que dificulta a manutenção._
 
-| Rank | CC Score | Arquivo | Função / Método | Linha |
-| :---: | :---: | --- | --- | :---: |
-| **D** | **29** | `scripts/core/cortex/metadata.py` | `FrontmatterParser.validate_metadata` | 139 |
-| **D** | **23** | `scripts/core/cortex/knowledge_orchestrator.py` | `KnowledgeOrchestrator.sync_multiple` | 167 |
-| **D** | **21** | `scripts/core/cortex/migrate.py` | `DocumentMigrator.print_summary` | 386 |
+| Rank | CC Score | Arquivo | Função / Método | Linha | Status |
+| :---: | :---: | --- | --- | :---: | :---: |
+| **D** | **29** | `scripts/core/cortex/metadata.py` | `FrontmatterParser.validate_metadata` | 139 | 🔴 Pendente |
+| **D** | **23** | `scripts/core/cortex/knowledge_orchestrator.py` | `KnowledgeOrchestrator.sync_multiple` | 167 | 🟡 **Em Progresso (Fase 1/4)** |
+| **D** | **21** | `scripts/core/cortex/migrate.py` | `DocumentMigrator.print_summary` | 386 | 🔴 Pendente |
 
 **Total de Funções Rank D:** 3
 **Impacto:** Alta criticidade no sistema CORTEX (Documentation as Code).
 
+#### 📋 Plano de Refatoração: `knowledge_orchestrator.py` (CC=23)
+
+**Fase 1 - Extração de Domínio Puro** ✅ **CONCLUÍDA** (04/Jan/2026)
+
+- ✅ Criados `sync_filters.py` e `sync_aggregator.py`
+- ✅ 19 novos testes unitários (100% TDD)
+- ✅ Zero regressões nos testes existentes
+- ✅ Linters passando (ruff, mypy)
+
+**Fase 2 - Integração no Orchestrator** (Próximo)
+
+- Substituir lógica inline por delegação aos novos módulos
+- Meta: Reduzir CC de 23 → ~18
+
+**Fase 3 - Extract SyncExecutor** (Futuro)
+
+- Extrair loop de sync para classe dedicada
+- Meta: Reduzir CC de ~18 → ~12
+
+**Fase 4 - Desacoplamento de Logging** (Futuro)
+
+- Observer Pattern para separar infra de domínio
+- Meta: Reduzir CC de ~12 → <11 (Rank B)
+- Remover do `--exclude` do Makefile
+
 ---
 
 ### 🚧 NÍVEL 3: MODERADA CRITICIDADE (RANK C - Top 15)
+
 _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 
 | Rank | CC Score | Arquivo | Função / Método | Linha |
@@ -115,9 +144,11 @@ _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 ### 🎯 Prioridade 1: Refatorar Rank D (CORTEX)
 
 #### 1. `FrontmatterParser.validate_metadata` (CC: 29)
+
 **Arquivo:** `scripts/core/cortex/metadata.py:139`
 **Problema:** Validação monolítica com 29 branches de decisão.
 **Estratégia:**
+
 - Extrair validação de cada campo para métodos auxiliares privados
 - Implementar pattern Chain of Responsibility para validators
 - Adicionar testes unitários antes da refatoração
@@ -125,9 +156,11 @@ _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 **Ticket Sugerido:** `refactor(cortex): split validate_metadata into validators chain`
 
 #### 2. `KnowledgeOrchestrator.sync_multiple` (CC: 23)
+
 **Arquivo:** `scripts/core/cortex/knowledge_orchestrator.py:167`
 **Problema:** Orquestração complexa de sincronização de múltiplos documentos.
 **Estratégia:**
+
 - Extrair lógica de sincronização individual para método privado
 - Aplicar pattern Strategy para diferentes tipos de sincronização
 - Mover tratamento de erros para decorator
@@ -135,9 +168,11 @@ _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 **Ticket Sugerido:** `refactor(cortex): simplify sync_multiple orchestration`
 
 #### 3. `DocumentMigrator.print_summary` (CC: 21)
+
 **Arquivo:** `scripts/core/cortex/migrate.py:386`
 **Problema:** Formatação de output com muitas condicionais.
 **Estratégia:**
+
 - Mover formatação para classe Formatter dedicada
 - Usar template method pattern para diferentes formatos
 - Separar lógica de cálculo da apresentação
@@ -161,12 +196,14 @@ _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 ## 📊 Métricas de Sucesso
 
 ### Baseline Atual (04 Jan 2026)
+
 - ✅ Complexidade Média Global: **A (3.6)**
 - ⚠️ Funções Rank D: **3**
 - 🚧 Funções Rank C (11+): **38**
 - 🚨 Funções Rank E: **0**
 
 ### Metas Q1 2026
+
 - 🎯 Reduzir Rank D para: **0** (eliminar todas as 3 funções)
 - 🎯 Reduzir Rank C para: **< 25** (65% do atual)
 - 🎯 Manter Rank E: **0**
@@ -196,9 +233,9 @@ _Monitorar. Não quebra o sistema, mas pode ser simplificado._
 
 ## 📚 Referências
 
-- **Radon Documentation:** https://radon.readthedocs.io/
-- **Cyclomatic Complexity (Wikipedia):** https://en.wikipedia.org/wiki/Cyclomatic_complexity
-- **Refactoring Catalog (Martin Fowler):** https://refactoring.com/catalog/
+- **Radon Documentation:** <https://radon.readthedocs.io/>
+- **Cyclomatic Complexity (Wikipedia):** <https://en.wikipedia.org/wiki/Cyclomatic_complexity>
+- **Refactoring Catalog (Martin Fowler):** <https://refactoring.com/catalog/>
 - **CORTEX Architecture:** `docs/architecture/CORTEX_INDICE.md`
 
 ---
