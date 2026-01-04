@@ -51,8 +51,25 @@ echo "Branch: $BRANCH_NAME"
 echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
 echo ""
 
+# Step 0: Check for uncommitted changes
+print_step "🔍 Step 0/5: Checking for uncommitted changes"
+if [ -n "$(git status --porcelain)" ]; then
+    print_error "Working tree has uncommitted changes. Please commit or stash them first."
+    echo ""
+    echo "Uncommitted changes:"
+    git status --short
+    echo ""
+    echo "💡 Suggested actions:"
+    echo "   1. Commit changes: git add . && git commit -m 'your message'"
+    echo "   2. Stash changes:  git stash"
+    echo "   3. Discard changes: git restore <file>"
+    exit 1
+fi
+print_success "Working tree clean"
+echo ""
+
 # Step 1: Sync main with remote
-print_step "📥 Step 1/5: Syncing main with origin"
+print_step "📥 Step 1/6: Syncing main with origin"
 if ! git checkout main; then
     print_error "Failed to checkout main branch"
     exit 1
@@ -66,7 +83,7 @@ print_success "Main branch updated"
 echo ""
 
 # Step 2: Delete local branch
-print_step "🗑️  Step 2/5: Deleting local branch"
+print_step "🗑️  Step 2/6: Deleting local branch"
 if git branch -d "$BRANCH_NAME" 2>/dev/null; then
     print_success "Local branch '$BRANCH_NAME' deleted"
 else
@@ -75,7 +92,7 @@ fi
 echo ""
 
 # Step 3: Delete remote branch (if exists)
-print_step "🌐 Step 3/5: Deleting remote branch"
+print_step "🌐 Step 3/6: Deleting remote branch"
 if git push origin --delete "$BRANCH_NAME" 2>/dev/null; then
     print_success "Remote branch deleted"
 else
@@ -84,7 +101,7 @@ fi
 echo ""
 
 # Step 4: Update development branches
-print_step "🔄 Step 4/5: Updating development branches"
+print_step "🔄 Step 4/6: Updating development branches"
 for branch in cli api; do
     if git rev-parse --verify "$branch" >/dev/null 2>&1; then
         echo "  → Updating $branch..."
@@ -103,7 +120,7 @@ git checkout main
 echo ""
 
 # Step 5: Clean Git graph
-print_step "🧹 Step 5/5: Cleaning Git graph"
+print_step "🧹 Step 5/6: Cleaning Git graph"
 echo "  → Pruning remote refs..."
 git fetch --prune
 
