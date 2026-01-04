@@ -601,6 +601,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="⚠️ NÍVEL 2: ALTA CRITICIDADE (RANK D)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plano-de-refatoracao-knowledge_orchestratorpy-cc23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Plano de Refatoração: knowledge_orchestrator.py (CC=23)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -874,6 +891,7 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <th>Arquivo</th>
 <th>Função / Método</th>
 <th style="text-align: center;">Linha</th>
+<th style="text-align: center;">Status</th>
 </tr>
 </thead>
 <tbody>
@@ -883,6 +901,7 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <td><code>scripts/core/cortex/metadata.py</code></td>
 <td><code>FrontmatterParser.validate_metadata</code></td>
 <td style="text-align: center;">139</td>
+<td style="text-align: center;">🔴 Pendente</td>
 </tr>
 <tr>
 <td style="text-align: center;"><strong>D</strong></td>
@@ -890,6 +909,7 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <td><code>scripts/core/cortex/knowledge_orchestrator.py</code></td>
 <td><code>KnowledgeOrchestrator.sync_multiple</code></td>
 <td style="text-align: center;">167</td>
+<td style="text-align: center;">🟡 <strong>Em Progresso (Fase 1/4)</strong></td>
 </tr>
 <tr>
 <td style="text-align: center;"><strong>D</strong></td>
@@ -897,11 +917,36 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <td><code>scripts/core/cortex/migrate.py</code></td>
 <td><code>DocumentMigrator.print_summary</code></td>
 <td style="text-align: center;">386</td>
+<td style="text-align: center;">🔴 Pendente</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Total de Funções Rank D:</strong> 3
 <strong>Impacto:</strong> Alta criticidade no sistema CORTEX (Documentation as Code).</p>
+<h4 id="plano-de-refatoracao-knowledge_orchestratorpy-cc23">📋 Plano de Refatoração: <code>knowledge_orchestrator.py</code> (CC=23)</h4>
+<p><strong>Fase 1 - Extração de Domínio Puro</strong> ✅ <strong>CONCLUÍDA</strong> (04/Jan/2026)</p>
+<ul>
+<li>✅ Criados <code>sync_filters.py</code> e <code>sync_aggregator.py</code></li>
+<li>✅ 19 novos testes unitários (100% TDD)</li>
+<li>✅ Zero regressões nos testes existentes</li>
+<li>✅ Linters passando (ruff, mypy)</li>
+</ul>
+<p><strong>Fase 2 - Integração no Orchestrator</strong> (Próximo)</p>
+<ul>
+<li>Substituir lógica inline por delegação aos novos módulos</li>
+<li>Meta: Reduzir CC de 23 → ~18</li>
+</ul>
+<p><strong>Fase 3 - Extract SyncExecutor</strong> (Futuro)</p>
+<ul>
+<li>Extrair loop de sync para classe dedicada</li>
+<li>Meta: Reduzir CC de ~18 → ~12</li>
+</ul>
+<p><strong>Fase 4 - Desacoplamento de Logging</strong> (Futuro)</p>
+<ul>
+<li>Observer Pattern para separar infra de domínio</li>
+<li>Meta: Reduzir CC de ~12 → &lt;11 (Rank B)</li>
+<li>Remover do <code>--exclude</code> do Makefile</li>
+</ul>
 <hr />
 <h3 id="nivel-3-moderada-criticidade-rank-c-top-15">🚧 NÍVEL 3: MODERADA CRITICIDADE (RANK C - Top 15)</h3>
 <p><em>Monitorar. Não quebra o sistema, mas pode ser simplificado.</em></p>
@@ -1077,26 +1122,32 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <h4 id="1-frontmatterparservalidate_metadata-cc-29">1. <code>FrontmatterParser.validate_metadata</code> (CC: 29)</h4>
 <p><strong>Arquivo:</strong> <code>scripts/core/cortex/metadata.py:139</code>
 <strong>Problema:</strong> Validação monolítica com 29 branches de decisão.
-<strong>Estratégia:</strong>
-- Extrair validação de cada campo para métodos auxiliares privados
-- Implementar pattern Chain of Responsibility para validators
-- Adicionar testes unitários antes da refatoração</p>
+<strong>Estratégia:</strong></p>
+<ul>
+<li>Extrair validação de cada campo para métodos auxiliares privados</li>
+<li>Implementar pattern Chain of Responsibility para validators</li>
+<li>Adicionar testes unitários antes da refatoração</li>
+</ul>
 <p><strong>Ticket Sugerido:</strong> <code>refactor(cortex): split validate_metadata into validators chain</code></p>
 <h4 id="2-knowledgeorchestratorsync_multiple-cc-23">2. <code>KnowledgeOrchestrator.sync_multiple</code> (CC: 23)</h4>
 <p><strong>Arquivo:</strong> <code>scripts/core/cortex/knowledge_orchestrator.py:167</code>
 <strong>Problema:</strong> Orquestração complexa de sincronização de múltiplos documentos.
-<strong>Estratégia:</strong>
-- Extrair lógica de sincronização individual para método privado
-- Aplicar pattern Strategy para diferentes tipos de sincronização
-- Mover tratamento de erros para decorator</p>
+<strong>Estratégia:</strong></p>
+<ul>
+<li>Extrair lógica de sincronização individual para método privado</li>
+<li>Aplicar pattern Strategy para diferentes tipos de sincronização</li>
+<li>Mover tratamento de erros para decorator</li>
+</ul>
 <p><strong>Ticket Sugerido:</strong> <code>refactor(cortex): simplify sync_multiple orchestration</code></p>
 <h4 id="3-documentmigratorprint_summary-cc-21">3. <code>DocumentMigrator.print_summary</code> (CC: 21)</h4>
 <p><strong>Arquivo:</strong> <code>scripts/core/cortex/migrate.py:386</code>
 <strong>Problema:</strong> Formatação de output com muitas condicionais.
-<strong>Estratégia:</strong>
-- Mover formatação para classe Formatter dedicada
-- Usar template method pattern para diferentes formatos
-- Separar lógica de cálculo da apresentação</p>
+<strong>Estratégia:</strong></p>
+<ul>
+<li>Mover formatação para classe Formatter dedicada</li>
+<li>Usar template method pattern para diferentes formatos</li>
+<li>Separar lógica de cálculo da apresentação</li>
+</ul>
 <p><strong>Ticket Sugerido:</strong> <code>refactor(cortex): extract summary formatting to dedicated formatter</code></p>
 <hr />
 <h3 id="prioridade-2-monitorar-rank-c-top-5">🎯 Prioridade 2: Monitorar Rank C (Top 5)</h3>
@@ -1173,9 +1224,9 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
 <ul>
-<li><strong>Radon Documentation:</strong> https://radon.readthedocs.io/</li>
-<li><strong>Cyclomatic Complexity (Wikipedia):</strong> https://en.wikipedia.org/wiki/Cyclomatic_complexity</li>
-<li><strong>Refactoring Catalog (Martin Fowler):</strong> https://refactoring.com/catalog/</li>
+<li><strong>Radon Documentation:</strong> <a href="https://radon.readthedocs.io/">https://radon.readthedocs.io/</a></li>
+<li><strong>Cyclomatic Complexity (Wikipedia):</strong> <a href="https://en.wikipedia.org/wiki/Cyclomatic_complexity">https://en.wikipedia.org/wiki/Cyclomatic_complexity</a></li>
+<li><strong>Refactoring Catalog (Martin Fowler):</strong> <a href="https://refactoring.com/catalog/">https://refactoring.com/catalog/</a></li>
 <li><strong>CORTEX Architecture:</strong> <code>docs/architecture/CORTEX_INDICE.md</code></li>
 </ul>
 <hr />
