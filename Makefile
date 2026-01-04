@@ -244,6 +244,8 @@ guardian-check:
 
 ## cortex-audit: Valida integridade da documentação (links, frontmatter, cobertura)
 cortex-audit:
+	@echo "📚 Validando documentação (CORTEX)..."
+	@$(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "📚 Verificando Integridade da Documentação (CORTEX)..."
 	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 
