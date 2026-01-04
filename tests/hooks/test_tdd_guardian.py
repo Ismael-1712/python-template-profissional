@@ -20,7 +20,9 @@ class TestTDDGuardian:
         return TDDGuardian()
 
     def test_src_main_requires_test_main(self, guardian: TDDGuardian) -> None:
-        """DADO um arquivo src/main.py
+        """Testa o mapeamento de src/main.py para tests/test_main.py.
+
+        DADO um arquivo src/main.py
         QUANDO verificamos a existência do teste correspondente
         ENTÃO deve mapear para tests/test_main.py
         """
@@ -34,7 +36,9 @@ class TestTDDGuardian:
     def test_src_core_utils_requires_test_core_utils(
         self, guardian: TDDGuardian
     ) -> None:
-        """DADO um arquivo src/core/utils.py
+        """Testa o mapeamento de módulos aninhados.
+
+        DADO um arquivo src/core/utils.py
         QUANDO verificamos a existência do teste correspondente
         ENTÃO deve mapear para tests/core/test_utils.py
         """
@@ -46,7 +50,9 @@ class TestTDDGuardian:
         assert result == expected_test, f"Esperava {expected_test}, obteve {result}"
 
     def test_src_init_should_be_ignored(self, guardian: TDDGuardian) -> None:
-        """DADO um arquivo src/__init__.py
+        """Testa que arquivos __init__.py são ignorados automaticamente.
+
+        DADO um arquivo src/__init__.py
         QUANDO verificamos se deve ser ignorado
         ENTÃO deve retornar True (arquivos __init__.py são ignorados)
         """
@@ -57,7 +63,9 @@ class TestTDDGuardian:
         assert result is True, f"Arquivo {source_file} deveria ser ignorado"
 
     def test_readme_should_be_ignored(self, guardian: TDDGuardian) -> None:
-        """DADO um arquivo README.md
+        """Testa que arquivos não-Python são ignorados.
+
+        DADO um arquivo README.md
         QUANDO verificamos se deve ser ignorado
         ENTÃO deve retornar True (arquivos não-Python são ignorados)
         """
@@ -68,7 +76,9 @@ class TestTDDGuardian:
         assert result is True, f"Arquivo {source_file} deveria ser ignorado"
 
     def test_src_nested_module_requires_test(self, guardian: TDDGuardian) -> None:
-        """DADO um arquivo src/app/services/auth.py
+        """Testa o mapeamento de módulos profundamente aninhados.
+
+        DADO um arquivo src/app/services/auth.py
         QUANDO verificamos a existência do teste correspondente
         ENTÃO deve mapear para tests/app/services/test_auth.py
         """
@@ -80,7 +90,9 @@ class TestTDDGuardian:
         assert result == expected_test, f"Esperava {expected_test}, obteve {result}"
 
     def test_non_src_file_should_be_ignored(self, guardian: TDDGuardian) -> None:
-        """DADO um arquivo fora de src/ (ex: scripts/utils.py)
+        """Testa que arquivos fora de src/ são ignorados.
+
+        DADO um arquivo fora de src/ (ex: scripts/utils.py)
         QUANDO verificamos se deve ser ignorado
         ENTÃO deve retornar True (apenas src/ requer testes)
         """
@@ -95,7 +107,9 @@ class TestTDDGuardian:
         guardian: TDDGuardian,
         tmp_path: Path,
     ) -> None:
-        """DADO um arquivo src/new_module.py sem teste correspondente
+        """Testa que validação falha quando teste está faltando.
+
+        DADO um arquivo src/new_module.py sem teste correspondente
         QUANDO executamos a validação
         ENTÃO deve retornar False e listar o arquivo faltante
         """
@@ -122,7 +136,9 @@ class TestTDDGuardian:
         guardian: TDDGuardian,
         tmp_path: Path,
     ) -> None:
-        """DADO um arquivo src/existing.py com teste correspondente
+        """Testa que validação passa quando teste existe.
+
+        DADO um arquivo src/existing.py com teste correspondente
         QUANDO executamos a validação
         ENTÃO deve retornar True (sem arquivos faltantes)
         """
@@ -151,7 +167,9 @@ class TestTDDGuardian:
         guardian: TDDGuardian,
         tmp_path: Path,
     ) -> None:
-        """DADO um arquivo src/__init__.py sem teste
+        """Testa que validação ignora arquivos __init__.py.
+
+        DADO um arquivo src/__init__.py sem teste
         QUANDO executamos a validação
         ENTÃO deve retornar True (arquivos __init__.py são ignorados)
         """
