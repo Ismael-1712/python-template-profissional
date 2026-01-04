@@ -17,7 +17,7 @@ from unittest.mock import Mock
 import pytest
 
 from scripts.core.cortex.knowledge_sync import KnowledgeSyncer, SyncResult, SyncStatus
-from scripts.core.cortex.models import KnowledgeEntry
+from scripts.core.cortex.models import DocStatus, KnowledgeEntry, KnowledgeSource
 
 # Module under test (will be created in implementation phase)
 # from scripts.core.cortex.sync_executor import SyncExecutor
@@ -34,10 +34,9 @@ def sample_entry():
     """Fixture providing a valid sample KnowledgeEntry."""
     return KnowledgeEntry(
         id="kno-001",
-        title="Sample Entry",
-        description="Sample description",
+        status=DocStatus.ACTIVE,
         tags=["test"],
-        sources=["https://example.com"],
+        sources=[KnowledgeSource(url="https://example.com")],
         file_path=Path("/workspace/docs/sample.md"),
     )
 
@@ -45,21 +44,18 @@ def sample_entry():
 @pytest.fixture
 def sample_entry_no_path():
     """Fixture providing entry without file_path (edge case)."""
-    entry = KnowledgeEntry(
+    return KnowledgeEntry(
         id="kno-002",
-        title="Entry Without Path",
-        description="Missing file path",
+        status=DocStatus.ACTIVE,
         tags=["test"],
-        sources=["https://example.com"],
+        sources=[KnowledgeSource(url="https://example.com")],
         file_path=None,  # Missing path
     )
-    return entry
 
 
 class TestSyncExecutor:
     """Tests for SyncExecutor class (TDD - Red Phase)."""
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_executor_initialization(self, mock_syncer):
         """Test that SyncExecutor initializes with syncer and dry_run flag.
 
@@ -74,7 +70,6 @@ class TestSyncExecutor:
         assert executor.syncer is mock_syncer
         assert executor.dry_run is False
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_empty_list(self, mock_syncer):
         """Test that executor handles empty entry list gracefully.
 
@@ -92,7 +87,6 @@ class TestSyncExecutor:
         assert results == []
         mock_syncer.sync_entry.assert_not_called()
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_success(self, mock_syncer, sample_entry):
         """Test successful sync of a single entry.
 
@@ -118,10 +112,10 @@ class TestSyncExecutor:
         assert len(results) == 1
         assert results[0].status == SyncStatus.UPDATED
         mock_syncer.sync_entry.assert_called_once_with(
-            sample_entry, sample_entry.file_path
+            sample_entry,
+            sample_entry.file_path,
         )
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_multiple_entries(self, mock_syncer, sample_entry):
         """Test batch sync of multiple entries.
 
@@ -150,7 +144,6 @@ class TestSyncExecutor:
         assert mock_syncer.sync_entry.call_count == 3
         assert all(r.status == SyncStatus.UPDATED for r in results)
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_missing_file_path(self, mock_syncer, sample_entry_no_path):
         """Test that executor handles entries without file_path.
 
@@ -170,7 +163,6 @@ class TestSyncExecutor:
         assert "file_path" in results[0].error_message.lower()
         mock_syncer.sync_entry.assert_not_called()
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_syncer_exception(self, mock_syncer, sample_entry):
         """Test that executor catches and wraps syncer exceptions.
 
@@ -192,7 +184,6 @@ class TestSyncExecutor:
         assert results[0].status == SyncStatus.ERROR
         assert "Network timeout" in results[0].error_message
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_dry_run_mode(self, mock_syncer, sample_entry):
         """Test that dry_run mode skips actual sync.
 
@@ -211,7 +202,6 @@ class TestSyncExecutor:
         assert results[0].status == SyncStatus.NOT_MODIFIED
         mock_syncer.sync_entry.assert_not_called()
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_mixed_results(self, mock_syncer, sample_entry):
         """Test batch with mixed success/failure results.
 
@@ -240,7 +230,6 @@ class TestSyncExecutor:
         assert results[1].status == SyncStatus.UPDATED
         assert results[2].status == SyncStatus.ERROR
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_execute_batch_preserves_entry_reference(self, mock_syncer, sample_entry):
         """Test that results contain original entry reference.
 
@@ -251,7 +240,9 @@ class TestSyncExecutor:
         from scripts.core.cortex.sync_executor import SyncExecutor
 
         mock_syncer.sync_entry.return_value = SyncResult(
-            sample_entry, SyncStatus.UPDATED, None
+            sample_entry,
+            SyncStatus.UPDATED,
+            None,
         )
 
         executor = SyncExecutor(syncer=mock_syncer, dry_run=False)
@@ -264,7 +255,6 @@ class TestSyncExecutor:
 class TestSyncExecutorEdgeCases:
     """Edge case tests for SyncExecutor."""
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_executor_with_none_syncer_raises_error(self):
         """Test that SyncExecutor requires valid syncer.
 
@@ -277,7 +267,6 @@ class TestSyncExecutorEdgeCases:
         with pytest.raises((TypeError, ValueError)):
             SyncExecutor(syncer=None, dry_run=False)
 
-    @pytest.mark.skip(reason="TDD RED - Implementation pending")
     def test_dry_run_default_is_false(self, mock_syncer):
         """Test that dry_run defaults to False if not specified.
 
