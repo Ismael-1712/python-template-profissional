@@ -698,10 +698,32 @@ make test-matrix
 
 Este projeto implementa o **TDD Guardian**, um mecanismo de duas camadas que garante a presença de testes para todo código novo:
 
-1. **Hook de Pre-commit (Estrutural)**: Valida que cada arquivo `.py` em `src/` tenha um teste correspondente em `tests/`. Exemplo:
-   - `src/main.py` → **REQUER** `tests/test_main.py`
-   - `src/core/utils.py` → **REQUER** `tests/core/test_utils.py`
-   - Arquivos `__init__.py` são ignorados automaticamente
+1. **Hook de Pre-commit (Estrutural) - Configurável para Múltiplos Diretórios**:
+
+   O TDD Guardian agora suporta monitoramento de múltiplos diretórios com diferentes políticas de enforcement:
+
+   - **`src/` (Modo STRICT)**: Bloqueia commits se testes estiverem faltando
+     - `src/main.py` → **REQUER** `tests/test_main.py`
+     - `src/core/utils.py` → **REQUER** `tests/core/test_utils.py`
+
+   - **`scripts/` (Modo WARN-ONLY)**: Emite avisos mas não bloqueia commits
+     - `scripts/deploy.py` → **RECOMENDA** `tests/scripts/test_deploy.py`
+     - `scripts/cli/doctor.py` → **RECOMENDA** `tests/scripts/cli/test_doctor.py`
+
+   - Arquivos `__init__.py` são ignorados automaticamente em ambos os modos
+
+   **Uso Manual do Guardian:**
+
+   ```bash
+   # Modo padrão (strict, apenas src/)
+   python scripts/hooks/tdd_guardian.py src/api.py
+
+   # Monitorar múltiplos diretórios
+   python scripts/hooks/tdd_guardian.py --dirs src scripts -- file1.py file2.py
+
+   # Modo warn-only (não bloqueia)
+   python scripts/hooks/tdd_guardian.py --warn-only scripts/deploy.py
+   ```
 
 2. **Validação de Cobertura Delta (CI)**: O comando `make test-delta` executa `diff-cover` com `--fail-under=100`, exigindo que **todo código modificado/adicionado** tenha 100% de cobertura de testes.
 
