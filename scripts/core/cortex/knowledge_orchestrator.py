@@ -26,8 +26,9 @@ if TYPE_CHECKING:
     from scripts.core.cortex.models import KnowledgeEntry
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
-from scripts.core.cortex.knowledge_sync import KnowledgeSyncer, SyncResult, SyncStatus
+from scripts.core.cortex.knowledge_sync import KnowledgeSyncer, SyncResult
 from scripts.core.cortex.sync_aggregator import SyncAggregator
+from scripts.core.cortex.sync_executor import SyncExecutor
 from scripts.core.cortex.sync_filters import EntryFilter
 from scripts.utils.logger import setup_logging
 
@@ -165,8 +166,7 @@ class KnowledgeOrchestrator:
             entries_with_sources=entries_with_sources,
         )
 
-    # TODO: Refactor God Function - extract sync logic into smaller steps
-    def sync_multiple(  # noqa: C901
+    def sync_multiple(
         self,
         entry_id: str | None = None,
         dry_run: bool = False,
@@ -257,70 +257,10 @@ class KnowledgeOrchestrator:
             )
 
         # Step 4: Execute sync for each entry
-        results: list[SyncResult] = []
-
         logger.info("Processing %d entries with sources", len(entries_with_sources))
 
-        for entry in entries_with_sources:
-            # Validate file_path exists
-            if not entry.file_path:
-                logger.error("Entry %s missing file_path (internal error)", entry.id)
-                results.append(
-                    SyncResult(
-                        entry=entry,
-                        status=SyncStatus.ERROR,
-                        error_message="Missing file_path attribute",
-                    ),
-                )
-                continue
-
-            logger.debug(
-                "Syncing entry %s (%d sources)",
-                entry.id,
-                len(entry.sources),
-            )
-
-            if dry_run:
-                # Dry run: simulate sync without actual I/O
-                logger.debug("Dry run: skipping actual sync for %s", entry.id)
-                results.append(
-                    SyncResult(
-                        entry=entry,
-                        status=SyncStatus.NOT_MODIFIED,
-                        error_message=None,
-                    ),
-                )
-            else:
-                # Real sync: delegate to syncer
-                try:
-                    sync_result = self.syncer.sync_entry(entry, entry.file_path)
-                    results.append(sync_result)
-
-                    if sync_result.status == SyncStatus.UPDATED:
-                        logger.info("Entry %s synchronized successfully", entry.id)
-                    elif sync_result.status == SyncStatus.NOT_MODIFIED:
-                        logger.debug("Entry %s: no changes (304)", entry.id)
-                    else:
-                        logger.error(
-                            "Entry %s sync failed: %s",
-                            entry.id,
-                            sync_result.error_message,
-                        )
-
-                except Exception as e:
-                    logger.error(
-                        "Exception syncing entry %s: %s",
-                        entry.id,
-                        str(e),
-                        exc_info=True,
-                    )
-                    results.append(
-                        SyncResult(
-                            entry=entry,
-                            status=SyncStatus.ERROR,
-                            error_message=str(e),
-                        ),
-                    )
+        executor = SyncExecutor(self.syncer, dry_run=dry_run)
+        results = executor.execute_batch(entries_with_sources)
 
         # Step 5: Aggregate results into summary
         summary = SyncAggregator.aggregate(results)
