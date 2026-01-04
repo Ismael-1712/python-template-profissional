@@ -8,3 +8,9 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+
+# Markdown: Preserve formatting to avoid auto-format conflicts
+[*.md]
+trim_trailing_whitespace = false
+# Note: Markdown files may have intentional trailing spaces (e.g., line breaks)
+# Auto-formatters should not modify spacing between sections
