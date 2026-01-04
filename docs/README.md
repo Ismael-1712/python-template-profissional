@@ -68,6 +68,12 @@ Metodologias e padrões validados em produção:
 
 Análises técnicas, métricas de débito técnico e planos de ação:
 
+- **[COMPLEXITY_GOD_FUNCTIONS.md](reports/COMPLEXITY_GOD_FUNCTIONS.md)** - 📉 **Matriz de Complexidade e God Functions**
+  - Catálogo de dívida técnica de complexidade ciclomática (CC)
+  - Prioridades de refatoração por criticidade (Rank D: 3 funções, Rank C: 38 funções)
+  - Plano de ação para simplificação de funções complexas no módulo CORTEX
+  - Métricas baseline e metas de redução de débito (Q1 2026)
+
 - **[TDD_GUARDIAN_FORENSICS.md](reports/TDD_GUARDIAN_FORENSICS.md)** - 🛡️ **Análise Forense do TDD Guardian**
   - Análise forense da cobertura de testes em scripts
   - Levantamento de débito técnico (~140 arquivos sem cobertura padronizada)
