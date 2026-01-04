@@ -33,7 +33,7 @@ repos:
           - pydantic-settings>=2.0
         pass_filenames: true
         types: [python]
-        exclude: ^(scripts/audit_dashboard\.py|tests/)
+        exclude: ^scripts/audit_dashboard\.py
 
   # 4. Nosso Auditor Customizado (O "Sistema de Auditoria")
   - repo: local
