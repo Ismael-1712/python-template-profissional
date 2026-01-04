@@ -56,6 +56,12 @@ Postmortems, retrospectivas e roadmaps de cada fase do projeto:
 
 Metodologias e padrões validados em produção:
 
+- **[GIT_WORKFLOW_TROUBLESHOOTING.md](guides/GIT_WORKFLOW_TROUBLESHOOTING.md)** - 🔧 **Troubleshooting de Workflow Git**
+  - Resolução de "Working tree has uncommitted changes" em post-pr-cleanup
+  - Sincronização de branches api/cli desincronizadas
+  - Resolução de conflitos de merge
+  - Comandos úteis de diagnóstico e checklist pré-limpeza
+
 - **[LLM_TASK_DECOMPOSITION_STRATEGY.md](guides/LLM_TASK_DECOMPOSITION_STRATEGY.md)** - 🤖 **Estratégia de Decomposição de Tarefas**
   - Modelo P31: Como dividir tarefas complexas em micro-etapas
   - Os 3 Critérios de Atomicidade (Comitável + Testável + Independente)
