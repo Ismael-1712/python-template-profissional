@@ -14,8 +14,12 @@ License: MIT
 
 from __future__ import annotations
 
-from scripts.core.cortex.knowledge_orchestrator import SyncSummary
+from typing import TYPE_CHECKING
+
 from scripts.core.cortex.knowledge_sync import SyncResult, SyncStatus
+
+if TYPE_CHECKING:
+    from scripts.core.cortex.knowledge_orchestrator import SyncSummary
 
 
 class SyncAggregator:
@@ -57,6 +61,9 @@ class SyncAggregator:
             >>> summary.error_count
             1
         """
+        # Import at runtime to avoid circular dependency
+        from scripts.core.cortex.knowledge_orchestrator import SyncSummary
+
         # Count results by status
         updated_count = sum(1 for r in results if r.status == SyncStatus.UPDATED)
         not_modified_count = sum(
