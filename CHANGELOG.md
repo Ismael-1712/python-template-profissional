@@ -4,6 +4,24 @@
 
 ### Changed
 
+- **♻️ CORTEX Knowledge Orchestrator - Phase 2 Refactoring**: Integração de módulos de domínio puro na God Function `sync_multiple`
+  - **Impacto da Refatoração**:
+    - **Complexidade Ciclomática**: 23 (Rank D) → 12 (Rank B) = **-48% de redução**
+    - **Promoção de Rank**: Função saiu da lista de "Alta Criticidade" para "Baixa Complexidade"
+    - **Linhas de código alteradas**: 15 linhas (3 blocos inline → 3 chamadas delegadas)
+  - **Substituições Realizadas**:
+    - Filtragem por ID: `[e for e in all_entries if e.id == entry_id]` → `EntryFilter.filter_by_id(all_entries, entry_id)`
+    - Filtragem de sources: `[e for e in entries if e.sources]` → `EntryFilter.filter_by_sources(entries_to_sync)`
+    - Agregação manual (6 linhas) → `SyncAggregator.aggregate(results)`
+  - **Correções Técnicas**:
+    - Resolvida importação circular em `sync_aggregator.py` usando `TYPE_CHECKING` + import lazy
+    - Adicionado tratamento de `ValueError` no filtro por ID com logging apropriado
+  - **Validação de Segurança**:
+    - ✅ 16/16 testes do orchestrator passando (zero regressões)
+    - ✅ make validate: ruff, mypy, xenon passando
+  - **Próximos Passos (Phase 3)**: Extract SyncExecutor para reduzir CC de 12 → ~8
+  - Documentação atualizada em `docs/reports/COMPLEXITY_GOD_FUNCTIONS.md`
+
 - **♻️ CORTEX Knowledge Orchestrator - Phase 1 Refactoring**: Extração de lógica de domínio da God Function `sync_multiple` (CC=23)
   - **Novos Módulos de Domínio Puro (Hexagonal Architecture)**:
     - `scripts/core/cortex/sync_filters.py`: Filtros para entries (por ID, por sources, validação)

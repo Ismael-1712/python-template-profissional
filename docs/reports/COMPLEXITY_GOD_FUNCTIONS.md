@@ -63,13 +63,13 @@ _Refatoração Recomendada. Código denso que dificulta a manutenção._
 | Rank | CC Score | Arquivo | Função / Método | Linha | Status |
 | :---: | :---: | --- | --- | :---: | :---: |
 | **D** | **29** | `scripts/core/cortex/metadata.py` | `FrontmatterParser.validate_metadata` | 139 | 🔴 Pendente |
-| **D** | **23** | `scripts/core/cortex/knowledge_orchestrator.py` | `KnowledgeOrchestrator.sync_multiple` | 167 | 🟡 **Em Progresso (Fase 1/4)** |
+| **B** | **12** | `scripts/core/cortex/knowledge_orchestrator.py` | `KnowledgeOrchestrator.sync_multiple` | 169 | 🟢 **Fase 2/4 Concluída** (-48% CC) |
 | **D** | **21** | `scripts/core/cortex/migrate.py` | `DocumentMigrator.print_summary` | 386 | 🔴 Pendente |
 
-**Total de Funções Rank D:** 3
+**Total de Funções Rank D:** 2 ~~3~~ (-1 função movida para Rank B)
 **Impacto:** Alta criticidade no sistema CORTEX (Documentation as Code).
 
-#### 📋 Plano de Refatoração: `knowledge_orchestrator.py` (CC=23)
+#### 📋 Plano de Refatoração: `knowledge_orchestrator.py` ~~(CC=23)~~ **→ CC=12**
 
 **Fase 1 - Extração de Domínio Puro** ✅ **CONCLUÍDA** (04/Jan/2026)
 
@@ -78,20 +78,26 @@ _Refatoração Recomendada. Código denso que dificulta a manutenção._
 - ✅ Zero regressões nos testes existentes
 - ✅ Linters passando (ruff, mypy)
 
-**Fase 2 - Integração no Orchestrator** (Próximo)
+**Fase 2 - Integração no Orchestrator** ✅ **CONCLUÍDA** (04/Jan/2026)
 
-- Substituir lógica inline por delegação aos novos módulos
-- Meta: Reduzir CC de 23 → ~18
+- ✅ Substituída lógica inline de filtragem por `EntryFilter.filter_by_id()`
+- ✅ Substituída lógica inline de filtragem de sources por `EntryFilter.filter_by_sources()`
+- ✅ Substituída agregação manual de resultados por `SyncAggregator.aggregate()`
+- ✅ Resolvida importação circular usando `TYPE_CHECKING`
+- ✅ **Redução de CC: 23 → 12 (-48%)**
+- ✅ **Promoção: Rank D → Rank B**
+- ✅ 16/16 testes do orchestrator passando
+- ✅ make validate: ✅
 
-**Fase 3 - Extract SyncExecutor** (Futuro)
+**Fase 3 - Extract SyncExecutor** (Próximo)
 
 - Extrair loop de sync para classe dedicada
-- Meta: Reduzir CC de ~18 → ~12
+- Meta: Reduzir CC de 12 → ~8
 
 **Fase 4 - Desacoplamento de Logging** (Futuro)
 
 - Observer Pattern para separar infra de domínio
-- Meta: Reduzir CC de ~12 → <11 (Rank B)
+- Meta: Reduzir CC de ~8 → <6 (Rank A)
 - Remover do `--exclude` do Makefile
 
 ---

@@ -27,6 +27,8 @@ if TYPE_CHECKING:
 
 from scripts.core.cortex.knowledge_scanner import KnowledgeScanner
 from scripts.core.cortex.knowledge_sync import KnowledgeSyncer, SyncResult, SyncStatus
+from scripts.core.cortex.sync_aggregator import SyncAggregator
+from scripts.core.cortex.sync_filters import EntryFilter
 from scripts.utils.logger import setup_logging
 
 logger = setup_logging(__name__)
@@ -226,23 +228,18 @@ class KnowledgeOrchestrator:
 
         # Step 2: Filter by entry_id if provided
         if entry_id:
-            entries_to_sync = [e for e in all_entries if e.id == entry_id]
-
-            if not entries_to_sync:
-                available_ids = ", ".join(e.id for e in all_entries)
-                msg = (
-                    f"Entry '{entry_id}' not found. Available entries: {available_ids}"
-                )
-                logger.error(msg)
-                raise ValueError(msg)
-
-            logger.debug("Filtered to specific entry: %s", entry_id)
+            try:
+                entries_to_sync = EntryFilter.filter_by_id(all_entries, entry_id)
+                logger.debug("Filtered to specific entry: %s", entry_id)
+            except ValueError as e:
+                logger.error(str(e))
+                raise
         else:
             entries_to_sync = all_entries
             logger.debug("Processing all %d entries", len(entries_to_sync))
 
         # Step 3: Filter entries that have external sources
-        entries_with_sources = [e for e in entries_to_sync if e.sources]
+        entries_with_sources = EntryFilter.filter_by_sources(entries_to_sync)
 
         if not entries_with_sources:
             if entry_id:
@@ -326,27 +323,13 @@ class KnowledgeOrchestrator:
                     )
 
         # Step 5: Aggregate results into summary
-        updated_count = sum(1 for r in results if r.status == SyncStatus.UPDATED)
-        not_modified_count = sum(
-            1 for r in results if r.status == SyncStatus.NOT_MODIFIED
-        )
-        error_count = sum(1 for r in results if r.status == SyncStatus.ERROR)
-        successful_count = updated_count + not_modified_count
-
-        summary = SyncSummary(
-            results=results,
-            total_processed=len(results),
-            successful_count=successful_count,
-            updated_count=updated_count,
-            not_modified_count=not_modified_count,
-            error_count=error_count,
-        )
+        summary = SyncAggregator.aggregate(results)
 
         logger.info(
             "Sync complete: %d updated, %d not modified, %d errors",
-            updated_count,
-            not_modified_count,
-            error_count,
+            summary.updated_count,
+            summary.not_modified_count,
+            summary.error_count,
         )
 
         return summary
