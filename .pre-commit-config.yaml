@@ -78,12 +78,22 @@ repos:
         description: "Automatically updates the vector store when documentation changes."
 
       - id: tdd-guardian
-        name: "TDD Guardian - Requer testes para código novo"
-        entry: python3 scripts/hooks/tdd_guardian.py
+        name: "TDD Guardian - Requer testes para código novo (src/)"
+        entry: python3 scripts/hooks/tdd_guardian.py --dirs src
         language: system
         pass_filenames: true
         types: [python]
-        description: "Garante que novos arquivos em src/ tenham testes correspondentes em tests/"
+        files: ^src/
+        description: "Garante que novos arquivos em src/ tenham testes correspondentes em tests/ (MODO STRICT)"
+
+      - id: tdd-guardian-scripts
+        name: "TDD Guardian - Monitora scripts/ (WARN-ONLY)"
+        entry: python3 scripts/hooks/tdd_guardian.py --dirs scripts --warn-only
+        language: system
+        pass_filenames: true
+        types: [python]
+        files: ^scripts/
+        description: "Monitora scripts/ e avisa sobre testes faltantes (não bloqueia commits)"
 
   - repo: local
     hooks:
