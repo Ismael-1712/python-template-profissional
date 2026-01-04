@@ -311,7 +311,7 @@ dev-doctor --security-checks
   1. Atualizar padrões de redação em `SensitiveDataFilter`
   2. Revisar hashes em `requirements.txt` (supply chain)
   3. Validar timeouts em `install_dev.py` (benchmarks atualizados)
-  4. Auditoria de CVEs em dependências (`pip-audit`)
+  4. ✅ **Auditoria de CVEs em dependências (`pip-audit`) - IMPLEMENTADO**
 
 ---
 

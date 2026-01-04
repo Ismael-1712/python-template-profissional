@@ -21,7 +21,14 @@
 
 ### Fixed
 
-- **🔧 WSL Compatibility: Git Hooks Robustness**: Refatoração dos Git hooks CORTEX para funcionar em ambientes WSL sem depender de PATH
+- **� CORTEX Audit Pipeline: Local Validation Implementation**: Implementação de validação local de documentação para prevenir falhas no CI
+  - **Problema**: Target `make cortex-audit` estava vazio, permitindo que documentos com metadados inválidos chegassem ao CI
+  - **Solução**: Adicionado comando `python -m scripts.cortex audit docs/ --fail-on-error` ao Makefile
+  - **Impacto**: `make validate` agora executa auditoria CORTEX localmente, detectando erros de frontmatter antes do push
+  - Correção de metadados: `docs/reports/TDD_GUARDIAN_FORENSICS.md` alterado de `type: report` (inválido) para `type: history` (válido)
+  - Tipos válidos no CORTEX: `guide`, `arch`, `reference`, `history`, `knowledge`
+
+- **�🔧 WSL Compatibility: Git Hooks Robustness**: Refatoração dos Git hooks CORTEX para funcionar em ambientes WSL sem depender de PATH
   - **Problema**: Hooks falhavam silenciosamente em WSL com warning `'cortex' command not found`
   - **Causa Raiz**: Hooks dependiam de executável `cortex` no PATH, que não existe sem `pip install -e .`
   - **Solução**: Hooks agora localizam dinamicamente o repositório Git e usam Python do venv diretamente

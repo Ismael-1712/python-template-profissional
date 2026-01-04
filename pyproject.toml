@@ -140,3 +140,21 @@ max-complexity = 10
 [tool.bandit]
 exclude_dirs = ["tests", ".venv", "scripts/core/mock_ci"]
 skips = ["B101"]  # B101: assert_used (opcional, se exclude_dirs não bastar)
+
+[tool.pip-audit]
+# Vulnerability ignores (migrated from .safety-policy.yml)
+# All ignores require documented technical justifications
+ignore-vulns = [
+    # PYSEC-51457: py package - ReDoS (DISPUTED CVE)
+    # Justification: Transitive dependency from pytest/interrogate.
+    # Cannot update at this time - disputed vulnerability with no fix.
+    # Expiration: 2030-12-31
+    "PYSEC-2022-42969",  # py package ReDoS (corresponds to Safety ID 51457)
+
+    # CVE-2025-50182 and CVE-2025-50181: urllib3 vulnerabilities
+    # Justification: Kubernetes version constraint requires urllib3<2.4.0
+    # Will update when kubernetes package allows urllib3>=2.5.0
+    # Expiration: 2030-12-31
+    "CVE-2025-50182",  # urllib3 (corresponds to Safety ID 77745)
+    "CVE-2025-50181",  # urllib3 (corresponds to Safety ID 77744)
+]

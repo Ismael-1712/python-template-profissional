@@ -794,7 +794,7 @@ make docs-check                 # Interrogate: Cobertura de docstrings (≥95%)
 make ci-check                   # GitHub Actions workflows audit (versões + cache)
 make audit-custom               # Auditoria de segurança customizada (fail-on: HIGH severity)
 make security-sast              # Bandit: Static Application Security Testing
-make security-sca               # Safety: Software Composition Analysis
+make security-sca               # Pip-Audit: Software Composition Analysis
 make audit-security             # Suite completa de segurança (Custom + SAST + SCA)
 make guardian-check             # Guardian: Políticas arquiteturais (shadow config detection)
 make cortex-audit               # CORTEX: Integridade de documentação (links + frontmatter)
@@ -829,7 +829,7 @@ format → deps-check → lint → type-check → complexity-check → arch-chec
 | 🛡️ **TDD Guardian** | diff-cover | Delta Coverage = 100% | ✅ ACTIVE |
 | 🔒 **Segurança Custom** | Audit CLI | Fail-on HIGH | ✅ MONITORED |
 | 🔐 **SAST** | Bandit | Code vulnerabilities | ✅ ACTIVE |
-| 🔐 **SCA** | Safety | Dependency vulnerabilities | ✅ ACTIVE |
+| 🔐 **SCA** | Pip-Audit | Dependency vulnerabilities | ✅ ACTIVE |
 | 🛡️ **Guardian** | Config Scanner | Shadow detection | ✅ ACTIVE |
 | 📄 **CORTEX** | Knowledge Graph | Links + metadata | ✅ VALIDATED |
 

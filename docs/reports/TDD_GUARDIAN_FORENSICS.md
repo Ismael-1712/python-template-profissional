@@ -1,6 +1,6 @@
 ---
 id: tdd-guardian-forensics
-type: report
+type: history
 status: active
 version: 1.0.0
 author: Engineering Team
@@ -10,9 +10,9 @@ context_tags:
   - testing
   - technical-debt
   - automation
+  - forensics
 linked_code:
   - scripts/hooks/tdd_guardian.py
-  - scripts/git-hooks/pre-commit
 title: TDD Guardian - Análise Forense e Viabilidade de Expansão
 ---
 

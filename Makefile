@@ -228,10 +228,10 @@ security-sast:
 	@echo "🔒 Running SAST (Bandit)..."
 	@$(PYTHON) -m bandit -c pyproject.toml -r . -ll  # -ll = Falha apenas em MEDIUM ou HIGH
 
-## security-sca: Software Composition Analysis (Safety)
+## security-sca: Software Composition Analysis (Pip-Audit)
 security-sca:
-	@echo "🔒 Running SCA (Safety)..."
-	@$(PYTHON) -m safety scan --detailed-output || true  # Continue on vuln (dev environment)
+	@echo "🔒 Running SCA (Pip-Audit)..."
+	@$(PYTHON) -m pip_audit --desc || true  # Continue on vuln (dev environment)
 
 ## audit-security: Executa suite completa de segurança (Custom + SAST + SCA)
 audit-security: audit-custom security-sast security-sca
@@ -244,6 +244,8 @@ guardian-check:
 
 ## cortex-audit: Valida integridade da documentação (links, frontmatter, cobertura)
 cortex-audit:
+	@echo "📚 Validando documentação (CORTEX)..."
+	@$(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 	@echo "📚 Verificando Integridade da Documentação (CORTEX)..."
 	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 
