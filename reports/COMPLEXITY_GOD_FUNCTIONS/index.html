@@ -605,10 +605,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#plano-de-refatoracao-knowledge_orchestratorpy-cc23" class="md-nav__link">
+  <a href="#plano-de-refatoracao-knowledge_orchestratorpy-cc23-cc12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📋 Plano de Refatoração: knowledge_orchestrator.py (CC=23)
+        📋 Plano de Refatoração: knowledge_orchestrator.py ~~(CC=23)~~ → CC=12
       
     </span>
   </a>
@@ -904,12 +904,12 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <td style="text-align: center;">🔴 Pendente</td>
 </tr>
 <tr>
-<td style="text-align: center;"><strong>D</strong></td>
-<td style="text-align: center;"><strong>23</strong></td>
+<td style="text-align: center;"><strong>B</strong></td>
+<td style="text-align: center;"><strong>12</strong></td>
 <td><code>scripts/core/cortex/knowledge_orchestrator.py</code></td>
 <td><code>KnowledgeOrchestrator.sync_multiple</code></td>
-<td style="text-align: center;">167</td>
-<td style="text-align: center;">🟡 <strong>Em Progresso (Fase 1/4)</strong></td>
+<td style="text-align: center;">169</td>
+<td style="text-align: center;">🟢 <strong>Fase 2/4 Concluída</strong> (-48% CC)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><strong>D</strong></td>
@@ -921,9 +921,9 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 </tr>
 </tbody>
 </table>
-<p><strong>Total de Funções Rank D:</strong> 3
+<p><strong>Total de Funções Rank D:</strong> 2 ~~3~~ (-1 função movida para Rank B)
 <strong>Impacto:</strong> Alta criticidade no sistema CORTEX (Documentation as Code).</p>
-<h4 id="plano-de-refatoracao-knowledge_orchestratorpy-cc23">📋 Plano de Refatoração: <code>knowledge_orchestrator.py</code> (CC=23)</h4>
+<h4 id="plano-de-refatoracao-knowledge_orchestratorpy-cc23-cc12">📋 Plano de Refatoração: <code>knowledge_orchestrator.py</code> ~~(CC=23)~~ <strong>→ CC=12</strong></h4>
 <p><strong>Fase 1 - Extração de Domínio Puro</strong> ✅ <strong>CONCLUÍDA</strong> (04/Jan/2026)</p>
 <ul>
 <li>✅ Criados <code>sync_filters.py</code> e <code>sync_aggregator.py</code></li>
@@ -931,20 +931,26 @@ O projeto não possui funções com complexidade superior a 40 (Rank E).</p>
 <li>✅ Zero regressões nos testes existentes</li>
 <li>✅ Linters passando (ruff, mypy)</li>
 </ul>
-<p><strong>Fase 2 - Integração no Orchestrator</strong> (Próximo)</p>
+<p><strong>Fase 2 - Integração no Orchestrator</strong> ✅ <strong>CONCLUÍDA</strong> (04/Jan/2026)</p>
 <ul>
-<li>Substituir lógica inline por delegação aos novos módulos</li>
-<li>Meta: Reduzir CC de 23 → ~18</li>
+<li>✅ Substituída lógica inline de filtragem por <code>EntryFilter.filter_by_id()</code></li>
+<li>✅ Substituída lógica inline de filtragem de sources por <code>EntryFilter.filter_by_sources()</code></li>
+<li>✅ Substituída agregação manual de resultados por <code>SyncAggregator.aggregate()</code></li>
+<li>✅ Resolvida importação circular usando <code>TYPE_CHECKING</code></li>
+<li>✅ <strong>Redução de CC: 23 → 12 (-48%)</strong></li>
+<li>✅ <strong>Promoção: Rank D → Rank B</strong></li>
+<li>✅ 16/16 testes do orchestrator passando</li>
+<li>✅ make validate: ✅</li>
 </ul>
-<p><strong>Fase 3 - Extract SyncExecutor</strong> (Futuro)</p>
+<p><strong>Fase 3 - Extract SyncExecutor</strong> (Próximo)</p>
 <ul>
 <li>Extrair loop de sync para classe dedicada</li>
-<li>Meta: Reduzir CC de ~18 → ~12</li>
+<li>Meta: Reduzir CC de 12 → ~8</li>
 </ul>
 <p><strong>Fase 4 - Desacoplamento de Logging</strong> (Futuro)</p>
 <ul>
 <li>Observer Pattern para separar infra de domínio</li>
-<li>Meta: Reduzir CC de ~12 → &lt;11 (Rank B)</li>
+<li>Meta: Reduzir CC de ~8 → &lt;6 (Rank A)</li>
 <li>Remover do <code>--exclude</code> do Makefile</li>
 </ul>
 <hr />
