@@ -58,3 +58,4 @@ sentence-transformers>=3.0.0
 
 # Vector Database for Cortex Memory
 chromadb>=0.4.0
+ # CI Sync: 1767747796
