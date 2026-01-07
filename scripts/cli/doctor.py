@@ -276,6 +276,56 @@ class DevDoctor:
             critical=False,
         )
 
+    def check_lockfile_sync(self) -> DiagnosticResult:
+        """Check if requirements.txt is synchronized with .in file.
+
+        This is a CRITICAL check that prevents development with
+        desynchronized dependency files.
+
+        Returns:
+            DiagnosticResult: Critical failure if files are desynchronized.
+        """
+        try:
+            # Import verification logic
+            from scripts.ci.verify_deps import check_sync
+
+            # Check dev requirements (primary lockfile)
+            if check_sync("dev"):
+                return DiagnosticResult(
+                    "Lockfile Sync",
+                    True,
+                    "requirements/dev.txt sincronizado com dev.in ✓",
+                )
+
+            return DiagnosticResult(
+                "Lockfile Sync",
+                False,
+                (
+                    "❌ requirements/dev.txt está DESSINCRONIZADO com dev.in!\n"
+                    "  🔒 RISCO: Dependências incorretas podem estar instaladas.\n"
+                    "  💊 PRESCRIÇÃO:\n"
+                    "     1. Execute: make requirements\n"
+                    "     2. Ou: pip-compile requirements/dev.in "
+                    "-o requirements/dev.txt\n"
+                    "     3. Depois: git add requirements/dev.txt"
+                ),
+                critical=True,
+            )
+        except ImportError as e:
+            return DiagnosticResult(
+                "Lockfile Sync",
+                False,
+                f"Erro ao importar verify_deps: {e}",
+                critical=True,
+            )
+        except Exception as e:
+            return DiagnosticResult(
+                "Lockfile Sync",
+                False,
+                f"Erro inesperado ao verificar lockfile: {e}",
+                critical=True,
+            )
+
     def run_diagnostics(self) -> bool:
         """Run all diagnostic checks.
 
@@ -293,6 +343,7 @@ class DevDoctor:
             self.check_vital_dependencies(),
             self.check_type_stubs(),
             self.check_git_hooks(),
+            self.check_lockfile_sync(),  # CRITICAL: Dependency autoimmunity
         ]
 
         critical_failure = False

@@ -410,6 +410,268 @@ def collect_metrics():
 
 ---
 
+## 🛡️ Sistema de Autoimunidade de Dependências
+
+**Adicionado:** 2026-01-06
+**Versão:** 2.0.0
+
+### Visão Geral
+
+O sistema de autoimunidade protege contra commits com arquivos de dependências (`requirements.txt`) dessincronizados com seus arquivos fonte (`.in`). Esse problema pode causar:
+
+- ❌ Falhas no CI/CD devido a versões incompatíveis
+- ❌ Bugs silenciosos causados por dependências erradas
+- ❌ Conflitos de merge em `requirements.txt`
+
+### Camadas de Proteção
+
+#### 1. 🔒 Pre-Commit Hook (Prevenção Local)
+
+**Localização:** `.pre-commit-config.yaml`
+
+```yaml
+- id: lockfile-sync-guard
+  name: "🔒 Lockfile Sync Guard"
+  entry: python scripts/ci/verify_deps.py
+  language: system
+  files: ^requirements/.*\.(in|txt)$
+```
+
+**Comportamento:**
+
+- Bloqueia commits se `requirements/dev.txt` não estiver sincronizado com `requirements/dev.in`
+- Executa antes do commit (proteção imediata)
+- Exibe mensagem de correção com comandos exatos
+
+**Como corrigir se bloqueado:**
+
+```bash
+# Opção 1: Usar Makefile (recomendado)
+make requirements
+
+# Opção 2: Comando direto
+python3.10 -m piptools compile requirements/dev.in -o requirements/dev.txt
+
+# Depois do recompile:
+git add requirements/dev.txt
+git commit -m "chore: ressincronizar lockfile"
+```
+
+#### 2. 🩺 Dev Doctor (Diagnóstico Proativo)
+
+**Comando:** `make doctor` ou `python -m scripts.cli.doctor`
+
+**Nova verificação crítica:**
+
+```python
+check_lockfile_sync() -> DiagnosticResult:
+    """Verifica sincronização entre .in e .txt"""
+    # critical=True - Bloqueia se dessincronizado
+```
+
+**Output esperado:**
+
+```
+🔍 Dev Doctor - Diagnóstico de Ambiente
+
+✓ Platform Strategy
+  🖥️  Platform: LinuxStrategy | Git: git | ✓ fsync
+
+✓ Python Version
+  Python 3.10.15 (Sincronizado)
+
+✓ Lockfile Sync
+  requirements/dev.txt sincronizado com dev.in ✓
+
+────────────────────────────────────────────────────
+✓ Ambiente SAUDÁVEL - Pronto para desenvolvimento! 🎉
+```
+
+**Se dessincronizado:**
+
+```
+✗ Lockfile Sync
+  ❌ requirements/dev.txt está DESSINCRONIZADO com dev.in!
+  🔒 RISCO: Você pode estar trabalhando com dependências incorretas.
+  💊 PRESCRIÇÃO:
+     1. Execute: make requirements
+     2. Ou: pip-compile requirements/dev.in -o requirements/dev.txt
+     3. Depois: git add requirements/dev.txt
+
+────────────────────────────────────────────────────
+✗ Ambiente DOENTE - 1 problema(s) crítico(s) detectado(s)! 🚨
+```
+
+#### 3. 🚦 CI/CD (Última Linha de Defesa)
+
+**Makefile target:** `make validate`
+
+```makefile
+validate: format deps-check lint type-check ... test
+```
+
+**Script:** `scripts/ci/verify_deps.py`
+
+**Melhorias (v2.0):**
+
+- ✅ Suporte a `PYTHON_BASELINE` env var (força uso de Python 3.10)
+- ✅ Comparação ignora comentários e metadados do pip-compile
+- ✅ Mensagens de erro detalhadas com comandos de correção
+
+### Workflow Recomendado
+
+#### Adicionando Nova Dependência
+
+```bash
+# 1. Editar arquivo .in
+echo "requests>=2.31.0" >> requirements/dev.in
+
+# 2. Recompilar lockfile (usa Python 3.10 baseline)
+make requirements
+
+# 3. Verificar mudanças
+git diff requirements/dev.txt
+
+# 4. Commit (pre-commit hook irá validar)
+git add requirements/dev.in requirements/dev.txt
+git commit -m "feat: adicionar requests para API calls"
+
+# O pre-commit hook automaticamente valida:
+# 🔒 Lockfile Sync Guard ... Passed
+```
+
+#### Atualizando Dependências
+
+```bash
+# Atualizar versão no .in
+sed -i 's/pytest>=7.0.0/pytest>=8.0.0/' requirements/dev.in
+
+# Recompilar
+make requirements
+
+# Revisar mudanças (pode atualizar dependências transitivas)
+git diff requirements/dev.txt
+
+# Commit
+git add requirements/
+git commit -m "chore: atualizar pytest para v8"
+```
+
+### Troubleshooting
+
+#### ❌ Erro: "DESSINCRONIZADO" no CI mas local está OK
+
+**Causa:** Diferença de versão Python entre local e CI
+
+**Solução:**
+
+```bash
+# Verificar Python local
+python --version
+# Output: Python 3.11.5 (problema!)
+
+# CI usa Python 3.10 (baseline)
+# Forçar recompile com baseline:
+make requirements
+
+# Ou especificar explicitamente:
+python3.10 -m piptools compile requirements/dev.in -o requirements/dev.txt
+```
+
+#### ❌ Pre-commit hook sempre falha mesmo após `make requirements`
+
+**Causa:** Hook rodando com Python diferente do baseline
+
+**Solução:**
+
+```bash
+# Verificar qual Python o hook está usando
+pre-commit run lockfile-sync-guard --verbose
+
+# Reinstalar pre-commit no venv correto
+source .venv/bin/activate
+pre-commit clean
+pre-commit install
+```
+
+#### ❌ Conflito de merge em `requirements/dev.txt`
+
+**Solução:**
+
+```bash
+# NUNCA resolver manualmente!
+# Aceitar versão de uma branch:
+git checkout --theirs requirements/dev.txt  # ou --ours
+
+# Recompilar do zero:
+make requirements
+
+# Validar:
+python scripts/ci/verify_deps.py
+
+# Commit resolução:
+git add requirements/dev.txt
+git commit -m "chore: resolver conflito de lockfile via recompile"
+```
+
+### Python Baseline Strategy
+
+O projeto usa **Python 3.10** como baseline para garantir compatibilidade CI/CD.
+
+**Variável de ambiente:**
+
+```bash
+export PYTHON_BASELINE="3.10"
+```
+
+**Comportamento do `verify_deps.py`:**
+
+1. Se `PYTHON_BASELINE` está definido:
+   - Tenta usar `python3.10` (ou versão especificada)
+   - Exibe warning se não encontrado
+   - Fallback para Python do sistema
+
+2. Se não definido:
+   - Usa `.venv/bin/python` (desenvolvimento local)
+   - Fallback para `sys.executable`
+
+**Makefile integration:**
+
+```makefile
+PYTHON_BASELINE := 3.10
+
+requirements:
+ @python$(PYTHON_BASELINE) -m piptools compile ...
+```
+
+### Testes de Validação
+
+**Arquivo:** `tests/test_dependency_safety.py`
+
+**Cenários cobertos:**
+
+- ✅ Cenário A: Arquivos sincronizados (deve passar)
+- ✅ Cenário B: Arquivos dessincronizados (deve falhar)
+- ✅ Cenário C: Python version mismatch (deve alertar)
+- ✅ Integração com `verify_deps.py`
+- ✅ Integração com Dev Doctor
+- ✅ Simulação de pre-commit hook
+
+**Executar testes:**
+
+```bash
+pytest tests/test_dependency_safety.py -v
+```
+
+### Referências Técnicas
+
+- **Script de verificação:** [`scripts/ci/verify_deps.py`](../../scripts/ci/verify_deps.py)
+- **Doctor check:** [`scripts/cli/doctor.py:check_lockfile_sync()`](../../scripts/cli/doctor.py)
+- **Pre-commit config:** [`.pre-commit-config.yaml:lockfile-sync-guard`](../../.pre-commit-config.yaml)
+- **Testes:** [`tests/test_dependency_safety.py`](../../tests/test_dependency_safety.py)
+
+---
+
 ## 🎓 Checklist de Code Review
 
 ### Para Reviewers
