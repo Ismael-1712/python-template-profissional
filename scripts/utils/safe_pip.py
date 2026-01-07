@@ -88,6 +88,7 @@ def safe_pip_compile(
                 # NOTE: --generate-hashes disabled (planned for future sprint)
                 # See: test_pip_compile_enforces_hashes (currently xfail)
                 "--strip-extras",  # FIX: Remove extras to match CI standards
+                "--allow-unsafe",  # FIX: Include pip/setuptools for reproducibility
                 "--output-file",
                 temp_path_str,  # Use temp for atomicity
                 input_path_str,  # <--- Now strictly relative
@@ -139,3 +140,6 @@ def safe_pip_compile(
             with contextlib.suppress(OSError):
                 temp_output.unlink()
         raise
+
+
+# Force PR Refresh

@@ -320,6 +320,7 @@ class TestDependencyAlignment:
                     "--output-file=-",
                     "--resolver=backtracking",
                     "--strip-extras",
+                    "--allow-unsafe",  # Include pip/setuptools for reproducibility
                     "--quiet",
                 ],
                 check=False,

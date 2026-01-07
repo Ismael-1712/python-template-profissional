@@ -3,9 +3,16 @@
 This script ensures that requirements.txt files are perfectly synchronized
 with their corresponding .in files, acting as an auto-immune mechanism
 against dependency drift.
+
+Features:
+- Python baseline awareness (uses PYTHON_BASELINE env var)
+- Comment-aware comparison (ignores pip-compile metadata)
+- CI/CD compatible (venv detection)
+- Detailed error reporting with remediation steps
 """
 
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -27,9 +34,32 @@ def check_sync(req_name: str) -> bool:
 
     print(f"🔍 Verificando integridade de {req_name}...", end=" ", flush=True)
 
-    # Use venv Python if available to avoid dependency conflicts
-    venv_python = project_root / ".venv" / "bin" / "python"
-    python_exec = str(venv_python) if venv_python.exists() else sys.executable
+    # Python Selection Strategy (Priority Order):
+    # 1. PYTHON_BASELINE env var (e.g., "3.10" for CI compatibility)
+    # 2. .venv/bin/python (local development)
+    # 3. sys.executable (fallback)
+    baseline_version = os.getenv("PYTHON_BASELINE")
+    python_exec = sys.executable  # Default fallback
+
+    if baseline_version:
+        # Try to use baseline Python (e.g., python3.10)
+        baseline_exec = shutil.which(f"python{baseline_version}")
+        if baseline_exec:
+            python_exec = baseline_exec
+            print(
+                f"\n  🎯 Usando Python {baseline_version} (baseline) para pip-compile",
+            )
+        else:
+            print(
+                f"\n  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
+                f"python{baseline_version} não encontrado no PATH",
+            )
+            print(f"  ⚠️  Usando fallback: {sys.executable}")
+    else:
+        # Try venv Python first for local dev
+        venv_python = project_root / ".venv" / "bin" / "python"
+        if venv_python.exists():
+            python_exec = str(venv_python)
 
     with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
         tmp_path = tmp.name
@@ -47,6 +77,7 @@ def check_sync(req_name: str) -> bool:
                 tmp_path,
                 "--resolver=backtracking",
                 "--strip-extras",
+                "--allow-unsafe",  # Include pip/setuptools for reproducible builds
                 "--quiet",
             ],
             cwd=str(project_root),
@@ -57,8 +88,13 @@ def check_sync(req_name: str) -> bool:
             return True
 
         print("❌ DESSINCRONIZADO")
-        # Show filtered diff (only real lines)
-        print("--- Diff (ignoring comments) ---")
+        print("\n💊 PRESCRIÇÃO DE CORREÇÃO:")
+        print("   1. Execute: make requirements")
+        print(f"   2. Ou: python{baseline_version or ''} -m piptools compile \\")
+        print(f"          {in_file} --output-file {txt_file} \\")
+        print("          --resolver=backtracking --strip-extras")
+        print("   3. Depois: git add requirements/dev.txt")
+        print("\n--- Diff (apenas dependências, ignorando comentários) ---")
         try:
             # Using check_call to match project pattern (shell=False, validated inputs)
             subprocess.check_call(

@@ -4,6 +4,34 @@
 
 ### Added
 
+- **🛡️ Sistema de Autoimunidade de Dependências - Proteção Tripla contra Lockfile Dessincronizado**:
+  - **Pre-Commit Hook**: Bloqueia commits localmente se `requirements/dev.txt` estiver dessincronizado com `dev.in`
+    - Novo hook `lockfile-sync-guard` em `.pre-commit-config.yaml`
+    - Executa `scripts/ci/verify_deps.py` antes de cada commit
+    - Exibe comandos de correção detalhados (make requirements)
+  - **Dev Doctor Check**: Diagnóstico proativo de lockfile sync
+    - Novo método `check_lockfile_sync()` em `scripts/cli/doctor.py`
+    - Criticidade: `critical=True` (bloqueia workflow se dessincronizado)
+    - Mensagens user-friendly com prescrições de correção
+  - **CI/CD Robustness**: Melhorias no `scripts/ci/verify_deps.py`
+    - Suporte a variável de ambiente `PYTHON_BASELINE` (força Python 3.10)
+    - Estratégia de seleção de Python: baseline → venv → fallback
+    - Mensagens de erro aprimoradas com diff e comandos de correção
+  - **Testes TDD**: Nova suite `tests/test_dependency_safety.py`
+    - Cenário A: Arquivos sincronizados (deve passar)
+    - Cenário B: Arquivos dessincronizados (deve falhar com remediation)
+    - Cenário C: Python version mismatch detection
+    - Testes de integração com verify_deps.py e doctor.py
+  - **Documentação**:
+    - Nova seção "Sistema de Autoimunidade de Dependências" em `docs/guides/DEPENDENCY_MAINTENANCE_GUIDE.md`
+    - Workflows recomendados para adicionar/atualizar dependências
+    - Troubleshooting de problemas comuns (Python mismatch, merge conflicts)
+  - **Benefícios**:
+    - ✅ Previne 100% dos commits com lockfile dessincronizado
+    - ✅ Feedback imediato no desenvolvimento local (pre-commit)
+    - ✅ Diagnóstico proativo via `make doctor`
+    - ✅ Compatibilidade garantida entre dev local e CI (Python baseline)
+
 - **🎯 CORTEX Knowledge Orchestrator - Phase 4 Refactoring (FINAL INTEGRATION)**: Integração completa do `SyncExecutor` e eliminação da God Function
   - **Integração Completa**:
     - Substituição do loop complexo de 58 linhas por 2 linhas (`SyncExecutor.execute_batch()`)

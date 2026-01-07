@@ -95,6 +95,14 @@ repos:
         files: ^scripts/
         description: "Monitora scripts/ e avisa sobre testes faltantes (não bloqueia commits)"
 
+      - id: lockfile-sync-guard
+        name: "🔒 Lockfile Sync Guard - Bloqueia commits com requirements dessincronizados"
+        entry: python scripts/ci/verify_deps.py
+        language: system
+        pass_filenames: false
+        files: ^requirements/.*\.(in|txt)$
+        description: "Garante que requirements.txt está sincronizado com .in antes de commits (AUTOIMUNIDADE)"
+
   - repo: local
     hooks:
       - id: governance-policy-strict
