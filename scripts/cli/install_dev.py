@@ -239,7 +239,10 @@ def install_dev_environment(workspace_root: Path) -> int:  # noqa: C901
                     result2 = subprocess.run(  # nosec # noqa: S603
                         pip_compile_cmd
                         + [
-                            "--strip-extras",  # Remove extras (e.g., coverage[toml])
+                            # Remove extras (e.g., coverage[toml])
+                            "--strip-extras",
+                            # Include pip/setuptools for reproducibility
+                            "--allow-unsafe",
                             "--output-file",
                             str(tmp_output),
                             str(workspace_root / "requirements" / "dev.in"),
