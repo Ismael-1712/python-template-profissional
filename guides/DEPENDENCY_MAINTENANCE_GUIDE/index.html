@@ -837,6 +837,206 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sistema-de-autoimunidade-de-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🛡️ Sistema de Autoimunidade de Dependências
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🛡️ Sistema de Autoimunidade de Dependências">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camadas-de-protecao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camadas de Proteção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Camadas de Proteção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pre-commit-hook-prevencao-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 🔒 Pre-Commit Hook (Prevenção Local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dev-doctor-diagnostico-proativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 🩺 Dev Doctor (Diagnóstico Proativo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cicd-ultima-linha-de-defesa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 🚦 CI/CD (Última Linha de Defesa)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Recomendado
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Recomendado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adicionando-nova-dependencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionando Nova Dependência
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atualizando-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atualizando Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#erro-dessincronizado-no-ci-mas-local-esta-ok" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Erro: "DESSINCRONIZADO" no CI mas local está OK
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit-hook-sempre-falha-mesmo-apos-make-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Pre-commit hook sempre falha mesmo após make requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflito-de-merge-em-requirementsdevtxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Conflito de merge em requirements/dev.txt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-baseline-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Baseline Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testes-de-validacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testes de Validação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#referencias-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referências Técnicas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#checklist-de-code-review" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1227,6 +1427,208 @@
 <a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    <span class="p">}</span>
 </code></pre></div>
 <hr />
+<h2 id="sistema-de-autoimunidade-de-dependencias">🛡️ Sistema de Autoimunidade de Dependências</h2>
+<p><strong>Adicionado:</strong> 2026-01-06
+<strong>Versão:</strong> 2.0.0</p>
+<h3 id="visao-geral">Visão Geral</h3>
+<p>O sistema de autoimunidade protege contra commits com arquivos de dependências (<code>requirements.txt</code>) dessincronizados com seus arquivos fonte (<code>.in</code>). Esse problema pode causar:</p>
+<ul>
+<li>❌ Falhas no CI/CD devido a versões incompatíveis</li>
+<li>❌ Bugs silenciosos causados por dependências erradas</li>
+<li>❌ Conflitos de merge em <code>requirements.txt</code></li>
+</ul>
+<h3 id="camadas-de-protecao">Camadas de Proteção</h3>
+<h4 id="1-pre-commit-hook-prevencao-local">1. 🔒 Pre-Commit Hook (Prevenção Local)</h4>
+<p><strong>Localização:</strong> <code>.pre-commit-config.yaml</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lockfile-sync-guard</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;🔒</span><span class="nv"> </span><span class="s">Lockfile</span><span class="nv"> </span><span class="s">Sync</span><span class="nv"> </span><span class="s">Guard&quot;</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="nt">entry</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python scripts/ci/verify_deps.py</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">^requirements/.*\.(in|txt)$</span>
+</code></pre></div>
+<p><strong>Comportamento:</strong></p>
+<ul>
+<li>Bloqueia commits se <code>requirements/dev.txt</code> não estiver sincronizado com <code>requirements/dev.in</code></li>
+<li>Executa antes do commit (proteção imediata)</li>
+<li>Exibe mensagem de correção com comandos exatos</li>
+</ul>
+<p><strong>Como corrigir se bloqueado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Opção 1: Usar Makefile (recomendado)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Opção 2: Comando direto</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>python3.10<span class="w"> </span>-m<span class="w"> </span>piptools<span class="w"> </span>compile<span class="w"> </span>requirements/dev.in<span class="w"> </span>-o<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="c1"># Depois do recompile:</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: ressincronizar lockfile&quot;</span>
+</code></pre></div>
+<h4 id="2-dev-doctor-diagnostico-proativo">2. 🩺 Dev Doctor (Diagnóstico Proativo)</h4>
+<p><strong>Comando:</strong> <code>make doctor</code> ou <code>python -m scripts.cli.doctor</code></p>
+<p><strong>Nova verificação crítica:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">check_lockfile_sync</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">DiagnosticResult</span><span class="p">:</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Verifica sincronização entre .in e .txt&quot;&quot;&quot;</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>    <span class="c1"># critical=True - Bloqueia se dessincronizado</span>
+</code></pre></div>
+<p><strong>Output esperado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>🔍 Dev Doctor - Diagnóstico de Ambiente
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>✓ Platform Strategy
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>  🖥️  Platform: LinuxStrategy | Git: git | ✓ fsync
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>✓ Python Version
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>  Python 3.10.15 (Sincronizado)
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>✓ Lockfile Sync
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>  requirements/dev.txt sincronizado com dev.in ✓
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>────────────────────────────────────────────────────
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>✓ Ambiente SAUDÁVEL - Pronto para desenvolvimento! 🎉
+</code></pre></div>
+<p><strong>Se dessincronizado:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>✗ Lockfile Sync
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>  ❌ requirements/dev.txt está DESSINCRONIZADO com dev.in!
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>  🔒 RISCO: Você pode estar trabalhando com dependências incorretas.
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>  💊 PRESCRIÇÃO:
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>     1. Execute: make requirements
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>     2. Ou: pip-compile requirements/dev.in -o requirements/dev.txt
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>     3. Depois: git add requirements/dev.txt
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>────────────────────────────────────────────────────
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>✗ Ambiente DOENTE - 1 problema(s) crítico(s) detectado(s)! 🚨
+</code></pre></div>
+<h4 id="3-cicd-ultima-linha-de-defesa">3. 🚦 CI/CD (Última Linha de Defesa)</h4>
+<p><strong>Makefile target:</strong> <code>make validate</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nf">validate</span><span class="o">:</span><span class="w"> </span><span class="n">format</span> <span class="n">deps</span>-<span class="n">check</span> <span class="n">lint</span> <span class="n">type</span>-<span class="n">check</span> ... <span class="n">test</span>
+</code></pre></div>
+<p><strong>Script:</strong> <code>scripts/ci/verify_deps.py</code></p>
+<p><strong>Melhorias (v2.0):</strong></p>
+<ul>
+<li>✅ Suporte a <code>PYTHON_BASELINE</code> env var (força uso de Python 3.10)</li>
+<li>✅ Comparação ignora comentários e metadados do pip-compile</li>
+<li>✅ Mensagens de erro detalhadas com comandos de correção</li>
+</ul>
+<h3 id="workflow-recomendado">Workflow Recomendado</h3>
+<h4 id="adicionando-nova-dependencia">Adicionando Nova Dependência</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># 1. Editar arquivo .in</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;requests&gt;=2.31.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements/dev.in
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="c1"># 2. Recompilar lockfile (usa Python 3.10 baseline)</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="c1"># 3. Verificar mudanças</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>git<span class="w"> </span>diff<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="c1"># 4. Commit (pre-commit hook irá validar)</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.in<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: adicionar requests para API calls&quot;</span>
+<a id="__codelineno-25-13" name="__codelineno-25-13" href="#__codelineno-25-13"></a>
+<a id="__codelineno-25-14" name="__codelineno-25-14" href="#__codelineno-25-14"></a><span class="c1"># O pre-commit hook automaticamente valida:</span>
+<a id="__codelineno-25-15" name="__codelineno-25-15" href="#__codelineno-25-15"></a><span class="c1"># 🔒 Lockfile Sync Guard ... Passed</span>
+</code></pre></div>
+<h4 id="atualizando-dependencias">Atualizando Dependências</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Atualizar versão no .in</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/pytest&gt;=7.0.0/pytest&gt;=8.0.0/&#39;</span><span class="w"> </span>requirements/dev.in
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="c1"># Recompilar</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="c1"># Revisar mudanças (pode atualizar dependências transitivas)</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a>git<span class="w"> </span>diff<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="c1"># Commit</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: atualizar pytest para v8&quot;</span>
+</code></pre></div>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<h4 id="erro-dessincronizado-no-ci-mas-local-esta-ok">❌ Erro: "DESSINCRONIZADO" no CI mas local está OK</h4>
+<p><strong>Causa:</strong> Diferença de versão Python entre local e CI</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="c1"># Verificar Python local</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>python<span class="w"> </span>--version
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="c1"># Output: Python 3.11.5 (problema!)</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="c1"># CI usa Python 3.10 (baseline)</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="c1"># Forçar recompile com baseline:</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="c1"># Ou especificar explicitamente:</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>python3.10<span class="w"> </span>-m<span class="w"> </span>piptools<span class="w"> </span>compile<span class="w"> </span>requirements/dev.in<span class="w"> </span>-o<span class="w"> </span>requirements/dev.txt
+</code></pre></div>
+<h4 id="pre-commit-hook-sempre-falha-mesmo-apos-make-requirements">❌ Pre-commit hook sempre falha mesmo após <code>make requirements</code></h4>
+<p><strong>Causa:</strong> Hook rodando com Python diferente do baseline</p>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Verificar qual Python o hook está usando</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>pre-commit<span class="w"> </span>run<span class="w"> </span>lockfile-sync-guard<span class="w"> </span>--verbose
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="c1"># Reinstalar pre-commit no venv correto</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>pre-commit<span class="w"> </span>clean
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>pre-commit<span class="w"> </span>install
+</code></pre></div>
+<h4 id="conflito-de-merge-em-requirementsdevtxt">❌ Conflito de merge em <code>requirements/dev.txt</code></h4>
+<p><strong>Solução:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="c1"># NUNCA resolver manualmente!</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="c1"># Aceitar versão de uma branch:</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>git<span class="w"> </span>checkout<span class="w"> </span>--theirs<span class="w"> </span>requirements/dev.txt<span class="w">  </span><span class="c1"># ou --ours</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="c1"># Recompilar do zero:</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>
+<a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="c1"># Validar:</span>
+<a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a>python<span class="w"> </span>scripts/ci/verify_deps.py
+<a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a>
+<a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="c1"># Commit resolução:</span>
+<a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: resolver conflito de lockfile via recompile&quot;</span>
+</code></pre></div>
+<h3 id="python-baseline-strategy">Python Baseline Strategy</h3>
+<p>O projeto usa <strong>Python 3.10</strong> como baseline para garantir compatibilidade CI/CD.</p>
+<p><strong>Variável de ambiente:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHON_BASELINE</span><span class="o">=</span><span class="s2">&quot;3.10&quot;</span>
+</code></pre></div>
+<p><strong>Comportamento do <code>verify_deps.py</code>:</strong></p>
+<ol>
+<li>Se <code>PYTHON_BASELINE</code> está definido:</li>
+<li>Tenta usar <code>python3.10</code> (ou versão especificada)</li>
+<li>Exibe warning se não encontrado</li>
+<li>
+<p>Fallback para Python do sistema</p>
+</li>
+<li>
+<p>Se não definido:</p>
+</li>
+<li>Usa <code>.venv/bin/python</code> (desenvolvimento local)</li>
+<li>Fallback para <code>sys.executable</code></li>
+</ol>
+<p><strong>Makefile integration:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nv">PYTHON_BASELINE</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="m">3</span>.10
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="nf">requirements</span><span class="o">:</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w"> </span>@python<span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>piptools<span class="w"> </span>compile<span class="w"> </span>...
+</code></pre></div>
+<h3 id="testes-de-validacao">Testes de Validação</h3>
+<p><strong>Arquivo:</strong> <code>tests/test_dependency_safety.py</code></p>
+<p><strong>Cenários cobertos:</strong></p>
+<ul>
+<li>✅ Cenário A: Arquivos sincronizados (deve passar)</li>
+<li>✅ Cenário B: Arquivos dessincronizados (deve falhar)</li>
+<li>✅ Cenário C: Python version mismatch (deve alertar)</li>
+<li>✅ Integração com <code>verify_deps.py</code></li>
+<li>✅ Integração com Dev Doctor</li>
+<li>✅ Simulação de pre-commit hook</li>
+</ul>
+<p><strong>Executar testes:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>pytest<span class="w"> </span>tests/test_dependency_safety.py<span class="w"> </span>-v
+</code></pre></div>
+<h3 id="referencias-tecnicas">Referências Técnicas</h3>
+<ul>
+<li><strong>Script de verificação:</strong> <a href="../../scripts/ci/verify_deps.py"><code>scripts/ci/verify_deps.py</code></a></li>
+<li><strong>Doctor check:</strong> <a href="../../scripts/cli/doctor.py"><code>scripts/cli/doctor.py:check_lockfile_sync()</code></a></li>
+<li><strong>Pre-commit config:</strong> <a href="../../.pre-commit-config.yaml"><code>.pre-commit-config.yaml:lockfile-sync-guard</code></a></li>
+<li><strong>Testes:</strong> <a href="../../tests/test_dependency_safety.py"><code>tests/test_dependency_safety.py</code></a></li>
+</ul>
+<hr />
 <h2 id="checklist-de-code-review">🎓 Checklist de Code Review</h2>
 <h3 id="para-reviewers">Para Reviewers</h3>
 <p>Ao revisar PRs que tocam <code>scripts/</code>:</p>
@@ -1240,12 +1642,12 @@
 </ul>
 <h3 id="para-desenvolvedores">Para Desenvolvedores</h3>
 <p>Antes de fazer commit:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Executar verificação rápida</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>./scripts/audit_dependencies.sh
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Executar testes de contrato</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>pytest<span class="w"> </span>tests/test_filesystem_contract.py
-<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>pytest<span class="w"> </span>tests/test_logger_contract.py
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="c1"># Executar verificação rápida</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>./scripts/audit_dependencies.sh
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="c1"># Executar testes de contrato</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>pytest<span class="w"> </span>tests/test_filesystem_contract.py
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>pytest<span class="w"> </span>tests/test_logger_contract.py
 </code></pre></div>
 <hr />
 <h2 id="referencias">📚 Referências</h2>
