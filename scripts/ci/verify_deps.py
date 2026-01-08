@@ -92,7 +92,7 @@ def check_sync(req_name: str) -> bool:
         print("   1. Execute: make requirements")
         print(f"   2. Ou: python{baseline_version or ''} -m piptools compile \\")
         print(f"          {in_file} --output-file {txt_file} \\")
-        print("          --resolver=backtracking --strip-extras")
+        print("          --resolver=backtracking --strip-extras --allow-unsafe")
         print("   3. Depois: git add requirements/dev.txt")
         print("\n--- Diff (apenas dependências, ignorando comentários) ---")
         try:
