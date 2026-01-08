@@ -306,7 +306,7 @@ class DevDoctor:
                     "  💊 PRESCRIÇÃO:\n"
                     "     1. Execute: make requirements\n"
                     "     2. Ou: pip-compile requirements/dev.in "
-                    "-o requirements/dev.txt\n"
+                    "-o requirements/dev.txt --allow-unsafe\n"
                     "     3. Depois: git add requirements/dev.txt"
                 ),
                 critical=True,
