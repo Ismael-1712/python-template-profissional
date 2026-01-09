@@ -76,7 +76,7 @@ def check_sync(req_name: str) -> bool:
                 "--output-file",
                 tmp_path,
                 "--resolver=backtracking",
-                "--strip-extras --allow-unsafe",
+                "--strip-extras",
                 "--allow-unsafe",  # Include pip/setuptools for reproducible builds
                 "--quiet",
             ],
