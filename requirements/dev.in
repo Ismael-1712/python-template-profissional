@@ -15,7 +15,7 @@ tomli; python_version < '3.11'
 # Type Checking
 mypy==1.19.1
 types-PyYAML==6.0.12.20250915
-types-requests==2.32.4.20250913
+types-requests==2.32.4.20260107
 
 # Code Complexity Analysis
 radon
