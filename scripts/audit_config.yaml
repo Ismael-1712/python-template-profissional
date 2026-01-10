@@ -26,6 +26,7 @@ exclude_paths:
   - "tests/test_verify_deps.py"  # Usa subprocess.run para testes E2E - inputs validados e shell=False
   - "scripts/utils/safe_pip.py"  # Usa subprocess.run de forma controlada e segura (shell=False)
   - "scripts/cli/install_dev.py"  # Usa subprocess.run de forma segura (shell=False + validação)
+  - "scripts/ci/verify_deps.py"  # Usa subprocess.run de forma segura (shell=False + validação) para pip-tools
 
 # CI simulation timeout in seconds
 ci_timeout: 300

@@ -25,6 +25,44 @@ import tempfile
 from pathlib import Path
 
 
+def _ensure_piptools_installed(python_exec: str, project_root: Path) -> bool:
+    """Ensure pip-tools is installed in the target Python interpreter.
+
+    This implements the auto-immune mechanism: before attempting to use
+    piptools, we verify it's available. If not, we install it on-the-fly.
+
+    Args:
+        python_exec: Path to Python interpreter to check/install pip-tools
+        project_root: Project root directory for working directory context
+
+    Returns:
+        bool: True if pip-tools is available (or was successfully installed)
+    """
+    # Check if piptools is already available
+    check_result = subprocess.run(  # nosec # noqa: S603
+        [python_exec, "-m", "pip", "show", "pip-tools"],
+        cwd=str(project_root),
+        capture_output=True,
+        check=False,
+    )
+
+    if check_result.returncode == 0:
+        return True  # Already installed
+
+    # Auto-immune response: install pip-tools
+    print("\n  💉 AUTOIMUNIDADE: Instalando pip-tools...", end="", flush=True)
+    try:
+        subprocess.check_call(  # nosec # noqa: S603
+            [python_exec, "-m", "pip", "install", "pip-tools", "--quiet"],
+            cwd=str(project_root),
+        )
+        print(" ✅")
+        return True
+    except subprocess.CalledProcessError:
+        print(" ❌")
+        return False
+
+
 def check_sync(req_name: str) -> bool:
     """Verify if a requirements file is synchronized with its input file.
 
@@ -66,6 +104,11 @@ def check_sync(req_name: str) -> bool:
         venv_python = project_root / ".venv" / "bin" / "python"
         if venv_python.exists():
             python_exec = str(venv_python)
+
+    # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
+    if not _ensure_piptools_installed(python_exec, project_root):
+        print("\n❌ ERRO: Não foi possível instalar pip-tools")
+        return False
 
     with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
         tmp_path = tmp.name
@@ -186,15 +229,12 @@ def fix_sync(req_name: str) -> bool:
 
     print(f"  📦 Executor: {python_exec}")
 
-    try:
-        # Ensure pip-tools is available in the selected Python
-        print("  🔍 Verificando pip-tools...", end=" ", flush=True)
-        subprocess.check_call(
-            [python_exec, "-m", "pip", "install", "pip-tools", "--quiet"],
-            cwd=str(project_root),
-        )
-        print("✅")
+    # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
+    if not _ensure_piptools_installed(python_exec, project_root):
+        print("\n❌ ERRO: Não foi possível instalar pip-tools")
+        return False
 
+    try:
         # Execute pip-compile with CI-compatible flags
         print(f"  ⚙️  Recompilando {in_file}...", end=" ", flush=True)
         subprocess.check_call(
