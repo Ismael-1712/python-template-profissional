@@ -12,8 +12,8 @@ services:
       - .:/app
     # Mapeia a porta 8000 do seu PC para a porta 8000 do contêiner
     # (Exemplo para uma API web)
-    ports:
-      - "8000:8000"
+    # ports:
+      # - "8000:8000"
     # Carrega as variáveis de ambiente do arquivo .env
     env_file:
       - .env

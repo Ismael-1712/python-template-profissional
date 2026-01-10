@@ -1,34 +1,13 @@
-"""Módulo principal da aplicação FastAPI."""
+"""Skeleton principal do Template v2.1.
 
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
-
-from src.app.core.config import settings
-
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-)
+Este arquivo deve ser estendido nas branches de derivação (api, cli, lib).
+"""
 
 
-@app.get("/", include_in_schema=False)
-def root() -> RedirectResponse:
-    """Redireciona a raiz para a documentação interativa."""
-    return RedirectResponse(url="/docs")
+def main() -> None:
+    """Executa o ponto de entrada do chassi neutro."""
+    print("Chassi SRE v2.1 carregado com sucesso. Aguardando implementação de domínio.")
 
 
-@app.get("/health")
-def health_check() -> dict[str, str]:
-    """Endpoint de health check explícito."""
-    return {"status": "ok"}
-
-
-@app.get(f"{settings.API_V1_STR}/meta")
-def get_meta() -> dict[str, str]:
-    """Retorna metadados do projeto."""
-    return {
-        "project_name": settings.PROJECT_NAME,
-        "version": settings.VERSION,
-        "api_v1_str": settings.API_V1_STR,
-    }
+if __name__ == "__main__":
+    main()
