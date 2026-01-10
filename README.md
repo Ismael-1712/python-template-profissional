@@ -137,8 +137,13 @@ make commit-amend
 ```bash
 # Adicionar dependência de desenvolvimento
 echo "black==24.1.0" >> requirements/dev.in
-pip-compile --output-file requirements/dev.txt requirements/dev.in
-make install-dev
+make requirements                    # 🆕 Recompila COM VALIDAÇÃO (modo autocura)
+
+# 🆕 NOVO: Sistema de Autocura de Dependências
+# O sistema agora detecta e corrige automaticamente lockfiles dessincronizados:
+# 1. Pre-commit hook bloqueia commits com dev.txt desatualizado
+# 2. make requirements usa verify_deps.py --fix (fonte única)
+# 3. CI valida usando o mesmo script (DRY principle)
 
 # Sincronizar ambiente com lockfile (recomendado após git pull)
 make sync                            # Usa .venv/bin/pip-sync para garantir sincronia exata
@@ -147,10 +152,16 @@ make sync                            # Usa .venv/bin/pip-sync para garantir sinc
 make check-venv                      # Diagnóstico: Python path, versões, pip-tools
 
 # Atualizar todas as dependências
-pip-compile --upgrade --output-file requirements/dev.txt requirements/dev.in
+echo "package>=new.version" >> requirements/dev.in
+make requirements                    # Recompila com Python 3.10 baseline (CI-compatible)
 
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
+
+# 🛡️ Protocolo de Imunidade Tripla:
+# - Pre-commit: Bloqueia commits se dev.txt dessincronizado
+# - make validate: Inclui deps-check no quality gate
+# - CI: Valida lockfile antes de rodar testes
 
 # 📖 Guia completo: docs/guides/DEPENDENCY_MANAGEMENT.md
 ```

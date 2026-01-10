@@ -108,14 +108,13 @@ setup: install-dev
 
 ## requirements: Recompila requirements/dev.txt usando a versão baseline (CI-compatible)
 requirements:
-	@echo "🔄 Compilando requirements com Python $(PYTHON_BASELINE) (CI-compatible)..."
+	@echo "🔄 Compilando requirements com Python $(PYTHON_BASELINE) (modo autocura)..."
 	@if ! command -v python$(PYTHON_BASELINE) &> /dev/null; then \
 		echo "❌ Erro: python$(PYTHON_BASELINE) não encontrado. Use 'pyenv install $(PYTHON_BASELINE)'"; \
 		exit 1; \
 	fi
-	@python$(PYTHON_BASELINE) -m pip install pip-tools --quiet
-	@python$(PYTHON_BASELINE) -m piptools compile requirements/dev.in --output-file requirements/dev.txt --resolver=backtracking --strip-extras --allow-unsafe
-	@echo "✅ Lockfile gerado com Python $(PYTHON_BASELINE) (compatível com CI)"
+	@PYTHON_BASELINE=$(PYTHON_BASELINE) $(PYTHON) $(SCRIPTS_DIR)/ci/verify_deps.py --fix
+	@echo "✅ Lockfile validado e sincronizado (fonte única da verdade: verify_deps.py)"
 
 ## validate-python: Valida se a versão do Python é compatível com a baseline do CI
 validate-python:

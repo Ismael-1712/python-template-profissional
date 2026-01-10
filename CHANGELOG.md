@@ -4,6 +4,37 @@
 
 ### Added
 
+- **🛡️ Protocolo de Imunidade de Dependências - Sistema de Autocura com Triple Defense**:
+  - **Modo Auto-Fix em `verify_deps.py`**: Nova flag `--fix` para autocorreção de lockfiles dessincronizados
+    - Detecta Python baseline via `PYTHON_BASELINE` env var
+    - Recompila `requirements/dev.txt` automaticamente com pip-compile
+    - Flags CI-compatible: `--resolver=backtracking --strip-extras --allow-unsafe`
+    - Mensagens claras diferenciando "Detecção" vs "Autocura"
+    - Exit codes: 0 (synced/fixed), 1 (desync sem --fix)
+  - **Makefile Idempotente**: Target `make requirements` refatorado para usar `verify_deps.py --fix`
+    - Elimina duplicação de lógica (DRY principle)
+    - Fonte única da verdade para recompilação de lockfiles
+    - Mensagens user-friendly com status de operação
+  - **Pre-Commit Hook**: Bloqueio preventivo de commits com lockfiles sujos
+    - Hook `lockfile-sync-guard` em `.pre-commit-config.yaml`
+    - Executa `verify_deps.py` (sem --fix) antes de cada commit
+    - Triggers: modificações em `requirements/*.{in,txt}`
+  - **CI/CD Simplificado**: Substituição de lógica duplicada em `.github/workflows/ci.yml`
+    - Remove validação inline duplicada (17 linhas → 4 linhas)
+    - Usa `scripts/ci/verify_deps.py` como fonte única (DRY)
+    - Define `PYTHON_BASELINE=3.10` para garantir consistência
+  - **Suite de Testes TDD**: `tests/test_verify_deps.py` com cobertura completa
+    - Detecção de lockfiles sincronizados/dessincronizados
+    - Validação de modo --fix com Python baseline
+    - Testes de exit codes e mensagens de erro
+    - Enforcement de `PYTHON_BASELINE` environment variable
+  - **Benefícios Arquiteturais**:
+    - ✅ **DRY Compliance**: Lógica centralizada em um único script
+    - ✅ **Self-Healing**: Desenvolvedor pode corrigir localmente com `--fix`
+    - ✅ **Triple Defense**: Pre-commit + CI + Make target
+    - ✅ **Zero Drift**: Python baseline garante compatibilidade dev ↔ CI
+    - ✅ **Developer Experience**: Mensagens claras com passos de remediação
+
 - **🛡️ Sistema de Autoimunidade de Dependências - Proteção Tripla contra Lockfile Dessincronizado**:
   - **Pre-Commit Hook**: Bloqueia commits localmente se `requirements/dev.txt` estiver dessincronizado com `dev.in`
     - Novo hook `lockfile-sync-guard` em `.pre-commit-config.yaml`
