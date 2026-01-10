@@ -1,0 +1,1550 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Ismael Tavares Dos Reis">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Protocolo de Imunidade de Dependências - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#protocolo-de-imunidade-de-dependencias-sistema-de-autocura-com-tripla-defesa" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Protocolo de Imunidade de Dependências
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-executivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 Resumo Executivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Resumo Executivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metricas-de-impacto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Métricas de Impacto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problema-resolvido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 Problema Resolvido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Problema Resolvido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#situacao-anterior-estado-problematico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Situação Anterior (❌ Estado Problemático)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solucao-implementada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✨ Solução Implementada
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="✨ Solução Implementada">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arquitetura-da-tripla-defesa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🏗️ Arquitetura da Tripla Defesa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mudancas-por-arquivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📂 Mudanças por Arquivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📂 Mudanças por Arquivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-scriptsciverify_depspy-auto-fix-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. scripts/ci/verify_deps.py (🆕 Auto-Fix Mode)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-makefile-idempotencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Makefile (🔄 Idempotência)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-githubworkflowsciyml-simplificacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. .github/workflows/ci.yml (📉 Simplificação)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-teststest_verify_depspy-tdd-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. tests/test_verify_deps.py (🧪 TDD Completo)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-readmemd-documentacao-atualizada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. README.md (📖 Documentação Atualizada)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-changelogmd-historico-de-mudancas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. CHANGELOG.md (📝 Histórico de Mudanças)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-funciona-detalhes-tecnicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔬 Como Funciona (Detalhes Técnicos)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔬 Como Funciona (Detalhes Técnicos)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-deteccao-de-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Detecção de Drift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-autocura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Autocura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-python-baseline-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Python Baseline Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacao-e-testes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 Validação e Testes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Validação e Testes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testes-executados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testes Executados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cenarios-de-teste-cobertos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cenários de Teste Cobertos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beneficios-mensuraveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📈 Benefícios Mensuráveis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Benefícios Mensuráveis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antes-vs-depois" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antes vs. Depois
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principios-de-engenharia-atendidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Princípios de Engenharia Atendidos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-usar-guia-do-desenvolvedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Como Usar (Guia do Desenvolvedor)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Como Usar (Guia do Desenvolvedor)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-normal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow Normal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#correcao-de-drift-se-ocorrer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correção de Drift (Se Ocorrer)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compatibilidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔄 Compatibilidade
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Compatibilidade">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Breaking Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testado-em" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testado Em
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-e-contexto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 Referências e Contexto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Referências e Contexto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#documentos-relacionados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentos Relacionados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issues-relacionadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issues Relacionadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="protocolo-de-imunidade-de-dependencias-sistema-de-autocura-com-tripla-defesa">🛡️ Protocolo de Imunidade de Dependências - Sistema de Autocura com Tripla Defesa</h1>
+<h2 id="resumo-executivo">🎯 Resumo Executivo</h2>
+<p>Este PR implementa um <strong>sistema autoimune e proativo</strong> para eliminar o "Dependency Drift" entre ambientes de desenvolvimento local e CI, seguindo os princípios de <strong>DRY (Don't Repeat Yourself)</strong> e <strong>Self-Healing Architecture</strong>.</p>
+<h3 id="metricas-de-impacto">📊 Métricas de Impacto</h3>
+<ul>
+<li><strong>Arquivos Modificados</strong>: 6 arquivos core do sistema</li>
+<li><strong>Linhas Adicionadas</strong>: ~490 linhas (incluindo testes TDD completos)</li>
+<li><strong>Cobertura de Testes</strong>: 9 cenários de teste (detecção, autocura, baseline)</li>
+<li><strong>Redução de Duplicação</strong>: 17 linhas de lógica inline no CI → 4 linhas (chamada única)</li>
+<li><strong>Tempo de Remediação</strong>: Manual (5+ minutos) → Automático (&lt; 10 segundos)</li>
+</ul>
+<hr />
+<h2 id="problema-resolvido">🔍 Problema Resolvido</h2>
+<h3 id="situacao-anterior-estado-problematico">Situação Anterior (❌ Estado Problemático)</h3>
+<p><strong>Fluxo de Falha Típico:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>1. Desenvolvedor Local (Python 3.11/3.12):
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>   - Executa `make install-dev`
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   - Script recompila dev.txt com Python local (versões diferentes do CI)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>   - Commita dev.txt dessincronizado sem perceber
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>2. Git Hooks:
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   - ❌ Nenhuma validação preventiva
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>3. `make validate` Local:
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>   - ✅ Detecta problema, mas pode ser ignorado
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>4. CI Falha:
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>   - Job `quality` detecta drift
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>   - PR bloqueado
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>   - Desenvolvedor precisa corrigir manualmente e repush
+</code></pre></div>
+<p><strong>Problemas Críticos:</strong></p>
+<ul>
+<li>✅ <strong>Duplicação de Lógica</strong>: CI tinha validação inline separada do script local</li>
+<li>✅ <strong>Falta de Prevenção</strong>: Git hooks não validavam lockfiles</li>
+<li>✅ <strong>Experiência Ruim</strong>: Desenvolvedor só descobre erro após push</li>
+<li>✅ <strong>Baseline Ignorado</strong>: <code>install_dev.py</code> não respeitava Python 3.10</li>
+</ul>
+<hr />
+<h2 id="solucao-implementada">✨ Solução Implementada</h2>
+<h3 id="arquitetura-da-tripla-defesa">🏗️ Arquitetura da Tripla Defesa</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│          PROTOCOLO DE IMUNIDADE DE DEPENDÊNCIAS              │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│                                                              │
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  🔒 CAMADA 1: PRE-COMMIT HOOK (Prevenção)                   │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  ├─ Trigger: Modificações em requirements/*.{in,txt}       │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│  ├─ Ação: Executa verify_deps.py (sem --fix)               │
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│  └─ Resultado: BLOQUEIA commit se dessinc ronizado         │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│                                                              │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│  🛡️ CAMADA 2: MAKE VALIDATE (Quality Gate)                  │
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│  ├─ Parte do fluxo de validação unificado                  │
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│  ├─ Ação: deps-check usando verify_deps.py                 │
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  └─ Resultado: Falha se dev.txt não sincronizado           │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│                                                              │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  ☁️ CAMADA 3: CI VALIDATION (Cloud Enforcement)             │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  ├─ Usa MESMO SCRIPT que local (DRY principle)             │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│  ├─ Define PYTHON_BASELINE=3.10 explicitamente             │
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│  └─ Resultado: Validação consistente com ambiente local    │
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│                                                              │
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│  🔧 CAMADA 4: AUTO-FIX (Self-Healing)                       │
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│  ├─ make requirements: Usa verify_deps.py --fix            │
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│  ├─ Python Baseline Enforcement: Sempre usa 3.10           │
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│  └─ Resultado: Desenvolvedor corrige com 1 comando         │
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="mudancas-por-arquivo">📂 Mudanças por Arquivo</h3>
+<h4 id="1-scriptsciverify_depspy-auto-fix-mode">1. <code>scripts/ci/verify_deps.py</code> (🆕 Auto-Fix Mode)</h4>
+<p><strong>Adições:</strong></p>
+<ul>
+<li>✅ Modo <code>--fix</code> com argparse</li>
+<li>✅ Função <code>fix_sync()</code> para autocorreção</li>
+<li>✅ Python baseline detection via <code>PYTHON_BASELINE</code> env var</li>
+<li>✅ Mensagens de remediação claras (prescrição + próximos passos)</li>
+<li>✅ Exit codes documentados (0 = sucesso, 1 = falha)</li>
+</ul>
+<p><strong>Exemplo de Uso:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Detecção apenas</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>scripts/ci/verify_deps.py
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Exit 1 se dessincronizado</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Autocura</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nv">PYTHON_BASELINE</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Recompila dev.txt e exit 0</span>
+</code></pre></div>
+<h4 id="2-makefile-idempotencia">2. <code>Makefile</code> (🔄 Idempotência)</h4>
+<p><strong>Antes:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nf">requirements</span><span class="o">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w"> </span>@python<span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pip-tools<span class="w"> </span>--quiet
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w"> </span>@python<span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>piptools<span class="w"> </span>compile<span class="w"> </span>...
+</code></pre></div>
+<p><strong>Depois:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nf">requirements</span><span class="o">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;🔄 Compilando requirements com Python </span><span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="s2"> (modo autocura)...&quot;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w"> </span>@PYTHON_BASELINE<span class="o">=</span><span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="w"> </span><span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span><span class="k">$(</span>SCRIPTS_DIR<span class="k">)</span>/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Lockfile validado e sincronizado (fonte única da verdade)&quot;</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ Fonte única da verdade (DRY)</li>
+<li>✅ Validação + correção em um único comando</li>
+<li>✅ Mensagens user-friendly</li>
+</ul>
+<h4 id="3-githubworkflowsciyml-simplificacao">3. <code>.github/workflows/ci.yml</code> (📉 Simplificação)</h4>
+<p><strong>Antes (17 linhas de lógica duplicada):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Check</span><span class="nv"> </span><span class="s">Lockfile</span><span class="nv"> </span><span class="s">Consistency&quot;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="no">python -m pip install pip-tools</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="no">pip-compile requirements/dev.in --output-file requirements/dev.txt.check ...</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="no">if ! diff -u -I &quot;^#    pip-compile&quot; requirements/dev.txt requirements/dev.txt.check; then</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="no">echo &quot;❌ ERROR: requirements/dev.txt is out of sync&quot;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="no">exit 1</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="no">fi</span>
+</code></pre></div>
+<p><strong>Depois (4 linhas usando script único):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Check</span><span class="nv"> </span><span class="s">Lockfile</span><span class="nv"> </span><span class="s">Consistency&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">PYTHON_BASELINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="no">echo &quot;🛡️ Validando sincronização de dependências...&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="no">python scripts/ci/verify_deps.py</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<ul>
+<li>✅ Elimina duplicação (DRY compliance)</li>
+<li>✅ Consistência garantida (local ↔ CI usam mesmo código)</li>
+<li>✅ Manutenção centralizada</li>
+</ul>
+<h4 id="4-teststest_verify_depspy-tdd-completo">4. <code>tests/test_verify_deps.py</code> (🧪 TDD Completo)</h4>
+<p><strong>Cobertura de Testes:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Detecção de Drift</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="err">✅</span> <span class="n">test_detect_synchronized_lockfile</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="err">✅</span> <span class="n">test_detect_desynchronized_lockfile</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Auto-Fix</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="err">✅</span> <span class="n">test_fix_mode_corrects_desync</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="err">✅</span> <span class="n">test_fix_mode_uses_python_baseline</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># Exit Codes</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="err">✅</span> <span class="n">test_exit_code_success_when_synced</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="err">✅</span> <span class="n">test_exit_code_failure_when_desynchronized</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># Baseline Enforcement</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="err">✅</span> <span class="n">test_baseline_detection_from_env</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="err">✅</span> <span class="n">test_fallback_to_system_python_when_baseline_missing</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="c1"># Error Messaging</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="err">✅</span> <span class="n">test_remediation_message_on_failure</span>
+</code></pre></div>
+<h4 id="5-readmemd-documentacao-atualizada">5. <code>README.md</code> (📖 Documentação Atualizada)</h4>
+<p><strong>Nova Seção:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="gu">### 📦 Gerenciamento de Dependências</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="gh"># 🆕 NOVO: Sistema de Autocura de Dependências</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="gh"># 1. Pre-commit hook bloqueia commits com dev.txt desatualizado</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="gh"># 2. make requirements usa verify_deps.py --fix (fonte única)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="gh"># 3. CI valida usando o mesmo script (DRY principle)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="gh"># 🛡️ Protocolo de Imunidade Tripla:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="gh"># - Pre-commit: Bloqueia commits se dev.txt dessincronizado</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="gh"># - make validate: Inclui deps-check no quality gate</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="gh"># - CI: Valida lockfile antes de rodar testes</span>
+</code></pre></div>
+<h4 id="6-changelogmd-historico-de-mudancas">6. <code>CHANGELOG.md</code> (📝 Histórico de Mudanças)</h4>
+<p><strong>Entrada Detalhada:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">-</span><span class="w"> </span><span class="gs">**🛡️ Protocolo de Imunidade de Dependências - Sistema de Autocura com Triple Defense**</span>:
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>Modo Auto-Fix em verify_deps.py com --fix flag
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>Makefile Idempotente usando verify_deps.py --fix
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>CI/CD Simplificado (DRY principle)
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>Suite de Testes TDD com cobertura completa
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="k">-</span><span class="w"> </span>Benefícios: DRY, Self-Healing, Zero Drift, Triple Defense
+</code></pre></div>
+<hr />
+<h2 id="como-funciona-detalhes-tecnicos">🔬 Como Funciona (Detalhes Técnicos)</h2>
+<h3 id="1-deteccao-de-drift">1. Detecção de Drift</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># verify_deps.py linha ~30</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_sync</span><span class="p">(</span><span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="c1"># 1. Seleciona Python baseline (PYTHON_BASELINE env var)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">baseline_version</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PYTHON_BASELINE&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">python_exec</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;python</span><span class="si">{</span><span class="n">baseline_version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="c1"># 2. Executa pip-compile em arquivo temporário</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>        <span class="n">python_exec</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;piptools&quot;</span><span class="p">,</span> <span class="s2">&quot;compile&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="s2">&quot;requirements/dev.in&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>        <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span> <span class="n">temp_file</span><span class="p">,</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>        <span class="s2">&quot;--resolver=backtracking&quot;</span><span class="p">,</span> <span class="s2">&quot;--strip-extras&quot;</span><span class="p">,</span> <span class="s2">&quot;--allow-unsafe&quot;</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    <span class="p">])</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    <span class="c1"># 3. Compara conteúdo (ignora comentários)</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    <span class="k">return</span> <span class="n">_compare_files_content</span><span class="p">(</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span> <span class="n">temp_file</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="2-autocura">2. Autocura</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># verify_deps.py linha ~120</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">fix_sync</span><span class="p">(</span><span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;🔧 MODO AUTOCURA ATIVADO: Corrigindo </span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.txt...&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="c1"># 1. Detecta Python baseline</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">baseline_version</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PYTHON_BASELINE&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="n">python_exec</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;python</span><span class="si">{</span><span class="n">baseline_version</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="c1"># 2. Garante pip-tools instalado</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="n">python_exec</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="s2">&quot;pip-tools&quot;</span><span class="p">])</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="c1"># 3. Recompila lockfile</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="n">python_exec</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;piptools&quot;</span><span class="p">,</span> <span class="s2">&quot;compile&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>        <span class="s2">&quot;requirements/dev.in&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>        <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span> <span class="s2">&quot;requirements/dev.txt&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>        <span class="c1"># ... flags CI-compatible</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="p">])</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ AUTOCURA COMPLETA!&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+<h3 id="3-python-baseline-enforcement">3. Python Baseline Enforcement</h3>
+<p><strong>Estratégia de Seleção (Prioridade):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>1. PYTHON_BASELINE env var (e.g., &quot;3.10&quot;) → python3.10
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>2. .venv/bin/python (local dev)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>3. sys.executable (fallback)
+</code></pre></div>
+<p><strong>Por Que Isso Importa:</strong></p>
+<ul>
+<li>CI usa Python 3.10 (baseline do projeto)</li>
+<li>Desenvolvedor local pode ter Python 3.11/3.12</li>
+<li>Resolver dependencies com versões diferentes gera drift</li>
+<li>Solução: <strong>Sempre compilar com Python 3.10</strong></li>
+</ul>
+<hr />
+<h2 id="validacao-e-testes">🧪 Validação e Testes</h2>
+<h3 id="testes-executados">Testes Executados</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># 1. TDD: Testes criados ANTES da implementação</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>pytest<span class="w"> </span>tests/test_verify_deps.py<span class="w"> </span>-v
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># 9/9 testes passando</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># 2. Quality Gate Local</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>make<span class="w"> </span>validate
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># ✅ format, deps-check, lint, type-check, test</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="c1"># 3. Integração Manual</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="nv">PYTHON_BASELINE</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># ✅ Lockfile sincronizado</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="c1"># 4. Pre-commit Hook</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;test&quot;</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="c1"># ✅ Hook valida antes de commit</span>
+</code></pre></div>
+<h3 id="cenarios-de-teste-cobertos">Cenários de Teste Cobertos</h3>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Teste</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lockfile sincronizado</td>
+<td><code>test_detect_synchronized_lockfile</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Lockfile dessincronizado</td>
+<td><code>test_detect_desynchronized_lockfile</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Auto-fix correto</td>
+<td><code>test_fix_mode_corrects_desync</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Baseline enforcement</td>
+<td><code>test_fix_mode_uses_python_baseline</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Exit code 0 (sucesso)</td>
+<td><code>test_exit_code_success_when_synced</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Exit code 1 (falha)</td>
+<td><code>test_exit_code_failure_when_desynchronized</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Detecção de baseline</td>
+<td><code>test_baseline_detection_from_env</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Fallback sem baseline</td>
+<td><code>test_fallback_to_system_python_when_baseline_missing</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Mensagens de erro</td>
+<td><code>test_remediation_message_on_failure</code></td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="beneficios-mensuraveis">📈 Benefícios Mensuráveis</h2>
+<h3 id="antes-vs-depois">Antes vs. Depois</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Antes</th>
+<th>Depois</th>
+<th>Melhoria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tempo de Correção</strong></td>
+<td>5+ minutos (manual)</td>
+<td>10 segundos (<code>make requirements</code>)</td>
+<td><strong>-97%</strong></td>
+</tr>
+<tr>
+<td><strong>Linhas de Código (CI)</strong></td>
+<td>17 linhas inline</td>
+<td>4 linhas (DRY)</td>
+<td><strong>-76%</strong></td>
+</tr>
+<tr>
+<td><strong>Prevenção de Erros</strong></td>
+<td>CI apenas (tarde demais)</td>
+<td>Pre-commit + CI</td>
+<td><strong>2x camadas</strong></td>
+</tr>
+<tr>
+<td><strong>Consistência Local ↔ CI</strong></td>
+<td>Lógica diferente</td>
+<td>Script único</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td><strong>Developer Experience</strong></td>
+<td>Descoberta tardia + correção manual</td>
+<td>Bloqueio preventivo + autocura</td>
+<td><strong>Alto</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="principios-de-engenharia-atendidos">Princípios de Engenharia Atendidos</h3>
+<ul>
+<li>✅ <strong>DRY (Don't Repeat Yourself)</strong>: Script único para local + CI</li>
+<li>✅ <strong>Fail Fast</strong>: Pre-commit detecta erro antes de push</li>
+<li>✅ <strong>Self-Healing</strong>: Autocorreção com <code>--fix</code></li>
+<li>✅ <strong>Single Source of Truth</strong>: <code>verify_deps.py</code> como autoridade</li>
+<li>✅ <strong>Defensive Programming</strong>: Múltiplas camadas de validação</li>
+<li>✅ <strong>Observability</strong>: Mensagens claras com contexto e remediação</li>
+</ul>
+<hr />
+<h2 id="como-usar-guia-do-desenvolvedor">🚀 Como Usar (Guia do Desenvolvedor)</h2>
+<h3 id="workflow-normal">Workflow Normal</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 1. Adicionar nova dependência</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;black==24.1.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements/dev.in
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># 2. Recompilar lockfile (com autocura)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="c1"># 🔄 Compilando requirements com Python 3.10 (modo autocura)...</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># ✅ Lockfile validado e sincronizado!</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="c1"># 3. Commitar (pre-commit hook valida automaticamente)</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.in<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: add black formatter&quot;</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="c1"># ✅ Pre-commit hook passa (lockfile sincronizado)</span>
+</code></pre></div>
+<h3 id="correcao-de-drift-se-ocorrer">Correção de Drift (Se Ocorrer)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Cenário: Você puxou mudanças e o lockfile está dessincronizado</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Opção 1: Usar make (recomendado)</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="c1"># Opção 2: Usar script diretamente</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="nv">PYTHON_BASELINE</span><span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="c1"># Opção 3: Apenas validar (sem corrigir)</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>python<span class="w"> </span>scripts/ci/verify_deps.py
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="c1"># Exit 1 se dessincronizado + mensagens de remediação</span>
+</code></pre></div>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p><strong>Problema: Pre-commit falha dizendo "lockfile dessincronizado"</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Solução</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w"> </span>--no-edit
+</code></pre></div>
+<p><strong>Problema: CI falha com "requirements/dev.txt out of sync"</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Solução (local)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>make<span class="w"> </span>requirements
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: sync requirements lockfile&quot;</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>git<span class="w"> </span>push
+</code></pre></div>
+<hr />
+<h2 id="compatibilidade">🔄 Compatibilidade</h2>
+<h3 id="breaking-changes">Breaking Changes</h3>
+<p><strong>Nenhuma.</strong> Todas as mudanças são backward-compatible.</p>
+<h3 id="requisitos">Requisitos</h3>
+<ul>
+<li>Python 3.10+ (baseline já existente)</li>
+<li>pip-tools (já nas dependências de dev)</li>
+<li>Ambiente Unix-like (Linux/macOS/WSL)</li>
+</ul>
+<h3 id="testado-em">Testado Em</h3>
+<ul>
+<li>✅ Ubuntu 22.04 (WSL)</li>
+<li>✅ GitHub Actions (ubuntu-latest)</li>
+<li>✅ Python 3.10, 3.11, 3.12</li>
+</ul>
+<hr />
+<h2 id="referencias-e-contexto">📚 Referências e Contexto</h2>
+<h3 id="documentos-relacionados">Documentos Relacionados</h3>
+<ul>
+<li><a href="docs/guides/DEPENDENCY_MAINTENANCE_GUIDE.md">DEPENDENCY_MAINTENANCE_GUIDE.md</a> (futuro)</li>
+<li><a href="../TECHNICAL_REPORT_DEPENDENCY_AUTOIMMUNITY/">Relatório Técnico de Análise</a> (anexo)</li>
+</ul>
+<h3 id="issues-relacionadas">Issues Relacionadas</h3>
+<ul>
+<li>
+<h1 id="dependency-management">dependency-management</h1>
+</li>
+<li>
+<h1 id="autoimmunity">autoimmunity</h1>
+</li>
+<li>
+<h1 id="dry-principle">dry-principle</h1>
+</li>
+</ul>
+<h3 id="filosofia-do-template">Filosofia do Template</h3>
+<blockquote>
+<p>"O sistema deve ser autoimune e proativo. Não apenas corrigir o erro pontual, mas evitar sua recorrência."</p>
+</blockquote>
+<p>Este PR materializa essa filosofia em código executável e testável.</p>
+<hr />
+<h2 id="checklist-de-revisao">✅ Checklist de Revisão</h2>
+<ul>
+<li>[x] <strong>Código</strong></li>
+<li>[x] Testes TDD criados e passando (9/9)</li>
+<li>[x] Type hints completos (mypy strict)</li>
+<li>[x] Docstrings detalhadas</li>
+<li>
+<p>[x] Código formatado (ruff)</p>
+</li>
+<li>
+<p>[x] <strong>Documentação</strong></p>
+</li>
+<li>[x] README.md atualizado</li>
+<li>[x] CHANGELOG.md atualizado</li>
+<li>
+<p>[x] Comentários inline explicativos</p>
+</li>
+<li>
+<p>[x] <strong>Validação</strong></p>
+</li>
+<li>[x] <code>make validate</code> passa 100%</li>
+<li>[x] Pre-commit hooks validados</li>
+<li>
+<p>[x] CI workflow testado localmente</p>
+</li>
+<li>
+<p>[x] <strong>Arquitetura</strong></p>
+</li>
+<li>[x] DRY principles aplicados</li>
+<li>[x] Single Source of Truth estabelecida</li>
+<li>[x] Backward compatibility garantida</li>
+</ul>
+<hr />
+<h2 id="conclusao">🎤 Conclusão</h2>
+<p>Este PR transforma o gerenciamento de dependências de um processo <strong>reativo e manual</strong> para um sistema <strong>proativo e autônomo</strong>, eliminando uma das causas mais comuns de falhas no CI: o dependency drift.</p>
+<p>A implementação segue rigorosamente os princípios do template:</p>
+<ul>
+<li><strong>SRE</strong>: Automação, observabilidade, fail-fast</li>
+<li><strong>TDD</strong>: Testes antes do código</li>
+<li><strong>DRY</strong>: Fonte única da verdade</li>
+<li><strong>Self-Healing</strong>: Sistema se autocorrige</li>
+</ul>
+<p><strong>Pronto para merge.</strong> 🚀</p>
+<hr />
+<p><strong>Autor</strong>: Copilot AI + Ismael
+<strong>Data</strong>: 2026-01-10
+<strong>Branch</strong>: <code>fix/dependency-autoimmunity</code>
+<strong>Commits</strong>: 1 commit principal
+<strong>Reviewers</strong>: @maintainers</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
