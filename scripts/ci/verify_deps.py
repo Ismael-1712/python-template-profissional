@@ -9,8 +9,14 @@ Features:
 - Comment-aware comparison (ignores pip-compile metadata)
 - CI/CD compatible (venv detection)
 - Detailed error reporting with remediation steps
+- Auto-fix capability (--fix flag) for self-healing
+
+Exit Codes:
+- 0: Lockfile synchronized or successfully fixed
+- 1: Lockfile desynchronized (without --fix) or fix failed
 """
 
+import argparse
 import os
 import shutil
 import subprocess
@@ -130,8 +136,133 @@ def _compare_files_content(path_a: Path, path_b: Path) -> bool:
     return lines_a == lines_b
 
 
-if __name__ == "__main__":
-    if check_sync("dev"):
-        sys.exit(0)
+def fix_sync(req_name: str) -> bool:
+    """Auto-fix desynchronization by recompiling with pip-compile.
+
+    This function implements the self-healing mechanism: it recompiles
+    the requirements.txt file using the Python baseline to ensure
+    compatibility with CI environments.
+
+    Args:
+        req_name: The name of the requirements file (e.g., 'dev', 'prod').
+
+    Returns:
+        bool: True if fix succeeded, False otherwise.
+
+    Strategy:
+        1. Detect Python baseline from PYTHON_BASELINE env var
+        2. Ensure pip-tools is installed in baseline Python
+        3. Run pip-compile with exact CI-compatible flags
+        4. Validate output and report success
+    """
+    project_root = Path(__file__).parent.parent.parent.resolve()
+    in_file = Path("requirements") / f"{req_name}.in"
+    txt_file = Path("requirements") / f"{req_name}.txt"
+
+    print(f"\n🔧 MODO AUTOCURA ATIVADO: Corrigindo {req_name}.txt...", flush=True)
+
+    # Python Selection (same strategy as check_sync)
+    baseline_version = os.getenv("PYTHON_BASELINE")
+    python_exec = sys.executable  # Default fallback
+
+    if baseline_version:
+        baseline_exec = shutil.which(f"python{baseline_version}")
+        if baseline_exec:
+            python_exec = baseline_exec
+            print(
+                f"  ✅ Usando Python {baseline_version} (baseline CI-compatible)",
+            )
+        else:
+            print(
+                f"  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
+                f"python{baseline_version} não encontrado",
+            )
+            print(f"  ⚠️  Usando fallback: {sys.executable}")
     else:
+        # Try venv Python for local dev
+        venv_python = project_root / ".venv" / "bin" / "python"
+        if venv_python.exists():
+            python_exec = str(venv_python)
+
+    print(f"  📦 Executor: {python_exec}")
+
+    try:
+        # Ensure pip-tools is available in the selected Python
+        print("  🔍 Verificando pip-tools...", end=" ", flush=True)
+        subprocess.check_call(
+            [python_exec, "-m", "pip", "install", "pip-tools", "--quiet"],
+            cwd=str(project_root),
+        )
+        print("✅")
+
+        # Execute pip-compile with CI-compatible flags
+        print(f"  ⚙️  Recompilando {in_file}...", end=" ", flush=True)
+        subprocess.check_call(
+            [
+                python_exec,
+                "-m",
+                "piptools",
+                "compile",
+                str(in_file),
+                "--output-file",
+                str(txt_file),
+                "--resolver=backtracking",
+                "--strip-extras",
+                "--allow-unsafe",
+                "--quiet",
+            ],
+            cwd=str(project_root),
+        )
+        print("✅")
+
+        print(f"\n✅ AUTOCURA COMPLETA: {txt_file} sincronizado com sucesso!")
+        print("\n💡 PRÓXIMO PASSO:")
+        print(f"   git add {txt_file}")
+        print("   git commit -m 'build: sync requirements lockfile'")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        print(f"\n❌ ERRO FATAL: Falha ao executar autocura (Exit Code {e.returncode})")
+        return False
+
+
+if __name__ == "__main__":
+    # Argument parsing for --fix flag
+    parser = argparse.ArgumentParser(
+        description="Dependency Synchronization Validator with Auto-Healing",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Detection only (CI mode)
+  python scripts/ci/verify_deps.py
+
+  # Auto-fix mode (local development)
+  PYTHON_BASELINE=3.10 python scripts/ci/verify_deps.py --fix
+
+Exit Codes:
+  0 - Lockfile synchronized or successfully fixed
+  1 - Lockfile desynchronized (without --fix) or fix failed
+        """,
+    )
+    parser.add_argument(
+        "--fix",
+        action="store_true",
+        help="Auto-fix desynchronization by recompiling with pip-compile",
+    )
+    args = parser.parse_args()
+
+    # Execute check
+    is_synced = check_sync("dev")
+
+    if is_synced:
+        sys.exit(0)
+    # Desynchronized detected
+    elif args.fix:
+        # Attempt auto-fix
+        if fix_sync("dev"):
+            sys.exit(0)
+        else:
+            sys.exit(1)
+    else:
+        # No fix requested, exit with error
         sys.exit(1)

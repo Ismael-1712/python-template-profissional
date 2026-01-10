@@ -75,16 +75,14 @@ jobs:
             venv-${{ runner.os }}-py3.10-
 
       # Verificar consistência do lockfile (Python 3.10 baseline)
+      # FONTE ÚNICA DA VERDADE: scripts/ci/verify_deps.py (DRY)
       - name: "Check Lockfile Consistency"
+        env:
+          PYTHON_BASELINE: "3.10"
         run: |
-          python -m pip install pip-tools
-          pip-compile requirements/dev.in --output-file requirements/dev.txt.check --resolver=backtracking --strip-extras --allow-unsafe
-          if ! diff -u -I "^#    pip-compile" requirements/dev.txt requirements/dev.txt.check; then
-            echo "❌ ERROR: requirements/dev.txt is out of sync with dev.in"
-            echo "Run 'make install-dev' locally and commit the updated dev.txt"
-            exit 1
-          fi
-          echo "✅ Lockfile is consistent"
+          echo "🛡️ Validando sincronização de dependências (Protocolo de Imunidade)..."
+          python scripts/ci/verify_deps.py
+          echo "✅ Lockfile sincronizado com dev.in"
 
       # Só instala se o cache falhou
       - name: "Instalar Dependências"
