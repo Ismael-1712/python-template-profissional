@@ -538,7 +538,7 @@ transformers==4.57.3
     # via sentence-transformers
 triton==3.5.1
     # via torch
-typer==0.21.0
+typer==0.21.1
     # via
     #   -r requirements/dev.in
     #   chromadb
