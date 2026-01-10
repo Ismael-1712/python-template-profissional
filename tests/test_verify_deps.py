@@ -86,106 +86,57 @@ def mock_pip_compile_success() -> Iterator[MagicMock]:
 class TestDependencyDetection:
     """Test suite for dependency drift detection."""
 
-    @pytest.mark.skip(
-        reason=(
-            "TDD: Mock de subprocess.check_call não captura import global. "
-            "Funcionalidade validada por test_exit_code_success_when_synced."
-        ),
-    )
     def test_detect_synchronized_lockfile(
         self,
         temp_workspace: Path,
-        mock_pip_compile_success: MagicMock,
     ) -> None:
         """Verify that synchronized lockfiles pass validation.
 
         Given: A requirements.in and matching requirements.txt
-        When: Running verify_deps.py without --fix
+        When: Running verify_deps.py via subprocess
         Then: Script exits with code 0 (success)
         """
         req_dir = temp_workspace / "requirements"
         (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
         (req_dir / "dev.txt").write_text(SAMPLE_TXT_SYNCED)
 
-        # Mock pip-compile to generate the same content
-        def side_effect(*args: object, **kwargs: object) -> None:
-            # Write the synced content to temp file created by verify_deps
-            output_args = args[0]
-            assert isinstance(output_args, (list, tuple))
+        # Execute real script via subprocess
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH)],
+            cwd=temp_workspace,
+            capture_output=True,
+            check=False,
+        )
 
-            # Ignore non-piptools commands (e.g., diff)
-            if "--output-file" not in output_args:
-                return
+        # Should succeed when synchronized
+        assert result.returncode == 0
 
-            # Find --output-file argument
-            for i, arg in enumerate(output_args):
-                if arg == "--output-file" and i + 1 < len(output_args):
-                    output_file = output_args[i + 1]
-                    output_path = Path(str(output_file))
-                    output_path.write_text(SAMPLE_TXT_SYNCED)
-                    return
-
-        mock_pip_compile_success.side_effect = side_effect
-
-        # Import after creating files
-        sys.path.insert(0, str(temp_workspace))
-        with patch("sys.argv", ["verify_deps.py"]):
-            with patch("pathlib.Path.cwd", return_value=temp_workspace):
-                from scripts.ci import verify_deps
-
-                result = verify_deps.check_sync("dev")
-                assert result is True
-
-    @pytest.mark.skip(
-        reason=(
-            "TDD: Teste requer refatoração do verify_deps.py para "
-            "injeção de dependências. Mock de subprocess.check_call não "
-            "funciona devido a import global no módulo. Funcionalidade "
-            "validada por test_exit_code_failure_when_desynchronized."
-        ),
-    )
     def test_detect_desynchronized_lockfile(
         self,
         temp_workspace: Path,
-        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         """Verify that desynchronized lockfiles fail validation.
 
         Given: A requirements.in and outdated requirements.txt
-        When: Running verify_deps.py without --fix
+        When: Running verify_deps.py via subprocess
         Then: Script exits with code 1 (failure)
         """
         req_dir = temp_workspace / "requirements"
         (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
         (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
 
-        # Mock pip-compile to generate updated content
-        def mock_check_call(*args: object, **kwargs: object) -> None:
-            output_args = args[0]
-            assert isinstance(output_args, (list, tuple))
-            # Find --output-file argument
-            for i, arg in enumerate(output_args):
-                if arg == "--output-file" and i + 1 < len(output_args):
-                    output_file = output_args[i + 1]
-                    Path(str(output_file)).write_text(SAMPLE_TXT_SYNCED)
-                    return
-            msg = "Mock: --output-file not found in args"
-            raise ValueError(msg)
+        # Execute real script via subprocess
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH)],
+            cwd=temp_workspace,
+            capture_output=True,
+            check=False,
+        )
 
-        monkeypatch.setattr("subprocess.check_call", mock_check_call)
-        monkeypatch.setattr("sys.argv", ["verify_deps.py"])
-        monkeypatch.setattr("pathlib.Path.cwd", lambda: temp_workspace)
-
-        # Clean module cache
-        for mod in list(sys.modules.keys()):
-            if mod.startswith("scripts"):
-                del sys.modules[mod]
-
-        sys.path.insert(0, str(temp_workspace))
-        from scripts.ci import verify_deps
-
-        result = verify_deps.check_sync("dev")
-        assert result is False
+        # Should fail when desynchronized
+        assert result.returncode == 1
+        # Check for error messages (using ASCII-safe checks)
+        assert b"DESSINCRONIZADO" in result.stdout or b"DESYNC" in result.stdout.upper()
 
     """Test suite for auto-fix mechanism."""
 
