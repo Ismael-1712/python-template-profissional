@@ -79,9 +79,9 @@ jobs:
       # HARDENING: Garantir pip-tools disponível (não assumir presença)
       - name: "Install pip-tools for Deep Check"
         run: |
-          echo "🔧 Ensuring pip-tools is available..."
-          pip install pip-tools
-          echo "✅ pip-tools installed"
+          echo "🔧 Ensuring pip-tools is available in venv..."
+          .venv/bin/python -m pip install pip-tools
+          echo "✅ pip-tools installed in venv"
 
       - name: "Check Lockfile Deep Consistency (v2.3)"
         env:
