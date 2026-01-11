@@ -505,7 +505,7 @@ tokenizers==0.22.2
     #   transformers
 toml==0.10.2
     # via mutmut
-tomli==2.3.0 ; python_version < "3.11"
+tomli==2.4.0 ; python_version < "3.11"
     # via
     #   -r requirements/dev.in
     #   build

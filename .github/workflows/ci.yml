@@ -75,14 +75,14 @@ jobs:
             venv-${{ runner.os }}-py3.10-
 
       # Verificar consistência do lockfile (Python 3.10 baseline)
-      # FONTE ÚNICA DA VERDADE: scripts/ci/verify_deps.py (DRY)
-      - name: "Check Lockfile Consistency"
+      # FONTE ÚNICA DA VERDADE: Deep Consistency Check v2.3 (DRY)
+      - name: "Check Lockfile Deep Consistency (v2.3)"
         env:
           PYTHON_BASELINE: "3.10"
         run: |
-          echo "🛡️ Validando sincronização de dependências (Protocolo de Imunidade)..."
-          python scripts/ci/verify_deps.py
-          echo "✅ Lockfile sincronizado com dev.in"
+          echo "🛡️ Validando sincronização de dependências (Deep Check v2.3)..."
+          python -m scripts.core.dependency_guardian validate-deep dev --python-exec python3.10
+          echo "✅ Lockfile em paridade total com PyPI (Protocolo v2.3 ativo)"
 
       # Só instala se o cache falhou
       - name: "Instalar Dependências"

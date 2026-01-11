@@ -137,7 +137,7 @@ make commit-amend
 ```bash
 # Adicionar dependência de desenvolvimento
 echo "black==24.1.0" >> requirements/dev.in
-make requirements                    # Recompila + sela com SHA-256 (Protocolo v2.2)
+make requirements                    # Recompila + valida com Deep Check (Protocolo v2.3)
 
 # 🆕 SISTEMA DE AUTOCURA v2.2 - Proteção Criptográfica
 # O sistema agora implementa selo de integridade SHA-256:
@@ -160,20 +160,28 @@ make check-venv                      # Diagnóstico: Python path, versões, pip-
 
 # Atualizar todas as dependências
 echo "package>=new.version" >> requirements/dev.in
-make requirements                    # Recompila com Python 3.10 baseline + selo SHA-256
+make requirements                    # Recompila com Python 3.10 baseline + Deep Check v2.3
 
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
 
-# 🔐 Protocolo de Imunidade v2.2 (4 Camadas):
+# 🔐 Protocolo de Imunidade v2.3 (5 Camadas):
 # Layer 1 - Pre-commit: Bloqueia commits se dev.txt dessincronizado
-# Layer 2 - Cryptographic Seal: SHA-256 embutido no lockfile
-# Layer 3 - Pre-push Hook: Valida selo antes de push (bloqueio hard)
-# Layer 4 - CI: Validação criptográfica (exit code 2 = security breach)
+# Layer 2 - Deep Consistency: In-memory pip-compile + byte-by-byte comparison
+# Layer 3 - Atomic Write: fcntl file locking + POSIX rename (evita corrupção)
+# Layer 4 - Pre-push Hook: Validação deep antes de push (bloqueio hard)
+# Layer 5 - CI/CD: Deep Check com exit code 1 em drift detectado
+
+# 🆕 MIGRAÇÃO v2.2 → v2.3:
+# - Selo SHA-256 PRESERVADO para backward compatibility
+# - Deep Check substitui validação de selo como mecanismo primário
+# - Atomic write elimina race conditions com IDE/editor buffers
+# - Detecção de drift PyPI (ex: tomli 2.3.0 vs 2.4.0)
 
 # 📖 Documentação completa:
 # - docs/guides/DEPENDENCY_MANAGEMENT.md
-# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.2)
+# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.3)
+# - docs/reports/FORENSIC_TOMLI_DRIFT_INVESTIGATION.md (caso forense)
 ```
 
 ### 🧠 CORTEX — Comandos Essenciais

@@ -4,6 +4,66 @@
 
 ### Added
 
+- **🚀 Protocolo de Imunidade de Dependências v2.3 - Deep Consistency Check**:
+  - **DependencyGuardian Enhanced**: Métodos v2.3 em `scripts/core/dependency_guardian.py`
+    - `validate_deep_consistency()`: In-memory pip-compile + byte-by-byte comparison
+    - `_compare_content_deep()`: Comment-agnostic diff detector com mismatch detalhado
+    - `_format_diff_report()`: Relatório formatado com passos de remediação
+    - `_write_sealed_content_atomic()`: Atomic write com fcntl.flock() + os.fsync()
+  - **Makefile Targets**:
+    - `deps-deep-check`: Validação Deep Consistency (v2.3)
+    - `deps-check`: Deprecated com warning (migrar para deps-deep-check)
+    - `validate`: Atualizado para usar deps-deep-check
+  - **CI/CD Integration**: `.github/workflows/ci.yml`
+    - "Check Lockfile Deep Consistency (v2.3)" step
+    - Usa `validate-deep` ao invés de verify_deps.py
+    - Exit code 1 em drift detectado (hard-fail)
+  - **Test Suite TDD**: `tests/test_dependency_guardian_deep.py` (10 testes, 100% pass)
+    - TestDeepConsistencyCheck: Drift detection, manual edits, edge cases
+    - TestAtomicWrite: Atomic write mechanism validation
+    - TestBackwardCompatibility: Garante v2.2 seal validation funcional
+  - **Eliminação de Drift PyPI**:
+    - Detecta dessincronia entre lockfile commitado e resolução atual
+    - Exemplo: tomli==2.3.0 (committed) vs tomli==2.4.0 (PyPI)
+    - Elimina false negatives do v2.2 seal-based validation
+  - **Proteção Contra Race Conditions**:
+    - fcntl file locking previne corrupção por VS Code/editor buffers
+    - tempfile.NamedTemporaryFile + POSIX rename garante atomicidade
+    - os.fsync() força flush do kernel antes de rename
+  - **Backward Compatibility**:
+    - Selos SHA-256 do v2.2 PRESERVADOS nos lockfiles
+    - `validate_seal()` ainda funciona (deprecated, mas disponível)
+    - Migração v2.2→v2.3 sem breaking changes no formato de lockfile
+  - **Documentação Forense**: 5 documentos em `docs/reports/`
+    - FORENSIC_TOMLI_DRIFT_INVESTIGATION.md (caso forense completo)
+    - FORENSIC_TIMELINE_DETAILED.md (linha do tempo)
+    - FORENSIC_TECHNICAL_DETAILS.md (análise técnica)
+    - FORENSIC_ROOT_CAUSE_ANALYSIS.md (5 Whys + diagrama espinha de peixe)
+    - FORENSIC_RECOMMENDATIONS_ACTIONABLE.md (roadmap v2.3→v3.0)
+
+### Changed
+
+- **Makefile**: Target `validate` agora usa `deps-deep-check` ao invés de `deps-check`
+- **CI Workflow**: Substituído `verify_deps.py` por `validate-deep` command
+- **Dependency Guardian**: Deep Check é o mecanismo primário (seal validation é fallback)
+
+### Deprecated
+
+- **Makefile**: Target `deps-check` (migrar para `deps-deep-check`)
+- **DependencyGuardian**: `validate_seal()` method (usar `validate_deep_consistency()`)
+
+### Security
+
+- **[CRITICAL]** Deep Consistency Check elimina drift detection gaps identificados no incidente tomli
+- Atomic write com file locking previne race conditions que causam corrupção de lockfile
+- In-memory pip-compile elimina dependency de cache PyPI para validação
+
+---
+
+## [Previous Releases]
+
+### v2.2 - Cryptographic Integrity Seals (2026-01-10)
+
 - **� Protocolo de Imunidade de Dependências v2.2 - Cryptographic Integrity Seals**:
   - **DependencyGuardian**: Nova classe em `scripts/core/dependency_guardian.py`
     - Geração de hash SHA-256 comment-agnostic dos `.in` files

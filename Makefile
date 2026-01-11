@@ -223,10 +223,17 @@ ci-check:
 	@$(PYTHON) scripts/ci/audit_workflows.py
 
 
-## deps-check: Verifica se arquivos requirements.txt estão sincronizados com .in
+## deps-check: Verifica se arquivos requirements.txt estão sincronizados com .in [DEPRECATED - use deps-deep-check]
 deps-check:
-	@echo "🛡️  Executando Protocolo de Imunidade de Dependências..."
+	@echo "⚠️  Aviso: deps-check usa validação de selo (v2.2), que pode ter falsos positivos."
+	@echo "   Considere usar: make deps-deep-check (v2.3 recomendado)"
 	@$(PYTHON) scripts/ci/verify_deps.py
+
+## deps-deep-check: Validação profunda de dependências (compilação em memória - v2.3)
+deps-deep-check:
+	@echo "🛡️  Executando Deep Consistency Check (Protocolo v2.3)..."
+	@$(PYTHON) -m scripts.core.dependency_guardian validate-deep dev
+	@echo "✅ Lockfile em paridade total com estado atual do PyPI"
 
 ## audit-custom: Executa auditoria de segurança customizada (HIGH severity)
 audit-custom:
@@ -281,8 +288,8 @@ cortex-audit:
 	@echo "📚 Verificando Integridade da Documentação (CORTEX)..."
 	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 
-## validate: Executa validação completa (Quality Gate Unificado - Fonte Única da Verdade)
-validate: format deps-check lint type-check complexity-check arch-check docs-check ci-check audit-security-sca guardian-check cortex-audit test tdd-check
+## validate: Executa validação completa (Quality Gate Unificado - Fonte Única da Verdade - v2.3 com Deep Check)
+validate: format deps-deep-check lint type-check complexity-check arch-check docs-check ci-check audit-security-sca guardian-check cortex-audit test tdd-check
 	@echo "✅ Quality Gate Passed: All systems go!"
 
 ## format: Formata código automaticamente com ruff

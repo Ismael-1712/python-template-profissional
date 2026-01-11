@@ -1,37 +1,52 @@
-"""Dependency Guardian - Cryptographic Integrity Seal System.
+r"""Dependency Guardian - Cryptographic Integrity Seal System.
 
-This module implements the v2.2 Autoimunity Protocol using SHA-256
-cryptographic seals to protect against dependency drift and tampering.
+This module implements the v2.3 Deep Consistency Protocol using SHA-256
+cryptographic seals and in-memory compilation to protect against dependency
+drift and tampering.
 
 The Guardian ensures that requirements.txt lockfiles are always derived
-from their corresponding .in files, preventing manual edits and drift.
+from their corresponding .in files, preventing manual edits and PyPI drift.
 
-Protocol:
-1. Compute SHA-256 hash of .in file (ignoring comments/blanks)
-2. Inject integrity seal into .txt lockfile header
-3. Validate seal on every critical operation (pre-push, CI)
+Protocol v2.3 (Enhanced):
+1. Compute SHA-256 hash of .in file (ignoring comments/blanks) - v2.2
+2. Inject integrity seal into .txt lockfile header - v2.2
+3. Validate seal on every critical operation (pre-push, CI) - v2.2
+4. Deep consistency check: pip-compile in memory + byte comparison - v2.3 NEW
+5. Atomic write with file locking to prevent editor corruption - v2.3 NEW
 
 Security Model:
 - Hash is comment-agnostic (robust against documentation changes)
 - Seal injection is idempotent (safe for multiple runs)
 - Validation fails fast on ANY mismatch (zero tolerance)
+- Deep check detects PyPI drift that seals alone cannot catch
 
 Usage:
     from scripts.core.dependency_guardian import DependencyGuardian
 
     guardian = DependencyGuardian(Path("requirements"))
 
-    # Seal a lockfile after pip-compile
+    # Seal a lockfile after pip-compile (v2.2)
     hash_value = guardian.compute_input_hash("dev")
     guardian.inject_seal("dev", hash_value)
 
-    # Validate before push
+    # Validate seal before push (v2.2)
     if not guardian.validate_seal("dev"):
         raise IntegrityError("Lockfile integrity compromised!")
+
+    # Deep consistency check (v2.3)
+    is_valid, diff = guardian.validate_deep_consistency("dev")
+    if not is_valid:
+        print(f"Lockfile desynchronized:\n{diff}")
+        raise IntegrityError("PyPI drift detected!")
 """
 
+import fcntl
 import hashlib
+import os
 import re
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 
@@ -229,14 +244,14 @@ class DependencyGuardian:
         return lines
 
     def _write_sealed_content(self, txt_file: Path, lines: list[str]) -> None:
-        """Write sealed content back to lockfile.
+        """Write sealed content back to lockfile (delegates to atomic write).
 
         Args:
             txt_file: Path to lockfile
             lines: Content to write
         """
-        new_content = "\n".join(lines) + "\n"
-        txt_file.write_text(new_content, encoding="utf-8")
+        # Use atomic write to prevent race conditions (v2.3 enhancement)
+        self._write_sealed_content_atomic(txt_file, lines)
 
     def validate_seal(self, req_name: str) -> bool:
         """Validate integrity seal against current .in file hash.
@@ -313,6 +328,249 @@ class DependencyGuardian:
 
         return result == 0
 
+    def validate_deep_consistency(
+        self,
+        req_name: str,
+        python_exec: str | None = None,
+    ) -> tuple[bool, str]:
+        """Validate lockfile against in-memory pip-compile (deep check).
+
+        This is the ULTIMATE consistency validation that catches:
+        - Manual edits to lockfile
+        - PyPI drift (upstream version changes between local and CI)
+        - Incomplete/corrupted pip-compile runs
+        - Seal tampering
+
+        This method resolves the critical flaw in v2.2 where the SHA-256 seal
+        validates the INPUT (.in file) but is blind to OUTPUT (.txt) changes
+        caused by PyPI releasing new versions between local commit and CI execution.
+
+        Args:
+            req_name: Requirements file name (e.g., 'dev')
+            python_exec: Path to Python interpreter (uses sys.executable if None)
+
+        Returns:
+            tuple[bool, str]: (is_valid, diff_report)
+                - is_valid: True if lockfile matches pip-compile output exactly
+                - diff_report: Human-readable diff if desynchronized, empty if synced
+
+        Example:
+            guardian = DependencyGuardian(Path("requirements"))
+            is_valid, diff = guardian.validate_deep_consistency("dev")
+
+            if not is_valid:
+                print("❌ Lockfile desynchronized:")
+                print(diff)
+        """
+        in_file = self.requirements_dir / f"{req_name}.in"
+        txt_file = self.requirements_dir / f"{req_name}.txt"
+
+        if not in_file.exists():
+            return False, f"Input file not found: {in_file}"
+
+        if not txt_file.exists():
+            return False, f"Lockfile not found: {txt_file}"
+
+        # Use system python if not specified
+        if python_exec is None:
+            python_exec = sys.executable
+
+        # Compile in memory to temporary file
+        with tempfile.NamedTemporaryFile(
+            mode="w+",
+            delete=False,
+            suffix=".txt",
+        ) as tmp:
+            tmp_path = Path(tmp.name)
+
+        try:
+            # Execute pip-compile (same flags as verify_deps.py for consistency)
+            result = subprocess.run(
+                [
+                    python_exec,
+                    "-m",
+                    "piptools",
+                    "compile",
+                    str(in_file),
+                    "--output-file",
+                    str(tmp_path),
+                    "--resolver=backtracking",
+                    "--strip-extras",
+                    "--allow-unsafe",
+                    "--quiet",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            if result.returncode != 0:
+                return False, f"pip-compile failed: {result.stderr}"
+
+            # Compare content (comment-agnostic, like verify_deps.py)
+            is_match, diff_lines = self._compare_content_deep(txt_file, tmp_path)
+
+            if is_match:
+                return True, ""
+            diff_report = self._format_diff_report(diff_lines, txt_file, tmp_path)
+            return False, diff_report
+
+        finally:
+            if tmp_path.exists():
+                tmp_path.unlink()
+
+    def _read_non_comment_lines(self, file_path: Path) -> list[str]:
+        """Extract non-comment, non-blank lines from a lockfile.
+
+        Args:
+            file_path: Path to lockfile
+
+        Returns:
+            list[str]: Stripped lines without comments/blanks
+        """
+        with open(file_path, encoding="utf-8") as f:
+            return [
+                line.strip()
+                for line in f
+                if line.strip() and not line.strip().startswith("#")
+            ]
+
+    def _find_mismatches(
+        self,
+        lines_a: list[str],
+        lines_b: list[str],
+    ) -> list[tuple[str, str]]:
+        """Find mismatched lines between two lockfile content lists.
+
+        Args:
+            lines_a: Lines from committed lockfile
+            lines_b: Lines from expected lockfile
+
+        Returns:
+            list[tuple[str, str]]: Pairs of (committed, expected) mismatches
+        """
+        mismatches = []
+        max_len = max(len(lines_a), len(lines_b))
+
+        for i in range(max_len):
+            line_a = lines_a[i] if i < len(lines_a) else "<missing>"
+            line_b = lines_b[i] if i < len(lines_b) else "<missing>"
+
+            if line_a != line_b:
+                mismatches.append((line_a, line_b))
+
+        return mismatches
+
+    def _compare_content_deep(
+        self,
+        file_a: Path,
+        file_b: Path,
+    ) -> tuple[bool, list[tuple[str, str]]]:
+        """Compare two lockfiles, ignoring comments (deep content comparison).
+
+        This implements the same comment-agnostic comparison as verify_deps.py
+        but returns detailed mismatch information for reporting.
+
+        Args:
+            file_a: First lockfile path (typically committed .txt)
+            file_b: Second lockfile path (typically in-memory compiled .txt)
+
+        Returns:
+            tuple[bool, list[tuple[str, str]]]:
+                - bool: True if files match
+                - list: [(line_a, line_b)] for mismatched lines
+        """
+        lines_a = self._read_non_comment_lines(file_a)
+        lines_b = self._read_non_comment_lines(file_b)
+
+        if lines_a == lines_b:
+            return True, []
+
+        mismatches = self._find_mismatches(lines_a, lines_b)
+        return False, mismatches
+
+    def _format_diff_report(
+        self,
+        mismatches: list[tuple[str, str]],
+        file_a: Path,
+        file_b: Path,
+    ) -> str:
+        """Format human-readable diff report for desynchronization.
+
+        Args:
+            mismatches: List of (committed_line, expected_line) tuples
+            file_a: Committed lockfile path
+            file_b: Expected lockfile path
+
+        Returns:
+            str: Formatted diff report with remediation steps
+        """
+        report = [
+            "📊 LOCKFILE DESYNCHRONIZATION DETECTED",
+            "",
+            f"  Committed:  {file_a.name}",
+            "  Expected:   (in-memory pip-compile)",
+            "",
+            "🔍 DIFFERENCES:",
+            "",
+        ]
+
+        for i, (line_a, line_b) in enumerate(mismatches, 1):
+            report.append(f"  [{i}] Mismatch:")
+            report.append(f"      COMMITTED: {line_a}")
+            report.append(f"      EXPECTED:  {line_b}")
+            report.append("")
+
+        report.append("💊 REMEDIATION:")
+        report.append("   make requirements  (or make deps-fix)")
+        report.append("")
+
+        return "\n".join(report)
+
+    def _write_sealed_content_atomic(
+        self,
+        txt_file: Path,
+        lines: list[str],
+    ) -> None:
+        """Write sealed content atomically with file locking.
+
+        This prevents race conditions with editors (VS Code) that might
+        save their buffer while we're writing, corrupting the lockfile.
+
+        Strategy:
+        1. Write to temporary file with exclusive lock
+        2. Force OS buffer flush (fsync)
+        3. Atomic rename (POSIX guarantee of all-or-nothing)
+
+        Args:
+            txt_file: Target lockfile path
+            lines: Content lines to write
+        """
+        new_content = "\n".join(lines) + "\n"
+
+        # Write to temporary file first
+        tmp_file = txt_file.with_suffix(".txt.tmp")
+
+        try:
+            with open(tmp_file, "w", encoding="utf-8") as f:
+                # Acquire exclusive lock (prevents concurrent writes)
+                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
+                try:
+                    f.write(new_content)
+                    f.flush()
+                    os.fsync(f.fileno())  # Force OS buffer flush to disk
+                finally:
+                    fcntl.flock(f.fileno(), fcntl.LOCK_UN)
+
+            # Atomic rename (POSIX guarantee: either fully renamed or not at all)
+            tmp_file.replace(txt_file)
+
+        except Exception:
+            # Cleanup temp file on failure
+            if tmp_file.exists():
+                tmp_file.unlink()
+            raise
+
 
 class IntegrityError(Exception):
     """Raised when integrity seal validation fails."""
@@ -322,10 +580,9 @@ class IntegrityError(Exception):
 def main() -> None:
     """CLI entry point for dependency guardian operations."""
     import argparse
-    import sys
 
     parser = argparse.ArgumentParser(
-        description="Dependency Guardian - Integrity Seal Manager",
+        description="Dependency Guardian - Integrity Seal Manager v2.3",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -335,8 +592,11 @@ Examples:
   # Inject seal into dev.txt
   python -m scripts.core.dependency_guardian seal dev
 
-  # Validate dev.txt integrity
+  # Validate dev.txt integrity (seal only - v2.2)
   python -m scripts.core.dependency_guardian validate dev
+
+  # Deep consistency check (pip-compile in-memory - v2.3)
+  python -m scripts.core.dependency_guardian validate-deep dev
 
 Exit Codes:
   0 - Success / Validation passed
@@ -346,7 +606,7 @@ Exit Codes:
 
     parser.add_argument(
         "action",
-        choices=["compute", "seal", "validate"],
+        choices=["compute", "seal", "validate", "validate-deep"],
         help="Action to perform",
     )
     parser.add_argument(
@@ -358,6 +618,11 @@ Exit Codes:
         type=Path,
         default=Path("requirements"),
         help="Path to requirements directory (default: requirements/)",
+    )
+    parser.add_argument(
+        "--python-exec",
+        type=str,
+        help="Path to Python interpreter for pip-compile (default: sys.executable)",
     )
 
     args = parser.parse_args()
@@ -379,10 +644,30 @@ Exit Codes:
         elif args.action == "validate":
             is_valid = guardian.validate_seal(args.req_name)
             if is_valid:
-                print("✅ Integrity seal VALID")
+                print("✅ Integrity seal VALID (v2.2 protocol)")
                 sys.exit(0)
             else:
                 print("❌ Integrity seal INVALID or MISSING")
+                sys.exit(1)
+
+        elif args.action == "validate-deep":
+            print(
+                "🔍 Executing Deep Consistency Check (v2.3 protocol)...",
+                flush=True,
+            )
+            is_valid, diff_report = guardian.validate_deep_consistency(
+                args.req_name,
+                python_exec=args.python_exec,
+            )
+
+            if is_valid:
+                print("✅ Lockfile is in PERFECT SYNC with PyPI state")
+                print("✅ Deep Consistency Check: PASSED")
+                sys.exit(0)
+            else:
+                print("❌ Deep Consistency Check: FAILED")
+                print()
+                print(diff_report)
                 sys.exit(1)
 
     except FileNotFoundError as e:
