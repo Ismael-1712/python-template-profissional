@@ -1,0 +1,1462 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Engineering Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>✅ CHECKLIST DE IMPLEMENTAÇÃO - Deep Consistency Check v2.3 - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#checklist-de-implementacao-deep-consistency-check-v23" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ✅ CHECKLIST DE IMPLEMENTAÇÃO - Deep Consistency Check v2.3
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 STATUS GERAL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-1-implementacao-do-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔬 FASE 1: IMPLEMENTAÇÃO DO CÓDIGO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔬 FASE 1: IMPLEMENTAÇÃO DO CÓDIGO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-dependency-guardian-core-logic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1. Dependency Guardian - Core Logic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-cli-interface-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2. CLI Interface Update
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-2-testes-unitarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🧪 FASE 2: TESTES UNITÁRIOS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 FASE 2: TESTES UNITÁRIOS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-testes-de-deteccao-de-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Testes de Detecção de Drift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-testes-de-edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Testes de Edge Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-3-integracao-ao-makefile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔧 FASE 3: INTEGRAÇÃO AO MAKEFILE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 FASE 3: INTEGRAÇÃO AO MAKEFILE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-novo-target-deps-deep-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Novo Target: deps-deep-check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-4-atualizacao-do-ci-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 FASE 4: ATUALIZAÇÃO DO CI WORKFLOW
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 FASE 4: ATUALIZAÇÃO DO CI WORKFLOW">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-github-actions-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. GitHub Actions Workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-5-documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📚 FASE 5: DOCUMENTAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 FASE 5: DOCUMENTAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-readme-principal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. README Principal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-arquivo-de-arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Arquivo de Arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-6-testes-de-integracao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔍 FASE 6: TESTES DE INTEGRAÇÃO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 FASE 6: TESTES DE INTEGRAÇÃO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-teste-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Teste End-to-End
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-teste-de-regressao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Teste de Regressão
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-7-metricas-e-monitoramento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 FASE 7: MÉTRICAS E MONITORAMENTO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 FASE 7: MÉTRICAS E MONITORAMENTO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-coletar-metricas-de-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Coletar Métricas de Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-alertas-de-drift-frequente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Alertas de Drift Frequente
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-8-deploy-e-rollout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚢 FASE 8: DEPLOY E ROLLOUT
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚢 FASE 8: DEPLOY E ROLLOUT">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-preparacao-para-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Preparação para Merge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-merge-e-comunicacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Merge e Comunicação
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#criterios-de-sucesso-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 CRITÉRIOS DE SUCESSO FINAL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 CRITÉRIOS DE SUCESSO FINAL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#funcionalidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funcionalidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentação
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qualidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qualidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estimativa-de-tempo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📅 ESTIMATIVA DE TEMPO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 REFERÊNCIAS
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="checklist-de-implementacao-deep-consistency-check-v23">✅ CHECKLIST DE IMPLEMENTAÇÃO - Deep Consistency Check v2.3</h1>
+<h2 id="status-geral">📋 STATUS GERAL</h2>
+<ul>
+<li>[x] Investigação forense concluída</li>
+<li>[x] Causa raiz identificada (race condition temporal de PyPI)</li>
+<li>[x] Solução proposta e documentada</li>
+<li>[ ] Implementação iniciada</li>
+<li>[ ] Testes escritos</li>
+<li>[ ] CI atualizado</li>
+<li>[ ] Documentação atualizada</li>
+<li>[ ] Deploy em produção</li>
+</ul>
+<hr />
+<h2 id="fase-1-implementacao-do-codigo">🔬 FASE 1: IMPLEMENTAÇÃO DO CÓDIGO</h2>
+<h3 id="11-dependency-guardian-core-logic">1.1. Dependency Guardian - Core Logic</h3>
+<p><strong>Arquivo:</strong> <code>scripts/core/dependency_guardian.py</code></p>
+<ul>
+<li>[ ] Adicionar método <code>validate_deep_consistency()</code></li>
+<li>[ ] Implementar compilação em memória (tempfile)</li>
+<li>[ ] Executar pip-compile com flags compatíveis com verify_deps.py</li>
+<li>[ ] Comparação de conteúdo (comment-agnostic)</li>
+<li>[ ] Geração de relatório de diferenças</li>
+<li>
+<p>[ ] Tratamento de erros (pip-compile failure)</p>
+</li>
+<li>
+<p>[ ] Adicionar método <code>_compare_content_deep()</code></p>
+</li>
+<li>[ ] Leitura de ambos os arquivos</li>
+<li>[ ] Filtro de comentários e linhas em branco</li>
+<li>[ ] Comparação linha a linha</li>
+<li>
+<p>[ ] Retornar lista de mismatches</p>
+</li>
+<li>
+<p>[ ] Adicionar método <code>_format_diff_report()</code></p>
+</li>
+<li>[ ] Formatação legível de diferenças</li>
+<li>[ ] Incluir sugestões de remediação</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Código passa em <code>make lint</code></li>
+<li>✅ Código passa em <code>make type-check</code></li>
+<li>✅ Sem dependências externas adicionadas</li>
+</ul>
+<hr />
+<h3 id="12-cli-interface-update">1.2. CLI Interface Update</h3>
+<p><strong>Arquivo:</strong> <code>scripts/core/dependency_guardian.py</code> (função <code>main()</code>)</p>
+<ul>
+<li>[ ] Adicionar ação <code>validate-deep</code> ao argparse</li>
+<li>[ ] Suporte para <code>--python-exec</code> opcional</li>
+<li>[ ] Exit codes corretos (0=sucesso, 1=falha)</li>
+<li>
+<p>[ ] Output formatado para humanos E CI</p>
+</li>
+<li>
+<p>[ ] Manter compatibilidade com ações existentes</p>
+</li>
+<li>[ ] <code>compute</code> (sem mudanças)</li>
+<li>[ ] <code>seal</code> (sem mudanças)</li>
+<li>[ ] <code>validate</code> (sem mudanças, deprecated)</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ <code>python -m scripts.core.dependency_guardian validate-deep dev</code> funciona</li>
+<li>✅ Output contém diff legível quando falhar</li>
+<li>✅ Exit code 0 quando sincronizado</li>
+<li>✅ Exit code 1 quando desincronizado</li>
+</ul>
+<hr />
+<h2 id="fase-2-testes-unitarios">🧪 FASE 2: TESTES UNITÁRIOS</h2>
+<h3 id="21-testes-de-deteccao-de-drift">2.1. Testes de Detecção de Drift</h3>
+<p><strong>Arquivo:</strong> <code>tests/test_dependency_guardian_deep.py</code> (criar novo)</p>
+<ul>
+<li>[ ] <code>test_deep_consistency_detects_pypi_drift()</code></li>
+<li>[ ] Setup: criar dev.in com dependência não pinada</li>
+<li>[ ] Compilar lockfile fresco</li>
+<li>[ ] Simular downgrade manual (tomli 2.4.0 → 2.3.0)</li>
+<li>[ ] Validar que deep check detecta discrepância</li>
+<li>[ ] Assert: <code>is_valid == False</code></li>
+<li>
+<p>[ ] Assert: diff contém ambas as versões</p>
+</li>
+<li>
+<p>[ ] <code>test_deep_consistency_passes_when_synced()</code></p>
+</li>
+<li>[ ] Setup: criar dev.in com dependências pinadas</li>
+<li>[ ] Compilar lockfile fresco</li>
+<li>[ ] Executar deep check imediatamente</li>
+<li>[ ] Assert: <code>is_valid == True</code></li>
+<li>
+<p>[ ] Assert: <code>diff == ""</code></p>
+</li>
+<li>
+<p>[ ] <code>test_deep_consistency_detects_manual_edit()</code></p>
+</li>
+<li>[ ] Setup: lockfile válido</li>
+<li>[ ] Adicionar dependência fake no meio do arquivo</li>
+<li>[ ] Executar deep check</li>
+<li>[ ] Assert: detecção de adulteração</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ 3 testes passam com <code>pytest</code></li>
+<li>✅ Coverage &gt; 90% para novos métodos</li>
+<li>✅ Testes não dependem de estado externo (PyPI)</li>
+</ul>
+<hr />
+<h3 id="22-testes-de-edge-cases">2.2. Testes de Edge Cases</h3>
+<ul>
+<li>[ ] <code>test_deep_check_handles_missing_input_file()</code></li>
+<li>
+<p>[ ] Assert: retorna <code>(False, "Input file not found: ...")</code></p>
+</li>
+<li>
+<p>[ ] <code>test_deep_check_handles_missing_lockfile()</code></p>
+</li>
+<li>
+<p>[ ] Assert: retorna <code>(False, "Lockfile not found: ...")</code></p>
+</li>
+<li>
+<p>[ ] <code>test_deep_check_handles_pip_compile_failure()</code></p>
+</li>
+<li>[ ] Simular falha do pip-compile (arquivo corrompido)</li>
+<li>[ ] Assert: retorna <code>(False, "pip-compile failed: ...")</code></li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Todos os edge cases cobertos</li>
+<li>✅ Mensagens de erro são descritivas</li>
+</ul>
+<hr />
+<h2 id="fase-3-integracao-ao-makefile">🔧 FASE 3: INTEGRAÇÃO AO MAKEFILE</h2>
+<h3 id="31-novo-target-deps-deep-check">3.1. Novo Target: deps-deep-check</h3>
+<p><strong>Arquivo:</strong> <code>Makefile</code></p>
+<ul>
+<li>[ ] Adicionar target <code>deps-deep-check</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c">## deps-deep-check: Validação profunda de dependências (compilação em memória)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nf">deps-deep-check</span><span class="o">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;🛡️  Executando Deep Consistency Check (Protocolo v2.3)...&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w"> </span>@<span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>validate-deep<span class="w"> </span>dev
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Lockfile em paridade total com estado atual do PyPI&quot;</span>
+</code></pre></div>
+<ul>
+<li>[ ] Atualizar target <code>validate</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">validate</span><span class="o">:</span><span class="w"> </span><span class="n">lint</span> <span class="n">type</span>-<span class="n">check</span> <span class="n">deps</span>-<span class="n">deep</span>-<span class="n">check</span> <span class="n">audit</span>
+</code></pre></div>
+<ul>
+<li>[ ] Deprecar <code>deps-check</code> (manter por compatibilidade)</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c">## deps-check: Validação rápida (selo SHA-256) [DEPRECATED]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nf">deps-check</span><span class="o">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;⚠️  Aviso: deps-check usa validação v2.2 (pode ter falsos positivos)&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;   Use: make deps-deep-check (v2.3 recomendado)&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w"> </span>@<span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span>scripts/ci/verify_deps.py
+</code></pre></div>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ <code>make deps-deep-check</code> executa sem erros em lockfile sincronizado</li>
+<li>✅ <code>make validate</code> inclui deep check</li>
+<li>✅ <code>make deps-check</code> mostra warning de deprecação</li>
+</ul>
+<hr />
+<h2 id="fase-4-atualizacao-do-ci-workflow">🚀 FASE 4: ATUALIZAÇÃO DO CI WORKFLOW</h2>
+<h3 id="41-github-actions-workflow">4.1. GitHub Actions Workflow</h3>
+<p><strong>Arquivo:</strong> <code>.github/workflows/ci.yml</code></p>
+<ul>
+<li>[ ] Substituir step "Check Lockfile Consistency"</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Check</span><span class="nv"> </span><span class="s">Lockfile</span><span class="nv"> </span><span class="s">Deep</span><span class="nv"> </span><span class="s">Consistency</span><span class="nv"> </span><span class="s">(v2.3)&quot;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">PYTHON_BASELINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="no">echo &quot;🛡️ Validando sincronização de dependências (Deep Check)...&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="no">python -m scripts.core.dependency_guardian validate-deep dev --python-exec python3.10</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="no">echo &quot;✅ Lockfile em paridade total com PyPI (Protocolo v2.3)&quot;</span>
+</code></pre></div>
+<ul>
+<li>[ ] (Opcional) Adicionar cache de pip-compile</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Cache</span><span class="nv"> </span><span class="s">pip-compile</span><span class="nv"> </span><span class="s">results&quot;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v5</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.cache/pip-compile</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deps-${{ hashFiles(&#39;requirements/dev.in&#39;, &#39;requirements/dev.txt&#39;) }}</span>
+</code></pre></div>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ CI passa em lockfile sincronizado</li>
+<li>✅ CI falha em lockfile desatualizado (tomli 2.3.0 vs 2.4.0)</li>
+<li>✅ Mensagem de erro é clara e acionável</li>
+</ul>
+<hr />
+<h2 id="fase-5-documentacao">📚 FASE 5: DOCUMENTAÇÃO</h2>
+<h3 id="51-readme-principal">5.1. README Principal</h3>
+<p><strong>Arquivo:</strong> <code>README.md</code></p>
+<ul>
+<li>[ ] Adicionar seção "Validação de Dependências (v2.3)"</li>
+<li>[ ] Explicar diferença entre v2.2 (selo) e v2.3 (deep check)</li>
+<li>[ ] Comandos de uso diário (<code>make validate</code>)</li>
+<li>
+<p>[ ] Troubleshooting (quando deep check falhar)</p>
+</li>
+<li>
+<p>[ ] Atualizar seção de comandos Make</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gu">### Comandos de Desenvolvimento</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>| Comando | Descrição |
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>|---------|-----------|
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>| <span class="sb">`make validate`</span> | Validação completa (lint + tipos + <span class="gs">**deep deps check**</span>) |
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>| <span class="sb">`make deps-deep-check`</span> | Validação profunda de dependências (v2.3) |
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>| <span class="sb">`make requirements`</span> | Sincronizar e selar lockfile |
+</code></pre></div>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Documentação está clara para novos desenvolvedores</li>
+<li>✅ Inclui exemplos de uso</li>
+</ul>
+<hr />
+<h3 id="52-arquivo-de-arquitetura">5.2. Arquivo de Arquitetura</h3>
+<p><strong>Arquivo:</strong> <code>docs/architecture/DEPENDENCY_GUARDIAN_v2.3.md</code> (criar novo)</p>
+<ul>
+<li>[ ] Documentar decisões de design</li>
+<li>[ ] Por que deep check é necessário</li>
+<li>[ ] Trade-offs de performance</li>
+<li>
+<p>[ ] Alternativas consideradas (dual-hash seal)</p>
+</li>
+<li>
+<p>[ ] Incluir diagramas de sequência</p>
+</li>
+<li>[ ] Fluxo de <code>make validate</code></li>
+<li>[ ] Fluxo de <code>make requirements</code></li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ ADR (Architecture Decision Record) completo</li>
+<li>✅ Diagramas incluídos</li>
+</ul>
+<hr />
+<h2 id="fase-6-testes-de-integracao">🔍 FASE 6: TESTES DE INTEGRAÇÃO</h2>
+<h3 id="61-teste-end-to-end">6.1. Teste End-to-End</h3>
+<p><strong>Cenário:</strong> Simular falha de CI no GitHub Actions</p>
+<ul>
+<li>[ ] Criar branch de teste</li>
+<li>[ ] Fazer downgrade manual de dependência (tomli 2.4.0 → 2.3.0)</li>
+<li>[ ] Commitar e push</li>
+<li>[ ] Verificar que CI falha com mensagem clara</li>
+<li>[ ] Executar <code>make requirements</code> localmente</li>
+<li>[ ] Push novamente</li>
+<li>[ ] Verificar que CI passa</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ CI detecta dessincronia em &lt;5 minutos</li>
+<li>✅ Mensagem de erro é acionável</li>
+<li>✅ Fix é trivial (<code>make requirements</code>)</li>
+</ul>
+<hr />
+<h3 id="62-teste-de-regressao">6.2. Teste de Regressão</h3>
+<p><strong>Cenário:</strong> Garantir que não quebramos funcionalidades existentes</p>
+<ul>
+<li>[ ] Executar <code>make validate</code> em branch main (deve passar)</li>
+<li>[ ] Executar <code>python -m scripts.core.dependency_guardian validate dev</code> (v2.2, deve passar)</li>
+<li>[ ] Executar <code>python -m scripts.core.dependency_guardian seal dev</code> (deve funcionar)</li>
+<li>[ ] Verificar que selo SHA-256 ainda é injetado corretamente</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Todas as funcionalidades v2.2 continuam funcionando</li>
+<li>✅ Selo SHA-256 é mantido para compatibilidade</li>
+</ul>
+<hr />
+<h2 id="fase-7-metricas-e-monitoramento">📊 FASE 7: MÉTRICAS E MONITORAMENTO</h2>
+<h3 id="71-coletar-metricas-de-performance">7.1. Coletar Métricas de Performance</h3>
+<ul>
+<li>[ ] Medir tempo de <code>make validate</code> antes e depois</li>
+<li>[ ] Baseline (v2.2): <code>time make validate</code> (sem deep check)</li>
+<li>[ ] Nova versão (v2.3): <code>time make validate</code> (com deep check)</li>
+<li>
+<p>[ ] Calcular delta</p>
+</li>
+<li>
+<p>[ ] Medir tempo do CI</p>
+</li>
+<li>[ ] Job "Quality" antes: ~X minutos</li>
+<li>[ ] Job "Quality" depois: ~Y minutos</li>
+<li>[ ] Verificar se está dentro do SLA (&lt;10 minutos)</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Delta de performance documentado</li>
+<li>✅ CI não ultrapassa 10 minutos</li>
+</ul>
+<hr />
+<h3 id="72-alertas-de-drift-frequente">7.2. Alertas de Drift Frequente</h3>
+<ul>
+<li>[ ] (Opcional) Adicionar log quando deep check detecta drift</li>
+<li>[ ] Registrar qual dependência mudou</li>
+<li>[ ] Enviar métrica para observability (se disponível)</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Logs são informativos</li>
+<li>✅ Facilita debugging futuro</li>
+</ul>
+<hr />
+<h2 id="fase-8-deploy-e-rollout">🚢 FASE 8: DEPLOY E ROLLOUT</h2>
+<h3 id="81-preparacao-para-merge">8.1. Preparação para Merge</h3>
+<ul>
+<li>[ ] Criar PR com todas as mudanças</li>
+<li>[ ] Título: <code>feat(deps): implement Deep Consistency Check v2.3</code></li>
+<li>[ ] Descrição detalhada (link para relatório forense)</li>
+<li>
+<p>[ ] Screenshots de testes passando</p>
+</li>
+<li>
+<p>[ ] Code review</p>
+</li>
+<li>[ ] Pelo menos 1 aprovação de tech lead</li>
+<li>[ ] Todos os comentários resolvidos</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ PR aprovado</li>
+<li>✅ CI verde</li>
+<li>✅ Sem merge conflicts</li>
+</ul>
+<hr />
+<h3 id="82-merge-e-comunicacao">8.2. Merge e Comunicação</h3>
+<ul>
+<li>[ ] Merge para main</li>
+<li>[ ] Comunicar mudança ao time</li>
+<li>[ ] Slack/Discord: "🚀 Dependency Guardian v2.3 deployed!"</li>
+<li>[ ] Destacar que <code>make validate</code> agora é mais rigoroso</li>
+<li>
+<p>[ ] Pedir para time rodar <code>make requirements</code> se deep check falhar</p>
+</li>
+<li>
+<p>[ ] Monitorar primeiros dias</p>
+</li>
+<li>[ ] Verificar se CI está passando em todos os PRs</li>
+<li>[ ] Coletar feedback do time</li>
+</ul>
+<p><strong>Critérios de Aceitação:</strong></p>
+<ul>
+<li>✅ Time notificado</li>
+<li>✅ Sem regressões reportadas em 48h</li>
+</ul>
+<hr />
+<h2 id="criterios-de-sucesso-final">🎯 CRITÉRIOS DE SUCESSO FINAL</h2>
+<h3 id="funcionalidade">Funcionalidade</h3>
+<ul>
+<li>[x] Deep check detecta drift de PyPI (testado com tomli 2.3.0 vs 2.4.0)</li>
+<li>[ ] Deep check passa quando lockfile está sincronizado</li>
+<li>[ ] Deep check falha quando lockfile está desatualizado</li>
+<li>[ ] Mensagens de erro são claras e acionáveis</li>
+</ul>
+<h3 id="performance">Performance</h3>
+<ul>
+<li>[ ] <code>make validate</code> executa em &lt;15 segundos (local)</li>
+<li>[ ] CI job "Quality" executa em &lt;10 minutos (GitHub Actions)</li>
+<li>[ ] Cache de pip-compile reduz tempo em ~50% em hits</li>
+</ul>
+<h3 id="documentacao">Documentação</h3>
+<ul>
+<li>[ ] README atualizado</li>
+<li>[ ] ADR criado em <code>docs/architecture/</code></li>
+<li>[ ] Relatório forense arquivado em <code>docs/reports/</code></li>
+</ul>
+<h3 id="qualidade">Qualidade</h3>
+<ul>
+<li>[ ] Coverage de testes &gt; 90%</li>
+<li>[ ] Nenhuma violação de lint/type-check</li>
+<li>[ ] Zero regressões em funcionalidades existentes</li>
+</ul>
+<hr />
+<h2 id="estimativa-de-tempo">📅 ESTIMATIVA DE TEMPO</h2>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Estimativa</th>
+<th>Prioridade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Implementação Core</td>
+<td>4-6 horas</td>
+<td>🔴 ALTA</td>
+</tr>
+<tr>
+<td>2. Testes Unitários</td>
+<td>2-3 horas</td>
+<td>🔴 ALTA</td>
+</tr>
+<tr>
+<td>3. Integração Makefile</td>
+<td>1 hora</td>
+<td>🟡 MÉDIA</td>
+</tr>
+<tr>
+<td>4. Atualização CI</td>
+<td>1-2 horas</td>
+<td>🔴 ALTA</td>
+</tr>
+<tr>
+<td>5. Documentação</td>
+<td>2-3 horas</td>
+<td>🟡 MÉDIA</td>
+</tr>
+<tr>
+<td>6. Testes Integração</td>
+<td>2 horas</td>
+<td>🟡 MÉDIA</td>
+</tr>
+<tr>
+<td>7. Métricas</td>
+<td>1 hora</td>
+<td>🟢 BAIXA</td>
+</tr>
+<tr>
+<td>8. Deploy</td>
+<td>1 hora</td>
+<td>🔴 ALTA</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>14-19 horas</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sprint recomendado:</strong> 1 sprint (2 semanas) com 1 desenvolvedor full-time</p>
+<hr />
+<h2 id="referencias">🔗 REFERÊNCIAS</h2>
+<ul>
+<li><a href="../FORENSE_DEPENDENCY_GUARDIAN_v2.2_INCIDENT_20260111/">Relatório Forense Completo</a></li>
+<li><a href="../PROPOSTA_DEEP_CONSISTENCY_CHECK_v2.3/">Proposta de Implementação</a></li>
+<li><a href="../FORENSE_DEPENDENCY_GUARDIAN_v2.2_DIAGRAMS/">Diagramas Técnicos</a></li>
+<li><a href="../SUMARIO_EXECUTIVO_INVESTIGACAO_FORENSE/">Sumário Executivo</a></li>
+</ul>
+<hr />
+<p><strong>Checklist criada por:</strong> GitHub Copilot (Claude Sonnet 4.5)
+<strong>Data:</strong> 2026-01-11
+<strong>Versão:</strong> 1.0</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

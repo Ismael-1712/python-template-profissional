@@ -1,0 +1,1490 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="GitHub Copilot (Claude Sonnet 4.5)">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Relatório Forense - Falha no Protocolo de Imunidade v2.2 - {{ project_name }}</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#relatorio-de-inteligencia-forense" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="{{ project_name }}" class="md-header__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            {{ project_name }}
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Relatório Forense - Falha no Protocolo de Imunidade v2.2
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/testing/" class="md-tabs__link">
+          
+  
+  
+  Guias
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/git_sync/" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="{{ project_name }}" class="md-nav__button md-logo" aria-label="{{ project_name }}" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    {{ project_name }}
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filosofia de Testes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/git_sync/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Git Sync
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--active"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#missao-investigacao-de-falha-no-protocolo-de-imunidade-v22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MISSÃO: INVESTIGAÇÃO DE FALHA NO PROTOCOLO DE IMUNIDADE v2.2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎯 EXECUTIVE SUMMARY
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 EXECUTIVE SUMMARY">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#causa-raiz-identificada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CAUSA RAIZ IDENTIFICADA
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analise-tecnica-detalhada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 ANÁLISE TÉCNICA DETALHADA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 ANÁLISE TÉCNICA DETALHADA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-timeline-do-incidente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. TIMELINE DO INCIDENTE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gatekeeper-gap-por-que-o-selo-sha-256-nao-detectou" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. GATEKEEPER GAP: POR QUE O SELO SHA-256 NÃO DETECTOU?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. GATEKEEPER GAP: POR QUE O SELO SHA-256 NÃO DETECTOU?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-algoritmo-de-hash-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Algoritmo de Hash Atual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-o-problema-fundamental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. O Problema Fundamental
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-analise-de-fluxo-make-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. ANÁLISE DE FLUXO (make requirements)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. ANÁLISE DE FLUXO (make requirements)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-sequencia-de-operacoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Sequência de Operações
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-potencial-race-condition-de-buffer-vs-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Potencial Race Condition de Buffer (VS Code)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-analise-do-ci-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ANÁLISE DO CI WORKFLOW
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. ANÁLISE DO CI WORKFLOW">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-job-de-quality-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Job de Quality Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analise-de-seguranca-do-protocolo-v22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔐 ANÁLISE DE SEGURANÇA DO PROTOCOLO v2.2
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 ANÁLISE DE SEGURANÇA DO PROTOCOLO v2.2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#falhas-identificadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FALHAS IDENTIFICADAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FALHAS IDENTIFICADAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#f1-insensibilidade-a-drift-temporal-de-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ F1: Insensibilidade a Drift Temporal de PyPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f2-ausencia-de-validacao-de-conteudo-do-lockfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ F2: Ausência de Validação de Conteúdo do Lockfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f3-race-condition-de-buffer-vs-codeeditor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ F3: Race Condition de Buffer (VS Code/Editor)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposta-de-autoimunidade-reforcada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 PROPOSTA DE AUTOIMUNIDADE REFORÇADA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💡 PROPOSTA DE AUTOIMUNIDADE REFORÇADA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solucao-1-deep-consistency-check-validacao-de-conteudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOLUÇÃO 1: Deep Consistency Check (Validação de Conteúdo)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SOLUÇÃO 1: Deep Consistency Check (Validação de Conteúdo)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-da-ferramenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design da Ferramenta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-2-dual-hash-seal-hash-do-in-hash-do-txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOLUÇÃO 2: Dual-Hash Seal (Hash do .in + Hash do .txt)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SOLUÇÃO 2: Dual-Hash Seal (Hash do .in + Hash do .txt)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solucao-3-atomic-write-com-file-locking-prevenir-race-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SOLUÇÃO 3: Atomic Write com File Locking (Prevenir Race Condition)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SOLUÇÃO 3: Atomic Write com File Locking (Prevenir Race Condition)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recomendacoes-finais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 RECOMENDAÇÕES FINAIS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 RECOMENDAÇÕES FINAIS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#estrategia-hibrida-defesa-em-profundidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ESTRATÉGIA HÍBRIDA (Defesa em Profundidade)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licoes-aprendidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 LIÇÕES APRENDIDAS
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 LIÇÕES APRENDIDAS">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-selos-criptograficos-imutabilidade-de-conteudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Selos Criptográficos ≠ Imutabilidade de Conteúdo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-a-prova-de-esquecimento-requer-validacao-de-estado-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. "À Prova de Esquecimento" Requer Validação de Estado Final
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-race-conditions-em-pipelines-de-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Race Conditions em Pipelines de Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas-do-incidente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 MÉTRICAS DO INCIDENTE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-da-investigacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ✅ STATUS DA INVESTIGAÇÃO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔗 REFERÊNCIAS
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="relatorio-de-inteligencia-forense">🔬 RELATÓRIO DE INTELIGÊNCIA FORENSE</h1>
+<h2 id="missao-investigacao-de-falha-no-protocolo-de-imunidade-v22">MISSÃO: INVESTIGAÇÃO DE FALHA NO PROTOCOLO DE IMUNIDADE v2.2</h2>
+<p><strong>Data do Incidente:</strong> 2026-01-11
+<strong>Commit Afetado:</strong> <code>4051427</code> (Dependency Guardian v2.2)
+<strong>Sistema Comprometido:</strong> GitHub CI - Verificação de Dependências
+<strong>Erro Reportado:</strong> <code>tomli==2.3.0</code> (commitado) vs <code>tomli==2.4.0</code> (esperado)</p>
+<hr />
+<h2 id="executive-summary">🎯 EXECUTIVE SUMMARY</h2>
+<p>O GitHub CI detectou uma <strong>dessincronia crítica</strong> no lockfile <code>requirements/dev.txt</code> após a implementação do Dependency Guardian v2.2. A investigação revela uma <strong>falha de design fundamental</strong> no protocolo SHA-256: o selo criptográfico é <strong>insensível a upgrades de dependências transitivas</strong> que ocorrem no PyPI entre o momento do commit e a execução do CI.</p>
+<h3 id="causa-raiz-identificada">CAUSA RAIZ IDENTIFICADA</h3>
+<p><strong>Race Condition Temporal de PyPI</strong>: O tomli 2.4.0 foi lançado no PyPI em <code>2026-01-11 11:21:45 UTC</code>, <strong>2 horas antes</strong> do commit do Guardian v2.2 (<code>13:24:26 -0300</code>). No momento do commit local, o pip-compile resolveu <code>tomli==2.3.0</code>, mas quando o GitHub CI executou, o pip-compile já resolveu <code>tomli==2.4.0</code>.</p>
+<hr />
+<h2 id="analise-tecnica-detalhada">📊 ANÁLISE TÉCNICA DETALHADA</h2>
+<h3 id="1-timeline-do-incidente">1. TIMELINE DO INCIDENTE</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>2025-10-08 22:01:00 UTC → tomli 2.3.0 lançado no PyPI
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>2026-01-11 11:21:45 UTC → tomli 2.4.0 lançado no PyPI ⚠️
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>2026-01-11 13:24:26 -0300 → Commit do Guardian v2.2 (local: tomli==2.3.0)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>2026-01-11 16:XX:XX -0300 → GitHub CI executa (resolve: tomli==2.4.0) ❌
+</code></pre></div>
+<p><strong>Gap Temporal:</strong> ~5 horas entre o release do PyPI e o commit local.</p>
+<hr />
+<h3 id="2-gatekeeper-gap-por-que-o-selo-sha-256-nao-detectou">2. GATEKEEPER GAP: POR QUE O SELO SHA-256 NÃO DETECTOU?</h3>
+<h4 id="21-algoritmo-de-hash-atual">2.1. Algoritmo de Hash Atual</h4>
+<p>O <code>DependencyGuardian.compute_input_hash()</code> calcula o SHA-256 <strong>apenas do arquivo <code>dev.in</code></strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># scripts/core/dependency_guardian.py (linhas 63-84)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">compute_input_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirements_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.in&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">content</span> <span class="o">=</span> <span class="n">in_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">lines</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">meaningful_lines</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="k">if</span> <span class="n">stripped</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            <span class="n">meaningful_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">normalized_content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meaningful_lines</span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">hash_obj</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">normalized_content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="k">return</span> <span class="n">hash_obj</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Entrada Normalizada (dev.in):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ruff==0.14.10
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pytest==9.0.2
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>...
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>tomli; python_version &lt; &#39;3.11&#39;  ← SEM PIN DE VERSÃO
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>...
+</code></pre></div>
+<p><strong>Hash Resultante:</strong> <code>c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4</code></p>
+<h4 id="22-o-problema-fundamental">2.2. O Problema Fundamental</h4>
+<p><strong>O hash do <code>.in</code> NÃO MUDA quando uma dependência transitiva é atualizada no PyPI.</strong></p>
+<ul>
+<li>O <code>dev.in</code> declara: <code>tomli; python_version &lt; '3.11'</code> (sem versão pinada)</li>
+<li>O pip-compile resolve para a versão <strong>mais recente disponível no PyPI no momento da execução</strong></li>
+<li>Resultado: <strong>Dois ambientes diferentes podem gerar lockfiles diferentes</strong> a partir do <strong>mesmo <code>.in</code></strong></li>
+</ul>
+<p><strong>VERIFICAÇÃO EXPERIMENTAL:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Hash do dev.in (não mudou)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>$<span class="w"> </span>sha256sum<span class="w"> </span>requirements/dev.in
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>0def3b7cbf12d4bf260762c4401c9d7b9385b5ce68f4dd88179faa49904dff85
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Selo armazenado no dev.txt (baseado no dev.in)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>$<span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;INTEGRITY_SEAL:&quot;</span><span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># INTEGRITY_SEAL: c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Hash recalculado pelo Guardian (ainda c34d823...)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>compute<span class="w"> </span>dev
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>SHA-256:<span class="w"> </span>c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># Mas o lockfile DIVERGE quando recompilado:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>$<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>piptools<span class="w"> </span>compile<span class="w"> </span>requirements/dev.in<span class="w"> </span>--dry-run<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>tomli
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="nv">tomli</span><span class="o">==</span><span class="m">2</span>.4.0<span class="w"> </span><span class="p">;</span><span class="w"> </span>python_version<span class="w"> </span>&lt;<span class="w"> </span><span class="s2">&quot;3.11&quot;</span><span class="w">  </span>←<span class="w"> </span>NOVO
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>$<span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;^tomli&quot;</span><span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="nv">tomli</span><span class="o">==</span><span class="m">2</span>.3.0<span class="w"> </span><span class="p">;</span><span class="w"> </span>python_version<span class="w"> </span>&lt;<span class="w"> </span><span class="s2">&quot;3.11&quot;</span><span class="w">  </span>←<span class="w"> </span>ANTIGO
+</code></pre></div>
+<p><strong>CONCLUSÃO:</strong> O selo SHA-256 valida <strong>corretamente</strong> porque o <code>.in</code> não mudou, mas o <code>.txt</code> está <strong>obsoleto</strong> porque o PyPI mudou.</p>
+<hr />
+<h3 id="3-analise-de-fluxo-make-requirements">3. ANÁLISE DE FLUXO (make requirements)</h3>
+<h4 id="31-sequencia-de-operacoes">3.1. Sequência de Operações</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c"># Makefile (linhas 110-120)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nf">requirements</span><span class="o">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w"> </span>@PYTHON_BASELINE<span class="o">=</span><span class="k">$(</span>PYTHON_BASELINE<span class="k">)</span><span class="w"> </span><span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w"> </span>@<span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>seal<span class="w"> </span>dev
+</code></pre></div>
+<p><strong>PASSO 1:</strong> <code>verify_deps.py --fix</code> executa pip-compile:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># scripts/ci/verify_deps.py (linhas 251-266)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="p">[</span><span class="n">python_exec</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;piptools&quot;</span><span class="p">,</span> <span class="s2">&quot;compile&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>     <span class="nb">str</span><span class="p">(</span><span class="n">in_file</span><span class="p">),</span> <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">txt_file</span><span class="p">),</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>     <span class="s2">&quot;--resolver=backtracking&quot;</span><span class="p">,</span> <span class="s2">&quot;--strip-extras&quot;</span><span class="p">,</span> <span class="s2">&quot;--allow-unsafe&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">],</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">cwd</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">project_root</span><span class="p">),</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span>
+</code></pre></div>
+<p><strong>Escritas no disco:</strong> <code>requirements/dev.txt</code> é sobrescrito.</p>
+<p><strong>PASSO 2:</strong> <code>dependency_guardian seal dev</code> injeta o selo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># scripts/core/dependency_guardian.py (linhas 228-239)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_write_sealed_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">new_content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">txt_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Escritas no disco:</strong> <code>requirements/dev.txt</code> é sobrescrito novamente.</p>
+<h4 id="32-potencial-race-condition-de-buffer-vs-code">3.2. Potencial Race Condition de Buffer (VS Code)</h4>
+<p><strong>Hipótese:</strong> Se o VS Code tiver o <code>dev.txt</code> aberto durante <code>make requirements</code>, pode ocorrer:</p>
+<ol>
+<li><code>verify_deps.py --fix</code> escreve nova versão do arquivo (tomli==2.4.0)</li>
+<li>VS Code detecta mudança externa e recarrega o arquivo no buffer</li>
+<li><code>dependency_guardian seal</code> escreve o selo no arquivo</li>
+<li><strong>Usuário salva manualmente o buffer do VS Code</strong> → Sobrescreve com versão antiga do buffer</li>
+</ol>
+<p><strong>VERIFICAÇÃO:</strong> Comando <code>lsof</code> não detectou locks ativos no arquivo.</p>
+<p><strong>STATUS:</strong> Hipótese <strong>IMPROVÁVEL</strong> para este incidente específico, mas <strong>POSSÍVEL</strong> em cenários de uso real.</p>
+<hr />
+<h3 id="4-analise-do-ci-workflow">4. ANÁLISE DO CI WORKFLOW</h3>
+<h4 id="41-job-de-quality-check">4.1. Job de Quality Check</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># .github/workflows/ci.yml (linhas 78-84)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Check</span><span class="nv"> </span><span class="s">Lockfile</span><span class="nv"> </span><span class="s">Consistency&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nt">PYTHON_BASELINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="no">echo &quot;🛡️ Validando sincronização de dependências...&quot;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="no">python scripts/ci/verify_deps.py</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="no">echo &quot;✅ Lockfile sincronizado com dev.in&quot;</span>
+</code></pre></div>
+<p><strong>FALHA DETECTADA:</strong> O <code>verify_deps.py</code> (sem <code>--fix</code>) executa:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># scripts/ci/verify_deps.py (linhas 74-88)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w+&quot;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">name</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">([</span><span class="o">...</span><span class="n">pip</span><span class="o">-</span><span class="nb">compile</span><span class="o">...</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">file</span><span class="p">,</span> <span class="n">tmp_path</span> <span class="o">...</span><span class="p">])</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="k">if</span> <span class="n">_compare_files_content</span><span class="p">(</span><span class="n">project_root</span> <span class="o">/</span> <span class="n">txt_file</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)):</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Sincronizado&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ DESSINCRONIZADO&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>    <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
+<p><strong>O que aconteceu:</strong></p>
+<ol>
+<li>CI executa pip-compile em memória → gera <code>tomli==2.4.0</code> (última versão do PyPI)</li>
+<li>Compara com <code>dev.txt</code> commitado → contém <code>tomli==2.3.0</code></li>
+<li><strong>Dessincronia detectada</strong> → CI falha ❌</li>
+</ol>
+<hr />
+<h2 id="analise-de-seguranca-do-protocolo-v22">🔐 ANÁLISE DE SEGURANÇA DO PROTOCOLO v2.2</h2>
+<h3 id="falhas-identificadas">FALHAS IDENTIFICADAS</h3>
+<h4 id="f1-insensibilidade-a-drift-temporal-de-pypi">❌ F1: Insensibilidade a Drift Temporal de PyPI</h4>
+<p><strong>Descrição:</strong> O selo SHA-256 protege contra <strong>edições manuais</strong> do <code>.txt</code>, mas <strong>não protege contra upgrades de dependências</strong> no PyPI que ocorrem entre commits.</p>
+<p><strong>Impacto:</strong> Um lockfile pode passar na validação do selo mas falhar no CI.</p>
+<p><strong>Severidade:</strong> HIGH (quebra a premissa "à prova de esquecimento")</p>
+<hr />
+<h4 id="f2-ausencia-de-validacao-de-conteudo-do-lockfile">❌ F2: Ausência de Validação de Conteúdo do Lockfile</h4>
+<p><strong>Descrição:</strong> O Guardian valida apenas:</p>
+<ul>
+<li>Hash do <code>.in</code> (entrada) ← OK</li>
+<li>Presença do selo no <code>.txt</code> (metadata) ← OK</li>
+<li><strong>NÃO valida:</strong> conteúdo efetivo do <code>.txt</code> contra compilação em memória</li>
+</ul>
+<p><strong>Impacto:</strong> Lockfiles obsoletos passam na validação.</p>
+<p><strong>Severidade:</strong> CRITICAL</p>
+<hr />
+<h4 id="f3-race-condition-de-buffer-vs-codeeditor">❌ F3: Race Condition de Buffer (VS Code/Editor)</h4>
+<p><strong>Descrição:</strong> Se o usuário tiver <code>dev.txt</code> aberto em um editor durante <code>make requirements</code>:</p>
+<ol>
+<li>pip-compile escreve nova versão</li>
+<li>Editor recarrega buffer</li>
+<li>Guardian injeta selo</li>
+<li><strong>Usuário salva o buffer</strong> → sobrescreve com versão antiga</li>
+</ol>
+<p><strong>Impacto:</strong> Selo aplicado a arquivo desatualizado.</p>
+<p><strong>Severidade:</strong> MEDIUM (depende de ação manual do usuário)</p>
+<hr />
+<h2 id="proposta-de-autoimunidade-reforcada">💡 PROPOSTA DE AUTOIMUNIDADE REFORÇADA</h2>
+<h3 id="solucao-1-deep-consistency-check-validacao-de-conteudo">SOLUÇÃO 1: Deep Consistency Check (Validação de Conteúdo)</h3>
+<p><strong>Objetivo:</strong> Integrar validação de conteúdo ao <code>make validate</code>, forçando paridade total entre <code>.in</code> e <code>.txt</code> via compilação em memória.</p>
+<h4 id="design-da-ferramenta">Design da Ferramenta</h4>
+<p><strong>Nome:</strong> <code>DependencyGuardian.validate_deep_consistency()</code></p>
+<p><strong>Lógica:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_deep_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that lockfile matches pip-compile output (deep check).</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="sd">    This is the ULTIMATE validation: we recompile in memory and compare</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="sd">    byte-by-byte (ignoring comments). This catches:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="sd">    - Manual edits</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="sd">    - PyPI drift (upstream version changes)</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="sd">    - Incomplete pip-compile runs</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="sd">        bool: True if lockfile is perfectly consistent with current PyPI state</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="n">in_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirements_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.in&quot;</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="n">txt_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirements_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.txt&quot;</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>    <span class="c1"># 1. Compile in memory</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w+&#39;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>        <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">name</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>            <span class="p">[</span><span class="s2">&quot;pip-compile&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">in_file</span><span class="p">),</span> <span class="s2">&quot;--output-file&quot;</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">,</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>             <span class="s2">&quot;--resolver=backtracking&quot;</span><span class="p">,</span> <span class="s2">&quot;--strip-extras&quot;</span><span class="p">,</span> <span class="s2">&quot;--allow-unsafe&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">],</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>        <span class="p">)</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>        <span class="c1"># 2. Compare content (comment-agnostic)</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare_content_deep</span><span class="p">(</span><span class="n">txt_file</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">))</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>    <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="k">def</span><span class="w"> </span><span class="nf">_compare_content_deep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_a</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">file_b</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Byte-by-byte comparison of meaningful lines (ignore comments).&quot;&quot;&quot;</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_a</span><span class="p">)</span> <span class="k">as</span> <span class="n">fa</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_b</span><span class="p">)</span> <span class="k">as</span> <span class="n">fb</span><span class="p">:</span>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>        <span class="n">lines_a</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">fa</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>        <span class="n">lines_b</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">fb</span> <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>    <span class="k">return</span> <span class="n">lines_a</span> <span class="o">==</span> <span class="n">lines_b</span>
+</code></pre></div>
+<p><strong>Integração ao Makefile:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c">## validate: Validação completa (linting + tipos + deps DEEP)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nf">validate</span><span class="o">:</span><span class="w"> </span><span class="n">lint</span> <span class="n">type</span>-<span class="n">check</span> <span class="n">deps</span>-<span class="n">deep</span>-<span class="n">check</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c">## deps-deep-check: Validação profunda de dependências (compilação em memória)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="nf">deps-deep-check</span><span class="o">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;🛡️  Executando Deep Consistency Check...&quot;</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w"> </span>@<span class="k">$(</span>PYTHON<span class="k">)</span><span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>validate-deep<span class="w"> </span>dev
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w"> </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Lockfile está em paridade total com o estado atual do PyPI&quot;</span>
+</code></pre></div>
+<p><strong>Vantagens:</strong></p>
+<p>✅ Detecta drift de PyPI em tempo real
+✅ Força recompilação se necessário
+✅ Prova de consistência absoluta (não apenas metadados)</p>
+<p><strong>Desvantagens:</strong></p>
+<p>⚠️ Aumenta tempo de validação (~5-10s por recompilação)
+⚠️ Requer conexão com PyPI (pode falhar em ambientes offline)</p>
+<hr />
+<h3 id="solucao-2-dual-hash-seal-hash-do-in-hash-do-txt">SOLUÇÃO 2: Dual-Hash Seal (Hash do .in + Hash do .txt)</h3>
+<p><strong>Objetivo:</strong> Selar tanto a entrada quanto a saída para detectar mudanças em ambos.</p>
+<h4 id="design">Design</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">inject_dual_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Inject dual integrity seal (input + output hashes).</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="sd">    Format:</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="sd">        # INTEGRITY_SEAL_IN:  &lt;sha256 of dev.in meaningful lines&gt;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="sd">        # INTEGRITY_SEAL_OUT: &lt;sha256 of dev.txt meaningful lines&gt;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">in_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_input_hash</span><span class="p">(</span><span class="n">req_name</span><span class="p">)</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="n">out_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_output_hash</span><span class="p">(</span><span class="n">req_name</span><span class="p">)</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    <span class="c1"># Inject both seals</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="n">txt_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirements_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.txt&quot;</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>    <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_lockfile_content</span><span class="p">(</span><span class="n">txt_file</span><span class="p">)</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    <span class="n">lines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strip_existing_seals</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>    <span class="n">injection_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_injection_point</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>    <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">injection_index</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;# INTEGRITY_SEAL_IN:  </span><span class="si">{</span><span class="n">in_hash</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">injection_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;# INTEGRITY_SEAL_OUT: </span><span class="si">{</span><span class="n">out_hash</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_write_sealed_content</span><span class="p">(</span><span class="n">txt_file</span><span class="p">,</span> <span class="n">lines</span><span class="p">)</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="k">def</span><span class="w"> </span><span class="nf">_compute_output_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute hash of meaningful lines in .txt (dependencies only).&quot;&quot;&quot;</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>    <span class="n">txt_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirements_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.txt&quot;</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>    <span class="n">content</span> <span class="o">=</span> <span class="n">txt_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>    <span class="n">lines</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>    <span class="n">meaningful_lines</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>        <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>        <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>    <span class="p">]</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>    <span class="n">normalized_content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meaningful_lines</span><span class="p">)</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">normalized_content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Validação:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">validate_dual_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate both input and output seals.</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="sd">        bool: True only if BOTH seals are valid</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">in_seal_valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_seal</span><span class="p">(</span><span class="n">req_name</span><span class="p">)</span>  <span class="c1"># Existing logic</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="n">out_seal_valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_output_seal</span><span class="p">(</span><span class="n">req_name</span><span class="p">)</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="k">return</span> <span class="n">in_seal_valid</span> <span class="ow">and</span> <span class="n">out_seal_valid</span>
+</code></pre></div>
+<p><strong>Vantagens:</strong></p>
+<p>✅ Detecta <strong>qualquer</strong> modificação no lockfile (manual ou PyPI drift)
+✅ Não requer recompilação (validação instantânea)
+✅ Funciona offline</p>
+<p><strong>Desvantagens:</strong></p>
+<p>⚠️ Não identifica <strong>qual</strong> dependência mudou
+⚠️ Requer <code>make requirements</code> para resolver drift legítimo</p>
+<hr />
+<h3 id="solucao-3-atomic-write-com-file-locking-prevenir-race-condition">SOLUÇÃO 3: Atomic Write com File Locking (Prevenir Race Condition)</h3>
+<p><strong>Objetivo:</strong> Prevenir que editores sobrescrevam o lockfile durante a geração.</p>
+<h4 id="design_1">Design</h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">fcntl</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">_write_sealed_content_atomic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Write sealed content atomically with file locking.&quot;&quot;&quot;</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">new_content</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="c1"># Write to temporary file first</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="n">tmp_file</span> <span class="o">=</span> <span class="n">txt_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.txt.tmp&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>        <span class="c1"># Acquire exclusive lock</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>        <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_EX</span><span class="p">)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>        <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_content</span><span class="p">)</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>            <span class="n">f</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>            <span class="n">os</span><span class="o">.</span><span class="n">fsync</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>  <span class="c1"># Force OS buffer flush</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>        <span class="k">finally</span><span class="p">:</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>            <span class="n">fcntl</span><span class="o">.</span><span class="n">flock</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">LOCK_UN</span><span class="p">)</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>    <span class="c1"># Atomic rename (POSIX guarantee)</span>
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>    <span class="n">tmp_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">txt_file</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Benefícios:</strong></p>
+<p>✅ Escritas atômicas (tudo-ou-nada)
+✅ Lock previne interferência de editores
+✅ <code>fsync()</code> garante flush em disco antes de liberar</p>
+<hr />
+<h2 id="recomendacoes-finais">📋 RECOMENDAÇÕES FINAIS</h2>
+<h3 id="estrategia-hibrida-defesa-em-profundidade">ESTRATÉGIA HÍBRIDA (Defesa em Profundidade)</h3>
+<p><strong>1. CURTO PRAZO (Hotfix):</strong></p>
+<ul>
+<li>[ ] Implementar <strong>Deep Consistency Check</strong> em <code>make validate</code></li>
+<li>[ ] Adicionar warning quando lockfile está desatualizado (não falhar, apenas alertar)</li>
+<li>[ ] Documentar limitação do selo SHA-256 no README</li>
+</ul>
+<p><strong>2. MÉDIO PRAZO (v2.3):</strong></p>
+<ul>
+<li>[ ] Implementar <strong>Dual-Hash Seal</strong> (IN + OUT)</li>
+<li>[ ] Atomic Write com file locking</li>
+<li>[ ] CI: executar Deep Check em vez de apenas validação de selo</li>
+</ul>
+<p><strong>3. LONGO PRAZO (v3.0):</strong></p>
+<ul>
+<li>[ ] Lockfile Timestamping: registrar timestamp do PyPI no selo</li>
+<li>[ ] Dependency Pinning Advisor: sugerir pinning de dependências críticas</li>
+<li>[ ] Integration com Dependabot/Renovate para upgrades controlados</li>
+</ul>
+<hr />
+<h2 id="licoes-aprendidas">🎓 LIÇÕES APRENDIDAS</h2>
+<h3 id="1-selos-criptograficos-imutabilidade-de-conteudo">1. Selos Criptográficos ≠ Imutabilidade de Conteúdo</h3>
+<p><strong>Insight:</strong> SHA-256 do <code>.in</code> valida a <strong>intenção</strong> (o que foi declarado), mas não a <strong>execução</strong> (o que foi resolvido). Em ambientes dinâmicos como o PyPI, essas duas coisas divergem.</p>
+<p><strong>Análogo:</strong> É como assinar digitalmente uma receita de bolo, mas o padeiro usar ingredientes de lotes diferentes.</p>
+<hr />
+<h3 id="2-a-prova-de-esquecimento-requer-validacao-de-estado-final">2. "À Prova de Esquecimento" Requer Validação de Estado Final</h3>
+<p><strong>Insight:</strong> Para ser verdadeiramente "à prova de esquecimento", o sistema deve validar o <strong>estado final</strong> (lockfile compilado), não apenas o <strong>estado inicial</strong> (.in file).</p>
+<p><strong>Solução:</strong> Deep Consistency Check como validação obrigatória.</p>
+<hr />
+<h3 id="3-race-conditions-em-pipelines-de-build">3. Race Conditions em Pipelines de Build</h3>
+<p><strong>Insight:</strong> Pipelines que escrevem múltiplas vezes no mesmo arquivo (<code>pip-compile</code> → <code>seal injection</code>) são suscetíveis a race conditions com editores.</p>
+<p><strong>Solução:</strong> Atomic writes com file locking ou redesign do pipeline (gerar + selar em uma única operação).</p>
+<hr />
+<h2 id="metricas-do-incidente">📊 MÉTRICAS DO INCIDENTE</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tempo de Detecção</strong></td>
+<td>~3 horas (CI executou após commit)</td>
+</tr>
+<tr>
+<td><strong>Tempo de Investigação</strong></td>
+<td>45 minutos</td>
+</tr>
+<tr>
+<td><strong>Root Cause Identification</strong></td>
+<td>100% (race condition temporal de PyPI)</td>
+</tr>
+<tr>
+<td><strong>False Positive do Seal</strong></td>
+<td>Não (selo está tecnicamente correto)</td>
+</tr>
+<tr>
+<td><strong>Impacto em Produção</strong></td>
+<td>0% (bloqueado pelo CI)</td>
+</tr>
+<tr>
+<td><strong>Severidade da Falha</strong></td>
+<td>HIGH (quebra premissa de imunidade)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="status-da-investigacao">✅ STATUS DA INVESTIGAÇÃO</h2>
+<p><strong>CONCLUSÃO:</strong> Falha no Protocolo de Imunidade v2.2 é causada por <strong>design limitation</strong>, não por bug de implementação. O selo SHA-256 funciona conforme especificado, mas a especificação é <strong>insuficiente</strong> para ambientes dinâmicos.</p>
+<p><strong>PRÓXIMOS PASSOS:</strong></p>
+<ol>
+<li>Implementar Deep Consistency Check (Solução 1)</li>
+<li>Adicionar testes de regressão para drift de PyPI</li>
+<li>Atualizar documentação com limitações conhecidas</li>
+<li>Planejar v2.3 com Dual-Hash Seal</li>
+</ol>
+<hr />
+<p><strong>Investigação conduzida por:</strong> GitHub Copilot (Claude Sonnet 4.5)
+<strong>Data:</strong> 2026-01-11
+<strong>Ticket:</strong> N/A (investigação forense interna)</p>
+<hr />
+<h2 id="referencias">🔗 REFERÊNCIAS</h2>
+<ul>
+<li>Commit do Incidente: <code>4051427</code></li>
+<li>PyPI Release Timeline: <a href="https://pypi.org/project/tomli/#history">https://pypi.org/project/tomli/#history</a></li>
+<li>Dependency Guardian v2.2: <code>scripts/core/dependency_guardian.py</code></li>
+<li>CI Workflow: <code>.github/workflows/ci.yml</code></li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
