@@ -103,6 +103,14 @@ repos:
         files: ^requirements/.*\.(in|txt)$
         description: "Garante que requirements.txt está sincronizado com .in antes de commits (AUTOIMUNIDADE)"
 
+      - id: pip-audit-sca
+        name: "🛡️ SCA - Detecta CVEs em Dependências (pip-audit)"
+        entry: python -m pip_audit . --desc
+        language: system
+        pass_filenames: false
+        files: ^requirements/.*\.(in|txt)$
+        description: "Bloqueia commits com vulnerabilidades não ignoradas (lê exceções de pyproject.toml)"
+
   - repo: local
     hooks:
       - id: governance-policy-strict

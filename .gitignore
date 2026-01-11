@@ -73,6 +73,9 @@ sync_report_*.json
 # CORTEX - Contexto dinâmico gerado (volátil, não deve ser commitado)
 .cortex/
 
+# Cache de pip-audit (SCA) - gerado pelo Makefile audit-security-sca
+.cache/
+
 # --- Lixo de Ferramental e Cache ---
 .ruff_cache/
 project_structure.txt

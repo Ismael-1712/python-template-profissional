@@ -1717,6 +1717,12 @@ make doctor
 # Verificar qualidade do código
 make audit
 
+# Auditoria de segurança (SCA - Software Composition Analysis)
+make audit-security-sca
+
+# Validação completa (inclui testes + segurança)
+make validate
+
 # Validar documentação e links
 cortex audit --links
 
@@ -1726,6 +1732,61 @@ cortex knowledge-graph --show-broken
 # Consultar último relatório de saúde
 cat docs/reports/KNOWLEDGE_HEALTH.md
 ```
+
+---
+
+## 🔒 Segurança
+
+Este projeto implementa **Triple Defense Architecture** para detecção de vulnerabilidades em dependências:
+
+### 🛡️ Software Composition Analysis (SCA)
+
+O sistema usa `pip-audit` para detectar CVEs conhecidas em todas as dependências (diretas e transitivas).
+
+**Camadas de Proteção:**
+
+```
+1. Pre-Commit Hook  → Bloqueia commits com CVEs localmente
+2. Makefile Target  → Validação manual com cache inteligente
+3. CI/CD Pipeline   → Validação obrigatória em Pull Requests
+```
+
+**Comandos Rápidos:**
+
+```bash
+# Executar auditoria de segurança
+make audit-security-sca
+
+# Validação completa (inclui SCA)
+make validate
+
+# Limpar cache de auditoria
+rm -rf .cache/pip-audit-*
+```
+
+**Política de Vulnerabilidades:**
+
+- 📋 **Processo completo de triagem:** [docs/security/VULNERABILITY_POLICY.md](docs/security/VULNERABILITY_POLICY.md)
+- ⏱️ **SLA por Severidade:**
+  - `CRITICAL`: 2 horas
+  - `HIGH`: 24 horas
+  - `MEDIUM`: 7 dias
+  - `LOW`: 30 dias
+
+**Exceções Documentadas:**
+
+CVEs aceitas com justificativa técnica estão documentadas em `pyproject.toml`:
+
+```toml
+[tool.pip-audit]
+ignore-vulns = [
+    "CVE-XXXX-XXXXX",  # Justificativa + Data de expiração
+]
+```
+
+Para reportar vulnerabilidades de segurança, veja [SECURITY.md](SECURITY.md).
+
+---
 
 ### 📖 Documentação Completa
 

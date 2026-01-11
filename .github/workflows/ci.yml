@@ -146,6 +146,17 @@ jobs:
       - name: "Security Audit (Static Analysis)"
         run: make audit
 
+      # Software Composition Analysis (SCA) - CVE Detection
+      - name: "🔒 Software Composition Analysis (pip-audit)"
+        run: |
+          echo "🔍 Scanning dependencies for known vulnerabilities..."
+          .venv/bin/python -m pip_audit . --desc || {
+            echo "❌ VULNERABILIDADES NÃO IGNORADAS DETECTADAS!"
+            echo "💊 Adicione exceções documentadas em [tool.pip-audit] no pyproject.toml"
+            exit 1
+          }
+          echo "✅ SCA Pass: No non-ignored vulnerabilities detected"
+
       # CORTEX Guardian (configurações não documentadas)
       - name: "Check Undocumented Configuration"
         run: .venv/bin/python -m scripts.cortex guardian-check . --fail-on-error

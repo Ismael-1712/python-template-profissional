@@ -227,10 +227,32 @@ security-sast:
 	@echo "🔒 Running SAST (Bandit)..."
 	@$(PYTHON) -m bandit -c pyproject.toml -r . -ll  # -ll = Falha apenas em MEDIUM ou HIGH
 
-## security-sca: Software Composition Analysis (Pip-Audit)
-security-sca:
-	@echo "🔒 Running SCA (Pip-Audit)..."
-	@$(PYTHON) -m pip_audit --desc || true  # Continue on vuln (dev environment)
+## audit-security-sca: Software Composition Analysis com cache inteligente (HARD-FAIL)
+audit-security-sca:
+	@echo "🔒 Executando SCA (pip-audit) com cache inteligente..."
+	@REQUIREMENTS_FILE="requirements/dev.txt"; \
+	CACHE_DIR=".cache"; \
+	if [ ! -f "$$REQUIREMENTS_FILE" ]; then \
+		echo "❌ Erro: $$REQUIREMENTS_FILE não encontrado!"; \
+		exit 1; \
+	fi; \
+	HASH=$$(sha256sum "$$REQUIREMENTS_FILE" 2>/dev/null | cut -d' ' -f1 || md5sum "$$REQUIREMENTS_FILE" 2>/dev/null | cut -d' ' -f1); \
+	CACHE_FILE="$$CACHE_DIR/pip-audit-$$HASH.stamp"; \
+	mkdir -p "$$CACHE_DIR"; \
+	if [ -f "$$CACHE_FILE" ]; then \
+		echo "✅ Cache encontrado (lockfile inalterado). Pulando scan."; \
+	else \
+		echo "🔍 Cache miss. Executando scan completo..."; \
+		$(PYTHON) -m pip_audit . --desc && \
+		touch "$$CACHE_FILE" && \
+		echo "✅ SCA Pass: Nenhuma vulnerabilidade não ignorada detectada." || \
+		(echo "❌ VULNERABILIDADES NÃO IGNORADAS DETECTADAS!" && \
+		 echo "💊 CORREÇÃO: Atualize dependências ou adicione exceções documentadas em [tool.pip-audit] no pyproject.toml" && \
+		 exit 1); \
+	fi
+
+## security-sca: Alias para audit-security-sca (retrocompatibilidade)
+security-sca: audit-security-sca
 
 ## audit-security: Executa suite completa de segurança (Custom + SAST + SCA)
 audit-security: audit-custom security-sast security-sca
@@ -249,7 +271,7 @@ cortex-audit:
 	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 
 ## validate: Executa validação completa (Quality Gate Unificado - Fonte Única da Verdade)
-validate: format deps-check lint type-check complexity-check arch-check docs-check ci-check audit-security guardian-check cortex-audit test tdd-check
+validate: format deps-check lint type-check complexity-check arch-check docs-check ci-check audit-security-sca guardian-check cortex-audit test tdd-check
 	@echo "✅ Quality Gate Passed: All systems go!"
 
 ## format: Formata código automaticamente com ruff

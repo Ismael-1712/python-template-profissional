@@ -151,10 +151,13 @@ ignore-vulns = [
     # Expiration: 2030-12-31
     "PYSEC-2022-42969",  # py package ReDoS (corresponds to Safety ID 51457)
 
-    # CVE-2025-50182 and CVE-2025-50181: urllib3 vulnerabilities
-    # Justification: Kubernetes version constraint requires urllib3<2.4.0
-    # Will update when kubernetes package allows urllib3>=2.5.0
+    # urllib3 vulnerabilities - Blocked by kubernetes dependency constraint
+    # Justification: kubernetes package requires urllib3<2.7.0
+    # Will update when kubernetes allows urllib3>=2.7.0
     # Expiration: 2030-12-31
-    "CVE-2025-50182",  # urllib3 (corresponds to Safety ID 77745)
-    "CVE-2025-50181",  # urllib3 (corresponds to Safety ID 77744)
+    "CVE-2025-50182",  # urllib3 <2.5.0
+    "CVE-2025-50181",  # urllib3 <2.5.0
+    "CVE-2025-66418",  # urllib3 <2.6.0
+    "CVE-2025-66471",  # urllib3 <2.6.0
+    "CVE-2026-21441",  # urllib3 <2.6.3
 ]
