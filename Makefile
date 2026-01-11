@@ -114,7 +114,18 @@ requirements:
 		exit 1; \
 	fi
 	@PYTHON_BASELINE=$(PYTHON_BASELINE) $(PYTHON) $(SCRIPTS_DIR)/ci/verify_deps.py --fix
-	@echo "✅ Lockfile validado e sincronizado (fonte única da verdade: verify_deps.py)"
+	@echo "🔐 Injetando selo de integridade SHA-256..."
+	@$(PYTHON) -m scripts.core.dependency_guardian seal dev
+	@echo "✅ Lockfile validado, sincronizado e selado (Protocolo v2.2 ativo)"
+
+## deps-fix: Autocura total - sincroniza e sela requirements (wrapper conveniente)
+deps-fix:
+	@echo "💊 AUTOCURA TOTAL: Sincronização + Selagem Criptográfica"
+	@$(MAKE) requirements
+	@echo ""
+	@echo "💡 PRÓXIMOS PASSOS:"
+	@echo "   git add requirements/dev.txt"
+	@echo "   git commit -m 'build: sync and seal requirements lockfile'"
 
 ## validate-python: Valida se a versão do Python é compatível com a baseline do CI
 validate-python:

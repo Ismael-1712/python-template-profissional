@@ -4,7 +4,44 @@
 
 ### Added
 
-- **🛡️ Protocolo de Segurança SCA v2.1 - Triple Defense Architecture**:
+- **� Protocolo de Imunidade de Dependências v2.2 - Cryptographic Integrity Seals**:
+  - **DependencyGuardian**: Nova classe em `scripts/core/dependency_guardian.py`
+    - Geração de hash SHA-256 comment-agnostic dos `.in` files
+    - Injeção de selo de integridade em lockfiles `.txt`
+    - Validação criptográfica com constant-time comparison
+    - CLI standalone: `compute`, `seal`, `validate` commands
+  - **Makefile Enhancements**:
+    - Target `requirements` agora injeta selo SHA-256 automaticamente
+    - Novo target `deps-fix`: autocura total (sync + seal)
+    - Selo aplicado após cada `pip-compile` para garantir integridade
+  - **Git Pre-Push Hook Hardened**: `scripts/git-hooks/pre-push`
+    - FASE 1: Validação criptográfica obrigatória antes de push
+    - Bloqueia push se selo inválido ou ausente (exit code 2)
+    - FASE 2: Alerta de mutation testing (existente)
+    - Mensagens de remediação claras para autocura
+  - **CI/CD Integration**: `scripts/ci/verify_deps.py`
+    - Nova flag `--validate-seal` para validação standalone
+    - Exit code 2 para violação de integridade (security breach)
+    - Mensagens claras diferenciando dessincronia vs. adulteração
+  - **Test Suite TDD**: `tests/test_dependency_guardian.py` (16 testes, 100% pass)
+    - Hash generation (comment-agnostic, change detection)
+    - Seal injection (idempotency, location, format)
+    - Seal validation (success, tampering detection, corruption)
+    - Edge cases (empty files, Unicode, comments-only)
+    - Integration tests (end-to-end workflow)
+  - **Arquitetura Documentada**: `docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md`
+    - Modelo de segurança completo (ameaças mitigadas)
+    - Diagramas de 5 camadas (Input → Compilation → Crypto → Storage → Validation)
+    - Workflows de uso (adicionar deps, detectar adulteração, CI validation)
+    - Análise de segurança (propriedades criptográficas, formato do selo)
+    - Roadmap v2.3 e v3.0
+  - **Proteção em 4 Camadas**:
+    1. Pre-commit: Bloqueia commits com lockfile dessincroni zado
+    2. Cryptographic Seal: SHA-256 embutido no header do `.txt`
+    3. Pre-push Hook: Validação criptográfica antes de push (bloqueio hard)
+    4. CI: Validação final com exit code 2 em violação
+
+- **�🛡️ Protocolo de Segurança SCA v2.1 - Triple Defense Architecture**:
   - **Makefile Hardened**: Target `audit-security-sca` com cache inteligente baseado em SHA256
     - Remove soft-fail (`|| true`) - agora BLOQUEIA build em CVEs detectadas
     - Cache de resultados JSON em `.cache/pip-audit-{hash}.json` para performance

@@ -137,13 +137,20 @@ make commit-amend
 ```bash
 # Adicionar dependência de desenvolvimento
 echo "black==24.1.0" >> requirements/dev.in
-make requirements                    # 🆕 Recompila COM VALIDAÇÃO (modo autocura)
+make requirements                    # Recompila + sela com SHA-256 (Protocolo v2.2)
 
-# 🆕 NOVO: Sistema de Autocura de Dependências
-# O sistema agora detecta e corrige automaticamente lockfiles dessincronizados:
-# 1. Pre-commit hook bloqueia commits com dev.txt desatualizado
-# 2. make requirements usa verify_deps.py --fix (fonte única)
-# 3. CI valida usando o mesmo script (DRY principle)
+# 🆕 SISTEMA DE AUTOCURA v2.2 - Proteção Criptográfica
+# O sistema agora implementa selo de integridade SHA-256:
+# 1. Pre-commit: Bloqueia commits com dev.txt desatualizado
+# 2. make requirements: Recompila + injeta selo criptográfico
+# 3. Pre-push hook: Valida selo SHA-256 antes de permitir push
+# 4. CI: Valida integridade criptográfica (exit code 2 = bloqueio)
+
+# Autocura Total (sincroniza + sela)
+make deps-fix                        # Wrapper conveniente para requirements + selo
+
+# Validar selo de integridade manualmente
+python scripts/ci/verify_deps.py --validate-seal
 
 # Sincronizar ambiente com lockfile (recomendado após git pull)
 make sync                            # Usa .venv/bin/pip-sync para garantir sincronia exata
@@ -153,17 +160,20 @@ make check-venv                      # Diagnóstico: Python path, versões, pip-
 
 # Atualizar todas as dependências
 echo "package>=new.version" >> requirements/dev.in
-make requirements                    # Recompila com Python 3.10 baseline (CI-compatible)
+make requirements                    # Recompila com Python 3.10 baseline + selo SHA-256
 
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
 
-# 🛡️ Protocolo de Imunidade Tripla:
-# - Pre-commit: Bloqueia commits se dev.txt dessincronizado
-# - make validate: Inclui deps-check no quality gate
-# - CI: Valida lockfile antes de rodar testes
+# 🔐 Protocolo de Imunidade v2.2 (4 Camadas):
+# Layer 1 - Pre-commit: Bloqueia commits se dev.txt dessincronizado
+# Layer 2 - Cryptographic Seal: SHA-256 embutido no lockfile
+# Layer 3 - Pre-push Hook: Valida selo antes de push (bloqueio hard)
+# Layer 4 - CI: Validação criptográfica (exit code 2 = security breach)
 
-# 📖 Guia completo: docs/guides/DEPENDENCY_MANAGEMENT.md
+# 📖 Documentação completa:
+# - docs/guides/DEPENDENCY_MANAGEMENT.md
+# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.2)
 ```
 
 ### 🧠 CORTEX — Comandos Essenciais

@@ -1,8 +1,8 @@
-"""Tool for verifying dependency synchronization.
+"""Tool for verifying dependency synchronization with cryptographic integrity.
 
 This script ensures that requirements.txt files are perfectly synchronized
 with their corresponding .in files, acting as an auto-immune mechanism
-against dependency drift.
+against dependency drift with SHA-256 cryptographic sealing.
 
 Features:
 - Python baseline awareness (uses PYTHON_BASELINE env var)
@@ -10,10 +10,12 @@ Features:
 - CI/CD compatible (venv detection)
 - Detailed error reporting with remediation steps
 - Auto-fix capability (--fix flag) for self-healing
+- Cryptographic integrity seals (v2.2 Autoimunity Protocol)
 
 Exit Codes:
 - 0: Lockfile synchronized or successfully fixed
 - 1: Lockfile desynchronized (without --fix) or fix failed
+- 2: Integrity seal validation failed (critical security breach)
 """
 
 import argparse
@@ -267,9 +269,9 @@ def fix_sync(req_name: str) -> bool:
 
 
 if __name__ == "__main__":
-    # Argument parsing for --fix flag
+    # Argument parsing for --fix and --validate-seal flags
     parser = argparse.ArgumentParser(
-        description="Dependency Synchronization Validator with Auto-Healing",
+        description="Dependency Synchronization Validator with Cryptographic Integrity",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -279,9 +281,13 @@ Examples:
   # Auto-fix mode (local development)
   PYTHON_BASELINE=3.10 python scripts/ci/verify_deps.py --fix
 
+  # Validate cryptographic seal only
+  python scripts/ci/verify_deps.py --validate-seal
+
 Exit Codes:
   0 - Lockfile synchronized or successfully fixed
   1 - Lockfile desynchronized (without --fix) or fix failed
+  2 - Integrity seal validation failed (security breach)
         """,
     )
     parser.add_argument(
@@ -289,7 +295,49 @@ Exit Codes:
         action="store_true",
         help="Auto-fix desynchronization by recompiling with pip-compile",
     )
+    parser.add_argument(
+        "--validate-seal",
+        action="store_true",
+        help="Validate cryptographic integrity seal (v2.2 Protocol)",
+    )
     args = parser.parse_args()
+
+    project_root = Path(__file__).parent.parent.parent.resolve()
+
+    # If seal validation requested, check and exit
+    if args.validate_seal:
+        try:
+            # Import Guardian for seal validation
+            sys.path.insert(0, str(project_root))
+            from scripts.core.dependency_guardian import DependencyGuardian
+
+            guardian = DependencyGuardian(project_root / "requirements")
+
+            print(
+                "🔐 Validando selo de integridade criptográfico...",
+                end=" ",
+                flush=True,
+            )
+            is_valid = guardian.validate_seal("dev")
+
+            if is_valid:
+                print("✅ VÁLIDO")
+                print(
+                    "✅ Protocolo v2.2: Lockfile protegido contra adulteração",
+                )
+                sys.exit(0)
+            else:
+                print("❌ FALHOU")
+                print(
+                    "\n🚨 ALERTA: Selo de integridade inválido ou ausente!",
+                )
+                print("   Possível adulteração detectada no lockfile.")
+                print("\n💊 REMEDIAÇÃO:")
+                print("   make deps-fix")
+                sys.exit(2)
+        except Exception as e:
+            print(f"\n❌ ERRO: Falha na validação do selo: {e}")
+            sys.exit(2)
 
     # Execute check
     is_synced = check_sync("dev")
@@ -305,4 +353,5 @@ Exit Codes:
             sys.exit(1)
     else:
         # No fix requested, exit with error
+        sys.exit(1)
         sys.exit(1)

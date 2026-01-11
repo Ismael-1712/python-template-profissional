@@ -1,15 +1,64 @@
 #!/bin/bash
+# =============================================================================
+# Git Pre-Push Hook: Mutation Testing Alert + Dependency Integrity
+# =============================================================================
 
 # Cores para alerta visual
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Padrão de arquivos críticos
-CORE_PATTERN="scripts/core/"
+# Detecta Python
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${HOOK_DIR}/../.." && pwd)"
 
-# Detecta arquivos alterados
+if [ -f "${PROJECT_ROOT}/.venv/bin/python" ]; then
+    PYTHON="${PROJECT_ROOT}/.venv/bin/python"
+elif command -v python3.10 &> /dev/null; then
+    PYTHON="python3.10"
+elif command -v python3 &> /dev/null; then
+    PYTHON="python3"
+else
+    PYTHON="python"
+fi
+
+# =============================================================================
+# FASE 1: Validação de Integridade Criptográfica (v2.2 Protocol)
+# =============================================================================
+echo -e "${BLUE}🛡️  Guardião de Dependências v2.2 - Validação Pré-Push${NC}"
+echo "=================================================="
+
+cd "${PROJECT_ROOT}"
+
+if ${PYTHON} scripts/ci/verify_deps.py --validate-seal 2>/dev/null; then
+    echo -e "${GREEN}✅ Selo de integridade VÁLIDO${NC}"
+else
+    EXIT_CODE=$?
+    if [ ${EXIT_CODE} -eq 2 ]; then
+        echo ""
+        echo -e "${RED}🚫 PRE-PUSH BLOQUEADO: Falha na validação de integridade${NC}"
+        echo ""
+        echo -e "${YELLOW}💊 AUTOCURA RECOMENDADA:${NC}"
+        echo "   1. Execute: make deps-fix"
+        echo "   2. Commit: git add requirements/dev.txt"
+        echo "   3. Commit: git commit --amend --no-edit"
+        echo "   4. Retry:  git push"
+        echo ""
+        exit 1
+    fi
+    # Se exit code não é 2, apenas aviso (selo pode não existir ainda)
+    echo -e "${YELLOW}⚠️  Aviso: Validação de selo não disponível (possível primeiro push)${NC}"
+fi
+
+echo ""
+
+# =============================================================================
+# FASE 2: Alerta de Mutation Testing (Original)
+# =============================================================================
+CORE_PATTERN="scripts/core/"
 CHANGED_FILES=$(git diff --name-only HEAD origin/main 2>/dev/null)
 
 if echo "$CHANGED_FILES" | grep -q "$CORE_PATTERN"; then
@@ -22,7 +71,6 @@ if echo "$CHANGED_FILES" | grep -q "$CORE_PATTERN"; then
     echo "$FILES_AFFECTED" | head -n 3
     [ $(echo "$FILES_AFFECTED" | wc -l) -gt 3 ] && echo "... e outros."
 
-    # Pega o primeiro arquivo para sugerir o comando
     FIRST_FILE=$(echo "$FILES_AFFECTED" | head -n 1)
 
     echo -e "\n${CYAN}💡 Recomendação de Qualidade:${NC}"
