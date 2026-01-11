@@ -76,6 +76,13 @@ jobs:
 
       # Verificar consistência do lockfile (Python 3.10 baseline)
       # FONTE ÚNICA DA VERDADE: Deep Consistency Check v2.3 (DRY)
+      # HARDENING: Garantir pip-tools disponível (não assumir presença)
+      - name: "Install pip-tools for Deep Check"
+        run: |
+          echo "🔧 Ensuring pip-tools is available..."
+          pip install pip-tools
+          echo "✅ pip-tools installed"
+
       - name: "Check Lockfile Deep Consistency (v2.3)"
         env:
           PYTHON_BASELINE: "3.10"

@@ -1,11 +1,11 @@
 ---
 id: forense-dependency-guardian-v22-incident
-type: report
+type: history
 version: 1.0.0
 author: GitHub Copilot (Claude Sonnet 4.5)
 title: "Relatório Forense - Falha no Protocolo de Imunidade v2.2"
 date: 2026-01-11
-status: "Investigação Concluída"
+status: active
 severity: "CRITICAL"
 investigator: "GitHub Copilot (Claude Sonnet 4.5)"
 tags: [forensics, dependency-guardian, ci-failure, race-condition]

@@ -9,6 +9,7 @@ Protocol: TDD (tests written before implementation)
 """
 
 import subprocess
+import sys
 from pathlib import Path
 
 from scripts.core.dependency_guardian import DependencyGuardian
@@ -34,7 +35,7 @@ class TestDeepConsistencyCheck:
         txt_file = tmp_path / "dev.txt"
         subprocess.run(
             [
-                "python3",
+                sys.executable,
                 "-m",
                 "piptools",
                 "compile",
@@ -93,7 +94,7 @@ class TestDeepConsistencyCheck:
         txt_file = tmp_path / "dev.txt"
         subprocess.run(
             [
-                "python3",
+                sys.executable,
                 "-m",
                 "piptools",
                 "compile",
@@ -129,7 +130,7 @@ class TestDeepConsistencyCheck:
         txt_file = tmp_path / "dev.txt"
         subprocess.run(
             [
-                "python3",
+                sys.executable,
                 "-m",
                 "piptools",
                 "compile",

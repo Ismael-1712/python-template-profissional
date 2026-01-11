@@ -1,11 +1,11 @@
 ---
 id: proposta-deep-consistency-check-v23
-type: report
+type: arch
 version: 1.0.0
 author: GitHub Copilot
 title: "Proposta de Implementação - Deep Consistency Check v2.3"
 date: 2026-01-11
-status: "Design Proposal"
+status: active
 priority: "CRITICAL"
 tags: [dependency-guardian, enhancement, security]
 ---

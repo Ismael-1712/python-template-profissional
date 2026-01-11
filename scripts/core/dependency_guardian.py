@@ -375,6 +375,20 @@ class DependencyGuardian:
         if python_exec is None:
             python_exec = sys.executable
 
+        # RESILIÊNCIA: Verificar se piptools está disponível
+        check_piptools = subprocess.run(
+            [python_exec, "-m", "pip", "show", "pip-tools"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if check_piptools.returncode != 0:
+            return False, (
+                "❌ Environment Not Ready: pip-tools not found.\n"
+                "   Install with: pip install pip-tools\n"
+                "   Or use: make install-dev"
+            )
+
         # Compile in memory to temporary file
         with tempfile.NamedTemporaryFile(
             mode="w+",
