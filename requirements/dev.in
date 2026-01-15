@@ -45,7 +45,7 @@ python-frontmatter
 
 # Mutation Testing
 mutmut==3.4.0
-textual==7.0.0  # Pin required by mutmut (avoid version conflicts)
+textual==7.3.0  # Pin required by mutmut (avoid version conflicts)
 tomlkit
 pip-tools
 
