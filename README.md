@@ -6,6 +6,7 @@
 [![Python](https://img.shields.io/badge/python-{{ python_version }}+-blue.svg)](https://www.python.org/downloads/)
 [![Code Quality](https://img.shields.io/badge/ruff-checked-brightgreen.svg)](https://github.com/astral-sh/ruff)
 [![Type Safety](https://img.shields.io/badge/mypy-strict-blue.svg)](https://mypy-lang.org/)
+[![Security](https://img.shields.io/badge/audit-passing-brightgreen.svg)](./scripts/cli/audit.py)
 [![CORTEX Health](https://img.shields.io/badge/cortex%20health-60%2F100-orange.svg)](#-cortex-health-score)
 [![Tests](https://img.shields.io/badge/tests-passing-success.svg)](./tests)
 

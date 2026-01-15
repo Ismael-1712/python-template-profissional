@@ -33,7 +33,7 @@ class TestDeepConsistencyCheck:
 
         # Compile fresh lockfile with current PyPI state
         txt_file = tmp_path / "dev.txt"
-        subprocess.run(
+        subprocess.run(  # nosec B603 - Safe: shell=False (implicit), controlled test inputs
             [
                 sys.executable,
                 "-m",
@@ -92,7 +92,7 @@ class TestDeepConsistencyCheck:
 
         # Fresh compile
         txt_file = tmp_path / "dev.txt"
-        subprocess.run(
+        subprocess.run(  # nosec B603 - Safe: shell=False (implicit), controlled test inputs
             [
                 sys.executable,
                 "-m",
@@ -128,7 +128,7 @@ class TestDeepConsistencyCheck:
         in_file.write_text("pytest==9.0.2\n", encoding="utf-8")
 
         txt_file = tmp_path / "dev.txt"
-        subprocess.run(
+        subprocess.run(  # nosec B603 - Safe: shell=False (implicit), controlled test inputs
             [
                 sys.executable,
                 "-m",

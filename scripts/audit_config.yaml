@@ -24,6 +24,7 @@ exclude_paths:
   - "tests/test_mock_ci_runner_e2e.py"  # Usa subprocess.run para testes E2E - falso positivo
   - "tests/test_dependency_alignment.py"  # Usa subprocess.run para validar lockfiles - seguro
   - "tests/test_dependency_guardian_resilience.py"  # Usa subprocess.run para testes de fallback - seguro (mocks)
+  - "tests/test_dependency_guardian_deep.py"  # Usa subprocess.run para testes E2E de pip-compile - seguro (shell=False)
   - "tests/test_verify_deps.py"  # Usa subprocess.run para testes E2E - inputs validados e shell=False
   - "tests/test_security_audit.py"  # Usa subprocess.run em mocks de testes - seguro (shell=False)
   - "scripts/utils/safe_pip.py"  # Usa subprocess.run de forma controlada e segura (shell=False)
