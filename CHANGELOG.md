@@ -4,7 +4,29 @@
 
 ### Added
 
-- **� Protocolo de Estabilização v2.4.3 - Neutralização de Falsos-Positivos HIGH**:
+- **🔐 Protocolo de Modernização v2.5 - Dependency Hardening & Graph Hygiene**:
+  - **Atualização Criptograficamente Selada**: Bump textual 7.0.0 → 7.3.0
+    - Lockfile regenerado com Protocolo de Segurança v2.4 (Deep Check + SHA-256 Sealing)
+    - Selo de Integridade: `bda74004b72d09b6b31c81883f4d7b31bebedd2e91b42b463250bae22db9717d`
+    - Branch `chore/modernize-textual-v7-3` criada via rebase de `dependabot/pip/textual-7.2.0`
+    - Conformidade total com Triple Defense SCA, Dependency Immunity Protocol e Deep Consistency Check
+  - **Higiene de Grafo (GitOps Best Practices)**:
+    - **Expurgo de Branches Mergeadas** (locais + remotas):
+      - `fix/ci-decompression-v2-4` (mergeada em v2.4.2)
+      - `fix/ci-resilience-path-v2-4-1` (mergeada em v2.4.2)
+      - `fix/audit-high-neutralization-v2-4-3` (mergeada em v2.4.3 via #281)
+    - Grafo Linear Restaurado: Histórico limpo sem ponteiros obsoletos
+    - Main local sincronizada com `origin/main` (commit `9607cc4`)
+  - **Validação de Qualidade**:
+    - `pytest tests/test_dependency_guardian_resilience.py`: ✅ 4/4 PASSED
+    - `make audit`: ✅ 0 HIGH, 17 LOW (Quality Gate VERDE)
+    - Ambiente `.venv` ressincronizado com lockfile v2.4.3
+  - **DNA Arquitetural Preservado**:
+    - Modernização via rebase (não recriação) mantém rastreabilidade do Dependabot
+    - Todos os protocolos de segurança (v2.1 → v2.4) retroativamente aplicados
+    - Zero regressão de segurança ou funcionalidade
+
+- **🛡️ Protocolo de Estabilização v2.4.3 - Neutralização de Falsos-Positivos HIGH**:
   - **Quality Gate Final VERDE**: Code Auditor v2.1.2 agora passa sem achados de severidade HIGH
   - **Exclusão Cirúrgica** (`scripts/audit_config.yaml`):
     - Adicionado `tests/test_dependency_guardian_deep.py` à lista `exclude_paths`
