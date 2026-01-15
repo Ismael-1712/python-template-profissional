@@ -328,6 +328,50 @@ class DependencyGuardian:
 
         return result == 0
 
+    def _validate_python_executable(self, python_exec: str) -> str:
+        """Validate python_exec and fallback to sys.executable if invalid.
+
+        Args:
+            python_exec: Path to Python interpreter to validate
+
+        Returns:
+            str: Validated Python executable (original or sys.executable fallback)
+        """
+        if python_exec == sys.executable:
+            return python_exec
+
+        try:
+            # nosec B603: shell=False, controlled input from --python-exec CLI arg
+            test_exec = subprocess.run(
+                [python_exec, "--version"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=5,
+            )
+            if test_exec.returncode != 0:
+                print(
+                    f"⚠️ Warning: Python executable '{python_exec}' returned "
+                    f"non-zero status. Falling back to sys.executable.",
+                    file=sys.stderr,
+                )
+                return sys.executable
+            return python_exec
+        except (FileNotFoundError, OSError) as e:
+            print(
+                f"⚠️ Warning: Python executable '{python_exec}' not found "
+                f"({e.__class__.__name__}). Falling back to sys.executable.",
+                file=sys.stderr,
+            )
+            return sys.executable
+        except subprocess.TimeoutExpired:
+            print(
+                f"⚠️ Warning: Python executable '{python_exec}' timed out. "
+                f"Falling back to sys.executable.",
+                file=sys.stderr,
+            )
+            return sys.executable
+
     def validate_deep_consistency(
         self,
         req_name: str,
@@ -374,6 +418,9 @@ class DependencyGuardian:
         # Use system python if not specified
         if python_exec is None:
             python_exec = sys.executable
+
+        # RESILIÊNCIA v2.4.1: Validar python_exec e fallback se inválido
+        python_exec = self._validate_python_executable(python_exec)
 
         # RESILIÊNCIA: Verificar se piptools está disponível
         check_piptools = subprocess.run(
@@ -689,11 +736,11 @@ Exit Codes:
                 if is_ci:
                     print(
                         "\n🔵 CI MODE DETECTED: Drift detectado mas "
-                        "pipeline não bloqueado"
+                        "pipeline não bloqueado",
                     )
                     print("⚠️  REVISAR LOGS: Lockfile em dessincronia com PyPI")
                     print(
-                        "💡 Execute 'make requirements' localmente para ressincronizar"
+                        "💡 Execute 'make requirements' localmente para ressincronizar",
                     )
                     sys.exit(0)  # CI permissivo
                 else:

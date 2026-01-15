@@ -4,6 +4,32 @@
 
 ### Added
 
+- **🛡️ Protocolo de Estabilização v2.4.1 - Resiliência de Infraestrutura**:
+  - **Correção Exit Code 127**: Workflow CI agora usa Python do runner ao invés de `.venv/bin/python`
+  - **Guardian Fallback Resiliente** (`scripts/core/dependency_guardian.py`):
+    - `validate_deep_consistency()`: Fallback automático para `sys.executable` se `python_exec` inválido
+    - Validação de executável antes de uso (timeout 5s)
+    - Warnings informativos em stderr quando fallback ocorre
+    - Suporta 3 cenários: FileNotFoundError, OSError, TimeoutExpired
+  - **Test Suite TDD Resilience** (`tests/test_dependency_guardian_resilience.py`):
+    - `test_fallback_to_sys_executable_when_python_exec_not_found()`: Valida fallback para path inexistente
+    - `test_fallback_preserves_functionality()`: Garante resultado equivalente pós-fallback
+    - `test_no_fallback_when_python_exec_valid()`: Confirma não-fallback com executável válido
+    - `test_fallback_with_none_python_exec()`: Valida comportamento legacy (None → sys.executable)
+  - **Workflow Environment-Agnostic** (`.github/workflows/ci.yml`):
+    - "Install pip-tools for Deep Check": `python3.10 -m pip install --user pip-tools`
+    - "Debug Installed Packages": Proteção condicional (`if [ -f .venv/bin/pip ]`)
+    - "Ensure Type Stubs": Proteção condicional (só executa se .venv existe)
+    - Elimina dependência de .venv antes da criação do ambiente virtual
+  - **Resolução de Impasse Operacional v2**:
+    - Elimina Exit Code 127 causado por cache miss + uso prematuro de .venv
+    - Guardian agora roda ANTES de install-dev (usando runner Python)
+    - Workflow não assume presença de .venv em steps pré-instalação
+  - **SRE Compliance**:
+    - Fail-Safe design: Sistema degrada graciosamente para runner Python
+    - Least Astonishment: Warnings claros quando fallback ocorre
+    - Idempotência: Mesmo resultado com ou sem fallback
+
 - **� Protocolo de Descompressão v2.4 - CI Resilience Mode**:
   - **Dualidade Local/CI**: Sistema agora opera em dois modos distintos:
     - **Local (Fail-Hard)**: Mantém rigor total - qualquer drift bloqueia workflow

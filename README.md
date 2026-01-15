@@ -165,7 +165,7 @@ make requirements                    # Recompila com Python 3.10 baseline + Deep
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
 
-# 🔐 Protocolo de Imunidade v2.4 (6 Camadas - Decompressão Operacional):
+# 🔐 Protocolo de Imunidade v2.4.1 (6 Camadas + Resiliência):
 # Layer 1 - Pre-commit: Bloqueia commits se dev.txt dessincronizado
 # Layer 2 - Deep Consistency: In-memory pip-compile + byte-by-byte comparison
 # Layer 3 - Atomic Write: fcntl file locking + POSIX rename (evita corrupção)
@@ -174,6 +174,16 @@ git add requirements/dev.in requirements/dev.txt
 #   ├─ LOCAL: Exit code 1 em drift (fail-hard, força correção)
 #   └─ CI (GitHub Actions): Exit code 0 em drift (warn-only, não bloqueia pipeline)
 # Layer 6 - Observability: Logs forenses completos mesmo em modo warn (CI fica VERDE, alertas AMARELOS)
+# Layer 7 - Infrastructure Resilience (v2.4.1):
+#   ├─ Guardian fallback: sys.executable se python_exec inválido
+#   ├─ Workflow environment-agnostic: Usa python3.10 do runner (não .venv)
+#   └─ Exit Code 127 eliminado: Validações independentes de venv
+
+# 🆕 PROTOCOLO v2.4.1 - ESTABILIZAÇÃO DE INFRAESTRUTURA:
+# - Guardian Fallback: Degrada graciosamente para runner Python se .venv inválido
+# - CI Environment-Agnostic: pip-tools instalado com runner Python (python3.10)
+# - Proteções Condicionais: Steps de debug/stubs só executam se .venv existe
+# - Eliminação de Exit Code 127: Validações rodam ANTES de install-dev
 
 # 🆕 PROTOCOLO v2.4 - DESCOMPRESSÃO OPERACIONAL:
 # - Auto-detecção de ambiente via GITHUB_ACTIONS env var
@@ -182,18 +192,20 @@ git add requirements/dev.in requirements/dev.txt
 # - Fail-Safe Design: Sistema relaxa em emergência (CI) mas mantém proteção local
 # - Defense in Depth: pip-audit continua bloqueando vulnerabilidades independentemente
 
-# 🆕 MIGRAÇÃO v2.2 → v2.3 → v2.4:
+# 🆕 MIGRAÇÃO v2.2 → v2.3 → v2.4 → v2.4.1:
 # - v2.2: Selo SHA-256 criptográfico
 # - v2.3: Deep Check (elimina drift PyPI blind spot)
 # - v2.4: Dual-mode (CI resilience sem comprometer segurança local)
+# - v2.4.1: Infrastructure resilience (Guardian fallback + workflow hardening)
 # - Selo SHA-256 PRESERVADO para backward compatibility
 # - Deep Check substitui validação de selo como mecanismo primário
 # - Atomic write elimina race conditions com IDE/editor buffers
 # - Detecção de drift PyPI (ex: tomli 2.3.0 vs 2.4.0)
+# - Fallback resiliente quando .venv não existe ou python_exec inválido
 
 # 📖 Documentação completa:
 # - docs/guides/DEPENDENCY_MANAGEMENT.md
-# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.4)
+# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.4.1)
 # - docs/reports/FORENSIC_TOMLI_DRIFT_INVESTIGATION.md (caso forense)
 ```
 

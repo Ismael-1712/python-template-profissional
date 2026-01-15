@@ -397,7 +397,7 @@ class TestDependencyAlignment:
                     pytest.skip(
                         f"⚠️  [CI MODE - WARN ONLY]\n{error_message}\n"
                         "🔵 Modo Permissivo: Lockfile drift detectado "
-                        "mas não bloqueia CI"
+                        "mas não bloqueia CI",
                     )
                 else:
                     pytest.fail(error_message)

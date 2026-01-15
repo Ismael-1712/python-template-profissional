@@ -23,6 +23,7 @@ Implementar proteção criptográfica baseada em **SHA-256** e **Deep Consistenc
 **v2.3 (Estado Anterior)**: Rigidez extrema bloqueava CI quando drift inevitável de PyPI ocorria entre commit local e execução remota (ex: nova versão de dependência transitiva publicada no intervalo de minutos).
 
 **v2.4 (Solução)**: Implementação de **dual-mode operation**:
+
 - **Local (Desenvolvedor)**: Fail-Hard - mantém rigor total
 - **CI (GitHub Actions)**: Warn-Only - permissivo mas observável
 
@@ -354,17 +355,20 @@ SHA-256: c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
 ## 🚀 Roadmap Evolutivo
 
 ### v2.2 (Implementado - 2026-01-11)
+
 - ✅ Selo SHA-256 criptográfico
 - ✅ Pre-push hook com validação de selo
 - ✅ Backward compatibility garantida
 
 ### v2.3 (Implementado - 2026-01-12)
+
 - ✅ Deep Consistency Check (in-memory pip-compile)
 - ✅ Eliminação de PyPI drift blind spot
 - ✅ Atomic write com file locking (fcntl)
 - ✅ Comment-agnostic diff detection
 
 ### v2.4 (Implementado - 2026-01-15) 🎯 ATUAL
+
 - ✅ **Dual-mode operation** (Local=Fail-Hard, CI=Warn-Only)
 - ✅ **Auto-detecção de CI** via `GITHUB_ACTIONS` env var
 - ✅ **Desbloqueio operacional** do pipeline
@@ -372,6 +376,7 @@ SHA-256: c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
 - ✅ **Defense in Depth** mantida (pip-audit independente)
 
 ### v3.0 (Planejado)
+
 - [ ] Assinatura GPG dos lockfiles
 - [ ] Integração com Dependabot (auto-update)
 - [ ] ML para detecção de padrões anômalos
