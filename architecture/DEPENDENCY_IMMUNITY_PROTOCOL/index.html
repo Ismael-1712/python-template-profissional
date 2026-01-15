@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Sistema de proteção criptográfica contra drift de dependências">
+        <meta name="description" content="Sistema de proteção criptográfica com modo dual (Local=Fail-Hard, CI=Warn-Only)">
       
       
         <meta name="author" content="SRE Team">
@@ -23,7 +23,7 @@
     
     
       
-        <title>Protocolo de Imunidade de Dependências v2.2 - {{ project_name }}</title>
+        <title>Protocolo de Imunidade de Dependências v2.4 - Decompressão Operacional - {{ project_name }}</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#protocolo-de-imunidade-de-dependencias-v22" class="md-skip">
+        <a href="#protocolo-de-imunidade-de-dependencias-v24" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Protocolo de Imunidade de Dependências v2.2
+              Protocolo de Imunidade de Dependências v2.4 - Decompressão Operacional
             
           </span>
         </div>
@@ -555,6 +555,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#novidade-v24-protocolo-de-descompressao-operacional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🆕 NOVIDADE v2.4: Protocolo de Descompressão Operacional
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🆕 NOVIDADE v2.4: Protocolo de Descompressão Operacional">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-resolvido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problema Resolvido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arquitetura-dual-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura Dual-Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#modelo-de-seguranca" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -923,22 +962,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roadmap-futuro" class="md-nav__link">
+  <a href="#roadmap-evolutivo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚀 Roadmap Futuro
+        🚀 Roadmap Evolutivo
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="🚀 Roadmap Futuro">
+    <nav class="md-nav" aria-label="🚀 Roadmap Evolutivo">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#v23-planejado" class="md-nav__link">
+  <a href="#v22-implementado-2026-01-11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v2.3 (Planejado)
+        v2.2 (Implementado - 2026-01-11)
       
     </span>
   </a>
@@ -946,10 +985,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#v30-visao" class="md-nav__link">
+  <a href="#v23-implementado-2026-01-12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v3.0 (Visão)
+        v2.3 (Implementado - 2026-01-12)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v24-implementado-2026-01-15-atual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.4 (Implementado - 2026-01-15) 🎯 ATUAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v30-planejado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v3.0 (Planejado)
       
     </span>
   </a>
@@ -981,6 +1042,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="🤝 Contribuições">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changelog-de-versoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changelog de Versões
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1000,9 +1078,43 @@
 
 
 
-<h1 id="protocolo-de-imunidade-de-dependencias-v22">Protocolo de Imunidade de Dependências v2.2</h1>
+<h1 id="protocolo-de-imunidade-de-dependencias-v24">Protocolo de Imunidade de Dependências v2.4</h1>
 <h2 id="objetivo">🎯 Objetivo</h2>
-<p>Implementar proteção criptográfica baseada em <strong>SHA-256</strong> para prevenir drift, adulteração e inconsistências em lockfiles de dependências Python.</p>
+<p>Implementar proteção criptográfica baseada em <strong>SHA-256</strong> e <strong>Deep Consistency Check</strong> para prevenir drift, adulteração e inconsistências em lockfiles de dependências Python, com <strong>modo operacional dual</strong> para garantir rigor local e resiliência no CI.</p>
+<h2 id="novidade-v24-protocolo-de-descompressao-operacional">🆕 NOVIDADE v2.4: Protocolo de Descompressão Operacional</h2>
+<h3 id="problema-resolvido">Problema Resolvido</h3>
+<p><strong>v2.3 (Estado Anterior)</strong>: Rigidez extrema bloqueava CI quando drift inevitável de PyPI ocorria entre commit local e execução remota (ex: nova versão de dependência transitiva publicada no intervalo de minutos).</p>
+<p><strong>v2.4 (Solução)</strong>: Implementação de <strong>dual-mode operation</strong>:</p>
+<ul>
+<li><strong>Local (Desenvolvedor)</strong>: Fail-Hard - mantém rigor total</li>
+<li><strong>CI (GitHub Actions)</strong>: Warn-Only - permissivo mas observável</li>
+</ul>
+<h3 id="arquitetura-dual-mode">Arquitetura Dual-Mode</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│          CAMADA DE DETECÇÃO DE AMBIENTE                      │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                                                              │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  Auto-detecção via Env Var:                                  │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│    is_ci = os.getenv(&quot;GITHUB_ACTIONS&quot;) == &quot;true&quot;            │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│                                                              │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│  ┌──────────────────┐         ┌──────────────────┐          │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│  │  LOCAL MODE      │         │   CI MODE        │          │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│  │  (Fail-Hard)     │         │   (Warn-Only)    │          │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│  └────────┬─────────┘         └────────┬─────────┘          │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│           │                            │                     │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>└───────────┼────────────────────────────┼─────────────────────┘
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>            │                            │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            ▼                            ▼
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>┌─────────────────────┐      ┌─────────────────────┐
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│  DRIFT DETECTADO?   │      │  DRIFT DETECTADO?   │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│                     │      │                     │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│  ├─ SIM: Exit 1 ❌  │      │  ├─ SIM: Exit 0 🔵  │
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  └─ NÃO: Exit 0 ✅  │      │  └─ NÃO: Exit 0 ✅  │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                     │      │                     │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│  pytest.fail()      │      │  pytest.skip()      │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│  (Bloqueia dev)     │      │  (Warning logs)     │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>└─────────────────────┘      └─────────────────────┘
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>       FORÇA CORREÇÃO         NÃO BLOQUEIA PIPELINE
+</code></pre></div>
 <h2 id="modelo-de-seguranca">🔐 Modelo de Segurança</h2>
 <h3 id="principio-fundamental">Princípio Fundamental</h3>
 <p>Todo <code>requirements.txt</code> deve ser <strong>derivado exclusivamente</strong> de seu correspondente <code>.in</code> através de <code>pip-compile</code>, garantido por selo criptográfico.</p>
@@ -1012,19 +1124,19 @@
 <tr>
 <th>Ameaça</th>
 <th>Impacto</th>
-<th>Mitigação</th>
+<th>Mitigação (v2.4)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Edição manual de .txt</strong></td>
 <td>Drift silencioso, builds inconsistentes</td>
-<td>Selo detecta adulteração</td>
+<td>Deep Check detecta (fail-hard local)</td>
 </tr>
 <tr>
 <td><strong>Commit de lockfile desatualizado</strong></td>
 <td>CI quebrado, dependências desalinhadas</td>
-<td>Pre-push hook bloqueia</td>
+<td>Pre-commit hook bloqueia localmente</td>
 </tr>
 <tr>
 <td><strong>Modificação maliciosa</strong></td>
@@ -1034,93 +1146,103 @@
 <tr>
 <td><strong>Drift entre ambientes</strong></td>
 <td>"Works on my machine" syndrome</td>
-<td>Baseline Python garante reprodutibilidade</td>
+<td>Baseline Python + Deep Check</td>
+</tr>
+<tr>
+<td><strong>🆕 Drift PyPI inevitável (CI)</strong></td>
+<td>CI bloqueado por versões transitivas novas</td>
+<td>Modo warn-only no CI (não bloqueia)</td>
+</tr>
+<tr>
+<td><strong>🆕 Falsos-positivos operacionais</strong></td>
+<td>Pipeline travado por drift temporário</td>
+<td>Auto-detecção de CI relaxa validação</td>
 </tr>
 </tbody>
 </table>
 <h2 id="arquitetura">🏗️ Arquitetura</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    CAMADA DE ENTRADA                          │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                  (requirements/dev.in)                        │
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  - Dependências declarativas                                  │
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  - Documentação em comentários (ignorada pelo hash)           │
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└────────────────────────┬─────────────────────────────────────┘
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                         │
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                         │ pip-compile
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                         │ (Python Baseline: 3.10)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                         ▼
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│              CAMADA DE COMPILAÇÃO                             │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                   (Transitória)                               │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  - Resolução de dependências                                  │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  - Lockfile gerado em memória                                 │
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>└────────────────────────┬─────────────────────────────────────┘
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                         │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                         │ DependencyGuardian.compute_input_hash()
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>                         │ (SHA-256 de linhas significativas)
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>                         ▼
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│         CAMADA DE PROTEÇÃO CRIPTOGRÁFICA                      │
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│                                                               │
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│  ┌──────────────────────────────────────┐                    │
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│  │   Hash = SHA256(clean(dev.in))      │                    │
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│  │   • Ignora comentários               │                    │
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│  │   • Ignora linhas vazias             │                    │
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│  │   • Normaliza espaços                │                    │
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│  └──────────────┬───────────────────────┘                    │
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│                 │                                             │
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│                 │ inject_seal()                               │
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│                 ▼                                             │
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│  ┌──────────────────────────────────────┐                    │
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│  │  # INTEGRITY_SEAL: &lt;64-char-hash&gt;   │                    │
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│  └──────────────────────────────────────┘                    │
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>└────────────────────────┬─────────────────────────────────────┘
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>                         │
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>                         │ Lockfile com selo
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>                         ▼
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>│                  CAMADA DE ARMAZENAMENTO                      │
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>│              (requirements/dev.txt + Seal)                    │
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>│  - Dependências pinadas                                       │
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│  - Selo criptográfico embutido                                │
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│  - Rastreável via Git                                         │
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>└────────────────────────┬─────────────────────────────────────┘
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>                         │
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>                         │ Pre-Push Hook / CI
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>                         │
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>                         ▼
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>┌──────────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>│              CAMADA DE VALIDAÇÃO                              │
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>│                                                               │
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>│  DependencyGuardian.validate_seal():                          │
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>│    1. Extrai selo atual do .txt                               │
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>│    2. Recomputa hash do .in                                   │
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>│    3. Compara (constant-time)                                 │
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>│                                                               │
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>│  ✅ VÁLIDO   → Push permitido                                 │
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>│  ❌ INVÁLIDO → Push BLOQUEADO (exit code 2)                   │
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>└──────────────────────────────────────────────────────────────┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌──────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│                    CAMADA DE ENTRADA                          │
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│                  (requirements/dev.in)                        │
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  - Dependências declarativas                                  │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│  - Documentação em comentários (ignorada pelo hash)           │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>└────────────────────────┬─────────────────────────────────────┘
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>                         │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                         │ pip-compile
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>                         │ (Python Baseline: 3.10)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>                         ▼
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>┌──────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│              CAMADA DE COMPILAÇÃO                             │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│                   (Transitória)                               │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  - Resolução de dependências                                  │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  - Lockfile gerado em memória                                 │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>└────────────────────────┬─────────────────────────────────────┘
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>                         │
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>                         │ DependencyGuardian.compute_input_hash()
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>                         │ (SHA-256 de linhas significativas)
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>                         ▼
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>┌──────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│         CAMADA DE PROTEÇÃO CRIPTOGRÁFICA                      │
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│                                                               │
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>│  ┌──────────────────────────────────────┐                    │
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│  │   Hash = SHA256(clean(dev.in))      │                    │
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>│  │   • Ignora comentários               │                    │
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│  │   • Ignora linhas vazias             │                    │
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│  │   • Normaliza espaços                │                    │
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│  └──────────────┬───────────────────────┘                    │
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│                 │                                             │
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│                 │ inject_seal()                               │
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│                 ▼                                             │
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│  ┌──────────────────────────────────────┐                    │
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│  │  # INTEGRITY_SEAL: &lt;64-char-hash&gt;   │                    │
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│  └──────────────────────────────────────┘                    │
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>└────────────────────────┬─────────────────────────────────────┘
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>                         │
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>                         │ Lockfile com selo
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>                         ▼
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>┌──────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>│                  CAMADA DE ARMAZENAMENTO                      │
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>│              (requirements/dev.txt + Seal)                    │
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>│  - Dependências pinadas                                       │
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>│  - Selo criptográfico embutido                                │
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>│  - Rastreável via Git                                         │
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>└────────────────────────┬─────────────────────────────────────┘
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>                         │
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>                         │ Pre-Push Hook / CI
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>                         │
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>                         ▼
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>┌──────────────────────────────────────────────────────────────┐
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>│              CAMADA DE VALIDAÇÃO                              │
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>│                                                               │
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>│  DependencyGuardian.validate_seal():                          │
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>│    1. Extrai selo atual do .txt                               │
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>│    2. Recomputa hash do .in                                   │
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>│    3. Compara (constant-time)                                 │
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>│                                                               │
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>│  ✅ VÁLIDO   → Push permitido                                 │
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>│  ❌ INVÁLIDO → Push BLOQUEADO (exit code 2)                   │
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>└──────────────────────────────────────────────────────────────┘
 </code></pre></div>
 <h2 id="componentes-implementados">🛠️ Componentes Implementados</h2>
 <h3 id="1-dependencyguardian-scriptscoredependency_guardianpy">1. DependencyGuardian (<code>scripts/core/dependency_guardian.py</code>)</h3>
 <p><strong>Classe principal</strong> que implementa o protocolo criptográfico.</p>
 <h4 id="metodos-publicos">Métodos Públicos</h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">DependencyGuardian</span><span class="p">:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requirements_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">compute_input_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">inject_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seal_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">DependencyGuardian</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requirements_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">compute_input_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">inject_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">seal_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_seal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>
 <h4 id="algoritmo-de-hash-comment-agnostic">Algoritmo de Hash (Comment-Agnostic)</h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">compute_input_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">content</span> <span class="o">=</span> <span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.in&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">meaningful_lines</span> <span class="o">=</span> <span class="p">[</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>        <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="p">]</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">normalized</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meaningful_lines</span><span class="p">)</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">normalized</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">compute_input_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="n">content</span> <span class="o">=</span> <span class="n">read_file</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">req_name</span><span class="si">}</span><span class="s2">.in&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">meaningful_lines</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>        <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="p">]</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">normalized</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">meaningful_lines</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">normalized</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 </code></pre></div>
 <p><strong>Por que comment-agnostic?</strong></p>
 <ul>
@@ -1130,10 +1252,10 @@
 </ul>
 <h3 id="2-integracao-cicd-scriptsciverify_depspy">2. Integração CI/CD (<code>scripts/ci/verify_deps.py</code>)</h3>
 <p><strong>Nova flag <code>--validate-seal</code></strong> para validação standalone.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--validate-seal
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># Exit Code:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">#   0 - Selo válido</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">#   2 - Selo inválido ou ausente (BLOQUEANTE)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--validate-seal
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Exit Code:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">#   0 - Selo válido</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1">#   2 - Selo inválido ou ausente (BLOQUEANTE)</span>
 </code></pre></div>
 <h4 id="fluxo-de-validacao">Fluxo de Validação</h4>
 <ol>
@@ -1145,72 +1267,72 @@
 <h3 id="3-git-pre-push-hook-scriptsgit-hookspre-push">3. Git Pre-Push Hook (<code>scripts/git-hooks/pre-push</code>)</h3>
 <p><strong>Bloqueio automático</strong> de pushes com lockfiles corrompidos.</p>
 <h4 id="fases-de-execucao">Fases de Execução</h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>FASE<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>Validação<span class="w"> </span>Criptográfica
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>└─&gt;<span class="w"> </span>verify_deps.py<span class="w"> </span>--validate-seal
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">      </span>├─&gt;<span class="w"> </span>✅<span class="w"> </span>VÁLIDO<span class="w">   </span>→<span class="w"> </span>Prossegue
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">      </span>└─&gt;<span class="w"> </span>❌<span class="w"> </span>INVÁLIDO<span class="w"> </span>→<span class="w"> </span>BLOQUEIA<span class="w"> </span><span class="o">(</span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="o">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>FASE<span class="w"> </span><span class="m">2</span>:<span class="w"> </span>Alerta<span class="w"> </span>de<span class="w"> </span>Mutation<span class="w"> </span>Testing<span class="w"> </span><span class="o">(</span>Existente<span class="o">)</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>└─&gt;<span class="w"> </span>Aviso<span class="w"> </span>em<span class="w"> </span>alterações<span class="w"> </span>de<span class="w"> </span>scripts/core/
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>FASE<span class="w"> </span><span class="m">1</span>:<span class="w"> </span>Validação<span class="w"> </span>Criptográfica
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>└─&gt;<span class="w"> </span>verify_deps.py<span class="w"> </span>--validate-seal
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">      </span>├─&gt;<span class="w"> </span>✅<span class="w"> </span>VÁLIDO<span class="w">   </span>→<span class="w"> </span>Prossegue
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">      </span>└─&gt;<span class="w"> </span>❌<span class="w"> </span>INVÁLIDO<span class="w"> </span>→<span class="w"> </span>BLOQUEIA<span class="w"> </span><span class="o">(</span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="o">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>FASE<span class="w"> </span><span class="m">2</span>:<span class="w"> </span>Alerta<span class="w"> </span>de<span class="w"> </span>Mutation<span class="w"> </span>Testing<span class="w"> </span><span class="o">(</span>Existente<span class="o">)</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>└─&gt;<span class="w"> </span>Aviso<span class="w"> </span>em<span class="w"> </span>alterações<span class="w"> </span>de<span class="w"> </span>scripts/core/
 </code></pre></div>
 <p><strong>Instalação Automática</strong>: <code>install_dev.py</code> cria symlink em <code>.git/hooks/pre-push</code></p>
 <h3 id="4-makefile-targets">4. Makefile Targets</h3>
 <h4 id="make-requirements"><code>make requirements</code></h4>
 <p>Workflow completo: compile + seal</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">requirements</span><span class="o">:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span>@PYTHON_BASELINE<span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span>@python<span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>seal<span class="w"> </span>dev
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Lockfile selado e protegido&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nf">requirements</span><span class="o">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span>@PYTHON_BASELINE<span class="o">=</span><span class="m">3</span>.10<span class="w"> </span>python<span class="w"> </span>scripts/ci/verify_deps.py<span class="w"> </span>--fix
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span>@python<span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>seal<span class="w"> </span>dev
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span>@echo<span class="w"> </span><span class="s2">&quot;✅ Lockfile selado e protegido&quot;</span>
 </code></pre></div>
 <h4 id="make-deps-fix-novo"><code>make deps-fix</code> (NOVO)</h4>
 <p>Wrapper conveniente para autocura total.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>make<span class="w"> </span>deps-fix
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Equivalente a:</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1">#   1. make requirements</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1">#   2. Mostra instruções de commit</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>make<span class="w"> </span>deps-fix
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Equivalente a:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1">#   1. make requirements</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">#   2. Mostra instruções de commit</span>
 </code></pre></div>
 <h2 id="workflows-de-uso">📋 Workflows de Uso</h2>
 <h3 id="workflow-1-adicionar-nova-dependencia">Workflow 1: Adicionar Nova Dependência</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 1. Edita arquivo de entrada</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;new-package==1.0.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements/dev.in
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># 2. Recompila e sela</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>make<span class="w"> </span>deps-fix
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># 3. Commit</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.in<span class="w"> </span>requirements/dev.txt
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: add new-package dependency&quot;</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="c1"># 4. Push (validação automática via hook)</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>git<span class="w"> </span>push
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c1"># → Pre-push hook valida selo → ✅ Aprovado</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Edita arquivo de entrada</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;new-package==1.0.0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>requirements/dev.in
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># 2. Recompila e sela</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>make<span class="w"> </span>deps-fix
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="c1"># 3. Commit</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.in<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;build: add new-package dependency&quot;</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># 4. Push (validação automática via hook)</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>git<span class="w"> </span>push
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1"># → Pre-push hook valida selo → ✅ Aprovado</span>
 </code></pre></div>
 <h3 id="workflow-2-deteccao-de-adulteracao">Workflow 2: Detecção de Adulteração</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Cenário: Alguém editou dev.txt manualmente</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>git<span class="w"> </span>push
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># → Pre-push hook executa</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># → Selo inválido detectado</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># → 🚫 PUSH BLOQUEADO</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># Remediação:</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>make<span class="w"> </span>deps-fix
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w"> </span>--no-edit
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>git<span class="w"> </span>push<span class="w">  </span><span class="c1"># ✅ Agora passa</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Cenário: Alguém editou dev.txt manualmente</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>git<span class="w"> </span>push
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># → Pre-push hook executa</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># → Selo inválido detectado</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># → 🚫 PUSH BLOQUEADO</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># Remediação:</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>make<span class="w"> </span>deps-fix
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>git<span class="w"> </span>add<span class="w"> </span>requirements/dev.txt
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>git<span class="w"> </span>commit<span class="w"> </span>--amend<span class="w"> </span>--no-edit
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>git<span class="w"> </span>push<span class="w">  </span><span class="c1"># ✅ Agora passa</span>
 </code></pre></div>
 <h3 id="workflow-3-ci-validation">Workflow 3: CI Validation</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># .github/workflows/ci.yml</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nt">jobs</span><span class="p">:</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">validate-deps</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Integrity Seal</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">          </span><span class="no">python scripts/ci/verify_deps.py --validate-seal</span>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">          </span><span class="nt">PYTHON_BASELINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># .github/workflows/ci.yml</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">validate-deps</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Integrity Seal</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">          </span><span class="no">python scripts/ci/verify_deps.py --validate-seal</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">          </span><span class="nt">PYTHON_BASELINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3.10&quot;</span>
 </code></pre></div>
 <h2 id="testes-implementados">🧪 Testes Implementados</h2>
 <h3 id="suite-completa-teststest_dependency_guardianpy">Suíte Completa: <code>tests/test_dependency_guardian.py</code></h3>
@@ -1251,8 +1373,8 @@
 </tbody>
 </table>
 <p><strong>Status</strong>: ✅ <strong>16/16 testes PASSANDO</strong> (100% success rate)</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>pytest<span class="w"> </span>tests/test_dependency_guardian.py<span class="w"> </span>-v
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># ======================= 16 passed in 1.62s =======================</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>pytest<span class="w"> </span>tests/test_dependency_guardian.py<span class="w"> </span>-v
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># ======================= 16 passed in 1.62s =======================</span>
 </code></pre></div>
 <h2 id="analise-de-seguranca">🔍 Análise de Segurança</h2>
 <h3 id="propriedades-criptograficas">Propriedades Criptográficas</h3>
@@ -1288,14 +1410,14 @@
 </tbody>
 </table>
 <h3 id="formato-do-selo">Formato do Selo</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># INTEGRITY_SEAL: &lt;64-char-lowercase-hex&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># INTEGRITY_SEAL: &lt;64-char-lowercase-hex&gt;</span>
 </code></pre></div>
 <p><strong>Regex de Validação</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">SEAL_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^# INTEGRITY_SEAL:\s+([0-9a-f]</span><span class="si">{64}</span><span class="s2">)\s*$&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">SEAL_PATTERN</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^# INTEGRITY_SEAL:\s+([0-9a-f]</span><span class="si">{64}</span><span class="s2">)\s*$&quot;</span>
 </code></pre></div>
 <h3 id="exemplo-real-projeto-atual">Exemplo Real (Projeto Atual)</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>compute<span class="w"> </span>dev
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>SHA-256:<span class="w"> </span>c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>scripts.core.dependency_guardian<span class="w"> </span>compute<span class="w"> </span>dev
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>SHA-256:<span class="w"> </span>c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
 </code></pre></div>
 <h2 id="metricas-de-impacto">📊 Métricas de Impacto</h2>
 <h3 id="antes-do-protocolo-v22">Antes do Protocolo v2.2</h3>
@@ -1311,18 +1433,34 @@
 <li>✅ <strong>Auditabilidade</strong> via hash SHA-256</li>
 <li>✅ <strong>Reprodutibilidade</strong> garantida por baseline Python</li>
 </ul>
-<h2 id="roadmap-futuro">🚀 Roadmap Futuro</h2>
-<h3 id="v23-planejado">v2.3 (Planejado)</h3>
+<h2 id="roadmap-evolutivo">🚀 Roadmap Evolutivo</h2>
+<h3 id="v22-implementado-2026-01-11">v2.2 (Implementado - 2026-01-11)</h3>
 <ul>
-<li>[ ] Suporte para múltiplos lockfiles (dev, prod, test)</li>
-<li>[ ] Selo timestamped (inclui data no hash)</li>
-<li>[ ] Integração com <code>pip-audit</code> (vulnerabilidades)</li>
+<li>✅ Selo SHA-256 criptográfico</li>
+<li>✅ Pre-push hook com validação de selo</li>
+<li>✅ Backward compatibility garantida</li>
 </ul>
-<h3 id="v30-visao">v3.0 (Visão)</h3>
+<h3 id="v23-implementado-2026-01-12">v2.3 (Implementado - 2026-01-12)</h3>
+<ul>
+<li>✅ Deep Consistency Check (in-memory pip-compile)</li>
+<li>✅ Eliminação de PyPI drift blind spot</li>
+<li>✅ Atomic write com file locking (fcntl)</li>
+<li>✅ Comment-agnostic diff detection</li>
+</ul>
+<h3 id="v24-implementado-2026-01-15-atual">v2.4 (Implementado - 2026-01-15) 🎯 ATUAL</h3>
+<ul>
+<li>✅ <strong>Dual-mode operation</strong> (Local=Fail-Hard, CI=Warn-Only)</li>
+<li>✅ <strong>Auto-detecção de CI</strong> via <code>GITHUB_ACTIONS</code> env var</li>
+<li>✅ <strong>Desbloqueio operacional</strong> do pipeline</li>
+<li>✅ <strong>Fail-Safe design</strong> (relaxa em emergência, mantém observabilidade)</li>
+<li>✅ <strong>Defense in Depth</strong> mantida (pip-audit independente)</li>
+</ul>
+<h3 id="v30-planejado">v3.0 (Planejado)</h3>
 <ul>
 <li>[ ] Assinatura GPG dos lockfiles</li>
-<li>[ ] Blockchain de dependências (imutabilidade)</li>
+<li>[ ] Integração com Dependabot (auto-update)</li>
 <li>[ ] ML para detecção de padrões anômalos</li>
+<li>[ ] Dashboard de drift metrics (Prometheus/Grafana)</li>
 </ul>
 <h2 id="referencias">📚 Referências</h2>
 <ul>
@@ -1340,9 +1478,18 @@
 <li>✅ Validação via <code>make validate</code></li>
 </ol>
 <hr />
-<p><strong>Última Atualização</strong>: 2026-01-11
+<p><strong>Última Atualização</strong>: 2026-01-15
+<strong>Versão</strong>: v2.4.0 (Decompressão Operacional)
 <strong>Mantenedores</strong>: SRE Team
-<strong>Status</strong>: 🟢 Ativo (Produção)</p>
+<strong>Status</strong>: 🟢 Ativo (Produção) - <strong>CI Resilience Mode Enabled</strong></p>
+<h3 id="changelog-de-versoes">Changelog de Versões</h3>
+<ul>
+<li><strong>v2.4.0</strong> (2026-01-15): Dual-mode operation, auto-detecção de CI, desbloqueio operacional</li>
+<li><strong>v2.3.0</strong> (2026-01-12): Deep Consistency Check, atomic write, PyPI drift detection</li>
+<li><strong>v2.2.0</strong> (2026-01-11): Selo SHA-256 criptográfico, pre-push hook</li>
+<li><strong>v2.1.0</strong> (2026-01-10): Baseline Python, comment-agnostic hash</li>
+<li><strong>v2.0.0</strong> (2026-01-09): Protocolo inicial de integridade</li>
+</ul>
 
 
 
