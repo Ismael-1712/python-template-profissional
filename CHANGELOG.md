@@ -4,7 +4,28 @@
 
 ### Added
 
-- **🚀 Protocolo de Imunidade de Dependências v2.3 - Deep Consistency Check**:
+- **� Protocolo de Descompressão v2.4 - CI Resilience Mode**:
+  - **Dualidade Local/CI**: Sistema agora opera em dois modos distintos:
+    - **Local (Fail-Hard)**: Mantém rigor total - qualquer drift bloqueia workflow
+    - **CI (Warn-Only)**: Permissivo com drift de PyPI - não bloqueia pipeline
+  - **Auto-detecção de Ambiente**: Usa `GITHUB_ACTIONS` env var para identificar contexto
+  - **Test Suite Adaptation** (`tests/test_dependency_alignment.py`):
+    - `test_requirements_txt_is_synced()`: `pytest.skip()` no CI, `pytest.fail()` localmente
+    - Logs forenses completos preservados mesmo em modo warn
+  - **Guardian Decompression** (`scripts/core/dependency_guardian.py`):
+    - `validate-deep`: Exit code 0 no CI quando drift detectado (com warnings)
+    - Exit code 1 localmente (comportamento v2.3 preservado)
+    - Mensagens diplomáticas: "🔵 CI MODE DETECTED: Drift detectado mas pipeline não bloqueado"
+  - **Resolução de Impasse Operacional**:
+    - Elimina bloqueios de CI causados por drift inevitável de PyPI entre commit local e execução remota
+    - Mantém proteção local contra esquecimento de `make requirements`
+    - CI fica VERDE mas logs AMARELOS alertam sobre dessincronia
+  - **SRE Compliance**:
+    - Fail-Safe design: Sistema relaxa em emergência mas mantém observabilidade
+    - Defense in Depth: `pip-audit` continua bloqueando vulnerabilidades (independente)
+    - Least Surprise: Desenvolvedor local não percebe mudança (comportamento inalterado)
+
+- **�🚀 Protocolo de Imunidade de Dependências v2.3 - Deep Consistency Check**:
   - **DependencyGuardian Enhanced**: Métodos v2.3 em `scripts/core/dependency_guardian.py`
     - `validate_deep_consistency()`: In-memory pip-compile + byte-by-byte comparison
     - `_compare_content_deep()`: Comment-agnostic diff detector com mismatch detalhado

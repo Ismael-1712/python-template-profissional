@@ -165,14 +165,27 @@ make requirements                    # Recompila com Python 3.10 baseline + Deep
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
 
-# 🔐 Protocolo de Imunidade v2.3 (5 Camadas):
+# 🔐 Protocolo de Imunidade v2.4 (6 Camadas - Decompressão Operacional):
 # Layer 1 - Pre-commit: Bloqueia commits se dev.txt dessincronizado
 # Layer 2 - Deep Consistency: In-memory pip-compile + byte-by-byte comparison
 # Layer 3 - Atomic Write: fcntl file locking + POSIX rename (evita corrupção)
 # Layer 4 - Pre-push Hook: Validação deep antes de push (bloqueio hard)
-# Layer 5 - CI/CD: Deep Check com exit code 1 em drift detectado
+# Layer 5 - CI/CD Dual Mode: Deep Check com comportamento dual:
+#   ├─ LOCAL: Exit code 1 em drift (fail-hard, força correção)
+#   └─ CI (GitHub Actions): Exit code 0 em drift (warn-only, não bloqueia pipeline)
+# Layer 6 - Observability: Logs forenses completos mesmo em modo warn (CI fica VERDE, alertas AMARELOS)
 
-# 🆕 MIGRAÇÃO v2.2 → v2.3:
+# 🆕 PROTOCOLO v2.4 - DESCOMPRESSÃO OPERACIONAL:
+# - Auto-detecção de ambiente via GITHUB_ACTIONS env var
+# - CI permissivo: Drift de PyPI não bloqueia pipeline (mas alerta nos logs)
+# - Local estrito: Desenvolvedor ainda é forçado a rodar make requirements
+# - Fail-Safe Design: Sistema relaxa em emergência (CI) mas mantém proteção local
+# - Defense in Depth: pip-audit continua bloqueando vulnerabilidades independentemente
+
+# 🆕 MIGRAÇÃO v2.2 → v2.3 → v2.4:
+# - v2.2: Selo SHA-256 criptográfico
+# - v2.3: Deep Check (elimina drift PyPI blind spot)
+# - v2.4: Dual-mode (CI resilience sem comprometer segurança local)
 # - Selo SHA-256 PRESERVADO para backward compatibility
 # - Deep Check substitui validação de selo como mecanismo primário
 # - Atomic write elimina race conditions com IDE/editor buffers
@@ -180,7 +193,7 @@ git add requirements/dev.in requirements/dev.txt
 
 # 📖 Documentação completa:
 # - docs/guides/DEPENDENCY_MANAGEMENT.md
-# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.3)
+# - docs/architecture/DEPENDENCY_IMMUNITY_PROTOCOL.md (v2.4)
 # - docs/reports/FORENSIC_TOMLI_DRIFT_INVESTIGATION.md (caso forense)
 ```
 

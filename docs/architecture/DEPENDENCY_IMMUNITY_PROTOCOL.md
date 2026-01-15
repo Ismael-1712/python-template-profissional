@@ -1,20 +1,59 @@
 ---
-id: dependency-immunity-protocol-v2-2
+id: dependency-immunity-protocol-v2-4
 type: arch
 status: active
-version: 2.2.0
+version: 2.4.0
 author: SRE Team
-date: "2026-01-11"
-title: "Protocolo de Imunidade de Dependências v2.2"
-description: "Sistema de proteção criptográfica contra drift de dependências"
-tags: ["security", "dependencies", "cryptography", "autoimunity"]
+date: "2026-01-15"
+title: "Protocolo de Imunidade de Dependências v2.4 - Decompressão Operacional"
+description: "Sistema de proteção criptográfica com modo dual (Local=Fail-Hard, CI=Warn-Only)"
+tags: ["security", "dependencies", "cryptography", "autoimunity", "ci-resilience"]
 ---
 
-# Protocolo de Imunidade de Dependências v2.2
+# Protocolo de Imunidade de Dependências v2.4
 
 ## 🎯 Objetivo
 
-Implementar proteção criptográfica baseada em **SHA-256** para prevenir drift, adulteração e inconsistências em lockfiles de dependências Python.
+Implementar proteção criptográfica baseada em **SHA-256** e **Deep Consistency Check** para prevenir drift, adulteração e inconsistências em lockfiles de dependências Python, com **modo operacional dual** para garantir rigor local e resiliência no CI.
+
+## 🆕 NOVIDADE v2.4: Protocolo de Descompressão Operacional
+
+### Problema Resolvido
+
+**v2.3 (Estado Anterior)**: Rigidez extrema bloqueava CI quando drift inevitável de PyPI ocorria entre commit local e execução remota (ex: nova versão de dependência transitiva publicada no intervalo de minutos).
+
+**v2.4 (Solução)**: Implementação de **dual-mode operation**:
+- **Local (Desenvolvedor)**: Fail-Hard - mantém rigor total
+- **CI (GitHub Actions)**: Warn-Only - permissivo mas observável
+
+### Arquitetura Dual-Mode
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│          CAMADA DE DETECÇÃO DE AMBIENTE                      │
+│                                                              │
+│  Auto-detecção via Env Var:                                  │
+│    is_ci = os.getenv("GITHUB_ACTIONS") == "true"            │
+│                                                              │
+│  ┌──────────────────┐         ┌──────────────────┐          │
+│  │  LOCAL MODE      │         │   CI MODE        │          │
+│  │  (Fail-Hard)     │         │   (Warn-Only)    │          │
+│  └────────┬─────────┘         └────────┬─────────┘          │
+│           │                            │                     │
+└───────────┼────────────────────────────┼─────────────────────┘
+            │                            │
+            ▼                            ▼
+┌─────────────────────┐      ┌─────────────────────┐
+│  DRIFT DETECTADO?   │      │  DRIFT DETECTADO?   │
+│                     │      │                     │
+│  ├─ SIM: Exit 1 ❌  │      │  ├─ SIM: Exit 0 🔵  │
+│  └─ NÃO: Exit 0 ✅  │      │  └─ NÃO: Exit 0 ✅  │
+│                     │      │                     │
+│  pytest.fail()      │      │  pytest.skip()      │
+│  (Bloqueia dev)     │      │  (Warning logs)     │
+└─────────────────────┘      └─────────────────────┘
+       FORÇA CORREÇÃO         NÃO BLOQUEIA PIPELINE
+```
 
 ## 🔐 Modelo de Segurança
 
@@ -24,12 +63,14 @@ Todo `requirements.txt` deve ser **derivado exclusivamente** de seu corresponden
 
 ### Ameaças Mitigadas
 
-| Ameaça | Impacto | Mitigação |
-|--------|---------|-----------|
-| **Edição manual de .txt** | Drift silencioso, builds inconsistentes | Selo detecta adulteração |
-| **Commit de lockfile desatualizado** | CI quebrado, dependências desalinhadas | Pre-push hook bloqueia |
+| Ameaça | Impacto | Mitigação (v2.4) |
+|--------|---------|------------------|
+| **Edição manual de .txt** | Drift silencioso, builds inconsistentes | Deep Check detecta (fail-hard local) |
+| **Commit de lockfile desatualizado** | CI quebrado, dependências desalinhadas | Pre-commit hook bloqueia localmente |
 | **Modificação maliciosa** | Injeção de dependências não autorizadas | Hash SHA-256 prova integridade |
-| **Drift entre ambientes** | "Works on my machine" syndrome | Baseline Python garante reprodutibilidade |
+| **Drift entre ambientes** | "Works on my machine" syndrome | Baseline Python + Deep Check |
+| **🆕 Drift PyPI inevitável (CI)** | CI bloqueado por versões transitivas novas | Modo warn-only no CI (não bloqueia) |
+| **🆕 Falsos-positivos operacionais** | Pipeline travado por drift temporário | Auto-detecção de CI relaxa validação |
 
 ## 🏗️ Arquitetura
 
@@ -310,19 +351,31 @@ SHA-256: c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
 - ✅ **Auditabilidade** via hash SHA-256
 - ✅ **Reprodutibilidade** garantida por baseline Python
 
-## 🚀 Roadmap Futuro
+## 🚀 Roadmap Evolutivo
 
-### v2.3 (Planejado)
+### v2.2 (Implementado - 2026-01-11)
+- ✅ Selo SHA-256 criptográfico
+- ✅ Pre-push hook com validação de selo
+- ✅ Backward compatibility garantida
 
-- [ ] Suporte para múltiplos lockfiles (dev, prod, test)
-- [ ] Selo timestamped (inclui data no hash)
-- [ ] Integração com `pip-audit` (vulnerabilidades)
+### v2.3 (Implementado - 2026-01-12)
+- ✅ Deep Consistency Check (in-memory pip-compile)
+- ✅ Eliminação de PyPI drift blind spot
+- ✅ Atomic write com file locking (fcntl)
+- ✅ Comment-agnostic diff detection
 
-### v3.0 (Visão)
+### v2.4 (Implementado - 2026-01-15) 🎯 ATUAL
+- ✅ **Dual-mode operation** (Local=Fail-Hard, CI=Warn-Only)
+- ✅ **Auto-detecção de CI** via `GITHUB_ACTIONS` env var
+- ✅ **Desbloqueio operacional** do pipeline
+- ✅ **Fail-Safe design** (relaxa em emergência, mantém observabilidade)
+- ✅ **Defense in Depth** mantida (pip-audit independente)
 
+### v3.0 (Planejado)
 - [ ] Assinatura GPG dos lockfiles
-- [ ] Blockchain de dependências (imutabilidade)
+- [ ] Integração com Dependabot (auto-update)
 - [ ] ML para detecção de padrões anômalos
+- [ ] Dashboard de drift metrics (Prometheus/Grafana)
 
 ## 📚 Referências
 
@@ -342,6 +395,15 @@ Modificações neste protocolo devem passar por:
 
 ---
 
-**Última Atualização**: 2026-01-11
+**Última Atualização**: 2026-01-15
+**Versão**: v2.4.0 (Decompressão Operacional)
 **Mantenedores**: SRE Team
-**Status**: 🟢 Ativo (Produção)
+**Status**: 🟢 Ativo (Produção) - **CI Resilience Mode Enabled**
+
+### Changelog de Versões
+
+- **v2.4.0** (2026-01-15): Dual-mode operation, auto-detecção de CI, desbloqueio operacional
+- **v2.3.0** (2026-01-12): Deep Consistency Check, atomic write, PyPI drift detection
+- **v2.2.0** (2026-01-11): Selo SHA-256 criptográfico, pre-push hook
+- **v2.1.0** (2026-01-10): Baseline Python, comment-agnostic hash
+- **v2.0.0** (2026-01-09): Protocolo inicial de integridade

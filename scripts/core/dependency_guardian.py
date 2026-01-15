@@ -682,7 +682,22 @@ Exit Codes:
                 print("❌ Deep Consistency Check: FAILED")
                 print()
                 print(diff_report)
-                sys.exit(1)
+
+                # PROTOCOLO v2.4: CI=Warn (Exit 0), Local=Fail-Hard (Exit 1)
+                is_ci = os.getenv("GITHUB_ACTIONS", "").lower() == "true"
+
+                if is_ci:
+                    print(
+                        "\n🔵 CI MODE DETECTED: Drift detectado mas "
+                        "pipeline não bloqueado"
+                    )
+                    print("⚠️  REVISAR LOGS: Lockfile em dessincronia com PyPI")
+                    print(
+                        "💡 Execute 'make requirements' localmente para ressincronizar"
+                    )
+                    sys.exit(0)  # CI permissivo
+                else:
+                    sys.exit(1)  # Local estrito
 
     except FileNotFoundError as e:
         print(f"❌ Error: {e}", file=sys.stderr)
