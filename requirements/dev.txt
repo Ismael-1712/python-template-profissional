@@ -4,7 +4,6 @@
 #
 #    pip-compile --allow-unsafe --output-file=requirements/dev.txt --strip-extras requirements/dev.in
 #
-# INTEGRITY_SEAL: c34d823c37c3d7325be44665b0072e3c4a12dc66ead7fb9e3ce166bb8c59aaa4
 annotated-types==0.7.0
     # via pydantic
 anyio==4.12.1

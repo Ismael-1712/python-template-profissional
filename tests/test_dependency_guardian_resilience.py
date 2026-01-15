@@ -20,6 +20,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+from _pytest.capture import CaptureFixture
 
 from scripts.core.dependency_guardian import DependencyGuardian
 
@@ -50,7 +51,7 @@ class TestDependencyGuardianResilience:
         self,
         guardian: DependencyGuardian,
         mock_requirements_files: tuple[Path, Path],
-        capsys: pytest.CaptureFixture,
+        capsys: CaptureFixture[str],
     ) -> None:
         """Test fallback to sys.executable when python_exec doesn't exist.
 
@@ -147,7 +148,7 @@ class TestDependencyGuardianResilience:
         self,
         guardian: DependencyGuardian,
         mock_requirements_files: tuple[Path, Path],
-        capsys: pytest.CaptureFixture,
+        capsys: CaptureFixture[str],
     ) -> None:
         """Test that fallback does NOT occur when python_exec is valid.
 
