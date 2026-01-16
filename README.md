@@ -166,7 +166,7 @@ make requirements                    # Recompila com Python 3.10 baseline + Deep
 # ⚠️ IMPORTANTE: Sempre commite dev.in E dev.txt juntos!
 git add requirements/dev.in requirements/dev.txt
 
-# 🔐 Protocolo de Imunidade v2.4.1 (6 Camadas + Resiliência):
+# 🔐 Protocolo de Imunidade v2.5.4 (8 Camadas + Concurrency Safety):
 # Layer 1 - Pre-commit: Bloqueia commits se dev.txt dessincronizado
 # Layer 2 - Deep Consistency: In-memory pip-compile + byte-by-byte comparison
 # Layer 3 - Atomic Write: fcntl file locking + POSIX rename (evita corrupção)
@@ -179,6 +179,18 @@ git add requirements/dev.in requirements/dev.txt
 #   ├─ Guardian fallback: sys.executable se python_exec inválido
 #   ├─ Workflow environment-agnostic: Usa python3.10 do runner (não .venv)
 #   └─ Exit Code 127 eliminado: Validações independentes de venv
+# Layer 8 - Concurrency Immunity (v2.5.4): 🆕
+#   ├─ File Locking (fcntl): Trava exclusiva previne race conditions
+#   ├─ Serial Test Marker: @pytest.mark.serial isola testes sensíveis
+#   ├─ Bifurcated Execution: pytest-xdist workers paralelizam testes seguros
+#   └─ Lockfile Integrity: requirements/dev.txt protegido contra truncamento silencioso
+
+# 🆕 PROTOCOLO v2.5.4 - CONCURRENCY IMMUNITY:
+# - File Locking: verify_deps.py usa fcntl.LOCK_EX para sincronização
+# - Serial Tests: Testes de validação de lockfile executam isoladamente
+# - Execução Bifásica: make test divide em fase paralela + serial
+# - Proteção Ativa: Previne truncamento de 606 → 10 linhas por race conditions
+# - Zero Overhead: Testes não sensíveis continuam paralelizados (-n auto)
 
 # 🆕 PROTOCOLO v2.4.1 - ESTABILIZAÇÃO DE INFRAESTRUTURA:
 # - Guardian Fallback: Degrada graciosamente para runner Python se .venv inválido
