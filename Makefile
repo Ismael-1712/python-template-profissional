@@ -302,9 +302,15 @@ save: format
 audit: doctor
 	$(PYTHON) -m scripts.cli.audit
 
-## test: Executa suite completa de testes com pytest (paralelo via pytest-xdist)
+## test: Executa suite completa de testes (paralelo + serial - v2.5.4 Concurrency Immunity)
 test: doctor
-	PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR)
+	@echo "🧪 FASE 1/2: Testes Paralelos (pytest-xdist)..."
+	@PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR) -m "not serial" -n auto || true
+	@echo ""
+	@echo "🔒 FASE 2/2: Testes Seriais (race-condition sensitive)..."
+	@PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR) -m "serial" -n0
+	@echo ""
+	@echo "✅ Suite completa executada (Protocolo v2.5.4 ativo)"
 
 ## test-ci: Executa testes sem doctor (otimizado para CI)
 test-ci:

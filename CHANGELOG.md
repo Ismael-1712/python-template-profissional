@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+### Added
+
+- **🔒 Camada 8: Concurrency Immunity (v2.5.4) - Protocolo de Neutralização de Race Conditions**
+  - **File Locking Atômico**: Implementado em `scripts/ci/verify_deps.py`
+    - Trava exclusiva `fcntl.LOCK_EX` previne compilações concorrentes
+    - Lockfile temporário `.verify_deps_{req_name}.lock` para sincronização
+    - Proteção contra truncamento silencioso causado por pytest-xdist workers paralelos
+  - **Marcador Serial**: Testes sensíveis a concorrência isolados com `@pytest.mark.serial`
+    - `test_requirements_txt_is_synced` agora executa em modo serial (não paralelo)
+    - Previne race conditions em validações de lockfile
+  - **Execução Bifásica de Testes**: Refatorado `make test` (Makefile)
+    - FASE 1: Testes paralelos (`pytest -n auto -m "not serial"`)
+    - FASE 2: Testes seriais (`pytest -n0 -m "serial"`)
+    - Mantém performance enquanto garante segurança contra race conditions
+  - **Evidência Forense**: Arquivo `requirements/dev.txt` mantido em 606 linhas durante `make validate`
+    - Bug histórico neutralizado: truncamento para 10 linhas (pytest + ruff apenas)
+    - Mecanismo de proteção ativo em todos os workers paralelos
+
+### Fixed
+
+- **🐛 Race Condition Crítica**: Truncamento silencioso de `requirements/dev.txt`
+  - **Causa Raiz**: Workers pytest-xdist competindo por acesso ao lockfile durante validação
+  - **Impacto**: Lockfile reduzido de 606 linhas para 10 linhas (perda de dependências transitivas)
+  - **Solução**: File locking + execução serial para testes de validação de deps
+
 ## [2.5.1] - 2026-01-16
 
 ### Added
