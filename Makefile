@@ -303,7 +303,7 @@ audit: doctor
 	$(PYTHON) -m scripts.cli.audit
 
 ## test: Executa suite completa de testes (paralelo + serial - v2.5.4 Concurrency Immunity)
-test: $(VENV) $(INSTALL_COMPLETE)
+test: $(VENV)
 	@echo "🧪 FASE 1/2: Testes Paralelos (pytest-xdist)..."
 	@PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR) -m "not serial" -n auto || true
 	@echo ""
