@@ -292,11 +292,16 @@ class TestDependencyAlignment:
             pytest.fail(error_message)
 
     # TODO: Refactor God Function - split validation into smaller test methods
+    @pytest.mark.serial  # Protocolo v2.5.4: Previne race conditions com pytest-xdist
     def test_requirements_txt_is_synced(self, project_root: Path) -> None:  # noqa: C901
         """Verify requirements/dev.txt is in sync using pip-compile.
 
         This test uses pip-compile to generate what the lockfile should be
         and compares it with the current file to detect sync issues.
+
+        NOTE: Marked as @pytest.mark.serial to prevent race conditions when
+        multiple pytest-xdist workers attempt to validate/compile the same
+        lockfile simultaneously.
 
         Raises:
             AssertionError: If lockfile is out of sync with dev.in

@@ -120,8 +120,8 @@ testpaths = [ "tests",]
 python_files = [ "test_*.py",]
 python_classes = [ "Test*",]
 python_functions = [ "test_*",]
-addopts = "-ra --strict-markers --strict-config --showlocals -n auto"
-markers = [ "unit: mark a test as a unit test.", "integration: mark a test as an integration test.", "e2e: mark a test as an end-to-end test.",]
+addopts = "-ra --strict-markers --strict-config --showlocals"
+markers = [ "unit: mark a test as a unit test.", "integration: mark a test as an integration test.", "e2e: mark a test as an end-to-end test.", "serial: Testes que não podem ser paralelizados (risk: race conditions)",]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = [ "uvicorn", "typer", "pydantic", "pydantic-settings", "chromadb", "sentence-transformers", "tomli", "pip-tools", "ruff", "mypy", "pytest", "pytest-xdist", "pytest-cov", "babel", "mkdocs-material", "mkdocstrings", "python-frontmatter", "pyyaml", "jinja2", "fastapi",]

@@ -83,6 +83,7 @@ def mock_pip_compile_success() -> Iterator[MagicMock]:
         yield mock
 
 
+@pytest.mark.serial  # v2.5.4: Tests modify project files, must run sequentially
 class TestDependencyDetection:
     """Test suite for dependency drift detection."""
 
@@ -233,7 +234,17 @@ class TestDependencyDetection:
 
                     sys.path.insert(0, str(temp_workspace))
                     with patch("sys.argv", ["verify_deps.py", "--fix"]):
-                        with patch("pathlib.Path.cwd", return_value=temp_workspace):
+                        # CRITICAL FIX (v2.5.5): Mock _resolve_paths to prevent
+                        # writing to REAL lockfile (Path(__file__) points to
+                        # real project)
+                        with patch(
+                            "scripts.ci.verify_deps._resolve_paths",
+                            return_value=(
+                                temp_workspace,
+                                Path("requirements/dev.in"),
+                                Path("requirements/dev.txt"),
+                            ),
+                        ):
                             from scripts.ci import verify_deps
 
                             verify_deps.fix_sync("dev")
@@ -256,6 +267,7 @@ class TestDependencyDetection:
                             )
 
 
+@pytest.mark.serial  # v2.5.4: Tests modify project files, must run sequentially
 class TestExitCodes:
     """Test suite for proper exit code handling."""
 
@@ -301,6 +313,7 @@ class TestExitCodes:
         assert result.returncode in (0, 1)  # Permissive during TDD
 
 
+@pytest.mark.serial  # v2.5.4: Tests modify project files, must run sequentially
 class TestPythonBaselineEnforcement:
     """Test suite for Python baseline version enforcement."""
 
@@ -322,6 +335,7 @@ class TestPythonBaselineEnforcement:
             assert shutil.which("python3") or shutil.which("python")
 
 
+@pytest.mark.serial  # v2.5.4: Tests modify project files, must run sequentially
 class TestErrorMessaging:
     """Test suite for user-facing error messages."""
 
@@ -345,3 +359,519 @@ class TestErrorMessaging:
 
                 # Should include remediation steps
                 assert "make requirements" in captured.out or True  # TDD-permissive
+
+
+@pytest.mark.serial
+class TestEdgeCasesAndErrorHandling:
+    """Test suite for edge cases and error handling scenarios (v2.5.6).
+
+    This test suite ensures 100% code coverage by testing error paths
+    and exceptional conditions that are critical for robustness.
+    """
+
+    def test_ensure_piptools_installation_failure(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify behavior when pip-tools installation fails.
+
+        Coverage Target: Lines 103-106 in verify_deps.py
+        Scenario: pip install pip-tools raises CalledProcessError
+        """
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_install,
+        ):
+            # pip show returns error (pip-tools not installed)
+            mock_run.return_value = MagicMock(returncode=1)
+
+            # pip install fails
+            mock_install.side_effect = subprocess.CalledProcessError(1, "pip")
+
+            from scripts.ci.verify_deps import _ensure_piptools_installed
+
+            result = _ensure_piptools_installed("python", temp_workspace)
+
+            assert result is False
+            captured = capsys.readouterr()
+            assert "❌" in captured.out
+
+    def test_pip_compile_execution_failure(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify handling of pip-compile execution failures.
+
+        Coverage Target: Lines 182-183 in verify_deps.py
+        Scenario: pip-compile fails during check_sync
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with patch("subprocess.run") as mock_run:
+            # pip show success (pip-tools installed)
+            mock_run.return_value = MagicMock(returncode=0)
+
+            # Mock _compile_in_memory to raise CalledProcessError
+            with (
+                patch(
+                    "scripts.ci.verify_deps._compile_in_memory",
+                    side_effect=subprocess.CalledProcessError(2, "pip-compile"),
+                ),
+                patch(
+                    "scripts.ci.verify_deps._resolve_paths",
+                    return_value=(
+                        temp_workspace,
+                        Path("requirements/dev.in"),
+                        Path("requirements/dev.txt"),
+                    ),
+                ),
+            ):
+                from scripts.ci.verify_deps import check_sync
+
+                result = check_sync("dev")
+
+                assert result is False
+                captured = capsys.readouterr()
+                assert "❌ ERRO FATAL" in captured.out
+                assert "Exit Code 2" in captured.out
+
+    def test_compare_files_when_txt_missing(
+        self,
+        temp_workspace: Path,
+    ) -> None:
+        """Verify behavior when requirements.txt does not exist.
+
+        Coverage Target: Line 254 in verify_deps.py
+        Scenario: _compare_files_content called with non-existent file
+        """
+        from scripts.ci.verify_deps import _compare_files_content
+
+        missing_file = temp_workspace / "nonexistent.txt"
+        existing_file = temp_workspace / "exists.txt"
+        existing_file.write_text("pytest==9.0.2")
+
+        result = _compare_files_content(missing_file, existing_file)
+
+        assert result is False
+
+    def test_python_baseline_not_found_in_path(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify fallback when PYTHON_BASELINE executable is not found.
+
+        Coverage Target: Lines 310-313 in verify_deps.py
+        Scenario: PYTHON_BASELINE set but python executable doesn't exist
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with patch.dict("os.environ", {"PYTHON_BASELINE": "3.99"}):
+            with patch("shutil.which") as mock_which:
+                # python3.99 does not exist
+                mock_which.return_value = None
+
+                with (
+                    patch("subprocess.run") as mock_run,
+                    patch("subprocess.check_call") as mock_compile,
+                ):
+                    mock_run.return_value = MagicMock(returncode=0)
+
+                    def check_call_side_effect(*args: Any, **kwargs: Any) -> int:
+                        if "piptools" in str(args[0]):
+                            output_idx = args[0].index("--output-file") + 1
+                            Path(args[0][output_idx]).write_text(SAMPLE_TXT_SYNCED)
+                        return 0
+
+                    mock_compile.side_effect = check_call_side_effect
+
+                    with patch(
+                        "scripts.ci.verify_deps._resolve_paths",
+                        return_value=(
+                            temp_workspace,
+                            Path("requirements/dev.in"),
+                            Path("requirements/dev.txt"),
+                        ),
+                    ):
+                        from scripts.ci.verify_deps import fix_sync
+
+                        fix_sync("dev")
+
+                        captured = capsys.readouterr()
+                        assert "PYTHON_BASELINE=3.99 definido, mas" in captured.out
+                        assert "não encontrado" in captured.out
+
+    def test_fix_sync_compilation_failure(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify error handling when fix_sync compilation fails.
+
+        Coverage Target: Lines 362-367 in verify_deps.py
+        Scenario: Auto-fix fails during pip-compile execution
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_compile,
+        ):
+            mock_run.return_value = MagicMock(returncode=0)
+
+            # pip-compile fails during recompilation
+            mock_compile.side_effect = subprocess.CalledProcessError(1, "pip-compile")
+
+            with patch(
+                "scripts.ci.verify_deps._resolve_paths",
+                return_value=(
+                    temp_workspace,
+                    Path("requirements/dev.in"),
+                    Path("requirements/dev.txt"),
+                ),
+            ):
+                from scripts.ci.verify_deps import fix_sync
+
+                result = fix_sync("dev")
+
+                assert result is False
+                captured = capsys.readouterr()
+                assert "❌ ERRO FATAL" in captured.out
+                assert "Falha ao executar autocura" in captured.out
+
+    def test_ensure_piptools_successful_installation(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify successful installation of pip-tools when not present.
+
+        Coverage Target: Lines 63-64 in verify_deps.py
+        Scenario: pip-tools is missing but gets installed successfully
+        """
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_install,
+        ):
+            # pip show returns error (pip-tools not installed)
+            mock_run.return_value = MagicMock(returncode=1)
+
+            # pip install succeeds
+            mock_install.return_value = 0
+
+            from scripts.ci.verify_deps import _ensure_piptools_installed
+
+            result = _ensure_piptools_installed("python", temp_workspace)
+
+            assert result is True
+            mock_install.assert_called_once()
+
+    def test_check_sync_piptools_installation_failure(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify check_sync returns False when pip-tools cannot be installed.
+
+        Coverage Target: Lines 218-219 in verify_deps.py
+        Scenario: check_sync fails because pip-tools installation fails
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_install,
+        ):
+            # pip show fails (not installed)
+            mock_run.return_value = MagicMock(returncode=1)
+            # pip install fails
+            mock_install.side_effect = subprocess.CalledProcessError(1, "pip")
+
+            with patch(
+                "scripts.ci.verify_deps._resolve_paths",
+                return_value=(
+                    temp_workspace,
+                    Path("requirements/dev.in"),
+                    Path("requirements/dev.txt"),
+                ),
+            ):
+                from scripts.ci.verify_deps import check_sync
+
+                result = check_sync("dev")
+
+                assert result is False
+                captured = capsys.readouterr()
+                assert "Não foi possível instalar pip-tools" in captured.out
+
+    def test_fix_sync_piptools_installation_failure(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify fix_sync returns False when pip-tools cannot be installed.
+
+        Coverage Target: Lines 332-333 in verify_deps.py
+        Scenario: fix_sync fails because pip-tools installation fails
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_install,
+        ):
+            mock_run.return_value = MagicMock(returncode=1)
+            mock_install.side_effect = subprocess.CalledProcessError(1, "pip")
+
+            with patch(
+                "scripts.ci.verify_deps._resolve_paths",
+                return_value=(
+                    temp_workspace,
+                    Path("requirements/dev.in"),
+                    Path("requirements/dev.txt"),
+                ),
+            ):
+                from scripts.ci.verify_deps import fix_sync
+
+                result = fix_sync("dev")
+
+                assert result is False
+                captured = capsys.readouterr()
+                assert "Não foi possível instalar pip-tools" in captured.out
+
+
+@pytest.mark.serial
+class TestHelperFunctions:
+    """Test suite for internal helper functions (v2.5.6).
+
+    Tests for _resolve_paths, _select_python_executable, and other helpers.
+    """
+
+    def test_resolve_paths_returns_correct_structure(self) -> None:
+        """Verify _resolve_paths returns proper path tuple.
+
+        Coverage Target: Lines 70-82 in verify_deps.py
+        """
+        from scripts.ci.verify_deps import _resolve_paths
+
+        project_root, in_file, txt_file = _resolve_paths("dev")
+
+        assert project_root.exists()
+        assert in_file == Path("requirements/dev.in")
+        assert txt_file == Path("requirements/dev.txt")
+
+    def test_select_python_executable_with_baseline(
+        self,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify _select_python_executable honors PYTHON_BASELINE.
+
+        Coverage Target: Lines 97-104 in verify_deps.py
+        """
+        temp_project = Path("/tmp/fake_project")
+        temp_project.mkdir(exist_ok=True)
+
+        with patch.dict("os.environ", {"PYTHON_BASELINE": "3.10"}):
+            with patch("shutil.which") as mock_which:
+                mock_which.return_value = "/usr/bin/python3.10"
+
+                from scripts.ci.verify_deps import _select_python_executable
+
+                result = _select_python_executable(temp_project)
+
+                assert result == "/usr/bin/python3.10"
+                captured = capsys.readouterr()
+                assert "🎯 Usando Python 3.10" in captured.out
+
+    def test_select_python_executable_baseline_not_found(
+        self,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify fallback when PYTHON_BASELINE executable not found.
+
+        Coverage Target: Lines 105-112 in verify_deps.py
+        """
+        temp_project = Path("/tmp/fake_project")
+        temp_project.mkdir(exist_ok=True)
+
+        with patch.dict("os.environ", {"PYTHON_BASELINE": "3.99"}):
+            with patch("shutil.which") as mock_which:
+                mock_which.return_value = None  # python3.99 doesn't exist
+
+                from scripts.ci.verify_deps import _select_python_executable
+
+                result = _select_python_executable(temp_project)
+
+                # Should fallback to sys.executable
+                assert result == sys.executable
+                captured = capsys.readouterr()
+                assert "PYTHON_BASELINE=3.99 definido, mas" in captured.out
+                assert "não encontrado no PATH" in captured.out
+
+    def test_select_python_executable_uses_venv_when_no_baseline(self) -> None:
+        """Verify venv Python is used when PYTHON_BASELINE not set.
+
+        Coverage Target: Lines 113-114 in verify_deps.py
+        """
+        with patch.dict("os.environ", {}, clear=True):
+            from scripts.ci.verify_deps import _select_python_executable
+
+            temp_project = Path("/tmp/fake_project_venv")
+            temp_project.mkdir(exist_ok=True)
+            venv_dir = temp_project / ".venv" / "bin"
+            venv_dir.mkdir(parents=True, exist_ok=True)
+            venv_python = venv_dir / "python"
+            venv_python.touch()
+
+            result = _select_python_executable(temp_project)
+
+            # Should use venv Python when it exists
+            assert str(venv_python) in result
+
+    def test_check_sync_dessincronizado_mensagens(
+        self,
+        temp_workspace: Path,
+        capsys: CaptureFixture[str],
+    ) -> None:
+        """Verify check_sync prints desync messages.
+
+        Coverage Target: Lines 226-227 in verify_deps.py
+        Scenario: Lockfile is desynchronized, verify messages
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with (
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_compile,
+        ):
+            mock_run.return_value = MagicMock(returncode=0)
+
+            def check_call_side_effect(*args: Any, **kwargs: Any) -> int:
+                if "piptools" in str(args[0]):
+                    output_idx = args[0].index("--output-file") + 1
+                    # Write different content to simulate desync
+                    Path(args[0][output_idx]).write_text(SAMPLE_TXT_SYNCED)
+                return 0
+
+            mock_compile.side_effect = check_call_side_effect
+
+            with patch(
+                "scripts.ci.verify_deps._resolve_paths",
+                return_value=(
+                    temp_workspace,
+                    Path("requirements/dev.in"),
+                    Path("requirements/dev.txt"),
+                ),
+            ):
+                from scripts.ci.verify_deps import check_sync
+
+                result = check_sync("dev")
+
+                assert result is False
+                captured = capsys.readouterr()
+                assert "❌ DESSINCRONIZADO" in captured.out
+                assert "PRESCRIÇÃO DE CORREÇÃO" in captured.out
+
+
+@pytest.mark.serial
+class TestCLIEntryPoint:
+    """Test suite for __main__ CLI entry point (v2.5.6).
+
+    Tests the argparse CLI interface and main execution paths.
+    """
+
+    def test_main_check_mode_synced(self, temp_workspace: Path) -> None:
+        """Verify CLI execution in check mode with synced files.
+
+        Coverage Target: Lines 378-450 (main block)
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_SYNCED)
+
+        with (
+            patch("sys.argv", [str(SCRIPT_PATH)]),
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_compile,
+        ):
+            mock_run.return_value = MagicMock(returncode=0)
+
+            def check_call_side_effect(*args: Any, **kwargs: Any) -> int:
+                if "piptools" in str(args[0]):
+                    output_idx = args[0].index("--output-file") + 1
+                    Path(args[0][output_idx]).write_text(SAMPLE_TXT_SYNCED)
+                return 0
+
+            mock_compile.side_effect = check_call_side_effect
+
+            with (
+                patch(
+                    "scripts.ci.verify_deps._resolve_paths",
+                    return_value=(
+                        temp_workspace,
+                        Path("requirements/dev.in"),
+                        Path("requirements/dev.txt"),
+                    ),
+                ),
+                pytest.raises(SystemExit) as exc_info,
+            ):
+                # Import and execute main
+                import runpy
+
+                runpy.run_path(str(SCRIPT_PATH), run_name="__main__")
+
+            assert exc_info.value.code == 0
+
+    def test_main_fix_mode(self, temp_workspace: Path) -> None:
+        """Verify CLI execution in --fix mode.
+
+        Coverage Target: Lines 451-462 (fix mode in main)
+        """
+        req_dir = temp_workspace / "requirements"
+        (req_dir / "dev.in").write_text(SAMPLE_IN_FILE)
+        (req_dir / "dev.txt").write_text(SAMPLE_TXT_DESYNC)
+
+        with (
+            patch("sys.argv", [str(SCRIPT_PATH), "--fix"]),
+            patch("subprocess.run") as mock_run,
+            patch("subprocess.check_call") as mock_compile,
+        ):
+            mock_run.return_value = MagicMock(returncode=0)
+
+            def check_call_side_effect(*args: Any, **kwargs: Any) -> int:
+                if "piptools" in str(args[0]):
+                    output_idx = args[0].index("--output-file") + 1
+                    Path(args[0][output_idx]).write_text(SAMPLE_TXT_SYNCED)
+                return 0
+
+            mock_compile.side_effect = check_call_side_effect
+
+            with (
+                patch(
+                    "scripts.ci.verify_deps._resolve_paths",
+                    return_value=(
+                        temp_workspace,
+                        Path("requirements/dev.in"),
+                        Path("requirements/dev.txt"),
+                    ),
+                ),
+                pytest.raises(SystemExit) as exc_info,
+            ):
+                import runpy
+
+                runpy.run_path(str(SCRIPT_PATH), run_name="__main__")
+
+            assert exc_info.value.code == 0

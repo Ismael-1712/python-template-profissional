@@ -1,12 +1,12 @@
 ---
-generated_at: 2026-01-15T22:22:40.321127+00:00
+generated_at: 2026-01-16T23:49:10.016966+00:00
 health_score: 20.0
 status: critical
 ---
 
 # 📊 Knowledge Graph Health Report
 
-**Generated:** 2026-01-15 22:22:40 UTC
+**Generated:** 2026-01-16 23:49:10 UTC
 **Overall Health Score:** 20.0/100 (🔴 Critical)
 
 ---
