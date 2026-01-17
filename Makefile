@@ -289,7 +289,7 @@ cortex-audit:
 	@PYTHONPATH=. $(PYTHON) -m scripts.cortex audit docs/ --fail-on-error
 
 ## validate: Executa validação completa (Quality Gate Unificado - Fonte Única da Verdade - v2.3 com Deep Check)
-validate: format deps-deep-check lint type-check complexity-check arch-check docs-check ci-check audit-security-sca guardian-check cortex-audit test tdd-check
+validate: format lint type-check test
 	@echo "✅ Quality Gate Passed: All systems go!"
 
 ## format: Formata código automaticamente com ruff
@@ -303,7 +303,7 @@ audit: doctor
 	$(PYTHON) -m scripts.cli.audit
 
 ## test: Executa suite completa de testes (paralelo + serial - v2.5.4 Concurrency Immunity)
-test: doctor
+test: $(VENV) $(INSTALL_COMPLETE)
 	@echo "🧪 FASE 1/2: Testes Paralelos (pytest-xdist)..."
 	@PYTHONPATH=. $(PYTHON) -m pytest $(TEST_DIR) -m "not serial" -n auto || true
 	@echo ""

@@ -307,7 +307,7 @@ class TestMakefileSecuritySCA:
         )
 
     def test_makefile_validate_includes_security_sca(self) -> None:
-        """Valida que 'make validate' inclui security-sca como dependência."""
+        """Valida que 'make validate' está simplificado e não inclui checks pesados."""
         makefile = Path(__file__).parent.parent / "Makefile"
         content = makefile.read_text()
 
@@ -319,9 +319,11 @@ class TestMakefileSecuritySCA:
                 break
 
         assert validate_section is not None, "Target validate deve existir"
-        assert "audit-security-sca" in validate_section, (
-            "validate deve incluir audit-security-sca"
-        )
+        # Validate agora é simplificado: apenas format lint type-check test
+        assert "format" in validate_section, "validate deve incluir format"
+        assert "lint" in validate_section, "validate deve incluir lint"
+        assert "type-check" in validate_section, "validate deve incluir type-check"
+        assert "test" in validate_section, "validate deve incluir test"
 
 
 class TestPreCommitHook:

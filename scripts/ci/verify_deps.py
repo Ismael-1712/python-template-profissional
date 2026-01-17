@@ -20,7 +20,6 @@ Exit Codes:
 """
 
 import argparse
-import fcntl  # v2.5.4: File locking for race condition prevention
 import os
 import shutil
 import subprocess
@@ -67,12 +66,126 @@ def _ensure_piptools_installed(python_exec: str, project_root: Path) -> bool:
         return False
 
 
+def _resolve_paths(req_name: str) -> tuple[Path, Path, Path]:
+    """Resolve project paths for requirements validation.
+
+    Args:
+        req_name: Requirements file name (e.g., 'dev', 'prod').
+
+    Returns:
+        Tuple of (project_root, in_file, txt_file).
+    """
+    project_root = Path(__file__).parent.parent.parent.resolve()
+    in_file = Path("requirements") / f"{req_name}.in"
+    txt_file = Path("requirements") / f"{req_name}.txt"
+    return project_root, in_file, txt_file
+
+
+def _select_python_executable(project_root: Path) -> str:
+    """Select Python executable following priority order.
+
+    Priority:
+        1. PYTHON_BASELINE env var (e.g., "3.10" for CI)
+        2. .venv/bin/python (local development)
+        3. sys.executable (fallback)
+
+    Args:
+        project_root: Project root directory.
+
+    Returns:
+        Path to selected Python executable.
+    """
+    baseline_version = os.getenv("PYTHON_BASELINE")
+    python_exec = sys.executable  # Default fallback
+
+    if baseline_version:
+        baseline_exec = shutil.which(f"python{baseline_version}")
+        if baseline_exec:
+            python_exec = baseline_exec
+            print(
+                f"\n  🎯 Usando Python {baseline_version} (baseline) para pip-compile",
+            )
+        else:
+            print(
+                f"\n  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
+                f"python{baseline_version} não encontrado no PATH",
+            )
+            print(f"  ⚠️  Usando fallback: {sys.executable}")
+    else:
+        venv_python = project_root / ".venv" / "bin" / "python"
+        if venv_python.exists():
+            python_exec = str(venv_python)
+
+    return python_exec
+
+
+def _compile_in_memory(
+    python_exec: str,
+    in_file: Path,
+    project_root: Path,
+) -> Path:
+    """Execute pip-compile to temporary file.
+
+    Args:
+        python_exec: Python executable path.
+        in_file: Input .in file path (relative).
+        project_root: Project root directory.
+
+    Returns:
+        Path to compiled temporary file.
+
+    Raises:
+        subprocess.CalledProcessError: If pip-compile fails.
+    """
+    tmp_file = tempfile.NamedTemporaryFile(mode="w+", delete=False)
+    tmp_path = Path(tmp_file.name)
+    tmp_file.close()
+
+    subprocess.check_call(
+        [
+            python_exec,
+            "-m",
+            "piptools",
+            "compile",
+            str(in_file),
+            "--output-file",
+            str(tmp_path),
+            "--resolver=backtracking",
+            "--strip-extras",
+            "--allow-unsafe",
+            "--quiet",
+        ],
+        cwd=str(project_root),
+    )
+    return tmp_path
+
+
+def _print_remediation_message(in_file: Path, txt_file: Path) -> None:
+    """Print corrective actions for desynchronized lockfiles."""
+    baseline_version = os.getenv("PYTHON_BASELINE")
+    print("\n💊 PRESCRIÇÃO DE CORREÇÃO:")
+    print("   1. Execute: make requirements")
+    print(f"   2. Ou: python{baseline_version or ''} -m piptools compile \\")
+    print(f"          {in_file} --output-file {txt_file} \\")
+    print("          --resolver=backtracking --strip-extras --allow-unsafe")
+    print("   3. Depois: git add requirements/dev.txt")
+
+
+def _show_diff(txt_file_path: Path, tmp_path: Path) -> None:
+    """Display diff between current and expected lockfile."""
+    print("\n--- Diff (apenas dependências, ignorando comentários) ---")
+    try:
+        subprocess.check_call(
+            ["diff", "-I", "^#", str(txt_file_path), str(tmp_path)],
+        )
+    except subprocess.CalledProcessError:
+        pass  # diff returns non-zero when files differ (expected)
+
+
 def check_sync(req_name: str) -> bool:
     """Verify if a requirements file is synchronized with its input file.
 
-    Implements Concurrency Immunity (v2.5.4): Uses file locking to prevent
-    race conditions when multiple processes (e.g., pytest-xdist workers)
-    attempt to validate/compile the same lockfile simultaneously.
+    SIMPLIFICADO: Remove file locking e complexidade. Apenas compara conteúdo.
 
     Args:
         req_name: The name of the requirements file (e.g., 'dev', 'prod').
@@ -80,113 +193,39 @@ def check_sync(req_name: str) -> bool:
     Returns:
         bool: True if synchronized, False otherwise.
     """
-    project_root = Path(__file__).parent.parent.parent.resolve()
-    in_file = Path("requirements") / f"{req_name}.in"
-    txt_file = Path("requirements") / f"{req_name}.txt"
+    project_root, in_file, txt_file = _resolve_paths(req_name)
 
-    # v2.5.4: Acquire exclusive lock to prevent race conditions
-    lockfile_path = project_root / f".verify_deps_{req_name}.lock"
-    lockfile = open(lockfile_path, "w")
+    print(f"🔍 Verificando integridade de {req_name}...", end=" ", flush=True)
 
+    python_exec = _select_python_executable(project_root)
+
+    # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
+    if not _ensure_piptools_installed(python_exec, project_root):
+        print("\n❌ ERRO: Não foi possível instalar pip-tools")
+        return False
+
+    tmp_path = None
     try:
-        # CRITICAL: Block until lock is acquired (prevents concurrent pip-compile)
-        fcntl.flock(lockfile.fileno(), fcntl.LOCK_EX)
+        tmp_path = _compile_in_memory(python_exec, in_file, project_root)
 
-        print(f"🔍 Verificando integridade de {req_name}...", end=" ", flush=True)
+        if _compare_files_content(project_root / txt_file, tmp_path):
+            print("✅ Sincronizado")
+            return True
 
-        # Python Selection Strategy (Priority Order):
-        # 1. PYTHON_BASELINE env var (e.g., "3.10" for CI compatibility)
-        # 2. .venv/bin/python (local development)
-        # 3. sys.executable (fallback)
-        baseline_version = os.getenv("PYTHON_BASELINE")
-        python_exec = sys.executable  # Default fallback
+        print("❌ DESSINCRONIZADO")
+        _print_remediation_message(in_file, txt_file)
+        _show_diff(project_root / txt_file, tmp_path)
+        return False
 
-        if baseline_version:
-            # Try to use baseline Python (e.g., python3.10)
-            baseline_exec = shutil.which(f"python{baseline_version}")
-            if baseline_exec:
-                python_exec = baseline_exec
-                print(
-                    f"\n  🎯 Usando Python {baseline_version} "
-                    "(baseline) para pip-compile",
-                )
-            else:
-                print(
-                    f"\n  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
-                    f"python{baseline_version} não encontrado no PATH",
-                )
-                print(f"  ⚠️  Usando fallback: {sys.executable}")
-        else:
-            # Try venv Python first for local dev
-            venv_python = project_root / ".venv" / "bin" / "python"
-            if venv_python.exists():
-                python_exec = str(venv_python)
-
-        # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
-        if not _ensure_piptools_installed(python_exec, project_root):
-            print("\n❌ ERRO: Não foi possível instalar pip-tools")
-            return False
-
-        with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
-            tmp_path = tmp.name
-
-        try:
-            # Execute pip-compile from root using RELATIVE paths
-            subprocess.check_call(
-                [
-                    python_exec,
-                    "-m",
-                    "piptools",
-                    "compile",
-                    str(in_file),
-                    "--output-file",
-                    tmp_path,
-                    "--resolver=backtracking",
-                    "--strip-extras",
-                    "--allow-unsafe",  # Include pip/setuptools for reproducible builds
-                    "--quiet",
-                ],
-                cwd=str(project_root),
-            )
-
-            if _compare_files_content(project_root / txt_file, Path(tmp_path)):
-                print("✅ Sincronizado")
-                return True
-
-            print("❌ DESSINCRONIZADO")
-            print("\n💊 PRESCRIÇÃO DE CORREÇÃO:")
-            print("   1. Execute: make requirements")
-            print(f"   2. Ou: python{baseline_version or ''} -m piptools compile \\")
-            print(f"          {in_file} --output-file {txt_file} \\")
-            print("          --resolver=backtracking --strip-extras --allow-unsafe")
-            print("   3. Depois: git add requirements/dev.txt")
-            print("\n--- Diff (apenas dependências, ignorando comentários) ---")
-            try:
-                # Using check_call to match project pattern
-                # (shell=False, validated inputs)
-                subprocess.check_call(
-                    ["diff", "-I", "^#", str(project_root / txt_file), tmp_path],
-                )
-            except subprocess.CalledProcessError:
-                pass  # diff returns non-zero when files differ (expected)
-            return False
-
-        except subprocess.CalledProcessError as e:
-            print(
-                f"\n❌ ERRO FATAL ao executar pip-compile (Exit Code {e.returncode}).",
-            )
-            return False
-        finally:
-            # Cleanup temp file
-            if os.path.exists(tmp_path):
-                os.unlink(tmp_path)
+    except subprocess.CalledProcessError as e:
+        print(
+            f"\n❌ ERRO FATAL ao executar pip-compile (Exit Code {e.returncode}).",
+        )
+        return False
     finally:
-        # v2.5.4: Release lock and cleanup
-        fcntl.flock(lockfile.fileno(), fcntl.LOCK_UN)
-        lockfile.close()
-        # Remove lockfile (optional, prevents clutter)
-        if lockfile_path.exists():
-            lockfile_path.unlink()
+        # Cleanup temp file
+        if tmp_path and tmp_path.exists():
+            tmp_path.unlink()
 
 
 def _compare_files_content(path_a: Path, path_b: Path) -> bool:
@@ -210,107 +249,82 @@ def _compare_files_content(path_a: Path, path_b: Path) -> bool:
 def fix_sync(req_name: str) -> bool:
     """Auto-fix desynchronization by recompiling with pip-compile.
 
-    This function implements the self-healing mechanism: it recompiles
-    the requirements.txt file using the Python baseline to ensure
-    compatibility with CI environments.
-
-    Implements Concurrency Immunity (v2.5.4): Uses file locking to prevent
-    race conditions during auto-fix operations.
+    SIMPLIFICADO: Remove file locking. Apenas recompila o lockfile.
 
     Args:
         req_name: The name of the requirements file (e.g., 'dev', 'prod').
 
     Returns:
         bool: True if fix succeeded, False otherwise.
-
-    Strategy:
-        1. Detect Python baseline from PYTHON_BASELINE env var
-        2. Ensure pip-tools is installed in baseline Python
-        3. Run pip-compile with exact CI-compatible flags
-        4. Validate output and report success
     """
     project_root = Path(__file__).parent.parent.parent.resolve()
     in_file = Path("requirements") / f"{req_name}.in"
     txt_file = Path("requirements") / f"{req_name}.txt"
 
-    # v2.5.4: Acquire exclusive lock
-    lockfile_path = project_root / f".verify_deps_{req_name}.lock"
-    lockfile = open(lockfile_path, "w")
+    print(f"\n🔧 MODO AUTOCURA ATIVADO: Corrigindo {req_name}.txt...", flush=True)
+
+    # Python Selection (same strategy as check_sync)
+    baseline_version = os.getenv("PYTHON_BASELINE")
+    python_exec = sys.executable  # Default fallback
+
+    if baseline_version:
+        baseline_exec = shutil.which(f"python{baseline_version}")
+        if baseline_exec:
+            python_exec = baseline_exec
+            print(
+                f"  ✅ Usando Python {baseline_version} (baseline CI-compatible)",
+            )
+        else:
+            print(
+                f"  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
+                f"python{baseline_version} não encontrado",
+            )
+            print(f"  ⚠️  Usando fallback: {sys.executable}")
+    else:
+        # Try venv Python for local dev
+        venv_python = project_root / ".venv" / "bin" / "python"
+        if venv_python.exists():
+            python_exec = str(venv_python)
+
+    print(f"  📦 Executor: {python_exec}")
+
+    # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
+    if not _ensure_piptools_installed(python_exec, project_root):
+        print("\n❌ ERRO: Não foi possível instalar pip-tools")
+        return False
 
     try:
-        fcntl.flock(lockfile.fileno(), fcntl.LOCK_EX)
+        # Execute pip-compile with CI-compatible flags
+        print(f"  ⚙️  Recompilando {in_file}...", end=" ", flush=True)
+        subprocess.check_call(
+            [
+                python_exec,
+                "-m",
+                "piptools",
+                "compile",
+                str(in_file),
+                "--output-file",
+                str(txt_file),
+                "--resolver=backtracking",
+                "--strip-extras",
+                "--allow-unsafe",
+                "--quiet",
+            ],
+            cwd=str(project_root),
+        )
+        print("✅")
 
-        print(f"\n🔧 MODO AUTOCURA ATIVADO: Corrigindo {req_name}.txt...", flush=True)
+        print(f"\n✅ AUTOCURA COMPLETA: {txt_file} sincronizado com sucesso!")
+        print("\n💡 PRÓXIMO PASSO:")
+        print(f"   git add {txt_file}")
+        print("   git commit -m 'build: sync requirements lockfile'")
+        return True
 
-        # Python Selection (same strategy as check_sync)
-        baseline_version = os.getenv("PYTHON_BASELINE")
-        python_exec = sys.executable  # Default fallback
-
-        if baseline_version:
-            baseline_exec = shutil.which(f"python{baseline_version}")
-            if baseline_exec:
-                python_exec = baseline_exec
-                print(
-                    f"  ✅ Usando Python {baseline_version} (baseline CI-compatible)",
-                )
-            else:
-                print(
-                    f"  ⚠️  PYTHON_BASELINE={baseline_version} definido, mas "
-                    f"python{baseline_version} não encontrado",
-                )
-                print(f"  ⚠️  Usando fallback: {sys.executable}")
-        else:
-            # Try venv Python for local dev
-            venv_python = project_root / ".venv" / "bin" / "python"
-            if venv_python.exists():
-                python_exec = str(venv_python)
-
-        print(f"  📦 Executor: {python_exec}")
-
-        # AUTO-IMMUNE CHECK: Ensure pip-tools is installed
-        if not _ensure_piptools_installed(python_exec, project_root):
-            print("\n❌ ERRO: Não foi possível instalar pip-tools")
-            return False
-
-        try:
-            # Execute pip-compile with CI-compatible flags
-            print(f"  ⚙️  Recompilando {in_file}...", end=" ", flush=True)
-            subprocess.check_call(
-                [
-                    python_exec,
-                    "-m",
-                    "piptools",
-                    "compile",
-                    str(in_file),
-                    "--output-file",
-                    str(txt_file),
-                    "--resolver=backtracking",
-                    "--strip-extras",
-                    "--allow-unsafe",
-                    "--quiet",
-                ],
-                cwd=str(project_root),
-            )
-            print("✅")
-
-            print(f"\n✅ AUTOCURA COMPLETA: {txt_file} sincronizado com sucesso!")
-            print("\n💡 PRÓXIMO PASSO:")
-            print(f"   git add {txt_file}")
-            print("   git commit -m 'build: sync requirements lockfile'")
-            return True
-
-        except subprocess.CalledProcessError as e:
-            print(
-                f"\n❌ ERRO FATAL: Falha ao executar autocura "
-                f"(Exit Code {e.returncode})",
-            )
-            return False
-    finally:
-        # v2.5.4: Release lock and cleanup
-        fcntl.flock(lockfile.fileno(), fcntl.LOCK_UN)
-        lockfile.close()
-        if lockfile_path.exists():
-            lockfile_path.unlink()
+    except subprocess.CalledProcessError as e:
+        print(
+            f"\n❌ ERRO FATAL: Falha ao executar autocura (Exit Code {e.returncode})",
+        )
+        return False
 
 
 if __name__ == "__main__":

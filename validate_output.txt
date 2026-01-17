@@ -1,0 +1,770 @@
+✨ Aplicando Auto-Correção de Estilo (Auto-Immune)...
+1 file reformatted, 224 files left unchanged
+All checks passed!
+🛡️  Executando Deep Consistency Check (Protocolo v2.3)...
+🔍 Executing Deep Consistency Check (v2.3 protocol)...
+❌ Deep Consistency Check: FAILED
+
+📊 LOCKFILE DESYNCHRONIZATION DETECTED
+
+  Committed:  dev.txt
+  Expected:   (in-memory pip-compile)
+
+🔍 DIFFERENCES:
+
+  [1] Mismatch:
+      COMMITTED: pytest==9.0.2
+      EXPECTED:  annotated-types==0.7.0
+
+  [2] Mismatch:
+      COMMITTED: ruff==0.14.10
+      EXPECTED:  anyio==4.12.1
+
+  [3] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  attrs==25.4.0
+
+  [4] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  babel==2.17.0
+
+  [5] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  backoff==2.2.1
+
+  [6] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  bandit==1.9.2
+
+  [7] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  bcrypt==5.0.0
+
+  [8] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  boolean-py==5.0
+
+  [9] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  build==1.4.0
+
+  [10] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  cachecontrol==0.14.4
+
+  [11] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  cachetools==6.2.4
+
+  [12] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  certifi==2026.1.4
+
+  [13] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  cfgv==3.5.0
+
+  [14] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  chardet==5.2.0
+
+  [15] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  charset-normalizer==3.4.4
+
+  [16] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  chromadb==1.4.1
+
+  [17] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  click==8.1.8
+
+  [18] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  click-option-group==0.5.9
+
+  [19] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  colorama==0.4.6
+
+  [20] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  coloredlogs==15.0.1
+
+  [21] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  coverage==7.13.1
+
+  [22] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  cyclonedx-python-lib==11.6.0
+
+  [23] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  defusedxml==0.7.1
+
+  [24] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  deprecated==1.3.1
+
+  [25] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  deptry==0.24.0
+
+  [26] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  diff-cover==10.2.0
+
+  [27] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  distlib==0.4.0
+
+  [28] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  distro==1.9.0
+
+  [29] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  dotty-dict==1.3.1
+
+  [30] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  durationpy==0.10
+
+  [31] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  exceptiongroup==1.3.1
+
+  [32] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  execnet==2.1.2
+
+  [33] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  filelock==3.20.3
+
+  [34] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  flatbuffers==25.12.19
+
+  [35] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  fsspec==2026.1.0
+
+  [36] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  gitdb==4.0.12
+
+  [37] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  gitpython==3.1.46
+
+  [38] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  googleapis-common-protos==1.72.0
+
+  [39] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  grimp==3.14
+
+  [40] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  grpcio==1.76.0
+
+  [41] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  h11==0.16.0
+
+  [42] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  hf-xet==1.2.0
+
+  [43] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  httpcore==1.0.9
+
+  [44] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  httptools==0.7.1
+
+  [45] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  httpx==0.28.1
+
+  [46] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  huggingface-hub==0.36.0
+
+  [47] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  humanfriendly==10.0
+
+  [48] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  identify==2.6.16
+
+  [49] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  idna==3.11
+
+  [50] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  import-linter==2.9
+
+  [51] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  importlib-metadata==8.7.1
+
+  [52] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  importlib-resources==6.5.2
+
+  [53] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  iniconfig==2.3.0
+
+  [54] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  interrogate==1.7.0
+
+  [55] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  jinja2==3.1.6
+
+  [56] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  joblib==1.5.3
+
+  [57] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  jsonschema==4.26.0
+
+  [58] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  jsonschema-specifications==2025.9.1
+
+  [59] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  kubernetes==35.0.0
+
+  [60] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  libcst==1.8.6
+
+  [61] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  librt==0.7.8
+
+  [62] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  license-expression==30.4.4
+
+  [63] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  linkify-it-py==2.0.3
+
+  [64] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mando==0.7.1
+
+  [65] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  markdown-it-py==4.0.0
+
+  [66] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  markupsafe==3.0.3
+
+  [67] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mdit-py-plugins==0.5.0
+
+  [68] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mdurl==0.1.2
+
+  [69] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mmh3==5.2.0
+
+  [70] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mpmath==1.3.0
+
+  [71] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  msgpack==1.1.2
+
+  [72] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mutmut==3.4.0
+
+  [73] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mypy==1.19.1
+
+  [74] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  mypy-extensions==1.1.0
+
+  [75] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  networkx==3.4.2
+
+  [76] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nodeenv==1.10.0
+
+  [77] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  numpy==2.2.6
+
+  [78] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cublas-cu12==12.8.4.1
+
+  [79] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cuda-cupti-cu12==12.8.90
+
+  [80] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cuda-nvrtc-cu12==12.8.93
+
+  [81] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cuda-runtime-cu12==12.8.90
+
+  [82] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cudnn-cu12==9.10.2.21
+
+  [83] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cufft-cu12==11.3.3.83
+
+  [84] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cufile-cu12==1.13.1.3
+
+  [85] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-curand-cu12==10.3.9.90
+
+  [86] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cusolver-cu12==11.7.3.90
+
+  [87] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cusparse-cu12==12.5.8.93
+
+  [88] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-cusparselt-cu12==0.7.1
+
+  [89] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-nccl-cu12==2.27.5
+
+  [90] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-nvjitlink-cu12==12.8.93
+
+  [91] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-nvshmem-cu12==3.3.20
+
+  [92] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  nvidia-nvtx-cu12==12.8.90
+
+  [93] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  oauthlib==3.3.1
+
+  [94] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  onnxruntime==1.23.2
+
+  [95] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-api==1.39.1
+
+  [96] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-exporter-otlp-proto-common==1.39.1
+
+  [97] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-exporter-otlp-proto-grpc==1.39.1
+
+  [98] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-proto==1.39.1
+
+  [99] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-sdk==1.39.1
+
+  [100] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  opentelemetry-semantic-conventions==0.60b1
+
+  [101] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  orjson==3.11.5
+
+  [102] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  overrides==7.7.0
+
+  [103] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  packageurl-python==0.17.6
+
+  [104] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  packaging==25.0
+
+  [105] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pathspec==1.0.3
+
+  [106] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pip-api==0.0.34
+
+  [107] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pip-audit==2.10.0
+
+  [108] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pip-requirements-parser==32.0.1
+
+  [109] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pip-tools==7.5.2
+
+  [110] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  platformdirs==4.5.1
+
+  [111] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pluggy==1.6.0
+
+  [112] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  posthog==5.4.0
+
+  [113] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pre-commit==4.5.1
+
+  [114] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  protobuf==6.33.4
+
+  [115] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  py==1.11.0
+
+  [116] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  py-serializable==2.1.0
+
+  [117] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pybase64==1.4.3
+
+  [118] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pydantic==2.12.5
+
+  [119] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pydantic-core==2.41.5
+
+  [120] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pydantic-settings==2.12.0
+
+  [121] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pygments==2.19.2
+
+  [122] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pyparsing==3.3.1
+
+  [123] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pypika==0.50.0
+
+  [124] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pyproject-api==1.10.0
+
+  [125] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pyproject-hooks==1.2.0
+
+  [126] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pytest==9.0.2
+
+  [127] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pytest-cov==7.0.0
+
+  [128] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pytest-xdist==3.8.0
+
+  [129] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  python-dateutil==2.9.0.post0
+
+  [130] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  python-dotenv==1.2.1
+
+  [131] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  python-frontmatter==1.1.0
+
+  [132] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  python-gitlab==6.5.0
+
+  [133] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  python-semantic-release==10.5.3
+
+  [134] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pyyaml==6.0.3
+
+  [135] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  radon==6.0.1
+
+  [136] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  referencing==0.37.0
+
+  [137] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  regex==2026.1.15
+
+  [138] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  requests==2.32.5
+
+  [139] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  requests-oauthlib==2.0.0
+
+  [140] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  requests-toolbelt==1.0.0
+
+  [141] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  requirements-parser==0.13.0
+
+  [142] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  rich==14.2.0
+
+  [143] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  rpds-py==0.30.0
+
+  [144] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  ruff==0.14.13
+
+  [145] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  safetensors==0.7.0
+
+  [146] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  scikit-learn==1.7.2
+
+  [147] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  scipy==1.15.3
+
+  [148] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  sentence-transformers==5.2.0
+
+  [149] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  setproctitle==1.3.7
+
+  [150] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  shellingham==1.5.4
+
+  [151] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  six==1.17.0
+
+  [152] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  smmap==5.0.2
+
+  [153] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  sortedcontainers==2.4.0
+
+  [154] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  stevedore==5.6.0
+
+  [155] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  sympy==1.14.0
+
+  [156] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tabulate==0.9.0
+
+  [157] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tenacity==9.1.2
+
+  [158] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  textual==7.3.0
+
+  [159] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  threadpoolctl==3.6.0
+
+  [160] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tokenizers==0.22.2
+
+  [161] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  toml==0.10.2
+
+  [162] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tomli==2.4.0 ; python_version < "3.11"
+
+  [163] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tomli-w==1.2.0
+
+  [164] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tomlkit==0.13.3
+
+  [165] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  torch==2.9.1
+
+  [166] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tox==4.34.1
+
+  [167] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  tqdm==4.67.1
+
+  [168] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  transformers==4.57.6
+
+  [169] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  triton==3.5.1
+
+  [170] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  typer==0.21.0
+
+  [171] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  types-pyyaml==6.0.12.20250915
+
+  [172] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  types-requests==2.32.4.20250913
+
+  [173] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  typing-extensions==4.15.0
+
+  [174] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  typing-inspection==0.4.2
+
+  [175] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  uc-micro-py==1.0.3
+
+  [176] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  urllib3==2.6.3
+
+  [177] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  uvicorn==0.40.0
+
+  [178] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  uvloop==0.22.1
+
+  [179] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  virtualenv==20.36.1
+
+  [180] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  watchfiles==1.1.1
+
+  [181] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  websocket-client==1.9.0
+
+  [182] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  websockets==16.0
+
+  [183] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  wheel==0.45.1
+
+  [184] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  wrapt==2.0.1
+
+  [185] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  xenon==0.9.3
+
+  [186] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  zipp==3.23.0
+
+  [187] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  pip==25.3
+
+  [188] Mismatch:
+      COMMITTED: <missing>
+      EXPECTED:  setuptools==80.9.0
+
+💊 REMEDIATION:
+   make requirements  (or make deps-fix)
+
+make: *** [Makefile:235: deps-deep-check] Error 1

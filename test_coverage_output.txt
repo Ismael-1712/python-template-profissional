@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.19, pytest-9.0.2, pluggy-1.6.0 -- /home/ismae/projects/python-template-profissional/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/ismae/projects/python-template-profissional
+configfile: pyproject.toml
+plugins: anyio-4.12.1, xdist-3.8.0, cov-7.0.0
+collecting ... collected 14 items
+
+tests/test_verify_deps.py::TestDependencyDetection::test_detect_synchronized_lockfile PASSED [  7%]
+tests/test_verify_deps.py::TestDependencyDetection::test_detect_desynchronized_lockfile XFAIL [ 14%]
+tests/test_verify_deps.py::TestDependencyDetection::test_fix_mode_corrects_desync PASSED [ 21%]
+tests/test_verify_deps.py::TestDependencyDetection::test_fix_mode_uses_python_baseline PASSED [ 28%]
+tests/test_verify_deps.py::TestExitCodes::test_exit_code_success_when_synced PASSED [ 35%]
+tests/test_verify_deps.py::TestExitCodes::test_exit_code_failure_when_desynchronized PASSED [ 42%]
+tests/test_verify_deps.py::TestPythonBaselineEnforcement::test_baseline_detection_from_env PASSED [ 50%]
+tests/test_verify_deps.py::TestPythonBaselineEnforcement::test_fallback_to_system_python_when_baseline_missing PASSED [ 57%]
+tests/test_verify_deps.py::TestErrorMessaging::test_remediation_message_on_failure PASSED [ 64%]
+tests/test_verify_deps.py::TestEdgeCasesAndErrorHandling::test_ensure_piptools_installation_failure PASSED [ 71%]
+tests/test_verify_deps.py::TestEdgeCasesAndErrorHandling::test_pip_compile_execution_failure PASSED [ 78%]
+tests/test_verify_deps.py::TestEdgeCasesAndErrorHandling::test_compare_files_when_txt_missing PASSED [ 85%]
+tests/test_verify_deps.py::TestEdgeCasesAndErrorHandling::test_python_baseline_not_found_in_path PASSED [ 92%]
+tests/test_verify_deps.py::TestEdgeCasesAndErrorHandling::test_fix_sync_compilation_failure PASSED [100%]/home/ismae/projects/python-template-profissional/.venv/lib/python3.10/site-packages/coverage/inorout.py:497: CoverageWarning: Module scripts/ci/verify_deps was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.13.1/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+/home/ismae/projects/python-template-profissional/.venv/lib/python3.10/site-packages/coverage/control.py:958: CoverageWarning: No data was collected. (no-data-collected); see https://coverage.readthedocs.io/en/7.13.1/messages.html#warning-no-data-collected
+  self._warn("No data was collected.", slug="no-data-collected")
+/home/ismae/projects/python-template-profissional/.venv/lib/python3.10/site-packages/pytest_cov/plugin.py:363: CovReportWarning: Failed to generate report: No data to report.
+
+  warnings.warn(CovReportWarning(message), stacklevel=1)
+
+WARNING: Failed to generate report: No data to report.
+
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.10.19-final-0 _______________
+
+=========================== short test summary info ============================
+XFAIL tests/test_verify_deps.py::TestDependencyDetection::test_detect_desynchronized_lockfile - pip-compile auto-updates versions in temp environment, making desync detection unreliable in tests
+=================== 13 passed, 1 xfailed in 63.57s (0:01:03) ===================
