@@ -19,7 +19,7 @@ babel==2.17.0
     # via -r requirements/dev.in
 backoff==2.2.1
     # via posthog
-bandit==1.9.2
+bandit==1.9.3
     # via -r requirements/dev.in
 bcrypt==5.0.0
     # via chromadb
