@@ -444,7 +444,7 @@ rpds-py==0.30.0
     # via
     #   jsonschema
     #   referencing
-ruff==0.14.13
+ruff==0.14.14
     # via -r requirements/dev.in
 safetensors==0.7.0
     # via transformers
