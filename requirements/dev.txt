@@ -431,7 +431,7 @@ requests-toolbelt==1.0.0
     # via python-gitlab
 requirements-parser==0.13.0
     # via deptry
-rich==14.2.0
+rich==14.3.1
     # via
     #   bandit
     #   chromadb
